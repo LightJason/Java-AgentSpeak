@@ -42,7 +42,7 @@ import java.util.stream.Stream;
  * defines the query structure and all other arguments the literal functor structure.
  * The action fails on connection and parsing errors.
  *
- * @code L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" ); GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql-fake" ); @endcode
+ * {@code L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" ); GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql-fake" );}
  * @see http://graphql.org/
  */
 public final class CQueryLiteral extends IBaseGraphQL

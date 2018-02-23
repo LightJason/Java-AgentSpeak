@@ -43,7 +43,7 @@ import java.util.Set;
  * The action converts each set argument to a list,
  * the action never fails
  *
- * @code [L1|L2] = collection/set/tolist( Set1, Set2 ); @endcode
+ * {@code [L1|L2] = collection/set/tolist( Set1, Set2 );}
  */
 public final class CToList extends IBuiltinAction
 {

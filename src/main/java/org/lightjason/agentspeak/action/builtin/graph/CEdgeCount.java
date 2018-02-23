@@ -43,7 +43,7 @@ import java.util.List;
  * The action returns the number of edges
  * within a graph and never fails
  *
- * @code [E1|E2] = graph/edgecount( Graph1, Graph2 ); @endcode
+ * {@code [E1|E2] = graph/edgecount( Graph1, Graph2 );}
  */
 public final class CEdgeCount extends IBuiltinAction
 {

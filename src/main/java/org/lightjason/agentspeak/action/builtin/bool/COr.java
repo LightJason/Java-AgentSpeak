@@ -42,7 +42,7 @@ import java.util.List;
  * to combine all logical arguments in a single
  * result, the action never fails
  *
- * @code R = bool/or( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * {@code R = bool/or( Logical1, [Logical2, Logical3], Logical4 );}
  * @see https://en.wikipedia.org/wiki/Logical_disjunction
  */
 public final class COr extends IBuiltinAction

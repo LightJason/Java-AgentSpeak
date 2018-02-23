@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
@@ -76,7 +77,7 @@ public abstract class IStorage extends IBuiltinAction
     protected IStorage( @Nullable final String... p_forbidden )
     {
         this(
-            ( p_forbidden == null ) || ( p_forbidden.length == 0 )
+            ( Objects.isNull( p_forbidden ) ) || ( p_forbidden.length == 0 )
             ? Stream.empty()
             : Arrays.stream( p_forbidden )
         );

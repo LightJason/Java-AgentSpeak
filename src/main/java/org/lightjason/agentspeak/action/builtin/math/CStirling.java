@@ -45,7 +45,7 @@ import java.util.List;
  * of each tuple of the unflatten argument list, n is the first value of the tupel
  * and k is the second value of the tupel, the action fails never
  *
- * @code [S1|S2] = math/stirling(2,3, [4,5]); @endcode
+ * {@code [S1|S2] = math/stirling(2,3, [4,5]);}
  * @see https://en.wikipedia.org/wiki/Stirling_number
  */
 public final class CStirling extends IBuiltinAction

@@ -39,7 +39,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * @code [Hour|Minute|Second|Nano] = datetime/time( "now" ); @endcode
+ * {@code [Hour|Minute|Second|Nano] = datetime/time( "now" );}
  */
 public final class CTime extends IDateTime
 {

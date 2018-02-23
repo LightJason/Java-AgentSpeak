@@ -40,7 +40,7 @@ import java.util.List;
  * each graph instance, the first argument is the vertex, all
  * other graphs, the action never fails
  *
- * @code [OE1|OE2] = graph/inedgessingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [OE1|OE2] = graph/inedgessingle( Vertex, Graph1, Graph2 );}
  */
 public final class CInEdgesSingle extends IApplySingle
 {

@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * The arguments of this action are nested lists and the action transfer all nested structures
  * to a straight list, the action fails never
  *
- * @code L = collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] ); @endcode
+ * {@code L = collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] );}
  */
 public final class CFlatConcat extends IBuiltinAction
 {

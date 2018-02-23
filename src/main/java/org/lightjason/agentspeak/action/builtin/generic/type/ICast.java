@@ -41,7 +41,7 @@ import java.util.List;
  * the string represenation and returns the string,
  * the action never fails
  *
- * @code [A|B|C] = generic/type/tostring( X, Y Z ); @endcode
+ * {@code [A|B|C] = generic/type/tostring( X, Y Z );}
  */
 public abstract class ICast extends IBuiltinAction
 {

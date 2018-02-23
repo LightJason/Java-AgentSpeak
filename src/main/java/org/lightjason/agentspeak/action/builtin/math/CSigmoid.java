@@ -45,7 +45,7 @@ import java.util.function.Function;
  * argument, all values beginning at the fourth position will be used for t, so the
  * action returns all values but and is never failing.
  *
- * @code [A | B | C] = math/sigmoid( 1, 1, 1, 10, 20, 30 ); @endcode
+ * {@code [A | B | C] = math/sigmoid( 1, 1, 1, 10, 20, 30 );}
  * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
 public final class CSigmoid extends IBuiltinAction

@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * optional arguments must be even and it will create a key-value structure, the
  * action fails on an odd number of arguments except zero only
  *
- * @code M = collection/map/create(); @endcode
+ * {@code M = collection/map/create();}
  */
 public final class CCreate extends IBuiltinAction
 {

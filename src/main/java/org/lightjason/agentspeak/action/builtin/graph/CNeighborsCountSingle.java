@@ -37,7 +37,7 @@ import java.util.List;
  * each graph argument, the first argument is the vertex, all
  * other graphs, the action never fails
  *
- * @code [C1|C2] = graph/neighborscountsingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [C1|C2] = graph/neighborscountsingle( Vertex, Graph1, Graph2 );}
  */
 public final class CNeighborsCountSingle extends IApplySingle
 {

@@ -39,13 +39,14 @@ import java.util.List;
  * will be used as weight-map, a tuple of the string "defaultweight"
  * and a numeric value defines the default weight value of the weight-map
  * (the default value is zero), a tuple which will not fit this definition
- * defines the start- and end-vertex, the action fails on wrong input
+ * defines the start- and end-vertex, the action fails on wrong input.
+ * The weight-map does not need an entry for each edge non-existing edges
+ * have got on default zero weight
  *
- * @code [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
- * [D3|D4] = graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
- * @endcode
- *
- * @note the weight-map does not need an entry for each edge non-existing edges have got on default zero weight
+ * {@code
+    [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
+    [D3|D4] = graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+ * }
  */
 public class CDistancePath extends IApplyPathAlgorithm
 {

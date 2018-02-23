@@ -223,7 +223,9 @@ public final class TestCActionCrypto extends IBaseTest
     }
 
     /**
-     * test encrypting & decrypting
+     * test encrypting and decrypting
+     *
+     * @param p_crypt tripel with input data
      */
     @Test
     @UseDataProvider( "generatecrypt" )

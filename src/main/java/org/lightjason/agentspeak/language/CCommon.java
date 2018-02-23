@@ -251,7 +251,7 @@ public final class CCommon
             return p_term;
 
         final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
-        if ( l_variable != null )
+        if ( Objects.nonNull( l_variable ) )
             return l_variable;
 
         throw new CIllegalArgumentException(

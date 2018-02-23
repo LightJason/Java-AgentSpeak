@@ -38,7 +38,7 @@ import java.util.Map;
  * and returns the value, the action fails on
  * parsing errors
  *
- * @code [X|Y|Z] = generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] ); @endcode
+ * {@code [X|Y|Z] = generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] );}
  */
 public final class CParseLiteral extends IParse
 {

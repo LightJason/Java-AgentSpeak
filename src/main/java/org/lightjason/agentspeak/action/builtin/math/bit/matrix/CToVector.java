@@ -46,7 +46,7 @@ import java.util.stream.IntStream;
  * the bit within the vector are row-wise copied
  * from the matrix and the action never fails
  *
- * @code [V1|V2] = math/bit/matrix/tovector( Matrix1, Matrix2 ); @endcode
+ * {@code [V1|V2] = math/bit/matrix/tovector( Matrix1, Matrix2 );}
  */
 public final class CToVector extends IBuiltinAction
 {

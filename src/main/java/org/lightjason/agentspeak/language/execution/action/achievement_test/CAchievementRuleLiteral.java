@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -69,7 +70,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return m_value == null
+        return Objects.isNull( m_value )
                ? Stream.empty()
                : CCommon.flattenrecursive( m_value.orderedvalues() )
                         .parallel()

@@ -42,7 +42,7 @@ import java.util.stream.Stream;
  * The action calculates \f$ \frac{i}{\sum_{i} \frac{1}{x_i}} \f$
  * over all unflatten arguments, action fails never
  *
- * @code G = math/harmonicmean( 1, 3, 9, [10, [11, 12]] ); @endcode
+ * {@code G = math/harmonicmean( 1, 3, 9, [10, [11, 12]] );}
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CHarmonicMean extends IBuiltinAction

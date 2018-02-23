@@ -39,7 +39,7 @@ import java.util.List;
  * a single graph argument, the first argument is the graph,
  * all other vertices, the action never fails
  *
- * @code [N1|N2] = graph/neighborsmultiple( Graph, Vertex1, Vertex2 ); @endcode
+ * {@code [N1|N2] = graph/neighborsmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CNeighborsMultiple extends IApplyMultiple
 {

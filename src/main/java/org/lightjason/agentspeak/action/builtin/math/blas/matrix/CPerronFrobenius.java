@@ -52,7 +52,7 @@ import java.util.stream.IntStream;
  * are squared matrices, the returning arguments are the eigenvector for each matrix, the
  * action never fails
  *
- * @code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3); @endcode
+ * {@code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);}
  * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
  */
 public final class CPerronFrobenius extends IAlgebra

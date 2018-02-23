@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  * for a summary or descriptive statistic object, on no arguments
  * a summary statistic object is created, the action never fails
  *
- * @code [S1|S2] = math/statistic/createstaistic("summary", ["descriptive"]); @endcode
+ * {@code [S1|S2] = math/statistic/createstaistic("summary", ["descriptive"]);}
  * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public final class CCreateStatistic extends IBuiltinAction

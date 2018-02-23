@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * The action creates lists of each input matrix,
  * the action never fails
  *
- * @code [L1|L2|L3] = math/blas/matrix/tolist( Matrix1, [Matrix2, Matrix3] ); @endcode
+ * {@code [L1|L2|L3] = math/blas/matrix/tolist( Matrix1, [Matrix2, Matrix3] );}
  */
 public final class CToList extends IBuiltinAction
 {

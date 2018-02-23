@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * nested structures and reverse all elements in a single list,
  * the action fails never
  *
- * @code R = collection/list/reverse( L, [1,2], [3,4,[7,8]] ); @endcode
+ * {@code R = collection/list/reverse( L, [1,2], [3,4,[7,8]] );}
  */
 public final class CReverse extends IBuiltinAction
 {

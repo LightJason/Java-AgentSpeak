@@ -44,7 +44,7 @@ import java.util.List;
  * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$, the action fails
  * on empty lists
  *
- * @code L = collection/list/complement( [1,2,3], [3,4,5] ); @endcode
+ * {@code L = collection/list/complement( [1,2,3], [3,4,5] );}
  * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
  */
 public final class CComplement extends IBuiltinAction

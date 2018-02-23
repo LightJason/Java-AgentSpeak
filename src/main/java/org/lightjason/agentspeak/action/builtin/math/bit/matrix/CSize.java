@@ -43,7 +43,7 @@ import java.util.List;
  * their size (number of bits for the rows * columns), the action
  * never fails
  *
- * @code [A|B] = math/bit/matrix/size( Matrix1, Matrix2 ); @endcode
+ * {@code [A|B] = math/bit/matrix/size( Matrix1, Matrix2 );}
  */
 public final class CSize extends IBuiltinAction
 {

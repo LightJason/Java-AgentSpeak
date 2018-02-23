@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns the opposite vertex, the first argument is the vertex,
  * second the edge and any other the graphs, the action never fails
  *
- * @code [V1|V2] = graph/oppositesingle( Vertex, Edge, Graph1, Graph2 ); @endcode
+ * {@code [V1|V2] = graph/oppositesingle( Vertex, Edge, Graph1, Graph2 );}
  */
 public final class COppositeSingle extends IApplySingle
 {

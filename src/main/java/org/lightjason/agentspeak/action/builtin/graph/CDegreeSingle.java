@@ -37,7 +37,7 @@ import java.util.List;
  * argument the degree on each graph argument,
  * the action never fails
  *
- * @code [D1|D2] = graph/degree( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [D1|D2] = graph/degree( Vertex, Graph1, Graph2 );}
  */
 public final class CDegreeSingle extends IApplySingle
 {

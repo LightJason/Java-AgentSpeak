@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -205,9 +206,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     {
         final String l_elements = StringUtils.join(
             Stream.of(
-                m_variablebuilder == null ? "" : m_variablebuilder,
+                Objects.isNull( m_variablebuilder ) ? "" : m_variablebuilder,
                 m_initialbeliefs.isEmpty() ? "" : m_initialbeliefs,
-                m_initialgoal == null ? "" : m_initialgoal,
+                Objects.isNull( m_initialgoal ) ? "" : m_initialgoal,
                 m_plans.isEmpty() ? "" : m_plans,
                 m_rules.isEmpty() ? "" : m_rules
             ).filter( i -> !i.toString().trim().isEmpty() ).toArray(),

@@ -41,7 +41,7 @@ import java.util.List;
  * All arguments of the action will change
  * to a upper-case string and the action never fails
  *
- * @code [A|B|C|D] = string/upper("AbC", "Ef", ["de", "XYZ"]); @endcode
+ * {@code [A|B|C|D] = string/upper("AbC", "Ef", ["de", "XYZ"]);}
  */
 public final class CUpper extends IBuiltinAction
 {

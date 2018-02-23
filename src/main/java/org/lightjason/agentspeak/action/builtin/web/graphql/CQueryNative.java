@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
  * literal functor structure. The action fails on connection
  * and parsing errors.
  *
- * @code GQ = web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql-fake" ); @endcode
+ * {@code GQ = web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql-fake" );}
  * @see http://graphql.org/
  */
 public final class CQueryNative extends IBaseGraphQL

@@ -42,7 +42,7 @@ import java.util.List;
  * The actions clears statistic objects, so
  * all arguments must be statistic objects
  *
- * @code math/statistic/clearstatistic( Statistic1, [Statistic2, [Statistic3]] ); @endcode
+ * {@code math/statistic/clearstatistic( Statistic1, [Statistic2, [Statistic3]] );}
  */
 public final class CClearStatistic extends IBuiltinAction
 {

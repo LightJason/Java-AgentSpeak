@@ -36,7 +36,7 @@ import java.util.Map;
  * other values are map references, the key-value pair
  * is added to all maps iif not exists and the action never fails
  *
- * @code collection/map/putsingleifabsent( "key", "value", Map1, Map2 ); @endcode
+ * {@code collection/map/putsingleifabsent( "key", "value", Map1, Map2 );}
  */
 public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object>>
 {

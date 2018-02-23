@@ -163,6 +163,7 @@ public final class TestCActionMathBitVector extends IBaseTest
     /**
      * test all single-input actions
      *
+     * @param p_input tripel of input data, actions classes and results
      * @throws IllegalAccessException is thrwon on instantiation error
      * @throws InstantiationException is thrwon on instantiation error
      * @throws NoSuchMethodException is thrwon on instantiation error

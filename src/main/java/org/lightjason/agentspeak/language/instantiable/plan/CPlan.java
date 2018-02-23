@@ -42,6 +42,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -162,7 +163,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             super.toString(),
             m_annotation.values(),
             m_triggerevent,
-            m_condition == null ? "" : MessageFormat.format( " |- {0}", m_condition ),
+            Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),
             StringUtils.join( m_action, "; " )
         );
     }

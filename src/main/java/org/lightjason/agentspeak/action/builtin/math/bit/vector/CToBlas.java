@@ -49,7 +49,7 @@ import java.util.stream.IntStream;
  * other arguments are bit vectors and the actions
  * never fails
  *
- * @code [A|B] = math/bit/vector/toblas( BitVector1, BitVector2, "dense | sparse" ); @endcode
+ * {@code [A|B] = math/bit/vector/toblas( BitVector1, BitVector2, "dense | sparse" );}
  */
 public final class CToBlas extends IBuiltinAction
 {

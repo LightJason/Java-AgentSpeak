@@ -42,10 +42,10 @@ import java.util.stream.Collectors;
  * The action assign the first argument to all
  * other arguments which must be a matrix
  *
- * @code
+ * {@code
     math/blas/matrix/assign(2, Matrix1, [Matrix2, Matrix3] );
     math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
- * @endcode
+ * }
  *
  */
 public final class CAssign extends IBuiltinAction

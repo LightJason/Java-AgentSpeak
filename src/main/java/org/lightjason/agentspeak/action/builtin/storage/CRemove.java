@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  * which is referenced by the key and returns the
  * value, the action never fails
  *
- * @code [A|B] = storage/remove("foo", "bar"); @endcode
+ * {@code [A|B] = storage/remove("foo", "bar");}
  */
 public final class CRemove extends IStorage
 {

@@ -20,13 +20,13 @@
     ######################################################################################
 
 -->
-<project xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.lightjason</groupId>
     <artifactId>agentspeak</artifactId>
     <version>0.0.2-SNAPSHOT</version>
+
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L++)</name>
@@ -54,7 +54,7 @@
         <url>https://github.com/LightJason/AgentSpeak</url>
         <connection>scm:git:git://github.com:LightJason/AgentSpeak.git</connection>
         <developerConnection>scm:git:git@github.com:LightJason/AgentSpeak.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.0.1</tag>
     </scm>
 
     <distributionManagement>
@@ -111,9 +111,9 @@
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
         <!-- will be set outside (build parameter) -->
-        <build.number></build.number>
-        <build.commit></build.commit>
-        <coverall.token></coverall.token>
+        <build.number />
+        <build.commit />
+        <coverall.token />
     </properties>
 
 
@@ -475,7 +475,7 @@
                         <releaseBranchPrefix>release/</releaseBranchPrefix>
                         <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
                         <supportBranchPrefix>support/</supportBranchPrefix>
-                        <versionTagPrefix>v</versionTagPrefix>
+                        <versionTagPrefix>pre-v</versionTagPrefix>
                         <origin>origin</origin>
                     </gitFlowConfig>
                 </configuration>
@@ -532,6 +532,23 @@
             </plugin>
 
             <!-- Doxygen -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

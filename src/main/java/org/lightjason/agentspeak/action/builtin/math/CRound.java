@@ -42,7 +42,7 @@ import java.util.List;
  * input argument the rounded value and the action
  * fails never
  *
- * @code [I1|I2|I3] = math/round( 5.5, [1.2, [2.7]] ); @endcode
+ * {@code [I1|I2|I3] = math/round( 5.5, [1.2, [2.7]] );}
  * @see https://en.wikipedia.org/wiki/Rounding
  */
 public final class CRound extends IBuiltinAction

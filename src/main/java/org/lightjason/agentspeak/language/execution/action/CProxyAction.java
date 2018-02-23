@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -134,7 +135,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+            return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
         }
 
         @Nonnull
@@ -207,7 +208,7 @@ public final class CProxyAction implements IExecution
 
             // resolve action
             m_action = p_actions.get( p_literal.fqnfunctor() );
-            if ( m_action == null )
+            if ( Objects.isNull( m_action ) )
                 throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "actionunknown", p_literal ) );
 
             // check number of arguments and add action to the score cache
@@ -234,7 +235,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+            return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
         }
 
         @Nonnull

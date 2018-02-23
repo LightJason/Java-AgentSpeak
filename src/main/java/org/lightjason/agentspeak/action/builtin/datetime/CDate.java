@@ -39,7 +39,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * @code [Year|Month|Day|DayOfWeek|DayOfYear] = datetime/date( "now" ); @endcode
+ * {@code [Year|Month|Day|DayOfWeek|DayOfYear] = datetime/date( "now" );}
  */
 public final class CDate extends IDateTime
 {

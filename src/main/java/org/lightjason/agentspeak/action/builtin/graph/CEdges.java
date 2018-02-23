@@ -42,10 +42,10 @@ import java.util.List;
 /**
  * returns for a graph all edges.
  * The action returns for all graph arguments
- * a list of edges, the action never fails
+ * a list of edges, the action never fails.
+ * The return argument is an unmodifyable list
  *
- * @code [E1|E2] = graph/edges( Graph1, Graph2 ); @endcode
- * @note the return argument is an unmodifyable list
+ * {@code [E1|E2] = graph/edges( Graph1, Graph2 );}
  */
 public final class CEdges extends IBuiltinAction
 {

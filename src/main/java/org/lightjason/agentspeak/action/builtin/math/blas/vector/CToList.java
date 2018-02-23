@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * The action creates lists of each input vector,
  * the action never fails
  *
- * @code [L1|L2|L3] = math/blas/vector/tolist( Vector1, [Vector2, Vector3] ); @endcode
+ * {@code [L1|L2|L3] = math/blas/vector/tolist( Vector1, [Vector2, Vector3] );}
  */
 public final class CToList extends IBuiltinAction
 {

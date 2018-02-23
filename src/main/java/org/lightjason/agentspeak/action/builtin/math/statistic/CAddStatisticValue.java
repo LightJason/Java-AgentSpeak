@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * statistic object and the action fails on a wrong input, only
  * number and statistic objects are allowed
  *
- * @code math/statistic/addstatisticvalue( StatisticObject1, [1,2,3, StatisticObject2], 1,5,8, StatisticObject3 ); @endcode
+ * {@code math/statistic/addstatisticvalue( StatisticObject1, [1,2,3, StatisticObject2], 1,5,8, StatisticObject3 );}
  */
 public final class CAddStatisticValue extends IBuiltinAction
 {

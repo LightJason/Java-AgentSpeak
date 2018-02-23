@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
  * Prints a set of messages to the commandline / output-stream, the command
  * can be used with a variable set of arguments and fails never
  *
- * @code generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y); @endcode
+ * {@code generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y);}
  */
 public final class CPrint extends IBuiltinAction
 {
@@ -163,7 +164,7 @@ public final class CPrint extends IBuiltinAction
                          .map( ITerm::raw )
                          .map( i ->
                          {
-                             if ( i == null )
+                             if ( Objects.isNull( i ) )
                                  return "";
 
                              final IFormatter<?> l_formatter = m_formatter.parallelStream()
@@ -172,7 +173,7 @@ public final class CPrint extends IBuiltinAction
                                                                           .findFirst()
                                                                           .orElse( null );
 
-                             return l_formatter == null ? i.toString() : l_formatter.toString( i );
+                             return Objects.isNull( l_formatter ) ? i.toString() : l_formatter.toString( i );
                          } )
                          .collect( Collectors.joining( m_seperator ) );
     }
@@ -180,7 +181,6 @@ public final class CPrint extends IBuiltinAction
     /**
      * interface of a serializable supplier
      * @tparam T supplier type
-     * @todo modify to a SerializableLambda if posible
      */
     @FunctionalInterface
     public interface ISupplier<T> extends Serializable
@@ -227,7 +227,7 @@ public final class CPrint extends IBuiltinAction
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null ) && ( p_object instanceof IFormatter<?> ) && ( this.hashCode() == p_object.hashCode() );
+            return ( p_object instanceof IFormatter<?> ) && ( this.hashCode() == p_object.hashCode() );
         }
 
         /**

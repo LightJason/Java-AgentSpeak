@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  * all other bit matrices, so \f$ m_i = m_i \text{ || } m_1 \f$
  * is performed, the action never fails
  *
- * @code math/bit/matrix/or( Matrix, Matrix1, Matrix2 ); @endcode
+ * {@code math/bit/matrix/or( Matrix, Matrix1, Matrix2 );}
  */
 public final class COr extends IOperator
 {

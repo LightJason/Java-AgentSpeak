@@ -41,7 +41,7 @@ import java.util.List;
  * second is the value, all other are list objects,
  * the action fails never
  *
- * @code collection/list/set( 2, "a string value", L1, L2, L3 ); @endcode
+ * {@code collection/list/set( 2, "a string value", L1, L2, L3 );}
  */
 public final class CSet extends IBuiltinAction
 {

@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.common.IPath;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -48,7 +49,7 @@ abstract class IBaseFilter implements IFilter
      */
     protected IBaseFilter( final IPath... p_paths )
     {
-        if ( p_paths != null )
+        if ( Objects.nonNull( p_paths ) )
             m_paths.addAll( Arrays.asList( p_paths ) );
     }
 
@@ -59,7 +60,7 @@ abstract class IBaseFilter implements IFilter
      */
     protected IBaseFilter( final Collection<IPath> p_paths )
     {
-        if ( p_paths != null )
+        if ( Objects.nonNull( p_paths ) )
             m_paths.addAll( p_paths );
     }
 

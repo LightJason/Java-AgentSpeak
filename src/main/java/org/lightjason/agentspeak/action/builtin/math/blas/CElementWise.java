@@ -48,7 +48,7 @@ import java.util.function.BiFunction;
  * operations (plus, plus-absolute, minus, multiply, divide),
  * all arguments are triples of matrix-operator-matrix|scalar,
  * the action fails on assigning problems
- * @code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]); @endcode
+ * {@code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]);}
  *
  */
 public final class CElementWise extends IBuiltinAction

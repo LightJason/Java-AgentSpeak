@@ -39,7 +39,7 @@ import java.util.List;
  * of vertices, for each tuple a list of all edges between the vertices is
  * returned, the action never fails
  *
- * @code [L1|L2] = graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] ); @endcode
+ * {@code [L1|L2] = graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] );}
  */
 public final class CEdgeListMultiple extends IApplyMultiple
 {

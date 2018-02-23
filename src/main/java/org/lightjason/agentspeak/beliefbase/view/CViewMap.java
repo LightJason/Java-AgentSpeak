@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -255,7 +256,7 @@ public final class CViewMap implements IView
     {
         // build path relative to this view
         final IPath l_path = this.path();
-        return ( ( p_path == null ) || ( p_path.length == 0 )
+        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
                  ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
                  : Arrays.stream( p_path )
                          .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
@@ -273,7 +274,7 @@ public final class CViewMap implements IView
     @Override
     public final IView clear( @Nullable final IPath... p_path )
     {
-        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+        if ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 ) )
             m_clearconsumer.accept( m_data );
         else
             Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ) ).forEach( i -> i.clear() );

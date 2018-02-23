@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * the size of the vector, the last argument defines as string a
  * dense or sparse vector (default is dense) and the action never fails
  *
- * @code [A|B|C] = math/blas/vector/create( 3, 2, 1, "dense | sparse"); @endcode
+ * {@code [A|B|C] = math/blas/vector/create( 3, 2, 1, "dense | sparse");}
  */
 public final class CCreate extends IBuiltinAction
 {

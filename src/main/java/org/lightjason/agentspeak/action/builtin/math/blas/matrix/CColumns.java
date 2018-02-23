@@ -43,7 +43,7 @@ import java.util.List;
  * Reads the column number of each input matrix and returns
  * the value, the action never fails.
  *
- * @code [C1|C2] = math/blas/matrix/columns(M1,M2); @endcode
+ * {@code [C1|C2] = math/blas/matrix/columns(M1,M2);}
  */
 public final class CColumns extends IBuiltinAction
 {

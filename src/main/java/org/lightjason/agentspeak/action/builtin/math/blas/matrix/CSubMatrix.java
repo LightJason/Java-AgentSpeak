@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * submatrix ( from/to row, from/to column ) and each matrix
  * object that starts at the fiveth position will
  *
- * @code [M1|M2] = math/blas/matrix/submatrix( FromRow, ToRow, FromColumn, ToColumn, Matrix1, [ Matrix2 ] );  @endcode
+ * {@code [M1|M2] = math/blas/matrix/submatrix( FromRow, ToRow, FromColumn, ToColumn, Matrix1, [ Matrix2 ] );}
  */
 public final class CSubMatrix extends IAlgebra
 {

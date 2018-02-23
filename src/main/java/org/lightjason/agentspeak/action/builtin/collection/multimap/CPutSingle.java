@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
  * other values are multimap references, the key-value pair
  * is added to all multimaps and the action never fails
  *
- * @code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 ); @endcode
+ * {@code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
  */
 public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {

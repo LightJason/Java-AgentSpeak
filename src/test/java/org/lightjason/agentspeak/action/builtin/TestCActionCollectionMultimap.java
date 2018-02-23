@@ -99,7 +99,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
 
     /**
-     * test key & values
+     * test key and values
      */
     @Test
     public final void keysvalues()

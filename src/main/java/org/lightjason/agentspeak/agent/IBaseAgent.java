@@ -161,7 +161,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // initial plans and rules
         p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );
         p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-        if ( p_configuration.initialgoal() != null )
+        if ( Objects.nonNull( p_configuration.initialgoal() ) )
             m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
     }
 
@@ -211,7 +211,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         return this.sleep(
             p_cycles,
-            ( p_term == null ) || ( p_term.length == 0 )
+            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
             ? Stream.of()
             : Arrays.stream( p_term )
         );
@@ -231,7 +231,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final IAgent<T> wakeup( @Nullable final ITerm... p_term )
     {
         return this.wakeup(
-            ( p_term == null ) || ( p_term.length == 0 )
+            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
             ? Stream.of()
             : Arrays.stream( p_term )
         );
@@ -332,7 +332,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
-        if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
+        if ( ( Objects.nonNull( p_immediately ) ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
             return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
 
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution

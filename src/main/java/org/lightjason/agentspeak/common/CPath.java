@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
@@ -95,7 +96,7 @@ public final class CPath implements IPath
      */
     public CPath( @Nullable final String... p_varargs )
     {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+        if ( ( Objects.isNull( p_varargs ) ) || ( p_varargs.length == 0 ) )
             m_path = CPath.listfactory();
         else
         {
@@ -311,11 +312,8 @@ public final class CPath implements IPath
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null )
-               && (
-                    ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
-                    || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) )
-               );
+        return ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
+               || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) );
     }
 
     @Override
@@ -424,7 +422,7 @@ public final class CPath implements IPath
 
         // create path-copy and nomalize (remove dot, double-dot and empty values)
         final List<String> l_dotremove = m_path.stream()
-                                               .filter( i -> ( i != null ) && ( !i.isEmpty() ) && ( !".".equals( i ) ) )
+                                               .filter( i -> Objects.nonNull( i ) && ( !i.isEmpty() ) && ( !".".equals( i ) ) )
                                                .collect( Collectors.toList() );
         if ( l_dotremove.isEmpty() )
             return;

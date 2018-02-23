@@ -39,7 +39,7 @@ import java.util.List;
  * a single graph instance, the first argument is the graph instance, all
  * other arguments are vertices, the action never fails
  *
- * @code [OE1|OE2] = graph/inedgesmultiple( Graph, Vertex1, Vertex2 ); @endcode
+ * {@code [OE1|OE2] = graph/inedgesmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CInEdgesMultiple extends IApplyMultiple
 {

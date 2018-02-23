@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * returns the modified date-time objects, the action
  * never fails
  *
- * @code [O1|O2] = datetime/applymonths( "minus|plus" 6, DateTime1, DateTime2 ); @endcode
+ * {@code [O1|O2] = datetime/applymonths( "minus|plus" 6, DateTime1, DateTime2 );}
  */
 public final class CApplyMonths extends IPlusMinus
 {

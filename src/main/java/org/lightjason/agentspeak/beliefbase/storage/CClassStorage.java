@@ -122,7 +122,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     public final boolean putMultiElement( @Nonnull final String p_key, final ILiteral p_value )
     {
         final Field l_field = m_fields.get( p_key );
-        if ( ( l_field == null ) || ( p_value.emptyValues() ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
+        if ( ( Objects.isNull( l_field ) ) || ( p_value.emptyValues() ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
             return false;
 
         try
@@ -177,7 +177,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     public Collection<ILiteral> getMultiElement( @Nonnull final String p_key )
     {
         final Field l_field = m_fields.get( p_key );
-        return l_field == null ? Collections.emptySet() : Stream.of( this.literal( p_key, l_field ) ).collect( Collectors.toSet() );
+        return Objects.isNull( l_field ) ? Collections.emptySet() : Stream.of( this.literal( p_key, l_field ) ).collect( Collectors.toSet() );
     }
 
     @Override
@@ -210,7 +210,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
         try
         {
             final Object l_value = p_field.get( m_instance );
-            return l_value == null ? CLiteral.from( p_name, CRawTerm.EMPTY ) : CLiteral.from( p_name, CRawTerm.from( l_value ) );
+            return Objects.isNull( l_value ) ? CLiteral.from( p_name, CRawTerm.EMPTY ) : CLiteral.from( p_name, CRawTerm.from( l_value ) );
         }
         catch ( final IllegalAccessException l_exception )
         {

@@ -40,6 +40,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -104,11 +105,10 @@ public abstract class IBaseBeliefbase implements IBeliefbase
     public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         // check all references of mask and remove unused references
-        Reference<? extends IView> l_reference;
-        while ( ( l_reference = m_maskreference.poll() ) != null )
+        for ( Reference<? extends IView> l_reference = m_maskreference.poll(); Objects.nonNull( l_reference ); l_reference = m_maskreference.poll() )
         {
             final IView l_view = l_reference.get();
-            if ( l_view != null )
+            if ( Objects.nonNull( l_view ) )
             {
                 m_views.remove( l_view );
                 m_events.asMap().remove( l_view );

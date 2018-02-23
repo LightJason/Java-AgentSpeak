@@ -44,7 +44,7 @@ import java.util.List;
  * The action returns a list of all vertices
  * for each graph argument, the action never fails
  *
- * @code [V1|V2] = graph/vertices( Graph1, Graph2 ); @endcode
+ * {@code [V1|V2] = graph/vertices( Graph1, Graph2 );}
  */
 public final class CVertices extends IBuiltinAction
 {

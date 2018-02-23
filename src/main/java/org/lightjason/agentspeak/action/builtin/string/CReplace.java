@@ -40,10 +40,10 @@ import java.util.List;
  * action to replace all occurence within a string.
  * The action replaces the first argument with the second argument
  * on each string beginning at the third argument and returns
- * all replaced strings, the action never fails
+ * all replaced strings, the action never fails. The first argument
+ * of the action be defined as a regular expression
  *
- * @code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" ); @endcode
- * @note the first argument of the action be defined as a regular expression
+ * {@code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" );}
  * @see https://en.wikipedia.org/wiki/Regular_expression
  */
 public final class CReplace extends IBuiltinAction

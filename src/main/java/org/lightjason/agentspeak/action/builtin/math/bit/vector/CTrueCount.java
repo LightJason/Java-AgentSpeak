@@ -42,7 +42,7 @@ import java.util.List;
  * The actions returnf for each input vector the
  * number of true values, the action never fails
  *
- * @code [A|B] = math/blas/vector/truecount( BitVector1, BitVector2 ); @endcode
+ * {@code [A|B] = math/blas/vector/truecount( BitVector1, BitVector2 );}
  */
 public final class CTrueCount extends IBuiltinAction
 {

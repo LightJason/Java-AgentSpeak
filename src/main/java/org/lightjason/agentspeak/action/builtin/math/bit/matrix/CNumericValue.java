@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * given index tuples (0 = false, 1 = true),
  * the action fails on wrong input
  *
- * @code [B1|B2] = math/bit/matrix/numericvalue( BitMatrix, 1, 2, [Row, Column] ); @endcode
+ * {@code [B1|B2] = math/bit/matrix/numericvalue( BitMatrix, 1, 2, [Row, Column] );}
  */
 public final class CNumericValue extends IBuiltinAction
 {

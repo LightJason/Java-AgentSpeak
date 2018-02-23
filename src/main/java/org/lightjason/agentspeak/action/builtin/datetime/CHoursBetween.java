@@ -36,11 +36,12 @@ import java.util.stream.Stream;
  * returns the hours between two dates.
  * The actions returns the number of hours between
  * two date-time objects, the action never
- * fails
+ * fails. A positive value will be returned iif the
+ * first date-time item is before the second one, a negative value
+ * will be returned iif the first date-time item is after the second
+ * date-time item
  *
- * @code [H1|H2] = datetime/hoursbetween( DateTime1, DateTime2, DateTime3, DateTime4 ); @endcode
- * @note a positive value will be returned iif the first date-time item is before the second one, a negative value
- * will be returned iif the first date-time item is after the second date-time item
+ * {@code [H1|H2] = datetime/hoursbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
  */
 public final class CHoursBetween extends IBetween
 {
