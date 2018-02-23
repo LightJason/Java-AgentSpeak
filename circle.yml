@@ -9,6 +9,7 @@ jobs:
         branches:
             ignore:
                 - developing
+                - /feature.*/
                 - /hotfix.*/
                 - /release.*/
                 - /support.*/
