@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Returns a list with all values of the argument
  * maps and fails never
  *
- * @code L = collection/map/values( Map1, Map2, Map3 ); @endcode
+ * {@code L = collection/map/values( Map1, Map2, Map3 );}
  */
 public final class CValues extends IBuiltinAction
 {

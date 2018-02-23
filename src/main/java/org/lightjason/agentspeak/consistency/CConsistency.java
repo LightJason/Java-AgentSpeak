@@ -54,8 +54,6 @@ import java.util.stream.Stream;
 
 /**
  * layer with consistency data based a markov-chain
- *
- * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
 public final class CConsistency implements IConsistency
 {

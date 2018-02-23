@@ -39,7 +39,7 @@ import java.util.List;
  * "now" the current date-time will returned, the
  * action never fails
  *
- * @code [O1|O2] = datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" ); @endcode
+ * {@code [O1|O2] = datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" );}
  */
 public final class CCreate extends IDateTime
 {

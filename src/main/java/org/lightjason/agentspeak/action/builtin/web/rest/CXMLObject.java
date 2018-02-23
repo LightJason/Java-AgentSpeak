@@ -40,7 +40,7 @@ import java.util.Map;
  * Creates a literal from an XML REST-webservice, first argument
  * is the URL of the webservice and second argument the functor of the literal
  *
- * @code W = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" ); @endcode
+ * {@code W = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );}
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/XML
