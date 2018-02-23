@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,13 +79,13 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     @Override
     public final int hashCode()
     {
-        return m_value == null ? 0 : m_value.hashCode() ^ m_righthand.hashCode();
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode() ^ m_righthand.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
@@ -97,7 +98,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_value == null ? Stream.empty() : m_value.stream();
+        return Objects.isNull( m_value ) ? Stream.empty() : m_value.stream();
     }
 
     /**

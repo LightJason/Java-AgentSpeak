@@ -43,7 +43,7 @@ import java.util.List;
  * are plans to the plan-base of the current
  * agent, the action never fails
  *
- * @code agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] ); @endcode
+ * {@code agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] );}
  */
 public final class CAddPlan extends IBuiltinAction
 {

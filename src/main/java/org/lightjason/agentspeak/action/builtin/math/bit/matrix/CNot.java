@@ -42,7 +42,7 @@ import java.util.List;
  * the action apply the logical not operator, the action
  * never fails
  *
- * @code math/bit/matrix/not( Matrix1, Matrix2 ); @endcode
+ * {@code math/bit/matrix/not( Matrix1, Matrix2 );}
  */
 public final class CNot extends IBuiltinAction
 {

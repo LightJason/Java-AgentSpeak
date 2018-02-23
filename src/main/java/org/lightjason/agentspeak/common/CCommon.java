@@ -152,7 +152,7 @@ public final class CCommon
     @Nonnull
     public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
-        return ( ( p_package == null ) || ( p_package.length == 0 )
+        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
                  : Arrays.stream( p_package ) )
             .flatMap( j ->
@@ -273,7 +273,7 @@ public final class CCommon
     {
         final Pair<Boolean, IAgentAction.EAccess> l_classannotation = CCommon.isActionClass( p_class );
         if ( !l_classannotation.getLeft() )
-            return p_class.getSuperclass() == null
+            return Objects.isNull( p_class.getSuperclass() )
                    ? Stream.empty()
                    : methods( p_class.getSuperclass() );
 
@@ -396,7 +396,7 @@ public final class CCommon
             return p_file.toURI().normalize().toURL();
 
         final URL l_url = CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) );
-        if ( l_url == null )
+        if ( Objects.isNull( l_url ) )
             throw new CIllegalArgumentException( CCommon.languagestring( CCommon.class, "fileurlnull", p_file ) );
         return l_url.toURI().normalize().toURL();
     }
@@ -477,11 +477,11 @@ public final class CCommon
             {
 
                 final URL l_url = p_loader.getResource( l_resource );
-                if ( l_url == null )
+                if ( Objects.isNull( l_url ) )
                     return null;
 
                 final URLConnection l_connection = l_url.openConnection();
-                if ( l_connection == null )
+                if ( Objects.isNull( l_connection ) )
                     return null;
 
                 l_connection.setUseCaches( false );

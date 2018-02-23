@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns the number of verticies that are incident to each edge
  * for a single graph object, the action never fails
  *
- * @code [C1|C2] = graph/incidentcountmultiple( Graph, Edge1, Edge2 ); @endcode
+ * {@code [C1|C2] = graph/incidentcountmultiple( Graph, Edge1, Edge2 );}
  */
 public final class CIncidentCountMultiple extends IApplyMultiple
 {

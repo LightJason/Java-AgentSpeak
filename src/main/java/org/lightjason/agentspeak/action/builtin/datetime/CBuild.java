@@ -46,7 +46,7 @@ import java.util.List;
  * the tuple is the time-zone, which can be set to empty
  * or "current", so the system-default zone is used
  *
- * @code O1 = datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, "current" );  @endcode
+ * {@code O1 = datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, "current" );}
  */
 public final class CBuild extends IBuiltinAction
 {

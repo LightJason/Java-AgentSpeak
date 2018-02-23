@@ -39,7 +39,7 @@ import java.util.List;
  * each graph argument, the first argument is the vertex,
  * all other graphs, the action never fails
  *
- * @code [N1|N2] = graph/neighborssingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [N1|N2] = graph/neighborssingle( Vertex, Graph1, Graph2 );}
  */
 public final class CNeighborsSingle extends IApplySingle
 {

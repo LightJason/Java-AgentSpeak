@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * are tuples of ranges \f$ [ \text{lower-bound}, \text{upper-bound} ) \f$,
  * the action fails on an wrong number of arguments
  *
- * @code [L1|L2] = collection/list/get( L, 2, 5, [4, 6] ); @endcode
+ * {@code [L1|L2] = collection/list/get( L, 2, 5, [4, 6] );}
  */
 public final class CSubList extends IBuiltinAction
 {

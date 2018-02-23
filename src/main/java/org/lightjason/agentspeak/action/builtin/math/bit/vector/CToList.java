@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
  * The action creates a list with 0 / 1 values of
  * the values of the bit vector, the action never fails
  *
- * @code [L1|L2] = math/bit/vector/tolist( Vector1, Vector2 ); @endcode
+ * {@code [L1|L2] = math/bit/vector/tolist( Vector1, Vector2 );}
  */
 public final class CToList extends IBuiltinAction
 {

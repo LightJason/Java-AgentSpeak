@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * the first \f$ \frac{n}{2} \f$ are x-values the other \f$ \frac{n}{2} \f$
  * values are the y-values
  *
- * @code PI = math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]); @endcode
+ * {@code PI = math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]);}
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  * @see https://en.wikipedia.org/wiki/Divided_differences
  * @see https://en.wikipedia.org/wiki/Linear_interpolation

@@ -42,7 +42,7 @@ import java.util.List;
  * Gets the number of non-zero cells on each vector
  * input and returns the value, the action never fails
  *
- * @code [NZ1|NZ2] = math/blas/vector/nonzero(V1,V2); @endcode
+ * {@code [NZ1|NZ2] = math/blas/vector/nonzero(V1,V2);}
  */
 public final class CNonZero extends IBuiltinAction
 {

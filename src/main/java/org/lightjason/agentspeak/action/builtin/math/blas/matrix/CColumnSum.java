@@ -48,10 +48,10 @@ import java.util.stream.IntStream;
  * a string value defines a sparse or dense resulting vector,
  * the action never fails
  *
- * @code
+ * {@code
     [S1|S2] = math/blas/matrix/columnsum( Matrix1, Matrix2 );
     [S1|S2] = math/blas/matrix/columnsum( Matrix1, Matrix2, "sparse" );
- * @endcode
+ * }
  */
 public final class CColumnSum extends IAlgebra
 {

@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * geometricmean, max, min, count, populationvariance, quadraticmean, secondmoment,
  * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis
  *
- * @code [SStd|SVar|SMean]  = math/statistic/multiplestatisticvalue(Statistic, "standarddeviation", "variance", "mean" ); @endcode
+ * {@code [SStd|SVar|SMean]  = math/statistic/multiplestatisticvalue(Statistic, "standarddeviation", "variance", "mean" );}
  */
 public final class CMultipleStatisticValue extends IBuiltinAction
 {

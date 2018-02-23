@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for the first graph argument and each following tuple
  * of vertex and edge the opposite, the action never fails
  *
- * @code [V1|V2] = graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] ); @endcode
+ * {@code [V1|V2] = graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */
 public final class COppositeMultiple extends IApplyMultiple
 {

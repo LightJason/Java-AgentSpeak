@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.error.CIllegalStateException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -76,7 +77,7 @@ public final class CConstant<T> extends CVariable<T>
     @Override
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CConstant<>( m_functor, m_value )
                : new CConstant<>( p_prefix[0].append( m_functor ), m_value );
     }

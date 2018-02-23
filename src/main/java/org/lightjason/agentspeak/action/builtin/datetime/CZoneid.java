@@ -39,7 +39,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * @code ZoneID = datetime/zoneid( "now" ); @endcode
+ * {@code ZoneID = datetime/zoneid( "now" );}
  */
 public final class CZoneid extends IDateTime
 {

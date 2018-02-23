@@ -50,7 +50,7 @@ import java.util.List;
  * all other arguments are datasets for encrypting, the actions returns all
  * drcrypted datasets back and fails if a dataset cannot be decrypted
  *
- * @code [DecyptData1 | DecyptData2 | DecyptData3] = crypto/decrypt( Key, Dataset1, Dataset2, Dataset3 ); @endcode
+ * {@code [DecyptData1 | DecyptData2 | DecyptData3] = crypto/decrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
 public final class CDecrypt extends IBuiltinAction
 {

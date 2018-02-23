@@ -245,11 +245,8 @@ public interface IPath extends Serializable, Comparable<IPath>
         @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null )
-                   && (
-                       ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
-                       || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) )
-                   );
+            return ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
+                   || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) );
         }
     };
 

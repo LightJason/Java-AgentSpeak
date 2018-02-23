@@ -42,7 +42,7 @@ import java.util.List;
  * Reads the dimension of each input matrix and returns
  * the rows and columns, the action never fails.
  *
- * @code [Row1|Column1|Row2|Column2] = math/blas/matrix/dimension(M1,M2); @endcode
+ * {@code [Row1|Column1|Row2|Column2] = math/blas/matrix/dimension(M1,M2);}
  */
 public final class CDimension extends IBuiltinAction
 {

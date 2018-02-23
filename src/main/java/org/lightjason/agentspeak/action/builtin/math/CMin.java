@@ -43,7 +43,7 @@ import java.util.OptionalDouble;
  * the minimum with \f$ min( x_0, x_1, \ldots, x_i ) \f$,
  * the action fails on wrong input
  *
- * @code Max = math/min( 2, 5, 7, [3, 2] ); @endcode
+ * {@code Max = math/min( 2, 5, 7, [3, 2] );}
  */
 public final class CMin extends IBuiltinAction
 {

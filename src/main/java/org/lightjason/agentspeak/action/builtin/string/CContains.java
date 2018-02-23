@@ -42,7 +42,7 @@ import java.util.List;
  * all other arguments, but it returns the boolean result for
  * each argument, the action never fails
  *
- * @code [L1|L2] = string/contains("this is a long string", "long", "string"); @endcode
+ * {@code [L1|L2] = string/contains("this is a long string", "long", "string");}
  */
 public final class CContains extends IBuiltinAction
 {

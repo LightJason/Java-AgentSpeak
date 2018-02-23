@@ -37,7 +37,7 @@ import java.util.List;
  * egde argument if both are incident on each graph instance, the
  * action never fails
  *
- * @code [B1|B2] = graph/isincidentsingle( Vertex, Edge, Graph1, Graph2 ); @endcode
+ * {@code [B1|B2] = graph/isincidentsingle( Vertex, Edge, Graph1, Graph2 );}
  */
 public final class CIsIncidentSingle extends IApplySingle
 {

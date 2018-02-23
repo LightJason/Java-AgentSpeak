@@ -178,7 +178,7 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null ) && ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
+            return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
         }
     };
 

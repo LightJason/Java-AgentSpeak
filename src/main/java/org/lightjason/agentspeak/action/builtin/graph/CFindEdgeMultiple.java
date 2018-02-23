@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for each tuple of vertices the edge of a single
  * graph instance, the action never fails
  *
- * @code [E1|E2|E3] = graph/findedgesingle( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] ); @endcode
+ * {@code [E1|E2|E3] = graph/findedgesingle( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */
 public final class CFindEdgeMultiple extends IApplyMultiple
 {

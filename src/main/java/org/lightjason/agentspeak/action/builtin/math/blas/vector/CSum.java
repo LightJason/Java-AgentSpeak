@@ -42,7 +42,7 @@ import java.util.List;
  * Calculates for each input vector the sum and returns
  * the value, the action never fails
  *
- * @code [S1|S2] = math/blas/vector/sum(V1,V2); @endcode
+ * {@code [S1|S2] = math/blas/vector/sum(V1,V2);}
  */
 public final class CSum extends IBuiltinAction
 {

@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for a vertex as first argument the in-degree
  * on each graph argument, the action fails on wrong input
  *
- * @code [D1|D2] = graph/indegreesingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [D1|D2] = graph/indegreesingle( Vertex, Graph1, Graph2 );}
  */
 public final class CInDegreeSingle extends IApplySingle
 {

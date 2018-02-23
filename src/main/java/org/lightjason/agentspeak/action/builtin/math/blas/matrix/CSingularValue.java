@@ -45,7 +45,7 @@ import java.util.List;
  * called and the values, and the two matrixes (left / right)
  * are returned, the action never fails
  *
- * @code [Values1|U1|V1|Values2|U2|V2] = blas/matrix/singularvalue(Matrix1, Matrix2); @endcode
+ * {@code [Values1|U1|V1|Values2|U2|V2] = blas/matrix/singularvalue(Matrix1, Matrix2);}
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
  */
 public final class CSingularValue extends IBuiltinAction

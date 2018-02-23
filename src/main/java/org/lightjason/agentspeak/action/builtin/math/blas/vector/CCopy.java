@@ -43,7 +43,7 @@ import java.util.List;
  * copied and returned, the action
  * never fails
  *
- * @code [A|B] = math/blas/vector/copy( Vector1, Vector2 ); @endcode
+ * {@code [A|B] = math/blas/vector/copy( Vector1, Vector2 );}
  */
 public final class CCopy extends IBuiltinAction
 {

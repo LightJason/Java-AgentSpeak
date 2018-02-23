@@ -38,7 +38,7 @@ import java.util.Map;
  * other arguments are key values, the action
  * returns the value of each key and never fails
  *
- * @code [V1|V2] = collection/map/getmultiple( Map, "key1", "key2" ); @endcode
+ * {@code [V1|V2] = collection/map/getmultiple( Map, "key1", "key2" );}
  */
 public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
 {

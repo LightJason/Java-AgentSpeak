@@ -43,8 +43,10 @@ import java.util.stream.Collectors;
  * The action creates a set and put all given arguments
  * inside the set, the action never fails
  *
- * @code S = collection/set/create( "1", [ 1, 2, 3] );
- * S = collection/set/create(); @endcode
+ * {@code
+    S = collection/set/create( "1", [ 1, 2, 3] );
+    S = collection/set/create();
+ * }
  */
 public final class CCreate extends IBuiltinAction
 {

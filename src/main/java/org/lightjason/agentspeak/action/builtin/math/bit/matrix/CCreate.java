@@ -44,7 +44,7 @@ import java.util.List;
  * for each input tuple argument a bit matrix will be created and
  * returned, the action never fails
  *
- * @code [A|B] = math/bit/matrix/create( 3,2, [1, 12] ); @endcode
+ * {@code [A|B] = math/bit/matrix/create( 3,2, [1, 12] );}
  */
 public final class CCreate extends IBuiltinAction
 {

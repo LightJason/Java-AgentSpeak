@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * the action fails on wrong input, index starts
  * at zero, the action never fails
  *
- * @code [V1|V2] = math/bit/vector/range( BitVector, 0, 1, [3, 5] ); @endcode
+ * {@code [V1|V2] = math/bit/vector/range( BitVector, 0, 1, [3, 5] );}
  */
 public final class CRange extends IBuiltinAction
 {

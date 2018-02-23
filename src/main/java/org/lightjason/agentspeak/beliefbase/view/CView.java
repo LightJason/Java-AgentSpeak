@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -183,7 +184,7 @@ public final class CView implements IView
     @Override
     public final IView clear( @Nullable final IPath... p_path )
     {
-        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+        if ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 ) )
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
@@ -227,7 +228,7 @@ public final class CView implements IView
     {
         // build path relative to this view
         final IPath l_path = this.path();
-        return ( ( p_path == null ) || ( p_path.length == 0 )
+        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
                ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
                : Arrays.stream( p_path )
                        .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
@@ -240,7 +241,7 @@ public final class CView implements IView
     {
         // build path relative to this view
         final IPath l_path = this.path();
-        return ( ( p_path == null ) || ( p_path.length == 0 )
+        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
                ? Stream.concat(
                    m_beliefbase.streamLiteral().filter( i -> i.negated() == p_negated ),
                    m_beliefbase.streamView().flatMap( i -> i.stream( p_negated ) )
@@ -290,12 +291,12 @@ public final class CView implements IView
             l_view = m_beliefbase.viewOrDefault(
                         l_root,
 
-                        p_generator == null || p_generator.length == 0
+                        Objects.isNull( p_generator ) || p_generator.length == 0
                         ? null
                         : p_generator[0].apply( l_root, this )
                      );
 
-            if ( l_view == null )
+            if ( Objects.isNull( l_view ) )
                 return Stream.empty();
             m_beliefbase.add( l_view );
         }
@@ -390,7 +391,7 @@ public final class CView implements IView
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IView ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IView ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

@@ -43,7 +43,7 @@ import java.util.List;
  * the infinity-norm and returns the value, the
  * action never fails
  *
- * @code [N1|N2] = math/blas/matrix/infinitynorm(M1,M2); @endcode
+ * {@code [N1|N2] = math/blas/matrix/infinitynorm(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Uniform_norm
  */
 public final class CInfinityNorm extends IAlgebra

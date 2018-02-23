@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * given index tuples (row / column), the action
  * fail on incorrect input
  *
- * @code [B1|B2] = math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] ); @endcode
+ * {@code [B1|B2] = math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] );}
  */
 public final class CBoolValue extends IBuiltinAction
 {

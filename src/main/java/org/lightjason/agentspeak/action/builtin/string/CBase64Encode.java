@@ -43,7 +43,7 @@ import java.util.List;
  * The base64 encoded version is created from each string argument,
  * the action never fails
  *
- * @code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
+ * {@code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" );}
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Encode extends IBuiltinAction

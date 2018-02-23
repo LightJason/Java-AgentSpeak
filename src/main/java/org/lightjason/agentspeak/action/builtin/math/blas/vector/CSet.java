@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * all other arguments are vector objects,
  * the action never fails
  *
- * @code math/blas/vector/assign( 3, 5.3, Vector1, [Vector2, [Vector3]] ); @endcode
+ * {@code math/blas/vector/assign( 3, 5.3, Vector1, [Vector2, [Vector3]] );}
  */
 public final class CSet extends IBuiltinAction
 {

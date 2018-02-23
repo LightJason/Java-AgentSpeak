@@ -41,7 +41,7 @@ import java.util.List;
  * Calculates for each argument the signum value
  * \f$ sgn(x) = \begin{cases} -1 & \text{if } x < 0 \\ 0 & \text{if } x = 0 \\ 1 & \text{if } x > 0 \end{cases} \f$
  *
- * @code [A|B|C] = math/signum(-3, 0, 8) @endcode
+ * {@code [A|B|C] = math/signum(-3, 0, 8);}
  * @see https://en.wikipedia.org/wiki/Sign_function
  */
 public final class CSignum extends IBuiltinAction

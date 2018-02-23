@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * other arguments are matrix object, the action
  * never fails
  *
- * @code [R1|R2] = math/blas/matrix/row(2, Matrix1, [Matrix2]); @endcode
+ * {@code [R1|R2] = math/blas/matrix/row(2, Matrix1, [Matrix2]);}
  */
 public final class CRow extends IBuiltinAction
 {

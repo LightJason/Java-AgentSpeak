@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the first graph argument if the first part of all vertex tuples
  * a successor of the second part, the action never fails
  *
- * @code [B1|B2|B3] = graph/issuccessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] ); @endcode
+ * {@code [B1|B2|B3] = graph/issuccessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */
 public final class CIsSuccessorMultiple extends IApplyMultiple
 {

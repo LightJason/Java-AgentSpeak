@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action checks if an element is within the action and
  * returns the boolean flag, the action never fails
  *
- * @code [A|B] = storage/exist( "foo", "bar" ); @endcode
+ * {@code [A|B] = storage/exist( "foo", "bar" );}
  */
 public final class CExists extends IStorage
 {

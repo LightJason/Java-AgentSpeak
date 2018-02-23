@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * other number values (x-position) for
  * interpolation
  *
- * @code [A|B|C] = math/interpolate/singleinterpolate( InterpolatingFunction, 3, [10, [50]] ); @endcode
+ * {@code [A|B|C] = math/interpolate/singleinterpolate( InterpolatingFunction, 3, [10, [50]] );}
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
 public final class CSingleInterpolate extends IBuiltinAction

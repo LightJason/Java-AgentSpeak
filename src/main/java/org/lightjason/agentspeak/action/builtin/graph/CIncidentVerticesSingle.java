@@ -38,7 +38,7 @@ import java.util.List;
  * The action returns for the first edge argument the incident vertices
  * of each graph argument, the action never fails
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * {@code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 );}
  */
 public final class CIncidentVerticesSingle extends IApplySingle
 {

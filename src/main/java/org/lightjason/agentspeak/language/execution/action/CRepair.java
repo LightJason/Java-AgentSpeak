@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -75,7 +76,7 @@ public class CRepair extends IBaseExecution<IExecution>
     public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
-            m_value == null ? Stream.empty() : m_value.variables(),
+            Objects.isNull( m_value ) ? Stream.empty() : m_value.variables(),
             m_fallback.variables()
         );
     }

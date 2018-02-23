@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates \f$ acos( x_i ) \f$ for all arguments, the return
  * value is in \f$ [0, \pi) \f$, the arguments must be in radians.
  *
- * @code [A | B | C] = math/acos( -1, -5, 3 ); @endcode
+ * {@code [A | B | C] = math/acos( -1, -5, 3 );}
  * @see https://en.wikipedia.org/wiki/Inverse_trigonometric_functions
  */
 public final class CACos extends IBuiltinAction

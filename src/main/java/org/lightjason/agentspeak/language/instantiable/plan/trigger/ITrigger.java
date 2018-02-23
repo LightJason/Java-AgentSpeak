@@ -36,6 +36,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -111,7 +112,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null ) && ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
+            return ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
         }
     };
 
@@ -196,7 +197,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         public static EType from( @Nonnull final String p_sequence )
         {
             final EType l_type = ELEMENTS.get( p_sequence.trim() );
-            if ( l_type == null )
+            if ( Objects.isNull( l_type ) )
                 throw new CIllegalArgumentException( CCommon.languagestring( EType.class, "sequencenotfound", p_sequence ) );
 
             return l_type;

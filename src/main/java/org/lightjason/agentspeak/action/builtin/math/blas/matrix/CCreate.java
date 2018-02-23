@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * last object is a string with dense or sparse, all other
  * arguments are tuples of row and column size.
  *
- * @code [M1|M2] = math/blas/matrix/create(2,2, [3,2], "dense|sparse"); @endcode
+ * {@code [M1|M2] = math/blas/matrix/create(2,2, [3,2], "dense|sparse");}
  */
 public final class CCreate extends IBuiltinAction
 {
