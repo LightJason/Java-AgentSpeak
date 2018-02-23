@@ -283,11 +283,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public Object visitAnnotation_value_literal( final PlanBundleParser.Annotation_value_literalContext p_context )
     {
-<<<<<<< HEAD
-        if ( p_context.NUMBER() != null )
-=======
         if ( Objects.nonNull( p_context.number() ) )
->>>>>>> developing
             return new CValueAnnotation<>(
                 IAnnotation.EType.CONSTANT,
                 (String) this.visitVariableatom( p_context.variableatom() ),
@@ -475,21 +471,12 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExecutable_term( final PlanBundleParser.Executable_termContext p_context )
     {
-<<<<<<< HEAD
-        if ( p_context.STRING() != null )
-            return new CRawAction<>( stringvalue( p_context.STRING() ) );
-        if ( p_context.NUMBER() != null )
-            return new CRawAction<>( numbervalue( p_context.NUMBER() ) );
-        if ( p_context.LOGICALVALUE() != null )
-            return new CRawAction<>( logicalvalue( p_context.LOGICALVALUE() ) );
-=======
         if ( Objects.nonNull( p_context.STRING() ) )
             return new CRawAction<>( stringvalue( p_context.STRING().getText() ) );
         if ( Objects.nonNull( p_context.number() ) )
             return new CRawAction<>( this.visitNumber( p_context.number() ) );
         if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
             return new CRawAction<>( logicalvalue( p_context.LOGICALVALUE().getText() ) );
->>>>>>> developing
 
         if ( Objects.nonNull( p_context.executable_action() ) )
             return this.visitExecutable_action( p_context.executable_action() );
@@ -644,21 +631,12 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitTerm( final PlanBundleParser.TermContext p_context )
     {
-<<<<<<< HEAD
-        if ( p_context.STRING() != null )
-            return stringvalue( p_context.STRING() );
-        if ( p_context.NUMBER() != null )
-            return numbervalue( p_context.NUMBER() );
-        if ( p_context.LOGICALVALUE() != null )
-            return logicalvalue( p_context.LOGICALVALUE() );
-=======
         if ( Objects.nonNull( p_context.STRING() ) )
             return stringvalue( p_context.STRING().getText() );
         if ( Objects.nonNull( p_context.number() ) )
             return this.visitNumber( p_context.number() );
         if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
             return logicalvalue( p_context.LOGICALVALUE().getText() );
->>>>>>> developing
 
         if ( Objects.nonNull( p_context.literal() ) )
             return this.visitLiteral( p_context.literal() );
@@ -700,8 +678,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-<<<<<<< HEAD
-=======
     public final Object visitNumber( final PlanBundleParser.NumberContext p_context )
     {
         if ( Objects.nonNull( p_context.CONSTANTNUMBER() ) )
@@ -720,7 +696,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
->>>>>>> developing
     public final Object visitAtom( final PlanBundleParser.AtomContext p_context )
     {
         return p_context.getText();
@@ -803,13 +778,8 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
     {
-<<<<<<< HEAD
-        if ( p_context.LOGICALVALUE().getSymbol() != null )
-            return new CAtom( logicalvalue( p_context.LOGICALVALUE() ) );
-=======
         if ( Objects.nonNull( p_context.LOGICALVALUE().getSymbol() ) )
             return new CAtom( logicalvalue( p_context.LOGICALVALUE().getText() ) );
->>>>>>> developing
 
         if ( Objects.nonNull( p_context.variable() ) )
             return new CAtom( this.visitVariable( p_context.variable() ) );
@@ -955,13 +925,8 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
     {
-<<<<<<< HEAD
-        if ( p_context.NUMBER() != null )
-            return new CAtom( numbervalue( p_context.NUMBER() ) );
-=======
         if ( Objects.nonNull( p_context.number() ) )
             return new CAtom( this.visitNumber( p_context.number() ) );
->>>>>>> developing
 
         if ( Objects.nonNull( p_context.variable() ) )
             return new CAtom( this.visitVariable( p_context.variable() ) );
@@ -1026,13 +991,8 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
      */
     private static Number numbervalue( final TerminalNode p_number )
     {
-<<<<<<< HEAD
-        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_number.getText() );
-        if ( l_constant != null )
-=======
         final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_value );
         if ( Objects.nonNull( l_constant ) )
->>>>>>> developing
             return l_constant;
 
         return Double.valueOf( p_number.getText() );
