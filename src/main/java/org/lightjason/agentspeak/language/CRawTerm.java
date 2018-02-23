@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 /**
@@ -84,10 +85,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
         else
         {
             m_value = (T) p_value;
-            m_functor = p_value == null ? IPath.EMPTY : CPath.from( p_value.toString() );
+            m_functor = Objects.isNull( p_value ) ? IPath.EMPTY : CPath.from( p_value.toString() );
         }
 
-        m_hashcode = m_value == null ? 0 : m_value.hashCode();
+        m_hashcode = Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
 
@@ -117,7 +118,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null )
+        return ( Objects.nonNull( p_object ) )
                && (
                    (
                         ( p_object instanceof IVariable<?> )
@@ -131,7 +132,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final String toString()
     {
-        return m_value == null ? "" : m_value.toString();
+        return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
     @Nonnull

@@ -94,7 +94,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IExpression ) && ( m_execution.equals( p_object ) );
+        return ( p_object instanceof IExpression ) && ( m_execution.equals( p_object ) );
     }
 
     @Override

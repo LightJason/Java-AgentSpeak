@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -73,7 +74,7 @@ public final class CCreateKey extends IBuiltinAction
             final Pair<Key, Key> l_key = EAlgorithm.from( p_argument.get( 0 ).<String>raw() ).generateKey();
 
             p_return.add( CRawTerm.from( l_key.getLeft() ) );
-            if ( l_key.getRight() != null )
+            if ( Objects.nonNull( l_key.getRight() ) )
                 p_return.add( CRawTerm.from( l_key.getRight() ) );
 
             return CFuzzyValue.from( true );

@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 /**
@@ -144,7 +145,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
-        return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+        return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Nonnull
@@ -166,13 +167,13 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IVariable<?> ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IVariable<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}({1})", m_functor, m_value == null ? "" : m_value );
+        return MessageFormat.format( "{0}({1})", m_functor, Objects.isNull( m_value ) ? "" : m_value );
     }
 
     @Nonnull
@@ -213,7 +214,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CVariable<>( m_functor, m_value )
                : new CVariable<>( p_prefix[0].append( m_functor ), m_value );
     }
@@ -230,7 +231,7 @@ public class CVariable<T> implements IVariable<T>
     public ITerm deepcopy( final IPath... p_prefix )
     {
         return new CVariable<>(
-            ( p_prefix == null ) || ( p_prefix.length == 0 )
+            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
             org.lightjason.agentspeak.language.CCommon.deepclone( m_value )

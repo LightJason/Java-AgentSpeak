@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -99,7 +100,7 @@ public abstract class IBaseWeb extends IBuiltinAction
     {
         p_request.setHeader(
             "User-Agent",
-            ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
+            ( Objects.isNull( System.getProperty( "http.agent" ) ) ) || ( System.getProperty( "http.agent" ).isEmpty() )
             ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
             : System.getProperty( "http.agent" )
         );
@@ -176,7 +177,7 @@ public abstract class IBaseWeb extends IBuiltinAction
     @SuppressWarnings( "unchecked" )
     protected static Stream<ITerm> flatterm( @Nullable final Object p_object )
     {
-        if ( ( p_object == null ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
+        if ( ( Objects.isNull( p_object ) ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
             return Stream.empty();
 
         return p_object instanceof Map

@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -66,7 +67,7 @@ public abstract class IBaseExecution<T> implements IExecution
      */
     public final boolean isValueAssignableTo( final Class<?> p_class )
     {
-        return ( m_value != null ) &&  p_class.isAssignableFrom( m_value.getClass() );
+        return ( Objects.nonNull( m_value ) ) &&  p_class.isAssignableFrom( m_value.getClass() );
     }
 
     /**
@@ -90,7 +91,7 @@ public abstract class IBaseExecution<T> implements IExecution
     @Override
     public String toString()
     {
-        return m_value == null ? "" : m_value.toString();
+        return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
 }

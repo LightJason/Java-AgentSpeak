@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -76,7 +77,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     {
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );
-        if ( l_rules == null )
+        if ( Objects.isNull( l_rules ) )
             return CFuzzyValue.from( false );
 
         // first step is the unification of the caller literal, so variables will be set from the current execution context
@@ -128,13 +129,13 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value == null ? 0 : m_value.hashCode();
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
 }

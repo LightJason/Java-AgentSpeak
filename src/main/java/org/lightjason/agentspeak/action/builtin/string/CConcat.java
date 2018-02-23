@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -65,7 +66,7 @@ public final class CConcat extends IBuiltinAction
     {
         p_return.add( CRawTerm.from(
             CCommon.flatten( p_argument )
-                   .filter( i -> i.raw() != null )
+                   .filter( i -> Objects.nonNull( i.raw() ) )
                    .map( i -> i.raw().toString() )
                    .collect( Collectors.joining() )
         ) );
