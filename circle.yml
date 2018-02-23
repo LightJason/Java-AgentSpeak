@@ -9,9 +9,9 @@ jobs:
         branches:
             ignore:
                 - developing
-                - /hotfix-.*/
-                - /release-.*/
-                - /support-.*/
+                - /hotfix.*/
+                - /release.*/
+                - /support.*/
                 - /dev-.*/
                 - /gh-.*/
 
