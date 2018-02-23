@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLambdaExpression.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.action</a> &gt; <span class="el_source">CLambdaExpression.java</span></div><h1>CLambdaExpression.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.action;
+
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.CContext;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * lambda expression definition
+ */
+public final class CLambdaExpression extends IBaseExecution&lt;IVariable&lt;?&gt;&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5128636076731831236L;
+    /**
+     * initialization expression
+     */
+    private final IExecution m_initialize;
+    /**
+     * execution body
+     */
+    private final List&lt;IExecution&gt; m_body;
+    /**
+     * flag of parallel execution
+     */
+    private final boolean m_parallel;
+    /**
+     * return variable
+     */
+    private final IVariable&lt;?&gt; m_return;
+
+
+    /**
+     * ctor
+     *
+     * @param p_parallel parallel execution flag
+     * @param p_initialize expression
+     * @param p_iterator iteration variable
+     * @param p_body execution body
+     */
+    public CLambdaExpression( final boolean p_parallel, @Nonnull final IExecution p_initialize,
+                              @Nonnull final IVariable&lt;?&gt; p_iterator, @Nonnull final List&lt;IExecution&gt; p_body )
+    {
+<span class="fc" id="L88">        this( p_parallel, p_initialize, p_iterator, null, p_body );</span>
+<span class="fc" id="L89">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_parallel parallel execution flag
+     * @param p_initialize expression
+     * @param p_iterator iteration variable
+     * @param p_return return variable
+     * @param p_body execution body
+     */
+    public CLambdaExpression( final boolean p_parallel, @Nonnull final IExecution p_initialize, @Nonnull final IVariable&lt;?&gt; p_iterator,
+                              @Nullable final IVariable&lt;?&gt; p_return, @Nonnull final List&lt;IExecution&gt; p_body )
+    {
+<span class="fc" id="L103">        super( p_iterator );</span>
+<span class="fc" id="L104">        m_parallel = p_parallel;</span>
+<span class="fc" id="L105">        m_initialize = p_initialize;</span>
+<span class="fc" id="L106">        m_return = p_return;</span>
+<span class="fc" id="L107">        m_body = Collections.unmodifiableList( p_body );</span>
+<span class="fc" id="L108">    }</span>
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+        // run initialization
+<span class="fc" id="L116">        final List&lt;ITerm&gt; l_initialization = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if ( !m_initialize.execute( p_parallel, p_context, p_argument, l_initialization ).value() )</span>
+<span class="nc" id="L118">            return CFuzzyValue.from( false );</span>
+
+        // run lambda expression
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        final List&lt;?&gt; l_return = m_parallel ? this.executeParallel( p_context, l_initialization ) : this.executeSequential( p_context, l_initialization );</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if ( Objects.nonNull( m_return ) )</span>
+<span class="fc" id="L123">            CCommon.replaceFromContext( p_context, m_return ).&lt;IVariable&lt;List&lt;?&gt;&gt;&gt;term().set( l_return );</span>
+
+<span class="fc" id="L125">        return CFuzzyValue.from( true );</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        return m_initialize.hashCode() ^ m_value.hashCode() ^ m_body.hashCode() ^ ( m_parallel ? 9931 : 0 );</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L137" title="All 4 branches missed.">        return ( p_object instanceof IExecution ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        return Objects.isNull( m_return )</span>
+<span class="fc" id="L145">               ? m_initialize.variables()</span>
+<span class="fc" id="L146">               : Stream.concat(</span>
+<span class="fc" id="L147">                   Stream.of( m_return ),</span>
+<span class="fc" id="L148">                   m_initialize.variables()</span>
+               );
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        return MessageFormat.format( &quot;{0}({1}) -&gt; {2} | {3}&quot;, m_parallel ? &quot;@&quot; : &quot;&quot;, m_initialize, m_value, m_body );</span>
+    }
+
+    /**
+     * run sequential execution
+     *
+     * @param p_context execution context
+     * @param p_input input list
+     * @return return list
+     */
+    @Nonnull
+    private List&lt;?&gt; executeSequential( @Nonnull final IContext p_context, @Nonnull final List&lt;ITerm&gt; p_input )
+    {
+<span class="fc" id="L168">        final Triple&lt;IContext, IVariable&lt;?&gt;, IVariable&lt;?&gt;&gt; l_localcontext = this.getLocalContext( p_context );</span>
+
+<span class="fc" id="L170">        return CCommon.flatten( p_input )</span>
+<span class="fc" id="L171">                      .map( i -&gt;</span>
+                      {
+<span class="fc" id="L173">                          l_localcontext.getMiddle().set( i.raw() );</span>
+<span class="fc" id="L174">                          m_body.forEach( j -&gt; j.execute(</span>
+                                  m_parallel,
+<span class="fc" id="L176">                                  l_localcontext.getLeft(),</span>
+<span class="fc" id="L177">                                  Collections.&lt;ITerm&gt;emptyList(),</span>
+                                  new LinkedList&lt;&gt;()
+                               ) );
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                          return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;</span>
+                      } )
+<span class="fc" id="L182">                      .filter( Objects::nonNull )</span>
+<span class="fc" id="L183">                      .collect( Collectors.toList() );</span>
+    }
+
+    /**
+     * run parallel execution
+     *
+     * @param p_context execution context
+     * @param p_input input list
+     * @return return list
+     */
+    @Nonnull
+    private List&lt;?&gt; executeParallel( @Nonnull final IContext p_context, @Nonnull final List&lt;ITerm&gt; p_input )
+    {
+<span class="fc" id="L196">        return CCommon.flatten( p_input )</span>
+<span class="fc" id="L197">                      .parallel()</span>
+<span class="fc" id="L198">                      .map( i -&gt;</span>
+                      {
+<span class="fc" id="L200">                          final Triple&lt;IContext, IVariable&lt;?&gt;, IVariable&lt;?&gt;&gt; l_localcontext = this.getLocalContext( p_context );</span>
+<span class="fc" id="L201">                          l_localcontext.getMiddle().set( i.raw() );</span>
+<span class="fc" id="L202">                          m_body.forEach( j -&gt; j.execute(</span>
+                                  m_parallel,
+<span class="fc" id="L204">                                  l_localcontext.getLeft(),</span>
+<span class="fc" id="L205">                                  Collections.&lt;ITerm&gt;emptyList(),</span>
+                                  new LinkedList&lt;&gt;()
+                                ) );
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">                          return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;</span>
+                      } )
+<span class="fc" id="L210">                      .filter( Objects::nonNull )</span>
+<span class="fc" id="L211">                      .collect( Collectors.toList() );</span>
+    }
+
+
+    /**
+     * create the local context structure of the expression
+     *
+     * @param p_context local context
+     * @return tripel with context, iterator variable and return variable
+     */
+    @Nonnull
+    private Triple&lt;IContext, IVariable&lt;?&gt;, IVariable&lt;?&gt;&gt; getLocalContext( @Nonnull final IContext p_context )
+    {
+<span class="fc" id="L224">        final IVariable&lt;?&gt; l_iterator = m_value.shallowcopy();</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        final IVariable&lt;?&gt; l_return = m_return != null ? m_return.shallowcopy() : null;</span>
+
+<span class="fc" id="L227">        final Set&lt;IVariable&lt;?&gt;&gt; l_variables = new HashSet&lt;&gt;( p_context.instancevariables().values() );</span>
+
+<span class="fc" id="L229">        m_body.stream().flatMap( IExecution::variables ).forEach( l_variables::add );</span>
+<span class="fc" id="L230">        l_variables.remove( l_iterator );</span>
+<span class="fc" id="L231">        l_variables.add( l_iterator );</span>
+
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if ( Objects.nonNull( l_return ) )</span>
+        {
+<span class="fc" id="L235">            l_variables.remove( l_return );</span>
+<span class="fc" id="L236">            l_variables.add( l_return );</span>
+        }
+
+<span class="fc" id="L239">        return new ImmutableTriple&lt;&gt;( new CContext( p_context.agent(), p_context.instance(), l_variables ), l_iterator, l_return );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

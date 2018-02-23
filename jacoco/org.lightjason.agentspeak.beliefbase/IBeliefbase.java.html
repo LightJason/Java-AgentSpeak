@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBeliefbase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.beliefbase</a> &gt; <span class="el_source">IBeliefbase.java</span></div><h1>IBeliefbase.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.beliefbase;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Stream;
+
+
+/**
+ * interface of beliefbase definition,
+ * that create the trigger events for the agent
+ *
+ * @tparam T agent type
+ */
+public interface IBeliefbase extends IStructure
+{
+    /**
+     * empty beliefbase
+     */
+<span class="nc" id="L49">    IBeliefbase EMPY = new IBeliefbase()</span>
+<span class="nc" id="L50">    {</span>
+
+        @Override
+        public final boolean empty()
+        {
+<span class="nc" id="L55">            return true;</span>
+        }
+
+        @Override
+        public final int size()
+        {
+<span class="nc" id="L61">            return 0;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;?&gt; update( @Nonnull final IAgent&lt;?&gt; p_agent )
+        {
+<span class="nc" id="L68">            return p_agent;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;ITrigger&gt; trigger( @Nonnull final IView p_view )
+        {
+<span class="nc" id="L75">            return Stream.empty();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;ILiteral&gt; streamLiteral()
+        {
+<span class="nc" id="L82">            return Stream.empty();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;IView&gt; streamView()
+        {
+<span class="nc" id="L89">            return Stream.empty();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IBeliefbase clear()
+        {
+<span class="nc" id="L96">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral add( @Nonnull final ILiteral p_literal )
+        {
+<span class="nc" id="L103">            return p_literal;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IView add( @Nonnull final IView p_view )
+        {
+<span class="nc" id="L110">            return p_view;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral remove( @Nonnull final ILiteral p_literal )
+        {
+<span class="nc" id="L117">            return p_literal;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IView remove( @Nonnull final IView p_view )
+        {
+<span class="nc" id="L124">            return p_view;</span>
+        }
+
+        @Override
+        public final boolean containsLiteral( @Nonnull final String p_key )
+        {
+<span class="nc" id="L130">            return false;</span>
+        }
+
+        @Override
+        public final boolean containsView( @Nonnull final String p_key )
+        {
+<span class="nc" id="L136">            return false;</span>
+        }
+
+        @Nullable
+        @Override
+        public final IView view( @Nonnull final String p_key )
+        {
+<span class="nc" id="L143">            return IView.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Collection&lt;ILiteral&gt; literal( @Nonnull final String p_key )
+        {
+<span class="nc" id="L150">            return Collections.emptySet();</span>
+        }
+
+        @Nullable
+        @Override
+        public final IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
+        {
+<span class="nc" id="L157">            return p_default;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IView create( @Nonnull final String p_name )
+        {
+<span class="nc" id="L164">            return IView.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IView create( @Nonnull final String p_name, @Nullable final IView p_parent
+        )
+        {
+<span class="nc" id="L172">            return IView.EMPTY;</span>
+        }
+
+    };
+
+    /**
+     * returns all trigger of the beliefbase
+     *
+     * @param p_view mask for events
+     * @return set with trigger events
+     */
+    @Nonnull
+    Stream&lt;ITrigger&gt; trigger( @Nonnull final IView p_view );
+
+
+
+    /**
+     * returns a stream over all literals
+     *
+     * @return literal stream
+     */
+    @Nonnull
+    Stream&lt;ILiteral&gt; streamLiteral();
+
+    /**
+     * returns a stream over all views
+     *
+     * @return view stream
+     */
+    @Nonnull
+    Stream&lt;IView&gt; streamView();
+
+
+
+    /**
+     * clears all elements
+     *
+     * @return beliefbase reference
+     */
+    @Nonnull
+    IBeliefbase clear();
+
+
+
+    /**
+     * adds a literal
+     *
+     * @param p_literal literal without path
+     * @return beliefbase reference
+     */
+    @Nonnull
+    ILiteral add( @Nonnull final ILiteral p_literal );
+
+    /**
+     * adds a view
+     *
+     * @param p_view view
+     * @return beliefbase reference
+     */
+    @Nonnull
+    IView add( @Nonnull final IView p_view );
+
+
+
+    /**
+     * removes a literal
+     *
+     * @param p_literal without path
+     * @return beliefbase reference
+     */
+    @Nonnull
+    ILiteral remove( @Nonnull final ILiteral p_literal );
+
+    /**
+     * removes a view
+     *
+     * @param p_view view
+     * @return beliefbase reference
+     */
+    @Nonnull
+    IView remove( @Nonnull final IView p_view );
+
+
+
+    /**
+     * contains a multi-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsLiteral( @Nonnull final String p_key );
+
+    /**
+     * contains a single-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsView( @Nonnull final String p_key );
+
+
+
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @return view or null
+     */
+    @Nullable
+    IView view( @Nonnull final String p_key );
+
+    /**
+     * returns a literal by the name
+     *
+     * @param p_key name of the literal
+     * @return collection of pairs with negated and literal
+     */
+    @Nonnull
+    Collection&lt;ILiteral&gt; literal( @Nonnull final String p_key );
+
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @param p_default view
+     * @return view or default element
+     */
+    @Nullable
+    IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default );
+
+
+
+    /**
+     * returns a new view of the belief base
+     *
+     * @param p_name name of the view
+     * @return created view
+     */
+    @Nonnull
+    IView create( @Nonnull final String p_name );
+
+    /**
+     * returns a new view of the belief base
+     *
+     * @param p_name name of the view
+     * @param p_parent parent view
+     * @return view
+     */
+    @Nonnull
+    IView create( @Nonnull final String p_name, @Nullable final IView p_parent );
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

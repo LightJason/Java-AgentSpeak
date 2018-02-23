@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CASTVisitorPlanBundle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.grammar</a> &gt; <span class="el_source">CASTVisitorPlanBundle.java</span></div><h1>CASTVisitorPlanBundle.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.grammar;
+
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
+import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
+import org.lightjason.agentspeak.language.execution.action.CLambdaExpression;
+import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
+import org.lightjason.agentspeak.language.execution.action.CProxyAction;
+import org.lightjason.agentspeak.language.execution.action.CRawAction;
+import org.lightjason.agentspeak.language.execution.action.CRepair;
+import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
+import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementRuleLiteral;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementRuleVariable;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
+import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
+import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
+import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
+import org.lightjason.agentspeak.language.execution.expression.CAtom;
+import org.lightjason.agentspeak.language.execution.expression.CProxyReturnExpression;
+import org.lightjason.agentspeak.language.execution.expression.EOperator;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.execution.expression.logical.CUnary;
+import org.lightjason.agentspeak.language.execution.expression.numerical.CAdditive;
+import org.lightjason.agentspeak.language.execution.expression.numerical.CComparable;
+import org.lightjason.agentspeak.language.execution.expression.numerical.CMultiplicative;
+import org.lightjason.agentspeak.language.execution.expression.numerical.CPower;
+import org.lightjason.agentspeak.language.execution.expression.numerical.CRelational;
+import org.lightjason.agentspeak.language.execution.expressionbinary.COperatorAssign;
+import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
+import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
+import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.instantiable.rule.CRule;
+import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.variable.CMutexVariable;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.CVariableEvaluate;
+import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+
+/**
+ * default abstract-syntax-tree (AST) visitor for plan-bundles scripts
+ *
+ * @note methods are implemented twice agent and plan-bundle, because both use equal
+ * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
+ */
+@SuppressWarnings( {&quot;all&quot;, &quot;warnings&quot;, &quot;unchecked&quot;, &quot;unused&quot;, &quot;cast&quot;} )
+public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor&lt;Object&gt; implements IASTVisitorPlanBundle
+{
+    /**
+     * logger
+     */
+<span class="nc" id="L116">    private static final Logger LOGGER = CCommon.logger( IASTVisitorAgent.class );</span>
+    /**
+     * set with initial beliefs
+     */
+<span class="nc" id="L120">    private final Set&lt;ILiteral&gt; m_initialbeliefs = new LinkedHashSet&lt;&gt;();</span>
+    /**
+     * map with plans
+     */
+<span class="nc" id="L124">    private final Set&lt;IPlan&gt; m_plans = new HashSet&lt;&gt;();</span>
+    /**
+     * map with logical rules
+     */
+<span class="nc" id="L128">    private final Multimap&lt;IPath, IRule&gt; m_rules = LinkedHashMultimap.create();</span>
+    /**
+     * map with action definition
+     */
+    private final Map&lt;IPath, IAction&gt; m_actions;
+
+    /**
+     * ctor
+     *
+     * @param p_actions set with actions
+     */
+    public CASTVisitorPlanBundle( @Nonnull final Set&lt;IAction&gt; p_actions )
+<span class="nc" id="L140">    {</span>
+<span class="nc" id="L141">        m_actions = p_actions.stream().collect( Collectors.toMap( i -&gt; i.name(), i -&gt; i ) );</span>
+<span class="nc" id="L142">        LOGGER.info( MessageFormat.format( &quot;create parser with actions &amp; rules : {0} / {1}&quot;, m_actions.keySet(), m_rules.keySet() ) );</span>
+<span class="nc" id="L143">    }</span>
+
+
+    // --- plan bundle rules -----------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final Object visitPlanbundle( final PlanBundleParser.PlanbundleContext p_context )
+    {
+<span class="nc" id="L151">        return this.visitChildren( p_context );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final Object visitBelief( final PlanBundleParser.BeliefContext p_context )
+    {
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        if ( Objects.isNull( p_context.literal() ) )</span>
+<span class="nc" id="L162">            return null;</span>
+
+<span class="nc" id="L164">        m_initialbeliefs.add( (ILiteral) this.visitLiteral( p_context.literal() ) );</span>
+<span class="nc" id="L165">        return null;</span>
+    }
+
+    @Override
+    public final Object visitPlans( final PlanBundleParser.PlansContext p_context )
+    {
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if ( Objects.isNull( p_context.plan() ) )</span>
+<span class="nc" id="L172">            return null;</span>
+
+<span class="nc" id="L174">        p_context.plan().stream().forEach( i -&gt; ( (List&lt;IPlan&gt;) this.visitPlan( i ) ).stream().forEach( j -&gt; m_plans.add( j ) ) );</span>
+<span class="nc" id="L175">        LOGGER.info( MessageFormat.format( &quot;parsed plans: {0}&quot;, m_plans ) );</span>
+<span class="nc" id="L176">        return null;</span>
+    }
+
+    @Override
+    public final Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
+    {
+        // create placeholder objects first and run parsing again to build full-qualified rule objects
+<span class="nc" id="L183">        p_context.logicrule().stream()</span>
+<span class="nc" id="L184">                 .map( i -&gt; (IRule) this.visitLogicrulePlaceHolder( i ) )</span>
+<span class="nc" id="L185">                 .forEach( i -&gt; m_rules.put( i.identifier().fqnfunctor(), i ) );</span>
+
+<span class="nc" id="L187">        final Multimap&lt;IPath, IRule&gt; l_rules = LinkedHashMultimap.create();</span>
+<span class="nc" id="L188">        p_context.logicrule().stream()</span>
+<span class="nc" id="L189">                 .flatMap( i -&gt; ( (List&lt;IRule&gt;) this.visitLogicrule( i ) ).stream() )</span>
+<span class="nc" id="L190">                 .forEach( i -&gt; l_rules.put( i.identifier().fqnfunctor(), i ) );</span>
+
+        // clear rule list and replace placeholder objects
+<span class="nc" id="L193">        m_rules.clear();</span>
+<span class="nc" id="L194">        l_rules.values().stream()</span>
+<span class="nc" id="L195">               .map( i -&gt; i.replaceplaceholder( l_rules ) )</span>
+<span class="nc" id="L196">               .forEach( i -&gt; m_rules.put( i.identifier().fqnfunctor(), i ) );</span>
+
+<span class="nc" id="L198">        LOGGER.info( MessageFormat.format( &quot;parsed rules: {0}&quot;, m_rules.values() ) );</span>
+<span class="nc" id="L199">        return null;</span>
+    }
+
+    @Override
+    public final Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
+    {
+<span class="nc" id="L205">        final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );</span>
+<span class="nc" id="L206">        return p_context.logicalruledefinition().stream()</span>
+<span class="nc" id="L207">                        .map( i -&gt; new CRule( (ILiteral) l_literal.deepcopy(), (List&lt;IExecution&gt;) this.visitLogicalruledefinition( i ) ) )</span>
+<span class="nc" id="L208">                        .collect( Collectors.toList() );</span>
+    }
+
+    @Override
+    public final Object visitLogicalruledefinition( final PlanBundleParser.LogicalruledefinitionContext p_context )
+    {
+<span class="nc" id="L214">        return this.visitBody( p_context.body() );</span>
+    }
+
+    @Override
+    public final Object visitPlan( final PlanBundleParser.PlanContext p_context )
+    {
+<span class="nc" id="L220">        final Set&lt;IAnnotation&lt;?&gt;&gt; l_annotation = (Set&lt;IAnnotation&lt;?&gt;&gt;) this.visitAnnotations( p_context.annotations() );</span>
+<span class="nc" id="L221">        final CTrigger l_trigger = new CTrigger(</span>
+<span class="nc" id="L222">            (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),</span>
+<span class="nc" id="L223">            (ILiteral) this.visitLiteral( p_context.literal() )</span>
+        );
+
+<span class="nc" id="L226">        return p_context.plandefinition()</span>
+<span class="nc" id="L227">                        .stream()</span>
+<span class="nc" id="L228">                        .map( i -&gt;</span>
+                        {
+<span class="nc" id="L230">                            final Pair&lt;IExpression, List&lt;IExecution&gt;&gt; l_content = (Pair&lt;IExpression, List&lt;IExecution&gt;&gt;) this.visitPlandefinition( i );</span>
+<span class="nc" id="L231">                            return new CPlan( l_trigger, l_content.getLeft(), l_content.getRight(), l_annotation );</span>
+                        } )
+<span class="nc" id="L233">                        .collect( Collectors.toList() );</span>
+    }
+
+    @Override
+    public final Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
+    {
+<span class="nc" id="L239">        return new ImmutablePair&lt;IExpression, List&lt;IExecution&gt;&gt;(</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            Objects.isNull( p_context.expression() ) ? IExpression.EMPTY</span>
+<span class="nc" id="L241">                                           : (IExpression) this.visitExpression( p_context.expression() ),</span>
+<span class="nc" id="L242">            (List&lt;IExecution&gt;) this.visitBody( p_context.body() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitAnnotations( final PlanBundleParser.AnnotationsContext p_context )
+    {
+<span class="nc bnc" id="L249" title="All 4 branches missed.">        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )</span>
+<span class="nc" id="L250">            return Collections.emptySet();</span>
+
+
+<span class="nc" id="L253">        final Set&lt;IAnnotation&lt;?&gt;&gt; l_annotation = new HashSet&lt;&gt;();</span>
+
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.annotation_atom() ) )</span>
+<span class="nc" id="L256">            p_context.annotation_atom().stream().map( i -&gt; (IAnnotation&lt;?&gt;) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );</span>
+
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.annotation_literal() ) )</span>
+<span class="nc" id="L259">            p_context.annotation_literal().stream().map( i -&gt; (IAnnotation&lt;?&gt;) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );</span>
+
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        return l_annotation.isEmpty() ? Collections.emptySet() : l_annotation;</span>
+    }
+
+    @Override
+    public final Object visitAnnotation_atom( final PlanBundleParser.Annotation_atomContext p_context )
+    {
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.ATOMIC() ) )</span>
+<span class="nc" id="L268">            return new CAtomAnnotation&lt;&gt;( IAnnotation.EType.ATOMIC );</span>
+
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.PARALLEL() ) )</span>
+<span class="nc" id="L271">            return new CAtomAnnotation&lt;&gt;( IAnnotation.EType.PARALLEL );</span>
+
+<span class="nc" id="L273">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;atomannotation&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitAnnotation_literal( final PlanBundleParser.Annotation_literalContext p_context )
+    {
+<span class="nc" id="L279">        return this.visitChildren( p_context );</span>
+    }
+
+    @Override
+    public Object visitAnnotation_value_literal( final PlanBundleParser.Annotation_value_literalContext p_context )
+    {
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.number() ) )</span>
+<span class="nc" id="L286">            return new CValueAnnotation&lt;&gt;(</span>
+                IAnnotation.EType.CONSTANT,
+<span class="nc" id="L288">                (String) this.visitVariableatom( p_context.variableatom() ),</span>
+<span class="nc" id="L289">                ( (Number) this.visitNumber( p_context.number() ) ).doubleValue()</span>
+            );
+
+<span class="nc bnc" id="L292" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.STRING() ) )</span>
+<span class="nc" id="L293">            return new CValueAnnotation&lt;&gt;(</span>
+                IAnnotation.EType.CONSTANT,
+<span class="nc" id="L295">                (String) this.visitVariableatom( p_context.variableatom() ),</span>
+<span class="nc" id="L296">                stringvalue( p_context.STRING().getText() )</span>
+            );
+
+<span class="nc" id="L299">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;valueannotation&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitPlan_trigger( final PlanBundleParser.Plan_triggerContext p_context )
+    {
+<span class="nc" id="L305">        return this.visitChildren( p_context );</span>
+    }
+
+    @Override
+    public final Object visitPlan_goal_trigger( final PlanBundleParser.Plan_goal_triggerContext p_context )
+    {
+<span class="nc bnc" id="L311" title="All 2 branches missed.">        if ( ITrigger.EType.ADDGOAL.sequence().equals( p_context.getText() ) )</span>
+<span class="nc" id="L312">            return ITrigger.EType.ADDGOAL;</span>
+
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        if ( ITrigger.EType.DELETEGOAL.sequence().equals( p_context.getText() ) )</span>
+<span class="nc" id="L315">            return ITrigger.EType.DELETEGOAL;</span>
+
+<span class="nc" id="L317">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;goaltrigger&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitPlan_belief_trigger( final PlanBundleParser.Plan_belief_triggerContext p_context )
+    {
+<span class="nc bnc" id="L323" title="All 2 branches missed.">        if ( ITrigger.EType.ADDBELIEF.sequence().equals( p_context.getText() ) )</span>
+<span class="nc" id="L324">            return ITrigger.EType.ADDBELIEF;</span>
+
+<span class="nc bnc" id="L326" title="All 2 branches missed.">        if ( ITrigger.EType.DELETEBELIEF.sequence().equals( p_context.getText() ) )</span>
+<span class="nc" id="L327">            return ITrigger.EType.DELETEBELIEF;</span>
+
+<span class="nc" id="L329">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;belieftrigger&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitBody( final PlanBundleParser.BodyContext p_context )
+    {
+        // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
+<span class="nc" id="L336">        return p_context.body_formula().stream()</span>
+<span class="nc" id="L337">                        .filter( i -&gt; Objects.nonNull( i ) )</span>
+<span class="nc" id="L338">                        .map( i -&gt; this.visitBody_formula( i ) )</span>
+<span class="nc" id="L339">                        .filter( i -&gt; i instanceof IExecution )</span>
+                        // expression are encapsulate to get result
+<span class="nc bnc" id="L341" title="All 2 branches missed.">                        .map( i -&gt; i instanceof IExpression ? new CRawAction&lt;&gt;( i ) : i )</span>
+<span class="nc" id="L342">                        .collect( Collectors.toList() );</span>
+    }
+
+    @Override
+    public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
+    {
+<span class="nc" id="L348">        return this.visitChildren( p_context );</span>
+    }
+
+    @Override
+    public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
+    {
+        // a non-existing repair formula can return any object-item, so convert it
+        // to executable structure, because the grammar rule must return an executable item
+<span class="nc bnc" id="L356" title="All 2 branches missed.">        if ( Objects.isNull( p_context.repair_formula() ) )</span>
+<span class="nc" id="L357">            return this.visitChildren( p_context );</span>
+
+
+        // if there exists any repair element, build a sequential hierarchie of repair calls
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_term() ) )</span>
+<span class="nc" id="L362">            return new CRepair(</span>
+<span class="nc" id="L363">                (IExecution) this.visitExecutable_term( p_context.executable_term() ),</span>
+<span class="nc" id="L364">                (IExecution) this.visitRepair_formula( p_context.repair_formula() )</span>
+            );
+
+<span class="nc bnc" id="L367" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.test_action() ) )</span>
+<span class="nc" id="L368">            return new CRepair(</span>
+<span class="nc" id="L369">                (IExecution) this.visitTest_action( p_context.test_action() ),</span>
+<span class="nc" id="L370">                (IExecution) this.visitRepair_formula( p_context.repair_formula() )</span>
+            );
+
+<span class="nc bnc" id="L373" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.achievement_goal_action() ) )</span>
+<span class="nc" id="L374">            return new CRepair(</span>
+<span class="nc" id="L375">                (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),</span>
+<span class="nc" id="L376">                (IExecution) this.visitRepair_formula( p_context.repair_formula() )</span>
+            );
+
+<span class="nc" id="L379">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;repairelement&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitUnification( final PlanBundleParser.UnificationContext p_context )
+    {
+<span class="nc" id="L385">        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );</span>
+
+<span class="nc bnc" id="L387" title="All 2 branches missed.">        if ( l_constraint instanceof IExpression )</span>
+<span class="nc" id="L388">            return new CExpressionUnify(</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">                p_context.AT() != null,</span>
+<span class="nc" id="L390">                (ILiteral) this.visitLiteral( p_context.literal() ),</span>
+                (IExpression) l_constraint
+            );
+
+<span class="nc bnc" id="L394" title="All 2 branches missed.">        if ( l_constraint instanceof IVariable&lt;?&gt; )</span>
+<span class="nc" id="L395">            return new CVariableUnify(</span>
+<span class="nc bnc" id="L396" title="All 2 branches missed.">                p_context.AT() != null,</span>
+<span class="nc" id="L397">                (ILiteral) this.visitLiteral( p_context.literal() ),</span>
+                (IVariable&lt;?&gt;) l_constraint
+            );
+
+<span class="nc bnc" id="L401" title="All 2 branches missed.">        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );</span>
+    }
+
+    @Override
+    public final Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
+    {
+<span class="nc bnc" id="L407" title="All 2 branches missed.">        if ( Objects.isNull( p_context ) )</span>
+<span class="nc" id="L408">            return null;</span>
+
+<span class="nc bnc" id="L410" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression() ) )</span>
+<span class="nc" id="L411">            return this.visitExpression( p_context.expression() );</span>
+
+<span class="nc bnc" id="L413" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable() ) )</span>
+<span class="nc" id="L414">            return this.visitVariable( p_context.variable() );</span>
+
+<span class="nc" id="L416">        return null;</span>
+    }
+
+    @Override
+    public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
+    {
+<span class="nc bnc" id="L422" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.body_formula() ) )</span>
+        {
+<span class="nc" id="L424">            final LinkedList&lt;IExecution&gt; l_statement = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L425">            l_statement.add( (IExecution) this.visitBody_formula( p_context.body_formula() ) );</span>
+<span class="nc" id="L426">            return l_statement;</span>
+        }
+
+<span class="nc" id="L429">        return this.visitBody( p_context.body() );</span>
+    }
+
+    @Override
+    public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
+    {
+<span class="nc bnc" id="L435" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.lambda_return() ) )</span>
+<span class="nc" id="L436">            return new CLambdaExpression(</span>
+<span class="nc" id="L437">                Objects.nonNull( p_context.AT() ),</span>
+<span class="nc" id="L438">                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),</span>
+<span class="nc" id="L439">                (IVariable&lt;?&gt;) this.visitVariable( p_context.variable() ),</span>
+<span class="nc" id="L440">                (IVariable&lt;?&gt;) this.visitLambda_return( p_context.lambda_return() ),</span>
+<span class="nc" id="L441">                (List&lt;IExecution&gt;) this.visitBlock_formula( p_context.block_formula() )</span>
+            );
+
+<span class="nc" id="L444">        return new CLambdaExpression(</span>
+<span class="nc" id="L445">            Objects.nonNull( p_context.AT() ),</span>
+<span class="nc" id="L446">            (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),</span>
+<span class="nc" id="L447">            (IVariable&lt;?&gt;) this.visitVariable( p_context.variable() ),</span>
+<span class="nc" id="L448">            (List&lt;IExecution&gt;) this.visitBlock_formula( p_context.block_formula() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
+    {
+<span class="nc bnc" id="L455" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable() ) )</span>
+<span class="nc" id="L456">            return new CRawAction&lt;&gt;( this.visitVariable( p_context.variable() ) );</span>
+
+<span class="nc bnc" id="L458" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.literal() ) )</span>
+<span class="nc" id="L459">            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );</span>
+
+<span class="nc" id="L461">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;lambdainitialization&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
+    {
+<span class="nc" id="L467">        return this.visitVariable( p_context.variable() );</span>
+    }
+
+    @Override
+    public final Object visitExecutable_term( final PlanBundleParser.Executable_termContext p_context )
+    {
+<span class="nc bnc" id="L473" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.STRING() ) )</span>
+<span class="nc" id="L474">            return new CRawAction&lt;&gt;( stringvalue( p_context.STRING().getText() ) );</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.number() ) )</span>
+<span class="nc" id="L476">            return new CRawAction&lt;&gt;( this.visitNumber( p_context.number() ) );</span>
+<span class="nc bnc" id="L477" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )</span>
+<span class="nc" id="L478">            return new CRawAction&lt;&gt;( logicalvalue( p_context.LOGICALVALUE().getText() ) );</span>
+
+<span class="nc bnc" id="L480" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_action() ) )</span>
+<span class="nc" id="L481">            return this.visitExecutable_action( p_context.executable_action() );</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_rule() ) )</span>
+<span class="nc" id="L483">            return this.visitExecutable_rule( p_context.executable_rule() );</span>
+
+<span class="nc bnc" id="L485" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression() ) )</span>
+<span class="nc" id="L486">            return this.visitExpression( p_context.expression() );</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.ternary_operation() ) )</span>
+<span class="nc" id="L488">            return this.visitTernary_operation( p_context.ternary_operation() );</span>
+
+<span class="nc" id="L490">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;termunknown&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
+    {
+<span class="nc" id="L496">        return this.visitChildren( p_context );</span>
+    }
+
+    @Override
+    public final Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
+    {
+<span class="nc" id="L502">        return new CSingleAssignment&lt;&gt;(</span>
+<span class="nc" id="L503">            (IVariable&lt;?&gt;) this.visitVariable( p_context.variable() ),</span>
+<span class="nc" id="L504">            (IExecution) this.visitExecutable_term( p_context.executable_term() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
+    {
+<span class="nc" id="L511">        return new CMultiAssignment&lt;&gt;(</span>
+<span class="nc" id="L512">            p_context.variablelist().variable().stream().map( i -&gt; (IVariable&lt;?&gt;) this.visitVariable( i ) )</span>
+<span class="nc" id="L513">                     .collect( Collectors.toList() ),</span>
+<span class="nc" id="L514">            (IExecution) this.visitExecutable_term( p_context.executable_term() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
+    {
+<span class="nc bnc" id="L521" title="All 10 branches missed.">        switch ( p_context.UNARYOPERATOR().getText() )</span>
+        {
+            case &quot;++&quot;:
+<span class="nc" id="L524">                return new CIncrement&lt;&gt;( (IVariable&lt;Number&gt;) this.visitVariable( p_context.variable() ) );</span>
+
+            case &quot;--&quot;:
+<span class="nc" id="L527">                return new CDecrement&lt;&gt;( (IVariable&lt;Number&gt;) this.visitVariable( p_context.variable() ) );</span>
+
+            default:
+<span class="nc" id="L530">                throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;unaryoperator&quot;, p_context.getText() ) );</span>
+        }
+    }
+
+    @Override
+    public final Object visitBinary_expression( final PlanBundleParser.Binary_expressionContext p_context )
+    {
+<span class="nc" id="L537">        final IVariable&lt;Number&gt; l_lhs = (IVariable&lt;Number&gt;) this.visitVariable( p_context.variable( 0 ) );</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">        final ITerm l_rhs = p_context.variable().size() == 2</span>
+<span class="nc" id="L539">                            ? (IVariable&lt;Number&gt;) this.visitVariable( p_context.variable( 1 ) )</span>
+<span class="nc" id="L540">                            : CRawTerm.from( this.visitNumber( p_context.number() ) );</span>
+
+<span class="nc" id="L542">        return new COperatorAssign(</span>
+<span class="nc" id="L543">            l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.from( p_context.BINARYOPERATOR().getText() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
+    {
+<span class="nc bnc" id="L550" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.literal() ) )</span>
+<span class="nc" id="L551">            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );</span>
+
+<span class="nc bnc" id="L553" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable_evaluate() ) )</span>
+<span class="nc" id="L554">            return new CAchievementGoalVariable(</span>
+<span class="nc" id="L555">                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),</span>
+<span class="nc bnc" id="L556" title="All 2 branches missed.">                p_context.DOUBLEEXCLAMATIONMARK() != null</span>
+            );
+
+<span class="nc" id="L559">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;achievmentgoal&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
+    {
+<span class="nc" id="L565">        return new CTernaryOperation(</span>
+<span class="nc" id="L566">            (IExpression) this.visitExpression( p_context.expression() ),</span>
+<span class="nc" id="L567">            (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),</span>
+<span class="nc" id="L568">            (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
+    {
+<span class="nc" id="L575">        return this.visitExecutable_term( p_context.executable_term() );</span>
+    }
+
+    @Override
+    public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
+    {
+<span class="nc" id="L581">        return this.visitExecutable_term( p_context.executable_term() );</span>
+    }
+
+    @Override
+    public final Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
+    {
+        // dollar sign is used to recognize a rule
+<span class="nc bnc" id="L588" title="All 2 branches missed.">        return p_context.DOLLAR() != null</span>
+<span class="nc" id="L589">               ? new CTestRule( CPath.from( (String) this.visitAtom( p_context.atom() ) ) )</span>
+<span class="nc" id="L590">               : new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );</span>
+    }
+
+    @Override
+    public final Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
+    {
+<span class="nc bnc" id="L596" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.PLUS() ) )</span>
+<span class="nc" id="L597">            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.ADD );</span>
+
+<span class="nc bnc" id="L599" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.MINUS() ) )</span>
+<span class="nc" id="L600">            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );</span>
+
+<span class="nc" id="L602">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;beliefaction&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
+    {
+<span class="nc" id="L608">        return new CDeconstruct&lt;&gt;(</span>
+<span class="nc" id="L609">            p_context.variablelist().variable().stream().map( i -&gt; (IVariable&lt;?&gt;) this.visitVariable( i ) ).collect( Collectors.toList() ),</span>
+<span class="nc bnc" id="L610" title="All 2 branches missed.">            (ITerm) ( p_context.literal() != null ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )</span>
+        );
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
+    {
+<span class="nc" id="L622">        return new CLiteral(</span>
+<span class="nc bnc" id="L623" title="All 2 branches missed.">            p_context.AT() != null,</span>
+<span class="nc bnc" id="L624" title="All 2 branches missed.">            p_context.STRONGNEGATION() != null,</span>
+<span class="nc" id="L625">            CPath.from( this.visitAtom( p_context.atom() ).toString() ),</span>
+<span class="nc" id="L626">            (Collection&lt;ITerm&gt;) this.visitTermlist( p_context.termlist() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitTerm( final PlanBundleParser.TermContext p_context )
+    {
+<span class="nc bnc" id="L633" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.STRING() ) )</span>
+<span class="nc" id="L634">            return stringvalue( p_context.STRING().getText() );</span>
+<span class="nc bnc" id="L635" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.number() ) )</span>
+<span class="nc" id="L636">            return this.visitNumber( p_context.number() );</span>
+<span class="nc bnc" id="L637" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )</span>
+<span class="nc" id="L638">            return logicalvalue( p_context.LOGICALVALUE().getText() );</span>
+
+<span class="nc bnc" id="L640" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.literal() ) )</span>
+<span class="nc" id="L641">            return this.visitLiteral( p_context.literal() );</span>
+<span class="nc bnc" id="L642" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable() ) )</span>
+<span class="nc" id="L643">            return this.visitVariable( p_context.variable() );</span>
+
+<span class="nc bnc" id="L645" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.termlist() ) )</span>
+<span class="nc" id="L646">            return this.visitTermlist( p_context.termlist() );</span>
+<span class="nc bnc" id="L647" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression() ) )</span>
+<span class="nc" id="L648">            return this.visitExpression( p_context.expression() );</span>
+<span class="nc bnc" id="L649" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.ternary_operation() ) )</span>
+<span class="nc" id="L650">            return this.visitTernary_operation( p_context.ternary_operation() );</span>
+
+<span class="nc" id="L652">        throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;termunknown&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
+    {
+<span class="nc bnc" id="L658" title="All 4 branches missed.">        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )</span>
+<span class="nc" id="L659">            return Collections.&lt;ITerm&gt;emptyList();</span>
+
+<span class="nc" id="L661">        return p_context.term().stream()</span>
+<span class="nc" id="L662">                        .map( i -&gt; this.visitTerm( i ) )</span>
+<span class="nc" id="L663">                        .filter( i -&gt; Objects.nonNull( i ) )</span>
+<span class="nc bnc" id="L664" title="All 2 branches missed.">                        .map( i -&gt; i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )</span>
+<span class="nc" id="L665">                        .collect( Collectors.toList() );</span>
+    }
+
+    @Override
+    public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
+    {
+<span class="nc" id="L671">        return this.visitChildren( p_context );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final Object visitNumber( final PlanBundleParser.NumberContext p_context )
+    {
+<span class="nc bnc" id="L682" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.CONSTANTNUMBER() ) )</span>
+<span class="nc" id="L683">            return numericonstant( p_context.CONSTANTNUMBER().getText() );</span>
+
+<span class="nc" id="L685">        final Number l_value = (Number) this.visitChildren( p_context );</span>
+<span class="nc bnc" id="L686" title="All 2 branches missed.">        return p_context.MINUS() != null</span>
+<span class="nc" id="L687">               ? -1 * l_value.doubleValue()</span>
+<span class="nc" id="L688">               : l_value.doubleValue();</span>
+    }
+
+    @Override
+    public final Object visitDigitsequence( final PlanBundleParser.DigitsequenceContext p_context )
+    {
+<span class="nc" id="L694">        return Double.valueOf( p_context.getText() );</span>
+    }
+
+    @Override
+    public final Object visitAtom( final PlanBundleParser.AtomContext p_context )
+    {
+<span class="nc" id="L700">        return p_context.getText();</span>
+    }
+
+    @Override
+    public final Object visitVariable( final PlanBundleParser.VariableContext p_context )
+    {
+<span class="nc bnc" id="L706" title="All 2 branches missed.">        return Objects.isNull( p_context.AT() ) ? new CVariable&lt;&gt;( p_context.getText() ) : new CMutexVariable&lt;&gt;( p_context.getText() );</span>
+    }
+
+    @Override
+    public final Object visitVariableatom( final PlanBundleParser.VariableatomContext p_context )
+    {
+<span class="nc" id="L712">        return p_context.getText();</span>
+    }
+
+    @Override
+    public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
+    {
+        // bracket expression
+<span class="nc bnc" id="L719" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression_bracket() ) )</span>
+<span class="nc" id="L720">            return this.visitExpression_bracket( p_context.expression_bracket() );</span>
+
+        // or-expression
+<span class="nc" id="L723">        return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(</span>
+            EOperator.OR,
+<span class="nc" id="L725">            (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),</span>
+<span class="nc bnc" id="L726" title="All 2 branches missed.">            p_context.expression() != null</span>
+<span class="nc" id="L727">            ? p_context.expression().stream().map( i -&gt; (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )</span>
+<span class="nc" id="L728">            : Collections.emptyList()</span>
+        );
+    }
+
+    @Override
+    public final Object visitExpression_bracket( final PlanBundleParser.Expression_bracketContext p_context )
+    {
+<span class="nc" id="L735">        return this.visitExpression( p_context.expression() );</span>
+    }
+
+    @Override
+    public final Object visitExpression_logical_and( final PlanBundleParser.Expression_logical_andContext p_context )
+    {
+<span class="nc" id="L741">        return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(</span>
+            EOperator.AND,
+<span class="nc" id="L743">            (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),</span>
+<span class="nc bnc" id="L744" title="All 2 branches missed.">            p_context.expression() != null</span>
+<span class="nc" id="L745">            ? p_context.expression().stream().map( i -&gt; (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )</span>
+<span class="nc" id="L746">            : Collections.emptyList()</span>
+        );
+    }
+
+    @Override
+    public final Object visitExpression_logical_xor( final PlanBundleParser.Expression_logical_xorContext p_context )
+    {
+<span class="nc bnc" id="L753" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression_logical_element() ) )</span>
+<span class="nc" id="L754">            return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(</span>
+                EOperator.XOR,
+<span class="nc" id="L756">                (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),</span>
+<span class="nc bnc" id="L757" title="All 2 branches missed.">                p_context.expression() != null</span>
+<span class="nc" id="L758">                ? p_context.expression().stream().map( i -&gt; (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )</span>
+<span class="nc" id="L759">                : Collections.emptyList()</span>
+            );
+
+<span class="nc bnc" id="L762" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression_logical_negation() ) )</span>
+<span class="nc" id="L763">            return this.visitExpression_logical_negation( p_context.expression_logical_negation() );</span>
+
+<span class="nc bnc" id="L765" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.expression_numeric() ) )</span>
+<span class="nc" id="L766">            return this.visitExpression_numeric( p_context.expression_numeric() );</span>
+
+<span class="nc" id="L768">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;logicallefthandside&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
+    {
+<span class="nc" id="L774">        return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
+    {
+<span class="nc bnc" id="L780" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.LOGICALVALUE().getSymbol() ) )</span>
+<span class="nc" id="L781">            return new CAtom( logicalvalue( p_context.LOGICALVALUE().getText() ) );</span>
+
+<span class="nc bnc" id="L783" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable() ) )</span>
+<span class="nc" id="L784">            return new CAtom( this.visitVariable( p_context.variable() ) );</span>
+
+<span class="nc bnc" id="L786" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.unification() ) )</span>
+<span class="nc" id="L787">            return new CProxyReturnExpression&lt;&gt;( (IExecution) this.visitUnification( p_context.unification() ) );</span>
+
+<span class="nc bnc" id="L789" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_action() ) )</span>
+<span class="nc" id="L790">            return new CProxyReturnExpression&lt;&gt;( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );</span>
+
+<span class="nc bnc" id="L792" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_rule() ) )</span>
+<span class="nc" id="L793">            return new CProxyReturnExpression&lt;&gt;( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );</span>
+
+<span class="nc" id="L795">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;logicalelement&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
+    {
+<span class="nc bnc" id="L801" title="All 2 branches missed.">        if ( Objects.isNull( p_context.expression_numeric() ) )</span>
+<span class="nc" id="L802">            return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );</span>
+
+<span class="nc bnc" id="L804" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.EQUAL() ) )</span>
+<span class="nc" id="L805">            return new CComparable(</span>
+                EOperator.EQUAL,
+<span class="nc" id="L807">                (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),</span>
+<span class="nc" id="L808">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L811" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.NOTEQUAL() ) )</span>
+<span class="nc" id="L812">            return new CComparable(</span>
+                EOperator.NOTEQUAL,
+<span class="nc" id="L814">                (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),</span>
+<span class="nc" id="L815">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc" id="L818">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;compareoperator&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_numeric_relation( final PlanBundleParser.Expression_numeric_relationContext p_context )
+    {
+<span class="nc bnc" id="L824" title="All 2 branches missed.">        if ( Objects.isNull( p_context.expression_numeric() ) )</span>
+<span class="nc" id="L825">            return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );</span>
+
+<span class="nc bnc" id="L827" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.GREATER() ) )</span>
+<span class="nc" id="L828">            return new CRelational(</span>
+                EOperator.GREATER,
+<span class="nc" id="L830">                (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),</span>
+<span class="nc" id="L831">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L834" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.GREATEREQUAL() ) )</span>
+<span class="nc" id="L835">            return new CRelational(</span>
+                EOperator.GREATEREQUAL,
+<span class="nc" id="L837">                (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),</span>
+<span class="nc" id="L838">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L841" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.LESS() ) )</span>
+<span class="nc" id="L842">            return new CRelational(</span>
+                EOperator.LESS,
+<span class="nc" id="L844">                (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),</span>
+<span class="nc" id="L845">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L848" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.LESSEQUAL() ) )</span>
+<span class="nc" id="L849">            return new CRelational(</span>
+                EOperator.LESSEQUAL,
+<span class="nc" id="L851">                (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),</span>
+<span class="nc" id="L852">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc" id="L855">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;relationaloperator&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_numeric_additive( final PlanBundleParser.Expression_numeric_additiveContext p_context )
+    {
+<span class="nc bnc" id="L861" title="All 2 branches missed.">        if ( Objects.isNull( p_context.expression_numeric() ) )</span>
+<span class="nc" id="L862">            return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );</span>
+
+<span class="nc bnc" id="L864" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.PLUS() ) )</span>
+<span class="nc" id="L865">            return new CAdditive(</span>
+                EOperator.PLUS,
+<span class="nc" id="L867">                (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),</span>
+<span class="nc" id="L868">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L871" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.MINUS() ) )</span>
+<span class="nc" id="L872">            return new CAdditive(</span>
+                EOperator.MINUS,
+<span class="nc" id="L874">                (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),</span>
+<span class="nc" id="L875">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc" id="L878">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;additiveoperator&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
+    {
+<span class="nc bnc" id="L884" title="All 2 branches missed.">        if ( Objects.isNull( p_context.expression_numeric() ) )</span>
+<span class="nc" id="L885">            return this.visitExpression_numeric_power( p_context.expression_numeric_power() );</span>
+
+<span class="nc bnc" id="L887" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.MULTIPLY() ) )</span>
+<span class="nc" id="L888">            return new CMultiplicative(</span>
+                EOperator.MULTIPLY,
+<span class="nc" id="L890">                (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),</span>
+<span class="nc" id="L891">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L894" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.SLASH() ) )</span>
+<span class="nc" id="L895">            return new CMultiplicative(</span>
+                EOperator.DIVIDE,
+<span class="nc" id="L897">                (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),</span>
+<span class="nc" id="L898">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc bnc" id="L901" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.MODULO() ) )</span>
+<span class="nc" id="L902">            return new CMultiplicative(</span>
+                EOperator.MODULO,
+<span class="nc" id="L904">                (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),</span>
+<span class="nc" id="L905">                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+            );
+
+<span class="nc" id="L908">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;multiplicativeoperator&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExpression_numeric_power( final PlanBundleParser.Expression_numeric_powerContext p_context )
+    {
+<span class="nc bnc" id="L914" title="All 2 branches missed.">        if ( Objects.isNull( p_context.expression_numeric() ) )</span>
+<span class="nc" id="L915">            return this.visitExpression_numeric_element( p_context.expression_numeric_element() );</span>
+
+<span class="nc" id="L917">        return new CPower(</span>
+            EOperator.POWER,
+<span class="nc" id="L919">            (IExpression) this.visitExpression_numeric_element( p_context.expression_numeric_element() ),</span>
+<span class="nc" id="L920">            (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )</span>
+        );
+    }
+
+    @Override
+    public final Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
+    {
+<span class="nc bnc" id="L927" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.number() ) )</span>
+<span class="nc" id="L928">            return new CAtom( this.visitNumber( p_context.number() ) );</span>
+
+<span class="nc bnc" id="L930" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable() ) )</span>
+<span class="nc" id="L931">            return new CAtom( this.visitVariable( p_context.variable() ) );</span>
+
+<span class="nc bnc" id="L933" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_action() ) )</span>
+<span class="nc" id="L934">            return new CProxyReturnExpression&lt;&gt;( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );</span>
+
+<span class="nc bnc" id="L936" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.executable_rule() ) )</span>
+<span class="nc" id="L937">            return new CProxyReturnExpression&lt;&gt;( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );</span>
+
+<span class="nc" id="L939">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;numericelement&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitExecutable_action( final PlanBundleParser.Executable_actionContext p_context )
+    {
+<span class="nc" id="L945">        return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );</span>
+    }
+
+    @Override
+    public final Object visitExecutable_rule( final PlanBundleParser.Executable_ruleContext p_context )
+    {
+<span class="nc bnc" id="L951" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.literal() ) )</span>
+<span class="nc" id="L952">            return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );</span>
+
+<span class="nc bnc" id="L954" title="All 2 branches missed.">        if ( Objects.nonNull( p_context.variable_evaluate() ) )</span>
+<span class="nc" id="L955">            return new CAchievementRuleVariable( (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ) );</span>
+
+<span class="nc" id="L957">        throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;executablerule&quot;, p_context.getText() ) );</span>
+    }
+
+    @Override
+    public final Object visitVariable_evaluate( final PlanBundleParser.Variable_evaluateContext p_context )
+    {
+<span class="nc" id="L963">        return new CVariableEvaluate(</span>
+<span class="nc" id="L964">            (IVariable&lt;?&gt;) this.visitVariable( p_context.variable() ),</span>
+<span class="nc" id="L965">            (List&lt;ITerm&gt;) this.visitTermlist( p_context.termlist() )</span>
+        );
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- helper ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * create a rule placeholder object
+     *
+     * @param p_context logical rule context
+     * @return placeholder rule
+     */
+    protected Object visitLogicrulePlaceHolder( final PlanBundleParser.LogicruleContext p_context )
+    {
+<span class="nc" id="L982">        return new CRulePlaceholder( (ILiteral) this.visitLiteral( p_context.literal() ) );</span>
+    }
+
+    /**
+     * returns the value of a numeric constant
+     *
+     * @param p_value constant name
+     * @return number value
+     */
+    private static Number numericonstant( @Nonnull final String p_value )
+    {
+<span class="nc" id="L993">        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_value );</span>
+<span class="nc bnc" id="L994" title="All 2 branches missed.">        if ( Objects.nonNull( l_constant ) )</span>
+<span class="nc" id="L995">            return l_constant;</span>
+
+<span class="nc" id="L997">        throw new CSyntaxErrorException( CCommon.languagestring( CASTVisitorPlanBundle.class, &quot;constantunknown&quot;, p_value ) );</span>
+    }
+
+    /**
+     * converts a string token to the type
+     *
+     * @param p_value string value
+     * @return boolean value
+     */
+    private static boolean logicalvalue( @Nonnull final String p_value )
+    {
+<span class="nc bnc" id="L1008" title="All 6 branches missed.">        return ( !p_value.isEmpty() ) &amp;&amp; ( ( &quot;true&quot;.equals( p_value ) ) || ( &quot;success&quot;.equals( p_value ) ) );</span>
+    }
+
+    /**
+     * create a string value without quotes
+     *
+     * @param p_value string
+     * @return string without quotes
+     */
+    private static String stringvalue( @Nonnull final String p_value )
+    {
+<span class="nc bnc" id="L1019" title="All 2 branches missed.">        return p_value.length() &lt; 3 ? &quot;&quot; : p_value.substring( 1, p_value.length() - 1 );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
+
+    @Nonnull
+    @Override
+    public final Set&lt;ILiteral&gt; initialbeliefs()
+    {
+<span class="nc" id="L1031">        return m_initialbeliefs;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Set&lt;IPlan&gt; plans()
+    {
+<span class="nc" id="L1038">        return m_plans;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Set&lt;IRule&gt; rules()
+    {
+<span class="nc" id="L1045">        return new HashSet&lt;&gt;( m_rules.values() );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

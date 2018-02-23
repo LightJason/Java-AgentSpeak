@@ -1,0 +1,13 @@
+var namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression =
+[
+    [ "logical", "d1/d88/namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1logical.htm", "d1/d88/namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1logical" ],
+    [ "numerical", "d2/d0c/namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1numerical.htm", "d2/d0c/namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1numerical" ],
+    [ "CAtom", "da/d8f/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1CAtom.htm", "da/d8f/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1CAtom" ],
+    [ "CProxyReturnExpression", "d8/d62/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1CProxyReturnExpression.htm", "d8/d62/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1CProxyReturnExpression" ],
+    [ "EOperator", "d7/d0b/enumorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1EOperator.htm", "d7/d0b/enumorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1EOperator" ],
+    [ "IBaseBinary", "d9/d3a/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IBaseBinary.htm", "d9/d3a/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IBaseBinary" ],
+    [ "IBaseUnary", "d9/d75/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IBaseUnary.htm", "d9/d75/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IBaseUnary" ],
+    [ "IBinaryExpression", "d5/d25/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IBinaryExpression.htm", "d5/d25/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IBinaryExpression" ],
+    [ "IExpression", "d7/d0e/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IExpression.htm", "d7/d0e/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IExpression" ],
+    [ "IUnaryExpression", "d9/da2/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IUnaryExpression.htm", "d9/da2/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1expression_1_1IUnaryExpression" ]
+];

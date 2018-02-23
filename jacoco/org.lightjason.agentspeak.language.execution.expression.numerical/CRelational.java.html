@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CRelational.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expression.numerical</a> &gt; <span class="el_source">CRelational.java</span></div><h1>CRelational.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expression.numerical;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.expression.EOperator;
+import org.lightjason.agentspeak.language.execution.expression.IBaseBinary;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
+
+
+/**
+ * numerical relation expression
+ */
+public final class CRelational extends IBaseBinary
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5844609255203908714L;
+
+    /**
+     * ctor
+     *
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side argument
+     * @param p_righthandside right-hand-side
+     */
+    public CRelational( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
+    {
+<span class="fc" id="L61">        super( p_operator, p_lefthandside, p_righthandside );</span>
+
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if ( !m_operator.isRelational() )</span>
+<span class="nc" id="L64">            throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;operator&quot;, m_operator ) );</span>
+<span class="fc" id="L65">    }</span>
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L72">        final List&lt;ITerm&gt; l_argument = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if ( !this.executearguments( p_parallel, p_context, l_argument ) )</span>
+<span class="nc" id="L74">            return CFuzzyValue.from( false );</span>
+
+<span class="pc bpc" id="L76" title="2 of 5 branches missed.">        switch ( m_operator )</span>
+        {
+            case GREATER:
+<span class="fc" id="L79">                p_return.add( CRawTerm.from(</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) &gt; 0</span>
+                ) );
+<span class="fc" id="L82">                return CFuzzyValue.from( true );</span>
+
+            case GREATEREQUAL:
+<span class="nc" id="L85">                p_return.add( CRawTerm.from(</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) &gt;= 0</span>
+                ) );
+<span class="nc" id="L88">                return CFuzzyValue.from( true );</span>
+
+            case LESS:
+<span class="fc" id="L91">                p_return.add( CRawTerm.from(</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) &lt; 0</span>
+                ) );
+<span class="fc" id="L94">                return CFuzzyValue.from( true );</span>
+
+            case LESSEQUAL:
+<span class="fc" id="L97">                p_return.add( CRawTerm.from(</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) &lt;= 0</span>
+                ) );
+<span class="fc" id="L100">                return CFuzzyValue.from( true );</span>
+
+            default:
+<span class="nc" id="L103">                return CFuzzyValue.from( false );</span>
+        }
+    }
+
+    /**
+     * compares term types
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     */
+    private static int compare( @Nonnull final ITerm p_left, @Nonnull final ITerm p_right )
+    {
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        return org.lightjason.agentspeak.language.CCommon.rawvalueAssignableTo( p_left.raw(), Number.class )</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">               &amp;&amp; org.lightjason.agentspeak.language.CCommon.rawvalueAssignableTo( p_right.raw(), Number.class )</span>
+<span class="fc" id="L118">               ? comparenumber( CRelational.map( p_left.raw() ), CRelational.map( p_right.raw() ) )</span>
+<span class="nc" id="L119">               : compareobject( CRelational.map( p_left.raw() ), CRelational.map( p_right.raw() ) );</span>
+    }
+
+    /**
+     * compare method for any number type
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     *
+     * @tparam T number type
+     */
+    private static &lt;T extends Number &amp; Comparable&lt;T&gt;&gt; int comparenumber( @Nonnull final T p_left, @Nonnull final T p_right )
+    {
+<span class="fc" id="L133">        return Double.compare( p_left.doubleValue(), p_right.doubleValue() );</span>
+    }
+
+
+    /**
+     * compare method for any object type
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     *
+     * @tparam T object type
+     */
+    private static &lt;T extends Comparable&lt;T&gt;&gt; int compareobject( @Nonnull final T p_left, @Nonnull final T p_right )
+    {
+<span class="nc" id="L148">        return p_left.compareTo( p_right );</span>
+    }
+
+
+
+
+    /**
+     * type mapping method
+     *
+     * @param p_value value
+     * @tparam N return type
+     * @tparam M value type
+     * @return casted value
+     */
+    @Nonnull
+    @SuppressWarnings( &quot;unchecked&quot; )
+    private static &lt;N, M&gt; N map( @Nonnull final M p_value )
+    {
+<span class="fc" id="L166">        return (N) p_value;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

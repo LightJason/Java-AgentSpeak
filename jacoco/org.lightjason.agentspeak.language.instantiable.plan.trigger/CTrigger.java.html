@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CTrigger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.instantiable.plan.trigger</a> &gt; <span class="el_source">CTrigger.java</span></div><h1>CTrigger.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.instantiable.plan.trigger;
+
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+
+
+/**
+ * event with literal data
+ */
+public final class CTrigger implements ITrigger
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4216265954626567558L;
+    /**
+     * variable number
+     */
+    private final int m_variables;
+    /**
+     * literal with unified variables
+     */
+    private final ILiteral m_literal;
+    /**
+     * event type
+     */
+    private final EType m_event;
+    /**
+     * hashcode
+     */
+    private final int m_hashcode;
+    /**
+     * content hashcode
+     */
+    private final int m_structurehash;
+
+    /**
+     * ctor
+     *
+     * @param p_event type
+     * @param p_literal literal with unified variables
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public CTrigger( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )
+<span class="fc" id="L72">    {</span>
+<span class="fc" id="L73">        m_event = p_event;</span>
+<span class="fc" id="L74">        m_literal = p_literal;</span>
+<span class="fc" id="L75">        m_variables = CCommon.variablefrequency( p_literal ).size();</span>
+<span class="fc" id="L76">        m_hashcode = m_event.hashCode() ^ m_literal.hashCode();</span>
+<span class="fc" id="L77">        m_structurehash = m_event.hashCode() ^ m_literal.structurehash();</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * creates a trigger event^
+     *
+     * @param p_event event
+     * @param p_literal trigger literal
+     * @return trigger object
+     */
+    public static ITrigger from( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )
+    {
+<span class="fc" id="L89">        return new CTrigger( p_event, p_literal );</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L95">        return m_hashcode;</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">        return ( p_object instanceof ITrigger ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L107">        return MessageFormat.format( &quot;{0}{1}&quot;, m_event, m_literal );</span>
+    }
+
+    @Override
+    public final EType type()
+    {
+<span class="fc" id="L113">        return m_event;</span>
+    }
+
+    @Override
+    public final ILiteral literal()
+    {
+<span class="fc" id="L119">        return m_literal;</span>
+    }
+
+    @Override
+    public final int variablesize()
+    {
+<span class="nc" id="L125">        return m_variables;</span>
+    }
+
+    @Override
+    public final int structurehash()
+    {
+<span class="fc" id="L131">        return m_structurehash;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ITrigger shallowcopy( final IPath... p_prefix )
+    {
+<span class="fc" id="L138">        return new CTrigger( m_event, m_literal.shallowcopy( p_prefix ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ITrigger shallowcopysuffix()
+    {
+<span class="nc" id="L145">        return new CTrigger( m_event, m_literal.shallowcopysuffix() );</span>
+    }
+
+    @Override
+    public final int compareTo( @Nonnull final ITrigger p_other )
+    {
+<span class="fc" id="L151">        return p_other.toString().compareTo( this.toString() );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

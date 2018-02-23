@@ -1,0 +1,19 @@
+var namespaceorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list =
+[
+    [ "CAdd", "d8/d3a/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CAdd.htm", "d8/d3a/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CAdd" ],
+    [ "CComplement", "d7/de7/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CComplement.htm", "d7/de7/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CComplement" ],
+    [ "CCreate", "d8/d5c/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CCreate.htm", "d8/d5c/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CCreate" ],
+    [ "CFlat", "dd/d04/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CFlat.htm", "dd/d04/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CFlat" ],
+    [ "CFlatConcat", "d1/d79/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CFlatConcat.htm", "d1/d79/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CFlatConcat" ],
+    [ "CGet", "d3/df3/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CGet.htm", "d3/df3/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CGet" ],
+    [ "CIntersect", "dc/d84/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CIntersect.htm", "dc/d84/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CIntersect" ],
+    [ "CRange", "dc/dbe/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CRange.htm", "dc/dbe/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CRange" ],
+    [ "CRemove", "dd/dba/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CRemove.htm", "dd/dba/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CRemove" ],
+    [ "CReverse", "d5/d1d/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CReverse.htm", "d5/d1d/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CReverse" ],
+    [ "CSet", "d2/dee/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CSet.htm", "d2/dee/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CSet" ],
+    [ "CSubList", "d5/d97/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CSubList.htm", "d5/d97/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CSubList" ],
+    [ "CSymmetricDifference", "df/d93/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CSymmetricDifference.htm", "df/d93/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CSymmetricDifference" ],
+    [ "CUnion", "d4/d96/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CUnion.htm", "d4/d96/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CUnion" ],
+    [ "CUnique", "d5/d36/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CUnique.htm", "d5/d36/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CUnique" ],
+    [ "CZip", "d4/d14/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CZip.htm", "d4/d14/classorg_1_1lightjason_1_1agentspeak_1_1action_1_1builtin_1_1collection_1_1list_1_1CZip" ]
+];

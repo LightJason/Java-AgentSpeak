@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CPlan.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.instantiable.plan</a> &gt; <span class="el_source">CPlan.java</span></div><h1>CPlan.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.instantiable.plan;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
+
+
+/**
+ * plan structure
+ */
+public final class CPlan extends IBaseInstantiable implements IPlan
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8130277494195919583L;
+    /**
+     * trigger event
+     */
+    private final ITrigger m_triggerevent;
+    /**
+     * execution condition / expression
+     */
+    private final IExpression m_condition;
+
+
+    /**
+     * ctor
+     *
+     * @param p_event trigger event
+     * @param p_body plan body
+     * @param p_annotation annotations
+     */
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final List&lt;IExecution&gt; p_body, @Nonnull final Set&lt;IAnnotation&lt;?&gt;&gt; p_annotation )
+    {
+<span class="fc" id="L78">        this( p_event, IExpression.EMPTY, p_body, p_annotation );</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_event trigger event
+     * @param p_condition execution condition
+     * @param p_body plan body
+     * @param p_annotation annotations
+     */
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
+                  @Nonnull final List&lt;IExecution&gt; p_body, @Nonnull final Set&lt;IAnnotation&lt;?&gt;&gt; p_annotation )
+    {
+<span class="fc" id="L92">        super(</span>
+            p_body,
+            p_annotation,
+
+<span class="fc" id="L96">            CCommon.streamconcat(</span>
+<span class="fc" id="L97">                Stream.of(</span>
+<span class="fc" id="L98">                    p_event.hashCode(),</span>
+<span class="fc" id="L99">                    p_condition.hashCode()</span>
+                ),
+<span class="fc" id="L101">                p_body.stream().map( Object::hashCode ),</span>
+<span class="fc" id="L102">                p_annotation.stream().map( Object::hashCode )</span>
+<span class="fc" id="L103">            ).reduce( 0, ( i, j ) -&gt; i ^ j )</span>
+        );
+
+<span class="fc" id="L106">        m_triggerevent = p_event;</span>
+<span class="fc" id="L107">        m_condition = p_condition;</span>
+<span class="fc" id="L108">    }</span>
+
+    @Nonnull
+    @Override
+    public final ITrigger trigger()
+    {
+<span class="fc" id="L114">        return m_triggerevent;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L123">        final IFuzzyValue&lt;Boolean&gt; l_result = super.execute( p_parallel, p_context, p_argument, p_return );</span>
+
+        // create delete-goal trigger
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )</span>
+<span class="fc" id="L127">            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );</span>
+
+<span class="fc" id="L129">        return l_result;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; condition( final IContext p_context )
+    {
+                /*
+        // check condition for bounded variables
+        if ( m_condition.variables()
+                        .parallel()
+                        .map( i -&gt; CCommon.replaceFromContext( p_context, i ) )
+                        .filter( ITerm::hasVariable )
+                        .map( i -&gt; (IVariable) i )
+                        .anyMatch( i -&gt; !i.allocated() )
+            )
+            return CFuzzyValue.from( false );
+
+        */
+
+<span class="fc" id="L149">        final List&lt;ITerm&gt; l_return = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L150">        return CFuzzyValue.from(</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">            m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            &amp;&amp; ( l_return.size() == 1 )</span>
+<span class="fc" id="L153">            ? l_return.get( 0 ).&lt;Boolean&gt;raw()</span>
+<span class="nc" id="L154">            : false</span>
+        );
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L161">        return MessageFormat.format(</span>
+            &quot;{0} ({1} | {2}{3} ==&gt;&gt; {4})&quot;,
+<span class="fc" id="L163">            super.toString(),</span>
+<span class="fc" id="L164">            m_annotation.values(),</span>
+            m_triggerevent,
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            Objects.isNull( m_condition ) ? &quot;&quot; : MessageFormat.format( &quot; |- {0}&quot;, m_condition ),</span>
+<span class="fc" id="L167">            StringUtils.join( m_action, &quot;; &quot; )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L175">        return CCommon.streamconcat(</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">            m_condition != null ? m_condition.variables() : Stream.empty(),</span>
+<span class="fc" id="L177">            super.variables(),</span>
+<span class="fc" id="L178">            m_annotation.values().stream().flatMap( IAnnotation::variables ),</span>
+<span class="fc" id="L179">            CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -&gt; i instanceof IVariable&lt;?&gt; ).map( i -&gt; (IVariable&lt;?&gt;) i )</span>
+        );
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

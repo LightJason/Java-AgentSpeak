@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ILiteral.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language</a> &gt; <span class="el_source">ILiteral.java</span></div><h1>ILiteral.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language;
+
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.execution.IContext;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.stream.Stream;
+
+
+/**
+ * literal interface
+ *
+ * @note closed world assumption, no negation marker needed
+ */
+public interface ILiteral extends ITerm, IShallowCopy&lt;ILiteral&gt;, Comparable&lt;ILiteral&gt;
+{
+    /**
+     * empty literal
+     */
+<span class="fc" id="L44">    ILiteral EMPTY = new ILiteral()</span>
+<span class="fc" id="L45">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3396471300120317809L;
+
+        @Nonnull
+        @Override
+        public final Stream&lt;ITerm&gt; values( @Nullable final IPath... p_path )
+        {
+<span class="nc" id="L55">            return Stream.empty();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;ITerm&gt; orderedvalues( @Nullable final IPath... p_path )
+        {
+<span class="nc" id="L62">            return Stream.empty();</span>
+        }
+
+        @Override
+        public final boolean emptyValues()
+        {
+<span class="nc" id="L68">            return true;</span>
+        }
+
+        @Override
+        public boolean negated()
+        {
+<span class="nc" id="L74">            return false;</span>
+        }
+
+        @Override
+        public final boolean hasAt()
+        {
+<span class="nc" id="L80">            return false;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral unify( @Nonnull final IContext p_context )
+        {
+<span class="nc" id="L87">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral allocate( @Nonnull final IContext p_context )
+        {
+<span class="nc" id="L94">            return this;</span>
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final ILiteral p_literal )
+        {
+<span class="nc" id="L100">            return Integer.compare( p_literal.hashCode(), this.hashCode() );</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String functor()
+        {
+<span class="nc" id="L107">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public IPath functorpath()
+        {
+<span class="nc" id="L114">            return IPath.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public IPath fqnfunctor()
+        {
+<span class="nc" id="L121">            return IPath.EMPTY;</span>
+        }
+
+        @Override
+        public boolean hasVariable()
+        {
+<span class="nc" id="L127">            return false;</span>
+        }
+
+        @Nonnull
+        @Override
+        @SuppressWarnings( &quot;unchecked&quot; )
+        public final &lt;T&gt; T raw()
+        {
+<span class="nc" id="L135">            return (T) this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        {
+<span class="nc" id="L142">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopysuffix()
+        {
+<span class="nc" id="L149">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
+        {
+<span class="nc" id="L156">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral shallowcopysuffix()
+        {
+<span class="nc" id="L163">            return this;</span>
+        }
+
+        @Override
+        public final int structurehash()
+        {
+<span class="nc" id="L169">            return 0;</span>
+        }
+
+        @Override
+        public final int hashCode()
+        {
+<span class="nc" id="L175">            return 0;</span>
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+<span class="nc bnc" id="L181" title="All 4 branches missed.">            return ( p_object instanceof ILiteral ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+        }
+    };
+
+    /**
+     * returns a stream over value items
+     *
+     * @param p_path optional filtering value names
+     * (filtering values within values)
+     * @return stream
+     */
+    @Nonnull
+    Stream&lt;ITerm&gt; values( final IPath... p_path );
+
+    /**
+     * returns a stream over the ordered values
+     * in sequential ordering
+     *
+     * @return term stream
+     */
+    @Nonnull
+    Stream&lt;ITerm&gt; orderedvalues( @Nullable final IPath... p_path );
+
+    /**
+     * check for empty values
+     *
+     * @return empty flag
+     */
+    boolean emptyValues();
+
+    /**
+     * getter of the literal for the negation
+     *
+     * @return negated flag
+     */
+    boolean negated();
+
+    /**
+     * returns if the literal has an @ prefix
+     *
+     * @return prefix is set
+     */
+    boolean hasAt();
+
+    /**
+     * unifies variables if exists
+     *
+     * @param p_context current execution context
+     * @return new literal instance with unified variables
+     *
+     * @note un-unifyable variables passwd into the result literal
+     */
+    @Nonnull
+    ILiteral unify( @Nonnull final IContext p_context );
+
+    /**
+     * allocate all variables with the current context
+     *
+     * @param p_context current execution context
+     * @return literal with replaced variable
+     */
+    @Nonnull
+    ILiteral allocate( @Nonnull final IContext p_context );
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

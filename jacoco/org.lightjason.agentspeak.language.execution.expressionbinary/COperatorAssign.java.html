@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>COperatorAssign.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expressionbinary</a> &gt; <span class="el_source">COperatorAssign.java</span></div><h1>COperatorAssign.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expressionbinary;
+
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Stream;
+
+
+/**
+ * assign operator expression
+ */
+public final class COperatorAssign implements IBinaryExpression
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 720534461732785140L;
+    /**
+     * left-hand-side
+     */
+    private final IVariable&lt;?&gt; m_lhs;
+    /**
+     * right-hand-side
+     */
+    private final ITerm m_rhs;
+    /**
+     * operator
+     */
+    private final EOperator m_operator;
+
+
+    /**
+     * ctor
+     *
+     * @param p_lhs left-hand-side variable
+     * @param p_rhs right-hand-side data
+     * @param p_operator operator
+     */
+    public COperatorAssign( final IVariable&lt;?&gt; p_lhs, final ITerm p_rhs, final EOperator p_operator )
+<span class="nc" id="L70">    {</span>
+<span class="nc" id="L71">        m_lhs = p_lhs;</span>
+<span class="nc" id="L72">        m_operator = p_operator;</span>
+<span class="nc" id="L73">        m_rhs = p_rhs;</span>
+<span class="nc" id="L74">    }</span>
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List&lt;ITerm&gt; p_argument,
+                                         @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="nc" id="L81">        final IVariable&lt;Number&gt; l_lhs = CCommon.replaceFromContext( p_context, m_lhs ).term();</span>
+<span class="nc" id="L82">        l_lhs.set( m_operator.apply( l_lhs.raw(), CCommon.replaceFromContext( p_context, m_rhs ).raw() ) );</span>
+
+<span class="nc" id="L84">        return CFuzzyValue.from( true );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L90">        return MessageFormat.format( &quot;{0} {1} {2}&quot;, m_lhs, m_operator, m_rhs );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="nc" id="L97">        return Stream.concat(</span>
+<span class="nc" id="L98">            Stream.of( m_lhs ),</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            m_rhs instanceof IVariable&lt;?&gt;</span>
+<span class="nc" id="L100">            ? Stream.of( m_rhs.term() )</span>
+<span class="nc" id="L101">            : Stream.empty()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

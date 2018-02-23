@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CDefaultAgentConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.configuration</a> &gt; <span class="el_source">CDefaultAgentConfiguration.java</span></div><h1>CDefaultAgentConfiguration.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.configuration;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.CBeliefbase;
+import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
+import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unify.IUnifier;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
+
+
+/**
+ * default agent configuration
+ */
+public class CDefaultAgentConfiguration&lt;T extends IAgent&lt;?&gt;&gt; implements IAgentConfiguration&lt;T&gt;
+{
+    /**
+     * logger
+     */
+<span class="fc" id="L60">    protected static final Logger LOGGER = CCommon.logger( IAgentConfiguration.class );</span>
+    /**
+     * name of the root beliefbase
+     */
+    protected static final String BELIEFBASEROOTNAME = &quot;beliefbase&quot;;
+    /**
+     * unifier instance
+     */
+    protected final IUnifier m_unifier;
+    /**
+     * initial goal trigger
+     */
+    protected final ITrigger m_initialgoal;
+    /**
+     * instance of agent plans
+     */
+    protected final Set&lt;IPlan&gt; m_plans;
+    /**
+     * instance of variable builder
+     */
+    protected final IVariableBuilder m_variablebuilder;
+    /**
+     * instance of initial beliefs
+     */
+    protected final Collection&lt;ILiteral&gt; m_initialbeliefs;
+    /**
+     * fuzzy operator
+     */
+    protected final IFuzzyBundle&lt;Boolean&gt; m_fuzzy;
+    /**
+     * rules
+     */
+    protected final Set&lt;IRule&gt; m_rules;
+
+
+    /**
+     * ctor
+     *
+     * @param p_fuzzy fuzzy operator
+     * @param p_initalbeliefs set with initial beliefs
+     * @param p_plans plans
+     * @param p_rules rules
+     * @param p_initialgoal initial goal
+     * @param p_unifier unifier component
+     */
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle&lt;Boolean&gt; p_fuzzy, @Nonnull final Collection&lt;ILiteral&gt; p_initalbeliefs,
+                                       @Nonnull final Set&lt;IPlan&gt; p_plans, @Nonnull final Set&lt;IRule&gt; p_rules,
+                                       @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier
+    )
+    {
+<span class="nc" id="L110">        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, IVariableBuilder.EMPTY );</span>
+<span class="nc" id="L111">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_fuzzy fuzzy operator
+     * @param p_initialbeliefs set with initial beliefs
+     * @param p_plans plans
+     * @param p_rules rules
+     * @param p_initialgoal initial goal
+     * @param p_unifier unifier component
+     * @param p_variablebuilder variable builder
+     */
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle&lt;Boolean&gt; p_fuzzy, @Nonnull final Collection&lt;ILiteral&gt; p_initialbeliefs,
+                                       @Nonnull final Set&lt;IPlan&gt; p_plans, @Nonnull final Set&lt;IRule&gt; p_rules,
+                                       final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                       @Nonnull final IVariableBuilder p_variablebuilder
+    )
+<span class="fc" id="L129">    {</span>
+<span class="fc" id="L130">        m_fuzzy = p_fuzzy;</span>
+<span class="fc" id="L131">        m_unifier = p_unifier;</span>
+<span class="fc" id="L132">        m_variablebuilder = p_variablebuilder;</span>
+
+<span class="fc" id="L134">        m_plans = Collections.unmodifiableSet( p_plans );</span>
+<span class="fc" id="L135">        m_rules = Collections.unmodifiableSet( p_rules );</span>
+<span class="fc" id="L136">        m_initialbeliefs = Collections.unmodifiableCollection( p_initialbeliefs );</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;</span>
+
+<span class="fc" id="L139">        LOGGER.info( MessageFormat.format( &quot;create agent configuration: {0}&quot;, this ) );</span>
+<span class="fc" id="L140">    }</span>
+
+    @Nonnull
+    @Override
+    public IView beliefbase()
+    {
+<span class="fc" id="L146">        final IView l_beliefbase = new CBeliefbase( new CMultiStorage&lt;&gt;() ).create( BELIEFBASEROOTNAME );</span>
+<span class="fc" id="L147">        m_initialbeliefs.forEach( i -&gt; l_beliefbase.add( i.shallowcopy() ) );</span>
+
+        // clear all events of the initial beliefs
+<span class="fc" id="L150">        l_beliefbase.trigger();</span>
+
+<span class="fc" id="L152">        return l_beliefbase;</span>
+    }
+
+    @Nullable
+    @Override
+    public final ITrigger initialgoal()
+    {
+<span class="fc" id="L159">        return m_initialgoal;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IUnifier unifier()
+    {
+<span class="fc" id="L166">        return m_unifier;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IVariableBuilder variablebuilder()
+    {
+<span class="fc" id="L173">        return m_variablebuilder;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyBundle&lt;Boolean&gt; fuzzy()
+    {
+<span class="fc" id="L180">        return m_fuzzy;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Collection&lt;ILiteral&gt; initialbeliefs()
+    {
+<span class="nc" id="L187">        return m_initialbeliefs;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Set&lt;IPlan&gt; plans()
+    {
+<span class="fc" id="L194">        return m_plans;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Set&lt;IRule&gt; rules()
+    {
+<span class="fc" id="L201">        return m_rules;</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L207">        final String l_elements = StringUtils.join(</span>
+<span class="fc" id="L208">            Stream.of(</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                Objects.isNull( m_variablebuilder ) ? &quot;&quot; : m_variablebuilder,</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                m_initialbeliefs.isEmpty() ? &quot;&quot; : m_initialbeliefs,</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">                Objects.isNull( m_initialgoal ) ? &quot;&quot; : m_initialgoal,</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">                m_plans.isEmpty() ? &quot;&quot; : m_plans,</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                m_rules.isEmpty() ? &quot;&quot; : m_rules</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">            ).filter( i -&gt; !i.toString().trim().isEmpty() ).toArray(),</span>
+            &quot; / &quot;
+<span class="fc" id="L216">        ).trim();</span>
+
+<span class="fc" id="L218">        return MessageFormat.format(</span>
+            &quot;{0} ( unifier: {1} / {2} {3} )&quot;,
+<span class="fc" id="L220">            super.toString(),</span>
+            m_unifier,
+            m_fuzzy,
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">            l_elements.isEmpty() ? &quot;&quot; : l_elements</span>
+<span class="fc" id="L224">        ).trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

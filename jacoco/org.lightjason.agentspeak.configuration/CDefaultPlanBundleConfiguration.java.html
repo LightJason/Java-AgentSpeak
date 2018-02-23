@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CDefaultPlanBundleConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.configuration</a> &gt; <span class="el_source">CDefaultPlanBundleConfiguration.java</span></div><h1>CDefaultPlanBundleConfiguration.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.configuration;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Set;
+import java.util.logging.Logger;
+
+
+/**
+ * default plan bundle configuration
+ */
+public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
+{
+    /**
+     * logger
+     */
+<span class="nc" id="L46">    protected static final Logger LOGGER = CCommon.logger( IPlanBundleConfiguration.class );</span>
+    /**
+     * instance of plans
+     */
+    private final Set&lt;IPlan&gt; m_plans;
+    /**
+     * rule instance
+     */
+    private final Set&lt;IRule&gt; m_rules;
+    /**
+     * instance of initial beliefs
+     */
+    private final Set&lt;ILiteral&gt; m_initialbeliefs;
+
+    /**
+     * ctor
+     *
+     * @param p_plans plans
+     * @param p_rules rules
+     * @param p_initialbeliefs initial beliefs
+     */
+    public CDefaultPlanBundleConfiguration( @Nonnull final Set&lt;IPlan&gt; p_plans, @Nonnull final Set&lt;IRule&gt; p_rules, @Nonnull final Set&lt;ILiteral&gt; p_initialbeliefs )
+<span class="nc" id="L68">    {</span>
+<span class="nc" id="L69">        m_initialbeliefs = Collections.unmodifiableSet( p_initialbeliefs );</span>
+<span class="nc" id="L70">        m_plans = Collections.unmodifiableSet( p_plans );</span>
+<span class="nc" id="L71">        m_rules = Collections.unmodifiableSet( p_rules );</span>
+
+<span class="nc" id="L73">        LOGGER.info( MessageFormat.format( &quot;create planbundle configuration: {0}&quot;, this ) );</span>
+<span class="nc" id="L74">    }</span>
+
+    @Nonnull
+    @Override
+    public final Set&lt;ILiteral&gt; beliefs()
+    {
+<span class="nc" id="L80">        return m_initialbeliefs;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Set&lt;IPlan&gt; plans()
+    {
+<span class="nc" id="L87">        return m_plans;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Set&lt;IRule&gt; rules()
+    {
+<span class="nc" id="L94">        return m_rules;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

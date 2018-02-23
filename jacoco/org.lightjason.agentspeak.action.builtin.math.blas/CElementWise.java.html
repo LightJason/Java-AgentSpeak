@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CElementWise.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.blas</a> &gt; <span class="el_source">CElementWise.java</span></div><h1>CElementWise.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.blas;
+
+import cern.colt.function.tdouble.DoubleDoubleFunction;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.jet.math.tdouble.DoubleFunctions;
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.function.BiFunction;
+
+
+/**
+ * elementweise vector / matrix operation.
+ * The action calculates elementwise different
+ * operations (plus, plus-absolute, minus, multiply, divide),
+ * all arguments are triples of matrix-operator-matrix|scalar,
+ * the action fails on assigning problems
+ * {@code [M1|M2|M3] = math/blas/elementwise( Matrix1, &quot;+&quot;, 5, Matrix2, &quot;|+|&quot;, Matrix3, Matrix4, &quot;-&quot;, 3, [Matrix5, &quot;*&quot;, 0.5], [Matrix6, &quot;/&quot;, 100]);}
+ *
+ */
+public final class CElementWise extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2655464156364927632L;
+
+    /**
+     * ctor
+     */
+    public CElementWise()
+    {
+<span class="fc" id="L66">        super( 3 );</span>
+<span class="fc" id="L67">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L73">        return 3;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L81">        return CFuzzyValue.from(</span>
+<span class="fc" id="L82">                StreamUtils.windowed(</span>
+<span class="fc" id="L83">                CCommon.flatten( p_argument ),</span>
+            3,
+                3
+<span class="fc" id="L86">            ).allMatch( i -&gt;</span>
+            {
+
+<span class="pc bpc" id="L89" title="1 of 6 branches missed.">                switch ( i.get( 1 ).&lt;String&gt;raw().trim() )</span>
+                {
+                    case &quot;+&quot; :
+<span class="fc" id="L92">                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.plus, ( n, m ) -&gt; n + m, p_return );</span>
+
+                    case &quot;|+|&quot; :
+<span class="fc" id="L95">                        return CElementWise.apply( i.get( 0 ), i.get( 2 ),  DoubleFunctions.plusAbs, ( n, m ) -&gt; Math.abs( n + m ), p_return );</span>
+
+                    case &quot;-&quot; :
+<span class="fc" id="L98">                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.minus, ( n, m ) -&gt; n - m, p_return );</span>
+
+                    case &quot;*&quot; :
+<span class="fc" id="L101">                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.mult, ( n, m ) -&gt; n * m, p_return );</span>
+
+                    case &quot;/&quot; :
+<span class="fc" id="L104">                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.div, ( n, m ) -&gt; n / m, p_return );</span>
+
+                    default:
+<span class="nc" id="L107">                        return false;</span>
+                }
+
+            } )
+        );
+    }
+
+
+    /**
+     * elementwise assign
+     *
+     * @param p_left left term argument (matrix argument)
+     * @param p_right matrix or scalar value argument
+     * @param p_matrixfunction function for matrix-matrix operation
+     * @param p_scalarfunction scalar function for value
+     * @param p_return return list
+     * @return successful executed
+     * @note DoubleMatrix1D and DoubleMatrix2D does not use an equal
+     * super class for defining the assign method, so code must be
+     * created twice for each type
+     */
+    private static boolean apply( final ITerm p_left, final ITerm p_right,
+                                  final DoubleDoubleFunction p_matrixfunction, final BiFunction&lt;Double, Double, Double&gt; p_scalarfunction,
+                                  final List&lt;ITerm&gt; p_return )
+    {
+        // operation for matrix
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix2D.class ) )</span>
+        {
+<span class="fc" id="L135">            final DoubleMatrix2D l_assign = p_left.&lt;DoubleMatrix2D&gt;raw().copy();</span>
+
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix2D.class ) )</span>
+            {
+<span class="fc" id="L139">                l_assign.assign( p_right.&lt;DoubleMatrix2D&gt;raw(), p_matrixfunction );</span>
+<span class="fc" id="L140">                p_return.add( CRawTerm.from( l_assign ) );</span>
+<span class="fc" id="L141">                return true;</span>
+            }
+
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )</span>
+            {
+<span class="fc" id="L146">                l_assign.assign( i -&gt; p_scalarfunction.apply( i, p_right.&lt;Number&gt;raw().doubleValue() ) );</span>
+<span class="fc" id="L147">                p_return.add( CRawTerm.from( l_assign ) );</span>
+<span class="fc" id="L148">                return true;</span>
+            }
+        }
+
+        // operation for vector
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix1D.class ) )</span>
+        {
+<span class="fc" id="L155">            final DoubleMatrix1D l_assign = p_left.&lt;DoubleMatrix1D&gt;raw().copy();</span>
+
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix1D.class ) )</span>
+            {
+<span class="fc" id="L159">                l_assign.assign( p_right.&lt;DoubleMatrix1D&gt;raw(), p_matrixfunction );</span>
+<span class="fc" id="L160">                p_return.add( CRawTerm.from( l_assign ) );</span>
+<span class="fc" id="L161">                return true;</span>
+            }
+
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )</span>
+            {
+<span class="fc" id="L166">                l_assign.assign( i -&gt; p_scalarfunction.apply( i, p_right.&lt;Number&gt;raw().doubleValue() ) );</span>
+<span class="fc" id="L167">                p_return.add( CRawTerm.from( l_assign ) );</span>
+<span class="fc" id="L168">                return true;</span>
+            }
+        }
+
+<span class="nc" id="L172">        return false;</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

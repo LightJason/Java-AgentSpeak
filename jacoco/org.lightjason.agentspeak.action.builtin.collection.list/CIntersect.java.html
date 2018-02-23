@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CIntersect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.collection.list</a> &gt; <span class="el_source">CIntersect.java</span></div><h1>CIntersect.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.collection.list;
+
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * creates the intersection between lists.
+ * All arguments are lists and the action returns the
+ * intersection \f$ \cap M_i \forall i \in \mathbb{N} \f$, the action fails never
+ *
+ * {@code I = collection/list/intersect( [1,2,[3,4]], [3,4,[8,9]], [1,2,3,5] );}
+ */
+public final class CIntersect extends IBuiltinAction
+{
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7453409804177199062L;
+
+    /**
+     * ctor
+     */
+    public CIntersect()
+    {
+<span class="fc" id="L63">        super( 3 );</span>
+<span class="fc" id="L64">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L70">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+        // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
+<span class="fc" id="L79">        final List&lt;Object&gt; l_result = CCommon.flatten( p_argument )</span>
+<span class="fc" id="L80">                                        .parallel()</span>
+<span class="fc" id="L81">                                        .map( ITerm::raw )</span>
+<span class="fc" id="L82">                                        .distinct()</span>
+<span class="fc" id="L83">                                        .filter(</span>
+<span class="fc" id="L84">                                            i -&gt; p_argument.parallelStream()</span>
+<span class="fc" id="L85">                                                           .allMatch( j -&gt; j.&lt;Collection&lt;ITerm&gt;&gt;raw()</span>
+<span class="fc" id="L86">                                                               .parallelStream()</span>
+<span class="fc" id="L87">                                                               .map( ITerm::raw )</span>
+<span class="fc" id="L88">                                                               .collect( Collectors.toList() )</span>
+<span class="fc" id="L89">                                                               .contains( i )</span>
+                                                           )
+<span class="fc" id="L91">                                        ).collect( Collectors.toList() );</span>
+<span class="fc" id="L92">        l_result.sort( Comparator.comparing( Object::hashCode ) );</span>
+
+<span class="fc" id="L94">        p_return.add( CRawTerm.from(</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            p_parallel ? Collections.synchronizedList( l_result ) : l_result</span>
+        ) );
+
+<span class="fc" id="L98">        return CFuzzyValue.from( true );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

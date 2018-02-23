@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CDistancePath.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.graph</a> &gt; <span class="el_source">CDistancePath.java</span></div><h1>CDistancePath.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.graph;
+
+import com.google.common.base.Function;
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
+import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+
+
+/**
+ * calculates the distance of two vertices within each graph instance.
+ * The ordering of the arguments can be arbitrary, for any graph
+ * instance the distance path is calculated, the first map instance
+ * will be used as weight-map, a tuple of the string &quot;defaultweight&quot;
+ * and a numeric value defines the default weight value of the weight-map
+ * (the default value is zero), a tuple which will not fit this definition
+ * defines the start- and end-vertex, the action fails on wrong input.
+ * The weight-map does not need an entry for each edge non-existing edges
+ * have got on default zero weight
+ *
+ * {@code
+    [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
+    [D3|D4] = graph/distancepath( &quot;defaultweight&quot;, 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+ * }
+ */
+<span class="fc" id="L51">public class CDistancePath extends IApplyPathAlgorithm</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2146213818742863048L;
+
+    @Override
+    protected final Object apply( @Nonnull final List&lt;ITerm&gt; p_vertices, @Nonnull final Graph&lt;Object, Object&gt; p_graph,
+                                  @Nonnull final Function&lt;Object, Number&gt; p_weightfunction )
+    {
+<span class="fc" id="L62">        return new DijkstraShortestPath&lt;&gt;( p_graph, p_weightfunction )</span>
+<span class="fc" id="L63">                                   .getDistance( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() )</span>
+<span class="fc" id="L64">                                   .doubleValue();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

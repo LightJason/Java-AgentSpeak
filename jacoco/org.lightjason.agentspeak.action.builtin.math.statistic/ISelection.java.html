@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ISelection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.statistic</a> &gt; <span class="el_source">ISelection.java</span></div><h1>ISelection.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.statistic;
+
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * abstract class for creating a selection one element
+ * of a list based on a fitness weight
+ */
+public abstract class ISelection extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -365949510289020495L;
+    /**
+     * random instance
+     */
+<span class="fc" id="L55">    private final Random m_random = new Random();</span>
+
+    /**
+     * ctor
+     */
+    protected ISelection()
+    {
+<span class="fc" id="L62">        super( 3 );</span>
+<span class="fc" id="L63">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L69">        return 2 + this.additionalArgumentNumber();</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+        // first parameter is a list with elements, which will return by the selection
+        // second parameter is a numeric value for each element
+<span class="fc" id="L80">        final List&lt;Object&gt; l_items = p_argument.get( 0 ).&lt;List&lt;Object&gt;&gt;raw().stream()</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">                                                                  .map( i -&gt; i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).raw() : i  )</span>
+<span class="fc" id="L82">                                                                  .collect( Collectors.toList() );</span>
+<span class="fc" id="L83">        final List&lt;Double&gt; l_weight = this.weight(</span>
+            l_items,
+<span class="fc" id="L85">            p_argument.get( 1 ).&lt;List&lt;?&gt;&gt;raw().stream()</span>
+                                              // list can be contains default Java objects or term objects
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">                                              .map( i -&gt; i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).&lt;Number&gt;raw() : (Number) i )</span>
+<span class="fc" id="L88">                                              .map( Number::doubleValue )</span>
+<span class="fc" id="L89">                                              .map( Math::abs ),</span>
+<span class="fc" id="L90">            p_argument.subList( 2, p_argument.size() )</span>
+        );
+
+<span class="pc bpc" id="L93" title="2 of 4 branches missed.">        if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )</span>
+<span class="nc" id="L94">            return CFuzzyValue.from( false );</span>
+
+        // select a random value and scale with the sum
+<span class="fc" id="L97">        double l_random = m_random.nextDouble() * l_weight.stream().mapToDouble( i -&gt; i ).sum();</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        for ( int i = 0; i &lt; l_weight.size(); i++ )</span>
+        {
+<span class="fc" id="L100">            l_random -= l_weight.get( i );</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if ( l_random &lt;= 0 )</span>
+            {
+<span class="fc" id="L103">                p_return.add( CRawTerm.from( l_items.get( i ) ) );</span>
+<span class="fc" id="L104">                return CFuzzyValue.from( true );</span>
+            }
+        }
+
+        // on rounding error return last element
+<span class="nc" id="L109">        p_return.add( CRawTerm.from( l_items.get( l_items.size() - 1 ) ) );</span>
+<span class="nc" id="L110">        return CFuzzyValue.from( true );</span>
+    }
+
+    /**
+     * modifies the weights
+     *
+     * @param p_items item list
+     * @param p_values stream of weights
+     * @param p_argument additional arguments
+     * @return list with weights
+     */
+    @Nonnull
+    protected abstract List&lt;Double&gt; weight( @Nonnull final List&lt;?&gt; p_items, @Nonnull final Stream&lt;Double&gt; p_values, @Nonnull final List&lt;ITerm&gt; p_argument );
+
+    /**
+     * number of additional parameter
+     *
+     * @return additional number
+     */
+    protected int additionalArgumentNumber()
+    {
+<span class="nc" id="L131">        return 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

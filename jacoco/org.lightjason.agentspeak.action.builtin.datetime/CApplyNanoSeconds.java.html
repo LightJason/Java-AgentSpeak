@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CApplyNanoSeconds.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.datetime</a> &gt; <span class="el_source">CApplyNanoSeconds.java</span></div><h1>CApplyNanoSeconds.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.datetime;
+
+
+import javax.annotation.Nonnull;
+import java.time.ZonedDateTime;
+import java.util.stream.Stream;
+
+
+/**
+ * subtract or adds a number of nano-seconds.
+ * The action adds / subtracts a number of
+ * nano-seconds to the date-time objects, the first
+ * argument is a string with minus or plus,
+ * the second argument the number and all other
+ * arguments are date-time objects, the action
+ * returns the modified date-time objects, the action
+ * never fails
+ *
+ * {@code [O1|O2] = datetime/applynanoseconds( &quot;minus|plus&quot; 6, DateTime1, DateTime2 );}
+ */
+<span class="fc" id="L44">public final class CApplyNanoSeconds extends IPlusMinus</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6372470747556969039L;
+
+    @Nonnull
+    @Override
+    protected final Stream&lt;?&gt; applyminus( @Nonnull final Stream&lt;ZonedDateTime&gt; p_datetime, final long p_value )
+    {
+<span class="fc" id="L55">        return p_datetime.map( i -&gt; i.minusNanos( p_value ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    protected final Stream&lt;?&gt; applyplus( @Nonnull final Stream&lt;ZonedDateTime&gt; p_datetime, final long p_value )
+    {
+<span class="fc" id="L62">        return p_datetime.map( i -&gt; i.plusNanos( p_value ) );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

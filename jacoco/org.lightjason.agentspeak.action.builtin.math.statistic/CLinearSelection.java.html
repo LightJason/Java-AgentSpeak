@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLinearSelection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.statistic</a> &gt; <span class="el_source">CLinearSelection.java</span></div><h1>CLinearSelection.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.statistic;
+
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * action to define a exponential fitness-proportinate-selection mechanism.
+ * The action defines a fitness-proportinate-selection based on a linear
+ * distribution, the first and second argument must be a list, the first
+ * list contains elements, the second list contains numeric values for defining
+ * the weights
+ *
+ * {@code S = math/statistic/linearselection( [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;], [0.5, 0.7, 0.9, 3] );}
+ * @see https://en.wikipedia.org/wiki/Fitness_proportionate_selection
+ */
+<span class="fc" id="L44">public final class CLinearSelection extends ISelection</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4358925095494861120L;
+
+    @Nonnull
+    @Override
+    protected final List&lt;Double&gt; weight( @Nonnull final List&lt;?&gt; p_items, @Nonnull final Stream&lt;Double&gt; p_values, @Nonnull final List&lt;ITerm&gt; p_argument )
+    {
+<span class="fc" id="L55">        return p_values.collect( Collectors.toList() );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ITrigger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.instantiable.plan.trigger</a> &gt; <span class="el_source">ITrigger.java</span></div><h1>ITrigger.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.instantiable.plan.trigger;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IShallowCopy;
+import org.lightjason.agentspeak.language.IStructureHash;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+
+/**
+ * event definition
+ *
+ * @note trigger are equal iif type and literal functor are equal
+ * and number of arguments are equal, otherwise unification is used
+ * to define the literal variables
+ */
+public interface ITrigger extends Serializable, IStructureHash, IShallowCopy&lt;ITrigger&gt;, Comparable&lt;ITrigger&gt;
+{
+    /**
+     * empty trigger
+     */
+<span class="nc" id="L55">    ITrigger EMPTY = new ITrigger()</span>
+<span class="nc" id="L56">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -4216254162765675258L;
+
+        @Override
+        public final int structurehash()
+        {
+<span class="nc" id="L65">            return 0;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ITrigger shallowcopy( @Nullable final IPath... p_prefix )
+        {
+<span class="nc" id="L72">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ITrigger shallowcopysuffix()
+        {
+<span class="nc" id="L79">            return this;</span>
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final ITrigger p_trigger )
+        {
+<span class="nc" id="L85">            return Integer.compare( p_trigger.hashCode(), this.hashCode() );</span>
+        }
+
+        @Override
+        public final EType type()
+        {
+<span class="nc" id="L91">            return EType.EMPTY;</span>
+        }
+
+        @Override
+        public final ILiteral literal()
+        {
+<span class="nc" id="L97">            return ILiteral.EMPTY;</span>
+        }
+
+        @Override
+        public final int variablesize()
+        {
+<span class="nc" id="L103">            return 0;</span>
+        }
+
+        @Override
+        public final int hashCode()
+        {
+<span class="nc" id="L109">            return 0;</span>
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+<span class="nc bnc" id="L115" title="All 4 branches missed.">            return ( p_object instanceof ITrigger ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+        }
+    };
+
+    /**
+     * returns the type of the event
+     *
+     * @return type
+     */
+    EType type();
+
+    /**
+     * returns the literal of the event
+     *
+     * @return literal
+     */
+    ILiteral literal();
+
+    /**
+     * returns variable number
+     *
+     * @return number
+     */
+    int variablesize();
+
+
+
+    /**
+     * event types
+     */
+<span class="fc" id="L145">    enum EType</span>
+    {
+<span class="fc" id="L147">        ADDBELIEF( &quot;+&quot; ),</span>
+<span class="fc" id="L148">        DELETEBELIEF( &quot;-&quot; ),</span>
+<span class="fc" id="L149">        ADDGOAL( &quot;+!&quot; ),</span>
+<span class="fc" id="L150">        DELETEGOAL( &quot;-!&quot; ),</span>
+<span class="fc" id="L151">        EMPTY( &quot;&quot; );</span>
+
+        /**
+         * math with elements for intantiation
+         */
+<span class="fc" id="L156">        private static final Map&lt;String, EType&gt; ELEMENTS = Collections.unmodifiableMap(</span>
+<span class="fc" id="L157">                                                                Arrays.stream( EType.values() )</span>
+<span class="fc" id="L158">                                                                      .collect( Collectors.toMap( EType::sequence, i -&gt; i ) )</span>
+                                                           );
+
+        /**
+         * text name of the enum
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name text name
+         */
+        EType( final String p_name )
+<span class="fc" id="L172">        {</span>
+<span class="fc" id="L173">            m_name = p_name;</span>
+<span class="fc" id="L174">        }</span>
+
+        @Override
+        public String toString()
+        {
+<span class="fc" id="L179">            return m_name;</span>
+        }
+
+        /**
+         * returns the trigger sequence
+         *
+         * @return trigger sequence string
+         */
+        public final String sequence()
+        {
+<span class="fc" id="L189">            return m_name;</span>
+        }
+
+        /**
+         * returns a trigger type by the char sequence
+         * @param p_sequence sequence
+         * @return trigger type
+         */
+        public static EType from( @Nonnull final String p_sequence )
+        {
+<span class="fc" id="L199">            final EType l_type = ELEMENTS.get( p_sequence.trim() );</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            if ( Objects.isNull( l_type ) )</span>
+<span class="nc" id="L201">                throw new CIllegalArgumentException( CCommon.languagestring( EType.class, &quot;sequencenotfound&quot;, p_sequence ) );</span>
+
+<span class="fc" id="L203">            return l_type;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

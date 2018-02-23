@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EOperator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expression</a> &gt; <span class="el_source">EOperator.java</span></div><h1>EOperator.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expression;
+
+
+/**
+ * expression operator
+ */
+<span class="fc" id="L30">public enum EOperator</span>
+{
+<span class="fc" id="L32">    PLUS( &quot;+&quot; ),</span>
+<span class="fc" id="L33">    MINUS( &quot;-&quot; ),</span>
+
+<span class="fc" id="L35">    MULTIPLY( &quot;*&quot; ),</span>
+<span class="fc" id="L36">    DIVIDE( &quot;/&quot; ),</span>
+<span class="fc" id="L37">    MODULO( &quot;%&quot; ),</span>
+<span class="fc" id="L38">    POWER( &quot;**&quot; ),</span>
+
+
+<span class="fc" id="L41">    OR( &quot;||&quot; ),</span>
+<span class="fc" id="L42">    AND( &quot;&amp;&amp;&quot; ),</span>
+<span class="fc" id="L43">    XOR( &quot;^&quot; ),</span>
+<span class="fc" id="L44">    NEGATION( &quot;~&quot; ),</span>
+
+<span class="fc" id="L46">    EQUAL( &quot;==&quot; ),</span>
+<span class="fc" id="L47">    NOTEQUAL( &quot;\\==&quot; ),</span>
+
+<span class="fc" id="L49">    LESS( &quot;&lt;&quot; ),</span>
+<span class="fc" id="L50">    LESSEQUAL( &quot;&lt;=&quot; ),</span>
+<span class="fc" id="L51">    GREATER( &quot;&gt;&quot; ),</span>
+<span class="fc" id="L52">    GREATEREQUAL( &quot;&gt;=&quot; );</span>
+
+
+
+    /**
+     * text name of the enum
+     */
+    private final String m_name;
+
+    /**
+     * ctor
+     *
+     * @param p_name text name
+     */
+    EOperator( final String p_name )
+<span class="fc" id="L67">    {</span>
+<span class="fc" id="L68">        m_name = p_name;</span>
+<span class="fc" id="L69">    }</span>
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L74">        return m_name;</span>
+    }
+
+    /**
+     * check of a logical operator
+     *
+     * @return boolean for logical operator
+     */
+    public final boolean isLogical()
+    {
+<span class="pc bpc" id="L84" title="1 of 8 branches missed.">        return ( this == AND ) || ( this == OR ) || ( this == XOR ) || ( this == NEGATION );</span>
+    }
+
+    /**
+     * check of a numeric operator
+     *
+     * @return boolean for numeric operator
+     */
+    public final boolean isNumerical()
+    {
+<span class="nc bnc" id="L94" title="All 12 branches missed.">        return ( this == PLUS ) || ( this == MINUS ) || ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO ) || ( this == POWER );</span>
+    }
+
+    /**
+     * check of a comparable operator
+     *
+     * @return boolean for comparable operator
+     */
+    public final boolean isComparable()
+    {
+<span class="pc bpc" id="L104" title="1 of 4 branches missed.">        return ( this == EQUAL ) || ( this == NOTEQUAL );</span>
+    }
+
+    /**
+     * check of a relational operator
+     *
+     * @return boolean for relational operator
+     */
+    public final boolean isRelational()
+    {
+<span class="pc bpc" id="L114" title="3 of 8 branches missed.">        return ( this == LESS ) || ( this == LESSEQUAL ) || ( this == GREATER ) || ( this == GREATEREQUAL );</span>
+    }
+
+    /**
+     * check of a additive operator
+     *
+     * @return boolean for additive operator
+     */
+    public final boolean isAdditive()
+    {
+<span class="pc bpc" id="L124" title="1 of 4 branches missed.">        return ( this == PLUS ) || ( this == MINUS );</span>
+    }
+
+    /**
+     * check of a multiplicative operator
+     *
+     * @return boolean for multiplicative operator
+     */
+    public final boolean isMultiplicative()
+    {
+<span class="pc bpc" id="L134" title="5 of 6 branches missed.">        return ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO );</span>
+    }
+
+    /**
+     * check of a power operator
+     *
+     * @return boolean for power operator
+     */
+    public final boolean isPower()
+    {
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        return this == POWER;</span>
+    }
+
+    /**
+     * check of a binary operator
+     *
+     * @return boolean of binary flag
+     */
+    public final boolean isBinary()
+    {
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        return this != NEGATION;</span>
+    }
+
+    /**
+     * check of a unary operator
+     *
+     * @return boolean of unary operator
+     */
+    public final boolean isUnary()
+    {
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        return this == NEGATION;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

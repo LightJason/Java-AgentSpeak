@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CNumericValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.bit.matrix</a> &gt; <span class="el_source">CNumericValue.java</span></div><h1>CNumericValue.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
+
+import cern.colt.matrix.tbit.BitMatrix;
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * returns for the index tuple a numeric value.
+ * The action returns for the first argument, which
+ * is a bit matrix, all numeric values for all
+ * given index tuples (0 = false, 1 = true),
+ * the action fails on wrong input
+ *
+ * {@code [B1|B2] = math/bit/matrix/numericvalue( BitMatrix, 1, 2, [Row, Column] );}
+ */
+public final class CNumericValue extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6053540018011561601L;
+
+    /**
+     * ctor
+     */
+    public CNumericValue()
+    {
+<span class="fc" id="L63">        super( 4 );</span>
+<span class="fc" id="L64">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L70">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L78">        final List&lt;ITerm&gt; l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if ( l_arguments.size() % 2 == 0 )</span>
+<span class="nc" id="L80">            return CFuzzyValue.from( false );</span>
+
+<span class="fc" id="L82">        StreamUtils.windowed(</span>
+<span class="fc" id="L83">            l_arguments.stream()</span>
+<span class="fc" id="L84">                   .skip( 1 )</span>
+<span class="fc" id="L85">                   .map( ITerm::&lt;Number&gt;raw )</span>
+<span class="fc" id="L86">                   .mapToInt( Number::intValue )</span>
+<span class="fc" id="L87">                   .boxed(),</span>
+                   2
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        ).mapToDouble( i -&gt; l_arguments.get( 0 ).&lt;BitMatrix&gt;raw().getQuick( i.get( 1 ), i.get( 0 ) ) ? 1 : 0 )</span>
+<span class="fc" id="L90">            .boxed()</span>
+<span class="fc" id="L91">            .map( CRawTerm::from )</span>
+<span class="fc" id="L92">            .forEach( p_return::add );</span>
+
+<span class="fc" id="L94">        return CFuzzyValue.from( true );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

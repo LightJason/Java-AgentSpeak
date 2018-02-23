@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CCommon.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.common</a> &gt; <span class="el_source">CCommon.java</span></div><h1>CCommon.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.common;
+
+import com.google.common.reflect.ClassPath;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.action.binding.CMethodAction;
+import org.lightjason.agentspeak.action.binding.IAgentAction;
+import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.Objects;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
+
+
+/**
+ * class for any helper calls
+ */
+public final class CCommon
+{
+    /**
+     * package name
+     **/
+    public static final String PACKAGEROOT = &quot;org.lightjason.agentspeak&quot;;
+    /**
+     * logger
+     */
+<span class="fc" id="L74">    private static final Logger LOGGER = CCommon.logger( CCommon.class );</span>
+    /**
+     * language resource bundle
+     **/
+<span class="fc" id="L78">    private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(</span>
+<span class="fc" id="L79">                                                        MessageFormat.format( &quot;{0}.{1}&quot;, PACKAGEROOT, &quot;language&quot; ),</span>
+<span class="fc" id="L80">                                                        Locale.getDefault(),</span>
+                                                        new CUTF8Control()
+    );
+    /**
+     * properties of the package
+     */
+<span class="fc" id="L86">    private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle(</span>
+<span class="fc" id="L87">                                                        MessageFormat.format( &quot;{0}.{1}&quot;, PACKAGEROOT, &quot;configuration&quot; ),</span>
+<span class="fc" id="L88">                                                        Locale.getDefault(),</span>
+                                                        new CUTF8Control()
+    );
+
+
+    /**
+     * private ctor - avoid instantiation
+     */
+    private CCommon()
+    {}
+
+    /**
+     * returns a logger instance
+     *
+     * @param p_class class type
+     * @return logger
+     */
+    @Nonnull
+    public static Logger logger( final Class&lt;?&gt; p_class )
+    {
+<span class="fc" id="L108">        return Logger.getLogger( p_class.getName() );</span>
+    }
+
+    /**
+     * list of usable languages
+     *
+     * @return list of language pattern
+     */
+    @Nonnull
+    public static String[] languages()
+    {
+<span class="fc" id="L119">        return Arrays.stream( PROPERTIES.getString( &quot;translation&quot; ).split( &quot;,&quot; ) ).map( i -&gt; i.trim().toLowerCase() ).toArray( String[]::new );</span>
+    }
+
+    /**
+     * returns the language bundle
+     *
+     * @return bundle
+     */
+    @Nonnull
+    public static ResourceBundle languagebundle()
+    {
+<span class="nc" id="L130">        return LANGUAGE;</span>
+    }
+
+    /**
+     * returns the property data of the package
+     *
+     * @return bundle object
+     */
+    @Nonnull
+    public static ResourceBundle configuration()
+    {
+<span class="fc" id="L141">        return PROPERTIES;</span>
+    }
+
+    // --- access to action instantiation ----------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * get all classes within an Java package as action
+     *
+     * @param p_package full-qualified package name or empty for default package
+     * @return action stream
+     */
+    @Nonnull
+    public static Stream&lt;IAction&gt; actionsFromPackage( @Nullable final String... p_package )
+    {
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )</span>
+<span class="fc" id="L156">                 ? Stream.of( MessageFormat.format( &quot;{0}.{1}&quot;, PACKAGEROOT, &quot;action.builtin&quot; ) )</span>
+<span class="pc" id="L157">                 : Arrays.stream( p_package ) )</span>
+<span class="fc" id="L158">            .flatMap( j -&gt;</span>
+            {
+                try
+                {
+<span class="fc" id="L162">                    return ClassPath.from( Thread.currentThread().getContextClassLoader() )</span>
+<span class="fc" id="L163">                                    .getTopLevelClassesRecursive( j )</span>
+<span class="fc" id="L164">                                    .parallelStream()</span>
+<span class="fc" id="L165">                                    .map( ClassPath.ClassInfo::load )</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">                                    .filter( i -&gt; !Modifier.isAbstract( i.getModifiers() ) )</span>
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">                                    .filter( i -&gt; !Modifier.isInterface( i.getModifiers() ) )</span>
+<span class="fc" id="L168">                                    .filter( i -&gt; Modifier.isPublic( i.getModifiers() ) )</span>
+<span class="fc" id="L169">                                    .filter( IAction.class::isAssignableFrom )</span>
+<span class="fc" id="L170">                                    .map( i -&gt;</span>
+                                    {
+                                        try
+                                        {
+<span class="fc" id="L174">                                            return (IAction) i.getConstructor().newInstance();</span>
+                                        }
+<span class="nc" id="L176">                                        catch ( final NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException l_exception )</span>
+                                        {
+<span class="nc" id="L178">                                            LOGGER.warning( CCommon.languagestring( CCommon.class, &quot;actioninstantiate&quot;, i, l_exception ) );</span>
+<span class="nc" id="L179">                                            return null;</span>
+                                        }
+                                    } )
+
+                                    // action can be instantiate
+<span class="fc" id="L184">                                    .filter( Objects::nonNull )</span>
+
+                                    // check usable action name
+<span class="fc" id="L187">                                    .filter( CCommon::actionusable );</span>
+                }
+<span class="nc" id="L189">                catch ( final IOException l_exception )</span>
+                {
+<span class="nc" id="L191">                    throw new UncheckedIOException( l_exception );</span>
+                }
+            } );
+    }
+
+
+    /**
+     * returns actions by a class
+     * @note class must be an inheritance of the IAgent interface
+     *
+     * @param p_class class list
+     * @return action stream
+     */
+    @Nonnull
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public static Stream&lt;IAction&gt; actionsFromAgentClass( @Nonnull final Class&lt;?&gt;... p_class )
+    {
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        return p_class.length == 0</span>
+<span class="nc" id="L209">               ? Stream.empty()</span>
+<span class="fc" id="L210">               : Arrays.stream( p_class )</span>
+<span class="fc" id="L211">                       .parallel()</span>
+<span class="fc" id="L212">                       .filter( IAgent.class::isAssignableFrom )</span>
+<span class="fc" id="L213">                       .flatMap( CCommon::methods )</span>
+<span class="fc" id="L214">                       .map( i -&gt;</span>
+                       {
+                           try
+                           {
+<span class="fc" id="L218">                               return (IAction) new CMethodAction( i );</span>
+                           }
+<span class="nc" id="L220">                           catch ( final IllegalAccessException l_exception )</span>
+                           {
+<span class="nc" id="L222">                               LOGGER.warning( CCommon.languagestring( CCommon.class, &quot;actioninstantiate&quot;, i, l_exception ) );</span>
+<span class="nc" id="L223">                               return null;</span>
+                           }
+                       } )
+
+                       // action can be instantiate
+<span class="fc" id="L228">                       .filter( Objects::nonNull )</span>
+
+                       // check usable action name
+<span class="fc" id="L231">                       .filter( CCommon::actionusable );</span>
+    }
+
+    /**
+     * checks if an action is usable
+     *
+     * @param p_action action object
+     * @return boolean usable flag
+     */
+    private static boolean actionusable( final IAction p_action )
+    {
+<span class="pc bpc" id="L242" title="2 of 4 branches missed.">        if ( ( p_action.name().empty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )</span>
+        {
+<span class="nc" id="L244">            LOGGER.warning( CCommon.languagestring( CCommon.class, &quot;actionnameempty&quot; ) );</span>
+<span class="nc" id="L245">            return false;</span>
+        }
+
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        if ( !Character.isLetter( p_action.name().get( 0 ).charAt( 0 ) ) )</span>
+        {
+<span class="nc" id="L250">            LOGGER.warning( CCommon.languagestring( CCommon.class, &quot;actionletter&quot;, p_action ) );</span>
+<span class="nc" id="L251">            return false;</span>
+        }
+
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">        if ( !Character.isLowerCase( p_action.name().get( 0 ).charAt( 0 ) ) )</span>
+        {
+<span class="nc" id="L256">            LOGGER.warning( CCommon.languagestring( CCommon.class, &quot;actionlowercase&quot;, p_action ) );</span>
+<span class="nc" id="L257">            return false;</span>
+        }
+
+<span class="fc" id="L260">        return true;</span>
+    }
+
+
+    /**
+     * reads all methods by the action-annotations
+     * for building agent-actions
+     *
+     * @param p_class class
+     * @return stream of all methods with inheritance
+     */
+    @Nonnull
+    private static Stream&lt;Method&gt; methods( final Class&lt;?&gt; p_class )
+    {
+<span class="fc" id="L274">        final Pair&lt;Boolean, IAgentAction.EAccess&gt; l_classannotation = CCommon.isActionClass( p_class );</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if ( !l_classannotation.getLeft() )</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">            return Objects.isNull( p_class.getSuperclass() )</span>
+<span class="fc" id="L277">                   ? Stream.empty()</span>
+<span class="fc" id="L278">                   : methods( p_class.getSuperclass() );</span>
+
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        final Predicate&lt;Method&gt; l_filter = IAgentAction.EAccess.WHITELIST.equals( l_classannotation.getRight() )</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">                                           ? i -&gt; !CCommon.isActionFiltered( i, p_class )</span>
+<span class="fc" id="L282">                                           : i -&gt; CCommon.isActionFiltered( i, p_class );</span>
+
+<span class="fc" id="L284">        return Stream.concat(</span>
+<span class="fc" id="L285">            Arrays.stream( p_class.getDeclaredMethods() )</span>
+<span class="fc" id="L286">                  .parallel()</span>
+<span class="fc" id="L287">                  .peek( i -&gt; i.setAccessible( true ) )</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">                  .filter( i -&gt; !Modifier.isAbstract( i.getModifiers() ) )</span>
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                  .filter( i -&gt; !Modifier.isInterface( i.getModifiers() ) )</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">                  .filter( i -&gt; !Modifier.isNative( i.getModifiers() ) )</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">                  .filter( i -&gt; !Modifier.isStatic( i.getModifiers() ) )</span>
+<span class="fc" id="L292">                  .filter( l_filter ),</span>
+<span class="fc" id="L293">            methods( p_class.getSuperclass() )</span>
+        );
+    }
+
+    /**
+     * filter of a class to use it as action
+     *
+     * @param p_class class for checking
+     * @return boolean flag of check result
+     */
+    @Nonnull
+    private static Pair&lt;Boolean, IAgentAction.EAccess&gt; isActionClass( final Class&lt;?&gt; p_class )
+    {
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        if ( !p_class.isAnnotationPresent( IAgentAction.class ) )</span>
+<span class="fc" id="L307">            return new ImmutablePair&lt;&gt;( false, IAgentAction.EAccess.BLACKLIST );</span>
+
+<span class="fc" id="L309">        final IAgentAction l_annotation = p_class.getAnnotation( IAgentAction.class );</span>
+<span class="fc" id="L310">        return new ImmutablePair&lt;&gt;(</span>
+<span class="pc bpc" id="L311" title="1 of 2 branches missed.">                   ( l_annotation.classes().length == 0 )</span>
+<span class="nc" id="L312">                   || ( Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )</span>
+<span class="nc" id="L313">                              .parallel()</span>
+<span class="pc bnc" id="L314" title="All 2 branches missed.">                              .anyMatch( p_class::equals )</span>
+                   ),
+<span class="fc" id="L316">                   l_annotation.access()</span>
+               );
+    }
+
+    /**
+     * class filter of an action to use it
+     *
+     * @param p_method method for checking
+     * @param p_class class
+     * @return boolean flag of check result
+     */
+    private static boolean isActionFiltered( final Method p_method, final Class&lt;?&gt; p_class )
+    {
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        return p_method.isAnnotationPresent( IAgentActionFilter.class )</span>
+               &amp;&amp; (
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">                   ( p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0 )</span>
+<span class="nc" id="L332">                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )</span>
+<span class="nc" id="L333">                              .parallel()</span>
+<span class="pc bnc" id="L334" title="All 2 branches missed.">                              .anyMatch( p_class::equals )</span>
+                   )
+               );
+    }
+
+    // --- resource access -------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * concats an URL with a path
+     *
+     * @param p_base base URL
+     * @param p_string additional path
+     * @return new URL
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    @Nonnull
+    public static URL concaturl( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    {
+<span class="fc" id="L354">        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();</span>
+    }
+
+    /**
+     * returns root path of the resource
+     *
+     * @return URL of file or null
+     */
+    @Nullable
+    public static URL resourceurl()
+    {
+<span class="fc" id="L365">        return CCommon.class.getClassLoader().getResource( &quot;&quot; );</span>
+    }
+
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file
+     * @return URL of file or null
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    @Nonnull
+    public static URL resourceurl( final String p_file ) throws URISyntaxException, MalformedURLException
+    {
+<span class="nc" id="L380">        return resourceurl( new File( p_file ) );</span>
+    }
+
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file relative to the CMain
+     * @return URL of file or null
+     *
+     * @throws URISyntaxException is thrown on URI errors
+     * @throws MalformedURLException is thrown on malformat
+     */
+    @Nonnull
+    private static URL resourceurl( final File p_file ) throws URISyntaxException, MalformedURLException
+    {
+<span class="nc bnc" id="L395" title="All 2 branches missed.">        if ( p_file.exists() )</span>
+<span class="nc" id="L396">            return p_file.toURI().normalize().toURL();</span>
+
+<span class="nc" id="L398">        final URL l_url = CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, &quot;/&quot; ) );</span>
+<span class="nc bnc" id="L399" title="All 2 branches missed.">        if ( Objects.isNull( l_url ) )</span>
+<span class="nc" id="L400">            throw new CIllegalArgumentException( CCommon.languagestring( CCommon.class, &quot;fileurlnull&quot;, p_file ) );</span>
+<span class="nc" id="L401">        return l_url.toURI().normalize().toURL();</span>
+    }
+
+    // --- language operations ---------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * returns the language depend string on any object
+     *
+     * @param p_source any object
+     * @param p_label label name
+     * @param p_parameter parameter
+     * @return translated string
+     *
+     * @tparam T object type
+     */
+    @Nonnull
+    public static &lt;T&gt; String languagestring( final T p_source, final String p_label, final Object... p_parameter )
+    {
+<span class="fc" id="L419">        return languagestring( p_source.getClass(), p_label, p_parameter );</span>
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    @Nonnull
+    public static String languagestring( final Class&lt;?&gt; p_class, final String p_label, final Object... p_parameter )
+    {
+        try
+        {
+<span class="fc" id="L435">            return MessageFormat.format( LANGUAGE.getString( languagelabel( p_class, p_label ) ), p_parameter );</span>
+        }
+<span class="nc" id="L437">        catch ( final MissingResourceException l_exception )</span>
+        {
+<span class="nc" id="L439">            return &quot;&quot;;</span>
+        }
+    }
+
+    /**
+     * returns the label of a class and string to get access to the resource
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @return label name
+     */
+    @Nonnull
+    private static String languagelabel( final Class&lt;?&gt; p_class, final String p_label )
+    {
+<span class="fc" id="L453">        return ( p_class.getCanonicalName().toLowerCase( Locale.ROOT ) + &quot;.&quot; + p_label.toLowerCase( Locale.ROOT ) ).replaceAll( &quot;[^a-zA-Z0-9_.]+&quot;, &quot;&quot; ).replace(</span>
+            PACKAGEROOT + &quot;.&quot;, &quot;&quot; );
+    }
+
+    // --- resource utf-8 encoding -----------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * class to read UTF-8 encoded property file
+     *
+     * @note Java default encoding for property files is ISO-Latin-1
+     */
+    private static final class CUTF8Control extends ResourceBundle.Control
+    {
+
+        public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
+                                               final boolean p_reload
+        ) throws IllegalAccessException, InstantiationException, IOException
+        {
+            final InputStream l_stream;
+<span class="fc" id="L472">            final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), &quot;properties&quot; );</span>
+
+<span class="pc bpc" id="L474" title="1 of 2 branches missed.">            if ( !p_reload )</span>
+<span class="fc" id="L475">                l_stream = p_loader.getResourceAsStream( l_resource );</span>
+            else
+            {
+
+<span class="nc" id="L479">                final URL l_url = p_loader.getResource( l_resource );</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">                if ( Objects.isNull( l_url ) )</span>
+<span class="nc" id="L481">                    return null;</span>
+
+<span class="nc" id="L483">                final URLConnection l_connection = l_url.openConnection();</span>
+<span class="nc bnc" id="L484" title="All 2 branches missed.">                if ( Objects.isNull( l_connection ) )</span>
+<span class="nc" id="L485">                    return null;</span>
+
+<span class="nc" id="L487">                l_connection.setUseCaches( false );</span>
+<span class="nc" id="L488">                l_stream = l_connection.getInputStream();</span>
+            }
+
+<span class="fc" id="L491">            final ResourceBundle l_bundle = new PropertyResourceBundle( new InputStreamReader( l_stream, &quot;UTF-8&quot; ) );</span>
+<span class="fc" id="L492">            l_stream.close();</span>
+<span class="fc" id="L493">            return l_bundle;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

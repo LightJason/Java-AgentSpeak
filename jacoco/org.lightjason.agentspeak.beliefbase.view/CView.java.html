@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.beliefbase.view</a> &gt; <span class="el_source">CView.java</span></div><h1>CView.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.beliefbase.view;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.IBeliefbase;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+
+/**
+ * view of a beliefbase
+ *
+ * @tparam T agent type
+ */
+public final class CView implements IView
+{
+    /**
+     * view name
+     */
+    private final String m_name;
+    /**
+     * reference to the beliefbase context
+     */
+    private final IBeliefbase m_beliefbase;
+    /**
+     * parent name
+     */
+    private final IView m_parent;
+
+
+
+    /**
+     * ctor
+     *
+     * @param p_name view name
+     * @param p_beliefbase reference to the beliefbase context
+     */
+    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase p_beliefbase )
+    {
+<span class="fc" id="L73">        this( p_name, p_beliefbase, null );</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_name view name
+     * @param p_beliefbase reference to the beliefbase context
+     * @param p_parent reference to the parent view
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase p_beliefbase, final IView p_parent )
+<span class="fc" id="L85">    {</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if ( p_name.isEmpty() )</span>
+<span class="nc" id="L87">            throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;empty&quot; ) );</span>
+
+<span class="fc" id="L89">        m_name = p_name;</span>
+<span class="fc" id="L90">        m_beliefbase = p_beliefbase;</span>
+<span class="fc" id="L91">        m_parent = p_parent;</span>
+<span class="fc" id="L92">    }</span>
+
+
+
+    // --- agent operations ------------------------------------------------------------------------------------------------------------------------------------
+
+    @Nonnull
+    @Override
+    public final Stream&lt;ITrigger&gt; trigger()
+    {
+        // remove the root element (position 0), because the root element
+        // is not used on the agent (asl) side
+<span class="fc" id="L104">        final IPath l_path = this.path().remove( 0 );</span>
+<span class="fc" id="L105">        return m_beliefbase.trigger( this ).map( i -&gt; i.shallowcopy( l_path ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IAgent&lt;?&gt; update( @Nonnull final IAgent&lt;?&gt; p_agent )
+    {
+<span class="fc" id="L112">        return m_beliefbase.update( p_agent );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --- operations ------------------------------------------------------------------------------------------------------------------------------------------
+
+    @Nonnull
+    @Override
+    public final IView add( @Nonnull final Stream&lt;ILiteral&gt; p_literal )
+    {
+<span class="fc" id="L125">        p_literal.parallel()</span>
+<span class="fc" id="L126">                 .forEach( i -&gt; this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );</span>
+<span class="fc" id="L127">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IView add( @Nonnull final ILiteral... p_literal )
+    {
+<span class="fc" id="L134">        return this.add( Arrays.stream( p_literal ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;varargs&quot; )
+    public final IView add( @Nonnull final IView... p_view )
+    {
+<span class="fc" id="L142">        Arrays.stream( p_view )</span>
+<span class="fc" id="L143">              .parallel()</span>
+<span class="fc" id="L144">              .forEach( i -&gt;</span>
+              {
+<span class="fc" id="L146">                  this.root()</span>
+<span class="pc" id="L147">                      .filter( j -&gt; i.beliefbase().equals( this.beliefbase() ) )</span>
+<span class="fc" id="L148">                      .findAny()</span>
+<span class="fc" id="L149">                      .ifPresent( j -&gt;</span>
+                      {
+<span class="nc" id="L151">                          throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;equal&quot;, i.path(), j.path() ) );</span>
+                      } );
+<span class="fc" id="L153">                  m_beliefbase.add( i );</span>
+<span class="fc" id="L154">              } );</span>
+<span class="fc" id="L155">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;varargs&quot; )
+    public final IView remove( @Nonnull final IView... p_view )
+    {
+<span class="nc" id="L163">        Arrays.stream( p_view ).forEach( m_beliefbase::remove );</span>
+<span class="nc" id="L164">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IView remove( @Nonnull final Stream&lt;ILiteral&gt; p_literal )
+    {
+<span class="fc" id="L171">        p_literal.parallel()</span>
+<span class="fc" id="L172">            .forEach( i -&gt; this.leafview( this.walk( i.functorpath() ) ).beliefbase().remove( i.shallowcopysuffix() ) );</span>
+<span class="fc" id="L173">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IView remove( @Nonnull final ILiteral... p_literal )
+    {
+<span class="fc" id="L180">        return this.remove( Arrays.stream( p_literal ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IView clear( @Nullable final IPath... p_path )
+    {
+<span class="pc bpc" id="L187" title="3 of 4 branches missed.">        if ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 ) )</span>
+<span class="fc" id="L188">            m_beliefbase.clear();</span>
+        else
+<span class="nc" id="L190">            Arrays.stream( p_path ).parallel()</span>
+<span class="nc" id="L191">                  .forEach( i -&gt; this.leafview( this.walk( i ) ).clear() );</span>
+
+<span class="fc" id="L193">        return this;</span>
+    }
+
+    @Override
+    public final boolean containsView( @Nonnull final IPath p_path )
+    {
+<span class="nc bnc" id="L199" title="All 2 branches missed.">        return !p_path.empty()</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">               &amp;&amp; ( p_path.size() == 1</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                    ? m_beliefbase.containsView( p_path.get( 0 ) )</span>
+<span class="nc" id="L202">                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                        .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )</span>
+               );
+    }
+
+    @Override
+    public final boolean containsLiteral( @Nonnull final IPath p_path )
+    {
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        return !p_path.empty()</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">               || ( p_path.size() == 1</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                    ? m_beliefbase.containsLiteral( p_path.get( 0 ) )</span>
+<span class="nc" id="L213">                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">                          .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )</span>
+               );
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+    // --- streaming access ------------------------------------------------------------------------------------------------------------------------------------
+
+    @Nonnull
+    @Override
+    public final Stream&lt;ILiteral&gt; stream( @Nullable final IPath... p_path )
+    {
+        // build path relative to this view
+<span class="fc" id="L230">        final IPath l_path = this.path();</span>
+<span class="fc bfc" id="L231" title="All 4 branches covered.">        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )</span>
+<span class="fc" id="L232">               ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -&gt; i.stream() ) )</span>
+<span class="fc" id="L233">               : Arrays.stream( p_path )</span>
+<span class="fc" id="L234">                       .flatMap( i -&gt; this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )</span>
+<span class="fc" id="L235">        ).map( i -&gt; i.shallowcopy( l_path ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;ILiteral&gt; stream( final boolean p_negated, @Nullable final IPath... p_path )
+    {
+        // build path relative to this view
+<span class="fc" id="L243">        final IPath l_path = this.path();</span>
+<span class="pc bpc" id="L244" title="2 of 4 branches missed.">        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )</span>
+<span class="nc" id="L245">               ? Stream.concat(</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">                   m_beliefbase.streamLiteral().filter( i -&gt; i.negated() == p_negated ),</span>
+<span class="nc" id="L247">                   m_beliefbase.streamView().flatMap( i -&gt; i.stream( p_negated ) )</span>
+               )
+<span class="fc" id="L249">               : Arrays.stream( p_path )</span>
+<span class="fc" id="L250">                       .flatMap( i -&gt; this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                       .filter( j -&gt; j.negated() == p_negated )</span>
+<span class="fc" id="L252">        ).map( i -&gt; i.shallowcopy( l_path ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IView&gt; walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
+    {
+<span class="fc" id="L259">        return this.walkdown( p_path, p_generator );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
+    {
+<span class="fc" id="L266">        Arrays.stream( p_paths )</span>
+<span class="fc" id="L267">            .parallel()</span>
+<span class="fc" id="L268">            .forEach( i -&gt; this.walk( i, p_generator ) );</span>
+<span class="fc" id="L269">        return this;</span>
+    }
+
+    /**
+     * inner walking structure of views
+     *
+     * @param p_path path
+     * @param p_generator generator (first argument is used, other elements will be ignored)
+     * @return view stream
+     */
+    @SuppressWarnings( &quot;varargs&quot; )
+    private Stream&lt;IView&gt; walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
+    {
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if ( p_path.empty() )</span>
+<span class="fc" id="L283">            return Stream.of( this );</span>
+
+        final IView l_view;
+<span class="fc" id="L286">        final String l_root = p_path.get( 0 );</span>
+
+<span class="fc" id="L288">        synchronized ( this )</span>
+        {
+            // add is run here for avoid overwriting view with a new object reference
+<span class="fc" id="L291">            l_view = m_beliefbase.viewOrDefault(</span>
+                        l_root,
+
+<span class="pc bpc" id="L294" title="1 of 4 branches missed.">                        Objects.isNull( p_generator ) || p_generator.length == 0</span>
+<span class="fc" id="L295">                        ? null</span>
+<span class="fc" id="L296">                        : p_generator[0].apply( l_root, this )</span>
+                     );
+
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">            if ( Objects.isNull( l_view ) )</span>
+<span class="nc" id="L300">                return Stream.empty();</span>
+<span class="fc" id="L301">            m_beliefbase.add( l_view );</span>
+<span class="fc" id="L302">        }</span>
+
+<span class="fc" id="L304">        return Stream.concat(</span>
+<span class="fc" id="L305">            Stream.of( this ),</span>
+<span class="fc" id="L306">            l_view.walk( p_path.subpath( 1 ), p_generator )</span>
+        );
+    }
+
+    /**
+     * returns the leaf of a view path
+     *
+     * @param p_stream stream of views
+     * @return last / leaf view
+     */
+    @Nonnull
+    private IView leafview( @Nonnull final Stream&lt;IView&gt; p_stream )
+    {
+<span class="fc" id="L319">        return p_stream</span>
+<span class="fc" id="L320">            .reduce( ( i, j ) -&gt; j )</span>
+<span class="fc" id="L321">            .orElse( IView.EMPTY );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --- basic access ----------------------------------------------------------------------------------------------------------------------------------------
+
+    @Nonnull
+    @Override
+    public final IBeliefbase beliefbase()
+    {
+<span class="fc" id="L334">        return m_beliefbase;</span>
+    }
+
+    @Override
+    public final boolean empty()
+    {
+<span class="nc" id="L340">        return m_beliefbase.empty();</span>
+    }
+
+    @Override
+    public final int size()
+    {
+<span class="fc" id="L346">        return m_beliefbase.size();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IView&gt; root()
+    {
+<span class="fc bfc" id="L353" title="All 2 branches covered.">        return this.hasParent()</span>
+<span class="fc" id="L354">               ? Stream.concat( Stream.of( this ), Stream.of( this.parent() ).flatMap( IView::root ) )</span>
+<span class="fc" id="L355">               : Stream.empty();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String name()
+    {
+<span class="fc" id="L362">        return m_name;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath path()
+    {
+<span class="fc" id="L369">        return this.root().map( IView::name ).collect( CPath.collect() ).reverse();</span>
+    }
+
+    @Nullable
+    @Override
+    public final IView parent()
+    {
+<span class="fc" id="L376">        return m_parent;</span>
+    }
+
+    @Override
+    public final boolean hasParent()
+    {
+<span class="fc bfc" id="L382" title="All 2 branches covered.">        return m_parent != null;</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L388">        return m_name.hashCode() ^ m_beliefbase.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="pc bpc" id="L394" title="1 of 4 branches missed.">        return ( p_object instanceof IView ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L400">        return MessageFormat.format( &quot;{0} ({1}): [{2}]&quot;, this.name(), super.toString(), m_beliefbase );</span>
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

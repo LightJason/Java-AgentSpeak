@@ -1,0 +1,13 @@
+*.*
+!.gitignore
+!circle.yml
+!*.htm*
+!*.css
+!*.js
+!*.png
+!*.gif
+!*.svg
+!*.json
+!*.g4
+!org\.lightjason*
+

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseAgentGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.generator</a> &gt; <span class="el_source">IBaseAgentGenerator.java</span></div><h1>IBaseAgentGenerator.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.generator;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IPlanBundle;
+import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.grammar.CParserAgent;
+import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unify.IUnifier;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+
+/**
+ * agent generator
+ */
+@SuppressFBWarnings( &quot;URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD&quot; )
+public abstract class IBaseAgentGenerator&lt;T extends IAgent&lt;?&gt;&gt; implements IAgentGenerator&lt;T&gt;
+{
+    /**
+     * configuration of an agent
+     */
+    protected final IAgentConfiguration&lt;T&gt; m_configuration;
+
+
+    /**
+     * ctor
+     *
+     * @param p_stream input stream
+     * @param p_actions set with action
+     * @throws Exception thrown on error
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set&lt;IAction&gt; p_actions ) throws Exception
+    {
+<span class="fc" id="L76">        this( p_stream, p_actions, Collections.emptySet(), IVariableBuilder.EMPTY );</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_stream input stream
+     * @param p_actions set with action
+     * @param p_variablebuilder variable builder (can be set to null)
+     * @throws Exception thrown on error
+     */
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set&lt;IAction&gt; p_actions, @Nonnull final IVariableBuilder p_variablebuilder )
+        throws Exception
+    {
+<span class="fc" id="L90">        this( p_stream, p_actions, Collections.emptySet(), p_variablebuilder );</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_stream input stream
+     * @param p_actions set with action
+     * @param p_planbundle set with planbundles
+     * @param p_variablebuilder variable builder (can be set to null)
+     * @throws Exception thrown on error
+     */
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set&lt;IAction&gt; p_actions,
+                                @Nonnull final Set&lt;IPlanBundle&gt; p_planbundle, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+<span class="fc" id="L104">    {</span>
+<span class="fc" id="L105">        final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );</span>
+<span class="fc" id="L106">        m_configuration = this.configuration(</span>
+            DEFAULTFUZZYBUNDLE,
+
+<span class="fc" id="L109">            Stream.concat(</span>
+<span class="fc" id="L110">                l_visitor.initialbeliefs().stream(),</span>
+<span class="pc" id="L111">                p_planbundle.stream().flatMap( i -&gt; i.initialbeliefs().stream() )</span>
+<span class="fc" id="L112">            ).collect( Collectors.toCollection( LinkedHashSet::new ) ),</span>
+
+<span class="fc" id="L114">            Stream.concat(</span>
+<span class="fc" id="L115">                l_visitor.plans().stream(),</span>
+<span class="pc" id="L116">                p_planbundle.parallelStream().flatMap( i -&gt; i.plans().stream() )</span>
+<span class="fc" id="L117">            ).collect( Collectors.toSet() ),</span>
+
+<span class="fc" id="L119">            Stream.concat(</span>
+<span class="fc" id="L120">                l_visitor.rules().stream(),</span>
+<span class="pc" id="L121">                p_planbundle.parallelStream().flatMap( i -&gt; i.rules().stream() )</span>
+<span class="fc" id="L122">            ).collect( Collectors.toSet() ),</span>
+
+<span class="fc" id="L124">            l_visitor.initialgoal(),</span>
+
+            DEFAULTUNIFIER,
+
+            p_variablebuilder
+        );
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * builds the configuraion, configuration runs cloning of objects if needed
+     *
+     * @param p_fuzzy fuzzy component
+     * @param p_initalbeliefs initial beliefs
+     * @param p_plans plans
+     * @param p_rules rules
+     * @param p_initialgoal intial goal
+     * @param p_unifier unifier component
+     * @param p_variablebuilder variable builder
+     * @return configuration object
+     */
+    protected IAgentConfiguration&lt;T&gt; configuration( @Nonnull final IFuzzyBundle&lt;Boolean&gt; p_fuzzy, @Nonnull final Collection&lt;ILiteral&gt; p_initalbeliefs,
+                                                    @Nonnull final Set&lt;IPlan&gt; p_plans, @Nonnull final Set&lt;IRule&gt; p_rules,
+                                                    @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                                    @Nonnull final IVariableBuilder p_variablebuilder )
+    {
+<span class="fc" id="L149">        return new CDefaultAgentConfiguration&lt;&gt;(</span>
+            p_fuzzy,
+            p_initalbeliefs,
+            p_plans,
+            p_rules,
+            p_initialgoal,
+            p_unifier,
+            p_variablebuilder
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;T&gt; generatemultiple( final int p_number, @Nullable final Object... p_data )
+    {
+<span class="nc" id="L164">        return IntStream.range( 0, p_number )</span>
+<span class="nc" id="L165">                    .parallel()</span>
+<span class="nc" id="L166">                    .mapToObj( i -&gt; this.generatesingle( p_data ) )</span>
+<span class="nc" id="L167">                    .filter( Objects::nonNull );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

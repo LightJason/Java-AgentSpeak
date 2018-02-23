@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CSingleStatisticValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.statistic</a> &gt; <span class="el_source">CSingleStatisticValue.java</span></div><h1>CSingleStatisticValue.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.statistic;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * gets a single statistic value of multiple statistic objects.
+ * The action returns for each statistic object the statistic value,
+ * the first argument is a string with the statitic value name (geometricmean, max,
+ * min, count, populationvariance, quadraticmean, secondmoment,
+ * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis)
+ * all other arguments are statistic objects
+ *
+ * {@code [V1|V2|V3] = math/statistic/getstatisticvalue( &quot;mean|min|max|...&quot;, Statistic1, [Statistic2, Statistic3] );}
+ */
+public final class CSingleStatisticValue extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1381562882185147512L;
+
+    /**
+     * ctor
+     */
+    public CSingleStatisticValue()
+    {
+<span class="fc" id="L64">        super( 3 );</span>
+<span class="fc" id="L65">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L71">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L80">        final List&lt;ITerm&gt; l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+<span class="fc" id="L81">        final EStatisticValue l_value = EStatisticValue.from( l_arguments.get( 0 ).&lt;String&gt;raw() );</span>
+
+<span class="fc" id="L83">        l_arguments.stream()</span>
+<span class="fc" id="L84">                   .skip( 1 )</span>
+<span class="fc" id="L85">                   .mapToDouble( i -&gt;</span>
+                   {
+
+<span class="fc bfc" id="L88" title="All 2 branches covered.">                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )</span>
+<span class="fc" id="L89">                           return l_value.value( i.&lt;SummaryStatistics&gt;raw() );</span>
+
+<span class="fc" id="L91">                       return l_value.value( i.&lt;DescriptiveStatistics&gt;raw() );</span>
+
+                   } )
+<span class="fc" id="L94">                   .boxed()</span>
+<span class="fc" id="L95">                   .map( CRawTerm::from )</span>
+<span class="fc" id="L96">                   .forEach( p_return::add );</span>
+
+<span class="fc" id="L98">        return CFuzzyValue.from( true );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

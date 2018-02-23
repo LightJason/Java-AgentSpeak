@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ITerm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language</a> &gt; <span class="el_source">ITerm.java</span></div><h1>ITerm.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language;
+
+import org.lightjason.agentspeak.common.IPath;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
+
+
+/**
+ * term interface
+ */
+public interface ITerm extends Serializable, IStructureHash, IDeepCopy&lt;ITerm&gt;
+{
+    /**
+     * serial id
+     */
+    long serialVersionUID = -3640918490398129717L;
+
+    /**
+     * empty term
+     */
+<span class="fc" id="L46">    ITerm EMPTY = new ITerm()</span>
+<span class="fc" id="L47">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3396420174718981909L;
+
+        @Nonnull
+        @Override
+        public final String functor()
+        {
+<span class="nc" id="L57">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath functorpath()
+        {
+<span class="nc" id="L64">            return IPath.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath fqnfunctor()
+        {
+<span class="nc" id="L71">            return IPath.EMPTY;</span>
+        }
+
+        @Override
+        public final boolean hasVariable()
+        {
+<span class="nc" id="L77">            return false;</span>
+        }
+
+        @Nullable
+        @Override
+        public final &lt;T&gt; T raw()
+        {
+<span class="nc" id="L84">            return null;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        {
+<span class="nc" id="L91">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopysuffix()
+        {
+<span class="nc" id="L98">            return this;</span>
+        }
+
+        @Override
+        public final int structurehash()
+        {
+<span class="nc" id="L104">            return 0;</span>
+        }
+    };
+
+    /**
+     * returns the functor without path
+     *
+     * @return functor
+     */
+    @Nonnull
+    String functor();
+
+    /**
+     * returns the path of the functor
+     *
+     * @return path
+     */
+    @Nonnull
+    IPath functorpath();
+
+    /**
+     * returns the full-qualified functor
+     * with path and name
+     *
+     * @return fqn functor
+     */
+    @Nonnull
+    IPath fqnfunctor();
+
+    /**
+     * checks if the literal has variables
+     *
+     * @return variable flag
+     */
+    boolean hasVariable();
+
+    /**
+     * cast to any raw value type
+     *
+     * @tparam raw type
+     * @return any type
+     */
+    @Nullable
+    &lt;T&gt; T raw();
+
+    /**
+     * casts the object to a term-type
+     *
+     * @return casted object
+     *
+     * @tparam T term type
+     */
+    @Nonnull
+    @SuppressWarnings( &quot;unchecked&quot; )
+    default &lt;T extends ITerm&gt; T term()
+    {
+<span class="fc" id="L160">        return (T) this;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseUnary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expression</a> &gt; <span class="el_source">IBaseUnary.java</span></div><h1>IBaseUnary.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expression;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.stream.Stream;
+
+
+/**
+ * base unary expression
+ */
+public abstract class IBaseUnary implements IUnaryExpression
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8992581726613099958L;
+    /**
+     * expression operator
+     */
+    protected final EOperator m_operator;
+    /**
+     * left-hand-side argument
+     */
+    protected final IExpression m_expression;
+
+
+    /**
+     * ctor
+     *
+     * @param p_operator operator
+     * @param p_expression expression
+     */
+    protected IBaseUnary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_expression )
+<span class="fc" id="L61">    {</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if ( !p_operator.isUnary() )</span>
+<span class="nc" id="L63">            throw new CIllegalArgumentException( CCommon.languagestring( IBaseUnary.class, &quot;operator&quot;, p_operator ) );</span>
+
+<span class="fc" id="L65">        m_operator = p_operator;</span>
+<span class="fc" id="L66">        m_expression = p_expression;</span>
+<span class="fc" id="L67">    }</span>
+
+    @Nonnull
+    @Override
+    public final IExpression expression()
+    {
+<span class="nc" id="L73">        return m_expression;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final EOperator operator()
+    {
+<span class="nc" id="L80">        return m_operator;</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L86">        return m_expression.hashCode() ^ m_operator.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        return ( p_object instanceof IExpression ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L98">        return MessageFormat.format( &quot;{0}({1})&quot;, m_operator, m_expression );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L105">        return m_expression.variables();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

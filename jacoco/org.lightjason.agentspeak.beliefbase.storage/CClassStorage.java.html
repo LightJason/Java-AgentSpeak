@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CClassStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.beliefbase.storage</a> &gt; <span class="el_source">CClassStorage.java</span></div><h1>CClassStorage.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.beliefbase.storage;
+
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * belief storage to get access to all class attributes
+ *
+ * @note all object attributes which are not transient will be read
+ * @todo implement recursive descent of properties
+ * @todo implement renaming function of properties
+ */
+public final class CClassStorage&lt;M&gt; extends IBaseStorage&lt;ILiteral, M&gt;
+{
+    /**
+     * object instance
+     */
+    private final Object m_instance;
+    /**
+     * map with functor and field reference
+     */
+    private final Map&lt;String, Field&gt; m_fields;
+
+    /**
+     * ctor
+     *
+     * @param p_instance object
+     */
+    public CClassStorage( @Nonnull final Object p_instance )
+    {
+<span class="fc" id="L70">        this( p_instance, i -&gt; i );</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_instance object
+     * @param p_fieldnameformater function to reformat field names
+     */
+    public CClassStorage( @Nonnull final Object p_instance, @Nonnull final Function&lt;String, String&gt; p_fieldnameformater )
+<span class="fc" id="L80">    {</span>
+<span class="fc" id="L81">        m_instance = p_instance;</span>
+<span class="fc" id="L82">        m_fields = Collections.unmodifiableMap(</span>
+<span class="fc" id="L83">            Arrays.stream( m_instance.getClass().getDeclaredFields() )</span>
+<span class="fc" id="L84">                  .peek( i -&gt; i.setAccessible( true ) )</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                  .filter( i -&gt; !Modifier.isTransient( i.getModifiers() ) )</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                  .filter( i -&gt; !Modifier.isStatic( i.getModifiers() ) )</span>
+<span class="fc" id="L87">                  .collect( Collectors.toMap(</span>
+<span class="fc" id="L88">                      i -&gt; p_fieldnameformater.apply( i.getName() ).toLowerCase( Locale.ROOT ).replace( &quot;\\s+&quot;, &quot;&quot; ), i -&gt; i )</span>
+                  )
+        );
+<span class="fc" id="L91">    }</span>
+
+    @Nonnull
+    @Override
+    public final Stream&lt;ILiteral&gt; streamMultiElements()
+    {
+<span class="fc" id="L97">        return m_fields.entrySet().stream()</span>
+<span class="fc" id="L98">                       .map( i -&gt; this.literal( i.getKey(), i.getValue() ) )</span>
+<span class="fc" id="L99">                       .filter( Objects::nonNull );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;M&gt; streamSingleElements()
+    {
+<span class="fc" id="L106">        return Stream.empty();</span>
+    }
+
+    @Override
+    public final  boolean containsMultiElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L112">        return m_fields.containsKey( p_key );</span>
+    }
+
+    @Override
+    public final boolean containsSingleElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L118">        return false;</span>
+    }
+
+    @Override
+    public final boolean putMultiElement( @Nonnull final String p_key, final ILiteral p_value )
+    {
+<span class="nc" id="L124">        final Field l_field = m_fields.get( p_key );</span>
+<span class="nc bnc" id="L125" title="All 6 branches missed.">        if ( ( Objects.isNull( l_field ) ) || ( p_value.emptyValues() ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )</span>
+<span class="nc" id="L126">            return false;</span>
+
+        try
+        {
+<span class="nc" id="L130">            l_field.set( m_instance, p_value.values().findFirst().orElseGet( () -&gt; CRawTerm.from( null ) ).raw() );</span>
+<span class="nc" id="L131">            return true;</span>
+        }
+<span class="nc" id="L133">        catch ( final IllegalAccessException l_exception )</span>
+        {
+<span class="nc" id="L135">            return false;</span>
+        }
+    }
+
+    @Override
+    public final boolean putSingleElement( @Nonnull final String p_key, final M p_value )
+    {
+<span class="nc" id="L142">        return false;</span>
+    }
+
+    @Override
+    public final boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
+    {
+<span class="nc" id="L148">        return false;</span>
+    }
+
+    @Override
+    public final boolean removeMultiElement( @Nonnull final String p_key, final ILiteral p_value )
+    {
+<span class="nc" id="L154">        return false;</span>
+    }
+
+    @Override
+    public final boolean removeSingleElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L160">        return false;</span>
+    }
+
+    @Override
+    public final M getSingleElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L166">        return null;</span>
+    }
+
+    @Override
+    public final M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
+    {
+<span class="nc" id="L172">        return p_default;</span>
+    }
+
+    @Nonnull
+    @Override
+    public Collection&lt;ILiteral&gt; getMultiElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L179">        final Field l_field = m_fields.get( p_key );</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        return Objects.isNull( l_field ) ? Collections.emptySet() : Stream.of( this.literal( p_key, l_field ) ).collect( Collectors.toSet() );</span>
+    }
+
+    @Override
+    public final void clear()
+    {
+<span class="nc" id="L186">    }</span>
+
+    @Override
+    public final boolean empty()
+    {
+<span class="nc" id="L191">        return m_fields.isEmpty();</span>
+    }
+
+    @Override
+    public final int size()
+    {
+<span class="nc" id="L197">        return m_fields.size();</span>
+    }
+
+    /**
+     * returns a literal definition of the a class field
+     *
+     * @param p_name literal functor
+     * @param p_field field reference
+     * @return null or literal
+     */
+    @Nullable
+    private ILiteral literal( @Nonnull final String p_name, @Nonnull final Field p_field )
+    {
+        try
+        {
+<span class="fc" id="L212">            final Object l_value = p_field.get( m_instance );</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            return Objects.isNull( l_value ) ? CLiteral.from( p_name, CRawTerm.EMPTY ) : CLiteral.from( p_name, CRawTerm.from( l_value ) );</span>
+        }
+<span class="nc" id="L215">        catch ( final IllegalAccessException l_exception )</span>
+        {
+<span class="nc" id="L217">            return null;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CInEdgesSingle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.graph</a> &gt; <span class="el_source">CInEdgesSingle.java</span></div><h1>CInEdgesSingle.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+
+package org.lightjason.agentspeak.action.builtin.graph;
+
+import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
+/**
+ * returns incomming edges of a vertex of each graph instance.
+ * The actions returns a list incoming edges of a vertex for
+ * each graph instance, the first argument is the vertex, all
+ * other graphs, the action never fails
+ *
+ * {@code [OE1|OE2] = graph/inedgessingle( Vertex, Graph1, Graph2 );}
+ */
+<span class="fc" id="L45">public final class CInEdgesSingle extends IApplySingle</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8923896207154476814L;
+
+    @Override
+    protected final int skipsize()
+    {
+<span class="fc" id="L55">        return 1;</span>
+    }
+
+    @Override
+    protected final void apply( final boolean p_parallel, @Nonnull final Graph&lt;Object, Object&gt; p_graph,
+                                @Nonnull final List&lt;ITerm&gt; p_window, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L62">        final List&lt;?&gt; l_return = new ArrayList&lt;&gt;( p_graph.getInEdges( p_window.get( 0 ).raw() ) );</span>
+
+<span class="fc" id="L64">        p_return.add(</span>
+<span class="fc" id="L65">            CRawTerm.from(</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">                p_parallel</span>
+<span class="fc" id="L67">                ? Collections.synchronizedList( l_return )</span>
+<span class="fc" id="L68">                : l_return</span>
+            )
+        );
+<span class="fc" id="L71">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

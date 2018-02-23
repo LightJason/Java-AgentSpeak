@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseBeliefbase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.beliefbase</a> &gt; <span class="el_source">IBaseBeliefbase.java</span></div><h1>IBaseBeliefbase.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.beliefbase;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.view.CView;
+import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+
+import javax.annotation.Nonnull;
+import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
+
+
+/**
+ * default behaviour of a beliefbase
+ *
+ * @tparam T agent type
+ * @todo check reference counting on delete views
+ * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
+ * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
+ * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
+ */
+@SuppressFBWarnings( &quot;RI_REDUNDANT_INTERFACES&quot; )
+<span class="fc" id="L58">public abstract class IBaseBeliefbase implements IBeliefbase</span>
+{
+
+    /**
+     * map with events for a mask
+     */
+<span class="fc" id="L64">    private final Multimap&lt;IView, ITrigger&gt; m_events = Multimaps.synchronizedSetMultimap( HashMultimap.create() );</span>
+    /**
+     * set with all current views
+     */
+<span class="fc" id="L68">    private final Set&lt;IView&gt; m_views = Collections.synchronizedSet( new HashSet&lt;&gt;() );</span>
+    /**
+     * weak reference queue of all masks to avoid memory-leaks of belief events
+     */
+<span class="fc" id="L72">    private final ReferenceQueue&lt;IView&gt; m_maskreference = new ReferenceQueue&lt;&gt;();</span>
+
+
+    @Nonnull
+    @Override
+    public final IView create( @Nonnull final String p_name )
+    {
+<span class="fc" id="L79">        return this.eventreference( new CView( p_name, this ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IView create( @Nonnull final String p_name, final IView p_parent )
+    {
+<span class="fc" id="L86">        return this.eventreference( new CView( p_name, this, p_parent ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public ILiteral add( @Nonnull final ILiteral p_literal )
+    {
+<span class="fc" id="L93">        return this.event( ITrigger.EType.ADDBELIEF, p_literal );</span>
+    }
+
+    @Nonnull
+    @Override
+    public ILiteral remove( @Nonnull final ILiteral p_literal )
+    {
+<span class="fc" id="L100">        return this.event( ITrigger.EType.DELETEBELIEF, p_literal );</span>
+    }
+
+    @Nonnull
+    @Override
+    public IAgent&lt;?&gt; update( @Nonnull final IAgent&lt;?&gt; p_agent )
+    {
+        // check all references of mask and remove unused references
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        for ( Reference&lt;? extends IView&gt; l_reference = m_maskreference.poll(); Objects.nonNull( l_reference ); l_reference = m_maskreference.poll() )</span>
+        {
+<span class="nc" id="L110">            final IView l_view = l_reference.get();</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if ( Objects.nonNull( l_view ) )</span>
+            {
+<span class="nc" id="L113">                m_views.remove( l_view );</span>
+<span class="nc" id="L114">                m_events.asMap().remove( l_view );</span>
+            }
+        }
+
+<span class="fc" id="L118">        return p_agent;</span>
+    }
+
+    @Nonnull
+    @Override
+    public Stream&lt;ITrigger&gt; trigger( @Nonnull final IView p_view )
+    {
+<span class="fc" id="L125">        return this.cleartrigger( p_view );</span>
+    }
+
+
+    /**
+     * push an event and literal to the event map
+     *
+     * @param p_event event
+     * @param p_literal literal
+     */
+    protected ILiteral event( final ITrigger.EType p_event, final ILiteral p_literal )
+    {
+<span class="fc" id="L137">        final ITrigger l_trigger = CTrigger.from( p_event, p_literal );</span>
+<span class="fc" id="L138">        m_views.parallelStream().forEach( i -&gt; m_events.put( i, l_trigger ) );</span>
+<span class="fc" id="L139">        return p_literal;</span>
+    }
+
+    /**
+     * removes the interal view references
+     *
+     * @param p_view view to remove
+     * @return view
+     */
+    protected final IView internalremove( final IView p_view )
+    {
+<span class="nc" id="L150">        m_views.remove( p_view );</span>
+<span class="nc" id="L151">        m_events.removeAll( p_view );</span>
+<span class="nc" id="L152">        return p_view;</span>
+    }
+
+    /**
+     * adds a view to the event referencing structure
+     *
+     * @param p_view view
+     * @return input view
+     */
+    protected IView eventreference( final IView p_view )
+    {
+<span class="fc" id="L163">        new PhantomReference&lt;&gt;( p_view, m_maskreference );</span>
+<span class="fc" id="L164">        m_views.add( p_view );</span>
+<span class="fc" id="L165">        return p_view;</span>
+    }
+
+    /**
+     * copy of all trigger values
+     *
+     * @param p_view trigger of this view
+     * @return set with trigger values
+     */
+    protected final Stream&lt;ITrigger&gt; cleartrigger( final IView p_view )
+    {
+<span class="fc" id="L176">        return m_events.removeAll( p_view ).stream();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

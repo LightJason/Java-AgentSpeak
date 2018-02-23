@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLiteral.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language</a> &gt; <span class="el_source">CLiteral.java</span></div><h1>CLiteral.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.hash.Hasher;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.grammar.CASTVisitorType;
+import org.lightjason.agentspeak.grammar.CErrorListener;
+import org.lightjason.agentspeak.grammar.IASTVisitorType;
+import org.lightjason.agentspeak.grammar.IBaseParser;
+import org.lightjason.agentspeak.grammar.TypeLexer;
+import org.lightjason.agentspeak.grammar.TypeParser;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * default generic literal class for agent beliefs
+ * a literal consists of a functor, an optional list of values
+ * e.g. velocity(50)
+ */
+public final class CLiteral implements ILiteral
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3253396471300120109L;
+    /**
+     * negation symbol
+     */
+    private static final String NEGATION = &quot;~&quot;;
+    /**
+     * at symbol
+     */
+    private static final String AT = &quot;@&quot;;
+    /**
+     * literal values
+     */
+    private final ImmutableMultimap&lt;IPath, ITerm&gt; m_values;
+    /**
+     * literal values as list
+     */
+    private final List&lt;ITerm&gt; m_orderedvalues;
+    /**
+     * literals functor
+     */
+    private final IPath m_functor;
+    /**
+     * negated option
+     */
+    private final boolean m_negated;
+    /**
+     * @ prefix is set
+     */
+    private final boolean m_at;
+    /**
+     * hash code
+     */
+    private final int m_hash;
+    /**
+     * hash of the structure
+     */
+    private final int m_structurehash;
+
+
+
+    /**
+     * ctor
+     *
+     * @param p_at @ prefix is set
+     * @param p_negated negated flag
+     * @param p_functor functor of the literal
+     * @param p_values initial list of values
+     */
+    public CLiteral( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Collection&lt;ITerm&gt; p_values )
+<span class="fc" id="L118">    {</span>
+<span class="fc" id="L119">        m_at = p_at;</span>
+<span class="fc" id="L120">        m_negated = p_negated;</span>
+        // create a full copy of the functor, because concurrency modification
+<span class="fc" id="L122">        m_functor = new CPath( p_functor );</span>
+
+        // create immutable structures
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if ( !p_values.isEmpty() )</span>
+        {
+<span class="fc" id="L127">            final Multimap&lt;IPath, ITerm&gt; l_values = LinkedListMultimap.create();</span>
+<span class="fc" id="L128">            p_values.forEach( i -&gt; l_values.put( i.fqnfunctor(), i ) );</span>
+<span class="fc" id="L129">            m_values = ImmutableListMultimap.copyOf( l_values );</span>
+<span class="fc" id="L130">            m_orderedvalues = Collections.unmodifiableList( new ArrayList&lt;&gt;( p_values ) );</span>
+<span class="fc" id="L131">        }</span>
+        else
+        {
+<span class="fc" id="L134">            m_orderedvalues = Collections.emptyList();</span>
+<span class="fc" id="L135">            m_values = ImmutableListMultimap.of();</span>
+        }
+
+        // calculates object hash value
+<span class="fc" id="L139">        final Hasher l_hasher = CCommon.getTermHashing();</span>
+<span class="fc" id="L140">        l_hasher.putInt( m_functor.hashCode() );</span>
+<span class="fc" id="L141">        l_hasher.putBoolean( m_negated );</span>
+<span class="fc" id="L142">        l_hasher.putBoolean( m_at );</span>
+<span class="fc" id="L143">        m_orderedvalues.forEach( i -&gt; l_hasher.putInt( i.hashCode() ) );</span>
+<span class="fc" id="L144">        m_hash = l_hasher.hash().asInt();</span>
+
+        // calculates the structure hash value of the value definition (need to start with value definition)
+<span class="fc" id="L147">        final Hasher l_valuehasher = CCommon.getTermHashing();</span>
+<span class="fc" id="L148">        m_orderedvalues.forEach( i -&gt; l_valuehasher.putInt( i.structurehash() ) );</span>
+<span class="fc" id="L149">        l_valuehasher.putBoolean( m_negated );</span>
+<span class="fc" id="L150">        l_valuehasher.putString( p_functor.path(), Charsets.UTF_8 );</span>
+<span class="fc" id="L151">        m_structurehash = l_valuehasher.hash().asInt();</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * factory
+     *
+     * @param p_functor functor string
+     * @param p_values value term
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
+    {
+<span class="fc" id="L163">        return from(</span>
+            p_functor,
+<span class="pc bpc" id="L165" title="1 of 4 branches missed.">            ( Objects.isNull( p_values ) ) || ( p_values.length == 0 )</span>
+<span class="fc" id="L166">            ? Collections.emptySet()</span>
+<span class="fc" id="L167">            : Arrays.stream( p_values ).collect( Collectors.toList() )</span>
+        );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor string
+     * @param p_values value term
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Collection&lt;ITerm&gt; p_values )
+    {
+<span class="fc" id="L180">        return new CLiteral(</span>
+<span class="fc" id="L181">            p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, &quot;&quot; ).replace( NEGATION, &quot;&quot; ) ),</span>
+            p_values
+        );
+    }
+
+    /**
+     * stream factory
+     *
+     * @param p_functor functor
+     * @param p_values value stream
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Stream&lt;ITerm&gt; p_values )
+    {
+<span class="fc" id="L195">        return from( p_functor, p_values.collect( Collectors.toList() ) );</span>
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor path
+     * @param p_values values
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    {
+<span class="nc" id="L207">        return from( false, false, p_functor, p_values );</span>
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor path
+     * @param p_values values
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final IPath p_functor, @Nonnull final Stream&lt;ITerm&gt; p_values )
+    {
+<span class="nc" id="L219">        return from( false, false, p_functor, p_values );</span>
+    }
+
+    /**
+     * factory
+     *
+     * @param p_at  at
+     * @param p_negated negation
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    {
+<span class="nc bnc" id="L233" title="All 4 branches missed.">        return from( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );</span>
+    }
+
+    /**
+     * factory
+     *
+     * @param p_at  at
+     * @param p_negated negation
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream&lt;ITerm&gt; p_values )
+    {
+<span class="nc" id="L247">        return new CLiteral( p_at, p_negated, p_functor, p_values.collect( Collectors.toList() ) );</span>
+    }
+
+    /**
+     * factory
+     *
+     * @param p_literal literal string
+     * @return literal
+     *
+     * @throws Exception parsing and stream exception
+     */
+    @Nonnull
+    public static ILiteral parse( @Nonnull final String p_literal ) throws Exception
+    {
+<span class="fc" id="L261">        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( &quot;UTF-8&quot; ) ) ) ).literal();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;ITerm&gt; values( @Nullable final IPath... p_path )
+    {
+<span class="pc bpc" id="L268" title="1 of 4 branches missed.">        return ( Objects.isNull( p_path ) ) || ( p_path.length &lt; 1 )</span>
+<span class="fc" id="L269">               ? m_values.values().stream()</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">               : p_path.length == 1</span>
+<span class="fc" id="L271">                 ? m_values.asMap().get( p_path[0] ).stream()</span>
+<span class="nc" id="L272">                 : m_values.asMap().get( p_path[0] ).stream()</span>
+<span class="nc" id="L273">                           .filter( i -&gt; i instanceof ILiteral )</span>
+<span class="nc" id="L274">                           .flatMap( i -&gt; ( (ILiteral) i ).values( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;ITerm&gt; orderedvalues( @Nullable final IPath... p_path )
+    {
+<span class="pc bpc" id="L281" title="1 of 4 branches missed.">        return ( Objects.isNull( p_path ) ) || ( p_path.length &lt; 1 )</span>
+<span class="fc" id="L282">               ? m_orderedvalues.stream().sequential()</span>
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">               : p_path.length == 1</span>
+<span class="fc" id="L284">                 ? m_orderedvalues.stream()</span>
+<span class="fc" id="L285">                                  .filter( i -&gt; i.fqnfunctor().equals( p_path[0] ) ).sequential()</span>
+<span class="nc" id="L286">                 : m_orderedvalues.stream()</span>
+<span class="nc" id="L287">                                  .filter( i -&gt; i.fqnfunctor().equals( p_path[0] ) )</span>
+<span class="nc" id="L288">                                  .filter( i -&gt; i instanceof ILiteral )</span>
+<span class="nc" id="L289">                                  .map( ITerm::&lt;ILiteral&gt;raw )</span>
+<span class="nc" id="L290">                                  .filter( Objects::nonNull )</span>
+<span class="nc" id="L291">                                  .flatMap( i -&gt; i.orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );</span>
+    }
+
+    @Override
+    public final boolean emptyValues()
+    {
+<span class="fc" id="L297">        return m_values.isEmpty();</span>
+    }
+
+    @Override
+    public final int structurehash()
+    {
+<span class="fc" id="L303">        return m_structurehash;</span>
+    }
+
+    @Override
+    public final boolean negated()
+    {
+<span class="fc" id="L309">        return m_negated;</span>
+    }
+
+    @Override
+    public final boolean hasAt()
+    {
+<span class="fc" id="L315">        return m_at;</span>
+    }
+
+    @Override
+    public final boolean hasVariable()
+    {
+<span class="fc" id="L321">        return m_orderedvalues.parallelStream().anyMatch( ITerm::hasVariable );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ILiteral unify( @Nonnull final IContext p_context )
+    {
+<span class="fc" id="L328">        return new CLiteral(</span>
+            m_at,
+            m_negated,
+            m_functor,
+<span class="fc" id="L332">            m_orderedvalues.stream()</span>
+<span class="fc" id="L333">                           .map( i -&gt;</span>
+                           {
+<span class="fc bfc" id="L335" title="All 2 branches covered.">                               if ( i instanceof IVariable&lt;?&gt; )</span>
+                               {
+<span class="fc" id="L337">                                   final IVariable&lt;?&gt; l_variable = p_context.instancevariables().get( i.fqnfunctor() );</span>
+<span class="pc bpc" id="L338" title="1 of 4 branches missed.">                                   return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.from( l_variable ) : l_variable;</span>
+                               }
+<span class="fc bfc" id="L340" title="All 2 branches covered.">                               if ( i instanceof ILiteral )</span>
+<span class="fc" id="L341">                                   return ( (ILiteral) i ).unify( p_context );</span>
+<span class="fc" id="L342">                               return i;</span>
+                           } )
+<span class="fc" id="L344">                           .collect( Collectors.toList() )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final ILiteral allocate( @Nonnull final IContext p_context )
+    {
+<span class="fc" id="L352">        return new CLiteral(</span>
+            m_at,
+            m_negated,
+            m_functor,
+<span class="fc" id="L356">            m_orderedvalues.stream()</span>
+<span class="fc" id="L357">                           .map( i -&gt;</span>
+                           {
+<span class="fc bfc" id="L359" title="All 2 branches covered.">                               if ( i instanceof IVariable&lt;?&gt; )</span>
+                               {
+<span class="fc" id="L361">                                   final IVariable&lt;?&gt; l_variable = p_context.instancevariables().get( i.fqnfunctor() );</span>
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">                                   return Objects.isNull( l_variable )</span>
+<span class="nc" id="L363">                                          ? CRawTerm.EMPTY</span>
+<span class="fc" id="L364">                                          : l_variable;</span>
+                               }
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">                               if ( i instanceof ILiteral )</span>
+<span class="nc" id="L367">                                   return ( (ILiteral) i ).unify( p_context );</span>
+<span class="fc" id="L368">                               return i;</span>
+                           } )
+<span class="fc" id="L370">                           .collect( Collectors.toList() )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final String functor()
+    {
+<span class="fc" id="L378">        return m_functor.suffix();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath functorpath()
+    {
+<span class="fc" id="L385">        return m_functor.subpath( 0, m_functor.size() - 1 );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath fqnfunctor()
+    {
+<span class="fc" id="L392">        return m_functor;</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final &lt;T&gt; T raw()
+    {
+<span class="fc" id="L400">        return (T) this;</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L406">        return m_hash;</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="pc bpc" id="L412" title="2 of 4 branches missed.">        return ( p_object instanceof ILiteral ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
+    {
+<span class="pc bpc" id="L419" title="1 of 4 branches missed.">        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+
+<span class="fc" id="L421">               ? new CLiteral(</span>
+                   m_at, m_negated, m_functor,
+<span class="fc" id="L423">                   m_values.values()</span>
+               )
+
+<span class="fc" id="L426">               : new CLiteral(</span>
+<span class="fc" id="L427">                   m_at, m_negated, p_prefix[0].append( m_functor ),</span>
+<span class="fc" id="L428">                   m_values.values()</span>
+               );
+    }
+
+    @Nonnull
+    @Override
+    public final ILiteral shallowcopysuffix()
+    {
+<span class="fc" id="L436">        return new CLiteral(</span>
+<span class="fc" id="L437">            m_at, m_negated, CPath.from( m_functor.suffix() ),</span>
+<span class="fc" id="L438">            m_values.values()</span>
+        );
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="pc bpc" id="L445" title="2 of 4 branches missed.">        return MessageFormat.format( &quot;{0}{1}{2}{3}&quot;, m_negated ? NEGATION : &quot;&quot;, m_at ? AT : &quot;&quot;, m_functor, m_orderedvalues );</span>
+    }
+
+    @Override
+    public final int compareTo( @Nonnull final ILiteral p_literal )
+    {
+<span class="fc" id="L451">        return Integer.compare( this.hashCode(), p_literal.hashCode() );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
+    {
+<span class="pc bpc" id="L458" title="2 of 4 branches missed.">        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+
+               ?
+<span class="fc" id="L461">               new CLiteral(</span>
+                   m_at, m_negated, m_functor,
+<span class="fc" id="L463">                   m_values.values().stream().map( i -&gt; i.deepcopy() ).collect( Collectors.toList() )</span>
+               )
+
+               :
+<span class="nc" id="L467">               new CLiteral(</span>
+<span class="nc" id="L468">                   m_at, m_negated, p_prefix[0].append( m_functor ),</span>
+<span class="nc" id="L469">                   m_values.values().stream().map( i -&gt; i.deepcopy() ).collect( Collectors.toList() )</span>
+               );
+    }
+
+    @Nonnull
+    @Override
+    public final synchronized ITerm deepcopysuffix()
+    {
+<span class="nc" id="L477">        return new CLiteral(</span>
+<span class="nc" id="L478">            m_at, m_negated, CPath.from( m_functor.suffix() ),</span>
+<span class="nc" id="L479">            m_values.values().stream().map( i -&gt; i.deepcopy() ).collect( Collectors.toList() )</span>
+        );
+    }
+
+
+    /**
+     * literal parser
+     */
+    private static final class CParser extends IBaseParser&lt;IASTVisitorType, TypeLexer, TypeParser&gt;
+    {
+
+        /**
+         * ctor
+         * @throws NoSuchMethodException on ctor-method call
+         */
+        CParser() throws NoSuchMethodException
+        {
+<span class="fc" id="L496">            super( new CErrorListener() );</span>
+<span class="fc" id="L497">        }</span>
+
+        @Nonnull
+        @Override
+        public final IASTVisitorType parse( @Nonnull final InputStream p_stream ) throws Exception
+        {
+<span class="fc" id="L503">            final IASTVisitorType l_visitor = new CASTVisitorType();</span>
+<span class="fc" id="L504">            l_visitor.visit( this.parser( p_stream ).literal_type() );</span>
+<span class="fc" id="L505">            return l_visitor;</span>
+        }
+
+        @Override
+        protected final Class&lt;TypeLexer&gt; lexerclass()
+        {
+<span class="fc" id="L511">            return TypeLexer.class;</span>
+        }
+
+        @Override
+        protected final Class&lt;TypeParser&gt; parserclass()
+        {
+<span class="fc" id="L517">            return TypeParser.class;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

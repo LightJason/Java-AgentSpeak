@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CRawAction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.action</a> &gt; <span class="el_source">CRawAction.java</span></div><h1>CRawAction.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.action;
+
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+
+/**
+ * encapsulate class for any non-executable data type e.g. boolean
+ * and caching of execution results
+ */
+public final class CRawAction&lt;T&gt; extends IBaseExecution&lt;T&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7181432659241612718L;
+
+    /**
+     * ctor
+     *
+     * @param p_data any object data
+     */
+    public CRawAction( @Nullable final T p_data )
+    {
+<span class="fc" id="L61">        super( p_data );</span>
+<span class="fc" id="L62">    }</span>
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if ( m_value instanceof IVariable&lt;?&gt; )</span>
+<span class="fc" id="L70">            return Stream.of( (IVariable&lt;?&gt;) m_value );</span>
+
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if ( m_value instanceof IExpression )</span>
+<span class="fc" id="L73">            return ( (IExpression) m_value ).variables();</span>
+
+<span class="fc" id="L75">        return super.variables();</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L87" title="All 4 branches missed.">        return ( p_object instanceof IBaseExecution&lt;?&gt; ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        return Objects.isNull( m_value ) ? &quot;&quot; : m_value.toString();</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if ( m_value instanceof Boolean )</span>
+<span class="fc" id="L103">            return this.getTypedResult( (Boolean) m_value, p_return );</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if ( m_value instanceof IVariable&lt;?&gt; )</span>
+<span class="fc" id="L105">            return this.getTypedResult( (IVariable&lt;?&gt;) m_value, p_context, p_return );</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if ( m_value instanceof IExpression )</span>
+<span class="fc" id="L107">            return this.getTypedResult( (IExpression) m_value, p_context, p_parallel, p_argument, p_return );</span>
+
+<span class="fc" id="L109">        return this.getTypedResult( m_value, p_return );</span>
+    }
+
+    /**
+     * fixed type result
+     *
+     * @param p_execution boolean value
+     * @param p_return native return
+     * @return fuzzy-boolean
+     */
+    @Nonnull
+    private IFuzzyValue&lt;Boolean&gt; getTypedResult( @Nonnull final Boolean p_execution, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L122">        p_return.add( CRawTerm.from( p_execution ) );</span>
+<span class="fc" id="L123">        return CFuzzyValue.from( p_execution );</span>
+    }
+
+    /**
+     * fixed type result
+     *
+     * @param p_execution variable value
+     * @param p_context context
+     * @param p_return native return
+     * @return fuzzy-boolean
+     */
+    @Nonnull
+    private IFuzzyValue&lt;Boolean&gt; getTypedResult( @Nonnull final IVariable&lt;?&gt; p_execution, @Nonnull final IContext p_context,
+                                                 @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L138">        final IVariable&lt;?&gt; l_value = (IVariable&lt;?&gt;) CCommon.replaceFromContext( p_context, p_execution );</span>
+
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if ( !l_value.allocated() )</span>
+<span class="nc" id="L141">            return CFuzzyValue.from( false );</span>
+
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if ( l_value.valueassignableto( Boolean.class ) )</span>
+<span class="nc" id="L144">            return CFuzzyValue.from( l_value.raw() );</span>
+
+<span class="fc" id="L146">        p_return.add( CRawTerm.from( l_value.raw() ) );</span>
+<span class="fc" id="L147">        return CFuzzyValue.from( true );</span>
+    }
+
+
+    /**
+     * fixed type result
+     *
+     * @param p_execution execution element
+     * @param p_context context
+     * @param p_parallel paralle execution
+     * @param p_argument arguments
+     * @param p_return native return
+     * @return fuzzy-boolean
+     */
+    @Nonnull
+    private IFuzzyValue&lt;Boolean&gt; getTypedResult( @Nonnull final IExpression p_execution, @Nonnull final IContext p_context,
+                                                 @Nonnull final Boolean p_parallel, @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L166">        final List&lt;ITerm&gt; l_return = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L167" title="2 of 4 branches missed.">        if ( ( !p_execution.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.isEmpty() ) )</span>
+<span class="nc" id="L168">            return CFuzzyValue.from( false );</span>
+
+<span class="fc" id="L170">        return CFuzzyValue.from( l_return.get( 0 ).&lt;Boolean&gt;raw() );</span>
+    }
+
+
+
+    /**
+     * fixed type result
+     *
+     * @param p_execution any other value
+     * @param p_return native return
+     * @return fuzzy-boolean
+     */
+    @Nonnull
+    private IFuzzyValue&lt;Boolean&gt; getTypedResult( @Nullable final T p_execution, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L185">        p_return.add( CRawTerm.from( p_execution ) );</span>
+<span class="fc" id="L186">        return CFuzzyValue.from( true );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

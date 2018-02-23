@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EStatisticValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.statistic</a> &gt; <span class="el_source">EStatisticValue.java</span></div><h1>EStatisticValue.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.statistic;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+
+import javax.annotation.Nonnull;
+import java.util.Locale;
+
+
+/**
+ * enum of statistic value types
+ */
+<span class="fc" id="L37">public enum EStatisticValue</span>
+{
+<span class="fc" id="L39">    GEOMETRICMEAN,</span>
+<span class="fc" id="L40">    MAX,</span>
+<span class="fc" id="L41">    MIN,</span>
+<span class="fc" id="L42">    COUNT,</span>
+<span class="fc" id="L43">    POPULATIONVARIANCE,</span>
+<span class="fc" id="L44">    QUADRATICMEAN,</span>
+<span class="fc" id="L45">    SECONDMOMENT,</span>
+<span class="fc" id="L46">    STANDARDDEVIATION,</span>
+<span class="fc" id="L47">    SUM,</span>
+<span class="fc" id="L48">    SUMLOG,</span>
+<span class="fc" id="L49">    SUMSQUARE,</span>
+<span class="fc" id="L50">    VARIANCE,</span>
+<span class="fc" id="L51">    MEAN,</span>
+<span class="fc" id="L52">    KURTIOSIS;</span>
+
+    /**
+     * additional factory
+     *
+     * @param p_value string
+     * @return enum
+     */
+    @Nonnull
+    public static EStatisticValue from( @Nonnull final String p_value )
+    {
+<span class="fc" id="L63">        return EStatisticValue.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );</span>
+    }
+
+    /**
+     * returns a statistic value
+     *
+     * @param p_statistic statistic object
+     * @return statistic value
+     */
+    public final double value( @Nonnull final SummaryStatistics p_statistic )
+    {
+<span class="pc bpc" id="L74" title="1 of 14 branches missed.">        switch ( this )</span>
+        {
+            case GEOMETRICMEAN:
+<span class="fc" id="L77">                return p_statistic.getGeometricMean();</span>
+
+            case MAX:
+<span class="fc" id="L80">                return p_statistic.getMax();</span>
+
+            case MIN:
+<span class="fc" id="L83">                return p_statistic.getMin();</span>
+
+            case COUNT:
+<span class="fc" id="L86">                return p_statistic.getN();</span>
+
+            case POPULATIONVARIANCE:
+<span class="fc" id="L89">                return p_statistic.getPopulationVariance();</span>
+
+            case QUADRATICMEAN:
+<span class="fc" id="L92">                return p_statistic.getQuadraticMean();</span>
+
+            case SECONDMOMENT:
+<span class="fc" id="L95">                return p_statistic.getSecondMoment();</span>
+
+            case STANDARDDEVIATION:
+<span class="fc" id="L98">                return p_statistic.getStandardDeviation();</span>
+
+            case SUM:
+<span class="fc" id="L101">                return p_statistic.getSum();</span>
+
+            case SUMLOG:
+<span class="fc" id="L104">                return p_statistic.getSumOfLogs();</span>
+
+            case SUMSQUARE:
+<span class="fc" id="L107">                return p_statistic.getSumsq();</span>
+
+            case VARIANCE:
+<span class="fc" id="L110">                return p_statistic.getVariance();</span>
+
+            case MEAN:
+<span class="fc" id="L113">                return p_statistic.getMean();</span>
+
+            default:
+<span class="nc" id="L116">                throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;unknown&quot;, this ) );</span>
+        }
+    }
+
+    /**
+     * returns a statistic value
+     *
+     * @param p_statistic statistic object
+     * @return statistic value
+     */
+    public final double value( @Nonnull final DescriptiveStatistics p_statistic )
+    {
+<span class="pc bpc" id="L128" title="1 of 13 branches missed.">        switch ( this )</span>
+        {
+            case GEOMETRICMEAN:
+<span class="fc" id="L131">                return p_statistic.getGeometricMean();</span>
+
+            case MAX:
+<span class="fc" id="L134">                return p_statistic.getMax();</span>
+
+            case MIN:
+<span class="fc" id="L137">                return p_statistic.getMin();</span>
+
+            case COUNT:
+<span class="fc" id="L140">                return p_statistic.getN();</span>
+
+            case POPULATIONVARIANCE:
+<span class="fc" id="L143">                return p_statistic.getPopulationVariance();</span>
+
+            case QUADRATICMEAN:
+<span class="fc" id="L146">                return p_statistic.getQuadraticMean();</span>
+
+            case STANDARDDEVIATION:
+<span class="fc" id="L149">                return p_statistic.getStandardDeviation();</span>
+
+            case SUM:
+<span class="fc" id="L152">                return p_statistic.getSum();</span>
+
+            case SUMSQUARE:
+<span class="fc" id="L155">                return p_statistic.getSumsq();</span>
+
+            case VARIANCE:
+<span class="fc" id="L158">                return p_statistic.getVariance();</span>
+
+            case MEAN:
+<span class="fc" id="L161">                return p_statistic.getMean();</span>
+
+            case KURTIOSIS:
+<span class="fc" id="L164">                return p_statistic.getKurtosis();</span>
+
+            default:
+<span class="nc" id="L167">                throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;unknown&quot;, this ) );</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

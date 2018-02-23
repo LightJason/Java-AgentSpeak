@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CParse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.blas.vector</a> &gt; <span class="el_source">CParse.java</span></div><h1>CParse.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.blas.vector;
+
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.builtin.math.blas.EType;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * creates a dense- or sparse-vector from as string.
+ * The action creates for each input argument a vector
+ * by parsing the string, the last string can be &quot;dense | sparse&quot;
+ * to defining a sparse / dense vector, the action never fails.
+ * Seperator is comma, semicolon or space
+ *
+ * {@code [V1|V2] = math/blas/vector/parse( &quot;1,2,3&quot;, &quot;7,8,9,10,12&quot;, &quot;dense|dense&quot; );}
+ */
+public final class CParse extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6489913482373871730L;
+
+    /**
+     * ctor
+     */
+    public CParse()
+    {
+<span class="fc" id="L65">        super( 4 );</span>
+<span class="fc" id="L66">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L72">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L80">        final List&lt;ITerm&gt; l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+        final int l_limit;
+        final EType l_type;
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">             &amp;&amp; ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).&lt;String&gt;raw() ) ) )</span>
+        {
+<span class="fc" id="L86">            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).&lt;String&gt;raw() );</span>
+<span class="fc" id="L87">            l_limit = l_arguments.size() - 1;</span>
+        }
+        else
+        {
+<span class="nc" id="L91">            l_type = EType.DENSE;</span>
+<span class="nc" id="L92">            l_limit = l_arguments.size();</span>
+        }
+
+
+        // create vectors
+<span class="pc bpc" id="L97" title="1 of 3 branches missed.">        switch ( l_type )</span>
+        {
+            case DENSE:
+<span class="fc" id="L100">                l_arguments.stream()</span>
+<span class="fc" id="L101">                           .limit( l_limit )</span>
+<span class="fc" id="L102">                           .map( ITerm::&lt;String&gt;raw )</span>
+<span class="fc" id="L103">                           .map( CParse::parse )</span>
+<span class="fc" id="L104">                           .map( DenseDoubleMatrix1D::new )</span>
+<span class="fc" id="L105">                           .map( CRawTerm::from )</span>
+<span class="fc" id="L106">                           .forEach( p_return::add );</span>
+
+<span class="fc" id="L108">                return CFuzzyValue.from( true );</span>
+
+            case SPARSE:
+<span class="fc" id="L111">                l_arguments.stream()</span>
+<span class="fc" id="L112">                           .limit( l_limit )</span>
+<span class="fc" id="L113">                           .map( ITerm::&lt;String&gt;raw )</span>
+<span class="fc" id="L114">                           .map( CParse::parse )</span>
+<span class="fc" id="L115">                           .map( SparseDoubleMatrix1D::new )</span>
+<span class="fc" id="L116">                           .map( CRawTerm::from )</span>
+<span class="fc" id="L117">                           .forEach( p_return::add );</span>
+
+<span class="fc" id="L119">                return CFuzzyValue.from( true );</span>
+
+            default:
+        }
+
+<span class="nc" id="L124">        return CFuzzyValue.from( false );</span>
+    }
+
+    /**
+     * parses the string
+     *
+     * @param p_string string
+     * @return double array
+     */
+    @Nonnull
+    private static double[] parse( @Nonnull final String p_string )
+    {
+<span class="fc" id="L136">        return Arrays.stream( p_string.split( &quot;;|,|\\s&quot; ) )</span>
+<span class="fc" id="L137">                     .map( String::trim )</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">                     .filter( i -&gt; !i.isEmpty() )</span>
+<span class="fc" id="L139">                     .mapToDouble( Double::parseDouble )</span>
+<span class="fc" id="L140">                     .toArray();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

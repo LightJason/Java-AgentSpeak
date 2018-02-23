@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CRemovePlan.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.agent</a> &gt; <span class="el_source">CRemovePlan.java</span></div><h1>CRemovePlan.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.agent;
+
+import com.codepoetics.protonpack.StreamUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+
+
+/**
+ * removes a plan by the plan trigger.
+ * The action moves all plan based on the
+ * input trigger arguments, the action fails
+ * on wrong input
+ *
+ * {@code agent/removeplan( &quot;+!&quot;, &quot;myplan(X)&quot;, &quot;-!&quot;, Literal );}
+ */
+@SuppressFBWarnings( &quot;GC_UNRELATED_TYPES&quot; )
+<span class="fc" id="L54">public final class CRemovePlan extends IBuiltinAction</span>
+{
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2509947123811973880L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L66">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L75">        return CFuzzyValue.from(</span>
+<span class="fc" id="L76">            StreamUtils.windowed(</span>
+<span class="fc" id="L77">                CCommon.flatten( p_argument ),</span>
+                2,
+                2
+<span class="fc" id="L80">            ).allMatch( i -&gt; CRemovePlan.remove( ITrigger.EType.from( i.get( 0 ).&lt;String&gt;raw() ), i.get( 1 ), p_context.agent() ) )</span>
+        );
+    }
+
+    /**
+     * removes the plan based on the trigger
+     *
+     * @param p_trigger trigger type
+     * @param p_literal literal as string or literal object
+     * @param p_agent agent
+     * @return flag to remove plan successfully
+     */
+    private static boolean remove( @Nonnull final ITrigger.EType p_trigger, @Nonnull final ITerm p_literal, @Nonnull final IAgent&lt;?&gt; p_agent )
+    {
+        final ILiteral l_literal;
+        try
+        {
+
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">            l_literal = CCommon.rawvalueAssignableTo( p_literal, ILiteral.class )</span>
+<span class="nc" id="L99">                        ? p_literal.&lt;ILiteral&gt;raw()</span>
+<span class="fc" id="L100">                        : CLiteral.parse( p_literal.&lt;String&gt;raw() );</span>
+
+        }
+<span class="nc" id="L103">        catch ( final Exception l_exception )</span>
+        {
+<span class="nc" id="L105">            return false;</span>
+<span class="fc" id="L106">        }</span>
+
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        return !p_agent.plans().removeAll( CTrigger.from( p_trigger, l_literal ) ).isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

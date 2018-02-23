@@ -1,0 +1,193 @@
+body {
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.2;
+    background-color: white;
+    padding: 0;
+}
+a {
+    color: #4183C4;
+}
+a.absent {
+    color: #cc0000;
+}
+a.anchor {
+    display: block;
+    padding-left: 30px;
+    margin-left: -30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 20px 0 10px;
+    padding: 0;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 {
+    font-size: 28px;
+    color: black;
+}
+h2 {
+    font-size: 24px;
+    border-bottom: 1px solid #cccccc;
+    color: black;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    color: #777777;
+    font-size: 14px;
+}
+p,
+ul,
+ol,
+dl,
+li,
+table,
+pre {
+    margin: 15px 0;
+}
+hr {
+    border: 0 none;
+    color: #cccccc;
+    height: 4px;
+    padding: 0;
+}
+body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
+    margin-top: 0;
+    padding-top: 0;
+}
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+li p.first {
+    display: inline-block;
+}
+li {
+    margin: 0;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+#grammartitle {
+    text-align: center;
+}
+#rulemenu {
+    width: 18%;
+    float: left;
+    padding: 0.5em;
+    border: 1px solid #cccccc;
+    background: #fefefe;
+}
+#rules {
+    width: 80%;
+    float: left;
+    margin-left: 1em;
+}
+.ruledetail {
+    padding: 0.5em;
+}
+svg.railroad-diagram {
+    background-color: transparent;
+}
+svg.railroad-diagram rect[rx~="10"] {
+    fill: hsl(210, 100%, 85%);
+}
+.ruledetail h5 {
+    overflow: hidden;
+}
+.ruledetail h5:before,
+.ruledetail h5:after {
+    width: 100%;
+    content: "";
+    height: 1px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #cccccc;
+}
+.ruledetail h5:before {
+    right: 0.5em;
+    margin-left: -97%;
+}
+.ruledetail h5:after {
+    left: 0.5em;
+    margin-right: -50%;
+}
+.ui-state-highlight {
+	border: 1px solid #fed22f;
+	background: #ffe45c;
+	color: #363636;
+	height: 65px;
+	opacity: 0.4;
+}
+@media print {
+    #rulemenu {
+        display: none !important;
+        height: 0;
+    }
+    .ruledetail {
+        page-break-inside: avoid;
+    }
+    .ruledetail h5 {
+        border-bottom: 1px solid #cccccc;
+    }
+}

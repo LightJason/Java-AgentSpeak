@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CAssign.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.blas.matrix</a> &gt; <span class="el_source">CAssign.java</span></div><h1>CAssign.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
+
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * assigns a value or matrix to all elements.
+ * The action assign the first argument to all
+ * other arguments which must be a matrix
+ *
+ * {@code
+    math/blas/matrix/assign(2, Matrix1, [Matrix2, Matrix3] );
+    math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
+ * }
+ *
+ */
+public final class CAssign extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2048633347249242365L;
+
+    /**
+     * ctor
+     */
+    public CAssign()
+    {
+<span class="fc" id="L63">        super( 4 );</span>
+<span class="fc" id="L64">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L70">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L79">        final List&lt;ITerm&gt; l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+
+<span class="fc" id="L81">        return CFuzzyValue.from(</span>
+<span class="fc" id="L82">            l_arguments.stream()</span>
+<span class="fc" id="L83">                       .skip( 1 )</span>
+<span class="fc" id="L84">                       .parallel()</span>
+<span class="fc" id="L85">                       .allMatch( i -&gt;</span>
+                       {
+
+<span class="fc bfc" id="L88" title="All 2 branches covered.">                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Number.class ) )</span>
+                           {
+<span class="fc" id="L90">                               i.&lt;DoubleMatrix2D&gt;raw().assign( l_arguments.get( 0 ).&lt;Number&gt;raw().doubleValue() );</span>
+<span class="fc" id="L91">                               return true;</span>
+                           }
+
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), DoubleMatrix2D.class ) )</span>
+                           {
+<span class="fc" id="L96">                               i.&lt;DoubleMatrix2D&gt;raw().assign( l_arguments.get( 0 ).&lt;DoubleMatrix2D&gt;raw() );</span>
+<span class="fc" id="L97">                               return true;</span>
+                           }
+
+<span class="nc" id="L100">                           return false;</span>
+
+                       } )
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

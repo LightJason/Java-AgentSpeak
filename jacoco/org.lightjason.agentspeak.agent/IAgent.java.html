@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IAgent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.agent</a> &gt; <span class="el_source">IAgent.java</span></div><h1>IAgent.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.agent;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.generator.IAgentGenerator;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unify.IUnifier;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.stream.Stream;
+
+
+/**
+ * agent interface
+ *
+ * @tparam T agent type
+ */
+public interface IAgent&lt;T extends IAgent&lt;?&gt;&gt; extends Serializable, Callable&lt;T&gt;
+{
+    /**
+     * empty agent
+     */
+<span class="nc" id="L63">    IAgent&lt;?&gt; EMPTY = new IAgent&lt;IAgent&lt;?&gt;&gt;()</span>
+<span class="nc" id="L64">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3043602502559853983L;
+
+        @Override
+        public final IAgent&lt;?&gt; call() throws Exception
+        {
+<span class="nc" id="L73">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( &quot;varargs&quot; )
+        public final &lt;N extends IInspector&gt; Stream&lt;N&gt; inspect( @Nonnull final N... p_inspector )
+        {
+<span class="nc" id="L82">            return Arrays.stream( p_inspector );</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue&lt;Boolean&gt; trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
+        {
+<span class="nc" id="L89">            return CFuzzyValue.from( true );</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IView beliefbase()
+        {
+<span class="nc" id="L96">            return IView.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Multimap&lt;IPath, ILiteral&gt; runningplans()
+        {
+<span class="nc" id="L103">            return ImmutableMultimap.of();</span>
+        }
+
+        @Override
+        public final boolean sleeping()
+        {
+<span class="nc" id="L109">            return false;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;IAgent&lt;?&gt;&gt; sleep( final long p_cycles, @Nullable final ITerm... p_term )
+        {
+<span class="nc" id="L116">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;IAgent&lt;?&gt;&gt; sleep( final long p_cycles, @Nonnull final Stream&lt;ITerm&gt; p_term )
+        {
+<span class="nc" id="L123">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;IAgent&lt;?&gt;&gt; wakeup( @Nullable final ITerm... p_term )
+        {
+<span class="nc" id="L130">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;IAgent&lt;?&gt;&gt; wakeup( @Nonnull final Stream&lt;ITerm&gt; p_term )
+        {
+<span class="nc" id="L137">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Map&lt;String, Object&gt; storage()
+        {
+<span class="nc" id="L144">            return Collections.emptyMap();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IUnifier unifier()
+        {
+<span class="nc" id="L151">            return IUnifier.EMPTY;</span>
+        }
+
+        @Nonnegative
+        @Override
+        public final long cycletime()
+        {
+<span class="nc" id="L158">            return 0;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Multimap&lt;ITrigger, IPlanStatistic&gt; plans()
+        {
+<span class="nc" id="L165">            return ImmutableMultimap.of();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyBundle&lt;Boolean&gt; fuzzy()
+        {
+<span class="nc" id="L172">            return IAgentGenerator.DEFAULTFUZZYBUNDLE;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IVariableBuilder variablebuilder()
+        {
+<span class="nc" id="L179">            return IVariableBuilder.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Multimap&lt;IPath, IRule&gt; rules()
+        {
+<span class="nc" id="L186">            return ImmutableMultimap.of();</span>
+        }
+
+        @Nonnull
+        @Override
+        @SuppressWarnings( &quot;unchecked&quot; )
+        public final &lt;N extends IAgent&lt;?&gt;&gt; N raw()
+        {
+<span class="nc" id="L194">            return (N) this;</span>
+        }
+
+        @Override
+        public final int hashCode()
+        {
+<span class="nc" id="L200">            return 0;</span>
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+<span class="nc bnc" id="L206" title="All 4 branches missed.">            return ( p_object instanceof IAgent&lt;?&gt; ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+        }
+    };
+
+
+    /**
+     * inspector method
+     *
+     * @param p_inspector inspector object
+     * @return inspector stream or empty stream
+     */
+    @Nonnull
+    @SuppressWarnings( &quot;unchecked&quot; )
+    &lt;N extends IInspector&gt; Stream&lt;N&gt; inspect( @Nonnull final N... p_inspector );
+
+    /**
+     * trigger an event
+     *
+     * @param p_trigger event trigger
+     * @param p_immediately run element immediately
+     * @return execution finished correctly
+     *
+     * @note the trigger is ignored iif the agent is sleeping
+     */
+    @Nonnull
+    IFuzzyValue&lt;Boolean&gt; trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately );
+
+    /**
+     * returns the beliefbase
+     *
+     * @return beliefbase
+     */
+    @Nonnull
+    IView beliefbase();
+
+    /**
+     * returns a map of the current running plans
+     *
+     * @return map with running plans and the instance literal
+     */
+    @Nonnull
+    Multimap&lt;IPath, ILiteral&gt; runningplans();
+
+    /**
+     * returns sleeping state
+     *
+     * @return sleeping flag
+     */
+    boolean sleeping();
+
+    /**
+     * pushs the agent into sleeping state
+     *
+     * @param p_cycles number of cycles for sleeping - if is set to maximum the sleeping time is infinity
+     * @param p_term literal list for wake-up calls
+     * @return agent reference
+     */
+    @Nonnull
+    IAgent&lt;T&gt; sleep( final long p_cycles, @Nullable final ITerm... p_term );
+
+    /**
+     * pushs the agent into sleeping state
+     *
+     * @param p_cycles number of cycles for sleeping - if is set to maximum the sleeping time is infinity
+     * @param p_term term stream for wake-up calls
+     * @return agent reference
+     */
+    @Nonnull
+    IAgent&lt;T&gt; sleep( final long p_cycles, @Nonnull final Stream&lt;ITerm&gt; p_term );
+
+    /**
+     * wake-up the agent by generating wakeup-goal
+     *
+     * @param p_term any term value which will push into the wake-up plan
+     * @return agent reference
+     */
+    @Nonnull
+    IAgent&lt;T&gt; wakeup( @Nullable final ITerm... p_term );
+
+    /**
+     * wake-up the agent by generating wakeup-goal
+     *
+     * @param p_term stream to call wake-up plan
+     * @return agent reference
+     */
+    @Nonnull
+    IAgent&lt;T&gt; wakeup( @Nonnull final Stream&lt;ITerm&gt; p_term );
+
+
+    /**
+     * storage access
+     *
+     * @return storage map
+     */
+    @Nonnull
+    Map&lt;String, Object&gt; storage();
+
+    /**
+     * returns an unifier
+     *
+     * @return unification algorithm
+     */
+    @Nonnull
+    IUnifier unifier();
+
+    /**
+     * returns the time in nano
+     * seconds at the last cycle
+     *
+     * @return nano seconds
+     */
+    @Nonnegative
+    long cycletime();
+
+    /**
+     * returns the internal map of plans
+     *
+     * @return plan map
+     */
+    @Nonnull
+    Multimap&lt;ITrigger, IPlanStatistic&gt; plans();
+
+    /**
+     * return fuzzy operator
+     *
+     * @return operator
+     */
+    @Nonnull
+    IFuzzyBundle&lt;Boolean&gt; fuzzy();
+
+    /**
+     * returns the variable builder function
+     *
+     * @return variable builder function
+     */
+    @Nonnull
+    IVariableBuilder variablebuilder();
+
+    /**
+     * returns amultimap with literal-rule functor
+     * and rle objects
+     *
+     * @return multimap
+     */
+    @Nonnull
+    Multimap&lt;IPath, IRule&gt; rules();
+
+    /**
+     * cast the interface agent object
+     * to a specified agent object
+     *
+     * @return specified agent
+     */
+    @Nonnull
+    &lt;N extends IAgent&lt;?&gt;&gt; N raw();
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

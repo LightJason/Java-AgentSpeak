@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseAgent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.agent</a> &gt; <span class="el_source">IBaseAgent.java</span></div><h1>IBaseAgent.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.agent;
+
+import com.codepoetics.protonpack.StreamUtils;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.TreeMultimap;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IStructureHash;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unify.IUnifier;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * agent base structure
+ *
+ * @tparam T agent type
+ */
+public abstract class IBaseAgent&lt;T extends IAgent&lt;?&gt;&gt; implements IAgent&lt;T&gt;
+{
+    /**
+     * logger
+     */
+<span class="fc" id="L86">    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.logger( IAgent.class );</span>
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -304366902555398136L;
+    /**
+     * beliefbase
+     */
+    protected final IView m_beliefbase;
+    /**
+     * storage map
+     *
+     * @note must be thread-safe
+     */
+<span class="fc" id="L100">    protected final Map&lt;String, Object&gt; m_storage = new ConcurrentHashMap&lt;&gt;();</span>
+    /**
+     * execution trigger with content hash
+     */
+<span class="fc" id="L104">    protected final Map&lt;Integer, ITrigger&gt; m_trigger = new ConcurrentHashMap&lt;&gt;();</span>
+    /**
+     * multimap with rules
+     */
+<span class="fc" id="L108">    protected final Multimap&lt;IPath, IRule&gt; m_rules = Multimaps.synchronizedMultimap( LinkedHashMultimap.create() );</span>
+    /**
+     * map with all existing plans and successful / fail runs
+     */
+<span class="fc" id="L112">    protected final Multimap&lt;ITrigger, IPlanStatistic&gt; m_plans = Multimaps.synchronizedMultimap(</span>
+<span class="fc" id="L113">                                                                    TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.&lt;IPlanStatistic&gt;naturalOrder() ) );</span>
+    /**
+     * nano seconds at the last cycle
+     */
+<span class="fc" id="L117">    private final AtomicLong m_cycletime = new AtomicLong();</span>
+    /**
+     * number of sleeping cycles
+     *
+     * @note values &gt;= 0 defines the sleeping time, Long.MAX_VALUE is infinity sleeping
+     * negative values defines the activity
+     */
+<span class="fc" id="L124">    private final AtomicLong m_sleepingcycles = new AtomicLong( Long.MIN_VALUE );</span>
+    /**
+     * set for waking-up literals
+     */
+<span class="fc" id="L128">    private final Set&lt;ITerm&gt; m_sleepingterm = Collections.synchronizedSet( new HashSet&lt;&gt;() );</span>
+    /**
+     * unifier
+     */
+    private final IUnifier m_unifier;
+    /**
+     * variable builder
+     */
+    private final IVariableBuilder m_variablebuilder;
+    /**
+     * fuzzy result collector
+     */
+    private final IFuzzyBundle&lt;Boolean&gt; m_fuzzy;
+    /**
+     * running plans (thread-safe)
+     */
+<span class="fc" id="L144">    private final Multimap&lt;IPath, ILiteral&gt; m_runningplans = Multimaps.synchronizedSetMultimap( HashMultimap.create() );</span>
+
+
+
+    /**
+     * ctor
+     *
+     * @param p_configuration agent configuration
+     */
+    public IBaseAgent( @Nonnull final IAgentConfiguration&lt;T&gt; p_configuration )
+<span class="fc" id="L154">    {</span>
+        // initialize agent
+<span class="fc" id="L156">        m_unifier = p_configuration.unifier();</span>
+<span class="fc" id="L157">        m_beliefbase = p_configuration.beliefbase();</span>
+<span class="fc" id="L158">        m_variablebuilder = p_configuration.variablebuilder();</span>
+<span class="fc" id="L159">        m_fuzzy = p_configuration.fuzzy();</span>
+
+        // initial plans and rules
+<span class="fc" id="L162">        p_configuration.plans().parallelStream().forEach( i -&gt; m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );</span>
+<span class="fc" id="L163">        p_configuration.rules().parallelStream().forEach( i -&gt; m_rules.put( i.identifier().fqnfunctor(), i ) );</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if ( Objects.nonNull( p_configuration.initialgoal() ) )</span>
+<span class="fc" id="L165">            m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );</span>
+<span class="fc" id="L166">    }</span>
+
+    @Nonnull
+    @Override
+    public final IView beliefbase()
+    {
+<span class="fc" id="L172">        return m_beliefbase;</span>
+    }
+
+    @Nonnull
+    @Override
+    @SafeVarargs
+    @SuppressWarnings( &quot;varargs&quot; )
+    public final &lt;N extends IInspector&gt; Stream&lt;N&gt; inspect( @Nonnull final N... p_inspector )
+    {
+<span class="nc" id="L181">        return Arrays.stream( p_inspector )</span>
+<span class="nc" id="L182">                     .parallel()</span>
+<span class="nc" id="L183">                     .peek( i -&gt;</span>
+                     {
+<span class="nc" id="L185">                         i.inspectcycletime( m_cycletime.get() );</span>
+<span class="nc" id="L186">                         i.inspectsleeping( m_sleepingcycles.get() );</span>
+<span class="nc" id="L187">                         i.inspectbelief( m_beliefbase.stream() );</span>
+<span class="nc" id="L188">                         i.inspectplans( m_plans.values().stream() );</span>
+<span class="nc" id="L189">                         i.inspectrunningplans( m_runningplans.values().stream() );</span>
+<span class="nc" id="L190">                         i.inspectstorage( m_storage.entrySet().stream() );</span>
+<span class="nc" id="L191">                         i.inspectrules( m_rules.values().stream() );</span>
+<span class="nc" id="L192">                     } );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Multimap&lt;IPath, ILiteral&gt; runningplans()
+    {
+<span class="fc" id="L199">        return ImmutableMultimap.copyOf( m_runningplans );</span>
+    }
+
+    @Override
+    public final boolean sleeping()
+    {
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        return m_sleepingcycles.get() &gt; 0;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IAgent&lt;T&gt; sleep( final long p_cycles, final ITerm... p_term )
+    {
+<span class="nc" id="L212">        return this.sleep(</span>
+            p_cycles,
+<span class="nc bnc" id="L214" title="All 4 branches missed.">            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )</span>
+<span class="nc" id="L215">            ? Stream.of()</span>
+<span class="nc" id="L216">            : Arrays.stream( p_term )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final IAgent&lt;T&gt; sleep( final long p_cycles, @Nonnull final Stream&lt;ITerm&gt; p_literal )
+    {
+<span class="nc" id="L224">        m_sleepingcycles.set( p_cycles );</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">        p_literal.filter( i -&gt; !i.hasVariable() ).forEach( m_sleepingterm::add );</span>
+<span class="nc" id="L226">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IAgent&lt;T&gt; wakeup( @Nullable final ITerm... p_term )
+    {
+<span class="nc" id="L233">        return this.wakeup(</span>
+<span class="nc bnc" id="L234" title="All 4 branches missed.">            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )</span>
+<span class="nc" id="L235">            ? Stream.of()</span>
+<span class="nc" id="L236">            : Arrays.stream( p_term )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final IAgent&lt;T&gt; wakeup( @Nonnull final Stream&lt;ITerm&gt; p_term )
+    {
+<span class="nc" id="L244">        p_term.forEach( m_sleepingterm::add );</span>
+<span class="nc" id="L245">        this.active( true );</span>
+<span class="nc" id="L246">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Map&lt;String, Object&gt; storage()
+    {
+<span class="fc" id="L253">        return m_storage;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IUnifier unifier()
+    {
+<span class="fc" id="L260">        return m_unifier;</span>
+    }
+
+    @Nonnegative
+    @Override
+    public final long cycletime()
+    {
+<span class="fc" id="L267">        return m_cycletime.get();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Multimap&lt;ITrigger, IPlanStatistic&gt; plans()
+    {
+<span class="fc" id="L274">        return m_plans;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyBundle&lt;Boolean&gt; fuzzy()
+    {
+<span class="fc" id="L281">        return m_fuzzy;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IVariableBuilder variablebuilder()
+    {
+<span class="fc" id="L288">        return m_variablebuilder;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Multimap&lt;IPath, IRule&gt; rules()
+    {
+<span class="fc" id="L295">        return m_rules;</span>
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public final &lt;N extends IAgent&lt;?&gt;&gt; N raw()
+    {
+<span class="fc" id="L303">        return (N) this;</span>
+    }
+
+    @Override
+    public String toString()
+    {
+<span class="nc" id="L309">        return MessageFormat.format(</span>
+            &quot;{0} ( {1} )&quot;,
+<span class="nc" id="L311">            super.toString(),</span>
+<span class="nc" id="L312">            StringUtils.join(</span>
+<span class="nc" id="L313">                StreamUtils.zip(</span>
+<span class="nc" id="L314">                    Stream.of( &quot;Trigger&quot;, &quot;Running Plans&quot;, &quot;Beliefbase&quot; ),</span>
+<span class="nc" id="L315">                    Stream.of( m_trigger.values(), m_runningplans.keySet(), m_beliefbase ),</span>
+<span class="nc" id="L316">                    ( l, c ) -&gt; MessageFormat.format( &quot;{0}: {1}&quot;, l, c )</span>
+<span class="nc" id="L317">                ).toArray(),</span>
+                &quot; / &quot;
+            )
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
+    {
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if ( m_sleepingcycles.get() &gt; 0 )</span>
+<span class="nc" id="L328">            return CFuzzyValue.from( false );</span>
+
+        // check if literal does not store any variables
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if ( p_trigger.literal().hasVariable() )</span>
+<span class="nc" id="L332">            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;literalvariable&quot;, p_trigger ) );</span>
+
+        // run plan immediatly and return
+<span class="pc bpc" id="L335" title="1 of 6 branches missed.">        if ( ( Objects.nonNull( p_immediately ) ) &amp;&amp; ( p_immediately.length &gt; 0 ) &amp;&amp; ( p_immediately[0] ) )</span>
+<span class="fc" id="L336">            return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );</span>
+
+        // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
+<span class="fc" id="L339">        synchronized ( this )</span>
+        {
+<span class="fc" id="L341">            m_trigger.putIfAbsent( p_trigger.hashCode(), p_trigger );</span>
+<span class="fc" id="L342">        }</span>
+
+<span class="fc" id="L344">        return CFuzzyValue.from( true );</span>
+    }
+
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public T call() throws Exception
+    {
+        // run beliefbase update, because environment can be changed and decrement sleeping value
+<span class="fc" id="L352">        m_beliefbase.update( (T) this );</span>
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">        if ( !this.active( false ) )</span>
+            // check wakup-event otherwise suspend
+<span class="nc" id="L355">            return (T) this;</span>
+
+        // update defuzzification
+<span class="fc" id="L358">        m_fuzzy.getValue().update( this );</span>
+
+        // clear running plan- and trigger list and execute elements
+<span class="fc" id="L361">        this.execute( this.generateexecutionlist() );</span>
+
+
+        // set the cycle time
+<span class="fc" id="L365">        m_cycletime.set( System.nanoTime() );</span>
+
+<span class="fc" id="L367">        return (T) this;</span>
+    }
+
+    /**
+     * create the plan executionlist with clearing internal structures
+     *
+     * @note must be synchronized for avoid indeterministic trigger list
+     *
+     * @return collection with execution plan and context
+     */
+    @Nonnull
+    private synchronized Collection&lt;Pair&lt;IPlanStatistic, IContext&gt;&gt; generateexecutionlist()
+    {
+<span class="fc" id="L380">        m_runningplans.clear();</span>
+<span class="fc" id="L381">        final Collection&lt;Pair&lt;IPlanStatistic, IContext&gt;&gt; l_execution = this.generateexecution(</span>
+<span class="fc" id="L382">            Stream.concat(</span>
+<span class="fc" id="L383">                m_trigger.values().parallelStream(),</span>
+<span class="fc" id="L384">                m_beliefbase.trigger().parallel()</span>
+            )
+        );
+<span class="fc" id="L387">        m_trigger.clear();</span>
+
+<span class="fc" id="L389">        return l_execution;</span>
+    }
+
+
+    /**
+     * create execution list with plan and context
+     *
+     * @param p_trigger trigger stream
+     * @return collection with excutable plans, instantiated execution context and plan statistic
+     */
+    @Nonnull
+    private Collection&lt;Pair&lt;IPlanStatistic, IContext&gt;&gt; generateexecution( @Nonnull final Stream&lt;ITrigger&gt; p_trigger )
+    {
+<span class="fc" id="L402">        return p_trigger</span>
+<span class="fc" id="L403">            .filter( Objects::nonNull )</span>
+            // get all possible plans
+<span class="fc" id="L405">            .flatMap( i -&gt; m_plans.get( i ).stream().map( j -&gt; new ImmutablePair&lt;&gt;( i, j ) ) )</span>
+<span class="fc" id="L406">            .parallel()</span>
+            // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
+<span class="fc" id="L408">            .map( i -&gt; new ImmutablePair&lt;&gt;( i, CCommon.unifytrigger( m_unifier, i.getLeft(), i.getRight().plan().trigger() ) ) )</span>
+            // check if unification was possible
+<span class="fc" id="L410">            .filter( i -&gt; i.getRight().getLeft() )</span>
+            // create execution context
+<span class="fc" id="L412">            .map( i -&gt; CCommon.instantiateplan( i.getLeft().getRight(), this, i.getRight().getRight() ) )</span>
+            // check plan-condition
+<span class="fc" id="L414">            .filter( i -&gt; m_fuzzy.getValue().defuzzify( i.getLeft().plan().condition( i.getRight() ) ) )</span>
+            // collectors-call must be toList not toSet because plan-execution can be have equal elements
+            // so a set avoid multiple plan-execution
+<span class="fc" id="L417">            .collect( Collectors.toList() );</span>
+    }
+
+    /**
+     * execute list of plans
+     *
+     * @param p_execution execution collection with instantiated plans and context
+     * @return fuzzy result for each executaed plan
+     */
+    @Nonnull
+    private IFuzzyValue&lt;Boolean&gt; execute( @Nonnull final Collection&lt;Pair&lt;IPlanStatistic, IContext&gt;&gt; p_execution )
+    {
+        // update executable plan list, so that test-goals are defined all the time
+<span class="fc" id="L430">        p_execution.parallelStream().forEach( i -&gt; m_runningplans.put(</span>
+<span class="fc" id="L431">            i.getLeft().plan().trigger().literal().fqnfunctor(),</span>
+<span class="fc" id="L432">            i.getLeft().plan().trigger().literal().unify( i.getRight() )</span>
+        ) );
+
+        // execute plan and return values and return execution result
+<span class="fc" id="L436">        return p_execution.parallelStream()</span>
+<span class="fc" id="L437">                          .map( i -&gt;</span>
+                          {
+<span class="fc" id="L439">                              final IFuzzyValue&lt;Boolean&gt; l_result = i.getLeft()</span>
+<span class="fc" id="L440">                                                                     .plan()</span>
+<span class="fc" id="L441">                                                                     .execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() );</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">                              if ( m_fuzzy.getValue().defuzzify( l_result ) )</span>
+                                  // increment successful runs
+<span class="fc" id="L444">                                  i.getLeft().incrementsuccessful();</span>
+                              else
+                                  // increment failed runs and create delete goal-event
+<span class="fc" id="L447">                                  i.getLeft().incrementfail();</span>
+<span class="fc" id="L448">                              return l_result;</span>
+<span class="fc" id="L449">                          } ).collect( m_fuzzy.getKey() );</span>
+    }
+
+    /**
+     * runs the wakeup goal
+     *
+     * @param p_immediatly runs the wake always
+     * @return returns true if the agent is active
+     */
+    private boolean active( final boolean p_immediatly )
+    {
+        // if the sleeping time ends or the agent will wakedup by a hard call,
+        // create the trigger and reset the time value
+<span class="pc bpc" id="L462" title="2 of 4 branches missed.">        if ( ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) ) || p_immediatly )</span>
+        {
+            (
+<span class="nc bnc" id="L465" title="All 2 branches missed.">                m_sleepingterm.isEmpty()</span>
+
+<span class="nc" id="L467">                ? Stream.of( CTrigger.from(</span>
+<span class="nc" id="L468">                    ITrigger.EType.ADDGOAL, CLiteral.from(</span>
+                    &quot;wakeup&quot;
+                    )
+                ) )
+
+<span class="nc" id="L473">                : m_sleepingterm.parallelStream()</span>
+<span class="nc" id="L474">                                .map( i -&gt; CTrigger.from(</span>
+                                    ITrigger.EType.ADDGOAL,
+<span class="nc" id="L476">                                    CLiteral.from( &quot;wakeup&quot;, i )</span>
+                                ) )
+
+<span class="nc" id="L479">            ).forEach( i -&gt; m_trigger.put( i.structurehash(), i ) );</span>
+
+<span class="nc" id="L481">            m_sleepingterm.clear();</span>
+        }
+
+        // if the sleeping time is not infinity decrese the counter
+<span class="pc bpc" id="L485" title="3 of 4 branches missed.">        if ( ( m_sleepingcycles.get() &gt; 0 ) &amp;&amp; ( m_sleepingcycles.get() != Long.MAX_VALUE ) )</span>
+<span class="nc" id="L486">            m_sleepingcycles.decrementAndGet();</span>
+
+<span class="pc bpc" id="L488" title="1 of 2 branches missed.">        return m_sleepingcycles.get() &lt;= 0;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

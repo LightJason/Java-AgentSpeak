@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CSpanningTree.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.graph</a> &gt; <span class="el_source">CSpanningTree.java</span></div><h1>CSpanningTree.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.graph;
+
+import com.google.common.base.Function;
+import edu.uci.ics.jung.algorithms.shortestpath.PrimMinimumSpanningTree;
+import edu.uci.ics.jung.graph.DelegateTree;
+import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * creates a minimal spanning tree of any graph instance.
+ * The action creates from each graph argument a spanning
+ * tree, the first map instance will be used as weight-map,
+ * a tuple of the string &quot;defaultweight&quot; and a numeric value
+ * defines the default weight value of the weight-map
+ * (the default value is zero), the action never fails
+ *
+ * {@code
+    [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
+    [SP3|SP4] = graph/spanningtree( &quot;defaultweight&quot;, 3, WeightMap, Graph3, Graph4 );
+ * }
+ */
+<span class="fc" id="L58">public final class CSpanningTree extends IBuiltinAction</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -367284435336974616L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L69">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L77">        final double l_defaultcost = CCommon.flatten( p_argument )</span>
+<span class="fc" id="L78">                                            .filter( i -&gt; CCommon.rawvalueAssignableTo( i, Number.class ) )</span>
+<span class="fc" id="L79">                                            .findFirst()</span>
+<span class="fc" id="L80">                                            .map( ITerm::&lt;Number&gt;raw )</span>
+<span class="fc" id="L81">                                            .map( Number::doubleValue )</span>
+<span class="fc" id="L82">                                            .orElse( 0D );</span>
+
+<span class="fc" id="L84">        final Map&lt;?, Number&gt; l_costmap = CCommon.flatten( p_argument )</span>
+<span class="fc" id="L85">                                                .filter( i -&gt; CCommon.rawvalueAssignableTo( i, Map.class ) )</span>
+<span class="fc" id="L86">                                                .findFirst()</span>
+<span class="fc" id="L87">                                                .map( ITerm::&lt;Map&lt;?, Number&gt;&gt;raw )</span>
+<span class="fc" id="L88">                                                .orElseGet( Collections::emptyMap );</span>
+
+<span class="fc" id="L90">        final Function&lt;Object, Double&gt; l_weightfunction = e -&gt; l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();</span>
+<span class="fc" id="L91">        final PrimMinimumSpanningTree&lt;Object, Object&gt; l_treefactory = new PrimMinimumSpanningTree&lt;&gt;( DelegateTree.getFactory(), l_weightfunction );</span>
+
+        // --- filter graphs ---
+<span class="fc" id="L94">        CCommon.flatten( p_argument )</span>
+<span class="fc" id="L95">               .filter( i -&gt; CCommon.rawvalueAssignableTo( i, Graph.class ) )</span>
+<span class="fc" id="L96">               .map( ITerm::&lt;Graph&lt;Object, Object&gt;&gt;raw )</span>
+<span class="fc" id="L97">               .map( l_treefactory )</span>
+<span class="fc" id="L98">               .map( CRawTerm::from )</span>
+<span class="fc" id="L99">               .forEach( p_return::add );</span>
+
+<span class="fc" id="L101">        return CFuzzyValue.from( true );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

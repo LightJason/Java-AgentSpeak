@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CGetMultiple.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.collection.map</a> &gt; <span class="el_source">CGetMultiple.java</span></div><h1>CGetMultiple.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.collection.map;
+
+import org.lightjason.agentspeak.action.builtin.collection.IMapGetMultiple;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * returns a multiple element of a single map.
+ * The first argument is a map reference and all
+ * other arguments are key values, the action
+ * returns the value of each key and never fails
+ *
+ * {@code [V1|V2] = collection/map/getmultiple( Map, &quot;key1&quot;, &quot;key2&quot; );}
+ */
+<span class="fc" id="L43">public final class CGetMultiple extends IMapGetMultiple&lt;Map&lt;Object, Object&gt;&gt;</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4100425217888323445L;
+
+    @Override
+    protected final void apply( final boolean p_parallel, @Nonnull final Map&lt;Object, Object&gt; p_instance,
+                                @Nonnull final Object p_key, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L54">        p_return.add(</span>
+<span class="fc" id="L55">            CRawTerm.from(</span>
+<span class="fc" id="L56">                p_instance.get( p_key )</span>
+            )
+        );
+<span class="fc" id="L59">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

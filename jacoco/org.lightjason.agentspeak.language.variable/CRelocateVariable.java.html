@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CRelocateVariable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.variable</a> &gt; <span class="el_source">CRelocateVariable.java</span></div><h1>CRelocateVariable.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.variable;
+
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.Objects;
+
+
+/**
+ * class for a relocated variable
+ *
+ * @tparam T variable type
+ */
+public final class CRelocateVariable&lt;T&gt; extends CVariable&lt;T&gt; implements IRelocateVariable
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2204692497385064257L;
+    /**
+     * reference to relocated variable
+     */
+    private final IVariable&lt;?&gt; m_relocate;
+
+
+    /**
+     * ctor
+     *
+     * @param p_variable variable which should be reloacted
+     */
+    public CRelocateVariable( final IVariable&lt;?&gt; p_variable )
+    {
+<span class="fc" id="L61">        super( p_variable.functor(), p_variable.raw() );</span>
+<span class="fc" id="L62">        m_relocate = p_variable;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * ctor
+     *  @param p_functor variable name
+     * @param p_relocate variable which should be relocated
+     */
+    public CRelocateVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable&lt;?&gt; p_relocate )
+    {
+<span class="fc" id="L72">        super( p_functor, p_relocate.raw() );</span>
+<span class="fc" id="L73">        m_relocate = p_relocate;</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * private ctor for creating object-copy
+     *  @param p_functor functor
+     * @param p_variable referenced variable
+     * @param p_value value
+     */
+    private CRelocateVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable&lt;?&gt; p_variable, @Nullable  final T p_value )
+    {
+<span class="nc" id="L84">        super( p_functor, p_value );</span>
+<span class="nc" id="L85">        m_relocate = p_variable;</span>
+<span class="nc" id="L86">    }</span>
+
+    @Nonnull
+    @Override
+    public final IVariable&lt;?&gt; relocate()
+    {
+<span class="fc" id="L92">        return</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            m_relocate instanceof CConstant&lt;?&gt;</span>
+<span class="fc" id="L94">            ? m_relocate</span>
+<span class="fc" id="L95">            : m_relocate.set( this.raw() );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IVariable&lt;T&gt; shallowcopy( final IPath... p_prefix )
+    {
+<span class="nc bnc" id="L102" title="All 4 branches missed.">        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+<span class="nc" id="L103">               ? new CRelocateVariable&lt;&gt;( m_functor, m_relocate, m_value )</span>
+<span class="nc" id="L104">               : new CRelocateVariable&lt;&gt;( p_prefix[0].append( m_functor ), m_relocate, m_value );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IVariable&lt;T&gt; shallowcopysuffix()
+    {
+<span class="nc" id="L111">        return new CRelocateVariable&lt;&gt;( m_functor, m_relocate );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ITerm deepcopy( final IPath... p_prefix )
+    {
+<span class="nc" id="L118">        return new CRelocateVariable&lt;&gt;(</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+<span class="nc" id="L120">            ? m_functor</span>
+<span class="nc" id="L121">            : m_functor.append( p_prefix[0] ),</span>
+<span class="nc" id="L122">            m_relocate, CCommon.deepclone( m_value )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final ITerm deepcopysuffix()
+    {
+<span class="nc" id="L130">        return new CRelocateVariable&lt;&gt;( CPath.from( m_functor.suffix() ), m_relocate, CCommon.deepclone( m_value ) );</span>
+    }
+
+    @Override
+    public String toString()
+    {
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        return MessageFormat.format( &quot;{0}({1})&gt;{2}&quot;, m_functor, Objects.isNull( m_value ) ? &quot;&quot; : m_value, m_relocate );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

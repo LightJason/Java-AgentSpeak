@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CProxyAction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.action</a> &gt; <span class="el_source">CProxyAction.java</span></div><h1>CProxyAction.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.action;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+
+/**
+ * proxy action to encapsulate all actions
+ */
+public final class CProxyAction implements IExecution
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4799005052331053271L;
+    /**
+     * execution
+     */
+    private final IExecution m_execution;
+
+    /**
+     * ctor
+     *
+     * @param p_actions actions definition
+     * @param p_literal literal
+     */
+    public CProxyAction( @Nonnull final Map&lt;IPath, IAction&gt; p_actions, @Nonnull final ILiteral p_literal )
+<span class="fc" id="L73">    {</span>
+<span class="fc" id="L74">        m_execution = new CActionWrapper( p_literal, p_actions );</span>
+<span class="fc" id="L75">    }</span>
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L83">        return m_execution.execute( p_parallel, p_context, p_argument, p_return );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L90">        return m_execution.variables();</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L96">        return MessageFormat.format( &quot;{0}&quot;, m_execution );</span>
+    }
+
+    /**
+     * inner class for encapsulating term values (variable / raw terms)
+     */
+    private static class CTermWrapper&lt;T extends ITerm&gt; implements IExecution
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6984535096829821628L;
+        /**
+         * term value
+         */
+        private final T m_value;
+
+        /**
+         * ctor
+         *
+         * @param p_value any static term
+         */
+        CTermWrapper( @Nonnull final T p_value )
+<span class="fc" id="L119">        {</span>
+<span class="fc" id="L120">            m_value = p_value;</span>
+<span class="fc" id="L121">        }</span>
+
+        @Override
+        public final int hashCode()
+        {
+<span class="nc" id="L126">            return m_value.hashCode();</span>
+        }
+
+        @Override
+        public final String toString()
+        {
+<span class="fc" id="L132">            return MessageFormat.format( &quot;{0}&quot;, m_value );</span>
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+<span class="nc bnc" id="L138" title="All 4 branches missed.">            return ( p_object instanceof IExecution ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+        )
+        {
+<span class="fc" id="L147">            p_return.add( m_value );</span>
+<span class="fc" id="L148">            return CFuzzyValue.from( true );</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+        {
+<span class="nc" id="L155">            return this.getVariableSet( m_value );</span>
+        }
+
+        /**
+         * returns a variable set based on the generic type
+         *
+         * @param p_value term type
+         * @return variable set (empty)
+         */
+        @Nonnull
+        private Stream&lt;IVariable&lt;?&gt;&gt; getVariableSet( final T p_value )
+        {
+<span class="nc" id="L167">            return Stream.&lt;IVariable&lt;?&gt;&gt;empty();</span>
+        }
+    }
+
+    /**
+     * inner class for encapsulating action execution
+     *
+     * @warning execution must run variable repacing before action calling
+     */
+    private static class CActionWrapper implements IExecution
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 5531271525053969711L;
+        /**
+         * parallel execution flag
+         */
+        private final boolean m_parallel;
+        /**
+         * action
+         */
+        private final IAction m_action;
+        /**
+         * arguments as map with index for prevent
+         * result order on parallel execution
+         */
+        private final Map&lt;Integer, IExecution&gt; m_arguments;
+
+
+        /**
+         * ctor
+         *
+         * @param p_literal action literal
+         * @param p_actions actions
+         */
+        CActionWrapper( @Nonnull final ILiteral p_literal, @Nonnull final Map&lt;IPath, IAction&gt; p_actions )
+<span class="fc" id="L204">        {</span>
+            // check parallel and inner execution
+<span class="fc" id="L206">            m_parallel = p_literal.hasAt();</span>
+
+
+            // resolve action
+<span class="fc" id="L210">            m_action = p_actions.get( p_literal.fqnfunctor() );</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">            if ( Objects.isNull( m_action ) )</span>
+<span class="nc" id="L212">                throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;actionunknown&quot;, p_literal ) );</span>
+
+            // check number of arguments and add action to the score cache
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">            if ( p_literal.orderedvalues().count() &lt; m_action.minimalArgumentNumber() )</span>
+<span class="nc" id="L216">                throw new CIllegalArgumentException(</span>
+<span class="nc" id="L217">                    org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;argumentnumber&quot;, p_literal, m_action.minimalArgumentNumber() ) );</span>
+
+            // resolve action arguments
+<span class="fc" id="L220">            m_arguments = Collections.unmodifiableMap( this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions ) );</span>
+<span class="fc" id="L221">        }</span>
+
+        @Override
+        public final int hashCode()
+        {
+<span class="nc" id="L226">            return m_action.hashCode() + m_arguments.hashCode();</span>
+        }
+
+        @Override
+        public final String toString()
+        {
+<span class="fc" id="L232">            return MessageFormat.format( &quot;{0}({1})&quot;, m_action, StringUtils.join( m_arguments.values(), &quot;, &quot; ) );</span>
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+<span class="nc bnc" id="L238" title="All 4 branches missed.">            return ( p_object instanceof IExecution ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+        }
+
+        @Nonnull
+        @Override
+        public IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+        )
+        {
+<span class="fc" id="L247">            return m_action.execute(</span>
+                m_parallel, p_context,
+<span class="fc" id="L249">                this.subexecute( p_context, m_arguments ),</span>
+                p_return
+            );
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+        {
+<span class="fc" id="L258">            return m_action.variables();</span>
+        }
+
+        /**
+         * builds the map of execution arguments
+         *
+         * @param p_elements collection with literal elements (term- / literal list of attributes &amp; annotations)
+         * @param p_actions map with actions
+         * @return ordered execution structure
+         */
+        @Nonnull
+        private Map&lt;Integer, IExecution&gt; createSubExecutions( @Nonnull final Collection&lt;? extends ITerm&gt; p_elements,
+                                                              @Nonnull final Map&lt;IPath, IAction&gt; p_actions )
+        {
+            // convert collection to list and build map with indices
+<span class="fc" id="L273">            final List&lt;? extends ITerm&gt; l_elements = new LinkedList&lt;&gt;( p_elements );</span>
+<span class="fc" id="L274">            return IntStream.range( 0, l_elements.size() )</span>
+<span class="fc" id="L275">                            .boxed()</span>
+<span class="fc" id="L276">                            .collect(</span>
+<span class="fc" id="L277">                                Collectors.toMap(</span>
+<span class="fc" id="L278">                                    i -&gt; i,</span>
+                                    i -&gt;
+                                    {
+<span class="fc" id="L281">                                        final ITerm l_term = l_elements.get( i );</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">                                        return l_term instanceof ILiteral</span>
+<span class="fc" id="L283">                                               ? new CActionWrapper( l_term.term(), p_actions )</span>
+<span class="fc" id="L284">                                               : new CTermWrapper&lt;&gt;( l_term );</span>
+                                    }
+                                )
+                            );
+        }
+
+        /**
+         * execute inner structures
+         *
+         * @param p_context context structure
+         * @param p_execution map with execution elements
+         * @return return arguments of execution (flat list)
+         */
+        @Nonnull
+        private List&lt;ITerm&gt; subexecute( @Nonnull final IContext p_context, @Nonnull final Map&lt;Integer, IExecution&gt; p_execution )
+        {
+<span class="fc" id="L300">            return Collections.unmodifiableList( CCommon.replaceFromContext(</span>
+                p_context,
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">                ( m_parallel</span>
+<span class="nc" id="L303">                  ? p_execution.entrySet().parallelStream()</span>
+<span class="fc" id="L304">                  : p_execution.entrySet()</span>
+<span class="fc" id="L305">                               .stream() )</span>
+<span class="fc" id="L306">                               .flatMap( i -&gt;</span>
+                               {
+<span class="fc" id="L308">                                   final List&lt;ITerm&gt; l_return = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L309">                                   i.getValue().execute( m_parallel, p_context, Collections.emptyList(), l_return );</span>
+<span class="fc" id="L310">                                   return l_return.stream();</span>
+                               } )
+<span class="fc" id="L312">                               .collect( Collectors.toList() )</span>
+            ) );
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

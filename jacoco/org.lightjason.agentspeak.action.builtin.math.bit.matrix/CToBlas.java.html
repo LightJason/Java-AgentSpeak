@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CToBlas.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.bit.matrix</a> &gt; <span class="el_source">CToBlas.java</span></div><h1>CToBlas.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
+
+import cern.colt.matrix.tbit.BitMatrix;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.builtin.math.blas.EType;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+
+/**
+ * converts the bit matrix to a blas matrix.
+ * The action converts the bit matrix to a blas matrix,
+ * the last argument can be &quot;dense&quot; or &quot;sparse&quot;, all
+ * other arguments are bit matrices and the actions
+ * never fails
+ *
+ * {@code [A|B] = math/bit/matrix/toblas( BitMatrix1, BitMatrix2, &quot;dense | sparse&quot; );}
+ */
+public final class CToBlas extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5682613760524318512L;
+
+    /**
+     * ctor
+     */
+    public CToBlas()
+    {
+<span class="fc" id="L67">        super( 4 );</span>
+<span class="fc" id="L68">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L74">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L82">        final List&lt;ITerm&gt; l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+<span class="fc" id="L83">        final EType l_type = l_arguments.parallelStream()</span>
+<span class="fc" id="L84">                                        .filter( i -&gt; CCommon.rawvalueAssignableTo( i, String.class ) )</span>
+<span class="pc" id="L85">                                        .findFirst().map( i -&gt; EType.from( i.&lt;String&gt;raw() ) )</span>
+<span class="fc" id="L86">                                        .orElse( EType.SPARSE );</span>
+
+<span class="pc bpc" id="L88" title="2 of 3 branches missed.">        switch ( l_type )</span>
+        {
+            case DENSE:
+<span class="nc" id="L91">                l_arguments.stream()</span>
+<span class="nc" id="L92">                           .filter( i -&gt; CCommon.rawvalueAssignableTo( i, BitMatrix.class ) )</span>
+<span class="nc" id="L93">                           .map( ITerm::&lt;BitMatrix&gt;raw )</span>
+<span class="nc" id="L94">                           .map( i -&gt; CToBlas.tomatrix( i, new DenseDoubleMatrix2D( i.rows(), i.columns() ) ) )</span>
+<span class="nc" id="L95">                           .map( CRawTerm::from )</span>
+<span class="nc" id="L96">                           .forEach( p_return::add );</span>
+
+<span class="nc" id="L98">                return CFuzzyValue.from( true );</span>
+
+
+            case SPARSE:
+<span class="fc" id="L102">                l_arguments.stream()</span>
+<span class="fc" id="L103">                           .filter( i -&gt; CCommon.rawvalueAssignableTo( i, BitMatrix.class ) )</span>
+<span class="fc" id="L104">                           .map( ITerm::&lt;BitMatrix&gt;raw )</span>
+<span class="fc" id="L105">                           .map( i -&gt; CToBlas.tomatrix( i, new SparseDoubleMatrix2D( i.rows(), i.columns() ) ) )</span>
+<span class="fc" id="L106">                           .map( CRawTerm::from )</span>
+<span class="fc" id="L107">                           .forEach( p_return::add );</span>
+
+<span class="fc" id="L109">                return CFuzzyValue.from( true );</span>
+
+            default:
+
+<span class="nc" id="L113">                return CFuzzyValue.from( false );</span>
+        }
+    }
+
+
+    /**
+     * converts the bit matrix to the blas matrix
+     *
+     * @param p_source bit matrix
+     * @param p_target blas matrix
+     * @return blas matrix
+     */
+    @Nonnull
+    private static DoubleMatrix2D tomatrix( @Nonnull final BitMatrix p_source, @Nonnull final DoubleMatrix2D p_target )
+    {
+<span class="fc" id="L128">        IntStream.range( 0, p_source.rows() )</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">                 .forEach( r -&gt; IntStream.range( 0, p_source.columns() ).forEach( c -&gt; p_target.setQuick( r, c, p_source.getQuick( r, c ) ? 1 : 0 ) ) );</span>
+
+<span class="fc" id="L131">        return p_target;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

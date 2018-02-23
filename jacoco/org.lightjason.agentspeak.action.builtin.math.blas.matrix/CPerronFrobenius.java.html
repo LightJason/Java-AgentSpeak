@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CPerronFrobenius.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.blas.matrix</a> &gt; <span class="el_source">CPerronFrobenius.java</span></div><h1>CPerronFrobenius.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
+
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.jet.math.tdouble.DoubleMult;
+import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+
+/**
+ * calculates the largest eigenvector with perron-frobenius theorem.
+ * The action calculates the largest eigenvector of a sequared matrix
+ * based on the perron-frobenius theorem, the calculation is \f$ E_{t+1} = M \cdot E_t \f$,
+ * the action uses on the first argument the number of iterations and all other argumentes
+ * are squared matrices, the returning arguments are the eigenvector for each matrix, the
+ * action never fails
+ *
+ * {@code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);}
+ * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
+ */
+public final class CPerronFrobenius extends IAlgebra
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4686274043894517802L;
+
+    /**
+     * ctor
+     */
+    public CPerronFrobenius()
+    {
+<span class="fc" id="L70">        super( 4 );</span>
+<span class="fc" id="L71">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L77">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="nc" id="L85">        final Random l_random = ThreadLocalRandom.current();</span>
+<span class="nc" id="L86">        final List&lt;ITerm&gt; l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+
+        // create eigenvectors
+<span class="nc" id="L89">        final List&lt;DoubleMatrix1D&gt; l_eigenvector = IntStream</span>
+<span class="nc" id="L90">            .range( 0, l_arguments.size() - 1 )</span>
+<span class="nc" id="L91">            .parallel()</span>
+<span class="nc" id="L92">            .boxed()</span>
+<span class="nc" id="L93">            .map( i -&gt; new double[l_arguments.get( i ).&lt;DoubleMatrix2D&gt;raw().rows()] )</span>
+<span class="nc" id="L94">            .map( DenseDoubleMatrix1D::new )</span>
+<span class="nc" id="L95">            .peek( i -&gt; IntStream.range( 0, Long.valueOf( i.size() ).intValue() ).forEach( j -&gt; i.setQuick( j, l_random.nextDouble() ) ) )</span>
+<span class="nc" id="L96">            .collect( Collectors.toList() );</span>
+
+        // run iteration
+<span class="nc" id="L99">        IntStream.range( 0, l_arguments.get( 0 ).&lt;Number&gt;raw().intValue() )</span>
+<span class="nc" id="L100">                 .forEach( i -&gt; IntStream</span>
+<span class="nc" id="L101">                     .range( 0, l_arguments.size() )</span>
+<span class="nc" id="L102">                     .boxed()</span>
+<span class="nc" id="L103">                     .parallel()</span>
+<span class="nc" id="L104">                     .forEach( j -&gt;</span>
+                     {
+<span class="nc" id="L106">                         l_eigenvector.get( j ).assign( DENSEALGEBRA.mult( l_arguments.get( j + 1 ).&lt;DoubleMatrix2D&gt;raw(), l_eigenvector.get( j ) ) );</span>
+<span class="nc" id="L107">                         l_eigenvector.get( j ).assign( DoubleMult.div( DENSEALGEBRA.norm2( l_eigenvector.get( j ) ) ) );</span>
+<span class="nc" id="L108">                     } ) );</span>
+
+<span class="nc" id="L110">        l_eigenvector.stream()</span>
+<span class="nc" id="L111">                     .map( CRawTerm::from )</span>
+<span class="nc" id="L112">                     .forEach( p_return::add );</span>
+
+<span class="nc" id="L114">        return CFuzzyValue.from( true );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

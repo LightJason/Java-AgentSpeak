@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CBuild.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.datetime</a> &gt; <span class="el_source">CBuild.java</span></div><h1>CBuild.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.datetime;
+
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
+
+
+/**
+ * builds a date-time object from elements.
+ * The actions creates form an eight-tuple a date-time
+ * object and never fails, the seventh argument within
+ * the tuple is the time-zone, which can be set to empty
+ * or &quot;current&quot;, so the system-default zone is used
+ *
+ * {@code O1 = datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, &quot;current&quot; );}
+ */
+<span class="fc" id="L51">public final class CBuild extends IBuiltinAction</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8462499187047054608L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L62">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L70">        StreamUtils.windowed(</span>
+<span class="fc" id="L71">            CCommon.flatten( p_argument ),</span>
+        8,
+            8
+        )
+<span class="fc" id="L75">                   .map( CBuild::apply )</span>
+<span class="fc" id="L76">                   .map( CRawTerm::from )</span>
+<span class="fc" id="L77">                   .forEach( p_return::add );</span>
+
+<span class="fc" id="L79">        return CFuzzyValue.from( true );</span>
+    }
+
+    /**
+     * creates the date-time object
+     *
+     * @param p_elements term elements
+     * @return date-time object
+     */
+    @Nonnull
+    private static ZonedDateTime apply( @Nonnull final List&lt;ITerm&gt; p_elements )
+    {
+<span class="fc" id="L91">        return ZonedDateTime.of(</span>
+
+            // year, month, day
+<span class="fc" id="L94">            p_elements.get( 0 ).&lt;Number&gt;raw().intValue(),</span>
+<span class="fc" id="L95">            p_elements.get( 1 ).&lt;Number&gt;raw().intValue(),</span>
+<span class="fc" id="L96">            p_elements.get( 2 ).&lt;Number&gt;raw().intValue(),</span>
+
+            // hours, minutes, seconds, nano-seconds
+<span class="fc" id="L99">            p_elements.get( 3 ).&lt;Number&gt;raw().intValue(),</span>
+<span class="fc" id="L100">            p_elements.get( 4 ).&lt;Number&gt;raw().intValue(),</span>
+<span class="fc" id="L101">            p_elements.get( 5 ).&lt;Number&gt;raw().intValue(),</span>
+<span class="fc" id="L102">            p_elements.get( 6 ).&lt;Number&gt;raw().intValue(),</span>
+
+            // zone id if empty or current, system-default will be used
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">            ( &quot;current&quot;.equalsIgnoreCase( p_elements.get( 7 ).&lt;String&gt;raw().trim() ) ) || ( p_elements.get( 7 ).&lt;String&gt;raw().trim().isEmpty() )</span>
+<span class="fc" id="L106">            ? ZoneId.systemDefault()</span>
+<span class="fc" id="L107">            : ZoneId.of( p_elements.get( 7 ).&lt;String&gt;raw().trim() )</span>
+        );
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

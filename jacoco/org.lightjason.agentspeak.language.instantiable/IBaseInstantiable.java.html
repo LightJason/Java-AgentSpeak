@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseInstantiable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.instantiable</a> &gt; <span class="el_source">IBaseInstantiable.java</span></div><h1>IBaseInstantiable.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.instantiable;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * base structure of instantiable elements
+ */
+public abstract class IBaseInstantiable implements IInstantiable
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8843291880722926104L;
+    /**
+     * action list
+     */
+    protected final List&lt;IExecution&gt; m_action;
+
+    /**
+     * map with annotation (enum value for getting annotation object)
+     */
+    protected final Map&lt;IAnnotation.EType, IAnnotation&lt;?&gt;&gt; m_annotation;
+    /**
+     * hash code
+     */
+    private final int m_hash;
+
+
+    /**
+     * ctor
+     *
+     * @param p_action executed actions
+     * @param p_annotation annotation map
+     * @param p_hash hash code
+     */
+    protected IBaseInstantiable( final List&lt;IExecution&gt; p_action, final Set&lt;IAnnotation&lt;?&gt;&gt; p_annotation, final int p_hash )
+<span class="fc" id="L79">    {</span>
+<span class="fc" id="L80">        m_hash = p_hash;</span>
+<span class="fc" id="L81">        m_action = Collections.unmodifiableList( p_action );</span>
+<span class="pc" id="L82">        m_annotation = Collections.unmodifiableMap( p_annotation.stream().collect( HashMap::new, ( m, s ) -&gt; m.put( s.id(), s ), Map::putAll ) );</span>
+<span class="fc" id="L83">    }</span>
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L88">        return m_hash;</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L94" title="All 4 branches missed.">        return ( p_object instanceof IInstantiable ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IContext instantiate( @Nonnull final IAgent&lt;?&gt; p_agent, @Nonnull final Stream&lt;IVariable&lt;?&gt;&gt; p_variable )
+    {
+<span class="fc" id="L101">        return CCommon.instantiate( this, p_agent, p_variable );</span>
+    }
+
+    @Nonnull
+    @Override
+    public Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L108">        return m_action.stream().flatMap( IExecution::variables );</span>
+    }
+
+    @Nonnull
+    @Override
+    public IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+        // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
+        // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an &quot;empty-list&quot;
+        // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        final List&lt;IFuzzyValue&lt;Boolean&gt;&gt; l_result = m_annotation.containsKey( IAnnotation.EType.PARALLEL )</span>
+<span class="nc" id="L121">                                                    ? this.executeparallel( p_context )</span>
+<span class="fc" id="L122">                                                    : this.executesequential( p_context );</span>
+        // if atomic flag if exists use this for return value
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        return m_annotation.containsKey( IAnnotation.EType.ATOMIC )</span>
+<span class="nc" id="L125">               ? CFuzzyValue.from( true )</span>
+<span class="fc" id="L126">               : l_result.stream().collect( p_context.agent().fuzzy().getKey() );</span>
+    }
+
+    /**
+     * execute plan sequential
+     *
+     * @param p_context execution context
+     * @return list with execution results
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    @SuppressWarnings( &quot;ResultOfMethodCallIgnored&quot; )
+    private List&lt;IFuzzyValue&lt;Boolean&gt;&gt; executesequential( final IContext p_context )
+    {
+<span class="fc" id="L140">        final List&lt;IFuzzyValue&lt;Boolean&gt;&gt; l_result = Collections.synchronizedList( new LinkedList&lt;&gt;() );</span>
+
+<span class="fc" id="L142">        m_action.stream()</span>
+<span class="fc" id="L143">                .map( i -&gt;</span>
+                {
+<span class="fc" id="L145">                    final IFuzzyValue&lt;Boolean&gt; l_return = i.execute( false, p_context, Collections.&lt;ITerm&gt;emptyList(), new LinkedList&lt;&gt;() );</span>
+<span class="fc" id="L146">                    l_result.add( l_return );</span>
+<span class="fc" id="L147">                    return p_context.agent().fuzzy().getValue().defuzzify( l_return );</span>
+                } )
+<span class="fc bfc" id="L149" title="All 2 branches covered.">                .filter( i -&gt; !i )</span>
+<span class="fc" id="L150">                .findFirst();</span>
+
+<span class="fc" id="L152">        return l_result;</span>
+    }
+
+    /**
+     * execute plan parallel
+     *
+     * @param p_context execution context
+     * @return list with execution results
+     *
+     * @note each element is executed
+     */
+    private List&lt;IFuzzyValue&lt;Boolean&gt;&gt; executeparallel( final IContext p_context )
+    {
+<span class="nc" id="L165">        return m_action.parallelStream()</span>
+<span class="nc" id="L166">                       .map( i -&gt; i.execute( false, p_context, Collections.&lt;ITerm&gt;emptyList(), new LinkedList&lt;&gt;() ) )</span>
+<span class="nc" id="L167">                       .collect( Collectors.toList() );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

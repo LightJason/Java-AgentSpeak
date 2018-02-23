@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CCreate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.linearprogram</a> &gt; <span class="el_source">CCreate.java</span></div><h1>CCreate.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.linearprogram;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.math3.optim.linear.LinearConstraint;
+import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * action to create a linear program.
+ * This action creates the linear program with
+ * the objective functions \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + d \f$,
+ * the first \f$ n-1 \f$ arguments are the \f$ c_i \f$ values (coefficients) and the last
+ * argument is the \f$ d \f$ value (constant) of the objective function, the action
+ * is never failing
+ *
+ * {@code LP = math/linearprogram/create(1,2, [3, [4,5]], 10);}
+ * @see https://en.wikipedia.org/wiki/Linear_programming
+ * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
+ */
+public final class CCreate extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7399100017836837088L;
+
+    /**
+     * ctor
+     */
+    public CCreate()
+    {
+<span class="fc" id="L68">        super( 3 );</span>
+<span class="fc" id="L69">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L75">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L83">        final List&lt;Double&gt; l_arguments = CCommon.flatten( p_argument )</span>
+<span class="fc" id="L84">                                                .map( i -&gt; i.&lt;Number&gt;raw().doubleValue() )</span>
+<span class="fc" id="L85">                                                .collect( Collectors.toList() );</span>
+
+<span class="fc" id="L87">        p_return.add( CRawTerm.from(</span>
+            new ImmutablePair&lt;&gt;(
+                new LinearObjectiveFunction(
+<span class="fc" id="L90">                    l_arguments.stream().limit( l_arguments.size() - 1 ).mapToDouble( i -&gt; i ).toArray(),</span>
+<span class="fc" id="L91">                    l_arguments.get( l_arguments.size() - 1 )</span>
+                ),
+                new HashSet&lt;LinearConstraint&gt;()
+            )
+        ) );
+
+<span class="fc" id="L97">        return CFuzzyValue.from( true );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

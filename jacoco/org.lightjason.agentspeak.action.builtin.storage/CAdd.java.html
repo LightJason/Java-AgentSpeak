@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CAdd.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.storage</a> &gt; <span class="el_source">CAdd.java</span></div><h1>CAdd.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.storage;
+
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+
+/**
+ * adds or overwrites an element in the agent-storage.
+ * The action adds all tuples into the storage, the arguments
+ * are tuples of a name and any value, the action never fails
+ *
+ * {@code storage/add( &quot;foo&quot;, X, &quot;bar&quot;, Y );}
+ */
+public final class CAdd extends IStorage
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3102307419115604147L;
+
+    /**
+     * ctor
+     */
+    public CAdd()
+    {
+<span class="fc" id="L60">        super();</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CAdd( @Nonnull final Function&lt;String, Boolean&gt; p_resolver )
+    {
+<span class="fc" id="L70">        super( p_resolver );</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CAdd( @Nullable final String... p_forbidden )
+    {
+<span class="fc" id="L80">        super( p_forbidden );</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden stream with borbidden keys
+     */
+    public CAdd( @Nonnull final Stream&lt;String&gt; p_fordbidden )
+    {
+<span class="fc" id="L90">        super( p_fordbidden );</span>
+<span class="fc" id="L91">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L97">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L106">        StreamUtils.windowed(</span>
+<span class="fc" id="L107">            p_argument.stream(),</span>
+            2,
+            2
+<span class="fc" id="L110">        ).forEach( i -&gt; this.add( p_context.agent(), i.get( 0 ).&lt;String&gt;raw(), i.get( 1 ) ) );</span>
+
+<span class="fc" id="L112">        return CFuzzyValue.from( true );</span>
+    }
+
+    /**
+     * adds a value into the storage
+     *
+     * @param p_agent agent
+     * @param p_key key
+     * @param p_value value
+     */
+    private void add( @Nonnull final IAgent&lt;?&gt; p_agent, @Nonnull final String p_key, @Nonnull final ITerm p_value )
+    {
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if ( m_resolver.apply( p_key ) )</span>
+<span class="fc" id="L125">            return;</span>
+
+<span class="fc" id="L127">        p_agent.storage().put( p_key, p_value.raw() );</span>
+<span class="fc" id="L128">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

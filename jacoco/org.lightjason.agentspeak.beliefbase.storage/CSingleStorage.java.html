@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CSingleStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.beliefbase.storage</a> &gt; <span class="el_source">CSingleStorage.java</span></div><h1>CSingleStorage.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.beliefbase.storage;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * thread-safe storage of the data of
+ * single- and multi-elements, a multi-element
+ * can be stored once and will be replaced iif
+ * a new one is added
+ *
+ * @tparam N multi-element type
+ * @tparam M single-element type
+ * @tparam T agent type
+ */
+public final class CSingleStorage&lt;N, M&gt; extends IBaseStorage&lt;N, M&gt;
+{
+    /**
+     * map with elements
+     **/
+<span class="nc" id="L52">    private final Map&lt;String, N&gt; m_multielements = Collections.synchronizedMap( new LinkedHashMap&lt;&gt;() );</span>
+    /**
+     * map with single elements
+     **/
+<span class="nc" id="L56">    private final Map&lt;String, M&gt; m_singleelements = new ConcurrentHashMap&lt;&gt;();</span>
+
+    /**
+     * ctor
+     */
+    public CSingleStorage()
+    {
+<span class="nc" id="L63">        super();</span>
+<span class="nc" id="L64">    }</span>
+
+    @Nonnull
+    @Override
+    public final Stream&lt;N&gt; streamMultiElements()
+    {
+<span class="nc" id="L70">        return m_multielements.values().stream();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;M&gt; streamSingleElements()
+    {
+<span class="nc" id="L77">        return m_singleelements.values().stream();</span>
+    }
+
+    @Override
+    public final boolean containsMultiElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L83">        return m_multielements.containsKey( p_key );</span>
+    }
+
+    @Override
+    public final boolean containsSingleElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L89">        return m_singleelements.containsKey( p_key );</span>
+    }
+
+    @Override
+    public final boolean putMultiElement( @Nonnull final String p_key, final N p_value )
+    {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        return !p_value.equals( m_multielements.put( p_key, p_value ) );</span>
+    }
+
+    @Override
+    public final boolean putSingleElement( @Nonnull final String p_key, final M p_value )
+    {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        return !p_value.equals( m_singleelements.put( p_key, p_value ) );</span>
+    }
+
+    @Override
+    public final boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
+    {
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        return !p_value.equals( m_singleelements.putIfAbsent( p_key, p_value ) );</span>
+    }
+
+    @Override
+    public final boolean removeMultiElement( @Nonnull final String p_key, final N p_value )
+    {
+<span class="nc" id="L113">        return p_value.equals( m_multielements.remove( p_key ) );</span>
+    }
+
+    @Override
+    public final boolean removeSingleElement( @Nonnull final String p_key )
+    {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        return m_singleelements.remove( p_key ) != null;</span>
+    }
+
+    @Override
+    public final M getSingleElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L125">        return m_singleelements.get( p_key );</span>
+    }
+
+    @Override
+    public final M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
+    {
+<span class="nc" id="L131">        return m_singleelements.getOrDefault( p_key, p_default );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Collection&lt;N&gt; getMultiElement( @Nonnull final String p_key )
+    {
+<span class="nc" id="L138">        return Stream.of( m_multielements.get( p_key ) ).collect( Collectors.toSet() );</span>
+    }
+
+    @Override
+    public final void clear()
+    {
+<span class="nc" id="L144">        m_multielements.clear();</span>
+<span class="nc" id="L145">        m_singleelements.clear();</span>
+<span class="nc" id="L146">    }</span>
+
+    @Override
+    public final boolean empty()
+    {
+<span class="nc bnc" id="L151" title="All 4 branches missed.">        return m_multielements.isEmpty() &amp;&amp; m_singleelements.isEmpty();</span>
+    }
+
+    @Override
+    public final int size()
+    {
+<span class="nc" id="L157">        return m_multielements.size();</span>
+    }
+
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L164">        return MessageFormat.format( &quot;[multi elements: {0}, single elements: {1}]&quot;, m_multielements, m_singleelements );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

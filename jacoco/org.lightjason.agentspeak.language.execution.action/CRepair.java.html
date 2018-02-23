@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CRepair.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.action</a> &gt; <span class="el_source">CRepair.java</span></div><h1>CRepair.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.action;
+
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+
+/**
+ * defines an execution element with a repair call
+ */
+public class CRepair extends IBaseExecution&lt;IExecution&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7095678561033158953L;
+    /**
+     * fallback execution
+     */
+    private final IExecution m_fallback;
+
+    /**
+     * ctor
+     *
+     * @param p_value execution element
+     * @param p_fallback fallback execution
+     */
+    public CRepair( @Nonnull final IExecution p_value, @Nonnull final IExecution p_fallback )
+    {
+<span class="fc" id="L61">        super( p_value );</span>
+<span class="fc" id="L62">        m_fallback = p_fallback;</span>
+<span class="fc" id="L63">    }</span>
+
+    @Nonnull
+    @Override
+    public IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L70">        final IFuzzyValue&lt;Boolean&gt; l_return = m_value.execute( p_parallel, p_context, p_argument, p_return );</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        return l_return.value() ? l_return : m_fallback.execute( p_parallel, p_context, p_argument, p_return );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L78">        return Stream.concat(</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            Objects.isNull( m_value ) ? Stream.empty() : m_value.variables(),</span>
+<span class="fc" id="L80">            m_fallback.variables()</span>
+        );
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L87">        return MessageFormat.format( &quot;{0} &lt;&lt; {1}&quot;, m_value, m_fallback );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

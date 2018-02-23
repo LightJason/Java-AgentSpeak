@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.grammar</a> &gt; <span class="el_source">IBaseParser.java</span></div><h1>IBaseParser.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.grammar;
+
+import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.TokenStream;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+
+/**
+ * generic default parser
+ */
+public abstract class IBaseParser&lt;T extends IASTVisitor, L extends Lexer, P extends Parser&gt; implements IParser&lt;T&gt;
+{
+    /**
+     * error listener
+     */
+    private final ANTLRErrorListener m_errorlistener;
+    /**
+     * ctor lexer reference
+     */
+    private final Constructor&lt;L&gt; m_ctorlexer;
+    /**
+     * ctor parser reference
+     */
+    private final Constructor&lt;P&gt; m_ctorparser;
+
+
+    /**
+     * ctor
+     *
+     * @param p_errorlistener listener instance
+     * @throws NoSuchMethodException on ctor-method call
+     */
+    protected IBaseParser( @Nonnull final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
+<span class="fc" id="L67">    {</span>
+<span class="fc" id="L68">        m_errorlistener = p_errorlistener;</span>
+<span class="fc" id="L69">        m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );</span>
+<span class="fc" id="L70">        m_ctorparser = this.parserclass().getConstructor( TokenStream.class );</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * returns a parser component
+     *
+     * @param p_stream input stream
+     * @return parser (for using in visitor interface)
+     *
+     * @throws IOException on io-stream errors
+     * @throws IllegalAccessException on lexer / parser method access error
+     * @throws InvocationTargetException on lexer / parser invocation error
+     * @throws InstantiationException on lexer / parser instantiation error
+     */
+    protected final P parser( @Nonnull final InputStream p_stream ) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
+    {
+<span class="fc" id="L86">        final L l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );</span>
+<span class="fc" id="L87">        l_lexer.removeErrorListeners();</span>
+<span class="fc" id="L88">        l_lexer.addErrorListener( m_errorlistener );</span>
+
+<span class="fc" id="L90">        final P l_parser = m_ctorparser.newInstance( new CommonTokenStream( l_lexer ) );</span>
+<span class="fc" id="L91">        l_parser.removeErrorListeners();</span>
+<span class="fc" id="L92">        l_parser.addErrorListener( m_errorlistener );</span>
+
+<span class="fc" id="L94">        return l_parser;</span>
+    }
+
+    /**
+     * returns the lexer class reference
+     *
+     * @return class of lexer
+     */
+    protected abstract Class&lt;L&gt; lexerclass();
+
+    /**
+     * returns the parser class reference
+     *
+     * @return class of parser
+     */
+    protected abstract Class&lt;P&gt; parserclass();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

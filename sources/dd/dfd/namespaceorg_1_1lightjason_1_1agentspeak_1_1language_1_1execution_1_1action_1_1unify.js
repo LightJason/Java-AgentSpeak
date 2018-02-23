@@ -1,0 +1,6 @@
+var namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify =
+[
+    [ "CDefaultUnify", "d4/d86/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify_1_1CDefaultUnify.htm", "d4/d86/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify_1_1CDefaultUnify" ],
+    [ "CExpressionUnify", "d4/da6/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify_1_1CExpressionUnify.htm", "d4/da6/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify_1_1CExpressionUnify" ],
+    [ "CVariableUnify", "da/d06/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify_1_1CVariableUnify.htm", "da/d06/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1execution_1_1action_1_1unify_1_1CVariableUnify" ]
+];

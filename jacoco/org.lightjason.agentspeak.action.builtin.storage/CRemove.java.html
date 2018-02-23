@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CRemove.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.storage</a> &gt; <span class="el_source">CRemove.java</span></div><h1>CRemove.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.storage;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+
+/**
+ * removes an element by name from the storage.
+ * The actions removes any value from the storage
+ * which is referenced by the key and returns the
+ * value, the action never fails
+ *
+ * {@code [A|B] = storage/remove(&quot;foo&quot;, &quot;bar&quot;);}
+ */
+public final class CRemove extends IStorage
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7237340367513736766L;
+
+    /**
+     * ctor
+     */
+    public CRemove()
+    {
+<span class="fc" id="L62">        super();</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CRemove( @Nonnull final Function&lt;String, Boolean&gt; p_resolver )
+    {
+<span class="fc" id="L72">        super( p_resolver );</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CRemove( @Nullable final String... p_forbidden )
+    {
+<span class="fc" id="L82">        super( p_forbidden );</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden stream with borbidden keys
+     */
+    public CRemove( @Nonnull final Stream&lt;String&gt; p_fordbidden )
+    {
+<span class="fc" id="L92">        super( p_fordbidden );</span>
+<span class="fc" id="L93">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L99">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L107">        CCommon.flatten( p_argument )</span>
+<span class="fc" id="L108">               .map( ITerm::&lt;String&gt;raw )</span>
+<span class="fc" id="L109">               .forEach( i -&gt; this.remove( p_context.agent(), i, p_return ) );</span>
+
+<span class="fc" id="L111">        return CFuzzyValue.from( true );</span>
+    }
+
+
+    /**
+     * removes a value from the storage
+     *
+     * @param p_agent agent
+     * @param p_key key
+     * @param p_return return arguments
+     */
+    private void remove( @Nonnull final IAgent&lt;?&gt; p_agent, @Nonnull final String p_key, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="pc bpc" id="L124" title="1 of 4 branches missed.">        if ( ( m_resolver.apply( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )</span>
+<span class="fc" id="L125">            return;</span>
+
+<span class="fc" id="L127">        p_return.add(</span>
+<span class="fc" id="L128">            CRawTerm.from(</span>
+<span class="fc" id="L129">                p_agent.storage().remove( p_key )</span>
+            )
+        );
+<span class="fc" id="L132">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IAchievementRule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.action.achievement_test</a> &gt; <span class="el_source">IAchievementRule.java</span></div><h1>IAchievementRule.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.action.achievement_test;
+
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.variable.IRelocateVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
+
+
+/**
+ * abstract class for execute a logical-rule
+ */
+abstract class IAchievementRule&lt;T extends ITerm&gt; extends IBaseExecution&lt;T&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -315973892409409832L;
+
+    /**
+     * ctor
+     *
+     * @param p_type value of the achievment-goal
+     */
+    protected IAchievementRule( @Nonnull final T p_type )
+    {
+<span class="fc" id="L62">        super( p_type );</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * execute rule from context
+     *
+     * @param p_parallel parallel execution
+     * @param p_context execution context
+     * @param p_value execution literal
+     * @return boolean result
+     */
+    @Nonnull
+    @SuppressWarnings( &quot;unchecked&quot; )
+    protected static IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value
+    )
+    {
+        // read current rules, if not exists execution fails
+<span class="fc" id="L79">        final Collection&lt;IRule&gt; l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if ( Objects.isNull( l_rules ) )</span>
+<span class="nc" id="L81">            return CFuzzyValue.from( false );</span>
+
+        // first step is the unification of the caller literal, so variables will be set from the current execution context
+<span class="fc" id="L84">        final ILiteral l_unified = p_value.allocate( p_context );</span>
+
+        // second step execute backtracking rules sequential / parallel
+<span class="fc" id="L87">        return (</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            p_parallel</span>
+<span class="nc" id="L89">            ? l_rules.parallelStream()</span>
+<span class="fc" id="L90">            : l_rules.stream()</span>
+<span class="fc" id="L91">        ).map( i -&gt;</span>
+        {
+
+            // instantiate variables by unification of the rule literal
+<span class="fc" id="L95">            final Set&lt;IVariable&lt;?&gt;&gt; l_variables = p_context.agent().unifier().unify( l_unified, i.identifier() );</span>
+
+            // execute rule
+<span class="fc" id="L98">            final IFuzzyValue&lt;Boolean&gt; l_return = i.execute(</span>
+<span class="fc" id="L99">                false, i.instantiate( p_context.agent(), l_variables.stream() ),</span>
+<span class="fc" id="L100">                Collections.&lt;ITerm&gt;emptyList(),</span>
+<span class="fc" id="L101">                Collections.&lt;ITerm&gt;emptyList()</span>
+            );
+
+            // create rule result with fuzzy- and defuzzificated value and instantiate variable set
+<span class="fc" id="L105">            return new ImmutableTriple&lt;&gt;( p_context.agent().fuzzy().getValue().defuzzify( l_return ), l_return, l_variables );</span>
+
+        } )
+
+         // find successfully ended rule
+<span class="fc" id="L110">         .filter( ImmutableTriple::getLeft )</span>
+<span class="fc" id="L111">         .findFirst()</span>
+
+         // realocate rule instantiated variables back to execution context
+<span class="fc" id="L114">         .map( i -&gt;</span>
+         {
+
+<span class="fc" id="L117">             i.getRight().parallelStream()</span>
+<span class="fc" id="L118">              .filter( j -&gt; j instanceof IRelocateVariable )</span>
+<span class="fc" id="L119">              .forEach( j -&gt; ( (IRelocateVariable) j ).relocate() );</span>
+
+<span class="fc" id="L121">             return i.getMiddle();</span>
+
+         } )
+
+         // otherwise rule fails (default behaviour)
+<span class="fc" id="L126">         .orElse( CFuzzyValue.from( false ) );</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L138" title="All 4 branches missed.">        return ( p_object instanceof IExecution ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

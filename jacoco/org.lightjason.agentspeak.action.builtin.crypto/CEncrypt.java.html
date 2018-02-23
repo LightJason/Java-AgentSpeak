@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CEncrypt.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.crypto</a> &gt; <span class="el_source">CEncrypt.java</span></div><h1>CEncrypt.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.crypto;
+
+import org.apache.commons.lang3.SerializationUtils;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.Serializable;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.List;
+
+
+/**
+ * encrypting algorithm.
+ * Encrypts a set of datasets, which can be complex objects, the first argument of the action
+ * is the encrypting key and all other arguments are datasets, the action returns all encypted
+ * datasets and fails if one encryption fails or on a wrong algorithm
+ *
+ * {@code [Encypt1 | Encrypt2 | Encypt3] = crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
+ */
+<span class="fc" id="L56">public final class CEncrypt extends IBuiltinAction</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5791747611724910332L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L67">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L76">        final Key l_key = p_argument.get( 0 ).raw();</span>
+        final EAlgorithm l_algorithm;
+        try
+        {
+<span class="fc" id="L80">            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );</span>
+        }
+<span class="fc" id="L82">        catch ( final IllegalArgumentException l_exception )</span>
+        {
+<span class="fc" id="L84">            return CFuzzyValue.from( false );</span>
+<span class="fc" id="L85">        }</span>
+
+<span class="fc" id="L87">        return CFuzzyValue.from(</span>
+<span class="fc" id="L88">                   CCommon.flatten( p_argument.stream().skip( 1 ) )</span>
+<span class="fc" id="L89">                          .map( ITerm::&lt;Serializable&gt;raw )</span>
+<span class="fc" id="L90">                          .allMatch( i -&gt; encrypt( l_algorithm, l_key, i, p_return ) )</span>
+        );
+    }
+
+
+    /**
+     * encrypts a datatset
+     *
+     * @param p_algorithm algorithm
+     * @param p_key key
+     * @param p_dataset dataset
+     * @param p_return return argument
+     * @return successful execution
+     */
+    private static boolean encrypt( @Nonnull final EAlgorithm p_algorithm, @Nonnull final Key p_key,
+                                    @Nonnull final Serializable p_dataset, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+        try
+        {
+<span class="fc" id="L109">            p_return.add(</span>
+<span class="fc" id="L110">                CRawTerm.from(</span>
+<span class="fc" id="L111">                    Base64.getEncoder().encodeToString(</span>
+<span class="fc" id="L112">                        p_algorithm.getEncryptCipher( p_key ).doFinal(</span>
+<span class="fc" id="L113">                            SerializationUtils.serialize( p_dataset )</span>
+                        )
+                    )
+                )
+            );
+
+<span class="fc" id="L119">            return true;</span>
+        }
+<span class="nc" id="L121">        catch ( final IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException l_exception )</span>
+        {
+<span class="nc" id="L123">            return false;</span>
+        }
+    }
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

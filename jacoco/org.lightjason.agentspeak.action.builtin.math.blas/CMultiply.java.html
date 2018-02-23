@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CMultiply.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.blas</a> &gt; <span class="el_source">CMultiply.java</span></div><h1>CMultiply.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.blas;
+
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.function.BiFunction;
+
+
+/**
+ * defines matrix- / vector-products.
+ * The action multiplies tupel-wise all unflatten arguments,
+ * the action fails iif the multiply cannot executed e.g. on wrong
+ * input
+ *
+ * {@code [M1|M2|M3] = math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] );}
+ */
+public final class CMultiply extends IAlgebra
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7399930315943440254L;
+
+    /**
+     * ctor
+     */
+    public CMultiply()
+    {
+<span class="fc" id="L62">        super( 4 );</span>
+<span class="fc" id="L63">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L69">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L77">        return CFuzzyValue.from(</span>
+<span class="fc" id="L78">            StreamUtils.windowed(</span>
+<span class="fc" id="L79">                CCommon.flatten( p_argument ),</span>
+                2,
+                2
+<span class="fc" id="L82">            ).parallel().allMatch( i -&gt;</span>
+            {
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                     &amp;&amp; ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )</span>
+<span class="fc" id="L87">                    return CMultiply.&lt;DoubleMatrix1D, DoubleMatrix1D&gt;apply(</span>
+<span class="fc" id="L88">                        i.get( 0 ), i.get( 1 ),</span>
+<span class="fc" id="L89">                        ( u, v ) -&gt; DENSEALGEBRA.multOuter( u, v, null ),</span>
+                        p_return
+                    );
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                     &amp;&amp; ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )</span>
+<span class="fc" id="L95">                    return CMultiply.&lt;DoubleMatrix2D, DoubleMatrix2D&gt;apply(</span>
+<span class="fc" id="L96">                        i.get( 0 ), i.get( 1 ),</span>
+                        DENSEALGEBRA::mult,
+                        p_return
+                    );
+
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                     &amp;&amp; ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )</span>
+<span class="fc" id="L103">                    return CMultiply.&lt;DoubleMatrix2D, DoubleMatrix1D&gt;apply(</span>
+<span class="fc" id="L104">                        i.get( 0 ), i.get( 1 ),</span>
+                        DENSEALGEBRA::mult,
+                        p_return
+                    );
+
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                return ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">                         &amp;&amp; ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">                       &amp;&amp; CMultiply.&lt;DoubleMatrix1D, DoubleMatrix2D&gt;apply(</span>
+<span class="fc" id="L112">                    i.get( 0 ), i.get( 1 ),</span>
+<span class="fc" id="L113">                    ( u, v ) -&gt; DENSEALGEBRA.mult( v, u ),</span>
+                    p_return
+                );
+
+            } )
+        );
+    }
+
+    /**
+     * apply method
+     *
+     * @param p_left first element
+     * @param p_right second element
+     * @param p_function function for the two elements
+     * @param p_return return list
+     * @tparam U first argument type
+     * @tparam V second argument type
+     * @return successful executed
+     */
+    private static &lt;U, V&gt; boolean apply( final ITerm p_left, final ITerm p_right, final BiFunction&lt;U, V, ?&gt; p_function, final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L134">        p_return.add( CRawTerm.from( p_function.apply( p_left.&lt;U&gt;raw(), p_right.&lt;V&gt;raw() ) ) );</span>
+<span class="fc" id="L135">        return true;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

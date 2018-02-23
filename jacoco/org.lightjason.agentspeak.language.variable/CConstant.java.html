@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CConstant.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.variable</a> &gt; <span class="el_source">CConstant.java</span></div><h1>CConstant.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.variable;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+
+
+/**
+ * constant definition
+ *
+ * @tparam T data type
+ */
+public final class CConstant&lt;T&gt; extends CVariable&lt;T&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8207552612082585231L;
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     * @param p_value value
+     */
+    public CConstant( @Nonnull final String p_functor, @Nullable final T p_value )
+    {
+<span class="fc" id="L55">        super( p_functor, p_value );</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     * @param p_value value
+     */
+    public CConstant( @Nonnull final IPath p_functor, @Nullable final T p_value )
+    {
+<span class="fc" id="L66">        super( p_functor, p_value );</span>
+<span class="fc" id="L67">    }</span>
+
+    @Nonnull
+    @Override
+    public final IVariable&lt;T&gt; set( final T p_value )
+    {
+<span class="fc" id="L73">        throw new CIllegalStateException( CCommon.languagestring( this, &quot;set&quot;, m_functor ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IVariable&lt;T&gt; shallowcopy( final IPath... p_prefix )
+    {
+<span class="pc bpc" id="L80" title="1 of 4 branches missed.">        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+<span class="fc" id="L81">               ? new CConstant&lt;&gt;( m_functor, m_value )</span>
+<span class="fc" id="L82">               : new CConstant&lt;&gt;( p_prefix[0].append( m_functor ), m_value );</span>
+    }
+
+
+    @Nonnull
+    @Override
+    public final IVariable&lt;T&gt; shallowcopysuffix()
+    {
+<span class="fc" id="L90">        return new CConstant&lt;&gt;( m_functor.suffix(), m_value );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CPath.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.common</a> &gt; <span class="el_source">CPath.java</span></div><h1>CPath.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.common;
+
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hasher;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+
+/**
+ * class to create a path structure
+ */
+public final class CPath implements IPath
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8502900889333744887L;
+    /**
+     * list with path parts *
+     */
+    private final List&lt;String&gt; m_path;
+    /**
+     * separator of the path elements *
+     */
+<span class="pc" id="L66">    private String m_separator = DEFAULTSEPERATOR;</span>
+
+    /**
+     * copy-ctor with arguments
+     *
+     * @param p_path path object
+     * @param p_varargs string arguments
+     */
+    public CPath( final IPath p_path, final String... p_varargs )
+    {
+<span class="nc" id="L76">        this( p_path );</span>
+<span class="nc" id="L77">        m_path.addAll( Arrays.asList( p_varargs ) );</span>
+<span class="nc" id="L78">        this.normalize();</span>
+<span class="nc" id="L79">    }</span>
+
+    /**
+     * copy-ctor
+     *
+     * @param p_path path object
+     */
+    public CPath( @Nonnull final IPath p_path )
+<span class="fc" id="L87">    {</span>
+<span class="fc" id="L88">        m_path = p_path.stream().collect( CPath.collectorfactory() );</span>
+<span class="fc" id="L89">        m_separator = p_path.separator();</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_varargs path component
+     */
+    public CPath( @Nullable final String... p_varargs )
+<span class="fc" id="L98">    {</span>
+<span class="pc bpc" id="L99" title="2 of 4 branches missed.">        if ( ( Objects.isNull( p_varargs ) ) || ( p_varargs.length == 0 ) )</span>
+<span class="nc" id="L100">            m_path = CPath.listfactory();</span>
+        else
+        {
+<span class="fc" id="L103">            m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) )</span>
+<span class="fc" id="L104">                           .map( String::trim )</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">                           .filter( i -&gt; !i.isEmpty() )</span>
+<span class="fc" id="L106">                           .collect( CPath.collectorfactory() );</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if ( m_path.size() == 0 )</span>
+<span class="nc" id="L108">                throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;pathempty&quot; ) );</span>
+        }
+<span class="fc" id="L110">        this.normalize();</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_stream string collection
+     */
+    public CPath( @Nonnull final Stream&lt;String&gt; p_stream )
+<span class="fc" id="L119">    {</span>
+<span class="fc" id="L120">        m_path = p_stream.collect( CPath.collectorfactory() );</span>
+<span class="fc" id="L121">        this.normalize();</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * private ctor for empty path
+     */
+    private CPath()
+<span class="nc" id="L128">    {</span>
+<span class="nc" id="L129">        m_path = Collections.emptyList();</span>
+<span class="nc" id="L130">    }</span>
+
+    /**
+     * creates a path object from different items
+     *
+     * @param p_varargs list of strings
+     * @return path object
+     */
+    @Nonnull
+    public static IPath createPath( @Nonnull final String... p_varargs )
+    {
+<span class="nc" id="L141">        return new CPath( p_varargs );</span>
+    }
+
+    /**
+     * creates a path object by splitting a string
+     *
+     * @param p_varargs list of string (first element is the seperator)
+     * @return path object
+     */
+    @Nonnull
+    public static IPath createPathWithSeperator( @Nonnull final String... p_varargs )
+    {
+<span class="fc" id="L153">        return new CPath(</span>
+<span class="fc" id="L154">            Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()</span>
+<span class="fc" id="L155">                  .flatMap( i -&gt; Arrays.stream( StringUtils.split( i, p_varargs[0] ) ) )</span>
+        );
+    }
+
+    /**
+     * factor method to build path
+     *
+     * @param p_string input string
+     * @return path
+     */
+    @Nonnull
+    public static IPath from( @Nonnull final String p_string )
+    {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        return p_string.isEmpty() ? EMPTY : createPathWithSeperator( DEFAULTSEPERATOR, p_string );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath append( @Nonnull final IPath p_path )
+    {
+<span class="fc" id="L175">        return new CPath( this ).pushback( p_path );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath append( @Nonnull final String p_path )
+    {
+<span class="nc" id="L182">        return new CPath( this ).pushback( p_path );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath remove( final int p_index )
+    {
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if ( !m_path.isEmpty() )</span>
+<span class="nc" id="L190">            m_path.remove( p_index );</span>
+<span class="fc" id="L191">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath remove( final int p_start, final int p_end )
+    {
+<span class="nc" id="L198">        m_path.subList( p_start, p_end ).clear();</span>
+<span class="nc" id="L199">        return this;</span>
+    }
+
+    @Override
+    public final synchronized boolean endswith( @Nonnull final IPath p_path )
+    {
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        return p_path.size() &lt;= this.size()</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">               &amp;&amp; IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -&gt; this.get( i - p_path.size() ).equals( p_path.get( i ) ) );</span>
+    }
+
+    @Override
+    public final boolean startswith( @Nonnull final IPath p_path )
+    {
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        return p_path.size() &lt;= this.size()</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">               &amp;&amp; IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -&gt; this.get( i ).equals( p_path.get( i ) ) );</span>
+
+    }
+
+    @Nonnull
+    @Override
+    public final String get( final int p_index )
+    {
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        return p_index &lt; 0 ? m_path.get( m_path.size() + p_index ) : m_path.get( p_index );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String path( @Nonnull final String p_separator )
+    {
+<span class="nc" id="L228">        return StringUtils.join( m_path, p_separator );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String path()
+    {
+<span class="fc" id="L235">        return StringUtils.join( m_path, m_separator );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String separator()
+    {
+<span class="fc" id="L242">        return m_separator;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath separator( @Nonnull final String p_separator )
+    {
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        if ( p_separator.isEmpty() )</span>
+<span class="nc" id="L250">            throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;separatornotempty&quot; ) );</span>
+
+<span class="fc" id="L252">        m_separator = p_separator;</span>
+<span class="fc" id="L253">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final synchronized IPath lower()
+    {
+<span class="fc" id="L260">        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -&gt; m_path.set( i, m_path.get( i ).toLowerCase() ) );</span>
+<span class="fc" id="L261">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final synchronized IPath upper()
+    {
+<span class="nc" id="L268">        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -&gt; m_path.set( i, m_path.get( i ).toUpperCase() ) );</span>
+<span class="nc" id="L269">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath subpath( final int p_fromindex )
+    {
+<span class="fc" id="L276">        return this.subpath( p_fromindex, this.size() );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath subpath( final int p_fromindex, final int p_toindex )
+    {
+<span class="fc" id="L283">        return new CPath(</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">            p_toindex == 0</span>
+<span class="fc" id="L285">            ? Stream.empty()</span>
+<span class="fc" id="L286">            : IntStream.range(</span>
+                p_fromindex,
+<span class="fc bfc" id="L288" title="All 2 branches covered.">                p_toindex &gt; 0 ? p_toindex : this.size() + p_toindex</span>
+            )
+<span class="fc" id="L290">            .mapToObj( m_path::get )</span>
+<span class="fc" id="L291">        ).separator( m_separator );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final synchronized String suffix()
+    {
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">        return m_path.isEmpty()</span>
+<span class="nc" id="L299">               ? &quot;&quot;</span>
+<span class="fc" id="L300">               : m_path.get( m_path.size() - 1 );</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L306">        final Hasher l_hasher = org.lightjason.agentspeak.language.CCommon.getTermHashing();</span>
+<span class="fc" id="L307">        m_path.forEach( i -&gt; l_hasher.putString( i, Charsets.UTF_8 ) );</span>
+<span class="fc" id="L308">        return l_hasher.hash().hashCode();</span>
+    }
+
+    @Override
+    @SuppressFBWarnings( &quot;EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS&quot; )
+    public final boolean equals( final Object p_object )
+    {
+<span class="fc bfc" id="L315" title="All 6 branches covered.">        return ( ( p_object instanceof IPath ) &amp;&amp; ( this.hashCode() == p_object.hashCode() ) )</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">               || ( ( p_object instanceof String ) &amp;&amp; ( this.path().hashCode() == p_object.hashCode() ) );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L322">        return this.path();</span>
+    }
+
+    /**
+     * check if the path is empty
+     *
+     * @return empty flag
+     */
+    public final boolean empty()
+    {
+<span class="fc" id="L332">        return m_path.isEmpty();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath pushback( @Nonnull final IPath p_path )
+    {
+<span class="fc" id="L339">        p_path.stream().forEach( m_path::add );</span>
+<span class="fc" id="L340">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath pushback( @Nonnull final String p_path )
+    {
+<span class="fc" id="L347">        this.pushback( new CPath( p_path ) );</span>
+<span class="fc" id="L348">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath pushfront( @Nonnull final String p_path )
+    {
+<span class="nc" id="L355">        this.pushfront( new CPath( p_path ) );</span>
+<span class="nc" id="L356">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final synchronized IPath pushfront( @Nonnull final IPath p_path )
+    {
+<span class="nc" id="L363">        final List&lt;String&gt; l_path = Stream.concat( p_path.stream(), m_path.stream() ).collect( Collectors.toList() );</span>
+<span class="nc" id="L364">        m_path.clear();</span>
+<span class="nc" id="L365">        m_path.addAll( l_path );</span>
+<span class="nc" id="L366">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String removesuffix()
+    {
+<span class="nc bnc" id="L373" title="All 2 branches missed.">        if ( this.empty() )</span>
+<span class="nc" id="L374">            return &quot;&quot;;</span>
+
+<span class="nc" id="L376">        final String l_suffix = this.suffix();</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">        if ( m_path.size() &gt; 0 )</span>
+<span class="nc" id="L378">            m_path.remove( m_path.size() - 1 );</span>
+<span class="nc" id="L379">        return l_suffix;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath reverse()
+    {
+<span class="fc" id="L386">        Collections.reverse( m_path );</span>
+<span class="fc" id="L387">        return this;</span>
+    }
+
+    @Override
+    public final int size()
+    {
+<span class="fc" id="L393">        return m_path.size();</span>
+    }
+
+    @Override
+    public final boolean startswith( final String p_path )
+    {
+<span class="nc" id="L399">        return this.startswith( new CPath( p_path ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;String&gt; stream()
+    {
+<span class="fc" id="L406">        return m_path.stream();</span>
+    }
+
+    @Override
+    public final int compareTo( @Nonnull final IPath p_path )
+    {
+<span class="nc" id="L412">        return Integer.compare( this.hashCode(), p_path.hashCode() );</span>
+    }
+
+    /**
+     * normalize the internal path
+     */
+    private synchronized void normalize()
+    {
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        if ( m_path.isEmpty() )</span>
+<span class="fc" id="L421">            return;</span>
+
+        // create path-copy and nomalize (remove dot, double-dot and empty values)
+<span class="fc" id="L424">        final List&lt;String&gt; l_dotremove = m_path.stream()</span>
+<span class="pc bpc" id="L425" title="3 of 6 branches missed.">                                               .filter( i -&gt; Objects.nonNull( i ) &amp;&amp; ( !i.isEmpty() ) &amp;&amp; ( !&quot;.&quot;.equals( i ) ) )</span>
+<span class="fc" id="L426">                                               .collect( Collectors.toList() );</span>
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">        if ( l_dotremove.isEmpty() )</span>
+<span class="nc" id="L428">            return;</span>
+
+<span class="fc" id="L430">        final String l_last = l_dotremove.get( l_dotremove.size() - 1 );</span>
+<span class="fc" id="L431">        final List&lt;String&gt; l_backremove = IntStream.range( 0, l_dotremove.size() - 1 )</span>
+<span class="fc" id="L432">                                                   .boxed()</span>
+<span class="pc bpc" id="L433" title="1 of 2 branches missed.">                                                   .filter( i -&gt; !l_dotremove.get( i + 1 ).equals( &quot;..&quot; ) )</span>
+<span class="fc" id="L434">                                                   .map( l_dotremove::get )</span>
+<span class="fc" id="L435">                                                   .collect( Collectors.toList() );</span>
+<span class="pc bpc" id="L436" title="1 of 2 branches missed.">        if ( !&quot;..&quot;.equals( l_last ) )</span>
+<span class="fc" id="L437">            l_backremove.add( l_last );</span>
+
+        // clear internal path and add optimized path
+<span class="fc" id="L440">        m_path.clear();</span>
+<span class="fc" id="L441">        m_path.addAll( l_backremove );</span>
+<span class="fc" id="L442">    }</span>
+
+    /**
+     * collector factory
+     *
+     * @return collector
+     */
+    @Nonnull
+    private static Collector&lt;String, List&lt;String&gt;, List&lt;String&gt;&gt; collectorfactory()
+    {
+<span class="fc" id="L452">        return new Collector&lt;String, List&lt;String&gt;, List&lt;String&gt;&gt;()</span>
+<span class="fc" id="L453">        {</span>
+            @Override
+            public final Supplier&lt;List&lt;String&gt;&gt; supplier()
+            {
+<span class="fc" id="L457">                return CopyOnWriteArrayList&lt;String&gt;::new;</span>
+            }
+
+            @Override
+            public final BiConsumer&lt;List&lt;String&gt;, String&gt; accumulator()
+            {
+<span class="fc" id="L463">                return List::add;</span>
+            }
+
+            @Override
+            public final BinaryOperator&lt;List&lt;String&gt;&gt; combiner()
+            {
+<span class="fc" id="L469">                return ( i, j ) -&gt;</span>
+                {
+<span class="nc" id="L471">                    i.addAll( j );</span>
+<span class="nc" id="L472">                    return i;</span>
+                };
+            }
+
+            @Override
+            public final Function&lt;List&lt;String&gt;, List&lt;String&gt;&gt; finisher()
+            {
+<span class="fc" id="L479">                return i -&gt; i;</span>
+            }
+
+            @Override
+            public final Set&lt;Characteristics&gt; characteristics()
+            {
+<span class="fc" id="L485">                return Collections.emptySet();</span>
+            }
+        };
+    }
+
+    /**
+     * list factory
+     *
+     * @return list
+     */
+    @Nonnull
+    private static List&lt;String&gt; listfactory()
+    {
+<span class="nc" id="L498">        return new CopyOnWriteArrayList&lt;&gt;();</span>
+    }
+
+    /**
+     * returns a collector to build a path from strings
+     *
+     * @return collector
+     */
+    public static Collector&lt;String, IPath, IPath&gt; collect()
+    {
+<span class="fc" id="L508">        return new CPathCollector();</span>
+    }
+
+    /**
+     * path collector
+     */
+    private static final class CPathCollector implements Collector&lt;String, IPath, IPath&gt;
+    {
+
+        @Override
+        public final Supplier&lt;IPath&gt; supplier()
+        {
+<span class="fc" id="L520">            return () -&gt; new CPath( Stream.empty() );</span>
+        }
+
+        @Override
+        public final BiConsumer&lt;IPath, String&gt; accumulator()
+        {
+<span class="fc" id="L526">            return IPath::pushback;</span>
+        }
+
+        @Override
+        public final BinaryOperator&lt;IPath&gt; combiner()
+        {
+<span class="fc" id="L532">            return IPath::pushback;</span>
+        }
+
+        @Override
+        public final Function&lt;IPath, IPath&gt; finisher()
+        {
+<span class="fc" id="L538">            return Function.identity();</span>
+        }
+
+        @Override
+        public final Set&lt;Characteristics&gt; characteristics()
+        {
+<span class="fc" id="L544">            return Collections.emptySet();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

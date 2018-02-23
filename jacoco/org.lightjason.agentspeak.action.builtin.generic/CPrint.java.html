@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CPrint.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.generic</a> &gt; <span class="el_source">CPrint.java</span></div><h1>CPrint.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.generic;
+
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.builtin.math.blas.CFormat1D;
+import org.lightjason.agentspeak.action.builtin.math.blas.CFormat2D;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.ObjectInputStream;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+
+/**
+ * action for sum of elements.
+ * Prints a set of messages to the commandline / output-stream, the command
+ * can be used with a variable set of arguments and fails never
+ *
+ * {@code generic/print(&quot;string A=&quot;, A, &quot;-- B=&quot;, B, &quot;-- C=&quot;, C, &quot;-- D=&quot;, D, &quot;-- X=&quot;, X, &quot;-- Y=&quot;, Y);}
+ */
+public final class CPrint extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4271829260928469828L;
+    /**
+     * output stream
+     */
+    private transient PrintStream m_stream;
+    /**
+     * supplier of print stream field
+     */
+    private final ISupplier&lt;PrintStream&gt; m_streamsupplier;
+    /**
+     * argument seperator
+     */
+    private final String m_seperator;
+    /**
+     * list mit individual format calls
+     */
+    private final Set&lt;IFormatter&lt;?&gt;&gt; m_formatter;
+
+
+    /**
+     * ctor
+     *
+     * @throws Exception is thrown on supplierer error
+     * @note generates an output stream to system.out
+     */
+    public CPrint() throws Exception
+    {
+<span class="fc" id="L89">        this( () -&gt; System.out, &quot;   &quot;, new CFormat2D(), new CFormat1D() );</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_streamsupplier print stream supplier
+     * @throws Exception is thrown on supplierer error
+     */
+    public CPrint( @Nonnull final ISupplier&lt;PrintStream&gt; p_streamsupplier ) throws Exception
+    {
+<span class="nc" id="L100">        this( p_streamsupplier, &quot;   &quot;, new CFormat2D(), new CFormat1D() );</span>
+<span class="nc" id="L101">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_streamsupplier print stream supplier
+     * @param p_seperator argument seperator
+     * @param p_formatter formatter elements
+     * @throws Exception is thrown on supplierer error
+     */
+    public CPrint( @Nonnull final ISupplier&lt;PrintStream&gt; p_streamsupplier, @Nonnull final String p_seperator, @Nullable final IFormatter&lt;?&gt;... p_formatter )
+        throws Exception
+    {
+<span class="fc" id="L114">        super( 2 );</span>
+<span class="fc" id="L115">        m_streamsupplier = p_streamsupplier;</span>
+<span class="fc" id="L116">        m_stream = m_streamsupplier.get();</span>
+<span class="fc" id="L117">        m_seperator = p_seperator;</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        m_formatter = p_formatter != null ? new HashSet&lt;&gt;( Arrays.asList( p_formatter ) ) : Collections.emptySet();</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * deserializable call
+     *
+     * @param p_stream object stream
+     * @throws Exception is thrown on io error
+     * @throws Exception is thrown on deserialization error
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws Exception
+    {
+<span class="nc" id="L130">        p_stream.defaultReadObject();</span>
+<span class="nc" id="L131">        m_stream = m_streamsupplier.get();</span>
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * returns the formatter list
+     *
+     * @return formatter set
+     */
+    public final Set&lt;IFormatter&lt;?&gt;&gt; formatter()
+    {
+<span class="fc" id="L141">        return m_formatter;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L150">        m_stream.println( MessageFormat.format( &quot;{0}&quot;, this.format( p_argument ) ) );</span>
+<span class="fc" id="L151">        return CFuzzyValue.from( true );</span>
+    }
+
+    /**
+     * format definition
+     *
+     * @param p_argument arguments list
+     * @return string
+     */
+    @Nonnull
+    private String format( @Nonnull final Collection&lt;ITerm&gt; p_argument )
+    {
+<span class="fc" id="L163">        return p_argument.stream()</span>
+<span class="fc" id="L164">                         .map( ITerm::raw )</span>
+<span class="fc" id="L165">                         .map( i -&gt;</span>
+                         {
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">                             if ( Objects.isNull( i ) )</span>
+<span class="nc" id="L168">                                 return &quot;&quot;;</span>
+
+<span class="fc" id="L170">                             final IFormatter&lt;?&gt; l_formatter = m_formatter.parallelStream()</span>
+<span class="fc" id="L171">                                                                          .filter( j -&gt; j.isAssignableTo( i.getClass() ) )</span>
+<span class="fc" id="L172">                                                                          .limit( 1 )</span>
+<span class="fc" id="L173">                                                                          .findFirst()</span>
+<span class="fc" id="L174">                                                                          .orElse( null );</span>
+
+<span class="fc bfc" id="L176" title="All 2 branches covered.">                             return Objects.isNull( l_formatter ) ? i.toString() : l_formatter.toString( i );</span>
+                         } )
+<span class="fc" id="L178">                         .collect( Collectors.joining( m_seperator ) );</span>
+    }
+
+    /**
+     * interface of a serializable supplier
+     * @tparam T supplier type
+     */
+    @FunctionalInterface
+    public interface ISupplier&lt;T&gt; extends Serializable
+    {
+        /**
+         * supplier exception
+         *
+         * @return item
+         * @throws Exception is thrown on any error
+         */
+        T get() throws Exception;
+    }
+
+
+    /**
+     * formating class
+     *
+     * @tparam any type
+     */
+<span class="fc" id="L203">    public abstract static class IFormatter&lt;T&gt; implements Serializable</span>
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -4997526550642055213L;
+
+        /**
+         * checks if a type is assigneable
+         *
+         * @param p_class assignable class
+         * @return assignable flag
+         */
+        public final boolean isAssignableTo( final Class&lt;?&gt; p_class )
+        {
+<span class="fc" id="L218">            return this.getType().isAssignableFrom( p_class );</span>
+        }
+
+        @Override
+        public final int hashCode()
+        {
+<span class="fc" id="L224">            return this.getType().hashCode();</span>
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+<span class="pc bpc" id="L230" title="2 of 4 branches missed.">            return ( p_object instanceof IFormatter&lt;?&gt; ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+        }
+
+        /**
+         * to string
+         *
+         * @param p_data object type
+         * @return output string
+         */
+        @SuppressWarnings( &quot;unchecked&quot; )
+        public final String toString( final Object p_data )
+        {
+<span class="fc" id="L242">            return this.format( (T) p_data );</span>
+        }
+
+        /**
+         * returns type to match the formatter
+         *
+         * @return class type
+         */
+        protected abstract Class&lt;?&gt; getType();
+
+        /**
+         * formatter call
+         *
+         * @param p_data object type
+         * @return formatted string
+         */
+        protected abstract String format( final T p_data );
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

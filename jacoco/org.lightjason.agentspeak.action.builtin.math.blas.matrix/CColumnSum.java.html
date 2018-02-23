@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CColumnSum.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.blas.matrix</a> &gt; <span class="el_source">CColumnSum.java</span></div><h1>CColumnSum.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
+
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
+import org.lightjason.agentspeak.action.builtin.math.blas.EType;
+import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.IntStream;
+
+
+/**
+ * returns the column-sum of a matrix.
+ * The action returns the column-sum of all matrix objects,
+ * a string value defines a sparse or dense resulting vector,
+ * the action never fails
+ *
+ * {@code
+    [S1|S2] = math/blas/matrix/columnsum( Matrix1, Matrix2 );
+    [S1|S2] = math/blas/matrix/columnsum( Matrix1, Matrix2, &quot;sparse&quot; );
+ * }
+ */
+<span class="fc" id="L56">public final class CColumnSum extends IAlgebra</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6504165889102496768L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L67">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L75">        final EType l_type = CCommon.flatten( p_argument )</span>
+<span class="fc" id="L76">                                    .parallel()</span>
+<span class="fc" id="L77">                                    .filter( i -&gt; CCommon.rawvalueAssignableTo( i, String.class ) )</span>
+<span class="fc" id="L78">                                    .findFirst()</span>
+<span class="fc" id="L79">                                    .map( ITerm::&lt;String&gt;raw )</span>
+<span class="fc" id="L80">                                    .map( EType::from )</span>
+<span class="fc" id="L81">                                    .orElse( EType.DENSE );</span>
+
+<span class="fc" id="L83">        CCommon.flatten( p_argument )</span>
+<span class="fc" id="L84">               .filter( i -&gt; CCommon.rawvalueAssignableTo( i, DoubleMatrix2D.class ) )</span>
+<span class="fc" id="L85">               .map( ITerm::&lt;DoubleMatrix2D&gt;raw )</span>
+<span class="fc" id="L86">               .map( i -&gt; IntStream.range( 0, i.columns() ).boxed().map( i::viewColumn ).mapToDouble( DoubleMatrix1D::zSum ).toArray() )</span>
+<span class="fc" id="L87">               .map( i -&gt; generate( i, l_type ) )</span>
+<span class="fc" id="L88">               .map( CRawTerm::from )</span>
+<span class="fc" id="L89">               .forEach( p_return::add );</span>
+
+<span class="fc" id="L91">        return CFuzzyValue.from( true );</span>
+    }
+
+    /**
+     * generates a vector
+     *
+     * @param p_value values
+     * @param p_type type
+     * @return vector
+     */
+    @Nonnull
+    private static DoubleMatrix1D generate( @Nonnull final double[] p_value, @Nonnull final EType p_type )
+    {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        switch ( p_type )</span>
+        {
+<span class="nc" id="L106">            case SPARSE: return new SparseDoubleMatrix1D( p_value );</span>
+<span class="fc" id="L107">            default : return new DenseDoubleMatrix1D( p_value );</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

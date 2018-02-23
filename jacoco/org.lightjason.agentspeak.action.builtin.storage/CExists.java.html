@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CExists.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.storage</a> &gt; <span class="el_source">CExists.java</span></div><h1>CExists.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.storage;
+
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+
+/**
+ * check if an element exists within the agent-storage.
+ * The action checks if an element is within the action and
+ * returns the boolean flag, the action never fails
+ *
+ * {@code [A|B] = storage/exist( &quot;foo&quot;, &quot;bar&quot; );}
+ */
+public final class CExists extends IStorage
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8505190439682767260L;
+
+    /**
+     * ctor
+     */
+    public CExists()
+    {
+<span class="fc" id="L60">        super();</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CExists( @Nonnull final Function&lt;String, Boolean&gt; p_resolver )
+    {
+<span class="fc" id="L70">        super( p_resolver );</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CExists( @Nullable final String... p_forbidden )
+    {
+<span class="fc" id="L80">        super( p_forbidden );</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden stream with borbidden keys
+     */
+    public CExists( @Nonnull final Stream&lt;String&gt; p_fordbidden )
+    {
+<span class="fc" id="L90">        super( p_fordbidden );</span>
+<span class="fc" id="L91">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L97">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L106">        CCommon.flatten( p_argument )</span>
+<span class="fc" id="L107">               .map( ITerm::&lt;String&gt;raw )</span>
+<span class="fc bfc" id="L108" title="All 4 branches covered.">               .map( i -&gt; ( !m_resolver.apply( i ) ) &amp;&amp; ( p_context.agent().storage().containsKey( i ) ) )</span>
+<span class="fc" id="L109">               .map( CRawTerm::from )</span>
+<span class="fc" id="L110">               .forEach( p_return::add );</span>
+
+<span class="fc" id="L112">        return CFuzzyValue.from( true );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

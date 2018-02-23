@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CVariable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.variable</a> &gt; <span class="el_source">CVariable.java</span></div><h1>CVariable.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.variable;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Objects;
+
+
+/**
+ * default variable definition
+ *
+ * @note variable set is not thread-safe on default
+ */
+public class CVariable&lt;T&gt; implements IVariable&lt;T&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5542578381343603600L;
+    /**
+     * variable / functor name
+     */
+    protected final IPath m_functor;
+    /**
+     * boolean flag, that defines an variable which matchs always
+     */
+    protected final boolean m_any;
+    /**
+     * value of the variable
+     */
+    protected T m_value;
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     */
+    public CVariable( @Nonnull final String p_functor )
+    {
+<span class="fc" id="L72">        this( CPath.from( p_functor ), null );</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     * @param p_value value
+     */
+    public CVariable( @Nonnull final String p_functor, @Nullable final T p_value )
+    {
+<span class="fc" id="L83">        this( CPath.from( p_functor ), p_value );</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     */
+    public CVariable( @Nonnull final IPath p_functor )
+    {
+<span class="nc" id="L93">        this( p_functor, null );</span>
+<span class="nc" id="L94">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     * @param p_value value
+     */
+    @SuppressFBWarnings( &quot;EC_UNRELATED_CLASS_AND_INTERFACE&quot; )
+    public CVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
+<span class="fc" id="L104">    {</span>
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">        m_any = p_functor.empty() || p_functor.equals( &quot;_&quot; );</span>
+<span class="fc" id="L106">        m_functor = p_functor;</span>
+<span class="fc" id="L107">        this.internalset( p_value );</span>
+<span class="fc" id="L108">    }</span>
+
+    @Nonnull
+    @Override
+    public IVariable&lt;T&gt; set( @Nullable final T p_value )
+    {
+<span class="fc" id="L114">        return this.internalset( p_value );</span>
+    }
+
+    @Override
+    public boolean allocated()
+    {
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        return m_value != null;</span>
+    }
+
+    @Override
+    public final boolean any()
+    {
+<span class="fc" id="L126">        return m_any;</span>
+    }
+
+    @Override
+    public boolean mutex()
+    {
+<span class="fc" id="L132">        return false;</span>
+    }
+
+    @Nonnull
+    @Override
+    public IVariable&lt;T&gt; thrownotallocated() throws IllegalStateException
+    {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if ( !this.allocated() )</span>
+<span class="fc" id="L140">            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;notallocated&quot;, m_functor ) );</span>
+
+<span class="fc" id="L142">        return this;</span>
+    }
+
+    @Override
+    public boolean valueassignableto( @Nonnull final Class&lt;?&gt;... p_class )
+    {
+<span class="fc bfc" id="L148" title="All 4 branches covered.">        return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -&gt; i.isAssignableFrom( m_value.getClass() ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public IVariable&lt;T&gt; throwvaluenotassignableto( @Nonnull final Class&lt;?&gt;... p_class ) throws IllegalArgumentException
+    {
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if ( !this.valueassignableto( p_class ) )</span>
+<span class="fc" id="L156">            throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;notassignable&quot;, m_functor, Arrays.asList( p_class ) ) );</span>
+
+<span class="nc" id="L158">        return this;</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L164">        return m_functor.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="pc bpc" id="L170" title="2 of 4 branches missed.">        return ( p_object instanceof IVariable&lt;?&gt; ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public String toString()
+    {
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        return MessageFormat.format( &quot;{0}({1})&quot;, m_functor, Objects.isNull( m_value ) ? &quot;&quot; : m_value );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String functor()
+    {
+<span class="fc" id="L183">        return m_functor.suffix();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath functorpath()
+    {
+<span class="fc" id="L190">        return m_functor.subpath( 0, m_functor.size() - 1 );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath fqnfunctor()
+    {
+<span class="fc" id="L197">        return m_functor;</span>
+    }
+
+    @Override
+    public final boolean hasVariable()
+    {
+<span class="fc" id="L203">        return true;</span>
+    }
+
+    @Override
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public &lt;N&gt; N raw()
+    {
+<span class="fc" id="L210">        return (N) m_value;</span>
+    }
+
+    @Nonnull
+    @Override
+    public IVariable&lt;T&gt; shallowcopy( final IPath... p_prefix )
+    {
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+<span class="fc" id="L218">               ? new CVariable&lt;&gt;( m_functor, m_value )</span>
+<span class="fc" id="L219">               : new CVariable&lt;&gt;( p_prefix[0].append( m_functor ), m_value );</span>
+    }
+
+    @Nonnull
+    @Override
+    public IVariable&lt;T&gt; shallowcopysuffix()
+    {
+<span class="fc" id="L226">        return new CVariable&lt;&gt;( m_functor.suffix(), m_value );</span>
+    }
+
+    @Nonnull
+    @Override
+    public ITerm deepcopy( final IPath... p_prefix )
+    {
+<span class="fc" id="L233">        return new CVariable&lt;&gt;(</span>
+<span class="pc bpc" id="L234" title="1 of 4 branches missed.">            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )</span>
+<span class="fc" id="L235">            ? m_functor</span>
+<span class="fc" id="L236">            : m_functor.append( p_prefix[0] ),</span>
+<span class="fc" id="L237">            org.lightjason.agentspeak.language.CCommon.deepclone( m_value )</span>
+        );
+    }
+
+    @Nonnull
+    @Override
+    public ITerm deepcopysuffix()
+    {
+<span class="fc" id="L245">        return new CVariable&lt;&gt;( m_functor.suffix(), org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );</span>
+    }
+
+    @Override
+    public final int structurehash()
+    {
+<span class="fc" id="L251">        return 0;</span>
+    }
+
+    /**
+     * internel set for avoid any exception throwing
+     *
+     * @param p_value value
+     * @return self reference
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    private IVariable&lt;T&gt; internalset( final T p_value )
+    {
+        // value must be set manually to avoid exception throwing (see CVariable.set)
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        if ( !m_any )</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">            m_value = p_value instanceof ITerm ? ( (ITerm) p_value ).raw() : p_value;</span>
+<span class="fc" id="L266">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

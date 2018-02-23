@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CInTriangle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.shape</a> &gt; <span class="el_source">CInTriangle.java</span></div><h1>CInTriangle.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.shape;
+
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * action check if a point is within a triangle.
+ * The first three tuple of arguments defines the triangle
+ * coordinate (x- / y-position), all other tuples are the tuples
+ * of x- / y-position, the action fails on wrong input
+ *
+ * {@code [In1|In2] = math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 );}
+ * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
+ */
+public final class CInTriangle extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6631790597145945788L;
+
+    /**
+     * ctor
+     */
+    public CInTriangle()
+    {
+<span class="fc" id="L62">        super( 3 );</span>
+<span class="fc" id="L63">    }</span>
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L69">        return 8;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L77">        final List&lt;Double&gt; l_arguments = CCommon.flatten( p_argument )</span>
+<span class="fc" id="L78">                                                .map( ITerm::&lt;Number&gt;raw )</span>
+<span class="fc" id="L79">                                                .mapToDouble( Number::doubleValue )</span>
+<span class="fc" id="L80">                                                .boxed()</span>
+<span class="fc" id="L81">                                                .collect( Collectors.toList() );</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if ( l_arguments.size() &lt; 8 )</span>
+<span class="nc" id="L83">            return CFuzzyValue.from( false );</span>
+
+<span class="fc" id="L85">        StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )</span>
+<span class="fc" id="L86">                   .peek( i -&gt;</span>
+                   {
+<span class="fc" id="L88">                       i.add(</span>
+<span class="fc" id="L89">                           l_arguments.get( 1 ) * l_arguments.get( 4 )</span>
+<span class="fc" id="L90">                           - l_arguments.get( 0 ) * l_arguments.get( 5 )</span>
+<span class="fc" id="L91">                           + ( l_arguments.get( 5 ) - l_arguments.get( 1 ) ) * i.get( 0 )</span>
+<span class="fc" id="L92">                           + ( l_arguments.get( 0 ) - l_arguments.get( 4 ) ) * i.get( 1 )</span>
+                       );
+
+<span class="fc" id="L95">                       i.add(</span>
+<span class="fc" id="L96">                           l_arguments.get( 0 ) * l_arguments.get( 3 )</span>
+<span class="fc" id="L97">                           - l_arguments.get( 1 ) * l_arguments.get( 2 )</span>
+<span class="fc" id="L98">                           + ( l_arguments.get( 1 ) - l_arguments.get( 3 ) ) * i.get( 0 )</span>
+<span class="fc" id="L99">                           + ( l_arguments.get( 2 ) - l_arguments.get( 0 ) ) * i.get( 1 )</span>
+                       );
+<span class="fc" id="L101">                   } )</span>
+<span class="pc bpc" id="L102" title="1 of 4 branches missed.">                   .map( i -&gt; ( i.get( 2 ) &gt; 0 ) &amp;&amp; ( i.get( 3 ) &gt; 0 )</span>
+<span class="fc" id="L103">                              &amp;&amp; ( i.get( 2 ) + i.get( 3 ) &lt; -l_arguments.get( 3 ) * l_arguments.get( 4 )</span>
+<span class="fc" id="L104">                                                             + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )</span>
+<span class="fc" id="L105">                                                             + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">                                                             + l_arguments.get( 2 ) * l_arguments.get( 5 ) )</span>
+                   )
+<span class="fc" id="L108">                   .map( CRawTerm::from )</span>
+<span class="fc" id="L109">                   .forEach( p_return::add );</span>
+
+<span class="fc" id="L111">        return CFuzzyValue.from( true );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution</a> &gt; <span class="el_source">CContext.java</span></div><h1>CContext.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+
+/**
+ * execution context
+ *
+ * @tparam T instance type (plan or rule)
+ */
+public final class CContext implements IContext
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2813094837634259389L;
+    /**
+     * agent of the running context
+     */
+    private final IAgent&lt;?&gt; m_agent;
+    /**
+     * current instance object
+     */
+    private final IInstantiable m_instance;
+    /**
+     * plan variables with their data
+     */
+    private final Map&lt;IPath, IVariable&lt;?&gt;&gt; m_variables;
+
+
+    /**
+     * ctor
+     *
+     * @param p_agent agent
+     * @param p_instance instance object
+     * @param p_variables instance variables
+     */
+    public CContext( @Nonnull final IAgent&lt;?&gt; p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Collection&lt;IVariable&lt;?&gt;&gt; p_variables )
+<span class="fc" id="L72">    {</span>
+<span class="fc" id="L73">        m_agent = p_agent;</span>
+<span class="fc" id="L74">        m_instance = p_instance;</span>
+<span class="fc" id="L75">        m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -&gt; i ) ) );</span>
+<span class="fc" id="L76">    }</span>
+
+    @Nonnull
+    @Override
+    public final IContext duplicate()
+    {
+<span class="fc" id="L82">        return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -&gt; i.shallowcopy() ).collect( Collectors.toSet() ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IAgent&lt;?&gt; agent()
+    {
+<span class="fc" id="L89">        return m_agent;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IInstantiable instance()
+    {
+<span class="fc" id="L96">        return m_instance;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Map&lt;IPath, IVariable&lt;?&gt;&gt; instancevariables()
+    {
+<span class="fc" id="L103">        return m_variables;</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="nc" id="L109">        return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L115" title="All 4 branches missed.">        return ( p_object instanceof IContext ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L121">        return MessageFormat.format( &quot;{0} [{1} | {2} | {3}]&quot;, super.toString(), m_variables.values(), m_instance, m_agent );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

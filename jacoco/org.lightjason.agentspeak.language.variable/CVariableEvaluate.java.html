@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CVariableEvaluate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.variable</a> &gt; <span class="el_source">CVariableEvaluate.java</span></div><h1>CVariableEvaluate.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.variable;
+
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+
+
+/**
+ * structure for creating evaluate variables
+ */
+public final class CVariableEvaluate implements IVariableEvaluate
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7310663182659231951L;
+    /**
+     * content variable with a string or literal
+     */
+    private final IVariable&lt;?&gt; m_variable;
+    /**
+     * optional parameter list
+     */
+    private final List&lt;ITerm&gt; m_parameter;
+
+    /**
+     * ctor
+     *
+     * @param p_variable variable
+     */
+    public CVariableEvaluate( @Nonnull final IVariable&lt;?&gt; p_variable )
+    {
+<span class="nc" id="L66">        this( p_variable, Collections.&lt;ITerm&gt;emptyList() );</span>
+<span class="nc" id="L67">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_variable variable
+     * @param p_parameter optional parameter list
+     */
+    public CVariableEvaluate( @Nonnull final IVariable&lt;?&gt; p_variable, @Nonnull final List&lt;ITerm&gt; p_parameter )
+<span class="fc" id="L76">    {</span>
+<span class="fc" id="L77">        m_variable = p_variable;</span>
+<span class="fc" id="L78">        m_parameter = Collections.unmodifiableList( p_parameter );</span>
+<span class="fc" id="L79">    }</span>
+
+
+    @Override
+    public final boolean mutex()
+    {
+<span class="fc" id="L85">        return m_variable.mutex();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ILiteral evaluate( final IContext p_context )
+    {
+<span class="fc" id="L92">        final IVariable&lt;?&gt; l_variable = CCommon.replaceFromContext( p_context, m_variable ).term();</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if ( !l_variable.allocated() )</span>
+<span class="nc" id="L94">            throw new CIllegalStateException();</span>
+
+        // if variable is a string
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if ( l_variable.valueassignableto( String.class ) )</span>
+<span class="fc" id="L98">            return this.fromString( l_variable.raw(), p_context );</span>
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if ( m_variable.valueassignableto( ILiteral.class ) )</span>
+<span class="fc" id="L101">            return this.fromLiteral( l_variable.raw(), p_context );</span>
+
+<span class="nc" id="L103">        throw new CIllegalStateException();</span>
+    }
+
+    @Nonnull
+    @Override
+    public Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L110">        return Stream.concat(</span>
+<span class="fc" id="L111">            Stream.of( m_variable ),</span>
+<span class="fc" id="L112">            m_parameter.parallelStream()</span>
+<span class="fc" id="L113">                       .filter( i -&gt; i instanceof IVariable&lt;?&gt; )</span>
+<span class="fc" id="L114">                       .map( ITerm::term )</span>
+        );
+    }
+
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L122">        return m_variable.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L128" title="All 4 branches missed.">        return ( p_object instanceof IVariableEvaluate ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        return MessageFormat.format( &quot;{0}{1}&quot;, m_variable, m_parameter.isEmpty() ? &quot;&quot; : m_parameter );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final String functor()
+    {
+<span class="nc" id="L141">        return m_variable.functor();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath functorpath()
+    {
+<span class="nc" id="L148">        return m_variable.functorpath();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPath fqnfunctor()
+    {
+<span class="nc" id="L155">        return m_variable.fqnfunctor();</span>
+    }
+
+    @Override
+    public final boolean hasVariable()
+    {
+<span class="nc" id="L161">        return true;</span>
+    }
+
+    @Override
+    public final &lt;T&gt; T raw()
+    {
+<span class="nc" id="L167">        return m_variable.raw();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ITerm deepcopy( final IPath... p_prefix )
+    {
+<span class="nc" id="L174">        return m_variable.deepcopy( p_prefix );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final ITerm deepcopysuffix()
+    {
+<span class="nc" id="L181">        return m_variable.deepcopysuffix();</span>
+    }
+
+    @Override
+    public final int structurehash()
+    {
+<span class="nc" id="L187">        return 0;</span>
+    }
+
+    /**
+     * creates the result literal from an input string
+     *
+     * @param p_value input string (literal functor)
+     * @param p_context execution context
+     * @return result literal
+     */
+    private ILiteral fromString( final String p_value, final IContext p_context )
+    {
+<span class="fc" id="L199">        return CLiteral.from( p_value, m_parameter ).unify( p_context );</span>
+    }
+
+    /**
+     * creates the result literal from an input literal
+     *
+     * @param p_literal input literal
+     * @param p_context execution context
+     * @return result literal
+     */
+    private ILiteral fromLiteral( final ILiteral p_literal, final IContext p_context )
+    {
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        return m_parameter.isEmpty()</span>
+<span class="fc" id="L212">            ? p_literal.unify( p_context )</span>
+            : new CLiteral(
+<span class="nc" id="L214">                p_literal.hasAt(),</span>
+<span class="nc" id="L215">                p_literal.negated(),</span>
+<span class="nc" id="L216">                p_literal.fqnfunctor(),</span>
+                m_parameter
+<span class="nc" id="L218">            ).unify( p_context );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

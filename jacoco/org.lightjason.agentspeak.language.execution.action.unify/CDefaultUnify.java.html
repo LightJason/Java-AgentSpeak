@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CDefaultUnify.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.action.unify</a> &gt; <span class="el_source">CDefaultUnify.java</span></div><h1>CDefaultUnify.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.action.unify;
+
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+
+/**
+ * unify action
+ *
+ * @note parallel is ignored
+ */
+public class CDefaultUnify extends IBaseExecution&lt;ILiteral&gt;
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2858968840990978860L;
+    /**
+     * parallel unification
+     */
+    protected final boolean m_parallel;
+    /**
+     * number of variables
+     */
+    protected final long m_variablenumber;
+
+    /**
+     * ctor
+     *
+     * @param p_parallel parallel execution
+     * @param p_literal literal
+     */
+    public CDefaultUnify( final boolean p_parallel,  @Nonnull final ILiteral p_literal )
+    {
+<span class="fc" id="L71">        super( p_literal );</span>
+<span class="fc" id="L72">        m_parallel = p_parallel;</span>
+
+        // check unique variables - get variable frequency especially any variable &quot;_&quot;
+<span class="fc" id="L75">        final Map&lt;IVariable&lt;?&gt;, Integer&gt; l_frequency = CCommon.variablefrequency( p_literal );</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if ( l_frequency.isEmpty() )</span>
+<span class="nc" id="L77">            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;novariable&quot; ) );</span>
+
+<span class="pc bpc" id="L79" title="2 of 6 branches missed.">        if ( l_frequency.entrySet().stream().filter( i -&gt; !i.getKey().any() ).anyMatch( i -&gt; i.getValue() &gt; 1 ) )</span>
+<span class="nc" id="L80">            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;uniquevariable&quot; ) );</span>
+
+        // count variables
+<span class="fc" id="L83">        m_variablenumber = l_frequency.size();</span>
+<span class="fc" id="L84">    }</span>
+
+    @Override
+    public String toString()
+    {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        return MessageFormat.format( &quot;{0}&gt;&gt;{1}&quot;, m_parallel ? &quot;@&quot; : &quot;&quot;, m_value );</span>
+    }
+
+    @Nonnull
+    @Override
+    public IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L98">        return p_context.agent().unifier().unify(</span>
+            p_context,
+            m_value,
+            m_variablenumber,
+            IExpression.EMPTY,
+            m_parallel
+        );
+    }
+
+    @Nonnull
+    @Override
+    public Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L111">        return CCommon.flattenrecursive( m_value.values() ).filter( i -&gt; i instanceof IVariable&lt;?&gt; ).map( ITerm::term );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

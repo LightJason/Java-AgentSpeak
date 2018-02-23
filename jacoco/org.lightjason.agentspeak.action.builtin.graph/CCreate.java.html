@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CCreate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.graph</a> &gt; <span class="el_source">CCreate.java</span></div><h1>CCreate.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.graph;
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+
+/**
+ * creates a graph data structure.
+ * The action create a graph data structure with nodes and edges,
+ * arguments are strings with the name of the graph type ( SPARSE |
+ * SPARSEMULTI | DIRECTEDSPARSE | DIRECTEDSPARSEMULTI | UNDIRECTEDSPARSE |
+ * UNDIRECTEDSPARSEMULTI ) on a wrong name,
+ * a sparse graph is created, the action never fails
+ *
+ * {@code [G1|G2] = graph/create( &quot;sparse&quot;, &quot;directedsparse&quot; );}
+ *
+ * @see https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
+ */
+<span class="fc" id="L64">public class CCreate extends IBuiltinAction</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8220165218772387059L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L75">        return 1;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L84">        CCommon.flatten( p_argument )</span>
+<span class="fc" id="L85">               .map( ITerm::&lt;String&gt;raw )</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">               .map( i -&gt; EGraphTypes.exist( i ) ? EGraphTypes.from( i ) : EGraphTypes.SPARSE )</span>
+<span class="fc" id="L87">               .map( EGraphTypes::get )</span>
+<span class="fc" id="L88">               .map( CRawTerm::from )</span>
+<span class="fc" id="L89">               .forEach( p_return::add );</span>
+
+<span class="fc" id="L91">        return CFuzzyValue.from( true );</span>
+    }
+
+
+    /**
+     * graph types
+     */
+<span class="fc" id="L98">    private enum EGraphTypes</span>
+    {
+<span class="fc" id="L100">        SPARSE,</span>
+<span class="fc" id="L101">        SPARSEMULTI,</span>
+<span class="fc" id="L102">        DIRECTEDSPARSE,</span>
+<span class="fc" id="L103">        DIRECTEDSPARSEMULTI,</span>
+<span class="fc" id="L104">        UNDIRECTEDSPARSE,</span>
+<span class="fc" id="L105">        UNDIRECTEDSPARSEMULTI;</span>
+
+        /**
+         * graph names
+         */
+<span class="fc" id="L110">        private static final Set&lt;String&gt; TYPES = Collections.unmodifiableSet(</span>
+<span class="fc" id="L111">            Arrays.stream( EGraphTypes.values() )</span>
+<span class="fc" id="L112">                  .map( i -&gt; i.name().toUpperCase( Locale.ROOT ) )</span>
+<span class="fc" id="L113">                  .collect( Collectors.toSet() )</span>
+        );
+
+        /**
+         * returns a new graph instance
+         *
+         * @return graph instance
+         */
+        @Nonnull
+        public final Graph&lt;?, ?&gt; get()
+        {
+<span class="pc bpc" id="L124" title="1 of 7 branches missed.">            switch ( this )</span>
+            {
+                case SPARSE:
+<span class="fc" id="L127">                    return new SparseGraph&lt;&gt;();</span>
+
+                case SPARSEMULTI:
+<span class="fc" id="L130">                    return new SparseMultigraph&lt;&gt;();</span>
+
+                case DIRECTEDSPARSE:
+<span class="fc" id="L133">                    return new DirectedSparseGraph&lt;&gt;();</span>
+
+                case DIRECTEDSPARSEMULTI:
+<span class="fc" id="L136">                    return new DirectedSparseMultigraph&lt;&gt;();</span>
+
+                case UNDIRECTEDSPARSE:
+<span class="fc" id="L139">                    return new UndirectedSparseGraph&lt;&gt;();</span>
+
+                case UNDIRECTEDSPARSEMULTI:
+<span class="fc" id="L142">                    return new UndirectedSparseMultigraph&lt;&gt;();</span>
+
+                default:
+<span class="nc" id="L145">                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;unknown&quot;, this ) );</span>
+            }
+        }
+
+        /**
+         * checks if a key exists
+         *
+         * @param p_value name value
+         * @return existance flag
+         */
+        public static boolean exist( @Nonnull final String p_value )
+        {
+<span class="fc" id="L157">            return TYPES.contains( p_value.toUpperCase( Locale.ROOT ) );</span>
+        }
+
+        /**
+         * returns graph type
+         *
+         * @param p_value name value
+         * @return graph type
+         */
+        @Nonnull
+        public static EGraphTypes from( @Nonnull final String p_value )
+        {
+<span class="fc" id="L169">            return EGraphTypes.valueOf( p_value.toUpperCase( Locale.ROOT ) );</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

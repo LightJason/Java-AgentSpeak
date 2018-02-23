@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IConstraint.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.math.linearprogram</a> &gt; <span class="el_source">IConstraint.java</span></div><h1>IConstraint.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.math.linearprogram;
+
+import org.apache.commons.math3.optim.linear.Relationship;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+
+import javax.annotation.Nonnull;
+import java.util.Locale;
+
+
+/**
+ * abstract class for constraint actions
+ */
+public abstract class IConstraint extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1078912058401537801L;
+
+    /**
+     * ctor
+     */
+    public IConstraint()
+    {
+<span class="fc" id="L50">        super( 3 );</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * returns the enum of a relationship by a string value
+     *
+     * @param p_symbol string symbol
+     * @return relationship
+     */
+    @Nonnull
+    protected final Relationship getRelation( @Nonnull final String p_symbol )
+    {
+<span class="pc bpc" id="L62" title="2 of 4 branches missed.">        switch ( p_symbol.trim().toLowerCase( Locale.ROOT ) )</span>
+        {
+            case &quot;less&quot;:
+            case &quot;less-equal&quot;:
+            case &quot;leq&quot;:
+            case &quot;&lt;&quot;:
+            case &quot;&lt;=&quot;:
+<span class="nc" id="L69">                return Relationship.LEQ;</span>
+
+            case &quot;greater&quot;:
+            case &quot;greater-equal&quot;:
+            case &quot;geq&quot;:
+            case &quot;&gt;&quot;:
+            case &quot;&gt;=&quot;:
+<span class="fc" id="L76">                return Relationship.GEQ;</span>
+
+            case &quot;equal&quot;:
+            case &quot;eq&quot;:
+            case &quot;=&quot;:
+            case &quot;==&quot;:
+<span class="fc" id="L82">                return Relationship.EQ;</span>
+
+            default:
+<span class="nc" id="L85">                throw new CIllegalArgumentException( CCommon.languagestring( IConstraint.class, &quot;relation&quot;, p_symbol ) );</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

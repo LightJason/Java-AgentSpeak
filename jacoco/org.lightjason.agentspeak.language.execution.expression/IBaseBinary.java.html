@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseBinary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expression</a> &gt; <span class="el_source">IBaseBinary.java</span></div><h1>IBaseBinary.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expression;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+
+
+/**
+ * binary expression
+ */
+public abstract class IBaseBinary implements IBinaryExpression
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1630029294068548691L;
+    /**
+     * expression operator
+     */
+    protected final EOperator m_operator;
+    /**
+     * left-hand-side argument
+     */
+    protected final IExpression m_lefthandside;
+    /**
+     * right-hand-side argument
+     */
+    protected final IExpression m_righthandside;
+
+
+
+    /**
+     * ctor
+     *
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side argument
+     * @param p_righthandside right-hand-side
+     */
+    protected IBaseBinary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
+<span class="fc" id="L71">    {</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if ( !p_operator.isBinary() )</span>
+<span class="nc" id="L73">            throw new CIllegalArgumentException( CCommon.languagestring( IBaseBinary.class, &quot;operator&quot;, p_operator ) );</span>
+
+<span class="fc" id="L75">        m_operator = p_operator;</span>
+<span class="fc" id="L76">        m_lefthandside = p_lefthandside;</span>
+<span class="fc" id="L77">        m_righthandside = p_righthandside;</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * execute expression arguments
+     *
+     * @param p_parallel parallel execution
+     * @param p_context execution context
+     * @param p_argument returning arguments of the expressions
+     * @return boolean of successfully execution
+     * @throws IllegalArgumentException is thrown if more than two arguments are returned
+     */
+    protected final boolean executearguments( final boolean p_parallel, @Nonnull final IContext p_context,
+                                              @Nonnull final List&lt;ITerm&gt; p_argument
+    ) throws IllegalArgumentException
+    {
+        // run left-hand- and right-hand-side argument
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if ( ( !m_lefthandside.execute( p_parallel, p_context, Collections.&lt;ITerm&gt;emptyList(), p_argument ).value() )</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">             || ( p_argument.isEmpty() ) )</span>
+<span class="fc" id="L96">            return false;</span>
+
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if ( ( !m_righthandside.execute( p_parallel, p_context, Collections.&lt;ITerm&gt;emptyList(), p_argument ).value() )</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">             || ( p_argument.isEmpty() ) )</span>
+<span class="nc" id="L100">            return false;</span>
+
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if ( p_argument.size() != 2 )</span>
+<span class="nc" id="L103">            throw new CIllegalArgumentException( CCommon.languagestring( IBaseBinary.class, &quot;argumentnumber&quot; ) );</span>
+
+<span class="fc" id="L105">        return true;</span>
+    }
+
+
+    @Nonnull
+    @Override
+    public final IExpression leftHandSide()
+    {
+<span class="nc" id="L113">        return m_lefthandside;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IExpression rightHandSide()
+    {
+<span class="nc" id="L120">        return m_righthandside;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final EOperator operator()
+    {
+<span class="nc" id="L127">        return m_operator;</span>
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L133">        return m_lefthandside.hashCode() ^ m_righthandside.hashCode() ^ m_operator.hashCode();</span>
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L139" title="All 4 branches missed.">        return ( p_object instanceof IExpression ) &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="fc" id="L145">        return MessageFormat.format( &quot;{0} {1} {2}&quot;, m_lefthandside, m_operator, m_righthandside );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L152">        return Stream.concat( m_lefthandside.variables(), m_righthandside.variables() );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EOperator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expressionbinary</a> &gt; <span class="el_source">EOperator.java</span></div><h1>EOperator.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expressionbinary;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CSyntaxErrorException;
+
+import javax.annotation.Nonnull;
+import java.util.function.BiFunction;
+
+
+/**
+ * binary operator
+ */
+<span class="nc" id="L37">public enum EOperator implements BiFunction&lt;Number, Number, Number&gt;</span>
+{
+<span class="nc" id="L39">    ASSIGNINCREMENT( &quot;+=&quot; ),</span>
+<span class="nc" id="L40">    ASSIGNDECREMENT( &quot;-=&quot; ),</span>
+<span class="nc" id="L41">    ASSIGNMULTIPLY( &quot;*=&quot; ),</span>
+<span class="nc" id="L42">    ASSIGNDIVIDE( &quot;/=&quot; ),</span>
+<span class="nc" id="L43">    ASSIGNMODULO( &quot;%=&quot; ),</span>
+<span class="nc" id="L44">    ASSIGNPOW( &quot;^=&quot; );</span>
+
+    /**
+     * operator
+     */
+    private final String m_operator;
+
+    /**
+     * ctor
+     *
+     * @param p_operator operator string
+     */
+    EOperator( final String p_operator )
+<span class="nc" id="L57">    {</span>
+<span class="nc" id="L58">        m_operator = p_operator;</span>
+<span class="nc" id="L59">    }</span>
+
+    @Override
+    public final Number apply( final Number p_lhs, final Number p_rhs )
+    {
+<span class="nc bnc" id="L64" title="All 7 branches missed.">        switch ( this )</span>
+        {
+            case ASSIGNINCREMENT:
+<span class="nc" id="L67">                return p_lhs.doubleValue() + p_rhs.doubleValue();</span>
+
+            case ASSIGNDECREMENT:
+<span class="nc" id="L70">                return p_lhs.doubleValue() - p_rhs.doubleValue();</span>
+
+            case ASSIGNMULTIPLY:
+<span class="nc" id="L73">                return p_lhs.doubleValue() * p_rhs.doubleValue();</span>
+
+            case ASSIGNDIVIDE:
+<span class="nc" id="L76">                return p_lhs.doubleValue() * p_rhs.doubleValue();</span>
+
+            case ASSIGNMODULO:
+<span class="nc" id="L79">                return p_lhs.longValue() % p_rhs.longValue();</span>
+
+            case ASSIGNPOW:
+<span class="nc" id="L82">                return Math.pow( p_lhs.doubleValue(), p_rhs.doubleValue() );</span>
+
+            default:
+<span class="nc" id="L85">                throw new CSyntaxErrorException( CCommon.languagestring( this, &quot;operatorunknown&quot;, this ) );</span>
+        }
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L92">        return m_operator;</span>
+    }
+
+    /**
+     * returns operator from string
+     *
+     * @param p_value string
+     * @return operator
+     */
+    public static EOperator from( @Nonnull final String p_value )
+    {
+<span class="nc bnc" id="L103" title="All 7 branches missed.">        switch ( p_value )</span>
+        {
+            case &quot;+=&quot;:
+<span class="nc" id="L106">                return ASSIGNINCREMENT;</span>
+
+            case &quot;-=&quot;:
+<span class="nc" id="L109">                return ASSIGNDECREMENT;</span>
+
+            case &quot;*=&quot;:
+<span class="nc" id="L112">                return ASSIGNMULTIPLY;</span>
+
+            case &quot;/=&quot;:
+<span class="nc" id="L115">                return ASSIGNDIVIDE;</span>
+
+            case &quot;%=&quot;:
+<span class="nc" id="L118">                return ASSIGNMODULO;</span>
+
+            case &quot;^=&quot;:
+<span class="nc" id="L121">                return ASSIGNPOW;</span>
+
+            default:
+<span class="nc" id="L124">                throw new CIllegalArgumentException( CCommon.languagestring( EOperator.class, &quot;notexist&quot;, p_value ) );</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

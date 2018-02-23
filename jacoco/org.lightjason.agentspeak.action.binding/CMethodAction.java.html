@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CMethodAction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.binding</a> &gt; <span class="el_source">CMethodAction.java</span></div><h1>CMethodAction.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.binding;
+
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * action for binding a method.
+ * action uses agent for object binding
+ */
+public final class CMethodAction extends IBaseAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -507236338411690842L;
+    /**
+     * name of the action
+     */
+    private final IPath m_name;
+    /**
+     * number of arguments
+     */
+    private final int m_arguments;
+    /**
+     * method reference
+     */
+    private transient Method m_method;
+    /**
+     * method handle
+     */
+    private transient MethodHandle m_methodhandle;
+
+
+    /**
+     * ctor
+     *
+     * @param p_method method reference
+     * @throws IllegalAccessException on method access error
+     */
+    public CMethodAction( @Nonnull final Method p_method ) throws IllegalAccessException
+<span class="fc" id="L87">    {</span>
+<span class="fc" id="L88">        m_method = p_method;</span>
+<span class="fc" id="L89">        m_arguments = m_method.getParameterCount();</span>
+<span class="fc" id="L90">        m_name = CPath.from(</span>
+<span class="pc bpc" id="L91" title="3 of 4 branches missed.">            m_method.isAnnotationPresent( IAgentActionName.class ) &amp;&amp; !m_method.getAnnotation( IAgentActionName.class ).name().isEmpty()</span>
+<span class="nc" id="L92">            ? m_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )</span>
+<span class="fc" id="L93">            : m_method.getName().toLowerCase( Locale.ROOT )</span>
+        );
+<span class="fc" id="L95">        m_methodhandle = MethodHandles.lookup().unreflect( m_method );</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * serialize call
+     *
+     * @param p_stream object stream
+     * @throws IOException error on writing object data
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+<span class="nc" id="L106">        p_stream.defaultWriteObject();</span>
+
+        // serialize method handle
+<span class="nc" id="L109">        p_stream.writeObject( m_method.getDeclaringClass() );</span>
+<span class="nc" id="L110">        p_stream.writeUTF( m_method.getName() );</span>
+<span class="nc" id="L111">        p_stream.writeObject( m_method.getParameterTypes() );</span>
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * deserializable call
+     *
+     * @param p_stream object stream
+     * @throws IOException is thrown on io error
+     * @throws ClassNotFoundException is thrown on deserialization error
+     * @throws NoSuchMethodException is thrown on method deserialization
+     * @throws IllegalAccessException is thrown on creating method handle
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException
+    {
+<span class="nc" id="L126">        p_stream.defaultReadObject();</span>
+
+        // deserialize method handle
+<span class="nc" id="L129">        m_method = ( (Class&lt;?&gt;) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class&lt;?&gt;[])p_stream.readObject() );</span>
+<span class="nc" id="L130">        m_methodhandle = MethodHandles.lookup().unreflect( m_method );</span>
+<span class="nc" id="L131">    }</span>
+
+    @Nonnull
+    @Override
+    public final IPath name()
+    {
+<span class="fc" id="L137">        return m_name;</span>
+    }
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="nc" id="L144">        return m_arguments;</span>
+    }
+
+    @Nonnull
+    @Override
+    public IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+        try
+        {
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            return m_arguments == 0</span>
+
+<span class="nc" id="L157">                ? CMethodAction.returnvalues(</span>
+<span class="nc" id="L158">                m_methodhandle.invoke( p_context.agent() ),</span>
+                p_return
+                )
+
+<span class="nc" id="L162">                : CMethodAction.returnvalues(</span>
+<span class="nc" id="L163">                    m_methodhandle.invokeWithArguments(</span>
+<span class="nc" id="L164">                        Stream.concat(</span>
+<span class="nc" id="L165">                            Stream.of( p_context.agent() ),</span>
+<span class="nc" id="L166">                            p_argument.stream().map( ITerm::raw )</span>
+<span class="nc" id="L167">                        ).collect( Collectors.toList() )</span>
+                    ),
+                    p_return
+                );
+        }
+<span class="nc" id="L172">        catch ( final Throwable l_throwable )</span>
+        {
+<span class="nc" id="L174">            LOGGER.warning( MessageFormat.format( &quot;binding method [{0}] throws error [{1}] in agent: &quot;, m_name, l_throwable, p_context.agent() ) );</span>
+<span class="nc" id="L175">            return CFuzzyValue.from( false );</span>
+        }
+    }
+
+    /**
+     * creates the returns values of the execution
+     *
+     * @param p_result return object of the invoke call
+     * @param p_return return argument list
+     * @return execution return
+     */
+    @Nonnull
+    private static IFuzzyValue&lt;Boolean&gt; returnvalues( @Nullable final Object p_result, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+        // void result of the execution
+<span class="nc bnc" id="L190" title="All 4 branches missed.">        if ( ( Objects.isNull( p_result ) ) || ( void.class.equals( p_result.getClass() ) ) )</span>
+<span class="nc" id="L191">            return CFuzzyValue.from( true );</span>
+
+        // otherwise object is returned
+<span class="nc" id="L194">        p_return.add( CRawTerm.from( p_result ) );</span>
+<span class="nc" id="L195">        return CFuzzyValue.from( true );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

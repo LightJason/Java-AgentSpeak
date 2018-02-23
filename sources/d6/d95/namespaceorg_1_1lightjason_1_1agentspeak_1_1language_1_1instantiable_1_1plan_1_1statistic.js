@@ -1,0 +1,5 @@
+var namespaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1instantiable_1_1plan_1_1statistic =
+[
+    [ "CPlanStatistic", "dd/de4/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1instantiable_1_1plan_1_1statistic_1_1CPlanStatistic.htm", "dd/de4/classorg_1_1lightjason_1_1agentspeak_1_1language_1_1instantiable_1_1plan_1_1statistic_1_1CPlanStatistic" ],
+    [ "IPlanStatistic", "dc/d70/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1instantiable_1_1plan_1_1statistic_1_1IPlanStatistic.htm", "dc/d70/interfaceorg_1_1lightjason_1_1agentspeak_1_1language_1_1instantiable_1_1plan_1_1statistic_1_1IPlanStatistic" ]
+];

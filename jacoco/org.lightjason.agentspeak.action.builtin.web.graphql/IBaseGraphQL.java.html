@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IBaseGraphQL.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.web.graphql</a> &gt; <span class="el_source">IBaseGraphQL.java</span></div><h1>IBaseGraphQL.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.web.graphql;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
+import org.lightjason.agentspeak.action.builtin.web.rest.IBaseRest;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * base graphql access
+ */
+public abstract class IBaseGraphQL extends IBaseWeb
+{
+    /**
+     * json mapper
+     */
+<span class="fc" id="L56">    protected static final ObjectMapper JSONMAPPER = new ObjectMapper();</span>
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4140550516932255685L;
+
+
+    /**
+     * ctor
+     *
+     * @param p_length length
+     */
+    protected IBaseGraphQL( final int p_length )
+    {
+<span class="fc" id="L70">        super( p_length );</span>
+<span class="fc" id="L71">    }</span>
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L76">        return 1;</span>
+    }
+
+    /**
+     * executes graphql query and returns a stream of terms of the result
+     *
+     * @param p_url endpoint url
+     * @param p_query query
+     * @return result literal stream
+     * @throws IOException is thrown on parsing and connection errors
+     */
+    protected static Stream&lt;ITerm&gt; sendquery( @Nonnull final String p_url, @Nonnull final String p_query ) throws IOException
+    {
+<span class="fc" id="L89">        final HttpPost l_post = httppost( p_url );</span>
+<span class="fc" id="L90">        l_post.setHeader( &quot;Content-Type&quot;, &quot;application/json&quot; );</span>
+<span class="fc" id="L91">        l_post.setEntity( new StringEntity( p_query ) );</span>
+
+<span class="fc" id="L93">        return flatterm( JSONMAPPER.readValue( httppostexecute( l_post ), Map.class ) );</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L101">        final List&lt;ITerm&gt; l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if ( l_argument.size() &lt; 3 )</span>
+<span class="nc" id="L103">            return CFuzzyValue.from( false );</span>
+
+        try
+        {
+<span class="fc" id="L107">            p_return.add(</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                p_argument.size() == 3</span>
+<span class="fc" id="L109">                ? CLiteral.from( l_argument.get( l_argument.size() - 1 ).&lt;String&gt;raw(), sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) ) )</span>
+<span class="nc" id="L110">                : IBaseRest.baseliteral(</span>
+<span class="nc" id="L111">                    l_argument.stream().skip( 2 ).map( ITerm::&lt;String&gt;raw ),</span>
+<span class="nc" id="L112">                    sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) )</span>
+                )
+            );
+        }
+<span class="nc" id="L116">        catch ( final IOException l_exception )</span>
+        {
+<span class="nc" id="L118">            throw new UncheckedIOException( l_exception );</span>
+<span class="fc" id="L119">        }</span>
+
+<span class="fc" id="L121">        return CFuzzyValue.from( true );</span>
+    }
+
+    /**
+     * converts a term argument to a graphql query
+     *
+     * @param p_argument query argument
+     * @return graphql query
+     * @note query must be encapsulate as string in a json object with key query
+     */
+    @Nonnull
+    private String query( @Nonnull final ITerm p_argument )
+    {
+<span class="fc" id="L134">        return MessageFormat.format(</span>
+            &quot;'{'\&quot;query\&quot; : \&quot;{0}\&quot;'}'&quot;,
+<span class="fc" id="L136">            this.argumentquery( p_argument ).replace( &quot;\&quot;&quot;, &quot;\\\&quot;&quot; )</span>
+        );
+    }
+
+    /**
+     * convert argument into graphql query
+     *
+     * @param p_argument query argument
+     * @return query string
+     */
+    protected abstract String argumentquery( @Nonnull final ITerm p_argument );
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

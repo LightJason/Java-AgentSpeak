@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CAdditive.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution.expression.numerical</a> &gt; <span class="el_source">CAdditive.java</span></div><h1>CAdditive.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution.expression.numerical;
+
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.expression.EOperator;
+import org.lightjason.agentspeak.language.execution.expression.IBaseBinary;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
+
+
+/**
+ * additve binary expression
+ */
+public final class CAdditive extends IBaseBinary
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 220138218890736772L;
+
+    /**
+     * ctor
+     *
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side argument
+     * @param p_righthandside right-hand-side
+     */
+    public CAdditive( final EOperator p_operator, final IExpression p_lefthandside,
+                      final IExpression p_righthandside
+    )
+    {
+<span class="fc" id="L63">        super( p_operator, p_lefthandside, p_righthandside );</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if ( !m_operator.isAdditive() )</span>
+<span class="nc" id="L65">            throw new CIllegalArgumentException( CCommon.languagestring( this, &quot;operator&quot;, m_operator ) );</span>
+<span class="fc" id="L66">    }</span>
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return )
+    {
+<span class="fc" id="L73">        final List&lt;ITerm&gt; l_argument = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if ( !this.executearguments( p_parallel, p_context, l_argument ) )</span>
+<span class="nc" id="L75">            return CFuzzyValue.from( false );</span>
+
+
+<span class="pc bpc" id="L78" title="1 of 3 branches missed.">        switch ( m_operator )</span>
+        {
+            case PLUS:
+<span class="fc" id="L81">                p_return.add( CRawTerm.from( this.add(</span>
+<span class="fc" id="L82">                    l_argument.get( 0 ).&lt;Number&gt;raw(),</span>
+<span class="fc" id="L83">                    l_argument.get( 1 ).&lt;Number&gt;raw()</span>
+                ) ) );
+<span class="fc" id="L85">                return CFuzzyValue.from( true );</span>
+
+            case MINUS:
+<span class="fc" id="L88">                p_return.add( CRawTerm.from( this.subtract(</span>
+<span class="fc" id="L89">                    l_argument.get( 0 ).&lt;Number&gt;raw(),</span>
+<span class="fc" id="L90">                    l_argument.get( 1 ).&lt;Number&gt;raw()</span>
+                ) ) );
+<span class="fc" id="L92">                return CFuzzyValue.from( true );</span>
+
+            default:
+<span class="nc" id="L95">                return CFuzzyValue.from( false );</span>
+        }
+
+    }
+
+    /**
+     * runs the addition of number types
+     *
+     * @param p_left left number argument
+     * @param p_right right number argument
+     * @return addition value
+     *
+     * @tparam N any number type
+     * @tparam M any number type
+     */
+    @Nonnull
+    private &lt;N extends Number, M extends Number&gt; Number add( @Nonnull final N p_left, @Nonnull final M p_right )
+    {
+<span class="fc" id="L113">        return p_left.doubleValue() + p_right.doubleValue();</span>
+    }
+
+    /**
+     * runs the subtraction of number types
+     *
+     * @param p_left left number argument
+     * @param p_right right number argument
+     * @return subtraction value
+     *
+     * @tparam N any number type
+     * @tparam M any number type
+     */
+    @Nonnull
+    private &lt;N extends Number, M extends Number&gt; Number subtract( @Nonnull final N p_left, @Nonnull final M p_right )
+    {
+<span class="fc" id="L129">        return p_left.doubleValue() - p_right.doubleValue();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

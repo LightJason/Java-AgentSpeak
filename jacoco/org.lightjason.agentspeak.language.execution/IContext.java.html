@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.execution</a> &gt; <span class="el_source">IContext.java</span></div><h1>IContext.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language.execution;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
+
+
+/**
+ * execution context with local data
+ */
+public interface IContext extends Serializable
+{
+    /**
+     * empty context with plan
+     */
+<span class="fc" id="L47">    IContext EMPTYPLAN = new IContext()</span>
+<span class="fc" id="L48">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1053856178724776159L;
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;?&gt; agent()
+        {
+<span class="nc" id="L58">            return IAgent.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+<span class="nc" id="L65">            return IPlan.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Map&lt;IPath, IVariable&lt;?&gt;&gt; instancevariables()
+        {
+<span class="nc" id="L72">            return Collections.emptyMap();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+<span class="nc" id="L79">            return this;</span>
+        }
+    };
+
+    /**
+     * empty context with rule
+     */
+<span class="fc" id="L86">    IContext EMPTYRULE = new IContext()</span>
+<span class="fc" id="L87">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1053856178757676139L;
+
+        @Nonnull
+        @Override
+        public final IAgent&lt;?&gt; agent()
+        {
+<span class="nc" id="L97">            return IAgent.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+<span class="nc" id="L104">            return IRule.EMPTY;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Map&lt;IPath, IVariable&lt;?&gt;&gt; instancevariables()
+        {
+<span class="nc" id="L111">            return Collections.emptyMap();</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+<span class="nc" id="L118">            return this;</span>
+        }
+    };
+
+
+    /**
+     * returns the agent of the context
+     *
+     * @return agent
+     */
+    @Nonnull
+    IAgent&lt;?&gt; agent();
+
+    /**
+     * returns the instance object
+     *
+     * @return instance object plan or rule
+     */
+    @Nonnull
+    IInstantiable instance();
+
+    /**
+     * returns the variables names and their current value
+     *
+     * @return variable names and their current value
+     */
+    @Nonnull
+    Map&lt;IPath, IVariable&lt;?&gt;&gt; instancevariables();
+
+    /**
+     * duplicates the context with a shallow-copy
+     *
+     * @return shallow-copy of the context
+     */
+    @Nonnull
+    IContext duplicate();
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

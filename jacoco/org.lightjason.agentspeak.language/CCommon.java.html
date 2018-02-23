@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CCommon.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language</a> &gt; <span class="el_source">CCommon.java</span></div><h1>CCommon.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.language;
+
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
+import com.rits.cloning.Cloner;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.compressors.pack200.Pack200CompressorOutputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.execution.CContext;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+
+/**
+ * common structure for execution definition
+ */
+public final class CCommon
+{
+    /**
+     * cloner
+     */
+<span class="fc" id="L78">    private static final Cloner CLONER = new Cloner();</span>
+
+    /**
+     * private ctor - avoid instantiation
+     */
+    private CCommon()
+    {
+    }
+
+    //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * updates within an instance context all variables of the stream
+     *
+     * @param p_context context
+     * @param p_unifiedvariables unified variables as stream
+     * @return context reference
+     */
+    @Nonnull
+    public static IContext updatecontext( @Nonnull final IContext p_context, @Nonnull final Stream&lt;IVariable&lt;?&gt;&gt; p_unifiedvariables )
+    {
+<span class="fc" id="L99">        p_unifiedvariables.parallel().forEach( i -&gt; p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );</span>
+<span class="fc" id="L100">        return p_context;</span>
+    }
+
+    /**
+     * creates the instantiate execution context with default variables
+     *
+     * @param p_instance instance object
+     * @param p_agent agent
+     * @param p_variable variable stream
+     * @return context object
+     */
+    @Nonnull
+    public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent&lt;?&gt; p_agent, @Nonnull final Stream&lt;IVariable&lt;?&gt;&gt; p_variable )
+    {
+<span class="fc" id="L114">        final Set&lt;IVariable&lt;?&gt;&gt; l_variables = p_instance.variables().parallel().map( i -&gt; i.shallowcopy() ).collect( Collectors.toSet() );</span>
+<span class="fc" id="L115">        Stream.concat(</span>
+            p_variable,
+<span class="fc" id="L117">            p_agent.variablebuilder().apply( p_agent, p_instance )</span>
+        )
+<span class="fc" id="L119">               .peek( l_variables::remove )</span>
+<span class="fc" id="L120">               .forEach( l_variables::add );</span>
+
+<span class="fc" id="L122">        return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );</span>
+    }
+
+
+    /**
+     * unifies trigger and creates the set of variables
+     *
+     * @note target trigger literal must be cloned to avoid variable overwriting
+     * @param p_unifier unifier
+     * @param p_source input trigger (with values)
+     * @param p_target trigger (of a plan / rule)
+     * @return pair of valid unification and unified variables
+     */
+    @Nonnull
+    public static Pair&lt;Boolean, Set&lt;IVariable&lt;?&gt;&gt;&gt; unifytrigger( @Nonnull final IUnifier p_unifier,
+                                                                 @Nonnull final ITrigger p_source, @Nonnull final ITrigger p_target )
+    {
+        // filter for avoid duplicated instantiation on non-existing values
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )</span>
+<span class="nc" id="L141">            return new ImmutablePair&lt;&gt;( false, Collections.emptySet() );</span>
+
+        // unify variables, source trigger literal must be copied
+<span class="fc" id="L144">        final Set&lt;IVariable&lt;?&gt;&gt; l_variables = p_unifier.unify( p_source.literal(), p_target.literal().deepcopy().&lt;ILiteral&gt;raw() );</span>
+
+        // check for completely unification (of all variables)
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        return l_variables.size() == CCommon.variablefrequency( p_target.literal() ).size()</span>
+<span class="fc" id="L148">               ? new ImmutablePair&lt;&gt;( true, l_variables )</span>
+<span class="nc" id="L149">               : new ImmutablePair&lt;&gt;( false, Collections.emptySet() );</span>
+    }
+
+    /**
+     * instantiate a plan with context and plan-specific variables
+     *
+     * @param p_planstatistic plan statistic for instatiation
+     * @param p_agent agent
+     * @param p_variables instantiated variables
+     * @return pair of planstatistic and context
+     */
+    @Nonnull
+    public static Pair&lt;IPlanStatistic, IContext&gt; instantiateplan( @Nonnull final IPlanStatistic p_planstatistic,
+                                                                  @Nonnull final IAgent&lt;?&gt; p_agent, @Nonnull final Set&lt;IVariable&lt;?&gt;&gt; p_variables )
+    {
+<span class="fc" id="L164">        return new ImmutablePair&lt;&gt;(</span>
+            p_planstatistic,
+<span class="fc" id="L166">            p_planstatistic.plan().instantiate(</span>
+                p_agent,
+<span class="fc" id="L168">                Stream.concat( p_variables.stream(), p_planstatistic.variables() )</span>
+            )
+        );
+    }
+
+    // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * concat multiple streams
+     *
+     * @param p_streams streams
+     * @tparam T any value type
+     * @return concated stream
+     */
+    @Nonnull
+    @SafeVarargs
+    @SuppressWarnings( &quot;varargs&quot; )
+    public static &lt;T&gt; Stream&lt;T&gt; streamconcat( @Nonnull final Stream&lt;T&gt;... p_streams )
+    {
+<span class="fc" id="L187">        return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );</span>
+    }
+
+    /**
+     * consts the variables within a literal
+     *
+     * @param p_literal literal
+     * @return map with frequency
+     */
+    @Nonnull
+    public static Map&lt;IVariable&lt;?&gt;, Integer&gt; variablefrequency( @Nonnull final ILiteral p_literal )
+    {
+<span class="fc" id="L199">        return Collections.unmodifiableMap(</span>
+<span class="fc" id="L200">            flattenrecursive( p_literal.orderedvalues() )</span>
+<span class="fc" id="L201">                  .filter( i -&gt; i instanceof IVariable&lt;?&gt; )</span>
+<span class="fc" id="L202">                  .map( i -&gt; (IVariable&lt;?&gt;) i )</span>
+<span class="fc" id="L203">                  .collect( Collectors.toMap( i -&gt; i, i -&gt; 1, Integer::sum ) )</span>
+        );
+    }
+
+    /**
+     * checks a term value for assignable class
+     *
+     * @param p_value any value type
+     * @param p_class assignable class
+     * @return term value or raw value
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public static &lt;T&gt; boolean rawvalueAssignableTo( @Nonnull final T p_value, @Nonnull final Class&lt;?&gt;... p_class )
+    {
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if ( p_value instanceof IVariable&lt;?&gt; )</span>
+<span class="fc" id="L218">            return ( (IVariable&lt;?&gt;) p_value ).valueassignableto( p_class );</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if ( p_value instanceof IRawTerm&lt;?&gt; )</span>
+<span class="fc" id="L220">            return ( (IRawTerm&lt;?&gt;) p_value ).valueassignableto( p_class );</span>
+
+<span class="fc" id="L222">        return Arrays.stream( p_class ).anyMatch( i -&gt; i.isAssignableFrom( p_value.getClass() ) );</span>
+    }
+
+
+    /**
+     * replace variables with context variables
+     *
+     * @param p_context execution context
+     * @param p_terms replacing term list
+     * @return result term list
+     */
+    @Nonnull
+    public static List&lt;ITerm&gt; replaceFromContext( @Nonnull final IContext p_context, @Nonnull final Collection&lt;? extends ITerm&gt; p_terms )
+    {
+<span class="fc" id="L236">        return p_terms.stream().map( i -&gt; replaceFromContext( p_context, i ) ).collect( Collectors.toList() );</span>
+    }
+
+    /**
+     * replace variable with context variable
+     * other values will be passed without context access
+     *
+     * @param p_context execution context
+     * @param p_term term
+     * @return replaces variable object
+     */
+    @Nonnull
+    public static ITerm replaceFromContext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
+    {
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if ( !( p_term instanceof IVariable&lt;?&gt; ) )</span>
+<span class="fc" id="L251">            return p_term;</span>
+
+<span class="fc" id="L253">        final IVariable&lt;?&gt; l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );</span>
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">        if ( Objects.nonNull( l_variable ) )</span>
+<span class="fc" id="L255">            return l_variable;</span>
+
+<span class="nc" id="L257">        throw new CIllegalArgumentException(</span>
+<span class="nc" id="L258">            org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, &quot;variablenotfoundincontext&quot;, p_term.fqnfunctor() )</span>
+        );
+    }
+
+
+    /**
+     * flat term-in-term collection into
+     * a straight term list
+     *
+     * @param p_terms term collection
+     * @return flat term stream
+     */
+    @Nonnull
+    public static Stream&lt;ITerm&gt; flatten( @Nonnull final Collection&lt;? extends ITerm&gt; p_terms )
+    {
+<span class="fc" id="L273">        return flattenstream( p_terms.stream() );</span>
+    }
+
+    /**
+     * flat term-in-term stream into
+     * a straight term list
+     *
+     * @param p_terms term stream
+     * @return flat term stream
+     */
+    @Nonnull
+    public static Stream&lt;ITerm&gt; flatten( @Nonnull final Stream&lt;? extends ITerm&gt; p_terms )
+    {
+<span class="fc" id="L286">        return flattenstream( p_terms );</span>
+    }
+
+    /**
+     * recursive stream of term values
+     *
+     * @param p_input term stream
+     * @return term stream
+     */
+    @Nonnull
+    public static Stream&lt;ITerm&gt; flattenrecursive( @Nonnull final Stream&lt;ITerm&gt; p_input )
+    {
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        return p_input.flatMap( i -&gt; i instanceof ILiteral ? flattenrecursive( ( i.&lt;ILiteral&gt;raw() ).orderedvalues() ) : Stream.of( i ) );</span>
+    }
+
+    /*
+     * recursive flattering of a stream structure
+     *
+     * @param p_list any stream
+     * @return term stream
+     */
+    @Nonnull
+    @SuppressWarnings( &quot;unchecked&quot; )
+    private static Stream&lt;ITerm&gt; flattenstream( @Nonnull final Stream&lt;?&gt; p_stream )
+    {
+<span class="fc" id="L311">        return p_stream.flatMap( i -&gt;</span>
+        {
+<span class="fc bfc" id="L313" title="All 2 branches covered.">            final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">            return l_value instanceof Collection&lt;?&gt;</span>
+<span class="fc" id="L315">                   ? flattenstream( ( (Collection&lt;?&gt;) l_value ).stream() )</span>
+<span class="fc" id="L316">                   : Stream.of( CRawTerm.from( l_value ) );</span>
+        } );
+    }
+
+    /**
+     * returns the hasing function for term data
+     *
+     * @return hasher
+     */
+    @Nonnull
+    public static Hasher getTermHashing()
+    {
+<span class="fc" id="L328">        return Hashing.sipHash24().newHasher();</span>
+    }
+
+    /**
+     * creates a deep-clone of an object
+     *
+     * @param p_object input object
+     * @tparam T object type
+     * @return deep-copy
+     */
+    @Nullable
+    @SuppressWarnings( &quot;unchecked&quot; )
+    public static &lt;T&gt; T deepclone( @Nullable final T p_object )
+    {
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        return Objects.isNull( p_object ) ? null : CLONER.deepClone( p_object );</span>
+    }
+
+    // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * calculates the levenshtein distance
+     *
+     * @param p_first first string
+     * @param p_second second string
+     * @param p_insertweight inserting weight
+     * @param p_replaceweight replace weight
+     * @param p_deleteweight delete weight
+     * @return distance
+     * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
+     */
+    public static double levenshtein( @Nonnull final String p_first, @Nonnull final String p_second, final double p_insertweight,
+                                      final double p_replaceweight, final double p_deleteweight )
+    {
+        // the array of distances
+<span class="fc" id="L362">        double[] l_cost = IntStream.range( 0, p_first.length() + 1 ).mapToDouble( i -&gt; i ).toArray();</span>
+<span class="fc" id="L363">        double[] l_newcost = new double[l_cost.length];</span>
+
+<span class="fc bfc" id="L365" title="All 2 branches covered.">        for ( int j = 1; j &lt; p_second.length() + 1; j++ )</span>
+        {
+<span class="fc" id="L367">            l_newcost[0] = j;</span>
+
+            // calculate cost of operation for all characters
+<span class="fc bfc" id="L370" title="All 2 branches covered.">            for ( int i = 1; i &lt; l_cost.length; i++ )</span>
+<span class="fc" id="L371">                l_newcost[i] = min(</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">                    l_cost[i - 1] + ( p_first.charAt( i - 1 ) == p_second.charAt( j - 1 ) ? 0 : p_replaceweight ),</span>
+                    l_newcost[i - 1] + p_deleteweight,
+                    l_cost[i] + p_insertweight
+                );
+
+<span class="fc" id="L377">            final double[] l_swap = l_cost;</span>
+<span class="fc" id="L378">            l_cost = l_newcost;</span>
+<span class="fc" id="L379">            l_newcost = l_swap;</span>
+        }
+
+<span class="fc" id="L382">        return l_cost[p_first.length()];</span>
+    }
+
+
+    /**
+     * returns the minimum of three elemens
+     *
+     * @param p_first first value
+     * @param p_second second value
+     * @param p_third third value
+     * @return minimum
+     */
+    public static double min( final double p_first, final double p_second, final double p_third )
+    {
+<span class="fc" id="L396">        return Math.min( Math.min( p_first, p_second ), p_third );</span>
+    }
+
+
+    /**
+     * normalized-compression-distance
+     *
+     * @param p_compression compression algorithm
+     * @param p_first first string
+     * @param p_second second string
+     * @return distance in [0,1]
+     */
+    public static double ncd( @Nonnull final ECompression p_compression, @Nonnull final String p_first, @Nonnull final String p_second )
+    {
+<span class="fc bfc" id="L410" title="All 2 branches covered.">        if ( p_first.equals( p_second ) )</span>
+<span class="fc" id="L411">            return 0;</span>
+
+<span class="fc" id="L413">        final double l_first = compress( p_compression, p_first );</span>
+<span class="fc" id="L414">        final double l_second = compress( p_compression, p_second );</span>
+<span class="fc" id="L415">        return ( compress( p_compression, p_first + p_second ) - Math.min( l_first, l_second ) ) / Math.max( l_first, l_second );</span>
+    }
+
+
+    /**
+     * compression algorithm
+     *
+     * @param p_compression compression algorithm
+     * @param p_input input string
+     * @return number of compression bytes
+     * @warning counting stream returns the correct number of bytes after flushing
+     */
+    private static double compress( @Nonnull final ECompression p_compression, @Nonnull final String p_input )
+    {
+<span class="fc" id="L429">        final DataOutputStream l_counting = new DataOutputStream( new NullOutputStream() );</span>
+
+<span class="fc" id="L431">        try (</span>
+<span class="fc" id="L432">            final InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );</span>
+<span class="fc" id="L433">            final OutputStream l_compress = p_compression.get( l_counting )</span>
+        )
+        {
+<span class="fc" id="L436">            IOUtils.copy( l_input, l_compress );</span>
+        }
+<span class="nc" id="L438">        catch ( final IOException l_exception )</span>
+        {
+<span class="nc" id="L440">            return 0;</span>
+<span class="fc" id="L441">        }</span>
+
+<span class="fc" id="L443">        return l_counting.size();</span>
+    }
+
+
+    /**
+     * compression algorithm
+     */
+<span class="fc" id="L450">    public enum ECompression</span>
+    {
+<span class="fc" id="L452">        BZIP,</span>
+<span class="fc" id="L453">        GZIP,</span>
+<span class="fc" id="L454">        DEFLATE,</span>
+<span class="fc" id="L455">        PACK200,</span>
+<span class="fc" id="L456">        XZ;</span>
+
+        /**
+         * enum names
+         */
+<span class="fc" id="L461">        private static final Set&lt;String&gt; ALGORITHMS = Collections.unmodifiableSet(</span>
+<span class="fc" id="L462">                                                          Arrays.stream( ECompression.values() )</span>
+<span class="fc" id="L463">                                                                .map( i -&gt; i.name().toUpperCase( Locale.ROOT ) )</span>
+<span class="fc" id="L464">                                                                .collect( Collectors.toSet() )</span>
+                                                      );
+
+        /**
+         * creates a compression stream
+         *
+         * @param p_datastream data-counting stream
+         * @return compression output stream
+         * @throws IOException throws on any io error
+         */
+        @Nonnull
+        public final OutputStream get( @Nonnull final DataOutputStream p_datastream ) throws IOException
+        {
+<span class="pc bpc" id="L477" title="4 of 6 branches missed.">            switch ( this )</span>
+            {
+<span class="fc" id="L479">                case BZIP : return new BZip2CompressorOutputStream( p_datastream );</span>
+
+<span class="fc" id="L481">                case GZIP : return new GzipCompressorOutputStream( p_datastream );</span>
+
+<span class="nc" id="L483">                case DEFLATE : return new DeflateCompressorOutputStream( p_datastream );</span>
+
+<span class="nc" id="L485">                case PACK200 : return new Pack200CompressorOutputStream( p_datastream );</span>
+
+<span class="nc" id="L487">                case XZ : return new XZCompressorOutputStream( p_datastream );</span>
+
+                default :
+<span class="nc" id="L490">                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, &quot;unknown&quot;, this ) );</span>
+            }
+        }
+
+        /**
+         * returns a compression value
+         *
+         * @param p_value string name
+         * @return compression value
+         */
+        @Nonnull
+        public static ECompression from( @Nonnull final String p_value )
+        {
+<span class="fc" id="L503">            return ECompression.valueOf( p_value.toUpperCase( Locale.ROOT ) );</span>
+        }
+
+
+        /**
+         * checks if a compression exists
+         *
+         * @param p_value compression name
+         * @return existance flag
+         */
+        public static boolean exist( @Nonnull final String p_value )
+        {
+<span class="fc" id="L515">            return ALGORITHMS.contains( p_value.toUpperCase( Locale.ROOT ) );</span>
+        }
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

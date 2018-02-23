@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CHash.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.crypto</a> &gt; <span class="el_source">CHash.java</span></div><h1>CHash.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.crypto;
+
+import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
+import org.apache.commons.lang3.SerializationUtils;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Locale;
+
+
+/**
+ * hash algorithm.
+ * The actions creates a hash values of datasets, the first argument is the name of the hasing algorithm
+ * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512),
+ * for all other unflatten arguments a hash value is calculated and the action returns the hash values back and never fails
+ *
+ * {@code [Hash1 | Hash2 | Hash3] = crypto/hash( &quot;Adler-32 | CRC-32 | CRC-32C | ...&quot;, Dataset1, Dataset2, Dataset3 );}
+ * @see https://en.wikipedia.org/wiki/Secure_Hash_Algorithm
+ * @see https://en.wikipedia.org/wiki/MD2_(cryptography)
+ * @see https://en.wikipedia.org/wiki/MD5
+ * @see https://en.wikipedia.org/wiki/Adler-32
+ * @see https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+ * @see https://en.wikipedia.org/wiki/MurmurHash
+ * @see https://en.wikipedia.org/wiki/SipHash
+ * @see http://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
+ * @see https://github.com/google/guava/wiki/HashingExplained
+ */
+<span class="fc" id="L65">public final class CHash extends IBuiltinAction</span>
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4638666396527392307L;
+
+    @Nonnegative
+    @Override
+    public final int minimalArgumentNumber()
+    {
+<span class="fc" id="L76">        return 2;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue&lt;Boolean&gt; execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List&lt;ITerm&gt; p_argument, @Nonnull final List&lt;ITerm&gt; p_return
+    )
+    {
+<span class="fc" id="L85">        CCommon.flatten( p_argument )</span>
+<span class="fc" id="L86">               .skip( 1 )</span>
+<span class="fc" id="L87">               .map( i -&gt; hash( p_context, p_argument.get( 0 ).&lt;String&gt;raw(), serialize( p_context, i ) ) )</span>
+<span class="fc" id="L88">               .map( CRawTerm::from )</span>
+<span class="fc" id="L89">               .forEach( p_return::add );</span>
+
+<span class="fc" id="L91">        return CFuzzyValue.from( true );</span>
+    }
+
+
+    /**
+     * serialize data
+     *
+     * @param p_context execution context
+     * @param p_object term object
+     * @return serialized bytes
+     *
+     * @note strings will be serialized always with utf-8 encoding, so comparing with md5sum is possible
+     */
+    private static byte[] serialize( @Nonnull final IContext p_context, @Nonnull final ITerm p_object )
+    {
+        try
+        {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            return CCommon.rawvalueAssignableTo( p_object, String.class )</span>
+<span class="fc" id="L109">                   ? p_object.&lt;String&gt;raw().getBytes( &quot;UTF-8&quot; )</span>
+<span class="fc" id="L110">                   : SerializationUtils.serialize( p_object.&lt;Serializable&gt;raw() );</span>
+        }
+<span class="nc" id="L112">        catch ( final UnsupportedEncodingException l_exception )</span>
+        {
+<span class="nc" id="L114">            throw new CRuntimeException( l_exception, p_context );</span>
+        }
+    }
+
+    /**
+     * runs hashing function with difference between Google Guava hashing and Java default digest
+     *
+     * @param p_context execution context
+     * @param p_algorithm algorithm name
+     * @param p_data byte data representation
+     * @return hash value
+     */
+    private static String hash( @Nonnull final IContext p_context, @Nonnull final String p_algorithm, @Nonnull final byte[] p_data )
+    {
+<span class="fc bfc" id="L128" title="All 7 branches covered.">        switch ( p_algorithm.trim().toLowerCase( Locale.ROOT ) )</span>
+        {
+            case &quot;adler-32&quot;:
+<span class="fc" id="L131">                return Hashing.adler32().newHasher().putBytes( p_data ).hash().toString();</span>
+
+            case &quot;crc-32&quot;:
+<span class="fc" id="L134">                return Hashing.crc32().newHasher().putBytes( p_data ).hash().toString();</span>
+
+            case &quot;crc-32c&quot;:
+<span class="fc" id="L137">                return Hashing.crc32c().newHasher().putBytes( p_data ).hash().toString();</span>
+
+            case &quot;murmur3-32&quot;:
+<span class="fc" id="L140">                return Hashing.murmur3_32().newHasher().putBytes( p_data ).hash().toString();</span>
+
+            case &quot;murmur3-128&quot;:
+<span class="fc" id="L143">                return Hashing.murmur3_128().newHasher().putBytes( p_data ).hash().toString();</span>
+
+            case &quot;siphash-2-4&quot;:
+<span class="fc" id="L146">                return Hashing.sipHash24().newHasher().putBytes( p_data ).hash().toString();</span>
+
+            default:
+                try
+                {
+<span class="fc" id="L151">                    return BaseEncoding.base16().encode( MessageDigest.getInstance( p_algorithm ).digest( p_data ) ).toLowerCase( Locale.ROOT );</span>
+                }
+<span class="fc" id="L153">                catch ( final NoSuchAlgorithmException l_exception )</span>
+                {
+<span class="fc" id="L155">                    throw new CRuntimeException( l_exception, p_context );</span>
+                }
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

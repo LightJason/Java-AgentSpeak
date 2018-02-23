@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CPlanStatistic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.language.instantiable.plan.statistic</a> &gt; <span class="el_source">CPlanStatistic.java</span></div><h1>CPlanStatistic.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+
+package org.lightjason.agentspeak.language.instantiable.plan.statistic;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.variable.CConstant;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
+
+
+/**
+ * plan statistic to count execution values
+ */
+public final class CPlanStatistic implements IPlanStatistic
+{
+    /**
+     * plan reference
+     */
+    private final IPlan m_plan;
+    /**
+     * count of successful exeuctions
+     */
+<span class="fc" id="L51">    private final AtomicLong m_successful = new AtomicLong();</span>
+    /**
+     * count of fail exeuctions
+     */
+<span class="fc" id="L55">    private final AtomicLong m_fail = new AtomicLong();</span>
+
+
+    /**
+     * ctor
+     *
+     * @param p_plan plan reference
+     */
+    private CPlanStatistic( @Nonnull final IPlan p_plan )
+<span class="fc" id="L64">    {</span>
+<span class="fc" id="L65">        m_plan = p_plan;</span>
+<span class="fc" id="L66">    }</span>
+
+    @Nonnull
+    @Override
+    public final IPlan plan()
+    {
+<span class="fc" id="L72">        return m_plan;</span>
+    }
+
+    @Override
+    @Nonnegative
+    public final long count()
+    {
+<span class="nc" id="L79">        return m_fail.get() + m_successful.get();</span>
+    }
+
+    @Override
+    @Nonnegative
+    public final long successful()
+    {
+<span class="nc" id="L86">        return m_successful.get();</span>
+    }
+
+    @Override
+    @Nonnegative
+    public final double successfulratio()
+    {
+<span class="fc" id="L93">        final double l_sum = m_successful.get() + m_fail.get();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        return l_sum == 0</span>
+<span class="fc" id="L95">               ? 0</span>
+<span class="fc" id="L96">               : m_successful.get() / l_sum;</span>
+    }
+
+    @Override
+    @Nonnegative
+    public final long fail()
+    {
+<span class="nc" id="L103">        return m_fail.get();</span>
+    }
+
+    @Override
+    public final double failratio()
+    {
+<span class="fc" id="L109">        final double l_sum = m_successful.get() + m_fail.get();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        return l_sum == 0</span>
+<span class="fc" id="L111">               ? 0</span>
+<span class="fc" id="L112">               : m_fail.get() / l_sum;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPlanStatistic incrementsuccessful()
+    {
+<span class="fc" id="L119">        m_successful.incrementAndGet();</span>
+<span class="fc" id="L120">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IPlanStatistic incrementfail()
+    {
+<span class="fc" id="L127">        m_fail.incrementAndGet();</span>
+<span class="fc" id="L128">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;IVariable&lt;?&gt;&gt; variables()
+    {
+<span class="fc" id="L135">        return Stream.of(</span>
+<span class="fc" id="L136">            new CConstant&lt;&gt;( &quot;PlanSuccessful&quot;, m_successful.get() ),</span>
+<span class="fc" id="L137">            new CConstant&lt;&gt;( &quot;PlanFail&quot;, m_fail.get() ),</span>
+<span class="fc" id="L138">            new CConstant&lt;&gt;( &quot;PlanRuns&quot;, m_successful.get() + m_fail.get() ),</span>
+
+            // execution ratio
+<span class="fc" id="L141">            new CConstant&lt;&gt;( &quot;PlanSuccessfulRatio&quot;, this.successfulratio() ),</span>
+<span class="fc" id="L142">            new CConstant&lt;&gt;( &quot;PlanFailRatio&quot;, this.failratio() )</span>
+        );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+<span class="fc" id="L149">        return m_plan.hashCode();</span>
+    }
+
+    @Override
+    @SuppressFBWarnings( &quot;EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS&quot; )
+    public final boolean equals( final Object p_object )
+    {
+<span class="nc bnc" id="L156" title="All 4 branches missed.">        return ( ( p_object instanceof IPlanStatistic ) || ( p_object instanceof IPlan ) )</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">               &amp;&amp; ( this.hashCode() == p_object.hashCode() );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L163">        return MessageFormat.format( &quot;successful [{0}], fail [{1}]: {2}&quot;, m_successful.get(), m_fail.get(), m_plan );</span>
+    }
+
+    /**
+     * factory
+     *
+     * @param p_plan plan object
+     * @return statistic object
+     */
+    @Nonnull
+    public static IPlanStatistic from( @Nonnull final IPlan p_plan )
+    {
+<span class="fc" id="L175">        return new CPlanStatistic( p_plan );</span>
+    }
+
+
+    @Override
+    public final int compareTo( @Nonnull final IPlanStatistic p_other )
+    {
+<span class="fc" id="L182">        return Integer.compare( this.hashCode(), p_other.hashCode() );</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

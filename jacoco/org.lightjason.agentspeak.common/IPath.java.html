@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IPath.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.common</a> &gt; <span class="el_source">IPath.java</span></div><h1>IPath.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.common;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.util.stream.Stream;
+
+
+/**
+ * interface of a path
+ *
+ * @note implement equals with String object, so a path object can be checked to a String
+ */
+public interface IPath extends Serializable, Comparable&lt;IPath&gt;
+{
+    /**
+     * default seperator
+     */
+    String DEFAULTSEPERATOR = &quot;/&quot;;
+
+    /**
+     * empty path
+     **/
+<span class="fc" id="L48">    IPath EMPTY = new IPath()</span>
+<span class="fc" id="L49">    {</span>
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8529008893337445887L;
+
+        @Nonnull
+        @Override
+        public final IPath append( @Nonnull final IPath p_path )
+        {
+<span class="nc" id="L59">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath append( @Nonnull final String p_path )
+        {
+<span class="nc" id="L66">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath remove( final int p_index )
+        {
+<span class="nc" id="L73">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath remove( final int p_start, final int p_end )
+        {
+<span class="nc" id="L80">            return this;</span>
+        }
+
+        @Override
+        public final boolean endswith( @Nonnull final IPath p_path )
+        {
+<span class="nc" id="L86">            return false;</span>
+        }
+
+        @Override
+        public final boolean empty()
+        {
+<span class="nc" id="L92">            return true;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String get( final int p_index )
+        {
+<span class="nc" id="L99">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String path( final String p_separator )
+        {
+<span class="nc" id="L106">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String path()
+        {
+<span class="fc" id="L113">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String separator()
+        {
+<span class="fc" id="L120">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath separator( @Nonnull final String p_separator )
+        {
+<span class="nc" id="L127">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath lower()
+        {
+<span class="nc" id="L134">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath upper()
+        {
+<span class="nc" id="L141">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath subpath( final int p_fromindex )
+        {
+<span class="nc" id="L148">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath subpath( final int p_fromindex, final int p_toindex )
+        {
+<span class="nc" id="L155">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String suffix()
+        {
+<span class="nc" id="L162">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushback( @Nonnull final IPath p_path )
+        {
+<span class="nc" id="L169">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushback( @Nonnull final String p_path )
+        {
+<span class="nc" id="L176">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushfront( @Nonnull final String p_path )
+        {
+<span class="nc" id="L183">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushfront( @Nonnull final IPath p_path )
+        {
+<span class="nc" id="L190">            return this;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final String removesuffix()
+        {
+<span class="nc" id="L197">            return &quot;&quot;;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final IPath reverse()
+        {
+<span class="nc" id="L204">            return this;</span>
+        }
+
+        @Override
+        public final int size()
+        {
+<span class="nc" id="L210">            return 0;</span>
+        }
+
+        @Override
+        public final boolean startswith( final IPath p_path )
+        {
+<span class="nc" id="L216">            return false;</span>
+        }
+
+        @Override
+        public final boolean startswith( final String p_path )
+        {
+<span class="nc" id="L222">            return false;</span>
+        }
+
+        @Nonnull
+        @Override
+        public final Stream&lt;String&gt; stream()
+        {
+<span class="fc" id="L229">            return Stream.empty();</span>
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final IPath p_path )
+        {
+<span class="nc" id="L235">            return Integer.compare( p_path.hashCode(), this.hashCode() );</span>
+        }
+
+        @Override
+        public final int hashCode()
+        {
+<span class="fc" id="L241">            return 0;</span>
+        }
+
+        @Override
+        @SuppressFBWarnings( &quot;EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS&quot; )
+        public final boolean equals( final Object p_object )
+        {
+<span class="nc bnc" id="L248" title="All 6 branches missed.">            return ( ( p_object instanceof IPath ) &amp;&amp; ( this.hashCode() == p_object.hashCode() ) )</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                   || ( ( p_object instanceof String ) &amp;&amp; ( this.path().hashCode() == p_object.hashCode() ) );</span>
+        }
+    };
+
+    /**
+     * appends a path at the current and returns a new object
+     *
+     * @param p_path path
+     * @return new path
+     */
+    @Nonnull
+    IPath append( @Nonnull final IPath p_path );
+
+    /**
+     * appends a string at the current path and returns the new object
+     *
+     * @param p_path string with path
+     * @return new path
+     */
+    @Nonnull
+    IPath append( @Nonnull final String p_path );
+
+    /**
+     * removes an element
+     *
+     * @param p_index index position
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath remove( final int p_index );
+
+    /**
+     * removes all elements from start index until end index (exclusive)
+     *
+     * @param p_start start index
+     * @param p_end end index (exclusive)
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath remove( final int p_start, final int p_end );
+
+    /**
+     * check of a path ends with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    boolean endswith( @Nonnull final IPath p_path );
+
+    /**
+     * check if the path is empty
+     *
+     * @return empty flag
+     */
+    boolean empty();
+
+    /**
+     * returns an part of the path
+     *
+     * @param p_index index position (negativ index is element from the end)
+     * @return element
+     */
+    @Nonnull
+    String get( final int p_index );
+
+    /**
+     * returns the full path as string with an individual separator
+     *
+     * @param p_separator separator
+     * @return string path
+     */
+    @Nonnull
+    String path( final String p_separator );
+
+    /**
+     * returns the full path as string
+     *
+     * @return string path
+     */
+    @Nonnull
+    String path();
+
+    /**
+     * returns the separator
+     *
+     * @return separator
+     */
+    @Nonnull
+    String separator();
+
+    /**
+     * sets the separator
+     *
+     * @param p_separator separator
+     * @return path object
+     */
+    @Nonnull
+    IPath separator( @Nonnull final String p_separator );
+
+    /**
+     * changes all elements to lower-case
+     *
+     * @return object
+     */
+    @Nonnull
+    IPath lower();
+
+    /**
+     * changes all elements to uppercase
+     *
+     * @return object
+     */
+    @Nonnull
+    IPath upper();
+
+    /**
+     * creates a path of the start index until the end
+     *
+     * @param p_fromindex start index
+     * @return path
+     */
+    @Nonnull
+    IPath subpath( final int p_fromindex );
+
+    /**
+     * creates a path of the indices
+     *
+     * @param p_fromindex start index
+     * @param p_toindex end index (exclusive) / negative values from the end
+     * @return path
+     */
+    @Nonnull
+    IPath subpath( final int p_fromindex, final int p_toindex );
+
+    /**
+     * returns the last part of the path
+     *
+     * @return string
+     */
+    @Nonnull
+    String suffix();
+
+    /**
+     * adds a path at the end
+     *
+     * @param p_path path
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath pushback( @Nonnull final IPath p_path );
+
+    /**
+     * adds a path at the end
+     *
+     * @param p_path string path
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath pushback( @Nonnull final String p_path );
+
+    /**
+     * adds a path at the front
+     *
+     * @param p_path string path
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath pushfront( @Nonnull final String p_path );
+
+    /**
+     * adds a path to the front of the path
+     *
+     * @param p_path path
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath pushfront( @Nonnull final IPath p_path );
+
+    /**
+     * remove the suffix from the path
+     *
+     * @return last item of the path
+     */
+    @Nonnull
+    String removesuffix();
+
+    /**
+     * reverse path
+     *
+     * @return return the changed object
+     */
+    @Nonnull
+    IPath reverse();
+
+    /**
+     * returns the number of path elements
+     *
+     * @return size
+     */
+    int size();
+
+    /**
+     * check of a path starts with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    boolean startswith( final IPath p_path );
+
+    /**
+     * check of a path starts with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    boolean startswith( final String p_path );
+
+    /**
+     * stream over elements
+     *
+     * @return sequential stream
+     */
+    @Nonnull
+    Stream&lt;String&gt; stream();
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IStorage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.action.builtin.storage</a> &gt; <span class="el_source">IStorage.java</span></div><h1>IStorage.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.action.builtin.storage;
+
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+/**
+ * storage default definitions
+ */
+public abstract class IStorage extends IBuiltinAction
+{
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2187242564778364709L;
+    /**
+     * set with forbidden keys
+     */
+    protected final Function&lt;String, Boolean&gt; m_resolver;
+
+    /**
+     * ctor
+     */
+    protected IStorage()
+    {
+<span class="fc" id="L58">        this( i -&gt; false );</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver of forbidden keys
+     * @warning resolver will be triggered in parallel
+     */
+    protected IStorage( @Nonnull final Function&lt;String, Boolean&gt; p_resolver )
+<span class="fc" id="L68">    {</span>
+<span class="fc" id="L69">        m_resolver = p_resolver;</span>
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    protected IStorage( @Nullable final String... p_forbidden )
+    {
+<span class="fc" id="L79">        this(</span>
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">            ( Objects.isNull( p_forbidden ) ) || ( p_forbidden.length == 0 )</span>
+<span class="nc" id="L81">            ? Stream.empty()</span>
+<span class="fc" id="L82">            : Arrays.stream( p_forbidden )</span>
+        );
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden forbidden keys
+     */
+    protected IStorage( @Nonnull final Stream&lt;String&gt; p_fordbidden )
+<span class="fc" id="L92">    {</span>
+<span class="fc" id="L93">        final Set&lt;String&gt; l_names = p_fordbidden.collect( Collectors.toCollection( ConcurrentSkipListSet::new ) );</span>
+<span class="fc" id="L94">        m_resolver = l_names::contains;</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * returns a stream which keys are forbidden
+     *
+     * @param p_keys key name stream
+     * @return boolean stream with forbidden check
+     */
+    @Nonnull
+    public final Stream&lt;Boolean&gt; forbiddenkeys( @Nonnull final Stream&lt;String&gt; p_keys )
+    {
+<span class="fc" id="L106">        return p_keys.map( m_resolver );</span>
+    }
+
+    /**
+     * returns a stream which keys are forbidden
+     *
+     * @param p_keys keys
+     * @return boolean stream with forbidden check
+     */
+    @Nonnull
+    public final Stream&lt;Boolean&gt; forbiddenkeys( @Nonnull final String... p_keys )
+    {
+<span class="fc" id="L118">        return this.forbiddenkeys( Arrays.stream( p_keys ) );</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CConsistency.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LightJason AgentSpeak(L++)</a> &gt; <a href="index.source.html" class="el_package">org.lightjason.agentspeak.consistency</a> &gt; <span class="el_source">CConsistency.java</span></div><h1>CConsistency.java</h1><pre class="source lang-java linenums">/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+package org.lightjason.agentspeak.consistency;
+
+import cern.colt.function.tdouble.DoubleFunction;
+import cern.colt.matrix.tdouble.DoubleFactory1D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.algo.DenseDoubleAlgebra;
+import cern.colt.matrix.tdouble.algo.decomposition.DenseDoubleEigenvalueDecomposition;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.math.tdouble.DoubleMult;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.consistency.filter.IFilter;
+import org.lightjason.agentspeak.consistency.metric.IMetric;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+
+/**
+ * layer with consistency data based a markov-chain
+ */
+public final class CConsistency implements IConsistency
+{
+    /**
+     * default value on non-existing objects
+     */
+<span class="nc" id="L63">    private static final Map.Entry&lt;Double, Double&gt; DEFAULTNONEXISTING = new AbstractMap.SimpleImmutableEntry&lt;&gt;( 1.0, 0.0 );</span>
+    /**
+     * algebra
+     */
+<span class="nc" id="L67">    private static final DenseDoubleAlgebra ALGEBRA = DenseDoubleAlgebra.DEFAULT;</span>
+    /**
+     * function for inverting probability
+     */
+<span class="nc" id="L71">    private static final DoubleFunction PROBABILITYINVERT = p_value -&gt; 1 - p_value;</span>
+    /**
+     * algorithm to calculate stationary probability
+     **/
+    private final EAlgorithm m_algorithm;
+    /**
+     * map with object and consistency &amp; inconsistency value
+     **/
+<span class="nc" id="L79">    private final Map&lt;IAgent&lt;?&gt;, Map.Entry&lt;Double, Double&gt;&gt; m_data = new ConcurrentHashMap&lt;&gt;();</span>
+    /**
+     * descriptive statistic
+     */
+<span class="nc" id="L83">    private final DescriptiveStatistics m_statistic = new SynchronizedDescriptiveStatistics();</span>
+    /**
+     * metric filter
+     */
+    private final IFilter m_filter;
+    /**
+     * metric object to create the consistency of two objects
+     **/
+    private final IMetric m_metric;
+    /**
+     * epsilon consistency to create an aperiodic markow-chain
+     **/
+    private final double m_epsilon;
+    /**
+     * number of iterations of the stochastic algorithm
+     **/
+    private final int m_iteration;
+
+
+    /**
+     * ctor
+     *
+     * @param p_algorithm algorithm
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @param p_iteration iterations
+     * @param p_epsilon epsilon consistency
+     */
+    private CConsistency( @Nonnull final EAlgorithm p_algorithm, @Nonnull final IFilter p_filter, @Nonnull final IMetric p_metric,
+                          final int p_iteration, final double p_epsilon )
+<span class="nc" id="L113">    {</span>
+<span class="nc" id="L114">        m_filter = p_filter;</span>
+<span class="nc" id="L115">        m_metric = p_metric;</span>
+<span class="nc" id="L116">        m_algorithm = p_algorithm;</span>
+<span class="nc" id="L117">        m_iteration = p_iteration;</span>
+<span class="nc" id="L118">        m_epsilon = p_epsilon;</span>
+<span class="nc" id="L119">    }</span>
+
+    @Nonnull
+    @Override
+    public final DescriptiveStatistics statistic()
+    {
+<span class="nc" id="L125">        return m_statistic;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IConsistency add( @Nonnull final IAgent&lt;?&gt; p_object )
+    {
+<span class="nc" id="L132">        m_data.putIfAbsent( p_object, DEFAULTNONEXISTING );</span>
+<span class="nc" id="L133">        return this;</span>
+    }
+
+    @Override
+    public final IConsistency call() throws Exception
+    {
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if ( m_data.size() &lt; 2 )</span>
+<span class="nc" id="L140">            return this;</span>
+
+        // get key list of map for addressing elements in the correct order
+<span class="nc" id="L143">        final ArrayList&lt;IAgent&lt;?&gt;&gt; l_keys = new ArrayList&lt;&gt;( m_data.keySet() );</span>
+
+        // calculate markov chain transition matrix
+<span class="nc" id="L146">        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );</span>
+<span class="nc" id="L147">        IntStream.range( 0, l_keys.size() )</span>
+<span class="nc" id="L148">                 .parallel()</span>
+<span class="nc" id="L149">                 .boxed()</span>
+<span class="nc" id="L150">                 .forEach( i -&gt;</span>
+                 {
+<span class="nc" id="L152">                     final IAgent&lt;?&gt; l_item = l_keys.get( i );</span>
+<span class="nc" id="L153">                     IntStream.range( i + 1, l_keys.size() )</span>
+<span class="nc" id="L154">                              .boxed()</span>
+<span class="nc" id="L155">                              .forEach( j -&gt;</span>
+                              {
+<span class="nc" id="L157">                                  final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );</span>
+<span class="nc" id="L158">                                  l_matrix.setQuick( i, j, l_value );</span>
+<span class="nc" id="L159">                                  l_matrix.setQuick( j, i, l_value );</span>
+<span class="nc" id="L160">                              } );</span>
+
+                     // row-wise normalization for getting probabilities
+<span class="nc" id="L163">                     final double l_norm = ALGEBRA.norm1( l_matrix.viewRow( i ) );</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                     if ( l_norm != 0 )</span>
+<span class="nc" id="L165">                        l_matrix.viewRow( i ).assign( DoubleMult.div( l_norm ) );</span>
+
+                     // set epsilon slope for preventing periodic markov chains
+<span class="nc" id="L168">                     l_matrix.setQuick( i, i, m_epsilon );</span>
+<span class="nc" id="L169">                 } );</span>
+
+        // check for a zero-matrix
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        final DoubleMatrix1D l_eigenvector = l_matrix.zSum() &lt;= m_data.size() * m_epsilon</span>
+<span class="nc" id="L173">                                             ? new DenseDoubleMatrix1D( m_data.size() )</span>
+<span class="nc" id="L174">                                             : m_algorithm.getStationaryDistribution( m_iteration, l_matrix );</span>
+
+        // calculate the inverted probability and normalize with 1-norm
+<span class="nc" id="L177">        final DoubleMatrix1D l_invertedeigenvector = new DenseDoubleMatrix1D( l_eigenvector.toArray() );</span>
+<span class="nc" id="L178">        l_invertedeigenvector.assign( PROBABILITYINVERT );</span>
+<span class="nc" id="L179">        l_invertedeigenvector.assign( DoubleFunctions.div( ALGEBRA.norm1( l_eigenvector ) ) );</span>
+
+        // set consistency for each entry and update statistic
+<span class="nc" id="L182">        m_statistic.clear();</span>
+<span class="nc" id="L183">        IntStream.range( 0, l_keys.size() )</span>
+<span class="nc" id="L184">                 .boxed()</span>
+<span class="nc" id="L185">                 .forEach( i -&gt;</span>
+                 {
+<span class="nc" id="L187">                     m_statistic.addValue( l_eigenvector.get( i ) );</span>
+<span class="nc" id="L188">                     m_data.put( l_keys.get( i ), new AbstractMap.SimpleImmutableEntry&lt;&gt;( l_invertedeigenvector.get( i ), l_eigenvector.get( i ) ) );</span>
+<span class="nc" id="L189">                 } );</span>
+
+<span class="nc" id="L191">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IConsistency remove( @Nonnull final IAgent&lt;?&gt; p_object )
+    {
+<span class="nc" id="L198">        m_data.remove( p_object );</span>
+<span class="nc" id="L199">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IConsistency clear()
+    {
+<span class="nc" id="L206">        m_statistic.clear();</span>
+<span class="nc" id="L207">        m_data.clear();</span>
+<span class="nc" id="L208">        return this;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IMetric metric()
+    {
+<span class="nc" id="L215">        return m_metric;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final IFilter filter()
+    {
+<span class="nc" id="L222">        return m_filter;</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;Map.Entry&lt;IAgent&lt;?&gt;, Double&gt;&gt; consistency()
+    {
+<span class="nc" id="L229">        return m_data.entrySet().stream().map( i -&gt; new AbstractMap.SimpleImmutableEntry&lt;&gt;( i.getKey(), i.getValue().getKey() ) );</span>
+    }
+
+    @Nonnegative
+    @Override
+    public final double consistency( @Nonnull final IAgent&lt;?&gt; p_object )
+    {
+<span class="nc" id="L236">        return m_data.getOrDefault( p_object, DEFAULTNONEXISTING ).getKey();</span>
+    }
+
+    @Nonnegative
+    @Override
+    public final double inconsistency( @Nonnull final IAgent&lt;?&gt; p_object )
+    {
+<span class="nc" id="L243">        return m_data.getOrDefault( p_object, DEFAULTNONEXISTING ).getValue();</span>
+    }
+
+    @Nonnull
+    @Override
+    public final Stream&lt;Map.Entry&lt;IAgent&lt;?&gt;, Double&gt;&gt; inconsistency()
+    {
+<span class="nc" id="L250">        return m_data.entrySet().stream().map( i -&gt; new AbstractMap.SimpleImmutableEntry&lt;&gt;( i.getKey(), i.getValue().getValue() ) );</span>
+    }
+
+    @Override
+    public final String toString()
+    {
+<span class="nc" id="L256">        return MessageFormat.format( &quot;{0}{1}&quot;, super.toString(), m_data );</span>
+    }
+
+    /**
+     * returns metric consistency
+     *
+     * @param p_first first element
+     * @param p_second secend element
+     * @return metric consistency
+     */
+    private double getMetricValue( final IAgent&lt;?&gt; p_first, final IAgent&lt;?&gt; p_second )
+    {
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        if ( p_first.equals( p_second ) )</span>
+<span class="nc" id="L269">            return 0;</span>
+
+<span class="nc" id="L271">        return m_metric.apply(</span>
+<span class="nc" id="L272">            m_filter.apply( p_first ),</span>
+<span class="nc" id="L273">            m_filter.apply( p_second )</span>
+        );
+    }
+
+    /**
+     * factory numerical algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @return consistency
+     */
+    public static IConsistency numeric( final IFilter p_filter, final IMetric p_metric )
+    {
+<span class="nc" id="L286">        return new CConsistency( EAlgorithm.NUMERICAL, p_filter, p_metric, 0, 0.001 );</span>
+    }
+
+    /**
+     * factory heuristic algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @return consistency
+     */
+    public static IConsistency heuristic( final IFilter p_filter, final IMetric p_metric )
+    {
+<span class="nc" id="L298">        return new CConsistency( EAlgorithm.FIXPOINT, p_filter, p_metric, 8, 0.001 );</span>
+    }
+
+    /**
+     * factory heuristic algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @param p_iteration number of iterations
+     * @return consistency
+     */
+    public static IConsistency heuristic( final IFilter p_filter, final IMetric p_metric, final int p_iteration )
+    {
+<span class="nc" id="L311">        return new CConsistency( EAlgorithm.FIXPOINT, p_filter, p_metric, p_iteration, 0.001 );</span>
+    }
+
+    /**
+     * factory numerical algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @param p_iteration number of iterations
+     * @param p_epsilon epsilon
+     * @return consistency
+     */
+    public static IConsistency heuristic( final IFilter p_filter, final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    {
+<span class="nc" id="L325">        return new CConsistency( EAlgorithm.FIXPOINT, p_filter, p_metric, p_iteration, p_epsilon );</span>
+    }
+
+
+
+    /**
+     * numeric algorithm structure
+     */
+<span class="nc" id="L333">    private enum EAlgorithm</span>
+    {
+        /**
+         * use numeric algorithm (QR decomposition)
+         **/
+<span class="nc" id="L338">        NUMERICAL,</span>
+        /**
+         * use stochastic algorithm (fixpoint iteration)
+         **/
+<span class="nc" id="L342">        FIXPOINT;</span>
+
+
+
+        /**
+         * calculates the stationary distribution
+         *
+         * @param p_iteration number of iteration
+         * @param p_matrix transition matrix
+         * @return stationary distribution
+         */
+        public final DoubleMatrix1D getStationaryDistribution( final int p_iteration, final DoubleMatrix2D p_matrix )
+        {
+            final DoubleMatrix1D l_eigenvector;
+<span class="nc bnc" id="L356" title="All 3 branches missed.">            switch ( this )</span>
+            {
+                case FIXPOINT:
+<span class="nc" id="L359">                    l_eigenvector = getLargestEigenvector( p_matrix, p_iteration );</span>
+<span class="nc" id="L360">                    break;</span>
+
+                case NUMERICAL:
+<span class="nc" id="L363">                    l_eigenvector = getLargestEigenvector( p_matrix );</span>
+<span class="nc" id="L364">                    break;</span>
+
+                default:
+<span class="nc" id="L367">                    throw new CIllegalStateException( CCommon.languagestring( this, &quot;algorithm&quot;, this ) );</span>
+            }
+
+            // normalize eigenvector and create positiv oriantation
+<span class="nc" id="L371">            l_eigenvector.assign( DoubleMult.div( ALGEBRA.norm1( l_eigenvector ) ) );</span>
+<span class="nc" id="L372">            l_eigenvector.assign( DoubleFunctions.abs );</span>
+
+<span class="nc" id="L374">            return l_eigenvector;</span>
+        }
+
+        /**
+         * get the largest eigen vector based on the perron-frobenius theorem
+         *
+         * @param p_matrix matrix
+         * @param p_iteration number of iterations
+         * @return largest eigenvector (not normalized)
+         *
+         * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
+         */
+        private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix, final int p_iteration )
+        {
+<span class="nc" id="L388">            final DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );</span>
+<span class="nc" id="L389">            IntStream.range( 0, p_iteration )</span>
+<span class="nc" id="L390">                     .forEach( i -&gt;</span>
+                     {
+<span class="nc" id="L392">                         l_probability.assign( ALGEBRA.mult( p_matrix, l_probability ) );</span>
+<span class="nc" id="L393">                         l_probability.assign( DoubleMult.div( ALGEBRA.norm2( l_probability ) ) );</span>
+<span class="nc" id="L394">                     } );</span>
+<span class="nc" id="L395">            return l_probability;</span>
+        }
+
+        /**
+         * get the largest eigen vector with QR decomposition
+         *
+         * @param p_matrix matrix
+         * @return largest eigenvector (not normalized)
+         */
+        private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
+        {
+<span class="nc" id="L406">            final DenseDoubleEigenvalueDecomposition l_eigen = new DenseDoubleEigenvalueDecomposition( p_matrix );</span>
+
+            // gets the position of the largest eigenvalue in parallel and returns the eigenvector
+<span class="nc" id="L409">            final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();</span>
+<span class="nc" id="L410">            return l_eigen.getV().viewColumn(</span>
+<span class="nc" id="L411">                IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()</span>
+<span class="nc bnc" id="L412" title="All 2 branches missed.">                         .reduce( ( i, j ) -&gt; l_eigenvalues[i] &lt; l_eigenvalues[j] ? j : i ).orElse( 0 )</span>
+            );
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>
