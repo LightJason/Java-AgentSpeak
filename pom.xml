@@ -475,7 +475,7 @@
                         <releaseBranchPrefix>release/</releaseBranchPrefix>
                         <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
                         <supportBranchPrefix>support/</supportBranchPrefix>
-                        <versionTagPrefix>v</versionTagPrefix>
+                        <versionTagPrefix>pre-v</versionTagPrefix>
                         <origin>origin</origin>
                     </gitFlowConfig>
                 </configuration>
