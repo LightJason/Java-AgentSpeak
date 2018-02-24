@@ -377,7 +377,7 @@
     <!-- main build -->
     <build>
         <!-- default goal is set to package and checking dependency updates -->
-        <defaultGoal>install versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates</defaultGoal>
+        <defaultGoal>package install versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates</defaultGoal>
 
         <!-- include resource directory with replacing configuration variables -->
         <resources>
