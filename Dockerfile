@@ -23,7 +23,7 @@ FROM lightjason/docker:jdk
 
 
 # --- configuration section ----------------------
-ENV DOCKERIMAGE_AGENTSPEAK_VERSION HEAD
+ENV DOCKERIMAGE_AGENTSPEAK_VERSION developing
 
 
 # --- content configuration section --------------
