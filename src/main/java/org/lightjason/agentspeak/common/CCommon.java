@@ -152,6 +152,19 @@ public final class CCommon
     @Nonnull
     public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
+        return CCommon.actionsFromPackage( Thread.currentThread().getContextClassLoader(), p_package );
+    }
+
+    /**
+     * get all classes within an Java package as action
+     *
+     * @param p_classloader classloader
+     * @param p_package full-qualified package name or empty for default package
+     * @return action stream
+     */
+    @Nonnull
+    public static Stream<IAction> actionsFromPackage( @Nonnull final ClassLoader p_classloader, @Nullable final String... p_package )
+    {
         return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
                  : Arrays.stream( p_package ) )
@@ -159,7 +172,7 @@ public final class CCommon
             {
                 try
                 {
-                    return ClassPath.from( Thread.currentThread().getContextClassLoader() )
+                    return ClassPath.from( p_classloader )
                                     .getTopLevelClassesRecursive( j )
                                     .parallelStream()
                                     .map( ClassPath.ClassInfo::load )
