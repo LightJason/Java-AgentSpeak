@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -124,7 +123,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         // create delete-goal trigger
         if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
-            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
+            p_context.agent().trigger( ITrigger.EType.DELETEGOAL.builddefault( m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;
     }

@@ -35,7 +35,7 @@ import java.util.List;
  * Cast any argument into a number,
  * the action fails on casting errors
  *
- * {@code [N1|N2] = generic/type/tofloat( X, Y );}
+ * {@code [N1|N2] = generic/type/tonumber( X, Y );}
  */
 public final class CToNumber extends ICast
 {

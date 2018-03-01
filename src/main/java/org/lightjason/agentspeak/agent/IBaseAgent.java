@@ -49,7 +49,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.unify.IUnifier;
@@ -464,17 +463,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             (
                 m_sleepingterm.isEmpty()
 
-                ? Stream.of( CTrigger.from(
-                    ITrigger.EType.ADDGOAL, CLiteral.from(
-                    "wakeup"
-                    )
-                ) )
+                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup" ) ) )
 
                 : m_sleepingterm.parallelStream()
-                                .map( i -> CTrigger.from(
-                                    ITrigger.EType.ADDGOAL,
-                                    CLiteral.from( "wakeup", i )
-                                ) )
+                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup", i ) ) )
 
             ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
 

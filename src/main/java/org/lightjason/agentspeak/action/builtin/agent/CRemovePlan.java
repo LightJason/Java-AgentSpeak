@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
@@ -105,6 +104,6 @@ public final class CRemovePlan extends IBuiltinAction
             return false;
         }
 
-        return !p_agent.plans().removeAll( CTrigger.from( p_trigger, l_literal ) ).isEmpty();
+        return !p_agent.plans().removeAll( p_trigger.builddefault( l_literal ) ).isEmpty();
     }
 }
