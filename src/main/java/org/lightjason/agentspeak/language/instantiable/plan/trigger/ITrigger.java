@@ -202,6 +202,18 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
 
             return l_type;
         }
+
+        /**
+         * build trigger based on a literal
+         *
+         * @param p_literal literal
+         * @return default trigger object
+         */
+        @Nonnull
+        public ITrigger builddefault( @Nonnull final ILiteral p_literal )
+        {
+            return CTrigger.from( this, p_literal );
+        }
     }
 
 }
