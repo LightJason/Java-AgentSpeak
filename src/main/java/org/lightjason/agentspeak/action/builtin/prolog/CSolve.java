@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -25,23 +25,27 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.MalformedGoalException;
+import alice.tuprolog.Number;
 import alice.tuprolog.Prolog;
 import alice.tuprolog.SolveInfo;
+import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
 import alice.tuprolog.Theory;
+import alice.tuprolog.Var;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 /**
@@ -50,7 +54,7 @@ import java.util.stream.IntStream;
  * returns the boolean of the execution, the action never
  * fails
  *
- * @code [A|B|C] = prolog/solve( Theory, ["Test1", "test2", "test3"] ); @endcode
+ * {@code [A|B] = prolog/solve( Theory, ["foo(X)", "bar(Y)"] );}
  */
 public final class CSolve extends IBuiltinAction
 {
@@ -70,27 +74,39 @@ public final class CSolve extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
+        // https://github.com/bolerio/hgdb/wiki/TuProlog
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205
+        // /tuProlog-3.2.1-mvn/src/alice/tuprolog/?at=master
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
+        // tuprolog/Struct.java?at=master&fileviewer=file-view-default
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
+        // tuprolog/Term.java?at=master&fileviewer=file-view-default
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
+        // tuprolog/Theory.java?at=master&fileviewer=file-view-default
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
+        // tuprolog/Var.java?at=master&fileviewer=file-view-default
+
+
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
             return CFuzzyValue.from( false );
 
-        final Prolog l_prolog = new Prolog();
-        l_prolog.setException( true );
-        l_prolog.setWarning( false );
         try
         {
-            l_prolog.setTheory( l_arguments.get( 0 ).raw() );
+            // create new theory with current agent beliefbase and append given theory
+            final Theory l_theory = new Theory( new Struct( p_context.agent().beliefbase().stream().map( CSolve::toprologterm ).toArray( Term[]::new ) ) );
+            l_theory.append( l_arguments.get( 0 ).raw() );
 
             final SolveInfo[] l_result = l_arguments.stream()
                                                     .skip( 1 )
-                                                    .map( i -> solve( l_prolog, i.<String>raw() ) )
+                                                    .map( i -> solve( l_theory, i.raw() ) )
                                                     .toArray( SolveInfo[]::new );
 
             if ( Arrays.stream( l_result ).anyMatch( i -> !i.isSuccess() ) )
                 return CFuzzyValue.from( false );
 
-            Arrays.stream( l_result )
-                  .map( i -> i.getSolution(). )
+            //Arrays.stream( l_result )
+            //      .map( i -> i.getSolution(). )
             return CFuzzyValue.from( true );
         }
         catch ( final Exception l_exception )
@@ -99,15 +115,56 @@ public final class CSolve extends IBuiltinAction
         }
     }
 
-    private static SolveInfo solve( @Nonnull final Prolog p_prolog, @Nonnull final String p_query )
+    /**
+     * run solver
+     *
+     * @param p_theory theory
+     * @param p_query query
+     * @return solver
+     */
+    private static SolveInfo solve( @Nonnull final Theory p_theory, @Nonnull final String p_query )
     {
+        final Prolog l_prolog = new Prolog();
+        l_prolog.setException( true );
+        l_prolog.setWarning( false );
+
         try
         {
-            return p_prolog.solve( p_query );
+            l_prolog.addTheory( p_theory );
+            return l_prolog.solve( p_query );
         }
-        catch ( final MalformedGoalException l_exception )
+        catch ( final InvalidTheoryException | MalformedGoalException l_exception )
         {
             throw new RuntimeException( l_exception );
         }
+    }
+
+    /**
+     * converts a agentspeak term to a prolog term
+     *
+     * @param p_term agentspeak term
+     * @return prolog term
+     */
+    private static Term toprologterm( @Nonnull final ITerm p_term )
+    {
+        if ( p_term instanceof IVariable<?> )
+            return new Var( p_term.functor() );
+
+        if ( ( p_term instanceof ILiteral ) && ( !p_term.<ILiteral>term().emptyValues() ) )
+            return new Struct( p_term.functor(), p_term.<ILiteral>term().orderedvalues().map( CSolve::toprologterm ).toArray( Term[]::new ) );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Double.class ) ) )
+            return new alice.tuprolog.Double( p_term.<Number>raw().doubleValue() );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Float.class ) ) )
+            return new alice.tuprolog.Float( p_term.<Number>raw().floatValue() );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Long.class ) ) )
+            return new alice.tuprolog.Long( p_term.<Number>raw().longValue() );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Integer.class ) ) )
+            return new alice.tuprolog.Int( p_term.<Number>raw().intValue() );
+
+        return new Struct( p_term.functor() );
     }
 }

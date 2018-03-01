@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -24,8 +24,11 @@
 package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
+import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
 import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -35,14 +38,15 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * creates theory objects by string input.
- * The action creates for each argument a theory object.
- * The action fail on theory errors
+ * The action creates for each argument an item within the theory
+ * and returns the theory input. The action fail on theory errors
  *
- * @code T = prolog/createtheory( "dosomethin(X) :- X is 5" ); @endcode
+ * {@code T = prolog/createtheory( "dosomethin(X) :- X is 5" );}
  */
 public final class CTheory extends IBuiltinAction
 {
@@ -56,11 +60,15 @@ public final class CTheory extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        CCommon.flatten( p_argument )
-               .map( ITerm::<String>raw )
-               .map( CTheory::theory )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        p_return.add(
+            CRawTerm.from(
+                theory( CCommon.flatten( p_argument )
+                               .map( ITerm::<String>raw )
+                               .map( Struct::new ),
+                        p_context
+                )
+            )
+        );
 
         return CFuzzyValue.from( true );
     }
@@ -68,18 +76,19 @@ public final class CTheory extends IBuiltinAction
     /**
      * create theory object and catch exception
      *
-     * @param p_theory string theory
+     * @param p_struct struct list
      * @return theory object
      */
-    private static Theory theory( @Nonnull final String p_theory )
+    protected static Theory theory( @Nonnull final Stream<Struct> p_struct, @Nonnull final IContext p_context )
     {
         try
         {
-            return new Theory( p_theory );
+            return new Theory( new Struct( p_struct.toArray( Term[]::new ) ) );
         }
         catch ( final InvalidTheoryException l_exception )
         {
-            throw new RuntimeException( l_exception );
+            throw new CRuntimeException( l_exception, p_context );
         }
     }
+
 }

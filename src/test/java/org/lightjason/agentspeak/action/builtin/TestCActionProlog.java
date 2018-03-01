@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -21,22 +21,17 @@
  * @endcond
  */
 
+
 package org.lightjason.agentspeak.action.builtin;
 
 import alice.tuprolog.interfaces.IProlog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.prolog.CCreateEngine;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -52,22 +47,6 @@ public final class TestCActionProlog extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CCreateEngine().execute(
-            false,
-            IContext.EMPTYPLAN,
-            Collections.emptyList(),
-            l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 1 );
-
-
-        new CCreateEngine().execute(
-            false,
-            IContext.EMPTYPLAN,
-            Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
-        );
 
         Assert.assertEquals( l_return.size(), 4 );
         l_return.stream().map( ITerm::raw ).forEach( i -> Assert.assertTrue( i instanceof IProlog ) );
