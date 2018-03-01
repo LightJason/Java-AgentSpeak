@@ -202,7 +202,7 @@ public abstract class IBaseWeb extends IBuiltinAction
                     .stream()
                     .map( i ->
                               CLiteral.from(
-                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
+                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/]", "-" ),
                                   flatterm( i.getValue() )
                               )
                     );

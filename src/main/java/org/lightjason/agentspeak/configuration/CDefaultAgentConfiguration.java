@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.unify.IUnifier;
@@ -134,7 +133,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
         m_initialbeliefs = Collections.unmodifiableCollection( p_initialbeliefs );
-        m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
+        m_initialgoal = p_initialgoal != null ? ITrigger.EType.ADDGOAL.builddefault( p_initialgoal ) : null;
 
         LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
     }

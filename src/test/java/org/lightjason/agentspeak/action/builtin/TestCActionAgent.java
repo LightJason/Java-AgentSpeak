@@ -51,7 +51,6 @@ import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
@@ -97,7 +96,7 @@ public final class TestCActionAgent extends IBaseTest
     {
         m_context = new CContext(
             new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
-            new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "contextplan" ) ) ),
+            new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "contextplan" ) ) ),
             Collections.emptyList()
         );
     }
@@ -109,7 +108,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void planlist()
     {
-        final ITrigger l_trigger = CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplanlist" ) );
+        final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testplanlist" ) );
         final IPlan l_plan = new CEmptyPlan( l_trigger );
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -147,7 +146,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void addplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testaddplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testaddplan" ) ) );
 
         new CAddPlan().execute(
             false, m_context,
@@ -189,7 +188,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void getplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testgetplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testgetplan" ) ) );
         final List<ITerm> l_return = new ArrayList<>();
 
 
@@ -223,7 +222,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void removeplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testremoveplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testremoveplan" ) ) );
         m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         Assert.assertTrue(

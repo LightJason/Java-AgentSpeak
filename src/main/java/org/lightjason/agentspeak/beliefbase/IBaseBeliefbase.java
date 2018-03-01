@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.CView;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
@@ -134,7 +133,7 @@ public abstract class IBaseBeliefbase implements IBeliefbase
      */
     protected ILiteral event( final ITrigger.EType p_event, final ILiteral p_literal )
     {
-        final ITrigger l_trigger = CTrigger.from( p_event, p_literal );
+        final ITrigger l_trigger = p_event.builddefault( p_literal );
         m_views.parallelStream().forEach( i -> m_events.put( i, l_trigger ) );
         return p_literal;
     }
