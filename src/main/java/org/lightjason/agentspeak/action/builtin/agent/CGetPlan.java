@@ -36,7 +36,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
@@ -112,7 +111,7 @@ public final class CGetPlan extends IBuiltinAction
             return false;
         }
 
-        final Collection<IPlanStatistic> l_plans = p_agent.plans().get( CTrigger.from( p_trigger, l_literal ) );
+        final Collection<IPlanStatistic> l_plans = p_agent.plans().get( p_trigger.builddefault( l_literal ) );
         if ( l_plans.isEmpty() )
             return false;
 

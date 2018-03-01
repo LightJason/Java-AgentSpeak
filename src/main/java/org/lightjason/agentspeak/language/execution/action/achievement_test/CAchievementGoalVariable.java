@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.execution.action.achievement_test;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
@@ -71,10 +70,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().trigger(
-            CTrigger.from(
-                ITrigger.EType.ADDGOAL,
-                m_value.evaluate( p_context )
-            ),
+            ITrigger.EType.ADDGOAL.builddefault( m_value.evaluate( p_context ) ),
             m_immediately
         );
     }
