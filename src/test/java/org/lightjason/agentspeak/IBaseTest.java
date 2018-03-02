@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak;
 
 import org.apache.commons.io.IOUtils;
+import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -33,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Collections;
 
 
@@ -50,16 +52,39 @@ public abstract class IBaseTest
     /**
      * generator of empty agents
      */
-    protected static final class CEmptyAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
+    protected static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
     {
         /**
          * ctor
          *
          * @throws Exception is thrown on any error
          */
-        public CEmptyAgentGenerator() throws Exception
+        public CAgentGenerator() throws Exception
         {
-            super( IOUtils.toInputStream( "", "UTF-8" ), Collections.emptySet() );
+            this( "", Collections.emptySet() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final String p_asl ) throws Exception
+        {
+            this( p_asl, Collections.emptySet() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @param p_action actions
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Collection<IAction> p_action ) throws Exception
+        {
+            super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet() );
         }
 
         @Nullable
@@ -75,6 +100,11 @@ public abstract class IBaseTest
      */
     private static final class CAgent extends IBaseAgent<IAgent<?>>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 3961697445753327536L;
+
         /**
          * ctor
          *

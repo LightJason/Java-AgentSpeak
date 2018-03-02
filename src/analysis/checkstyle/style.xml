@@ -446,6 +446,12 @@
 
         <module name = "SuperFinalize" />
 
+        <module name="SuppressionCommentFilter">
+            <property name="offCommentFormat" value="Checkstyle\:OFF\:([\w]+)"/>
+            <property name="onCommentFormat" value="Checkstyle\:ON\:([\w]+)"/>
+            <property name="checkFormat" value="$1"/>
+        </module>
+
         <!--  <module name="SuppressWarnings"/> -->
 
         <!--  <module name="SuppressWarningsHolder"/> -->

@@ -25,14 +25,18 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.MalformedGoalException;
+import alice.tuprolog.NoSolutionException;
+import alice.tuprolog.Number;
 import alice.tuprolog.Prolog;
 import alice.tuprolog.SolveInfo;
 import alice.tuprolog.Struct;
 import alice.tuprolog.Term;
+import alice.tuprolog.TermVisitor;
 import alice.tuprolog.Theory;
 import alice.tuprolog.Var;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -42,8 +46,10 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 
@@ -113,8 +119,22 @@ public final class CSolveAll extends IBuiltinAction
 
 
 
-            //Arrays.stream( l_result )
-            //      .map( i -> i.getSolution(). )
+            Arrays.stream( l_result )
+                  .flatMap( i -> {
+                      try
+                      {
+                          return i.getBindingVars().stream();
+                      }
+                      catch ( final NoSolutionException l_exception )
+                      {
+                          return null;
+                      }
+                  } )
+                  .filter( Var::isVar )
+                  .map( CSolveAll::fromprologterm )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
+
             return CFuzzyValue.from( true );
         }
         catch ( final Exception l_exception )
@@ -154,10 +174,9 @@ public final class CSolveAll extends IBuiltinAction
      * @param p_term agentspeak term
      * @return prolog term
      */
+    //Checkstyle:OFF:NPathComplexity
     private static Term toprologterm( @Nonnull final ITerm p_term )
     {
-        System.out.println( p_term );
-
         if ( p_term instanceof IVariable<?> )
             return new Var( p_term.functor() );
 
@@ -175,7 +194,65 @@ public final class CSolveAll extends IBuiltinAction
 
         if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Integer.class ) ) )
             return new alice.tuprolog.Int( p_term.raw() );
+        
+        return p_term.functor().isEmpty() ? new Struct() : new Struct( p_term.functor() );
+    }
+    //Checkstyle:ON:NPathComplexity
 
-        return new Struct( p_term.functor() );
+
+    /**
+     * extract data of a variable
+     *
+     * @param p_term variable
+     * @tparam T return type
+     * @return value
+     */
+    @Nullable
+    private static Object fromprologterm( @Nonnull Var p_term )
+    {
+        if ( !p_term.isBound() )
+            return null;
+
+        final AtomicReference<Object> l_data = new AtomicReference<>();
+        p_term.accept( new CTermVisitor( l_data ) );
+        return l_data.get();
+    }
+
+
+    /**
+     * term visitor with data reference
+     */
+    private final static class CTermVisitor implements TermVisitor
+    {
+        /**
+         * data reference
+         */
+        private final AtomicReference<Object> l_data;
+
+        CTermVisitor( @Nonnull final AtomicReference<Object> p_l_data )
+        {
+            l_data = p_l_data;
+        }
+
+        @Override
+        public void visit( final Struct p_struct )
+        {
+            System.out.println( p_struct.getName().length() );
+            if ( !p_struct.getName().isEmpty() )
+                l_data.compareAndSet( null, p_struct.getName() );
+        }
+
+        @Override
+        public void visit( final Var p_var )
+        {
+            p_var.getLink()
+                 .accept( new CTermVisitor( l_data ) );
+        }
+
+        @Override
+        public void visit( final Number p_number )
+        {
+            l_data.compareAndSet( null, p_number.doubleValue() );
+        }
     }
 }

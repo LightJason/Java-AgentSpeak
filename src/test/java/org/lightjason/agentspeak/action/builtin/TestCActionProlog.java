@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -68,7 +69,7 @@ public final class TestCActionProlog extends IBaseTest
     @Before
     public final void initialize() throws Exception
     {
-        m_agent = new CEmptyAgentGenerator().generatesingle();
+        m_agent = new CAgentGenerator().generatesingle();
         m_context = new CContext( Objects.requireNonNull( m_agent ), IPlan.EMPTY, Collections.emptyList() );
     }
 
@@ -101,17 +102,28 @@ public final class TestCActionProlog extends IBaseTest
 
         final List<ITerm> l_return = new ArrayList<>();
 
-        m_agent.beliefbase().add( CLiteral.from( "q", CRawTerm.from( 5 ) ) );
+        m_agent.beliefbase().add(
+            CLiteral.from( "q", CRawTerm.from( 5 ) ),
+            CLiteral.from( "s", CRawTerm.from( "hello world" ) ),
+            CLiteral.from( "l", CRawTerm.from( new HashSet<>() ) )
+        );
 
-        System.out.println(
+        Assert.assertTrue(
             new CSolveAll().execute(
                     false,
                     m_context,
-                    Stream.of( "q(X)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
                     l_return
-            )
+            ).value()
         );
 
+        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertEquals( 5.0, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 5.0, l_return.get( 1 ).<Number>raw() );
+        Assert.assertEquals( "hello world", l_return.get( 2 ).<String>raw() );
+
+        System.out.println( l_return.get( 3 ).raw().getClass() );
+        //Assert.assertTrue( l_return.get( 3 ).raw() instanceof HashSet<?> );
     }
 
 }
