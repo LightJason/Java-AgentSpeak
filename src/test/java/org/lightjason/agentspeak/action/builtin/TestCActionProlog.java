@@ -24,12 +24,14 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
+import alice.tuprolog.Theory;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.prolog.CSolveAll;
+import org.lightjason.agentspeak.action.builtin.prolog.CTheory;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -122,5 +124,40 @@ public final class TestCActionProlog extends IBaseTest
         Assert.assertEquals( 5.0, l_return.get( 1 ).<Number>raw() );
         Assert.assertEquals( "hello world", l_return.get( 2 ).<String>raw() );
     }
+
+    /**
+     * solve all with theory
+     */
+    @Test
+    public final void solveallwiththeory()
+    {
+        Assume.assumeNotNull( m_agent, m_context );
+
+        final List<ITerm> l_return = new ArrayList<>();
+
+        m_agent.beliefbase().add(
+            CLiteral.from( "data", CRawTerm.from( 5 ) ),
+            CLiteral.from( "data", CRawTerm.from( 10 ) )
+        );
+
+       new CTheory().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "dataquery(X) :- data(X); X > 7." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertTrue(
+            new CSolveAll().execute(
+                false,
+                m_context,
+                Stream.of( "dataquery(X).", l_return.get( 0 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+            ).value()
+        );
+
+        System.out.println( l_return );
+    }
+
 
 }

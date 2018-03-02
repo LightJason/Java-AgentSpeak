@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -62,9 +63,10 @@ public final class CTheory extends IBuiltinAction
     {
         p_return.add(
             CRawTerm.from(
-                theory( CCommon.flatten( p_argument )
-                               .map( ITerm::<String>raw )
-                               .map( Struct::new ),
+                theory(
+                    CCommon.flatten( p_argument )
+                           .map( ITerm::<String>raw )
+                           .collect( Collectors.joining("" ) ),
                         p_context
                 )
             )
@@ -76,14 +78,14 @@ public final class CTheory extends IBuiltinAction
     /**
      * create theory object and catch exception
      *
-     * @param p_struct struct list
+     * @param p_theory theory structure
      * @return theory object
      */
-    protected static Theory theory( @Nonnull final Stream<Struct> p_struct, @Nonnull final IContext p_context )
+    private static Theory theory( @Nonnull final String p_theory, @Nonnull final IContext p_context )
     {
         try
         {
-            return new Theory( new Struct( p_struct.toArray( Term[]::new ) ) );
+            return new Theory( p_theory );
         }
         catch ( final InvalidTheoryException l_exception )
         {
