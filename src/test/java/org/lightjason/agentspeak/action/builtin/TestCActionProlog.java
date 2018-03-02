@@ -93,10 +93,10 @@ public final class TestCActionProlog extends IBaseTest
     }
 
     /**
-     * solve a single fact
+     * solve all without theory
      */
     @Test
-    public final void solveexistingsingle()
+    public final void solveallwithouttheory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 
@@ -121,9 +121,6 @@ public final class TestCActionProlog extends IBaseTest
         Assert.assertEquals( 5.0, l_return.get( 0 ).<Number>raw() );
         Assert.assertEquals( 5.0, l_return.get( 1 ).<Number>raw() );
         Assert.assertEquals( "hello world", l_return.get( 2 ).<String>raw() );
-
-        System.out.println( l_return.get( 3 ).raw().getClass() );
-        //Assert.assertTrue( l_return.get( 3 ).raw() instanceof HashSet<?> );
     }
 
 }

@@ -30,37 +30,28 @@ import java.util.Arrays;
 
 
 /**
- * solve all given prolog queries.
- * The action solves any given prolog queries and
+ * solve any given prolog queries.
+ * The action solves all given prolog queries and
  * binds the beliefbase of the agent. All theory objects
  * will be aggregated together and all queries will be
  * asked and the bounded variables will be returned. The
- * action succeed if any queries can be successful executed
- * and only the bound variables will be returned
+ * action succeed if all queries can be successful executed.
  *
  * {@code
-    [A|B] = prolog/solveall( Theory1, ["foo(X)", Theory2, "bar(Y)"] );
-    [C|D] = prolog/solveall( "foo(X)", "bar(Y)" );
+    [A|B] = prolog/solveany( Theory1, ["foo(X)", Theory2, "bar(Y)"] );
+    [C|D] = prolog/solveany( "foo(X)", "bar(Y)" );
  * }
  */
-public final class CSolveAll extends IBaseSolve
+public class CSolveAny extends IBaseSolve
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 902243292596197085L;
-
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
+    private static final long serialVersionUID = 7170142285182677094L;
 
     @Override
     protected final boolean result( @Nonnull final SolveInfo[] p_solveinfos )
     {
-        return Arrays.stream( p_solveinfos ).anyMatch( i -> !i.isSuccess() );
+        return Arrays.stream( p_solveinfos ).anyMatch( SolveInfo::isSuccess );
     }
-
-
 }
