@@ -57,9 +57,9 @@ public final class CSolveAll extends IBaseSolve
     }
 
     @Override
-    protected final boolean result( @Nonnull final SolveInfo[] p_solveinfos )
+    protected final boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )
     {
-        return Arrays.stream( p_solveinfos ).anyMatch( i -> !i.isSuccess() );
+        return Arrays.stream( p_solveinfos ).allMatch( SolveInfo::isSuccess );
     }
 
 

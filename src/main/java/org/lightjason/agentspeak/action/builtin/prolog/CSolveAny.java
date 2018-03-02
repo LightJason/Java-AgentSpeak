@@ -50,7 +50,7 @@ public class CSolveAny extends IBaseSolve
     private static final long serialVersionUID = 7170142285182677094L;
 
     @Override
-    protected final boolean result( @Nonnull final SolveInfo[] p_solveinfos )
+    protected final boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )
     {
         return Arrays.stream( p_solveinfos ).anyMatch( SolveInfo::isSuccess );
     }

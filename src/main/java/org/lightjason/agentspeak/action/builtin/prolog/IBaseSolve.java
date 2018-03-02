@@ -55,6 +55,9 @@ import java.util.stream.Collectors;
 
 /**
  * prolog solving structure
+ *
+ * @see https://github.com/bolerio/hgdb/wiki/TuProlog
+ * @todo replace string concatination on belief generating after a new version of the library is published
  */
 public abstract class IBaseSolve extends IBuiltinAction
 {
@@ -68,24 +71,23 @@ public abstract class IBaseSolve extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        // https://github.com/bolerio/hgdb/wiki/TuProlog
-        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205
-        // /tuProlog-3.2.1-mvn/src/alice/tuprolog/?at=master
-        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
-        // tuprolog/Struct.java?at=master&fileviewer=file-view-default
-        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
-        // tuprolog/Term.java?at=master&fileviewer=file-view-default
-        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
-        // tuprolog/Theory.java?at=master&fileviewer=file-view-default
-        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/
-        // tuprolog/Var.java?at=master&fileviewer=file-view-default
-
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         final Theory l_theory;
         try
         {
-            l_theory = new Theory( new Struct( p_context.agent().beliefbase().stream().map( CSolveAll::toprologterm ).toArray( Term[]::new ) ) );
+            // beliefs must converted into a struct and converted to a string, because theory class creates an NPE on
+            // appending a struct generated theory and a string generated theory,
+            // see https://bitbucket.org/tuprologteam/tuprolog/issues/18/nullpointer-exception-on-theory-append
+            l_theory = new Theory(
+                            p_context.agent()
+                                     .beliefbase()
+                                     .stream()
+                                     .map( CSolveAll::toprologterm )
+                                     .map( i -> i.toString() + "." )
+                                     .collect( Collectors.joining( "\n" ) )
+                                     + "\n"
+            );
         }
         catch ( final Exception l_exception )
         {
@@ -115,7 +117,7 @@ public abstract class IBaseSolve extends IBuiltinAction
                                                 .toArray( SolveInfo[]::new );
 
         // result checking
-        if ( this.result( l_result  ) )
+        if ( !this.issuccess( l_result  ) )
             return CFuzzyValue.from( false );
 
         // result extraction to result values
@@ -147,7 +149,7 @@ public abstract class IBaseSolve extends IBuiltinAction
      * @param p_solveinfos solverinfos
      * @return successful or fail execution
      */
-    protected abstract boolean result( @Nonnull final SolveInfo[] p_solveinfos );
+    protected abstract boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos );
 
     /**
      * run solver
@@ -260,4 +262,5 @@ public abstract class IBaseSolve extends IBuiltinAction
             m_data.compareAndSet( null, p_number.doubleValue() );
         }
     }
+
 }

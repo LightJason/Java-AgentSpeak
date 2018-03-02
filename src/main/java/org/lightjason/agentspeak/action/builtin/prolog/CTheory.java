@@ -24,8 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
-import alice.tuprolog.Struct;
-import alice.tuprolog.Term;
 import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.error.CRuntimeException;
@@ -38,14 +36,14 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
  * creates theory objects by string input.
  * The action creates for each argument an item within the theory
- * and returns the theory input. The action fail on theory errors
+ * and returns the theory input. The action does not fail
  *
  * {@code T = prolog/createtheory( "dosomethin(X) :- X is 5" );}
  */
@@ -65,8 +63,9 @@ public final class CTheory extends IBuiltinAction
             CRawTerm.from(
                 theory(
                     CCommon.flatten( p_argument )
+                           .filter( i -> Objects.nonNull( i.raw() ) )
                            .map( ITerm::<String>raw )
-                           .collect( Collectors.joining("" ) ),
+                           .collect( Collectors.joining( "" ) ),
                         p_context
                 )
             )
@@ -79,6 +78,7 @@ public final class CTheory extends IBuiltinAction
      * create theory object and catch exception
      *
      * @param p_theory theory structure
+     * @param p_context agent context
      * @return theory object
      */
     private static Theory theory( @Nonnull final String p_theory, @Nonnull final IContext p_context )

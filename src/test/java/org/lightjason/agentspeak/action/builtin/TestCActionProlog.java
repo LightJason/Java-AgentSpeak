@@ -24,13 +24,13 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import alice.tuprolog.Theory;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.prolog.CSolveAll;
+import org.lightjason.agentspeak.action.builtin.prolog.CSolveAny;
 import org.lightjason.agentspeak.action.builtin.prolog.CTheory;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -140,10 +140,10 @@ public final class TestCActionProlog extends IBaseTest
             CLiteral.from( "data", CRawTerm.from( 10 ) )
         );
 
-       new CTheory().execute(
+        new CTheory().execute(
             false,
             IContext.EMPTYPLAN,
-            Stream.of( "dataquery(X) :- data(X); X > 7." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "query(X) :- data(X), X > 6." ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -151,13 +151,41 @@ public final class TestCActionProlog extends IBaseTest
             new CSolveAll().execute(
                 false,
                 m_context,
-                Stream.of( "dataquery(X).", l_return.get( 0 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "query(X).", l_return.get( 0 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
 
-        System.out.println( l_return );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 10.0, l_return.get( 1 ).<Number>raw() );
     }
 
+
+    /**
+     * solve any without theory
+     */
+    @Test
+    public final void solveanywithouttheory()
+    {
+        Assume.assumeNotNull( m_agent, m_context );
+
+        final List<ITerm> l_return = new ArrayList<>();
+
+        m_agent.beliefbase().add(
+            CLiteral.from( "a", CRawTerm.from( 8 ) )
+        );
+
+        Assert.assertTrue(
+            new CSolveAny().execute(
+                false,
+                m_context,
+                Stream.of( "a(X).", "foo(_).", "bar(5)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+            ).value()
+        );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 8.0, l_return.get( 0 ).<Number>raw() );
+    }
 
 }
