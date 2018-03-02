@@ -24,14 +24,26 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import alice.tuprolog.interfaces.IProlog;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.builtin.prolog.CSolveAll;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.CContext;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -40,16 +52,66 @@ import java.util.List;
 public final class TestCActionProlog extends IBaseTest
 {
     /**
-     * initialize prolog system
+     * context with agent
+     */
+    private IContext m_context;
+    /**
+     * agent
+     */
+    private IAgent<?> m_agent;
+
+    /**
+     * initialize test data
+     *
+     * @throws Exception is thrown on problems
+     */
+    @Before
+    public final void initialize() throws Exception
+    {
+        m_agent = new CEmptyAgentGenerator().generatesingle();
+        m_context = new CContext( Objects.requireNonNull( m_agent ), IPlan.EMPTY, Collections.emptyList() );
+    }
+
+
+    /**
+     * solve on an empty structure
      */
     @Test
-    public final void create()
+    public final void solveempty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
+        Assert.assertFalse(
+            new CSolveAll().execute(
+                    false,
+                    IContext.EMPTYPLAN,
+                    Stream.of( "q(X)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    l_return
+            ).value()
+        );
+    }
 
-        Assert.assertEquals( l_return.size(), 4 );
-        l_return.stream().map( ITerm::raw ).forEach( i -> Assert.assertTrue( i instanceof IProlog ) );
+    /**
+     * solve a single fact
+     */
+    @Test
+    public final void solveexistingsingle()
+    {
+        Assume.assumeNotNull( m_agent, m_context );
+
+        final List<ITerm> l_return = new ArrayList<>();
+
+        m_agent.beliefbase().add( CLiteral.from( "q", CRawTerm.from( 5 ) ) );
+
+        System.out.println(
+            new CSolveAll().execute(
+                    false,
+                    m_context,
+                    Stream.of( "q(X)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    l_return
+            )
+        );
+
     }
 
 }

@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.MalformedGoalException;
-import alice.tuprolog.Number;
 import alice.tuprolog.Prolog;
 import alice.tuprolog.SolveInfo;
 import alice.tuprolog.Struct;
@@ -56,7 +55,7 @@ import java.util.stream.Collectors;
  *
  * {@code [A|B] = prolog/solve( Theory, ["foo(X)", "bar(Y)"] );}
  */
-public final class CSolve extends IBuiltinAction
+public final class CSolveAll extends IBuiltinAction
 {
     /**
      * serial id
@@ -88,22 +87,31 @@ public final class CSolve extends IBuiltinAction
 
 
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
 
         try
         {
             // create new theory with current agent beliefbase and append given theory
-            final Theory l_theory = new Theory( new Struct( p_context.agent().beliefbase().stream().map( CSolve::toprologterm ).toArray( Term[]::new ) ) );
-            l_theory.append( l_arguments.get( 0 ).raw() );
+            final Theory l_theory = new Theory( new Struct( p_context.agent().beliefbase().stream().map( CSolveAll::toprologterm ).toArray( Term[]::new ) ) );
+
+            final int l_skip;
+            if ( l_arguments.get( 0 ).raw() instanceof Theory )
+            {
+                l_skip = 1;
+                l_theory.append( l_arguments.get( 0 ).raw() );
+            }
+            else
+                l_skip = 0;
+
 
             final SolveInfo[] l_result = l_arguments.stream()
-                                                    .skip( 1 )
+                                                    .skip( l_skip )
                                                     .map( i -> solve( l_theory, i.raw() ) )
                                                     .toArray( SolveInfo[]::new );
 
             if ( Arrays.stream( l_result ).anyMatch( i -> !i.isSuccess() ) )
                 return CFuzzyValue.from( false );
+
+
 
             //Arrays.stream( l_result )
             //      .map( i -> i.getSolution(). )
@@ -111,6 +119,7 @@ public final class CSolve extends IBuiltinAction
         }
         catch ( final Exception l_exception )
         {
+            LOGGER.warning( l_exception.getMessage() );
             return CFuzzyValue.from( false );
         }
     }
@@ -147,23 +156,25 @@ public final class CSolve extends IBuiltinAction
      */
     private static Term toprologterm( @Nonnull final ITerm p_term )
     {
+        System.out.println( p_term );
+
         if ( p_term instanceof IVariable<?> )
             return new Var( p_term.functor() );
 
         if ( ( p_term instanceof ILiteral ) && ( !p_term.<ILiteral>term().emptyValues() ) )
-            return new Struct( p_term.functor(), p_term.<ILiteral>term().orderedvalues().map( CSolve::toprologterm ).toArray( Term[]::new ) );
+            return new Struct( p_term.functor(), p_term.<ILiteral>term().orderedvalues().map( CSolveAll::toprologterm ).toArray( Term[]::new ) );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Double.class ) ) )
-            return new alice.tuprolog.Double( p_term.<Number>raw().doubleValue() );
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Double.class ) ) )
+            return new alice.tuprolog.Double( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Float.class ) ) )
-            return new alice.tuprolog.Float( p_term.<Number>raw().floatValue() );
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Float.class ) ) )
+            return new alice.tuprolog.Float( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Long.class ) ) )
-            return new alice.tuprolog.Long( p_term.<Number>raw().longValue() );
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Long.class ) ) )
+            return new alice.tuprolog.Long( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Integer.class ) ) )
-            return new alice.tuprolog.Int( p_term.<Number>raw().intValue() );
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Integer.class ) ) )
+            return new alice.tuprolog.Int( p_term.raw() );
 
         return new Struct( p_term.functor() );
     }

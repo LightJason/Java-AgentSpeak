@@ -23,8 +23,17 @@
 
 package org.lightjason.agentspeak;
 
+import org.apache.commons.io.IOUtils;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 
 /**
@@ -37,4 +46,43 @@ public abstract class IBaseTest
      */
     protected static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
 
+
+    /**
+     * generator of empty agents
+     */
+    protected static final class CEmptyAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
+    {
+        /**
+         * ctor
+         *
+         * @throws Exception is thrown on any error
+         */
+        public CEmptyAgentGenerator() throws Exception
+        {
+            super( IOUtils.toInputStream( "", "UTF-8" ), Collections.emptySet() );
+        }
+
+        @Nullable
+        @Override
+        public final IAgent<?> generatesingle( @Nullable final Object... p_data )
+        {
+            return new CAgent( m_configuration );
+        }
+    }
+
+    /**
+     * agent class
+     */
+    private static final class CAgent extends IBaseAgent<IAgent<?>>
+    {
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         */
+        CAgent( @Nonnull final IAgentConfiguration<IAgent<?>> p_configuration )
+        {
+            super( p_configuration );
+        }
+    }
 }
