@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.common;
 
-import com.google.common.reflect.ClassPath;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
@@ -32,6 +31,7 @@ import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,7 +39,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -73,10 +72,14 @@ public final class CCommon
      */
     private static final Logger LOGGER = CCommon.logger( CCommon.class );
     /**
+     * package separator
+     */
+    private static final String PACKAGESEPARATOR = ".";
+    /**
      * language resource bundle
      **/
     private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(
-                                                        MessageFormat.format( "{0}.{1}", PACKAGEROOT, "language" ),
+                                                        MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "language" ),
                                                         Locale.getDefault(),
                                                         new CUTF8Control()
     );
@@ -84,7 +87,7 @@ public final class CCommon
      * properties of the package
      */
     private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle(
-                                                        MessageFormat.format( "{0}.{1}", PACKAGEROOT, "configuration" ),
+                                                        MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "configuration" ),
                                                         Locale.getDefault(),
                                                         new CUTF8Control()
     );
@@ -150,60 +153,35 @@ public final class CCommon
      * @return action stream
      */
     @Nonnull
+    @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
-    {
-        return CCommon.actionsFromPackage( Thread.currentThread().getContextClassLoader(), p_package );
-    }
-
-    /**
-     * get all classes within an Java package as action
-     *
-     * @param p_classloader classloader
-     * @param p_package full-qualified package name or empty for default package
-     * @return action stream
-     */
-    @Nonnull
-    public static Stream<IAction> actionsFromPackage( @Nonnull final ClassLoader p_classloader, @Nullable final String... p_package )
     {
         return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
                  : Arrays.stream( p_package ) )
-            .flatMap( j ->
-            {
-                try
-                {
-                    return ClassPath.from( p_classloader )
-                                    .getTopLevelClassesRecursive( j )
-                                    .parallelStream()
-                                    .map( ClassPath.ClassInfo::load )
-                                    .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
-                                    .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
-                                    .filter( i -> Modifier.isPublic( i.getModifiers() ) )
-                                    .filter( IAction.class::isAssignableFrom )
-                                    .map( i ->
-                                    {
-                                        try
-                                        {
-                                            return (IAction) i.getConstructor().newInstance();
-                                        }
-                                        catch ( final NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException l_exception )
-                                        {
-                                            LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
-                                            return null;
-                                        }
-                                    } )
-
-                                    // action can be instantiate
-                                    .filter( Objects::nonNull )
-
-                                    // check usable action name
-                                    .filter( CCommon::actionusable );
-                }
-                catch ( final IOException l_exception )
-                {
-                    throw new UncheckedIOException( l_exception );
-                }
-            } );
+            .flatMap( j -> new Reflections( j ).getSubTypesOf( IAction.class )
+                                               .parallelStream()
+                                               .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
+                                               .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
+                                               .filter( i -> Modifier.isPublic( i.getModifiers() ) )
+                                               .map( i ->
+                                               {
+                                                   try
+                                                   {
+                                                       return (IAction) i.getConstructor().newInstance();
+                                                   }
+                                                   catch ( final NoSuchMethodException | InvocationTargetException
+                                                       | IllegalAccessException | InstantiationException l_exception )
+                                                   {
+                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
+                                                       return null;
+                                                   }
+                                               } )
+                                               // action can be instantiate
+                                               .filter( Objects::nonNull )
+                                               // check usable action name
+                                               .filter( CCommon::actionusable )
+            );
     }
 
 
@@ -236,10 +214,8 @@ public final class CCommon
                                return null;
                            }
                        } )
-
                        // action can be instantiate
                        .filter( Objects::nonNull )
-
                        // check usable action name
                        .filter( CCommon::actionusable );
     }
@@ -348,6 +324,8 @@ public final class CCommon
                    )
                );
     }
+
+
 
     // --- resource access -------------------------------------------------------------------------------------------------------------------------------------
 
