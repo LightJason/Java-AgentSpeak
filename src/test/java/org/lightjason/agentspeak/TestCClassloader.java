@@ -23,21 +23,22 @@
 
 package org.lightjason.agentspeak;
 
+import com.google.common.base.CharMatcher;
 import org.junit.Test;
 import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 
 /**
@@ -57,7 +58,7 @@ public final class TestCClassloader
             classes(
                 Thread.currentThread().getContextClassLoader(),
                 MessageFormat.format( "{0}.{1}", CCommon.PACKAGEROOT, "action.builtin" )
-            ).collect( Collectors.toList() )
+            ).collect( Collectors.toSet() )
         );
     }
 
@@ -69,52 +70,83 @@ public final class TestCClassloader
      * @return class stream
      * @throws IOException on any io error
      */
+    @Nonnull
     private static Stream<? extends Class<?>> classes( @Nullable final ClassLoader p_loader, @Nonnull final String p_package ) throws IOException
     {
-        if ( Objects.isNull( p_loader ) )
-            return Stream.empty();
-
-        final String l_root = p_package.replace( ".", "/" );
-
-        return StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(
-                    p_loader.getResources( l_root ).asIterator(),
-                    Spliterator.ORDERED
-                ),
-                false
-            ).flatMap( i -> findclasses( new File( i.getFile() ), l_root ) );
+        return Objects.isNull( p_loader )
+               ? Stream.empty()
+               : p_loader.resources( p_package.replace( ".", "/" ) ).flatMap( i -> findclasses( i, p_package ) );
     }
 
     /**
      * returns a stream of classes
      *
-     * @param p_directory directory
-     * @param p_directorypath classpage as directory
+     * @param p_url directory
+     * @param p_package package
      * @return class stream
      */
-    private static Stream<? extends Class<?>> findclasses( @Nonnull final File p_directory, @Nonnull final String p_directorypath )
+    @Nonnull
+    private static Stream<? extends Class<?>> findclasses( @Nonnull final URL p_url, @Nonnull final String p_package )
     {
-        if ( !p_directory.exists() )
+        if ( !p_url.getProtocol().equals( "file" ) )
             return Stream.empty();
 
-        final String l_package = p_directory.getAbsolutePath().substring( p_directory.getAbsolutePath().indexOf( p_directorypath ) ).replace( "/", "." );
-        return Arrays.stream( Objects.requireNonNull( p_directory.listFiles() ) )
-                     .parallel()
-                     .filter( i -> i.getName().endsWith( ".class" ) )
-                     .map( i -> MessageFormat.format( "{0}.{1}", l_package, i.getName().replace( ".class", "" ) ) )
-                     .map( i ->
-                     {
-                         try
-                         {
-                             return Class.forName( i );
-                         }
-                         catch ( final ClassNotFoundException l_exception )
-                         {
-                             return null;
-                         }
-                     } )
-                     .filter( Objects::nonNull );
+        final Path l_directory;
+        try
+        {
+             l_directory = Paths.get( p_url.toURI() );
+        }
+        catch ( final URISyntaxException l_exception )
+        {
+            return Stream.empty();
+        }
 
+        try
+        {
+             return Files.walk( l_directory )
+                         .parallel()
+                         .map( i -> i.normalize().toAbsolutePath().toFile() )
+                         .filter( i -> i.getName().endsWith( ".class" ) )
+                         .map( Object::toString )
+                         .map( i -> classname( i, p_package ) )
+                         .map( i ->
+                         {
+                             try
+                             {
+                                 //System.out.println( i );
+                                 return Class.forName( i );
+                             }
+                             catch ( final ClassNotFoundException l_exception )
+                             {
+                                 return null;
+                             }
+                         } )
+                         .filter( Objects::nonNull );
+        }
+        catch ( final IOException l_exception )
+        {
+            return Stream.empty();
+        }
     }
 
+    /**
+     * creates a class name from file input string
+     *
+     * @param p_name relative package path and filename
+     * @return full-qualified class name
+     */
+    @Nonnull
+    private static String classname( @Nonnull final String p_name, @Nonnull final String p_package )
+    {
+        String l_classname = p_name.replace( "/", "." ).replace( ".class", "" );
+        l_classname = l_classname.substring( l_classname.indexOf( p_package ) );
+
+        final int l_dollar = l_classname.lastIndexOf(36 );
+        return l_dollar == -1
+            ? l_classname
+            : Stream.of(
+                l_classname.substring( 0, l_dollar ),
+                CharMatcher.anyOf( "0123456789" ).trimLeadingFrom( l_classname.substring( l_dollar + 1 ) )
+            ).filter( i -> !i.isEmpty() ).collect( Collectors.joining( "." ) );
+    }
 }
