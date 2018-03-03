@@ -76,14 +76,6 @@ public final class CCommon
      */
     private static final String PACKAGESEPARATOR = ".";
     /**
-     * class extension suffix
-     */
-    private static final String CLASSEXTENSION = ".class";
-    /**
-     * url separator
-     */
-    private static final String URLSEPARATOR = "/";
-    /**
      * language resource bundle
      **/
     private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(
@@ -161,21 +153,8 @@ public final class CCommon
      * @return action stream
      */
     @Nonnull
-    public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
-    {
-        return CCommon.actionsFromPackage( Thread.currentThread().getContextClassLoader(), p_package );
-    }
-
-    /**
-     * get all classes within an Java package as action
-     *
-     * @param p_classloader classloader
-     * @param p_package full-qualified package name or empty for default package
-     * @return action stream
-     */
-    @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static Stream<IAction> actionsFromPackage( @Nonnull final ClassLoader p_classloader, @Nullable final String... p_package )
+    public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
         return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
@@ -198,10 +177,8 @@ public final class CCommon
                                                        return null;
                                                    }
                                                } )
-
                                                // action can be instantiate
                                                .filter( Objects::nonNull )
-
                                                // check usable action name
                                                .filter( CCommon::actionusable )
             );
@@ -237,10 +214,8 @@ public final class CCommon
                                return null;
                            }
                        } )
-
                        // action can be instantiate
                        .filter( Objects::nonNull )
-
                        // check usable action name
                        .filter( CCommon::actionusable );
     }
