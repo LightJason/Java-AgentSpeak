@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -48,10 +48,10 @@ import java.util.stream.IntStream;
  * a string value defines a sparse or dense resulting vector,
  * the action never fails
  *
- * @code
+ * {@code
     [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2 );
     [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
- * @endcode
+ * }
  */
 public final class CRowSum extends IAlgebra
 {

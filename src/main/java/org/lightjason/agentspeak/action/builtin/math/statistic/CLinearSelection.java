@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * list contains elements, the second list contains numeric values for defining
  * the weights
  *
- * @code S = math/statistic/linearselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3] ); @endcode
+ * {@code S = math/statistic/linearselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3] );}
  * @see https://en.wikipedia.org/wiki/Fitness_proportionate_selection
  */
 public final class CLinearSelection extends ISelection

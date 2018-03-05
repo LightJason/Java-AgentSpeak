@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,9 +42,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,8 +145,8 @@ public final class CViewMap implements IView
                     j.remove( i, l_data );
             },
             Map::clear,
-            ( i ) -> i.toLowerCase( Locale.ROOT ),
-            ( i ) -> i.toLowerCase( Locale.ROOT )
+            i -> i.toLowerCase( Locale.ROOT ),
+            i -> i.toLowerCase( Locale.ROOT )
         );
     }
 
@@ -255,7 +256,7 @@ public final class CViewMap implements IView
     {
         // build path relative to this view
         final IPath l_path = this.path();
-        return ( ( p_path == null ) || ( p_path.length == 0 )
+        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
                  ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
                  : Arrays.stream( p_path )
                          .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
@@ -273,7 +274,7 @@ public final class CViewMap implements IView
     @Override
     public final IView clear( @Nullable final IPath... p_path )
     {
-        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+        if ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 ) )
             m_clearconsumer.accept( m_data );
         else
             Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ) ).forEach( i -> i.clear() );

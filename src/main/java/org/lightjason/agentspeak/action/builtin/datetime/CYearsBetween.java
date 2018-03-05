@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,11 +36,12 @@ import java.util.stream.Stream;
  * returns the years between two dates.
  * The actions returns the number of years between
  * two date-time objects, the action never
- * fails
+ * fails. A positive value will be returned iif the
+ * first date-time item is before the second one, a
+ * negative value will be returned iif the first date-time
+ * item is after the second date-time item
  *
- * @code [Y1|Y2] = datetime/yearsbetween( DateTime1, DateTime2, DateTime3, DateTime4 ); @endcode
- * @note a positive value will be returned iif the first date-time item is before the second one, a negative value
- * will be returned iif the first date-time item is after the second date-time item
+ * {@code [Y1|Y2] = datetime/yearsbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
  */
 public final class CYearsBetween extends IBetween
 {

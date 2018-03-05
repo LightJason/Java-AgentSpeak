@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,7 +42,7 @@ import java.util.List;
  * Calculates for each pair of arguments \f$ \sqrt{ x_{i}^{2} + y_{i}^{2} } \f$ and
  * fail iif the number of arguments are odd, it unflats all list elements
  *
- * @code [A|B|C] = math/hypot( 1, [2, [3]], [4, 5]); @endcode
+ * {@code [A|B|C] = math/hypot( 1, [2, [3]], [4, 5]);}
  */
 public final class CHypot extends IBuiltinAction
 {

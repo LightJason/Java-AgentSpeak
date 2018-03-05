@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -25,24 +25,24 @@ package org.lightjason.agentspeak.configuration;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.beliefbase.CBeliefbase;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -133,7 +133,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
         m_initialbeliefs = Collections.unmodifiableCollection( p_initialbeliefs );
-        m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
+        m_initialgoal = p_initialgoal != null ? ITrigger.EType.ADDGOAL.builddefault( p_initialgoal ) : null;
 
         LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
     }
@@ -205,9 +205,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     {
         final String l_elements = StringUtils.join(
             Stream.of(
-                m_variablebuilder == null ? "" : m_variablebuilder,
+                Objects.isNull( m_variablebuilder ) ? "" : m_variablebuilder,
                 m_initialbeliefs.isEmpty() ? "" : m_initialbeliefs,
-                m_initialgoal == null ? "" : m_initialgoal,
+                Objects.isNull( m_initialgoal ) ? "" : m_initialgoal,
                 m_plans.isEmpty() ? "" : m_plans,
                 m_rules.isEmpty() ? "" : m_rules
             ).filter( i -> !i.toString().trim().isEmpty() ).toArray(),

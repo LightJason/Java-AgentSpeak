@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -38,7 +38,7 @@ import java.util.Map;
  * and returns the value, the action fails on
  * parsing errors
  *
- * @code [X|Y|Z] = generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] ); @endcode
+ * {@code [X|Y|Z] = generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] );}
  */
 public final class CParseLiteral extends IParse
 {

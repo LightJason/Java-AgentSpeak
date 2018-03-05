@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -21,65 +21,75 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.rest;
+package org.lightjason.agentspeak.action.builtin.prolog;
 
-import org.lightjason.agentspeak.language.CLiteral;
+import alice.tuprolog.InvalidTheoryException;
+import alice.tuprolog.Theory;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
- * action for calling a restful webservice with a JSON object.
- * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
- * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
+ * creates theory objects by string input.
+ * The action creates for each argument an item within the theory
+ * and returns the theory input. The action does not fail
  *
- * @code W = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
- * @see https://en.wikipedia.org/wiki/Representational_state_transfer
- * @see https://en.wikipedia.org/wiki/Web_service
- * @see https://en.wikipedia.org/wiki/JSON
+ * {@code T = prolog/createtheory( "dosomethin(X) :- X is 5" );}
  */
-public final class CJsonObject extends IBaseRest
+public final class CTheory extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3741382638836440374L;
+    private static final long serialVersionUID = -5362284489249927608L;
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        p_return.add(
+            CRawTerm.from(
+                theory(
+                    CCommon.flatten( p_argument )
+                           .filter( i -> Objects.nonNull( i.raw() ) )
+                           .map( ITerm::<String>raw )
+                           .collect( Collectors.joining( "" ) ),
+                        p_context
+                )
+            )
+        );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * create theory object and catch exception
+     *
+     * @param p_theory theory structure
+     * @param p_context agent context
+     * @return theory object
+     */
+    private static Theory theory( @Nonnull final String p_theory, @Nonnull final IContext p_context )
     {
         try
         {
-            final Map<String, ?> l_data = IBaseRest.json(
-                p_argument.get( 0 ).<String>raw(),
-                Map.class
-            );
-
-            p_return.add(
-                p_argument.size() == 2
-                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
-                : IBaseRest.baseliteral(
-                    p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
-                    flatterm( l_data )
-                )
-            );
-
-            return CFuzzyValue.from( true );
+            return new Theory( p_theory );
         }
-        catch ( final IOException l_exception )
+        catch ( final InvalidTheoryException l_exception )
         {
-            return CFuzzyValue.from( false );
+            throw new CRuntimeException( l_exception, p_context );
         }
     }
 

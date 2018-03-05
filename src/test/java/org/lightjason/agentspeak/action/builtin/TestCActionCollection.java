@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -123,6 +123,8 @@ public final class TestCActionCollection extends IBaseTest
 
     /**
      * test size
+     *
+     * @param p_input pair input data term and results
      */
     @Test
     @UseDataProvider( "generate" )
@@ -190,15 +192,4 @@ public final class TestCActionCollection extends IBaseTest
         Assert.assertTrue( l_map.isEmpty() );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command line arguments
-     */
-    @SuppressWarnings( "unchecked" )
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCollection().invoketest();
-    }
 }

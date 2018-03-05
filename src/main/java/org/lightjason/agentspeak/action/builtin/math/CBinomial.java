@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -44,7 +44,7 @@ import java.util.List;
  * first argument and k the second of each given input
  * tupel, the action fails never
  *
- * @code [B1|B2] = math/binomial( 49, 6,  30, 5 ); @endcode
+ * {@code [B1|B2] = math/binomial( 49, 6,  30, 5 );}
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
 public final class CBinomial extends IBuiltinAction

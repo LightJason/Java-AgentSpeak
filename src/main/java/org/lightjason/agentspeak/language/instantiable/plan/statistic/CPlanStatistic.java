@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -153,8 +153,7 @@ public final class CPlanStatistic implements IPlanStatistic
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null )
-               && ( ( p_object instanceof IPlanStatistic ) || ( p_object instanceof IPlan ) )
+        return ( ( p_object instanceof IPlanStatistic ) || ( p_object instanceof IPlan ) )
                && ( this.hashCode() == p_object.hashCode() );
     }
 

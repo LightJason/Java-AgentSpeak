@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -29,11 +29,12 @@ package org.lightjason.agentspeak.action.builtin.bool;
  * The actions checks the first argument
  * to all others arguments of unequality,
  * list structures won't be unflaten, but
- * elementwise compared, the action never fails
+ * elementwise compared, the action never fails.
+ * On number arguments not the value must equal, also
+ * the type (double / integral) must be equal, so keep
+ * in mind, that you use the correct number type on the argument input
  *
- * @code [NE1|NE2] = bool/notequal( "this is equal", "this is equal", [123, "test"] ); @endcode
- * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
- * so keep in mind, that you use the correct number type on the argument input
+ * {@code [NE1|NE2] = bool/notequal( "this is equal", "this is equal", [123, "test"] );}
  */
 public final class CNotEqual extends CEqual
 {

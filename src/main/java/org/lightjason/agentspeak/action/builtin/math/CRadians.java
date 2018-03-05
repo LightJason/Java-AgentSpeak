@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -41,7 +41,7 @@ import java.util.List;
  * Converts all degree arguments into radian values
  * \f$ \frac{x_i \cdot \pi}{180} \f$
  *
- * @code A = math/radians( 180 ); @endcode
+ * {@code A = math/radians( 180 );}
  * @see https://en.wikipedia.org/wiki/Radian
  */
 public final class CRadians extends IBuiltinAction

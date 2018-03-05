@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -41,7 +41,7 @@ import java.util.List;
  * Calculates for each argument the signum value
  * \f$ sgn(x) = \begin{cases} -1 & \text{if } x < 0 \\ 0 & \text{if } x = 0 \\ 1 & \text{if } x > 0 \end{cases} \f$
  *
- * @code [A|B|C] = math/signum(-3, 0, 8) @endcode
+ * {@code [A|B|C] = math/signum(-3, 0, 8);}
  * @see https://en.wikipedia.org/wiki/Sign_function
  */
 public final class CSignum extends IBuiltinAction

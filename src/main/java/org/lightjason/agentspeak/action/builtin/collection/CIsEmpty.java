@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,7 +45,7 @@ import java.util.Map;
  * a boolean flag for empty is returned, on all non-collection
  * types empty is always false, the action never fails
  *
- * @code [A|B|C] = collection/list/isempty(List, Map, MultiMap); @endcode
+ * {@code [A|B|C] = collection/list/isempty(List, Map, MultiMap);}
  */
 public final class CIsEmpty extends IBuiltinAction
 {

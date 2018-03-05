@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -41,7 +41,7 @@ import java.util.List;
  * For each unflatten input argument the \f$ sinh( x_i ) \f$
  * is calculated and the action never fails
  *
- * @code [X|Y|Z] = math/sinh( 3.2, [5,8, [1.2]] ); @endcode
+ * {@code [X|Y|Z] = math/sinh( 3.2, [5,8, [1.2]] );}
  * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CSinh extends IBuiltinAction

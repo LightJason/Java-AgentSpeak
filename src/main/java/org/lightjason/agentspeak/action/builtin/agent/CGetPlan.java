@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
@@ -54,7 +53,7 @@ import java.util.stream.Collectors;
  * for each tuple the plan object will returned within a list, the
  * action fails on non-existing plan
  *
- * @code [L1|L2] = agent/getplan( "+!", "myplan(X)", "-!", Literal ); @endcode
+ * {@code [L1|L2] = agent/getplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CGetPlan extends IBuiltinAction
@@ -112,7 +111,7 @@ public final class CGetPlan extends IBuiltinAction
             return false;
         }
 
-        final Collection<IPlanStatistic> l_plans = p_agent.plans().get( CTrigger.from( p_trigger, l_literal ) );
+        final Collection<IPlanStatistic> l_plans = p_agent.plans().get( p_trigger.builddefault( l_literal ) );
         if ( l_plans.isEmpty() )
             return false;
 

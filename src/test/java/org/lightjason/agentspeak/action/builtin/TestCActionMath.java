@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -76,6 +76,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -110,7 +111,7 @@ public final class TestCActionMath extends IBaseTest
                     CNextPrime.class
                 ),
 
-                ( i ) -> (double) Primes.nextPrime( i.intValue() )
+                i -> (double) Primes.nextPrime( i.intValue() )
             ),
 
             singlevaluetestcase(
@@ -141,27 +142,27 @@ public final class TestCActionMath extends IBaseTest
                     CTanh.class
                 ),
 
-                ( i ) -> Math.abs( i.doubleValue() ),
-                ( i ) -> Math.acos( i.doubleValue() ),
-                ( i ) -> Math.asin( i.doubleValue() ),
-                ( i ) -> Math.atan( i.doubleValue() ),
-                ( i ) -> Math.ceil( i.doubleValue() ),
-                ( i ) -> Math.cos( i.doubleValue() ),
-                ( i ) -> Math.cosh( i.doubleValue() ),
-                ( i ) -> Math.toDegrees( i.doubleValue() ),
-                ( i ) -> Math.exp( i.doubleValue() ),
-                ( i ) -> Primes.isPrime( i.intValue() ),
-                ( i ) -> Math.log( i.doubleValue() ),
-                ( i ) -> Math.log10( i.doubleValue() ),
-                ( i ) -> Math.floor( i.doubleValue() ),
-                ( i ) -> Math.toRadians( i.doubleValue() ),
-                ( i ) -> Math.round( i.doubleValue() ),
-                ( i ) -> Math.signum( i.doubleValue() ),
-                ( i ) -> Math.sin( i.doubleValue() ),
-                ( i ) -> Math.sinh( i.doubleValue() ),
-                ( i ) -> Math.sqrt( i.doubleValue() ),
-                ( i ) -> Math.tan( i.doubleValue() ),
-                ( i ) -> Math.tanh( i.doubleValue() )
+                i -> Math.abs( i.doubleValue() ),
+                i -> Math.acos( i.doubleValue() ),
+                i -> Math.asin( i.doubleValue() ),
+                i -> Math.atan( i.doubleValue() ),
+                i -> Math.ceil( i.doubleValue() ),
+                i -> Math.cos( i.doubleValue() ),
+                i -> Math.cosh( i.doubleValue() ),
+                i -> Math.toDegrees( i.doubleValue() ),
+                i -> Math.exp( i.doubleValue() ),
+                i -> Primes.isPrime( i.intValue() ),
+                i -> Math.log( i.doubleValue() ),
+                i -> Math.log10( i.doubleValue() ),
+                i -> Math.floor( i.doubleValue() ),
+                i -> Math.toRadians( i.doubleValue() ),
+                i -> Math.round( i.doubleValue() ),
+                i -> Math.signum( i.doubleValue() ),
+                i -> Math.sin( i.doubleValue() ),
+                i -> Math.sinh( i.doubleValue() ),
+                i -> Math.sqrt( i.doubleValue() ),
+                i -> Math.tan( i.doubleValue() ),
+                i -> Math.tanh( i.doubleValue() )
             )
 
         ).toArray();
@@ -188,10 +189,10 @@ public final class TestCActionMath extends IBaseTest
                 CMax.class
             ),
 
-            ( i ) -> i.mapToDouble( Number::doubleValue ).average().getAsDouble(),
-            ( i ) -> i.mapToDouble( Number::doubleValue ).sum(),
-            ( i ) -> i.mapToDouble( Number::doubleValue ).min().getAsDouble(),
-            ( i ) -> i.mapToDouble( Number::doubleValue ).max().getAsDouble()
+            i -> i.mapToDouble( Number::doubleValue ).average().getAsDouble(),
+            i -> i.mapToDouble( Number::doubleValue ).sum(),
+            i -> i.mapToDouble( Number::doubleValue ).min().getAsDouble(),
+            i -> i.mapToDouble( Number::doubleValue ).max().getAsDouble()
 
         ).toArray();
     }
@@ -248,17 +249,19 @@ public final class TestCActionMath extends IBaseTest
      *
      * @param p_input test data
      *
-     * @throws IllegalAccessException is thrown on instantiation error
-     * @throws InstantiationException is thrown on instantiation error
+     * @throws IllegalAccessException is thrwon on instantiation error
+     * @throws InstantiationException is thrwon on instantiation error
+     * @throws NoSuchMethodException is thrwon on instantiation error
+     * @throws InvocationTargetException is thrwon on instantiation error
      */
     @Test
     @UseDataProvider( "aggregationvaluegenerate" )
     public final void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
-        throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        p_input.getMiddle().newInstance().execute(
+        p_input.getMiddle().getConstructor().newInstance().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
@@ -274,17 +277,19 @@ public final class TestCActionMath extends IBaseTest
      *
      * @param p_input test data
      *
-     * @throws IllegalAccessException is thrown on instantiation error
-     * @throws InstantiationException is thrown on instantiation error
+     * @throws IllegalAccessException is thrwon on instantiation error
+     * @throws InstantiationException is thrwon on instantiation error
+     * @throws NoSuchMethodException is thrwon on instantiation error
+     * @throws InvocationTargetException is thrwon on instantiation error
      */
     @Test
     @UseDataProvider( "singlevaluegenerate" )
     public final void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
-        throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        p_input.getMiddle().newInstance().execute(
+        p_input.getMiddle().getConstructor().newInstance().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
@@ -515,17 +520,6 @@ public final class TestCActionMath extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3D );
-    }
-
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMath().invoketest();
     }
 
 }

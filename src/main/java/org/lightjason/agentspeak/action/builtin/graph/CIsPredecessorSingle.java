@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the first vertex argument that the second vertex
  * argument is predecessor within the given graph instances, the action never fails
  *
- * @code [B1|B2|B3] = graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
+ * {@code [B1|B2|B3] = graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
 public final class CIsPredecessorSingle extends IApplySingle
 {

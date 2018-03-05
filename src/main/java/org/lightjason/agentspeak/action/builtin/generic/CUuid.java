@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -40,9 +40,7 @@ import java.util.UUID;
  * create an uuid.
  * The action creates a random uuid value and never fails
  *
- * @code
-    U1 = generic/uuid();
- * @endcode
+ * {@code U1 = generic/uuid(); }
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  */
 public final class CUuid extends IBuiltinAction

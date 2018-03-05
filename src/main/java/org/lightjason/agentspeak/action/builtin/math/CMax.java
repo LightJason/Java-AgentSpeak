@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.OptionalDouble;
  * the maxmimum with \f$ max( x_0, x_1, \ldots, x_i ) \f$,
  * the action fails on wrong input
  *
- * @code Max = math/max( 2, 5, 7, [3, 2] ); @endcode
+ * {@code Max = math/max( 2, 5, 7, [3, 2] );}
  */
 public final class CMax extends IBuiltinAction
 {

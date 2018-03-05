@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.bit.vector;
 
-import jdk.nashorn.internal.runtime.BitVector;
+import cern.colt.matrix.tbit.BitVector;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * in each bit vector the given bit positions are set
  * to false, the action never fails
  *
- * @code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] ); @endcode
+ * {@code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] );}
  */
 public final class CClear extends IBuiltinAction
 {

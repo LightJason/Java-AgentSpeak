@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates \f$ asin( x_i ) \f$ for all arguments, the return
  * value is in \f$ [0, \pi) \f$, the arguments must be in radians.
  *
- * @code [A | B | C] = math/asin( -1, -5, 3 ); @endcode
+ * {@code [A | B | C] = math/asin( -1, -5, 3 );}
  * @see https://en.wikipedia.org/wiki/Inverse_trigonometric_functions
  */
 public final class CASin extends IBuiltinAction

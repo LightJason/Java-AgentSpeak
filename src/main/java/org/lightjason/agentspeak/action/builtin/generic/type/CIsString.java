@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -40,7 +40,7 @@ import java.util.List;
  * All arguments are checked if all are string values,
  * the action fails if one of the arguments is not a string
  *
- * @code generic/type/isstring( "foo", "bar", 123 ); @endcode
+ * {@code generic/type/isstring( "foo", "bar", 123 );}
  */
 public final class CIsString extends IBuiltinAction
 {

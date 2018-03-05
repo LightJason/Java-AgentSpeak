@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.List;
  * t and all other arguments will be used for \f$ x_i \f$,
  * the action fails never
  *
- * @code [A|B|C] = math/pow(2, -2, 2, 9); @endcode
+ * {@code [A|B|C] = math/pow(2, -2, 2, 9);}
  */
 public final class CPow extends IBuiltinAction
 {

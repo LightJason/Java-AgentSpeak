@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,7 +45,7 @@ import java.util.List;
  * called and the values, and the two matrixes (left / right)
  * are returned, the action never fails
  *
- * @code [Values1|U1|V1|Values2|U2|V2] = blas/matrix/singularvalue(Matrix1, Matrix2); @endcode
+ * {@code [Values1|U1|V1|Values2|U2|V2] = blas/matrix/singularvalue(Matrix1, Matrix2);}
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
  */
 public final class CSingularValue extends IBuiltinAction

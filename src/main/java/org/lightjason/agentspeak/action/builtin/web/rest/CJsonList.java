@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.rest;
+package org.lightjason.agentspeak.action.builtin.web.rest;
 
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -41,7 +41,7 @@ import java.util.Map;
  * all other arguments are the literal elements of the returning literal, the webservice must return a JSON list and
  * the last argument will used to encapsulate the list elements
  *
- * @code W = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" ); @endcode
+ * {@code W = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );}
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/JSON
@@ -52,6 +52,14 @@ public final class CJsonList extends IBaseRest
      * serial id
      */
     private static final long serialVersionUID = -5630882266708277403L;
+
+    /**
+     * ctor
+     */
+    public CJsonList()
+    {
+        super( 3 );
+    }
 
     @Nonnull
     @Override

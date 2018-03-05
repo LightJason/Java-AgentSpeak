@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,6 +36,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -111,7 +112,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object != null ) && ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
+            return ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
         }
     };
 
@@ -196,10 +197,22 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         public static EType from( @Nonnull final String p_sequence )
         {
             final EType l_type = ELEMENTS.get( p_sequence.trim() );
-            if ( l_type == null )
+            if ( Objects.isNull( l_type ) )
                 throw new CIllegalArgumentException( CCommon.languagestring( EType.class, "sequencenotfound", p_sequence ) );
 
             return l_type;
+        }
+
+        /**
+         * build trigger based on a literal
+         *
+         * @param p_literal literal
+         * @return default trigger object
+         */
+        @Nonnull
+        public ITrigger builddefault( @Nonnull final ILiteral p_literal )
+        {
+            return CTrigger.from( this, p_literal );
         }
     }
 

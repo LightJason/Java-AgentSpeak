@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -40,7 +40,7 @@ import java.util.List;
  * arguments are multimap references, the key will be
  * returned from each multimap, the action fails never,
  *
- * @code [A|B|C] = collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 ); @endcode
+ * {@code [A|B|C] = collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 );}
  */
 public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
 {

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.List;
  * are plans to the plan-base of the current
  * agent, the action never fails
  *
- * @code agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] ); @endcode
+ * {@code agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] );}
  */
 public final class CAddPlan extends IBuiltinAction
 {

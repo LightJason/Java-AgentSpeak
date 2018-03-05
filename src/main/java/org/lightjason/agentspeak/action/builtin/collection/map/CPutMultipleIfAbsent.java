@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import java.util.Map;
  * are key-value pairs, all pars are added to the map,
  * the action fails on wrong input number
  *
- * @code collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]); @endcode
+ * {@code collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
  */
 public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
 {

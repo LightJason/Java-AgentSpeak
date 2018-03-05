@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -51,7 +51,6 @@ import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
@@ -97,7 +96,7 @@ public final class TestCActionAgent extends IBaseTest
     {
         m_context = new CContext(
             new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
-            new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "contextplan" ) ) ),
+            new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "contextplan" ) ) ),
             Collections.emptyList()
         );
     }
@@ -109,7 +108,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void planlist()
     {
-        final ITrigger l_trigger = CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplanlist" ) );
+        final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testplanlist" ) );
         final IPlan l_plan = new CEmptyPlan( l_trigger );
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -147,7 +146,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void addplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testaddplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testaddplan" ) ) );
 
         new CAddPlan().execute(
             false, m_context,
@@ -189,7 +188,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void getplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testgetplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testgetplan" ) ) );
         final List<ITerm> l_return = new ArrayList<>();
 
 
@@ -223,7 +222,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void removeplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testremoveplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testremoveplan" ) ) );
         m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         Assert.assertTrue(
@@ -327,16 +326,6 @@ public final class TestCActionAgent extends IBaseTest
         }
 
         return m_context;
-    }
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionAgent().invoketest();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

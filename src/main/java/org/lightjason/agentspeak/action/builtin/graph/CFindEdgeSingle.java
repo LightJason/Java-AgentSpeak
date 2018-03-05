@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -38,7 +38,7 @@ import java.util.List;
  * are graphs, returning values are edges of each graph instance,
  * the action never fails
  *
- * @code [E1|E2|E3] = graph/findedgesingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
+ * {@code [E1|E2|E3] = graph/findedgesingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
 public final class CFindEdgeSingle extends IApplySingle
 {

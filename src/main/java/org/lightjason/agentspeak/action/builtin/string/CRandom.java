@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -44,7 +44,7 @@ import java.util.List;
  * all other arguments are numbers to present the length of the returning string
  * and the action never fails
  *
- * @code [A|B|C] = string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
+ * {@code [A|B|C] = string/random( "abdefgXYZUI", 5, 3, 6 );}
  */
 public final class CRandom extends IBuiltinAction
 {

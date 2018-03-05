@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -119,7 +119,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
         // run lambda expression
         final List<?> l_return = m_parallel ? this.executeParallel( p_context, l_initialization ) : this.executeSequential( p_context, l_initialization );
-        if ( m_return != null )
+        if ( Objects.nonNull( m_return ) )
             CCommon.replaceFromContext( p_context, m_return ).<IVariable<List<?>>>term().set( l_return );
 
         return CFuzzyValue.from( true );
@@ -134,14 +134,14 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_return == null
+        return Objects.isNull( m_return )
                ? m_initialize.variables()
                : Stream.concat(
                    Stream.of( m_return ),
@@ -230,7 +230,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         l_variables.remove( l_iterator );
         l_variables.add( l_iterator );
 
-        if ( l_return != null )
+        if ( Objects.nonNull( l_return ) )
         {
             l_variables.remove( l_return );
             l_variables.add( l_return );

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
@@ -48,7 +47,7 @@ import java.util.List;
  * input trigger arguments, the action fails
  * on wrong input
  *
- * @code agent/removeplan( "+!", "myplan(X)", "-!", Literal ); @endcode
+ * {@code agent/removeplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CRemovePlan extends IBuiltinAction
@@ -105,6 +104,6 @@ public final class CRemovePlan extends IBuiltinAction
             return false;
         }
 
-        return !p_agent.plans().removeAll( CTrigger.from( p_trigger, l_literal ) ).isEmpty();
+        return !p_agent.plans().removeAll( p_trigger.builddefault( l_literal ) ).isEmpty();
     }
 }

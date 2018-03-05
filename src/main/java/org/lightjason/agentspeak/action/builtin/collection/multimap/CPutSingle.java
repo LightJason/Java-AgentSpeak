@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
  * other values are multimap references, the key-value pair
  * is added to all multimaps and the action never fails
  *
- * @code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 ); @endcode
+ * {@code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
  */
 public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {

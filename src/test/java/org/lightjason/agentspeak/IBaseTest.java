@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -23,20 +23,19 @@
 
 package org.lightjason.agentspeak;
 
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.junit.Assert;
-import org.junit.AssumptionViolatedException;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.apache.commons.io.IOUtils;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -51,111 +50,69 @@ public abstract class IBaseTest
 
 
     /**
-     * invoke all test manually
+     * generator of empty agents
      */
-    protected final void invoketest()
+    protected static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
     {
-        final Set<Method> l_before = this.before();
-
-        Arrays.stream( this.getClass().getMethods() )
-              .filter( i -> i.getAnnotation( Test.class ) != null )
-              .filter( i -> i.getAnnotation( Ignore.class ) == null )
-              .forEach( i -> this.invoke( i, l_before ) );
-    }
-
-    /**
-     * invoke method and read if possible the data-provider
-     *
-     * @param p_method method
-     * @param p_before before method
-     */
-    private void invoke( final Method p_method, final Set<Method> p_before )
-    {
-        // method uses a data-provider
-        if ( p_method.getAnnotation( UseDataProvider.class ) == null )
-            this.execute( p_method, p_before );
-        else
+        /**
+         * ctor
+         *
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator() throws Exception
         {
-            final Object[] l_arguments;
-
-            try
-            {
-                l_arguments = (Object[]) this.getClass().getDeclaredMethod( p_method.getAnnotation( UseDataProvider.class ).value() ).invoke( null );
-
-            }
-            catch ( final InvocationTargetException l_exception )
-            {
-                Assert.assertTrue( l_exception.getTargetException().toString(), false );
-                return;
-            }
-            catch ( final IllegalAccessException | NoSuchMethodException l_exception )
-            {
-                Assert.assertTrue( l_exception.toString(), false );
-                return;
-            }
-
-            Arrays.stream( l_arguments ).forEach( i -> this.execute( p_method, p_before, i ) );
+            this( "", Collections.emptySet() );
         }
-    }
 
-    /**
-     * invokes the method within the current object context
-     *
-     * @param p_method method
-     * @param p_before before method
-     * @param p_arguments optional arguments
-     */
-    private void execute( final Method p_method, final Set<Method> p_before, final Object... p_arguments )
-    {
-        try
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final String p_asl ) throws Exception
         {
-            if ( !p_before.isEmpty() )
-                p_before.forEach( i ->
-                {
-                    try
-                    {
-                        i.invoke( this );
-                    }
-                    catch ( final IllegalAccessException | InvocationTargetException l_exception )
-                    {
-                        l_exception.printStackTrace();
-                        Assert.assertTrue( false );
-                    }
-                } );
+            this( p_asl, Collections.emptySet() );
+        }
 
-            p_method.invoke( this, p_arguments );
-        }
-        catch ( final AssumptionViolatedException l_exception )
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @param p_action actions
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Collection<IAction> p_action ) throws Exception
         {
-            // ignore catched exception
+            super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet() );
         }
-        catch ( final InvocationTargetException l_exception )
-        {
-            if ( l_exception.getTargetException() instanceof AssumptionViolatedException )
-                return;
 
-            if ( !p_method.getAnnotation( Test.class ).expected().isInstance( l_exception.getTargetException() ) )
-            {
-                l_exception.getTargetException().printStackTrace();
-                Assert.assertTrue( false );
-            }
-        }
-        catch ( final IllegalAccessException l_exception )
+        @Nullable
+        @Override
+        public final IAgent<?> generatesingle( @Nullable final Object... p_data )
         {
-            Assert.assertTrue( l_exception.toString(), false );
+            return new CAgent( m_configuration );
         }
     }
 
     /**
-     * reads the before annotated methods
-     *
-     * @return optional before method
+     * agent class
      */
-    private Set<Method> before()
+    private static final class CAgent extends IBaseAgent<IAgent<?>>
     {
-        return Arrays.stream( this.getClass().getMethods() )
-                     .filter( i -> i.getAnnotation( Before.class ) != null )
-                     .filter( i -> i.getAnnotation( Ignore.class ) == null )
-                     .collect( Collectors.toSet() );
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 3961697445753327536L;
+
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         */
+        CAgent( @Nonnull final IAgentConfiguration<IAgent<?>> p_configuration )
+        {
+            super( p_configuration );
+        }
     }
 }

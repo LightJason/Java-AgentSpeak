@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -23,13 +23,14 @@
 
 package org.lightjason.agentspeak.language.variable;
 
-import com.rits.cloning.Cloner;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -98,7 +99,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     @Override
     public final IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value )
                : new CRelocateMutexVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
@@ -107,7 +108,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateMutexVariable<>( CPath.from( m_functor.suffix() ), m_relocate, new Cloner().deepClone( m_value ) );
+        return new CRelocateMutexVariable<>( CPath.from( m_functor.suffix() ), m_relocate, CCommon.deepclone( m_value ) );
     }
 
     @Nonnull
@@ -115,11 +116,11 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return new CRelocateMutexVariable<>(
-            ( p_prefix == null ) || ( p_prefix.length == 0 )
+            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
             m_relocate,
-            new Cloner().deepClone( m_value )
+            CCommon.deepclone( m_value )
         );
     }
 

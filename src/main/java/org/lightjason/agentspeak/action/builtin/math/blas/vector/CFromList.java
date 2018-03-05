@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -47,7 +47,7 @@ import java.util.List;
  * with "dense | sparse" to create dense or sparse structures,
  * the action never fails
  *
- * @code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" ); @endcode
+ * {@code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
  */
 public final class CFromList extends IBuiltinAction
 {

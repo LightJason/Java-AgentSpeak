@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -46,7 +46,7 @@ import java.util.List;
  * the tuple is the time-zone, which can be set to empty
  * or "current", so the system-default zone is used
  *
- * @code O1 = datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, "current" );  @endcode
+ * {@code O1 = datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, "current" );}
  */
 public final class CBuild extends IBuiltinAction
 {

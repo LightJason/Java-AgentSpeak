@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -39,13 +39,14 @@ import java.util.List;
  * will be used as weight-map, a tuple of the string "defaultweight"
  * and a numeric value defines the default weight value of the weight-map
  * (the default value is zero), a tuple which will not fit this definition
- * defines the start- and end-vertex, the action fails on wrong input
+ * defines the start- and end-vertex, the action fails on wrong input.
+ * The weight-map does not need an entry for each edge non-existing edges
+ * have got on default zero weight
  *
- * @code [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
- * [D3|D4] = graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
- * @endcode
- *
- * @note the weight-map does not need an entry for each edge non-existing edges have got on default zero weight
+ * {@code
+    [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
+    [D3|D4] = graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+ * }
  */
 public class CDistancePath extends IApplyPathAlgorithm
 {

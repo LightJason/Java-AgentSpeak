@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * and returns this values as result of the action,
  * the action fails on wrong input
  *
- * @code generic/type/fuzzyreturn( true, 0.4); @endcode
+ * {@code generic/type/fuzzyreturn( true, 0.4);}
  */
 public class CFuzzyReturn extends IBuiltinAction
 {

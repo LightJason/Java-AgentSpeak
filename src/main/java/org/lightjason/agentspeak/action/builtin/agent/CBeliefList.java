@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * belief functor, if no arguments are give,
  * the full belieflist is returned
  *
- * @code L = agent/belieflist( true, "path/subpath/literalfunctor" ); @endcode
+ * {@code L = agent/belieflist( true, "path/subpath/literalfunctor" );}
  *
  */
 public final class CBeliefList extends IBuiltinAction

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -40,7 +40,7 @@ import java.util.List;
  * action for absolute value.
  * The action calculates \f$ \lvert x_i \rvert \f$ for all arguments
  *
- * @code [A | B | C] = math/abs( -1, -5, 3 ); @endcode
+ * {@code [A | B | C] = math/abs( -1, -5, 3 );}
  * @see https://en.wikipedia.org/wiki/Absolute_value
  */
 public final class CAbs extends IBuiltinAction

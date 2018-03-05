@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -89,7 +89,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
                                                  .map( i -> i.get( 1 ).<Number>raw() )
                                                  .orElse( 0D );
 
-        final Function<Object, Number> l_weightfunction = ( e ) -> l_weights.getOrDefault( e, l_defaultvalue );
+        final Function<Object, Number> l_weightfunction = e -> l_weights.getOrDefault( e, l_defaultvalue );
 
         final List<ITerm> l_vertices = StreamUtils.windowed( l_arguments.stream(), 2 )
                                                    .filter( i -> !( CCommon.rawvalueAssignableTo( i.get( 0 ), String.class )

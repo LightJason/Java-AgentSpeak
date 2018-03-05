@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -47,7 +47,7 @@ import java.util.List;
  * for each plan argument, succesfull, fail and sum rate is returned,
  * the action fails if the plan does not exist within the plan-base
  *
- * @code [Successful1|Fail1|Sum1|Successful2|Fail2|Sum2] = agent/planstatistic( Plan1, Plan2 ); @endcode
+ * {@code [Successful1|Fail1|Sum1|Successful2|Fail2|Sum2] = agent/planstatistic( Plan1, Plan2 );}
  */
 public final class CPlanStatistic extends IBuiltinAction
 {

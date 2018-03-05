@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -40,10 +40,10 @@ import java.util.List;
  * action to replace all occurence within a string.
  * The action replaces the first argument with the second argument
  * on each string beginning at the third argument and returns
- * all replaced strings, the action never fails
+ * all replaced strings, the action never fails. The first argument
+ * of the action be defined as a regular expression
  *
- * @code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" ); @endcode
- * @note the first argument of the action be defined as a regular expression
+ * {@code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" );}
  * @see https://en.wikipedia.org/wiki/Regular_expression
  */
 public final class CReplace extends IBuiltinAction

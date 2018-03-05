@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
 import javax.annotation.Nonnull;
 import java.util.AbstractMap;

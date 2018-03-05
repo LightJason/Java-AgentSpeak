@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,10 +42,10 @@ import java.util.Map;
 /**
  * returns the size of the collection.
  * All arguments must be collections and the action returns
- * the size of each collection, the action never fails
+ * the size of each collection, the action never fails.
+ * On non-collection type the action returns a zero value
  *
- * @code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel ); @endcode
- * @note on non-collection type the action returns a zero value
+ * {@code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel );}
  */
 public final class CSize extends IBuiltinAction
 {

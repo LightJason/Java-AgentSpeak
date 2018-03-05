@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * the dot-product, so the argument number must be odd
  * otherwise the action fails
  *
- * @code [D1|D2] = math/blas/vector(V1,V2, [V3, V4] ); @endcode
+ * {@code [D1|D2] = math/blas/vector(V1,V2, [V3, V4] );}
  * @see https://en.wikipedia.org/wiki/Dot_product
  */
 public final class CDotProduct extends IBuiltinAction

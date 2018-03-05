@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import java.util.Map;
  * other values are map references, the key-value pair
  * is added to all maps and the action never fails
  *
- * @code collection/map/putsingle( "key", "value", Map1, Map2 ); @endcode
+ * {@code collection/map/putsingle( "key", "value", Map1, Map2 );}
  */
 public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
 {

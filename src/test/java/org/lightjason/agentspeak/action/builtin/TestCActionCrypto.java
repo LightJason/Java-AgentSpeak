@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -223,7 +223,9 @@ public final class TestCActionCrypto extends IBaseTest
     }
 
     /**
-     * test encrypting & decrypting
+     * test encrypting and decrypting
+     *
+     * @param p_crypt tripel with input data
      */
     @Test
     @UseDataProvider( "generatecrypt" )
@@ -262,19 +264,5 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).raw(), "test string" );
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 12345 );
     }
-
-
-
-
-    /**
-     * test call
-     *
-     * @param p_args commandline arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCrypto().invoketest();
-    }
-
 
 }

@@ -1,35 +1,32 @@
-FROM alpine:3.7
+#
+# ######################################################################################
+# # LGPL License                                                                       #
+# #                                                                                    #
+# # This file is part of the LightJason AgentSpeak(L++)                                #
+# # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+# # This program is free software: you can redistribute it and/or modify               #
+# # it under the terms of the GNU Lesser General Public License as                     #
+# # published by the Free Software Foundation, either version 3 of the                 #
+# # License, or (at your option) any later version.                                    #
+# #                                                                                    #
+# # This program is distributed in the hope that it will be useful,                    #
+# # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+# # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+# # GNU Lesser General Public License for more details.                                #
+# #                                                                                    #
+# # You should have received a copy of the GNU Lesser General Public License           #
+# # along with this program. If not, see http://www.gnu.org/licenses/                  #
+# ######################################################################################
+#
+
+FROM lightjason/docker:jdk
 
 
 # --- configuration section ----------------------
 ENV DOCKERIMAGE_AGENTSPEAK_VERSION HEAD
 
-ENV DOCKERIMAGE_MAVEN_VERSION 3.5.2
-ENV DOCKERIMAGE_GLIBC_VERSION 2.26-r0
-ENV DOCKERIMAGE_JAVA_DOWNLOAD http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.tar.gz
 
-
-# --- dependencies section -----------------------
-RUN wget -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub
-RUN wget -O /tmp/glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$DOCKERIMAGE_GLIBC_VERSION/glibc-$DOCKERIMAGE_GLIBC_VERSION.apk
-RUN wget -O /tmp/glibc-bin.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$DOCKERIMAGE_GLIBC_VERSION/glibc-bin-$DOCKERIMAGE_GLIBC_VERSION.apk
-RUN wget -O /tmp/glibc-i18n.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$DOCKERIMAGE_GLIBC_VERSION/glibc-i18n-$DOCKERIMAGE_GLIBC_VERSION.apk
-
-RUN wget -O /tmp/maven.tar.gz http://archive.apache.org/dist/maven/maven-3/$DOCKERIMAGE_MAVEN_VERSION/binaries/apache-maven-$DOCKERIMAGE_MAVEN_VERSION-bin.tar.gz && mkdir -p /opt/maven && tar --strip 1 -zxvf /tmp/maven.tar.gz -C /opt/maven
-RUN wget -O /tmp/java.tar.gz --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" $DOCKERIMAGE_JAVA_DOWNLOAD && mkdir -p /opt/java && tar --strip 1 -zxvf /tmp/java.tar.gz -C /opt/java
-
-RUN apk --no-cache update &&\
-    apk --no-cache upgrade &&\
-    apk --no-cache add git doxygen graphviz openssh-client ca-certificates /tmp/glibc.apk /tmp/glibc-bin.apk /tmp/glibc-i18n.apk
-RUN /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 en_US.UTF-8
-
-
-# --- machine configuration section --------------
-ENV JAVA_HOME /opt/java
-ENV PATH /opt/maven/bin:$JAVA_HOME/bin:$PATH
-
+# --- content configuration section --------------
 RUN git clone https://github.com/LightJason/AgentSpeak.git /tmp/agentspeak
 RUN cd /tmp/agentspeak && git checkout $DOCKERIMAGE_AGENTSPEAK_VERSION
-RUN cd /tmp/agentspeak && mvn install -DskipTests
-
-RUN rm -rf /tmp/*
+RUN cd /tmp/agentspeak && mvn package install

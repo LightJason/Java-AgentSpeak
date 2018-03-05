@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for a vertex as first argument the in-degree
  * on each graph argument, the action fails on wrong input
  *
- * @code [D1|D2] = graph/indegreesingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [D1|D2] = graph/indegreesingle( Vertex, Graph1, Graph2 );}
  */
 public final class CInDegreeSingle extends IApplySingle
 {

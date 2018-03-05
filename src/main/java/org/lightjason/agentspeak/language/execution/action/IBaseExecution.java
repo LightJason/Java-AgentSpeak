@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -66,7 +67,7 @@ public abstract class IBaseExecution<T> implements IExecution
      */
     public final boolean isValueAssignableTo( final Class<?> p_class )
     {
-        return ( m_value != null ) &&  p_class.isAssignableFrom( m_value.getClass() );
+        return ( Objects.nonNull( m_value ) ) &&  p_class.isAssignableFrom( m_value.getClass() );
     }
 
     /**
@@ -90,7 +91,7 @@ public abstract class IBaseExecution<T> implements IExecution
     @Override
     public String toString()
     {
-        return m_value == null ? "" : m_value.toString();
+        return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
 }

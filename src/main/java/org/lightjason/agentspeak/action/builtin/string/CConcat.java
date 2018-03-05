@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
  * All string arguments will be join to a single
  * result, the action never fails
  *
- * @code S = string/concat("A", "B", "C"); @endcode
+ * {@code S = string/concat("A", "B", "C");}
  */
 public final class CConcat extends IBuiltinAction
 {
@@ -65,7 +66,7 @@ public final class CConcat extends IBuiltinAction
     {
         p_return.add( CRawTerm.from(
             CCommon.flatten( p_argument )
-                   .filter( i -> i.raw() != null )
+                   .filter( i -> Objects.nonNull( i.raw() ) )
                    .map( i -> i.raw().toString() )
                    .collect( Collectors.joining() )
         ) );

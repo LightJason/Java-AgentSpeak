@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -78,6 +78,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -177,17 +178,20 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     /**
      * test all input actions
      *
-     * @throws IllegalAccessException is thrown on instantiation error
-     * @throws InstantiationException is thrown on instantiation error
+     * @param p_input tripel of input data, actions and results
+     * @throws IllegalAccessException is thrwon on instantiation error
+     * @throws InstantiationException is thrwon on instantiation error
+     * @throws NoSuchMethodException is thrwon on instantiation error
+     * @throws InvocationTargetException is thrwon on instantiation error
      */
     @Test
     @UseDataProvider( "generator" )
     public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-        throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        p_input.getMiddle().newInstance().execute(
+        p_input.getMiddle().getConstructor().newInstance().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
@@ -771,14 +775,4 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                                          .forEach( j -> Assert.assertEquals( l_result.getQuick( i, j ), 0, 0  ) ) );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathBlasMatrix().invoketest();
-    }
 }

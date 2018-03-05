@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -48,6 +48,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -165,15 +166,17 @@ public final class TestCActionBool extends IBaseTest
      * @param p_input test-case data
      * @throws IllegalAccessException is thrwon on instantiation error
      * @throws InstantiationException is thrwon on instantiation error
+     * @throws NoSuchMethodException is thrwon on instantiation error
+     * @throws InvocationTargetException is thrwon on instantiation error
      */
     @Test
     @UseDataProvider( "generate" )
     public final void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-        throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        p_input.getMiddle().newInstance().execute(
+        p_input.getMiddle().getConstructor().newInstance().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
@@ -252,14 +255,4 @@ public final class TestCActionBool extends IBaseTest
         Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }
 
-
-    /**
-     * main test call
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionBool().invoketest();
-    }
 }

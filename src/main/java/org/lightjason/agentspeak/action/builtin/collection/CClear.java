@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.Map;
  * The action removes all elements of each collection arguments,
  * the action fails on a non-collection argument
  *
- * @code collection/clear( Map, MultiMap, Set, List ); @endcode
+ * {@code collection/clear( Map, MultiMap, Set, List );}
  */
 public final class CClear extends IBuiltinAction
 {

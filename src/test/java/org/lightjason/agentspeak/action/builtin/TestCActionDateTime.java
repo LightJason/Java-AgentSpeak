@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -79,13 +79,13 @@ public final class TestCActionDateTime extends IBaseTest
     public static Object[] generateapplyminus()
     {
         return Stream.of(
-            testcaseapply( new CApplyYears(), "2010-05-04T10:17:13-05:00[America/New_York]", 6, "2004-05-04T10:17:13-05:00[America/New_York]" ),
-            testcaseapply( new CApplyMonths(), "2009-05-04T10:17:13-05:00[America/New_York]", 7, "2008-10-04T10:17:13-04:00[America/New_York]" ),
-            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13-05:00[America/New_York]", 5, "2008-04-29T10:17:13-04:00[America/New_York]" ),
-            testcaseapply( new CApplyHours(), "2009-01-15T10:16:13+00:00[Europe/London]", 52, "2009-01-13T06:16:13Z[Europe/London]" ),
-            testcaseapply( new CApplyMinutes(), "2007-01-15T10:23:13+00:00[Europe/London]", 187, "2007-01-15T07:16:13Z[Europe/London]" ),
-            testcaseapply( new CApplySeconds(), "2006-01-15T10:23:13+00:00[Europe/London]", 4200, "2006-01-15T09:13:13Z[Europe/London]" ),
-            testcaseapply( new CApplyNanoSeconds(), "2005-01-15T10:23:13+00:00[Europe/London]", 10200, "2005-01-15T10:23:12.999989800Z[Europe/London]" )
+            testcaseapply( new CApplyYears(), "2010-05-04T10:17:13Z[America/New_York]", 6, "2004-05-04T10:17:13Z[America/New_York]" ),
+            testcaseapply( new CApplyMonths(), "2009-05-04T10:17:13Z[America/New_York]", 7, "2008-10-04T10:17:13Z[America/New_York]" ),
+            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13Z[America/New_York]", 5, "2008-04-29T10:17:13Z[America/New_York]" ),
+            testcaseapply( new CApplyHours(), "2009-01-15T15:16:13Z[Europe/London]", 36, "2009-01-14T03:16:13Z[Europe/London]" ),
+            testcaseapply( new CApplyMinutes(), "2007-01-15T10:23:13Z[Europe/London]", 187, "2007-01-15T07:16:13Z[Europe/London]" ),
+            testcaseapply( new CApplySeconds(), "2006-01-15T10:23:13Z[Europe/London]", 4200, "2006-01-15T09:13:13Z[Europe/London]" ),
+            testcaseapply( new CApplyNanoSeconds(), "2005-01-15T10:23:13Z[Europe/London]", 10200, "2005-01-15T10:23:12.999989800Z[Europe/London]" )
         ).toArray();
     }
 
@@ -98,13 +98,13 @@ public final class TestCActionDateTime extends IBaseTest
     public static Object[] generateapplyplus()
     {
         return Stream.of(
-            testcaseapply( new CApplyYears(), "2010-05-04T10:17:13-05:00[America/New_York]", 12, "2022-05-04T10:17:13-04:00[America/New_York]" ),
-            testcaseapply( new CApplyMonths(), "2009-05-04T10:17:13-05:00[America/New_York]", 8, "2010-01-04T10:17:13-05:00[America/New_York]" ),
-            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13-05:00[America/New_York]", 3, "2008-05-07T10:17:13-04:00[America/New_York]" ),
-            testcaseapply( new CApplyHours(), "2009-01-15T10:16:13+00:00[Europe/London]", 120, "2009-01-20T10:16:13Z[Europe/London]" ),
-            testcaseapply( new CApplyMinutes(), "2007-01-15T10:23:13+00:00[Europe/London]", 240, "2007-01-15T14:23:13Z[Europe/London]" ),
-            testcaseapply( new CApplySeconds(), "2006-01-15T10:23:13+00:00[Europe/London]", 7205, "2006-01-15T12:23:18Z[Europe/London]" ),
-            testcaseapply( new CApplyNanoSeconds(), "2005-01-15T10:23:13+00:00[Europe/London]", 15715, "2005-01-15T10:23:13.000015715Z[Europe/London]" )
+            testcaseapply( new CApplyYears(), "2010-05-04T10:17:13Z[America/New_York]", 12, "2022-05-04T10:17:13Z[America/New_York]" ),
+            testcaseapply( new CApplyMonths(), "2009-05-04T10:17:13Z[America/New_York]", 8, "2010-01-04T06:17:13-05:00[America/New_York]" ),
+            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13Z[America/New_York]", 3, "2008-05-07T10:17:13Z[America/New_York]" ),
+            testcaseapply( new CApplyHours(), "2009-01-15T10:16:13Z[Europe/London]", 120, "2009-01-20T10:16:13Z[Europe/London]" ),
+            testcaseapply( new CApplyMinutes(), "2007-01-15T10:23:13Z[Europe/London]", 240, "2007-01-15T14:23:13Z[Europe/London]" ),
+            testcaseapply( new CApplySeconds(), "2006-01-15T10:23:13Z[Europe/London]", 7205, "2006-01-15T12:23:18Z[Europe/London]" ),
+            testcaseapply( new CApplyNanoSeconds(), "2005-01-15T10:23:13Z[Europe/London]", 15715, "2005-01-15T10:23:13.000015715Z[Europe/London]" )
         ).toArray();
     }
 
@@ -121,8 +121,8 @@ public final class TestCActionDateTime extends IBaseTest
             testcasebetween(
                 new CYearsBetween(),
                 Stream.of(
-                    "2000-01-15T10:16:13+00:00[Europe/London]", "2000-01-15T10:16:13+00:00[Europe/London]",
-                    "2000-01-15T10:23:13+00:00[Europe/London]", "2020-05-04T10:17:13-04:00[America/New_York]"
+                    "2000-01-15T10:16:13Z[Europe/London]", "2000-01-15T10:16:13Z[Europe/London]",
+                    "2000-01-15T10:23:13Z[Europe/London]", "2020-05-04T10:17:13Z[America/New_York]"
                 ),
                 Stream.of( 0, 20 )
             ),
@@ -130,8 +130,8 @@ public final class TestCActionDateTime extends IBaseTest
             testcasebetween(
                 new CMonthsBetween(),
                 Stream.of(
-                    "1999-01-15T10:16:13+00:00[Europe/London]", "1999-01-15T10:16:13+00:00[Europe/London]",
-                    "1999-01-15T10:16:13+00:00[Europe/London]", "2001-01-15T10:16:13+00:00[Europe/London]"
+                    "1999-01-15T10:16:13Z[Europe/London]", "1999-01-15T10:16:13Z[Europe/London]",
+                    "1999-01-15T10:16:13Z[Europe/London]", "2001-01-15T10:16:13Z[Europe/London]"
                 ),
                 Stream.of( 0, 24 )
             ),
@@ -139,17 +139,17 @@ public final class TestCActionDateTime extends IBaseTest
             testcasebetween(
                 new CDaysBetween(),
                 Stream.of(
-                    "1998-01-15T10:23:13+00:00[Europe/London]", "1998-01-15T10:23:13+00:00[Europe/London]",
-                    "1998-06-15T10:23:13+00:00[Europe/London]", "1998-01-15T10:23:13+00:00[Europe/London]"
+                    "1998-01-15T10:23:13Z[Europe/London]", "1998-01-15T10:23:13Z[Europe/London]",
+                    "1998-06-15T10:23:13Z[Europe/London]", "1998-01-15T10:23:13Z[Europe/London]"
                 ),
-                Stream.of( 0, -150 )
+                Stream.of( 0, -151 )
             ),
 
             testcasebetween(
                 new CHoursBetween(),
                 Stream.of(
-                    "1997-05-04T10:17:13-05:00[America/New_York]", "1997-05-04T10:17:13-05:00[America/New_York]",
-                    "1997-05-04T18:12:13-05:00[America/New_York]", "1997-05-04T10:17:13-05:00[America/New_York]"
+                    "1997-05-04T10:17:13Z[America/New_York]", "1997-05-04T10:17:13Z[America/New_York]",
+                    "1997-05-04T18:12:13Z[America/New_York]", "1997-05-04T10:17:13Z[America/New_York]"
                 ),
                 Stream.of( 0, -7 )
             ),
@@ -157,8 +157,8 @@ public final class TestCActionDateTime extends IBaseTest
             testcasebetween(
                 new CMinutesBetween(),
                 Stream.of(
-                    "1996-01-15T10:23:13+00:00[Europe/Paris]", "1996-01-15T10:23:13+00:00[Europe/Paris]",
-                    "1996-01-15T10:23:13+00:00[Europe/Paris]", "1996-01-15T16:23:13+00:00[Europe/Paris]"
+                    "1996-01-15T10:23:13Z[Europe/Paris]", "1996-01-15T10:23:13Z[Europe/Paris]",
+                    "1996-01-15T10:23:13Z[Europe/Paris]", "1996-01-15T16:23:13Z[Europe/Paris]"
 
                 ),
                 Stream.of( 0, 360 )
@@ -167,8 +167,8 @@ public final class TestCActionDateTime extends IBaseTest
             testcasebetween(
                 new CSecondsBetween(),
                 Stream.of(
-                    "1995-01-15T10:23:13+00:00[Europe/Madrid]", "1995-01-15T10:23:13+00:00[Europe/Madrid]",
-                    "1995-02-15T10:23:13+00:00[Europe/Madrid]", "1995-02-14T10:23:13+00:00[Europe/Madrid]"
+                    "1995-01-15T10:23:13Z[Europe/Madrid]", "1995-01-15T10:23:13Z[Europe/Madrid]",
+                    "1995-02-15T10:23:13Z[Europe/Madrid]", "1995-02-14T10:23:13Z[Europe/Madrid]"
                 ),
                 Stream.of( 0, -86400 )
             )
@@ -214,7 +214,7 @@ public final class TestCActionDateTime extends IBaseTest
     {
         Assert.assertFalse(
             new CCreate().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( "error" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -284,10 +284,13 @@ public final class TestCActionDateTime extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CTime().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "2007-12-03T10:15:30+01:00[Europe/Moscow]" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            "action execution error",
+            new CTime().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -321,6 +324,8 @@ public final class TestCActionDateTime extends IBaseTest
 
     /**
      * test apply-days minus
+     *
+     * @param p_value tripel action, input data and result
      */
     @Test
     @UseDataProvider( "generateapplyminus" )
@@ -340,6 +345,8 @@ public final class TestCActionDateTime extends IBaseTest
 
     /**
      * test apply-days plus
+     *
+     * @param p_value tripel action, input data and result
      */
     @Test
     @UseDataProvider( "generateapplyplus" )
@@ -359,6 +366,8 @@ public final class TestCActionDateTime extends IBaseTest
 
     /**
      * test between
+     *
+     * @param p_value tripel action, input data and result
      */
     @Test
     @UseDataProvider( "generatebetween" )
@@ -376,18 +385,6 @@ public final class TestCActionDateTime extends IBaseTest
             l_return.stream().map( ITerm::<Number>raw ).mapToLong( Number::longValue ).toArray(),
             p_value.getRight().mapToLong( Number::longValue ).toArray()
         );
-    }
-
-
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionDateTime().invoketest();
     }
 
 }

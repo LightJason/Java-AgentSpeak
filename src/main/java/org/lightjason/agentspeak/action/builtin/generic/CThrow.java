@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -39,10 +39,9 @@ import java.util.List;
  * action for throwing a runtime execption.
  * The action fails never but throws a Java runtime exception on a boolean condition,
  * the first argument is a boolean value on true the exception is thrown, second argument
- * can be a string with a message
+ * can be a string with a message. The exception must be catched outside the agent call method
  *
- * @code generic/throw( true, "a message" ); @endcode
- * @note the exception must be catched outside the agent call method
+ * {@code generic/throw( true, "a message" );}
  */
 public final class CThrow extends IBuiltinAction
 {

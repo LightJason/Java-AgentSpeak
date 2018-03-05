@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -23,14 +23,15 @@
 
 package org.lightjason.agentspeak.language.variable;
 
-import com.rits.cloning.Cloner;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
+import java.util.Objects;
 
 
 /**
@@ -98,7 +99,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CRelocateVariable<>( m_functor, m_relocate, m_value )
                : new CRelocateVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
@@ -115,10 +116,10 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return new CRelocateVariable<>(
-            ( p_prefix == null ) || ( p_prefix.length == 0 )
+            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
-            m_relocate, new Cloner().deepClone( m_value )
+            m_relocate, CCommon.deepclone( m_value )
         );
     }
 
@@ -126,12 +127,12 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateVariable<>( CPath.from( m_functor.suffix() ), m_relocate, new Cloner().deepClone( m_value ) );
+        return new CRelocateVariable<>( CPath.from( m_functor.suffix() ), m_relocate, CCommon.deepclone( m_value ) );
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}({1})>{2}", m_functor, m_value == null ? "" : m_value, m_relocate );
+        return MessageFormat.format( "{0}({1})>{2}", m_functor, Objects.isNull( m_value ) ? "" : m_value, m_relocate );
     }
 }

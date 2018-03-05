@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action checks if an element is within the action and
  * returns the boolean flag, the action never fails
  *
- * @code [A|B] = storage/exist( "foo", "bar" ); @endcode
+ * {@code [A|B] = storage/exist( "foo", "bar" );}
  */
 public final class CExists extends IStorage
 {
@@ -51,6 +51,14 @@ public final class CExists extends IStorage
      * serial id
      */
     private static final long serialVersionUID = 8505190439682767260L;
+
+    /**
+     * ctor
+     */
+    public CExists()
+    {
+        super();
+    }
 
     /**
      * ctor

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -50,10 +50,10 @@ import java.util.Map;
  * defines the default weight value of the weight-map
  * (the default value is zero), the action never fails
  *
- * @code
+ * {@code
     [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
     [SP3|SP4] = graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
- * @endcode
+ * }
  */
 public final class CSpanningTree extends IBuiltinAction
 {
@@ -87,7 +87,7 @@ public final class CSpanningTree extends IBuiltinAction
                                                 .map( ITerm::<Map<?, Number>>raw )
                                                 .orElseGet( Collections::emptyMap );
 
-        final Function<Object, Double> l_weightfunction = ( e ) -> l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();
+        final Function<Object, Double> l_weightfunction = e -> l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();
         final PrimMinimumSpanningTree<Object, Object> l_treefactory = new PrimMinimumSpanningTree<>( DelegateTree.getFactory(), l_weightfunction );
 
         // --- filter graphs ---

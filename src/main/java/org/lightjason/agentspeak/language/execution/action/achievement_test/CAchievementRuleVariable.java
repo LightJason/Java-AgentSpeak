@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -73,6 +74,6 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return m_value == null ? Stream.empty() : m_value.variables();
+        return Objects.isNull( m_value ) ? Stream.empty() : m_value.variables();
     }
 }

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,10 +45,10 @@ import java.util.stream.Collectors;
  * creates a dense- or sparse-vector from as string.
  * The action creates for each input argument a vector
  * by parsing the string, the last string can be "dense | sparse"
- * to defining a sparse / dense vector, the action never fails
+ * to defining a sparse / dense vector, the action never fails.
+ * Seperator is comma, semicolon or space
  *
- * @code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" ); @endcode
- * @note seperator is comma, semicolon or space
+ * {@code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" );}
  */
 public final class CParse extends IBuiltinAction
 {

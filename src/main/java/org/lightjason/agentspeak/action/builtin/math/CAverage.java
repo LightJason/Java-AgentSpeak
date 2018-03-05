@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,7 +42,7 @@ import java.util.List;
  * The action calculates \f$ \frac{1}{i} \sum_{i} x_i \f$ over all arguments, action
  * fails never, but can throw a runtime exception
  *
- * @code A = math/average( 1, 3, 9, [10, [11, 12]] ); @endcode
+ * {@code A = math/average( 1, 3, 9, [10, [11, 12]] );}
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CAverage extends IBuiltinAction

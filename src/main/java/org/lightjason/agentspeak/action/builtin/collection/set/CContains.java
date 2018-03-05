@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -44,7 +44,7 @@ import java.util.Set;
  * that all other arguments are contained, the action never
  * fails
  *
- * @code [E1|E2|E3] = collection/set/contains( Set, "1", [1, 2] ); @endcode
+ * {@code [E1|E2|E3] = collection/set/contains( Set, "1", [1, 2] );}
  */
 public final class CContains extends IBuiltinAction
 {

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -33,7 +33,6 @@ import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -45,14 +44,14 @@ import org.lightjason.agentspeak.language.IStructureHash;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
-import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -161,7 +160,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // initial plans and rules
         p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );
         p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-        if ( p_configuration.initialgoal() != null )
+        if ( Objects.nonNull( p_configuration.initialgoal() ) )
             m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
     }
 
@@ -211,7 +210,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         return this.sleep(
             p_cycles,
-            ( p_term == null ) || ( p_term.length == 0 )
+            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
             ? Stream.of()
             : Arrays.stream( p_term )
         );
@@ -231,7 +230,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final IAgent<T> wakeup( @Nullable final ITerm... p_term )
     {
         return this.wakeup(
-            ( p_term == null ) || ( p_term.length == 0 )
+            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
             ? Stream.of()
             : Arrays.stream( p_term )
         );
@@ -332,7 +331,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
-        if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
+        if ( ( Objects.nonNull( p_immediately ) ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
             return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
 
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
@@ -464,17 +463,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             (
                 m_sleepingterm.isEmpty()
 
-                ? Stream.of( CTrigger.from(
-                    ITrigger.EType.ADDGOAL, CLiteral.from(
-                    "wakeup"
-                    )
-                ) )
+                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup" ) ) )
 
                 : m_sleepingterm.parallelStream()
-                                .map( i -> CTrigger.from(
-                                    ITrigger.EType.ADDGOAL,
-                                    CLiteral.from( "wakeup", i )
-                                ) )
+                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup", i ) ) )
 
             ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
 

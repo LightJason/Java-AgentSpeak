@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * are tuples of ranges \f$ [ \text{lower-bound}, \text{upper-bound} ) \f$,
  * the action fails on an wrong number of arguments
  *
- * @code [L1|L2] = collection/list/get( L, 2, 5, [4, 6] ); @endcode
+ * {@code [L1|L2] = collection/list/get( L, 2, 5, [4, 6] );}
  */
 public final class CSubList extends IBuiltinAction
 {

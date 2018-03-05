@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -26,9 +26,9 @@ package org.lightjason.agentspeak.action.builtin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.rest.CJsonList;
-import org.lightjason.agentspeak.action.builtin.rest.CJsonObject;
-import org.lightjason.agentspeak.action.builtin.rest.CXMLObject;
+import org.lightjason.agentspeak.action.builtin.web.rest.CJsonList;
+import org.lightjason.agentspeak.action.builtin.web.rest.CJsonObject;
+import org.lightjason.agentspeak.action.builtin.web.rest.CXMLObject;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,7 +44,7 @@ import java.util.stream.Stream;
 /**
  * REST-API test
  */
-public final class TestCActionRest extends IBaseTest
+public final class TestCActionWebRest extends IBaseTest
 {
 
     /**
@@ -242,14 +242,4 @@ public final class TestCActionRest extends IBaseTest
         );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionRest().invoketest();
-    }
 }

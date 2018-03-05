@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -52,6 +52,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,10 +65,8 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * abstract test for playing towers of hanoi
- *
- * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
- * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
+ * abstract test for playing <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">towers of hanoi</a>
+ * If a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 public final class TestCHanoiTowers extends IBaseTest
 {
@@ -197,17 +196,6 @@ public final class TestCHanoiTowers extends IBaseTest
                         }
                     } );
         }
-    }
-
-    /**
-     * main method for manual test
-     *
-     * @param p_args CLI arguments
-     * @throws Exception is thrown on any error
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCHanoiTowers().invoketest();
     }
 
 
@@ -409,7 +397,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( l_tower == null )
+            if ( Objects.isNull( l_tower ) )
                 return CFuzzyValue.from( false );
 
             p_return.add( CRawTerm.from( l_tower.size() ) );
@@ -462,7 +450,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( ( l_tower == null ) || ( Math.random() < m_failprobability ) )
+            if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
                 return CFuzzyValue.from( false );
 
             try
@@ -507,7 +495,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( l_tower == null )
+            if ( Objects.isNull( l_tower ) )
                 return CFuzzyValue.from( false );
 
             try

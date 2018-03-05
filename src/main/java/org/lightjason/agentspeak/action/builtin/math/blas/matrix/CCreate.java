@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * last object is a string with dense or sparse, all other
  * arguments are tuples of row and column size.
  *
- * @code [M1|M2] = math/blas/matrix/create(2,2, [3,2], "dense|sparse"); @endcode
+ * {@code [M1|M2] = math/blas/matrix/create(2,2, [3,2], "dense|sparse");}
  */
 public final class CCreate extends IBuiltinAction
 {

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,10 +42,9 @@ import java.util.List;
 /**
  * action to decodes a string with Base64.
  * The decoded string version is created from each string argument, which is
- * based64 encoded, the action fails on decoding error.
+ * based64 encoded, the action fails on decoding error. Return null on encoding errors
  *
- * @code [A|B] = string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
- * @note return null on encoding errors
+ * {@code [A|B] = string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" );}
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Decode extends IBuiltinAction

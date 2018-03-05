@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.io.ByteArrayInputStream;
@@ -85,7 +84,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         m_context = new CContext(
             new CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
-            new CPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "nothing" ) ), Collections.emptyList(), Collections.emptySet() ),
+            new CPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "nothing" ) ), Collections.emptyList(), Collections.emptySet() ),
             Collections.emptyList()
         );
     }
@@ -418,19 +417,6 @@ public final class TestCActionStorage extends IBaseTest
             new CExists( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray(),
             Stream.of( true, false ).toArray()
         );
-    }
-
-
-    /**
-     * main test call
-     *
-     * @param p_args command line arguments
-     *
-     * @throws Exception on any error
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCActionStorage().invoketest();
     }
 
 

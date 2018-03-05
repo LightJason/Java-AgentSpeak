@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,7 +45,7 @@ import java.util.function.Function;
  * argument, all values beginning at the fourth position will be used for t, so the
  * action returns all values but and is never failing.
  *
- * @code [A | B | C] = math/sigmoid( 1, 1, 1, 10, 20, 30 ); @endcode
+ * {@code [A | B | C] = math/sigmoid( 1, 1, 1, 10, 20, 30 );}
  * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
 public final class CSigmoid extends IBuiltinAction
@@ -67,10 +67,10 @@ public final class CSigmoid extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final Function<Double, Double> l_sigmoid = ( i ) -> p_argument.get( 0 ).<Number>raw().doubleValue()
-                                                            / ( p_argument.get( 1 ).<Number>raw().doubleValue()
-                                                                + Math.exp( -p_argument.get( 2 ).<Number>raw().doubleValue() * i )
-                                                            );
+        final Function<Double, Double> l_sigmoid = i -> p_argument.get( 0 ).<Number>raw().doubleValue()
+                                                          / ( p_argument.get( 1 ).<Number>raw().doubleValue()
+                                                              + Math.exp( -p_argument.get( 2 ).<Number>raw().doubleValue() * i )
+                                                          );
 
         CCommon.flatten( p_argument )
                .skip( 2 )

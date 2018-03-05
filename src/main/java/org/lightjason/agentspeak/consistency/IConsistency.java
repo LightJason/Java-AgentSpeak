@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -41,12 +42,39 @@ public interface IConsistency extends Callable<IConsistency>
 {
 
     /**
-     * returns the consistency value of an object
+     * returns the consistency of an object
      *
      * @param p_object object
-     * @return value or default value
+     * @return consistency or default consistency
      */
-    double value( final IAgent<?> p_object );
+    @Nonnegative
+    double consistency( @Nonnull final IAgent<?> p_object );
+
+    /**
+     * stream over all data
+     *
+     * @return entry with agent and consistency
+     */
+    @Nonnull
+    Stream<Map.Entry<IAgent<?>, Double>> consistency();
+
+    /**
+     * returns the inconsistency of an object
+     *
+     * @param p_object object
+     * @return consistency or default consistency
+     */
+    @Nonnegative
+    double inconsistency( @Nonnull final IAgent<?> p_object );
+
+    /**
+     * stream over all data
+     *
+     * @return entry with agent and inconsistency
+     */
+    @Nonnull
+    Stream<Map.Entry<IAgent<?>, Double>> inconsistency();
+
 
     /**
      * returns statistic data of the consistency values
@@ -63,7 +91,7 @@ public interface IConsistency extends Callable<IConsistency>
      * @return self reference
      */
     @Nonnull
-    IConsistency add( final IAgent<?> p_object );
+    IConsistency add( @Nonnull final IAgent<?> p_object );
 
     /**
      * removes an object
@@ -72,7 +100,7 @@ public interface IConsistency extends Callable<IConsistency>
      * @return self reference
      */
     @Nonnull
-    IConsistency remove( final IAgent<?> p_object );
+    IConsistency remove( @Nonnull final IAgent<?> p_object );
 
     /**
      * clear
@@ -96,13 +124,5 @@ public interface IConsistency extends Callable<IConsistency>
      */
     @Nonnull
     IFilter filter();
-
-    /**
-     * stream over all data
-     *
-     * @return entry with agent and consistency value
-     */
-    @Nonnull
-    Stream<Map.Entry<IAgent<?>, Double>> stream();
 
 }

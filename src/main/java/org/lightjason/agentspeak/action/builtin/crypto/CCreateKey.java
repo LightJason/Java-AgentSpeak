@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,15 +36,15 @@ import javax.annotation.Nonnull;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
  * creates an encrypting / decrypting key pair.
  * The argument is a string with the cryptographic algorithm AES, DES or RSA and the action return a key pair,
- * the action fails if the key cannot generated
+ * the action fails if the key cannot generated. The private key is set on RSA algorithm only
  *
- * @code [PublicKey, PrivateKey] = cypto/createkey( "AES | DES | RSA" ); @endcode
- * @note The private key is set on RSA algorithm only
+ * {@code [PublicKey, PrivateKey] = cypto/createkey( "AES | DES | RSA" );}
  * @see https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/Data_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/RSA_(cryptosystem)
@@ -74,7 +74,7 @@ public final class CCreateKey extends IBuiltinAction
             final Pair<Key, Key> l_key = EAlgorithm.from( p_argument.get( 0 ).<String>raw() ).generateKey();
 
             p_return.add( CRawTerm.from( l_key.getLeft() ) );
-            if ( l_key.getRight() != null )
+            if ( Objects.nonNull( l_key.getRight() ) )
                 p_return.add( CRawTerm.from( l_key.getRight() ) );
 
             return CFuzzyValue.from( true );

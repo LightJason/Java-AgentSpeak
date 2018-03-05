@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  * for a summary or descriptive statistic object, on no arguments
  * a summary statistic object is created, the action never fails
  *
- * @code [S1|S2] = math/statistic/createstaistic("summary", ["descriptive"]); @endcode
+ * {@code [S1|S2] = math/statistic/createstaistic("summary", ["descriptive"]);}
  * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public final class CCreateStatistic extends IBuiltinAction

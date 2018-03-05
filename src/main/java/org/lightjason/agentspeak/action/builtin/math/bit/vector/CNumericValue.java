@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * given index values (0 = false, 1 = true),
  * the action never fails
  *
- * @code [B1|B2|B3] = math/bit/vector/numericvalue( BitVector, 1, [3, 5] ); @endcode
+ * {@code [B1|B2|B3] = math/bit/vector/numericvalue( BitVector, 1, [3, 5] );}
  */
 public final class CNumericValue extends IBuiltinAction
 {

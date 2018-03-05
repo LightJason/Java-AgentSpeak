@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.List;
  * The base64 encoded version is created from each string argument,
  * the action never fails
  *
- * @code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
+ * {@code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" );}
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Encode extends IBuiltinAction

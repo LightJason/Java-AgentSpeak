@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language;
 
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+import com.rits.cloning.Cloner;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
@@ -39,13 +40,14 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -58,6 +60,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -69,6 +72,11 @@ import java.util.stream.Stream;
  */
 public final class CCommon
 {
+    /**
+     * cloner
+     */
+    private static final Cloner CLONER = new Cloner();
+
     /**
      * private ctor - avoid instantiation
      */
@@ -243,7 +251,7 @@ public final class CCommon
             return p_term;
 
         final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
-        if ( l_variable != null )
+        if ( Objects.nonNull( l_variable ) )
             return l_variable;
 
         throw new CIllegalArgumentException(
@@ -318,6 +326,20 @@ public final class CCommon
     public static Hasher getTermHashing()
     {
         return Hashing.sipHash24().newHasher();
+    }
+
+    /**
+     * creates a deep-clone of an object
+     *
+     * @param p_object input object
+     * @tparam T object type
+     * @return deep-copy
+     */
+    @Nullable
+    @SuppressWarnings( "unchecked" )
+    public static <T> T deepclone( @Nullable final T p_object )
+    {
+        return Objects.isNull( p_object ) ? null : CLONER.deepClone( p_object );
     }
 
     // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * and the last value is the \f$ v \f$ value and the action
  * never fails
  *
- * @code math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 ); @endcode
+ * {@code math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 );}
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
@@ -51,6 +52,14 @@ public abstract class IStorage extends IBuiltinAction
 
     /**
      * ctor
+     */
+    protected IStorage()
+    {
+        this( i -> false );
+    }
+
+    /**
+     * ctor
      *
      * @param p_resolver resolver of forbidden keys
      * @warning resolver will be triggered in parallel
@@ -68,7 +77,7 @@ public abstract class IStorage extends IBuiltinAction
     protected IStorage( @Nullable final String... p_forbidden )
     {
         this(
-            ( p_forbidden == null ) || ( p_forbidden.length == 0 )
+            ( Objects.isNull( p_forbidden ) ) || ( p_forbidden.length == 0 )
             ? Stream.empty()
             : Arrays.stream( p_forbidden )
         );

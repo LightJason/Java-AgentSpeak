@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action adds all tuples into the storage, the arguments
  * are tuples of a name and any value, the action never fails
  *
- * @code storage/add( "foo", X, "bar", Y ); @endcode
+ * {@code storage/add( "foo", X, "bar", Y );}
  */
 public final class CAdd extends IStorage
 {
@@ -51,6 +51,14 @@ public final class CAdd extends IStorage
      * serial id
      */
     private static final long serialVersionUID = 3102307419115604147L;
+
+    /**
+     * ctor
+     */
+    public CAdd()
+    {
+        super();
+    }
 
     /**
      * ctor

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * distribution, the first and second argument must be a list, the first list contains elements, the second
  * list contains numeric values for defining the weights, the third argument is the demand / rational factor
  *
- * @code S = math/statistic/exponentialselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3], RationalFactor ); @endcode
+ * {@code S = math/statistic/exponentialselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3], RationalFactor );}
  * @see https://en.wikipedia.org/wiki/Boltzmann_distribution
  * @see https://en.wikipedia.org/wiki/Log-linear_model
  */

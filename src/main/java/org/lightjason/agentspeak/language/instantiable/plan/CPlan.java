@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -42,6 +41,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -123,7 +123,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         // create delete-goal trigger
         if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
-            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
+            p_context.agent().trigger( ITrigger.EType.DELETEGOAL.builddefault( m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;
     }
@@ -162,7 +162,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             super.toString(),
             m_annotation.values(),
             m_triggerevent,
-            m_condition == null ? "" : MessageFormat.format( " |- {0}", m_condition ),
+            Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),
             StringUtils.join( m_action, "; " )
         );
     }

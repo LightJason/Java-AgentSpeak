@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.execution.action.achievement_test;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
@@ -34,6 +33,7 @@ import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -70,10 +70,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().trigger(
-            CTrigger.from(
-                ITrigger.EType.ADDGOAL,
-                m_value.evaluate( p_context )
-            ),
+            ITrigger.EType.ADDGOAL.builddefault( m_value.evaluate( p_context ) ),
             m_immediately
         );
     }
@@ -82,6 +79,6 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_value == null ? Stream.empty() :  m_value.variables();
+        return Objects.isNull( m_value ) ? Stream.empty() : m_value.variables();
     }
 }

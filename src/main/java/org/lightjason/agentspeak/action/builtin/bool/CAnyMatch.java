@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -40,11 +40,11 @@ import java.util.stream.Collectors;
 /**
  * checks any elements are equal to the first argument.
  * The actions checks the first argument to all other if any
- * matchs for equality, the action never fails
- *
- * @code AnyEqual = bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
- * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * matchs for equality, the action never fails. On number arguments
+ * not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
+ *
+ * {@code AnyEqual = bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] );}
  */
 public final class CAnyMatch extends IBuiltinAction
 {

@@ -1,68 +1,60 @@
-general:
-    branches:
-        only:
-            - master
-        ignore:
-            - developing
-            - /hotfix-.*/
-            - /release-.*/
-            - /support-.*/
-            - /dev-.*/
-            - /gh-.*/
-            - /jar-.*/
+version: 2
 
+jobs:
+    build:
+        working_directory: ~/agentspeak
+        docker:
+            - image: lightjason/docker:jdk
 
-machine:
-    timezone:
-        Europe/Berlin
+        branches:
+            ignore:
+                - developing
+                - /feature.*/
+                - /hotfix.*/
+                - /release.*/
+                - /support.*/
+                - /dev-.*/
+                - /gh-.*/
 
-    java:
-        version: oraclejdk8
+        environment:
+            TZ: "/usr/share/zoneinfo/Europe/Berlin"
 
+            GIT_AUTHOR_NAME: CircleCI
+            GIT_AUTHOR_EMAIL: info@lightjason.org
+            GIT_COMMITTER_NAME: CircleCI
+            GIT_COMMITTER_EMAIL: info@lightjason.org
 
-dependencies:
-    pre:
-        - sudo apt-get install graphviz xsltproc
-        - wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
-        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/Saxon-HE/9.8/SaxonHE9-8-0-4J.zip/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
-
-
-checkout:
-    post:
-        - git clean -xdf
-        - git fetch -p
-        - git gc --prune=now
-        - mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
-
-
-test:
-    override:
-        - mvn -B -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
-
-    post:
-        # documentation and test build
-        - mvn -B -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -Dcoverall.token=${COVERALL_TOKEN} site coveralls:report
-        # create CircleCI reports
-        - mkdir -p ${CIRCLE_TEST_REPORTS}/junit/
-        - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ${CIRCLE_TEST_REPORTS}/junit/ \;
-        # transformation classes to website json import
-        - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
-        - java -jar /tmp/saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
-
-
-deployment:
-    production:
-        branch: master
-        commands:
-            # documentation deployment to gh-pages
-            - mv -f target/site /tmp
-            - rm -Rf *
-            - git push origin :gh-pages || true
-            - git branch -D gh-pages || true
-            - git checkout --orphan gh-pages
-            - mv -f /tmp/site/* .
-            - echo -e 'general:\n    branches:\n        ignore:\n            - /.*/\n' > circle.yml
-            - echo -e '*.*\n!.gitignore\n!circle.yml\n!*.htm*\n!*.css\n!*.js\n!*.png\n!*.gif\n!*.svg\n!*.json\n!*.g4\n' > .gitignore
-            - git add --all .
-            - git commit -m "current documentation"
-            - git push origin gh-pages
+        steps:
+            - checkout
+            - run:
+                name: Git Clean
+                command: git clean -xdf && git fetch -p && git gc --prune=now
+            - run:
+                name: Maven Clean
+                command: mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
+            - run:
+                name: Build
+                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
+            - run:
+                name: Json Action List
+                command: |
+                    xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
+                    saxon -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
+            - add_ssh_keys:
+                fingerprints:
+                    - "4e:e9:25:14:ee:f6:17:42:69:13:b3:2a:55:7a:99:ec"
+            - run:
+                name: Deploy Documentation
+                command: |
+                    mv -f target/site /tmp
+                    rm -Rf *
+                    rm .dockerignore
+                    git push origin :gh-pages || true
+                    git branch -D gh-pages || true
+                    git checkout --orphan gh-pages
+                    mv -f /tmp/site/* .
+                    echo -e 'general:\n    branches:\n        ignore:\n            - /.*/\n' > circle.yml
+                    echo -e '*.*\n!.gitignore\n!circle.yml\n!*.htm*\n!*.css\n!*.js\n!*.png\n!*.gif\n!*.svg\n!*.json\n!*.g4\n!org\.lightjason*\n' > .gitignore
+                    git add --all .
+                    git commit -m "current documentation"
+                    git push origin gh-pages

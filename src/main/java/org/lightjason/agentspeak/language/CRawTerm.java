@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language;
 
-import com.rits.cloning.Cloner;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -35,6 +34,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 /**
@@ -85,10 +85,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
         else
         {
             m_value = (T) p_value;
-            m_functor = p_value == null ? IPath.EMPTY : CPath.from( p_value.toString() );
+            m_functor = Objects.isNull( p_value ) ? IPath.EMPTY : CPath.from( p_value.toString() );
         }
 
-        m_hashcode = m_value == null ? 0 : m_value.hashCode();
+        m_hashcode = Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
 
@@ -118,7 +118,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null )
+        return ( Objects.nonNull( p_object ) )
                && (
                    (
                         ( p_object instanceof IVariable<?> )
@@ -132,7 +132,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final String toString()
     {
-        return m_value == null ? "" : m_value.toString();
+        return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
     @Nonnull
@@ -205,7 +205,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
-        return CRawTerm.from( new Cloner().deepClone( m_value ) );
+        return CRawTerm.from( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
     }
 
     @Nonnull

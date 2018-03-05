@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * gets percentile value in $[0,100]$ from the statistic,
  * the action fails on wrong input
  *
- * @code [V1|V2|V3] = math/statistic/multiplepercentile( Statistic, 50, [25, 75] )  @endcode
+ * {@code [V1|V2|V3] = math/statistic/multiplepercentile( Statistic, 50, [25, 75] );}
  */
 public final class CMultiplePercentile extends IBuiltinAction
 {

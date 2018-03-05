@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -44,7 +44,7 @@ import java.util.List;
  * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$, the action fails
  * on empty lists
  *
- * @code L = collection/list/complement( [1,2,3], [3,4,5] ); @endcode
+ * {@code L = collection/list/complement( [1,2,3], [3,4,5] );}
  * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
  */
 public final class CComplement extends IBuiltinAction

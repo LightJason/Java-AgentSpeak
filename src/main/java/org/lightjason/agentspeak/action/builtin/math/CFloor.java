@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -41,7 +41,7 @@ import java.util.List;
  * Floors any argument values with \f$ \lfloor x_i \rfloor \f$ and returns
  * all values, the action never fails
  *
- * @code [A|B|C] = math/floor(1.3, 2.8, 9.7); @endcode
+ * {@code [A|B|C] = math/floor(1.3, 2.8, 9.7);}
  * @see https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
  */
 public final class CFloor extends IBuiltinAction

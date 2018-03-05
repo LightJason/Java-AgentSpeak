@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
  * returns the index within the unflatten argument list, the
  * action never fails
  *
- * @code MinIndex = math/minindex( 5, 6, [7,8, [1,2,3]] ); @endcode
+ * {@code MinIndex = math/minindex( 5, 6, [7,8, [1,2,3]] );}
  */
 public final class CMinIndex extends IBuiltinAction
 {

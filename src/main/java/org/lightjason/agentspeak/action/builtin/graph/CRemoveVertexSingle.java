@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -35,7 +35,7 @@ import java.util.List;
  * The action removes of all graph instances the given
  * vertex, the action never fails
  *
- * @code graph/removevertexsingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code graph/removevertexsingle( Vertex, Graph1, Graph2 );}
  */
 public final class CRemoveVertexSingle extends IApplySingle
 {

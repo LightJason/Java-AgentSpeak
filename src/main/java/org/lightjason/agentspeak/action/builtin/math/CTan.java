@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -42,7 +42,7 @@ import java.util.List;
  * value in radians the \f$ tan( x_i ) \f$ value,
  * the action never fails
  *
- * @code [X|Y|Z] = math/tan( pi, 1.3*pi, 0.43*pi ); @endcode
+ * {@code [X|Y|Z] = math/tan( pi, 1.3*pi, 0.43*pi );}
  * @see https://en.wikipedia.org/wiki/Trigonometric_functions
  */
 public final class CTan extends IBuiltinAction

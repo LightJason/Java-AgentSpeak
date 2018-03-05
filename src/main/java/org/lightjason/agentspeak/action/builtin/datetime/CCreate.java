@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -39,7 +39,7 @@ import java.util.List;
  * "now" the current date-time will returned, the
  * action never fails
  *
- * @code [O1|O2] = datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" ); @endcode
+ * {@code [O1|O2] = datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" );}
  */
 public final class CCreate extends IDateTime
 {

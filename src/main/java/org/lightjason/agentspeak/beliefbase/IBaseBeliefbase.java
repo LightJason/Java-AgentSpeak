@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.CView;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
@@ -40,6 +39,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -104,11 +104,10 @@ public abstract class IBaseBeliefbase implements IBeliefbase
     public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         // check all references of mask and remove unused references
-        Reference<? extends IView> l_reference;
-        while ( ( l_reference = m_maskreference.poll() ) != null )
+        for ( Reference<? extends IView> l_reference = m_maskreference.poll(); Objects.nonNull( l_reference ); l_reference = m_maskreference.poll() )
         {
             final IView l_view = l_reference.get();
-            if ( l_view != null )
+            if ( Objects.nonNull( l_view ) )
             {
                 m_views.remove( l_view );
                 m_events.asMap().remove( l_view );
@@ -134,7 +133,7 @@ public abstract class IBaseBeliefbase implements IBeliefbase
      */
     protected ILiteral event( final ITrigger.EType p_event, final ILiteral p_literal )
     {
-        final ITrigger l_trigger = CTrigger.from( p_event, p_literal );
+        final ITrigger l_trigger = p_event.builddefault( p_literal );
         m_views.parallelStream().forEach( i -> m_events.put( i, l_trigger ) );
         return p_literal;
     }

@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -48,15 +48,23 @@ import java.util.function.BiFunction;
  * operations (plus, plus-absolute, minus, multiply, divide),
  * all arguments are triples of matrix-operator-matrix|scalar,
  * the action fails on assigning problems
- * @code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]); @endcode
+ * {@code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]);}
  *
  */
-public class CElementWise extends IBuiltinAction
+public final class CElementWise extends IBuiltinAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2655464156364927632L;
+
+    /**
+     * ctor
+     */
+    public CElementWise()
+    {
+        super( 3 );
+    }
 
     @Nonnegative
     @Override
@@ -135,7 +143,7 @@ public class CElementWise extends IBuiltinAction
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
-                l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
                 p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }

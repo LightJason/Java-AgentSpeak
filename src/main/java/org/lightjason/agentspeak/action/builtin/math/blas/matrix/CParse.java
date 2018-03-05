@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -49,10 +49,10 @@ import java.util.stream.IntStream;
  * The action parses each argument and returns the matrix object,
  * the last argument can be a string with "dense" or "sparse" to
  * defining a dense or sparse matrix, all other arguments string with
- * a semicolon and space / comma seperated list, the action never fails
+ * a semicolon and space / comma seperated list, the action never fails.
+ * Semicolon splits the rows, spaces / comma splits the columns
  *
- * @code [A|B|C] = math/blas/matrix/parse("1,2;3,4", "5 6 7; 8 9 10", "dense|sparse" ) @endcode
- * @note semicolon splits the rows, spaces / comma splits the columns
+ * {@code [A|B|C] = math/blas/matrix/parse("1,2;3,4", "5 6 7; 8 9 10", "dense|sparse" );}
  */
 public final class CParse extends IBuiltinAction
 {

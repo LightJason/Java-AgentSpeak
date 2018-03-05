@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for the first graph argument and each following tuple
  * of vertex and edge the opposite, the action never fails
  *
- * @code [V1|V2] = graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] ); @endcode
+ * {@code [V1|V2] = graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */
 public final class COppositeMultiple extends IApplyMultiple
 {

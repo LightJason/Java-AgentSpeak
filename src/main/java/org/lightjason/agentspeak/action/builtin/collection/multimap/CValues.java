@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Returns a list with all values of the argument
  * multimaps and fails never
  *
- * @code L = collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 ); @endcode
+ * {@code L = collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
  */
 public final class CValues extends IBuiltinAction
 {
