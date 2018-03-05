@@ -89,8 +89,8 @@ public final class CMethodAction extends IBaseAction
         m_arguments = m_method.getParameterCount();
         m_name = CPath.from(
             m_method.isAnnotationPresent( IAgentActionName.class ) && !m_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
-            ? m_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
-            : m_method.getName().toLowerCase( Locale.ROOT )
+            ? m_method.getAnnotation( IAgentActionName.class ).name()
+            : m_method.getName()
         );
         m_methodhandle = MethodHandles.lookup().unreflect( m_method );
     }
