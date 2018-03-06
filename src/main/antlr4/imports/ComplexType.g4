@@ -30,6 +30,23 @@ import Terminal;
 
 // --- expression context ----------------------------------------------------------------
 
+// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
+
+/**
+ * expression rule
+ **/
+expression :
+    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
+    | STRONGNEGATION expression
+    | lhs=expression  operator=ARITHMETICOPERATOR1 rhs=expression
+    | lhs=expression  operator=ARITHMETICOPERATOR2 rhs=expression
+    | lhs=expression  operator=ARITHMETICOPERATOR3 rhs=expression
+    | lhs=expression operator=RELATIONALOPERATOR rhs=expression
+    | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
+    | lhs=expression operator=LOGICALOPERATOR2 rhs=expression
+    | term
+    ;
+
 /**
  * terms are non-predictable structures
  **/
@@ -74,6 +91,7 @@ execute_rule :
  * like X(1,2,Y), it is possible for passing variables and parameters
  **/
 execute_variable :
+    DOT
     variable
     ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
     ;

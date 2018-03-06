@@ -61,7 +61,7 @@ logicrules :
  */
 plan :
     annotations?
-    //plan_trigger
+    plan_trigger
     literal
     plandefinition*
     DOT
@@ -149,13 +149,15 @@ body_formula :
     ternary_operation
     | belief_action
 
+    | expression
     | deconstruct_expression
     | assignment_expression
     | unary_expression
     | binary_expression
+    | test_action
+    | achievement_goal_action
 
-    | repair_formula
-    | expression
+    //| repair_formula
     | unification
     | lambda
     ;
@@ -165,7 +167,7 @@ body_formula :
  * repairable formula
  **/
 repair_formula :
-    ( term | test_action | achievement_goal_action )
+    body_formula
     ( LEFTSHIFT repair_formula )?
     ;
 
@@ -248,23 +250,6 @@ binary_expression :
     expression
     ;
 
-// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
-
-/**
- * expression rule
- **/
-expression :
-    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
-    | STRONGNEGATION expression
-    | lhs=expression  operator=ARITHMETICOPERATOR1 rhs=expression
-    | lhs=expression  operator=ARITHMETICOPERATOR2 rhs=expression
-    | lhs=expression  operator=ARITHMETICOPERATOR3 rhs=expression
-    | lhs=expression operator=RELATIONALOPERATOR rhs=expression
-    | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
-    | lhs=expression operator=LOGICALOPERATOR2 rhs=expression
-    | term
-    ;
-
 // ---------------------------------------------------------------------------------------
 
 
@@ -285,7 +270,7 @@ ternary_operation :
  **/
 ternary_operation_true :
     QUESTIONMARK
-    term
+    expression
     ;
 
 /**
@@ -293,7 +278,7 @@ ternary_operation_true :
  **/
 ternary_operation_false :
     COLON
-    term
+    expression
     ;
 
 // ---------------------------------------------------------------------------------------
