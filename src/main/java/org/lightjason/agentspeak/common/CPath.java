@@ -85,7 +85,8 @@ public final class CPath implements IPath
      */
     public CPath( @Nonnull final IPath p_path )
     {
-        m_path = p_path.stream().collect( CPath.collectorfactory() );
+        m_path = p_path.stream().filter( i -> !i.isEmpty() )
+                                .collect( CPath.collectorfactory() );
         m_separator = p_path.separator();
     }
 
