@@ -39,31 +39,16 @@ belief :
     ;
 
 /**
- * agent plans rule
- * @note one plan must exists
- **/
-plans :
-    plan+
-    ;
-
-/**
- * optional (prolog) rules
- **/
-logicrules :
-    logicrule+
-    ;
-
-/**
  * plan modified against the original Jason grammar,
  * so a context is optional (on default true) and the
  * plan body is also optional. The definition is
  * trigger name [ plancontent ]* .
  */
 plan :
-    annotations?
-    plan_trigger
+    ANNOTATION*
+    PLANTRIGGER
     literal
-    plandefinition*
+    plandefinition+
     DOT
     ;
 
@@ -81,7 +66,7 @@ plandefinition :
  * but without context and trigger event
  **/
 logicrule :
-    annotations?
+    ANNOTATION*
     literal
     logicalruledefinition+
     DOT
@@ -95,41 +80,9 @@ logicalruledefinition :
     body
     ;
 
-/**
- * annotation for rules and plans
- **/
-annotations :
-    AT ( ANNOTATIONATOM | annotation_literal )+
-    ;
 
 /**
- * annotation (with parameter)
- **/
-annotation_literal :
-    CONSTANT
-    LEFTROUNDBRACKET
-    VARIABLEATOM
-    COMMA
-    ( NUMBER | STRING )
-    RIGHTROUNDBRACKET
-    ;
-
-/**
- * plan trigger which can match a goal or belief
- **/
-plan_trigger :
-    (PLUS | MINUS) EXCLAMATIONMARK?
-    ;
-
-/**
- * plan trigger for a belief
- **/
-plan_belief_trigger :
-    PLUS | MINUS
-    ;
-
-/**
- * plan or block body
+ * block body
  **/
 body :
     body_formula

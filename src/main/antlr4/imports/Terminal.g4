@@ -27,6 +27,22 @@
 lexer grammar Terminal;
 
 /**
+ * rule to represent the initial goal
+ **/
+INITIALGOAL :
+    EXCLAMATIONMARK
+    ATOM
+    DOT
+    ;
+
+/**
+ * plan trigger
+ **/
+PLANTRIGGER :
+    (PLUS | MINUS) EXCLAMATIONMARK?
+    ;
+
+/**
  * name structure of a variable
  **/
 VARIABLEATOM :
@@ -111,6 +127,25 @@ ARITHMETICOPERATOR2 :
 ARITHMETICOPERATOR3 :
     PLUS
     | MINUS
+    ;
+
+/**
+ * annotation for rules and plans
+ **/
+ANNOTATION :
+    AT ( ANNOTATIONATOM | ANNOTATION_LITERAL )
+    ;
+
+/**
+ * annotation (with parameter)
+ **/
+ANNOTATION_LITERAL :
+    CONSTANT
+    LEFTROUNDBRACKET
+    VARIABLEATOM
+    COMMA
+    ( NUMBER | STRING )
+    RIGHTROUNDBRACKET
     ;
 
 /**

@@ -35,29 +35,10 @@ import AgentSpeak;
  * initial grammar rule
  **/
 agent :
-    |
-    (
-        initial_beliefs?
-        initial_goal?
-        logicrules?
-        plans
-    )
-    ;
-
-/**
- * rule to represent initial beliefs
- **/
-initial_beliefs :
-    belief+
-    ;
-
-/**
- * rule to represent the initial goal
- **/
-initial_goal :
-    EXCLAMATIONMARK
-    ATOM
-    DOT
+    belief*
+    INITIALGOAL?
+    logicrule*
+    plan*
     ;
 
 // ---------------------------------------------------------------------------------------
