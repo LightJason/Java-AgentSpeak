@@ -135,7 +135,7 @@ belief_action :
  * test-goal / -rule action
  **/
 test_action :
-    QUESTIONMARK DOLLAR? ATOM
+    QUESTIONMARK DOLLAR? ATO5M
     ;
 
 /**
