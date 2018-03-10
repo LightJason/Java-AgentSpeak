@@ -26,7 +26,7 @@
  * the rules are restricted to the AgentSpeak elements e.g. beliefs, plan, ...
  **/
 grammar AgentSpeak;
-import ComplexType;
+import Logic;
 
 
 // --- agent-behaviour structure ---------------------------------------------------------
@@ -89,6 +89,23 @@ body :
     ( SEMICOLON body_formula )*
     ;
 
+// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
+
+/**
+ * expression rule
+ **/
+expression :
+    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
+    | STRONGNEGATION expression
+    | lhs=expression  operator=ARITHMETICOPERATOR1 rhs=expression
+    | lhs=expression  operator=ARITHMETICOPERATOR2 rhs=expression
+    | lhs=expression  operator=ARITHMETICOPERATOR3 rhs=expression
+    | lhs=expression operator=RELATIONALOPERATOR rhs=expression
+    | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
+    | lhs=expression operator=LOGICALOPERATOR2 rhs=expression
+    | term
+    ;
+
 // ---------------------------------------------------------------------------------------
 
 
@@ -135,14 +152,18 @@ belief_action :
  * test-goal / -rule action
  **/
 test_action :
-    QUESTIONMARK DOLLAR? ATO5M
+    QUESTIONMARK DOLLAR? ATOM
     ;
 
 /**
  * achivement-goal action
  **/
 achievement_goal_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | execute_variable )
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK )
+    (
+        literal
+        | variable ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
+    )
     ;
 
 // ---------------------------------------------------------------------------------------
@@ -257,6 +278,7 @@ unification_constraint :
     variable
     | expression
     ;
+
 // ---------------------------------------------------------------------------------------
 
 

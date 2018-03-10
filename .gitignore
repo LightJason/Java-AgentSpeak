@@ -21,6 +21,6 @@
 !src/analysis/**/*.txt
 
 src/main/antlr4/org/lightjason/agentspeak/grammar/AgentSpeak.g4
+src/main/antlr4/org/lightjason/agentspeak/grammar/Logic.g4
 src/main/antlr4/org/lightjason/agentspeak/grammar/Terminal.g4
-src/main/antlr4/org/lightjason/agentspeak/grammar/ComplexType.g4
 target/**

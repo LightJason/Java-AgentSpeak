@@ -21,31 +21,8 @@
  * @endcond
  */
 
-/**
- * grammar for complex-datatypes
- **/
-grammar ComplexType;
+grammar Logic;
 import Terminal;
-
-
-// --- expression context ----------------------------------------------------------------
-
-// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
-
-/**
- * expression rule
- **/
-expression :
-    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
-    | STRONGNEGATION expression
-    | lhs=expression  operator=ARITHMETICOPERATOR1 rhs=expression
-    | lhs=expression  operator=ARITHMETICOPERATOR2 rhs=expression
-    | lhs=expression  operator=ARITHMETICOPERATOR3 rhs=expression
-    | lhs=expression operator=RELATIONALOPERATOR rhs=expression
-    | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
-    | lhs=expression operator=LOGICALOPERATOR2 rhs=expression
-    | term
-    ;
 
 /**
  * terms are non-predictable structures
@@ -61,16 +38,7 @@ term :
 
     | literal
     | variable
-
-    | variablelist
-    | LEFTANGULARBRACKET termlist RIGHTANGULARBRACKET
     ;
-
-// ---------------------------------------------------------------------------------------
-
-
-
-// --- executable elements ---------------------------------------------------------------
 
 /**
  * rule for an action
@@ -95,12 +63,6 @@ execute_variable :
     variable
     ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
     ;
-
-// ---------------------------------------------------------------------------------------
-
-
-
-// --- complex-data-types ----------------------------------------------------------------
 
 /**
  * clause represent a literal structure existing
@@ -136,5 +98,3 @@ variable :
     AT?
     VARIABLEATOM
     ;
-
-// ---------------------------------------------------------------------------------------
