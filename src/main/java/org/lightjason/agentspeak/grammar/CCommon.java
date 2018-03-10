@@ -48,7 +48,7 @@ public final class CCommon
     /**
      * numeric constant values - infinity is defined manually
      */
-    static final Map<String, Double> NUMERICCONSTANT = Collections.unmodifiableMap(
+    public static final Map<String, Double> NUMERICCONSTANT = Collections.unmodifiableMap(
         StreamUtils.zip(
             Stream.of(
                 "pi",

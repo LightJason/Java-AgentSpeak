@@ -25,11 +25,10 @@
  * high-level grammar rules of AgentSpeak(L++)
  * which defines the agent
  **/
+
 grammar Agent;
 import AgentSpeak;
 
-
-// --- agent structure -------------------------------------------------------------------
 
 /**
  * initial grammar rule
@@ -40,5 +39,3 @@ agent :
     logicrule*
     plan*
     ;
-
-// ---------------------------------------------------------------------------------------

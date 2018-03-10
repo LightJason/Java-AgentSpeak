@@ -24,9 +24,10 @@
 grammar Logic;
 import Terminal;
 
+
 /**
  * terms are non-predictable structures
- **/
+ */
 term :
     STRING
     | NUMBER
@@ -42,14 +43,14 @@ term :
 
 /**
  * rule for an action
- **/
+ */
 execute_action :
     DOT
     literal;
 
 /**
  * rule for execute a logical-rule
- **/
+ */
 execute_rule :
     DOLLAR ( literal | execute_variable )
     ;
@@ -57,7 +58,7 @@ execute_rule :
 /**
  * variable-evaluation will be used for an executable call
  * like X(1,2,Y), it is possible for passing variables and parameters
- **/
+ */
 execute_variable :
     DOT
     variable
@@ -67,7 +68,7 @@ execute_variable :
 /**
  * clause represent a literal structure existing
  * atom, optional argument
- **/
+ */
 literal :
     ( AT | STRONGNEGATION )?
     ATOM
@@ -76,14 +77,14 @@ literal :
 
 /**
  * generic list equal to collcations with empty clause
- **/
+ */
 termlist :
     term ( COMMA term )*
     ;
 
 /**
  * list with head-tail-notation definition
- **/
+ */
 variablelist :
     LEFTANGULARBRACKET
     variable ( VLINE variable )*
@@ -93,7 +94,7 @@ variablelist :
 /**
  * variables are defined like Prolog variables,
  * @-prefix creates a thread-safe variable
- **/
+ */
 variable :
     AT?
     VARIABLEATOM

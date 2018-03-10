@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.grammar;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
@@ -35,6 +34,8 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.grammar.builder.CRaw;
+import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -100,6 +101,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -152,62 +154,32 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
     // --- agent rules -----------------------------------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public final Object visitAgent( final AgentParser.AgentContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
 
 
     @Override
-    public final Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
+    public Object visitAgent( final AgentParser.AgentContext p_context )
     {
-        p_context.belief().stream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
-        LOGGER.info( MessageFormat.format( "parsed initial beliefs: {0}", m_initialbeliefs ) );
-        return null;
-    }
+        m_initialgoal = Objects.isNull( p_context.INITIALGOAL() )
+                        ? null
+                        : CLiteral.from(
+                            p_context.INITIALGOAL().getText().replace( "!", "" ).replace( ".", "" )
+                        );
+
+        p_context.belief()
+                 .stream()
+                 .map( i -> this.visit( i ) )
+                 .map( i -> (ILiteral) i )
+                 .forEach( i -> m_initialbeliefs.add( i ) );
+
+        p_context.plan()
+                 .stream()
+                 .map( i -> this.visit( i ) )
+                 .map( i -> (IPlan) i )
+                 .forEach( i -> m_plans.add( i ) );
 
 
-
-    @Override
-    public final Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
-    {
-        m_initialgoal = CLiteral.from( (String) this.visitAtom( p_context.atom() ) );
-        LOGGER.info( MessageFormat.format( "parsed initial-goal: {0}", m_initialgoal ) );
-        return null;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public final Object visitBelief( final AgentParser.BeliefContext p_context )
-    {
-        return this.visitLiteral( p_context.literal() );
-    }
-
-
-
-    @Override
-    public final Object visitPlans( final AgentParser.PlansContext p_context )
-    {
-        if ( Objects.isNull( p_context.plan() ) )
-            return null;
-
-        p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.add( j ) ) );
-        LOGGER.info( MessageFormat.format( "parsed plans: {0}", m_plans ) );
-        return null;
-    }
-
-
-
-    @Override
-    public final Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
-    {
-        // create placeholder objects first and run parsing again to build full-qualified rule objects
+        /*
+                // create placeholder objects first and run parsing again to build full-qualified rule objects
         p_context.logicrule().stream()
                  .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
                  .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
@@ -224,7 +196,20 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
 
         LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
+         */
+
         return null;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final Object visitBelief( final AgentParser.BeliefContext p_context )
+    {
+        return this.visit( p_context.literal() );
     }
 
     @Override
@@ -234,12 +219,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return p_context.logicalruledefinition().stream()
                         .map( i -> new CRule( (ILiteral) l_literal.deepcopy(), (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
                         .collect( Collectors.toList() );
-    }
-
-    @Override
-    public final Object visitLogicalruledefinition( final AgentParser.LogicalruledefinitionContext p_context )
-    {
-        return this.visitBody( p_context.body() );
     }
 
     @Override
@@ -270,68 +249,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             : (IExpression) this.visitExpression( p_context.expression() ),
             (List<IExecution>) this.visitBody( p_context.body() )
         );
-    }
-
-    @Override
-    public final Object visitAnnotations( final AgentParser.AnnotationsContext p_context )
-    {
-        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )
-            return Collections.emptySet();
-
-
-        final Set<IAnnotation<?>> l_annotation = new HashSet<>();
-
-        if ( Objects.nonNull( p_context.annotation_atom() ) )
-            p_context.annotation_atom().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
-
-        if ( Objects.nonNull( p_context.annotation_literal() ) )
-            p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
-
-        return l_annotation.isEmpty() ? Collections.emptySet() : l_annotation;
-    }
-
-    @Override
-    public final Object visitAnnotation_atom( final AgentParser.Annotation_atomContext p_context )
-    {
-        if ( Objects.nonNull( p_context.ATOMIC() ) )
-            return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
-
-        if ( Objects.nonNull( p_context.PARALLEL() ) )
-            return new CAtomAnnotation<>( IAnnotation.EType.PARALLEL );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "atomannotation", p_context.getText() ) );
-    }
-
-    @Override
-    public final Object visitAnnotation_literal( final AgentParser.Annotation_literalContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitAnnotation_value_literal( final AgentParser.Annotation_value_literalContext p_context )
-    {
-        if ( Objects.nonNull( p_context.number() ) )
-            return new CValueAnnotation<>(
-                IAnnotation.EType.CONSTANT,
-                (String) this.visitVariableatom( p_context.variableatom() ),
-                ( (Number) numbervalue( p_context.NUMBER() ) ).doubleValue()
-            );
-
-        if ( Objects.nonNull( p_context.STRING() ) )
-            return new CValueAnnotation<>(
-                IAnnotation.EType.CONSTANT,
-                (String) this.visitVariableatom( p_context.variableatom() ),
-                stringvalue( p_context.STRING() )
-            );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "valueannotation", p_context.getText() ) );
-    }
-
-    @Override
-    public final Object visitPlan_trigger( final AgentParser.Plan_triggerContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
     @Override
@@ -648,10 +565,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
-        return new CLiteral(
-            Objects.nonNull( p_context.AT() ),
-            Objects.nonNull( p_context.STRONGNEGATION() ),
-            CPath.from( this.visitAtom( p_context.atom() ).toString() ),
+        return CTerm.literal(
+            p_context.AT(),
+            p_context.STRONGNEGATION(),
+            p_context.ATOM(),
             (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
         );
     }
@@ -659,24 +576,21 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTerm( final AgentParser.TermContext p_context )
     {
-        if ( Objects.nonNull( p_context.STRING() ) )
-            return stringvalue( p_context.STRING().getText() );
-        if ( Objects.nonNull( p_context.number() ) )
-            return this.visitNumber( p_context.number() );
-        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
-            return logicalvalue( p_context.LOGICALVALUE().getText() );
+        final Object l_terminal = CTerm.termterminals( p_context.STRING(), p_context.NUMBER(), p_context.LOGICALVALUE() );
+        if ( Objects.nonNull( l_terminal ) )
+            return l_terminal;
+
+        if ( Objects.nonNull( p_context.execute_action() ) )
+            return this.visit( p_context.execute_action() );
+        if ( Objects.nonNull( p_context.execute_rule() ) )
+            return this.visit( p_context.execute_rule() );
+        if ( Objects.nonNull( p_context.execute_variable() ) )
+            return this.visit( p_context.execute_variable() );
 
         if ( Objects.nonNull( p_context.literal() ) )
-            return this.visitLiteral( p_context.literal() );
+            return this.visit( p_context.literal() );
         if ( Objects.nonNull( p_context.variable() ) )
-            return this.visitVariable( p_context.variable() );
-
-        if ( Objects.nonNull( p_context.termlist() ) )
-            return this.visitTermlist( p_context.termlist() );
-        if ( Objects.nonNull( p_context.expression() ) )
-            return this.visitExpression( p_context.expression() );
-        if ( Objects.nonNull( p_context.ternary_operation() ) )
-            return this.visitTernary_operation( p_context.ternary_operation() );
+            return this.visit( p_context.variable() );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
@@ -684,14 +598,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
-        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )
-            return Collections.<ITerm>emptyList();
-
-        return p_context.term().stream()
-                        .map( i -> this.visitTerm( i ) )
-                        .filter( i -> Objects.nonNull( i ) )
-                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
-                        .collect( Collectors.toList() );
+        return ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() )
+               ? Collections.emptyList()
+               : CTerm.termlist( this, p_context.term().stream() );
     }
 
     @Override
@@ -705,43 +614,14 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public final Object visitNumber( final AgentParser.NumberContext p_context )
-    {
-        if ( Objects.nonNull( p_context.CONSTANTNUMBER() ) )
-            return numericonstant( p_context.CONSTANTNUMBER().getText() );
-
-        final Number l_value = (Number) this.visitChildren( p_context );
-        return Objects.nonNull( p_context.MINUS() )
-               ? -1 * l_value.doubleValue()
-               : l_value.doubleValue();
-    }
-
-    @Override
-    public final Object visitDigitsequence( final AgentParser.DigitsequenceContext p_context )
-    {
-        return Double.valueOf( p_context.getText() );
-    }
-
-    @Override
-    public final Object visitAtom( final AgentParser.AtomContext p_context )
-    {
-        return p_context.getText();
-    }
 
     @Override
     public final Object visitVariable( final AgentParser.VariableContext p_context )
     {
-        return Objects.isNull( p_context.AT() )
-               ? new CVariable<>( (String) this.visitVariableatom( p_context.variableatom() ) )
-               : new CMutexVariable<>( (String) this.visitVariableatom( p_context.variableatom() ) );
+        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
     }
 
-    @Override
-    public final Object visitVariableatom( final AgentParser.VariableatomContext p_context )
-    {
-        return p_context.getText();
-    }
+/*
 
     @Override
     public final Object visitExpression( final AgentParser.ExpressionContext p_context )
@@ -758,12 +638,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
             : Collections.emptyList()
         );
-    }
-
-    @Override
-    public final Object visitExpression_bracket( final AgentParser.Expression_bracketContext p_context )
-    {
-        return this.visitExpression( p_context.expression() );
     }
 
     @Override
@@ -997,6 +871,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         );
     }
 
+*/
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -1008,46 +884,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
      * @param p_context logical rule context
      * @return placeholder rule
      */
-    protected Object visitLogicrulePlaceHolder( final AgentParser.LogicruleContext p_context )
+    protected final Object visitLogicrulePlaceHolder( final AgentParser.LogicruleContext p_context )
     {
         return new CRulePlaceholder( (ILiteral) this.visitLiteral( p_context.literal() ) );
-    }
-
-    /**
-     * parsing number
-     *
-     * @param p_number terminal number node
-     * @return number value
-     */
-    private static Number numbervalue( final TerminalNode p_number )
-    {
-        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_value );
-        if ( Objects.nonNull( l_constant ) )
-            return l_constant;
-
-        return Double.valueOf( p_number.getText() );
-    }
-
-    /**
-     * converts a string token to the type
-     *
-     * @param p_value string value
-     * @return boolean value
-     */
-    private static boolean logicalvalue( @Nonnull final TerminalNode p_value )
-    {
-        return ( !p_value.getText().isEmpty() ) && ( ( "true".equals( p_value.getText() ) ) || ( "success".equals( p_value.getText() ) ) );
-    }
-
-    /**
-     * create a string value without quotes
-     *
-     * @param p_value string
-     * @return string without quotes
-     */
-    private static String stringvalue( @Nonnull final TerminalNode p_value )
-    {
-        return p_value.getText().length() < 3 ? "" : p_value.getText().substring( 1, p_value.getText().length() - 1 );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

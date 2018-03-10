@@ -24,7 +24,7 @@
 /**
  * base grammar rules of an additional version of AgentSpeak(L) without any terminal symbols,
  * the rules are restricted to the AgentSpeak elements e.g. beliefs, plan, ...
- **/
+ */
 grammar AgentSpeak;
 import Logic;
 
@@ -33,7 +33,7 @@ import Logic;
 
 /**
  * belief rule
- **/
+ */
 belief :
     literal DOT
     ;
@@ -55,7 +55,7 @@ plan :
 /**
  * plan body & context definition
  * The definition is [ : condition ] [ <- body ]
- **/
+ */
 plandefinition :
     ( COLON expression )?
     LEFTARROW body
@@ -64,7 +64,7 @@ plandefinition :
 /**
  * rules are similar to plans
  * but without context and trigger event
- **/
+ */
 logicrule :
     ANNOTATION*
     literal
@@ -74,7 +74,7 @@ logicrule :
 
 /**
  * rule definition similar to plan
- **/
+ */
 logicalruledefinition :
     RULEOPERATOR
     body
@@ -83,7 +83,7 @@ logicalruledefinition :
 
 /**
  * block body
- **/
+ */
 body :
     body_formula
     ( SEMICOLON body_formula )*
@@ -93,7 +93,7 @@ body :
 
 /**
  * expression rule
- **/
+ */
 expression :
     LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
     | STRONGNEGATION expression
@@ -114,7 +114,7 @@ expression :
 
 /**
  * basic executable formula
- **/
+ */
 body_formula :
     ternary_operation
     | belief_action
@@ -135,7 +135,7 @@ body_formula :
 
 /**
  * repairable formula
- **/
+ */
 repair_formula :
     body_formula
     ( LEFTSHIFT repair_formula )?
@@ -143,21 +143,21 @@ repair_formula :
 
 /**
  * belief-action operator
- **/
+ */
 belief_action :
     ( PLUS | MINUS ) literal
     ;
 
 /**
  * test-goal / -rule action
- **/
+ */
 test_action :
     QUESTIONMARK DOLLAR? ATOM
     ;
 
 /**
  * achivement-goal action
- **/
+ */
 achievement_goal_action :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK )
     (
@@ -174,7 +174,7 @@ achievement_goal_action :
 
 /**
  * deconstruct expression (splitting clauses)
- **/
+ */
 deconstruct_expression :
     variablelist
     DECONSTRUCT
@@ -183,7 +183,7 @@ deconstruct_expression :
 
 /**
  * assignment expression (for assignin a variable)
- **/
+ */
 assignment_expression :
     assignment_expression_singlevariable
     | assignment_expression_multivariable
@@ -191,7 +191,7 @@ assignment_expression :
 
 /**
  * assignment of a single variable
- **/
+ */
 assignment_expression_singlevariable :
     variable
     ASSIGN
@@ -200,7 +200,7 @@ assignment_expression_singlevariable :
 
 /**
  * assignment of a variable list
- **/
+ */
 assignment_expression_multivariable :
     variablelist
     ASSIGN
@@ -209,7 +209,7 @@ assignment_expression_multivariable :
 
 /**
  * unary expression
- **/
+ */
 unary_expression :
     variable
     UNARYOPERATOR
@@ -217,7 +217,7 @@ unary_expression :
 
 /**
  * binary expression
- **/
+ */
 binary_expression :
     variable
     BINARYOPERATOR
@@ -232,7 +232,7 @@ binary_expression :
 
 /**
  * ternary operation
- **/
+ */
 ternary_operation :
     expression
     ternary_operation_true
@@ -241,7 +241,7 @@ ternary_operation :
 
 /**
  * ternary operation true-rule
- **/
+ */
 ternary_operation_true :
     QUESTIONMARK
     expression
@@ -249,7 +249,7 @@ ternary_operation_true :
 
 /**
  * ternary operation false-rule
- **/
+ */
 ternary_operation_false :
     COLON
     expression
@@ -262,7 +262,7 @@ ternary_operation_false :
 
 /**
  * unification expression
- **/
+ */
 unification :
  AT? RIGHTSHIFT
  (
@@ -271,9 +271,9 @@ unification :
  )
  ;
 
-/*
+/**
  * unification constraint
- **/
+ */
 unification_constraint :
     variable
     | expression
@@ -287,7 +287,7 @@ unification_constraint :
 
 /**
  * lambda expression for iteration
- **/
+ */
 lambda :
     AT? lambda_initialization
     RIGHTARROW variable
@@ -297,7 +297,7 @@ lambda :
 
 /**
  * block-formula of subsection
- **/
+ */
 block_formula :
     LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
     | body_formula
@@ -305,7 +305,7 @@ block_formula :
 
 /**
  * initialization of lambda expression
- **/
+ */
 lambda_initialization :
     LEFTROUNDBRACKET
     ( variable | lambda_range )
@@ -314,7 +314,7 @@ lambda_initialization :
 
 /**
  * lambda range
- **/
+ */
 lambda_range :
     NUMBER
     ( COMMA NUMBER )?
@@ -322,7 +322,7 @@ lambda_range :
 
 /**
  * return argument lambda expression
- **/
+ */
 lambda_return :
     VLINE variable
     ;

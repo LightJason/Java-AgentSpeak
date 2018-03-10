@@ -31,9 +31,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.hash.Hasher;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.grammar.CASTVisitorType;
+import org.lightjason.agentspeak.grammar.CASTVisitorManual;
 import org.lightjason.agentspeak.grammar.CErrorListener;
-import org.lightjason.agentspeak.grammar.IASTVisitorType;
+import org.lightjason.agentspeak.grammar.IASTVisitorManual;
 import org.lightjason.agentspeak.grammar.IBaseParser;
 import org.lightjason.agentspeak.grammar.TypeLexer;
 import org.lightjason.agentspeak.grammar.TypeParser;
@@ -484,7 +484,7 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    private static final class CParser extends IBaseParser<IASTVisitorType, TypeLexer, TypeParser>
+    private static final class CParser extends IBaseParser<IASTVisitorManual, TypeLexer, TypeParser>
     {
 
         /**
@@ -498,9 +498,9 @@ public final class CLiteral implements ILiteral
 
         @Nonnull
         @Override
-        public final IASTVisitorType parse( @Nonnull final InputStream p_stream ) throws Exception
+        public final IASTVisitorManual parse( @Nonnull final InputStream p_stream ) throws Exception
         {
-            final IASTVisitorType l_visitor = new CASTVisitorType();
+            final IASTVisitorManual l_visitor = new CASTVisitorManual();
             l_visitor.visit( this.parser( p_stream ).literal_type() );
             return l_visitor;
         }

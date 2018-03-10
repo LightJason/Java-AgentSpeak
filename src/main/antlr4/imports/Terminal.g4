@@ -21,14 +21,12 @@
  * @endcond
  */
 
-/**
- * grammar defines the terminal symbols of all grammar rules
- **/
 lexer grammar Terminal;
+
 
 /**
  * rule to represent the initial goal
- **/
+ */
 INITIALGOAL :
     EXCLAMATIONMARK
     ATOM
@@ -37,14 +35,14 @@ INITIALGOAL :
 
 /**
  * plan trigger
- **/
+ */
 PLANTRIGGER :
     (PLUS | MINUS) EXCLAMATIONMARK?
     ;
 
 /**
  * name structure of a variable
- **/
+ */
 VARIABLEATOM :
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH )*
@@ -52,7 +50,7 @@ VARIABLEATOM :
 
 /**
  * atoms are defined like Prolog atoms
- **/
+ */
 ATOM :
     LOWERCASELETTER
     ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH | MINUS )*
@@ -60,7 +58,7 @@ ATOM :
 
 /**
  * binary operator
- **/
+ */
 BINARYOPERATOR :
     ASSIGNINCREMENT
     | ASSIGNDECREMENT
@@ -72,7 +70,7 @@ BINARYOPERATOR :
 
 /**
  * unary operator
- **/
+ */
 UNARYOPERATOR :
     INCREMENT
     | DECREMENT
@@ -80,7 +78,7 @@ UNARYOPERATOR :
 
 /**
  * relational operator
- **/
+ */
 RELATIONALOPERATOR :
     LESSEQUAL
     | GREATEREQUAL
@@ -92,7 +90,7 @@ RELATIONALOPERATOR :
 
 /**
  * logical operator with precendece 1
- **/
+ */
 LOGICALOPERATOR1 :
     AND
     | XOR
@@ -100,21 +98,21 @@ LOGICALOPERATOR1 :
 
 /**
  * logical operator with precendece 2
- **/
+ */
 LOGICALOPERATOR2 :
     OR
     ;
 
 /**
  * arithmetic operator with precendece 1
- **/
+ */
 ARITHMETICOPERATOR1 :
     POW
     ;
 
 /**
  * arithmetic operator with precendece 2
- **/
+ */
 ARITHMETICOPERATOR2 :
     MULTIPLY
     | DIVIDE
@@ -123,7 +121,7 @@ ARITHMETICOPERATOR2 :
 
 /**
  * arithmetic operator with precendece 3
- **/
+ */
 ARITHMETICOPERATOR3 :
     PLUS
     | MINUS
@@ -131,14 +129,14 @@ ARITHMETICOPERATOR3 :
 
 /**
  * annotation for rules and plans
- **/
+ */
 ANNOTATION :
     AT ( ANNOTATIONATOM | ANNOTATION_LITERAL )
     ;
 
 /**
  * annotation (with parameter)
- **/
+ */
 ANNOTATION_LITERAL :
     CONSTANT
     LEFTROUNDBRACKET
@@ -150,7 +148,7 @@ ANNOTATION_LITERAL :
 
 /**
  * annotation atom
- **/
+ */
 ANNOTATIONATOM :
     PARALLEL
     | ATOMIC
@@ -158,7 +156,7 @@ ANNOTATIONATOM :
 
 /**
  * boolean values
- **/
+ */
 LOGICALVALUE :
     TRUE
     | FALSE
@@ -166,7 +164,7 @@ LOGICALVALUE :
 
 /**
  * using floating-point number (double) and constants are used
- **/
+ */
 NUMBER :
     MINUS?
     ( CONSTANTNUMBER | DIGITSEQUENCE )
@@ -174,7 +172,7 @@ NUMBER :
 
 /**
  * string define with single or double quotes
- **/
+ */
 STRING :
     SINGLEQUOTESTRING
     | DOUBLEQUOTESTRING
@@ -182,7 +180,7 @@ STRING :
 
 /**
  * floating-point constants
- **/
+ */
 CONSTANTNUMBER :
     PI
     | EULER
@@ -289,13 +287,13 @@ MODULO                     : '%';
 
 /**
  * string can be definied in single- and double-quotes
- **/
+ */
 fragment SINGLEQUOTESTRING : '\'' ~('\'')* '\'';
 fragment DOUBLEQUOTESTRING : '"' ~('"')* '"';
 
 /**
  * char definitions
- **/
+ */
 LOWERCASELETTER            : [a-z];
 UPPERCASELETTER            : [A-Z];
 DIGIT                      : [0-9];
@@ -308,16 +306,16 @@ DIGITSEQUENCE              : DIGIT+ ('.' DIGIT+)?;
 
 /**
  * any whitespace
- **/
+ */
 WHITESPACE                 : (' ' | '\n' | '\t' | '\r')+ -> skip;
 /**
  * add for line-comment also #
- **/
+ */
 LINECOMMENT                : ('//' | '#') .*? '\r'? '\n' -> skip;
 /**
  * block comment allowed within the grammar
  * default behaviour does not allow block comments
- **/
+ */
 BLOCKCOMMENT                    :   '/*' .*? '*/' -> skip;
 
 // ---------------------------------------------------------------------------------------

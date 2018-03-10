@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 /**
  * interface of a type parser
  */
-public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
+public interface IASTVisitorManual extends IASTVisitor, ManualVisitor<Object>
 {
 
     /**

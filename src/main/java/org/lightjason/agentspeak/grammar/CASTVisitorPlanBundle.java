@@ -35,7 +35,7 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
-import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.grammar.builder.CRaw;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -620,10 +620,10 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
     {
-        return new CLiteral(
-            p_context.AT() != null,
-            p_context.STRONGNEGATION() != null,
-            CPath.from( this.visitAtom( p_context.atom() ).toString() ),
+        return CRaw.literal(
+            p_context.AT(),
+            p_context.STRONGNEGATION(),
+            p_context.ATOM(),
             (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
         );
     }

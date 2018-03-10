@@ -25,19 +25,16 @@
  * high-level grammar rules of AgentSpeak(L++)
  * which defines plan-bundles for importing in an agent
  **/
+
 grammar PlanBundle;
 import AgentSpeak;
 
 
-// --- plan-bundle structure -------------------------------------------------------------
-
 /**
  * initial grammar rule
- **/
+ */
 planbundle :
     belief*
     logicrule*
     plan*
     ;
-
-// ---------------------------------------------------------------------------------------

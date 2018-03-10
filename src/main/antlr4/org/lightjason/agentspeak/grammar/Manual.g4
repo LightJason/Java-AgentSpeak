@@ -21,34 +21,13 @@
  * @endcond
  */
 
-/**
- * high-level grammar rules of data typing
- **/
-grammar Type;
-import ComplexType;
+ grammar Manual;
+ import Logic;
 
-
-// --- agent structure -------------------------------------------------------------------
 
 /**
- * rule for a literal
- **/
-literal_type :
+ * manual rule to parse a literal
+ */
+ root_literal :
     literal
     ;
-
-/**
- * rule for an expression
- **/
-expression_type :
-    expression
-    ;
-
-/**
- * rule for a term
- **/
-expression_term :
-    term
-    ;
-
-// ---------------------------------------------------------------------------------------
