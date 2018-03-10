@@ -26,11 +26,8 @@ package org.lightjason.agentspeak.grammar;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
@@ -51,8 +48,6 @@ import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
-import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
-import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
@@ -60,13 +55,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expressionbinary.COperatorAssign;
 import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
 import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
-import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.instantiable.rule.CRule;
-import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
@@ -192,56 +181,28 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
-        CAgentSpeak.rule(
+        // @todo add body
+
+        return CAgentSpeak.rule(
             (ILiteral) this.visit( p_context.literal() ),
             Objects.isNull( p_context.ANNOTATION() )
             ? Stream.empty()
             : p_context.ANNOTATION().stream()
         );
 
-
-        final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );
-        return p_context.logicalruledefinition().stream()
-                        .map( i -> new CRule( (ILiteral) l_literal.deepcopy(), (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
-                        .collect( Collectors.toList() );
     }
 
     @Override
     public final Object visitPlan( final AgentParser.PlanContext p_context )
     {
-        CAgentSpeak.plan(
+        // @todo add body
+
+        return CAgentSpeak.plan(
             p_context.PLANTRIGGER(),
 
             Objects.isNull( p_context.ANNOTATION() )
             ? Stream.empty()
             : p_context.ANNOTATION().stream()
-        );
-
-
-        final Set<IAnnotation<?>> l_annotation = (Set<IAnnotation<?>>) this.visitAnnotations( p_context.annotations() );
-        final CTrigger l_trigger = new CTrigger(
-            (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),
-            (ILiteral) this.visitLiteral( p_context.literal() )
-        );
-
-        return p_context.plandefinition()
-                        .stream()
-                        .map( i ->
-                        {
-                            final Pair<IExpression, List<IExecution>> l_content = (Pair<IExpression, List<IExecution>>) this.visitPlandefinition( i );
-                            return new CPlan( l_trigger, l_content.getLeft(), l_content.getRight(), l_annotation );
-                        } )
-                        .collect( Collectors.toList() );
-    }
-
-    @Override
-    public final Object visitPlandefinition( final AgentParser.PlandefinitionContext p_context )
-    {
-        return new ImmutablePair<IExpression, List<IExecution>>(
-            Objects.isNull( p_context.expression() )
-            ? IExpression.EMPTY
-            : (IExpression) this.visitExpression( p_context.expression() ),
-            (List<IExecution>) this.visitBody( p_context.body() )
         );
     }
 
@@ -352,18 +313,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
-    {
-        return this.visitVariable( p_context.variable() );
-    }
-
-    @Override
-    public final Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
     public final Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
 
@@ -439,24 +388,12 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
-    {
-        return this.visitExecutable_term( p_context.executable_term() );
-    }
-
-    @Override
-    public final Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
-    {
-        return this.visitExecutable_term( p_context.executable_term() );
-    }
-
-    @Override
     public final Object visitTest_action( final AgentParser.Test_actionContext p_context )
     {
-        // dollar sign is used to recognize a rule
-        return Objects.nonNull( p_context.DOLLAR() )
-               ? new CTestRule( CPath.from( (String) this.visitAtom( p_context.atom() ) ) )
-               : new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
+        return CAgentSpeak.testgoal(
+            p_context.DOLLAR(),
+            p_context.ATOM()
+        );
     }
 
     @Override
@@ -486,17 +423,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Object visitLiteral( final AgentParser.LiteralContext p_context )
-    {
-        return CTerm.literal(
-            p_context.AT(),
-            p_context.STRONGNEGATION(),
-            p_context.ATOM(),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
-        );
-    }
-
-    @Override
     public final Object visitTerm( final AgentParser.TermContext p_context )
     {
         final Object l_terminal = CTerm.termterminals( p_context.STRING(), p_context.NUMBER(), p_context.LOGICALVALUE() );
@@ -519,17 +445,28 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
+    public final Object visitLiteral( final AgentParser.LiteralContext p_context )
+    {
+        return CTerm.literal(
+            p_context.AT(),
+            p_context.STRONGNEGATION(),
+            p_context.ATOM(),
+            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
+        );
+    }
+
+    @Override
+    public final Object visitVariable( final AgentParser.VariableContext p_context )
+    {
+        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
+    }
+
+    @Override
     public final Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
         return ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() )
                ? Collections.emptyList()
                : CTerm.termlist( this, p_context.term().stream() );
-    }
-
-    @Override
-    public final Object visitVariablelist( final AgentParser.VariablelistContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -538,11 +475,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    @Override
-    public final Object visitVariable( final AgentParser.VariableContext p_context )
-    {
-        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
-    }
+
 
 /*
 
@@ -795,22 +728,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
 */
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- helper ----------------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * create a rule placeholder object
-     *
-     * @param p_context logical rule context
-     * @return placeholder rule
-     */
-    protected final Object visitLogicrulePlaceHolder( final AgentParser.LogicruleContext p_context )
-    {
-        return new CRulePlaceholder( (ILiteral) this.visitLiteral( p_context.literal() ) );
-    }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

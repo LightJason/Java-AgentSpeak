@@ -25,14 +25,18 @@ package org.lightjason.agentspeak.grammar.builder;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
@@ -93,6 +97,20 @@ public final class CAgentSpeak
     }
 
     /**
+     * create a rule placeholder
+     *
+     * @param p_literal literal
+     * @return place holder rule
+     */
+    @Nonnull
+    public static IRule ruleplaceholder( @Nonnull final ILiteral p_literal )
+    {
+        return new CRulePlaceholder(
+            p_literal
+        );
+    }
+
+    /**
      * build annotation object
      * @param p_annotation annotation terminal
      * @return null or annoation
@@ -144,5 +162,20 @@ public final class CAgentSpeak
                           .map( i -> new CRepair( i.get( 0 ), i.get( 1 ) ) )
                           .reduce( ( i, j ) -> i )
                           .orElse( null );
+    }
+
+    /**
+     * create a test-goal
+     *
+     * @param p_dollar dollar sign (rule / plan)
+     * @param p_atom atom terminal
+     * @return execution
+     */
+    @Nonnull
+    public static IExecution testgoal( @Nullable final TerminalNode p_dollar, @Nonnull final TerminalNode p_atom )
+    {
+        return Objects.nonNull( p_dollar )
+            ? new CTestRule( CPath.from( p_atom.getText() ) )
+            : new CTestGoal( CPath.from( p_atom.getText() ) );
     }
 }
