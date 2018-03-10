@@ -255,6 +255,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
     {
+
         if ( Objects.isNull( p_context ) )
             return null;
 
@@ -315,38 +316,28 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
-
-
-        return new CSingleAssignment<>(
-            (IVariable<?>) this.visitVariable( p_context.variable() ),
-            (IExecution) this.visitExecutable_term( p_context.executable_term() )
+        return CAgentSpeak.singleassignment(
+            (IVariable<?>) this.visit( p_context.variable() ),
+            (IExecution) this.visit( p_context.expression() )
         );
     }
 
     @Override
     public final Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
     {
-        return new CMultiAssignment<>(
-            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) )
-                     .collect( Collectors.toList() ),
-            (IExecution) this.visitExecutable_term( p_context.executable_term() )
+        return CAgentSpeak.multiassignment(
+            (Stream<IVariable<?>>) this.visit( p_context.variablelist() ),
+            (IExecution) this.visit( p_context.expression() )
         );
     }
 
     @Override
     public final Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
     {
-        switch ( p_context.UNARYOPERATOR().getText() )
-        {
-            case "++":
-                return new CIncrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
-
-            case "--":
-                return new CDecrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
-
-            default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "unaryoperator", p_context.getText() ) );
-        }
+        return CAgentSpeak.unary(
+            p_context.UNARYOPERATOR(),
+            (IVariable<Number>) this.visit( p_context.variable() )
+        );
     }
 
     @Override
@@ -365,6 +356,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
+        p_context
+
         if ( Objects.nonNull( p_context.literal() ) )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
 

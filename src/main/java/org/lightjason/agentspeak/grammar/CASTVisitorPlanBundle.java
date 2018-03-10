@@ -147,40 +147,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public final Object visitPlans( final PlanBundleParser.PlansContext p_context )
-    {
-        if ( Objects.isNull( p_context.plan() ) )
-            return null;
-
-        p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.add( j ) ) );
-        LOGGER.info( MessageFormat.format( "parsed plans: {0}", m_plans ) );
-        return null;
-    }
-
-    @Override
-    public final Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
-    {
-        // create placeholder objects first and run parsing again to build full-qualified rule objects
-        p_context.logicrule().stream()
-                 .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
-                 .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
-        final Multimap<IPath, IRule> l_rules = LinkedHashMultimap.create();
-        p_context.logicrule().stream()
-                 .flatMap( i -> ( (List<IRule>) this.visitLogicrule( i ) ).stream() )
-                 .forEach( i -> l_rules.put( i.identifier().fqnfunctor(), i ) );
-
-        // clear rule list and replace placeholder objects
-        m_rules.clear();
-        l_rules.values().stream()
-               .map( i -> i.replaceplaceholder( l_rules ) )
-               .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
-        LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
-        return null;
-    }
-
-    @Override
     public final Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
     {
         final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );

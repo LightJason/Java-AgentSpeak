@@ -28,9 +28,13 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
+import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
+import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
+import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
@@ -38,12 +42,14 @@ import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -177,5 +183,60 @@ public final class CAgentSpeak
         return Objects.nonNull( p_dollar )
             ? new CTestRule( CPath.from( p_atom.getText() ) )
             : new CTestGoal( CPath.from( p_atom.getText() ) );
+    }
+
+    /**
+     * build an unary expression
+     *
+     * @param p_operator operator
+     * @param p_variable variable
+     * @return null or execution
+     */
+    @Nullable
+    public static IExecution unary( @Nonnull final TerminalNode p_operator, @Nonnull final IVariable<Number> p_variable )
+    {
+        switch ( p_operator.getText() )
+        {
+            case "++":
+                return new CIncrement<>( p_variable );
+
+            case "--":
+                return new CDecrement<>( p_variable );
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * build single assignment
+     *
+     * @param p_variable variable
+     * @param p_execution execution structure
+     * @return assignment execution
+     */
+    @Nonnull
+    public static IExecution singleassignment( @Nonnull final IVariable<?> p_variable, @Nonnull final IExecution p_execution )
+    {
+        return new CSingleAssignment<>(
+            p_variable,
+            p_execution
+        );
+    }
+
+    /**
+     * build multi assignment
+     *
+     * @param p_variable variable
+     * @param p_execution execution structure
+     * @return assignment execution
+     */
+    @Nonnull
+    public static IExecution multiassignment( @Nonnull final Stream<IVariable<?>> p_variable, @Nonnull final IExecution p_execution )
+    {
+        return new CMultiAssignment<>(
+            p_variable,
+            p_execution
+        );
     }
 }

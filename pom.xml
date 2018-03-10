@@ -275,7 +275,7 @@
                 <version>0.0.1</version>
                 <configuration>
                     <excludes>
-                        <exclude>Type.g4</exclude>
+                        <exclude>Manual.g4</exclude>
                     </excludes>
                 </configuration>
             </plugin>
