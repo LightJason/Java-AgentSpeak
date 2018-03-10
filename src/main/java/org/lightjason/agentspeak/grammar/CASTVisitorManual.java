@@ -87,6 +87,24 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
+    public final Object visitExecute_action( final ManualParser.Execute_actionContext ctx )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitExecute_rule( final ManualParser.Execute_ruleContext ctx )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitExecute_variable( final ManualParser.Execute_variableContext ctx )
+    {
+        return null;
+    }
+
+    @Override
     public final Object visitLiteral( final ManualParser.LiteralContext p_context )
     {
         return CTerm.literal(
@@ -114,6 +132,12 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
                         .filter( i -> Objects.nonNull( i ) )
                         .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
                         .collect( Collectors.toList() );
+    }
+
+    @Override
+    public final Object visitVariablelist( final ManualParser.VariablelistContext ctx )
+    {
+        return null;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
