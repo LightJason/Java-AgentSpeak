@@ -63,10 +63,12 @@ public final class CRaw
     @Nonnull
     public static Number numbervalue( @Nonnull final String p_number )
     {
+        // try to match to a numeric constant
         final Double l_constant = CCommon.NUMERICCONSTANT.get( p_number );
         if ( Objects.nonNull( l_constant ) )
             return l_constant;
 
+        // otherwise try to parse number value
         return Double.valueOf( p_number );
     }
 
@@ -90,6 +92,7 @@ public final class CRaw
     @Nonnull
     public static String stringvalue( @Nonnull final TerminalNode p_value )
     {
+        // on a string the single- and double-quotes must be removed
         return p_value.getText().length() < 3 ? "" : p_value.getText().substring( 1, p_value.getText().length() - 1 );
     }
 

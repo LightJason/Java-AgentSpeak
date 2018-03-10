@@ -72,7 +72,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final Stream<IExecution> p_body, @Nonnull final Stream<IAnnotation<?>> p_annotation )
     {
         this( p_event, IExpression.EMPTY, p_body, p_annotation );
     }
@@ -86,7 +86,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_annotation annotations
      */
     public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
-                  @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
+                  @Nonnull final Stream<IExecution> p_body, @Nonnull final Stream<IAnnotation<?>> p_annotation )
     {
         super(
             p_body,
@@ -97,8 +97,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
                     p_event.hashCode(),
                     p_condition.hashCode()
                 ),
-                p_body.stream().map( Object::hashCode ),
-                p_annotation.stream().map( Object::hashCode )
+                p_body.map( Object::hashCode ),
+                p_annotation.map( Object::hashCode )
             ).reduce( 0, ( i, j ) -> i ^ j )
         );
 

@@ -60,16 +60,16 @@ public final class CRule extends IBaseInstantiable implements IRule
      * ctor
      *
      * @param p_id literal with signature
-     * @param p_action action list
+     * @param p_body rule body
      */
-    public CRule( @Nonnull final ILiteral p_id, @Nonnull final List<IExecution> p_action )
+    public CRule( @Nonnull final ILiteral p_id, @Nonnull final Stream<IExecution> p_body )
     {
         super(
-            p_action,
-            Collections.emptySet(),
+            p_body,
+            Stream.empty(),
             Stream.concat(
                 Stream.of( p_id.hashCode() ),
-                p_action.stream().map( Object::hashCode )
+                p_body.map( Object::hashCode )
             ).reduce( 0, ( i, j ) -> i ^ j )
         );
         m_id = p_id;
@@ -89,12 +89,13 @@ public final class CRule extends IBaseInstantiable implements IRule
     {
         return new CRule(
             m_id,
-            m_action.stream().map( i ->
-                                       i instanceof CRulePlaceholder
-                                       // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
-                                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
-                                       : i
-            ).collect( Collectors.toList() )
+            m_action.stream()
+                    .map( i ->
+                       i instanceof CRulePlaceholder
+                       // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
+                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
+                       : i
+            )
         );
     }
 

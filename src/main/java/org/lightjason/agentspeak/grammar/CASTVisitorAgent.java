@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CRaw;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -207,14 +208,16 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Object visitBelief( final AgentParser.BeliefContext p_context )
-    {
-        return this.visit( p_context.literal() );
-    }
-
-    @Override
     public final Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
+        CAgentSpeak.rule(
+            (ILiteral) this.visit( p_context.literal() ),
+            Objects.isNull( p_context.ANNOTATION() )
+            ? Stream.empty()
+            : p_context.ANNOTATION().stream()
+        );
+
+
         final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );
         return p_context.logicalruledefinition().stream()
                         .map( i -> new CRule( (ILiteral) l_literal.deepcopy(), (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
@@ -224,6 +227,15 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitPlan( final AgentParser.PlanContext p_context )
     {
+        CAgentSpeak.plan(
+            p_context.PLANTRIGGER(),
+
+            Objects.isNull( p_context.ANNOTATION() )
+            ? Stream.empty()
+            : p_context.ANNOTATION().stream()
+        );
+
+
         final Set<IAnnotation<?>> l_annotation = (Set<IAnnotation<?>>) this.visitAnnotations( p_context.annotations() );
         final CTrigger l_trigger = new CTrigger(
             (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),
@@ -252,30 +264,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitPlan_goal_trigger( final AgentParser.Plan_goal_triggerContext p_context )
-    {
-        if ( ITrigger.EType.ADDGOAL.sequence().equals( p_context.getText() ) )
-            return ITrigger.EType.ADDGOAL;
-
-        if ( ITrigger.EType.DELETEGOAL.sequence().equals( p_context.getText() ) )
-            return ITrigger.EType.DELETEGOAL;
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "goaltrigger", p_context.getText() ) );
-    }
-
-    @Override
-    public final Object visitPlan_belief_trigger( final AgentParser.Plan_belief_triggerContext p_context )
-    {
-        if ( ITrigger.EType.ADDBELIEF.sequence().equals( p_context.getText() ) )
-            return ITrigger.EType.ADDBELIEF;
-
-        if ( ITrigger.EType.DELETEBELIEF.sequence().equals( p_context.getText() ) )
-            return ITrigger.EType.DELETEBELIEF;
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "belieftrigger", p_context.getText() ) );
-    }
-
-    @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
@@ -289,40 +277,14 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
     public final Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
     {
-        // a non-existing repair formula can return any object-item, so convert it
-        // to executable structure, because the grammar rule must return an executable item
-        if ( Objects.isNull( p_context.repair_formula() ) )
-            return this.visitChildren( p_context );
-
-
-        // if there exists any repair element, build a sequential hierarchie of repair calls
-        if ( Objects.nonNull( p_context.executable_term() ) )
-            return new CRepair(
-                (IExecution) this.visitExecutable_term( p_context.executable_term() ),
-                (IExecution) this.visitRepair_formula( p_context.repair_formula() )
-            );
-
-        if ( Objects.nonNull( p_context.test_action() ) )
-            return new CRepair(
-                (IExecution) this.visitTest_action( p_context.test_action() ),
-                (IExecution) this.visitRepair_formula( p_context.repair_formula() )
-            );
-
-        if ( Objects.nonNull( p_context.achievement_goal_action() ) )
-            return new CRepair(
-                (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
-                (IExecution) this.visitRepair_formula( p_context.repair_formula() )
-            );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( this, "repairelement", p_context.getText() ) );
+        return Stream.concat(
+            Stream.of(
+                this.visit( p_context.body_formula() )
+            ).map( i -> (IExecution) i ),
+            (Stream<IExecution>) this.visit( p_context.repair_formula() )
+        );
     }
 
     @Override
@@ -414,29 +376,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitExecutable_term( final AgentParser.Executable_termContext p_context )
-    {
-        if ( Objects.nonNull( p_context.STRING() ) )
-            return new CRawAction<>( stringvalue( p_context.STRING().getText() ) );
-        if ( Objects.nonNull( p_context.number() ) )
-            return new CRawAction<>( this.visitNumber( p_context.number() ) );
-        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
-            return new CRawAction<>( logicalvalue( p_context.LOGICALVALUE().getText() ) );
-
-        if ( Objects.nonNull( p_context.executable_action() ) )
-            return this.visitExecutable_action( p_context.executable_action() );
-        if ( Objects.nonNull( p_context.executable_rule() ) )
-            return this.visitExecutable_rule( p_context.executable_rule() );
-
-        if ( Objects.nonNull( p_context.expression() ) )
-            return this.visitExpression( p_context.expression() );
-        if ( Objects.nonNull( p_context.ternary_operation() ) )
-            return this.visitTernary_operation( p_context.ternary_operation() );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
-    }
-
-    @Override
     public final Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
         return this.visitChildren( p_context );
@@ -445,6 +384,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
+
+
         return new CSingleAssignment<>(
             (IVariable<?>) this.visitVariable( p_context.variable() ),
             (IExecution) this.visitExecutable_term( p_context.executable_term() )

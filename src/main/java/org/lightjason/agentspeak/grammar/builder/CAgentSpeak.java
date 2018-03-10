@@ -23,12 +23,18 @@
 
 package org.lightjason.agentspeak.grammar.builder;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.action.CRepair;
+import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,19 +68,36 @@ public final class CAgentSpeak
      * @param p_trigger trigger terminal
      * @return plan
      */
-    @Nullable
+    @Nonnull
     public static IPlan plan( @Nonnull final TerminalNode p_trigger, @Nonnull final Stream<TerminalNode> p_annotation )
     {
-
+        p_annotation.map( CAgentSpeak::annotation ).filter( Objects::nonNull );
 
         switch ( ITrigger.EType.from( p_trigger.getText() ) )
         {
-
             default:
-                return null;
+                return IPlan.EMPTY;
         }
     }
 
+    /**
+     * build a rule
+     *
+     * @param p_literal literal
+     * @param p_annotation annotation stream
+     * @return rule
+     */
+    @Nonnull
+    public static IRule rule( @Nonnull final ILiteral p_literal, @Nonnull final Stream<TerminalNode> p_annotation )
+    {
+        return IRule.EMPTY;
+    }
+
+    /**
+     * build annotation object
+     * @param p_annotation annotation terminal
+     * @return null or annoation
+     */
     @Nullable
     public static IAnnotation<?> annotation( @Nullable final TerminalNode p_annotation )
     {
@@ -87,23 +110,40 @@ public final class CAgentSpeak
         if ( p_annotation.getText().contains( "atomic" ) )
             return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
 
+        // on a constant annoation object, the data and name must be split at the comma,
+        // the value can be a number value or a string
         if ( p_annotation.getText().contains( "constant" ) )
         {
             final Matcher l_match = ANNOTATIONCONSTANT.matcher( p_annotation.getText() );
-            if ( l_match.find() )
+            if ( !l_match.find() )
+                return null;
+
+            final String l_data = l_match.group( 2 ).replace( "'", "" ).replace( "\"", "" );
+            try
             {
-                final String l_data = l_match.group( 2 ).replace( "'", "" ).replace( "\"", "" );
-                try
-                {
-                    return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), CRaw.numbervalue( l_data ) );
-                }
-                catch ( final NumberFormatException l_exception )
-                {
-                    return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), l_data );
-                }
+                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), CRaw.numbervalue( l_data ) );
+            }
+            catch ( final NumberFormatException l_exception )
+            {
+                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), l_data );
             }
         }
 
         return null;
+    }
+
+    /**
+     * builds a repair chain
+     *
+     * @param p_chain input chain elements
+     * @return null or repair
+     */
+    @Nullable
+    public static IExecution repair( @Nonnull final Stream<IExecution> p_chain )
+    {
+        return StreamUtils.windowed( p_chain.filter( Objects::nonNull ), 2 )
+                          .map( i -> new CRepair( i.get( 0 ), i.get( 1 ) ) )
+                          .reduce( (i, j) -> i )
+                          .orElse( null );
     }
 }
