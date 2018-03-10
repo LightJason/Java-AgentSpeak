@@ -39,7 +39,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,7 +77,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     protected IBaseInstantiable( final Stream<IExecution> p_action, final Stream<IAnnotation<?>> p_annotation, final int p_hash )
     {
         m_hash = p_hash;
-        m_action = Collections.unmodifiableList( p_action.collect(Collectors.toList() ) );
+        m_action = Collections.unmodifiableList( p_action.collect( Collectors.toList() ) );
         m_annotation = Collections.unmodifiableMap( p_annotation.collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
     }
 

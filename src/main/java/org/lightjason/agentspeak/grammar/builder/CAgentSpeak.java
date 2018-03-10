@@ -28,7 +28,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
-import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
@@ -52,7 +51,7 @@ public final class CAgentSpeak
     /**
      * reg pattern for matching annotation constant values
      */
-    private static Pattern ANNOTATIONCONSTANT = Pattern.compile( ".+\\( .+, .+ \\)" );
+    private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( ".+\\( .+, .+ \\)" );
 
     /**
      * ctor
@@ -143,7 +142,7 @@ public final class CAgentSpeak
     {
         return StreamUtils.windowed( p_chain.filter( Objects::nonNull ), 2 )
                           .map( i -> new CRepair( i.get( 0 ), i.get( 1 ) ) )
-                          .reduce( (i, j) -> i )
+                          .reduce( ( i, j ) -> i )
                           .orElse( null );
     }
 }

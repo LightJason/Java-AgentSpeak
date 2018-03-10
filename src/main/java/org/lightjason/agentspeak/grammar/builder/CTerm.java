@@ -80,6 +80,7 @@ public final class CTerm
     /**
      * build variable
      *
+     * @return variable
      */
     @Nonnull
     public static IVariable<?> variable( @Nullable final TerminalNode p_at, @Nonnull final TerminalNode p_variable )

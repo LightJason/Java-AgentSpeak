@@ -48,17 +48,8 @@ plan :
     ANNOTATION*
     PLANTRIGGER
     literal
-    plandefinition+
+    ( ( COLON expression )? LEFTARROW body )+
     DOT
-    ;
-
-/**
- * plan body & context definition
- * The definition is [ : condition ] [ <- body ]
- */
-plandefinition :
-    ( COLON expression )?
-    LEFTARROW body
     ;
 
 /**
@@ -68,18 +59,9 @@ plandefinition :
 logicrule :
     ANNOTATION*
     literal
-    logicalruledefinition+
+    ( RULEOPERATOR body )+
     DOT
     ;
-
-/**
- * rule definition similar to plan
- */
-logicalruledefinition :
-    RULEOPERATOR
-    body
-    ;
-
 
 /**
  * block body
