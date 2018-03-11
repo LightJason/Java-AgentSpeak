@@ -87,19 +87,19 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
-    public final Object visitExecute_action( final ManualParser.Execute_actionContext ctx )
+    public final Object visitExecute_action( final ManualParser.Execute_actionContext p_context )
     {
         return null;
     }
 
     @Override
-    public final Object visitExecute_rule( final ManualParser.Execute_ruleContext ctx )
+    public final Object visitExecute_rule( final ManualParser.Execute_ruleContext p_context )
     {
         return null;
     }
 
     @Override
-    public final Object visitExecute_variable( final ManualParser.Execute_variableContext ctx )
+    public final Object visitExecute_variable( final ManualParser.Execute_variableContext p_context )
     {
         return null;
     }
@@ -135,7 +135,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
-    public final Object visitVariablelist( final ManualParser.VariablelistContext ctx )
+    public final Object visitVariablelist( final ManualParser.VariablelistContext p_context )
     {
         return null;
     }

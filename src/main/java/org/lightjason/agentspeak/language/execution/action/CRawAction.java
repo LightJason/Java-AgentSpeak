@@ -43,7 +43,9 @@ import java.util.stream.Stream;
 /**
  * encapsulate class for any non-executable data type e.g. boolean
  * and caching of execution results
+ * @deprecated reorganize
  */
+@Deprecated
 public final class CRawAction<T> extends IBaseExecution<T>
 {
     /**

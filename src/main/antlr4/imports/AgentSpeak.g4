@@ -105,7 +105,6 @@ body_formula :
     | deconstruct_expression
     | assignment_expression
     | unary_expression
-    | binary_expression
     | test_action
     | achievement_goal_action
 
@@ -195,15 +194,6 @@ assignment_expression_multivariable :
 unary_expression :
     variable
     UNARYOPERATOR
-    ;
-
-/**
- * binary expression
- */
-binary_expression :
-    variable
-    BINARYOPERATOR
-    expression
     ;
 
 // ---------------------------------------------------------------------------------------

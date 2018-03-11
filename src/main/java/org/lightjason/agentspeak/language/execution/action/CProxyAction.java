@@ -51,7 +51,9 @@ import java.util.stream.Stream;
 
 /**
  * proxy action to encapsulate all actions
+ * @deprecated reorganize
  */
+@Deprecated
 public final class CProxyAction implements IExecution
 {
     /**

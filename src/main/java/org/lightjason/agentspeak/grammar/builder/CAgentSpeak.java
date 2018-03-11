@@ -28,11 +28,14 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
 import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
 import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
+import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
 import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
@@ -49,7 +52,6 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -239,4 +241,44 @@ public final class CAgentSpeak
             p_execution
         );
     }
+
+    /**
+     * build ternary operator
+     *
+     * @param p_expression expression definition
+     * @param p_true true execution
+     * @param p_false false execution
+     * @return ternary operator
+     */
+    @Nonnull
+    public static IExecution ternary( @Nonnull final IExpression p_expression, @Nonnull final IExecution p_true, @Nonnull final IExecution p_false )
+    {
+        return new CTernaryOperation(
+            p_expression,
+            p_true,
+            p_false
+        );
+    }
+
+    /**
+     * build belief action
+     *
+     * @param p_addbelief add-belief terminal
+     * @param p_deletebelief delete-belief terminal
+     * @param p_literal belief literal
+     * @return null or execution
+     */
+    @Nullable
+    public static IExecution beliefaction( @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief, @Nonnull final ILiteral p_literal )
+    {
+        if ( Objects.nonNull( p_addbelief ) )
+            return new CBeliefAction( p_literal, CBeliefAction.EAction.ADD );
+
+        if ( Objects.nonNull( p_deletebelief ) )
+            return new CBeliefAction( p_literal, CBeliefAction.EAction.DELETE );
+
+        return null;
+    }
+
+
 }

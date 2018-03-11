@@ -41,11 +41,8 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
 import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.action.CLambdaExpression;
-import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.action.CProxyAction;
 import org.lightjason.agentspeak.language.execution.action.CRawAction;
-import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
-import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
@@ -53,8 +50,6 @@ import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnif
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expressionbinary.COperatorAssign;
-import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
-import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -151,7 +146,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
         /*
-                // create placeholder objects first and run parsing again to build full-qualified rule objects
+        // create placeholder objects first and run parsing again to build full-qualified rule objects
         p_context.logicrule().stream()
                  .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
                  .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
@@ -255,7 +250,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
     {
-
         if ( Objects.isNull( p_context ) )
             return null;
 
@@ -341,23 +335,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitBinary_expression( final AgentParser.Binary_expressionContext p_context )
-    {
-        final IVariable<Number> l_lhs = (IVariable<Number>) this.visitVariable( p_context.variable( 0 ) );
-        final ITerm l_rhs = p_context.variable().size() == 2
-                            ? (IVariable<Number>) this.visitVariable( p_context.variable( 1 ) )
-                            : CRawTerm.from( numbervalue( p_context.NUMBER() ) );
-
-        return new COperatorAssign(
-            l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.from( p_context.BINARYOPERATOR().getText() )
-        );
-    }
-
-    @Override
     public final Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
-        p_context
-
         if ( Objects.nonNull( p_context.literal() ) )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
 
@@ -373,10 +352,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
     {
-        return new CTernaryOperation(
-            (IExpression) this.visitExpression( p_context.expression() ),
-            (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),
-            (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )
+        return CAgentSpeak.ternary(
+            (IExpression) this.visit( p_context.expression() ),
+            (IExecution) this.visit( p_context.ternary_operation_true() ),
+            (IExecution) this.visit( p_context.ternary_operation_false() )
         );
     }
 
@@ -392,19 +371,17 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBelief_action( final AgentParser.Belief_actionContext p_context )
     {
-        if ( Objects.nonNull( p_context.PLUS() ) )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.ADD );
-
-        if ( Objects.nonNull( p_context.MINUS() ) )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "beliefaction", p_context.getText() ) );
+        return CAgentSpeak.beliefaction(
+            p_context.PLUS(),
+            p_context.MINUS(),
+            (ILiteral) this.visit( p_context.literal() )
+        );
     }
 
     @Override
     public final Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
     {
-        return new CDeconstruct<>(
+         return new CDeconstruct<>(
             p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
             (ITerm) ( Objects.nonNull( p_context.literal() ) ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
         );

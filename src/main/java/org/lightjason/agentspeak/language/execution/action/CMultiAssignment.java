@@ -64,7 +64,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
      */
     public CMultiAssignment( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
     {
-        super( Collections.unmodifiableList( p_lefthand.collect(Collectors.toList() ) ) );
+        super( Collections.unmodifiableList( p_lefthand.collect( Collectors.toList() ) ) );
         m_righthand = p_righthand;
     }
 
