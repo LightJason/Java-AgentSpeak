@@ -24,11 +24,14 @@
 package org.lightjason.agentspeak.grammar.builder;
 
 import com.codepoetics.protonpack.StreamUtils;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
+import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
 import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
@@ -280,5 +283,19 @@ public final class CAgentSpeak
         return null;
     }
 
+    /**
+     * build deconstruct
+     *
+     * @return deconstruct execution
+     */
+    @Nonnull
+    public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<IVariable<?>> p_variables,
+                                          @Nullable final ITerm p_literal, @Nullable final ITerm p_variable )
+    {
+        return new CDeconstruct<>(
+            p_variables,
+            Objects.nonNull( p_literal ) ? p_literal : p_variable
+        );
+    }
 
 }

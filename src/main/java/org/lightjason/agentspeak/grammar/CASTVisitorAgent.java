@@ -34,12 +34,9 @@ import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
-import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.action.CLambdaExpression;
 import org.lightjason.agentspeak.language.execution.action.CProxyAction;
 import org.lightjason.agentspeak.language.execution.action.CRawAction;
@@ -49,7 +46,6 @@ import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.expressionbinary.COperatorAssign;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -381,9 +377,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
     {
-         return new CDeconstruct<>(
-            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-            (ITerm) ( Objects.nonNull( p_context.literal() ) ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
+        return CAgentSpeak.deconstruct(
+            this,
+            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visit( i ) ),
+            (ITerm) this.visit( p_context.literal() ),
+            (ITerm) this.visit( p_context.variable() )
         );
     }
 

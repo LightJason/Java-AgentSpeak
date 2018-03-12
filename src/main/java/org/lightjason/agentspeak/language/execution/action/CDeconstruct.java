@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -61,9 +62,9 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
      * @param p_righthand right-hand argument
      */
     @Nonnull
-    public CDeconstruct( @Nonnull final List<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
+    public CDeconstruct( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
     {
-        super( p_lefthand );
+        super( Collections.unmodifiableList( p_lefthand.collect( Collectors.toList() ) ) );
         m_righthand = p_righthand;
     }
 
