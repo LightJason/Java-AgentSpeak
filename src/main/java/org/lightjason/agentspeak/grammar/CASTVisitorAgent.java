@@ -129,11 +129,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
         p_context.belief()
                  .stream()
-                 .forEach( i -> this.visit( i ) );
-
-        p_context.plan()
-                 .stream()
-                 .forEach( i -> this.visit( i ) );
+                 .map( i -> (ILiteral) this.visit( i ) )
+                 .forEach( i -> m_initialbeliefs.add( i ) );
 
         /*
         // create placeholder objects first and run parsing again to build full-qualified rule objects
@@ -151,9 +148,12 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         l_rules.values().stream()
                .map( i -> i.replaceplaceholder( l_rules ) )
                .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
+        */
 
-        LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
-         */
+        p_context.plan()
+                 .stream()
+                 .map( i -> (IPlan) this.visit( i ) )
+                 .forEach( i -> m_plans.add( i ) );
 
         return null;
     }
@@ -164,10 +164,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitBelief( final AgentParser.BeliefContext p_context )
+    public final Object visitBelief( final AgentParser.BeliefContext p_context )
     {
-        m_initialbeliefs.add( (ILiteral) this.visit( p_context.literal() ) )
-        return null;
+        return this.visit( p_context.literal() );
     }
 
     @Override
@@ -193,18 +192,18 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         // @todo add body
 
-        m_plans.add(
-            CAgentSpeak.plan(
-                p_context.PLANTRIGGER(),
+        return CAgentSpeak.plan(
+            p_context.PLANTRIGGER(),
 
-                Objects.isNull( p_context.ANNOTATION() )
-                ? Stream.empty()
-                : p_context.ANNOTATION().stream()
-            )
+            Objects.isNull( p_context.ANNOTATION() )
+            ? Stream.empty()
+            : p_context.ANNOTATION().stream()
         );
-
-        return null;
     }
+
+
+
+
 
     @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
@@ -217,17 +216,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                         // expression are encapsulate to get result
                         .map( i -> i instanceof IExpression ? new CRawAction<>( i ) : i )
                         .collect( Collectors.toList() );
-    }
-
-    @Override
-    public final Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
-    {
-        return Stream.concat(
-            Stream.of(
-                this.visit( p_context.body_formula() )
-            ).map( i -> (IExecution) i ),
-            (Stream<IExecution>) this.visit( p_context.repair_formula() )
-        );
     }
 
     @Override
@@ -312,6 +300,19 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         throw new CSyntaxErrorException( CCommon.languagestring( this, "lambdainitialization", p_context.getText() ) );
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public final Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
@@ -340,6 +341,27 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
+    public final Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
+    {
+        return CAgentSpeak.ternary(
+            (IExpression) this.visit( p_context.expression() ),
+            (IExecution) this.visit( p_context.ternary_operation_true() ),
+            (IExecution) this.visit( p_context.ternary_operation_false() )
+        );
+    }
+
+    @Override
+    public final Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
+    {
+        return Stream.concat(
+            Stream.of(
+                this.visit( p_context.body_formula() )
+            ).map( i -> (IExecution) i ),
+            (Stream<IExecution>) this.visit( p_context.repair_formula() )
+        );
+    }
+
+    @Override
     public final Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
         if ( Objects.nonNull( p_context.literal() ) )
@@ -352,16 +374,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
-    }
-
-    @Override
-    public final Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
-    {
-        return CAgentSpeak.ternary(
-            (IExpression) this.visit( p_context.expression() ),
-            (IExecution) this.visit( p_context.ternary_operation_true() ),
-            (IExecution) this.visit( p_context.ternary_operation_false() )
-        );
     }
 
     @Override
@@ -391,6 +403,15 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visit( i ) ),
             (ITerm) this.visit( p_context.literal() ),
             (ITerm) this.visit( p_context.variable() )
+        );
+    }
+
+    @Override
+    public Object visitExecute_action( final AgentParser.Execute_actionContext p_context )
+    {
+        return CAgentSpeak.action(
+            (ILiteral) this.visit( p_context.literal() ),
+            m_actions
         );
     }
 

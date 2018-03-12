@@ -26,10 +26,15 @@ package org.lightjason.agentspeak.grammar.builder;
 import com.codepoetics.protonpack.StreamUtils;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.action.CActionProxy;
 import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
 import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
@@ -52,6 +57,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -296,6 +302,26 @@ public final class CAgentSpeak
             p_variables,
             Objects.nonNull( p_literal ) ? p_literal : p_variable
         );
+    }
+
+    /**
+     * creates an action execution definition
+     *
+     * @param p_actionliteral action literal
+     * @param p_actions map with actions
+     * @return wrapped action
+     */
+    @Nonnull
+    public static IExecution action( @Nonnull final ILiteral p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
+    {
+        final IAction l_action = p_actions.get( p_actionliteral.fqnfunctor() );
+        if ( Objects.isNull( l_action ) )
+            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "actionunknown", p_actionliteral ) );
+
+        if ( p_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
+            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
+
+        return new CActionProxy( p_actionliteral.hasAt(), l_action );
     }
 
 }

@@ -67,8 +67,8 @@ logicrule :
  * block body
  */
 body :
-    body_formula
-    ( SEMICOLON body_formula )*
+    repair_formula
+    ( SEMICOLON repair_formula )*
     ;
 
 // https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
@@ -95,6 +95,14 @@ expression :
 // --- agent-execution-context -----------------------------------------------------------
 
 /**
+ * repairable formula
+ */
+repair_formula :
+    body_formula
+    ( LEFTSHIFT repair_formula )?
+    ;
+
+/**
  * basic executable formula
  */
 body_formula :
@@ -108,19 +116,10 @@ body_formula :
     | test_action
     | achievement_goal_action
 
-    //| repair_formula
     | unification
     | lambda
     ;
 
-
-/**
- * repairable formula
- */
-repair_formula :
-    body_formula
-    ( LEFTSHIFT repair_formula )?
-    ;
 
 /**
  * belief-action operator
