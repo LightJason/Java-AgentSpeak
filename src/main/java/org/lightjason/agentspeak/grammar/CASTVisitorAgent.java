@@ -117,8 +117,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
     // --- agent rules -----------------------------------------------------------------------------------------------------------------------------------------
 
-
-
     @Override
     public Object visitAgent( final AgentParser.AgentContext p_context )
     {
@@ -128,18 +126,14 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                             p_context.INITIALGOAL().getText().replace( "!", "" ).replace( ".", "" )
                         );
 
+
         p_context.belief()
                  .stream()
-                 .map( i -> this.visit( i ) )
-                 .map( i -> (ILiteral) i )
-                 .forEach( i -> m_initialbeliefs.add( i ) );
+                 .forEach( i -> this.visit( i ) );
 
         p_context.plan()
                  .stream()
-                 .map( i -> this.visit( i ) )
-                 .map( i -> (IPlan) i )
-                 .forEach( i -> m_plans.add( i ) );
-
+                 .forEach( i -> this.visit( i ) );
 
         /*
         // create placeholder objects first and run parsing again to build full-qualified rule objects
@@ -170,17 +164,28 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
 
     @Override
+    public Object visitBelief( final AgentParser.BeliefContext p_context )
+    {
+        m_initialbeliefs.add( (ILiteral) this.visit( p_context.literal() ) )
+        return null;
+    }
+
+    @Override
     public final Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
         // @todo add body
 
-        return CAgentSpeak.rule(
-            (ILiteral) this.visit( p_context.literal() ),
-            Objects.isNull( p_context.ANNOTATION() )
-            ? Stream.empty()
-            : p_context.ANNOTATION().stream()
+        final ILiteral l_literal = (ILiteral) this.visit( p_context.literal() );
+        m_rules.put(
+            l_literal.fqnfunctor(),
+            CAgentSpeak.rule(
+                l_literal,
+                Objects.isNull( p_context.ANNOTATION() )
+                ? Stream.empty()
+                : p_context.ANNOTATION().stream()
+            )
         );
-
+        return null;
     }
 
     @Override
@@ -188,13 +193,17 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         // @todo add body
 
-        return CAgentSpeak.plan(
-            p_context.PLANTRIGGER(),
+        m_plans.add(
+            CAgentSpeak.plan(
+                p_context.PLANTRIGGER(),
 
-            Objects.isNull( p_context.ANNOTATION() )
-            ? Stream.empty()
-            : p_context.ANNOTATION().stream()
+                Objects.isNull( p_context.ANNOTATION() )
+                ? Stream.empty()
+                : p_context.ANNOTATION().stream()
+            )
         );
+
+        return null;
     }
 
     @Override
@@ -441,9 +450,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
 
 /*
 
