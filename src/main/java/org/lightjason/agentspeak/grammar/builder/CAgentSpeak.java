@@ -43,6 +43,9 @@ import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
+import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
+import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
+import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
 import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
@@ -319,6 +322,34 @@ public final class CAgentSpeak
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
 
         return new CActionProxy( p_actionliteral.hasAt(), l_action );
+    }
+
+    /**
+     * unification
+     *
+     * @param p_parallel parallel call
+     * @param p_literal literal call
+     * @param p_constraint unficiation constraint
+     * @return unification execution
+     */
+    @Nonnull
+    public static IExecution unification( boolean p_parallel, @Nonnull final ILiteral p_literal, @Nullable final ITerm p_constraint )
+    {
+        if ( p_constraint instanceof IExpression )
+            return new CExpressionUnify(
+                p_parallel,
+                p_literal,
+                p_constraint.raw()
+            );
+
+        if ( p_constraint instanceof IVariable<?> )
+            return new CVariableUnify(
+                p_parallel,
+                p_literal,
+                p_constraint.raw()
+            );
+
+        return new CDefaultUnify( p_parallel, p_literal );
     }
 
 }
