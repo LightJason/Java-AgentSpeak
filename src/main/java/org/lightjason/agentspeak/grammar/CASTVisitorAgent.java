@@ -208,14 +208,47 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
     {
-        // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
-        return p_context.body_formula().stream()
-                        .filter( i -> Objects.nonNull( i ) )
-                        .map( i -> this.visitBody_formula( i ) )
-                        .filter( i -> i instanceof IExecution )
-                        // expression are encapsulate to get result
-                        .map( i -> i instanceof IExpression ? new CRawAction<>( i ) : i )
-                        .collect( Collectors.toList() );
+        return CAgentSpeak.repair(
+            p_context.repair_formula()
+                     .stream()
+                     .map( i -> (IExecution) this.visit( i ) )
+        );
+    }
+
+    @Override
+    public Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
+    {
+        if ( Objects.nonNull( p_context.ternary_operation() ) )
+            return this.visit( p_context.ternary_operation() );
+
+        if ( Objects.nonNull( p_context.belief_action() ) )
+            return this.visit( p_context.belief_action() );
+
+        if ( Objects.nonNull( p_context.expression() ) )
+            return this.visit( p_context.expression() );
+
+        if ( Objects.nonNull( p_context.deconstruct_expression() ) )
+            return this.visit( p_context.deconstruct_expression() );
+
+        if ( Objects.nonNull( p_context.assignment_expression() ) )
+            return this.visit( p_context.assignment_expression() );
+
+        if ( Objects.nonNull( p_context.unary_expression() ) )
+            return this.visit( p_context.unary_expression() );
+
+        if ( Objects.nonNull( p_context.test_action() ) )
+            return this.visit( p_context.test_action() );
+
+        if ( Objects.nonNull( p_context.achievement_goal_action() ) )
+            return this.visit( p_context.achievement_goal_action() );
+
+        if ( Objects.nonNull( p_context.unification() ) )
+            return this.visit( p_context.unification() );
+
+        if ( Objects.nonNull( p_context.lambda() ) )
+            return this.visit( p_context.lambda() );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
 
     @Override
@@ -243,16 +276,13 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
     {
-        if ( Objects.isNull( p_context ) )
-            return null;
-
         if ( Objects.nonNull( p_context.expression() ) )
             return this.visitExpression( p_context.expression() );
 
         if ( Objects.nonNull( p_context.variable() ) )
             return this.visitVariable( p_context.variable() );
 
-        return null;
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "unificationunknown", p_context.getText() ) );
     }
 
     @Override

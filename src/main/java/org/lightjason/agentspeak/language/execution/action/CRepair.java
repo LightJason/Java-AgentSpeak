@@ -30,36 +30,32 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
  * defines an execution element with a repair call
  */
-public class CRepair extends IBaseExecution<IExecution>
+public class CRepair extends IBaseExecution<Collection<IExecution>>
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7095678561033158953L;
-    /**
-     * fallback execution
-     */
-    private final IExecution m_fallback;
 
     /**
      * ctor
      *
-     * @param p_value execution element
-     * @param p_fallback fallback execution
+     * @param p_chain execution chain
      */
-    public CRepair( @Nonnull final IExecution p_value, @Nonnull final IExecution p_fallback )
+    public CRepair( @Nonnull final Stream<IExecution> p_chain )
     {
-        super( p_value );
-        m_fallback = p_fallback;
+        super( Collections.unmodifiableList( p_chain.collect( Collectors.toList() ) ) );
     }
 
     @Nonnull
@@ -67,23 +63,25 @@ public class CRepair extends IBaseExecution<IExecution>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IFuzzyValue<Boolean> l_return = m_value.execute( p_parallel, p_context, p_argument, p_return );
-        return l_return.value() ? l_return : m_fallback.execute( p_parallel, p_context, p_argument, p_return );
+        return m_value.stream()
+                      .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
+                      .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
+                      .findFirst()
+                      .get();
     }
 
     @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            Objects.isNull( m_value ) ? Stream.empty() : m_value.variables(),
-            m_fallback.variables()
-        );
+        return m_value.stream().flatMap( IExecution::variables );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} << {1}", m_value, m_fallback );
+        return m_value.stream()
+                      .map( Object::toString )
+                      .collect( Collectors.joining( " << " ) );
     }
 }

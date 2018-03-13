@@ -175,10 +175,7 @@ public final class CAgentSpeak
     @Nullable
     public static IExecution repair( @Nonnull final Stream<IExecution> p_chain )
     {
-        return StreamUtils.windowed( p_chain.filter( Objects::nonNull ), 2 )
-                          .map( i -> new CRepair( i.get( 0 ), i.get( 1 ) ) )
-                          .reduce( ( i, j ) -> i )
-                          .orElse( null );
+        return new CRepair( p_chain );
     }
 
     /**
