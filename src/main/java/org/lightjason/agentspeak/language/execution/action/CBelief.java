@@ -23,64 +23,98 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
+import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
- * defines an execution element with a repair call
+ * belief action
  */
-public class CRepair extends IBaseExecution<Collection<IExecution>>
+public final class CBelief extends IBaseExecution<ILiteral>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7095678561033158953L;
+    private static final long serialVersionUID = -2856258502338708361L;
+    /**
+     * running action
+     */
+    private final EAction m_action;
 
     /**
      * ctor
      *
-     * @param p_chain execution chain
+     * @param p_literal literal
+     * @param p_action action
      */
-    public CRepair( @Nonnull final Stream<IExecution> p_chain )
+    public CBelief( @Nonnull final ILiteral p_literal, @Nonnull final EAction p_action )
     {
-        super( Collections.unmodifiableList( p_chain.collect( Collectors.toList() ) ) );
-    }
-
-    @Nonnull
-    @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-    {
-        return m_value.stream()
-                      .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
-                      .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
-                      .findFirst()
-                      .get();
-    }
-
-    @Nonnull
-    @Override
-    public final Stream<IVariable<?>> variables()
-    {
-        return m_value.stream().flatMap( IExecution::variables );
+        super( p_literal );
+        m_action = p_action;
     }
 
     @Override
     public final String toString()
     {
-        return m_value.stream()
-                      .map( Object::toString )
-                      .collect( Collectors.joining( " << " ) );
+        return MessageFormat.format( "{0}{1}", m_action, m_value );
+    }
+
+    @Nonnull
+    @Override
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        switch ( m_action )
+        {
+            case ADD:
+                p_context.agent().beliefbase().add( m_value.unify( p_context ) );
+                break;
+
+            case DELETE:
+                p_context.agent().beliefbase().remove( m_value.unify( p_context ) );
+                break;
+
+            default:
+                throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", m_action ) );
+        }
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * belief action definition
+     */
+    public enum EAction
+    {
+        ADD( "+" ),
+        DELETE( "-" );
+        /**
+         * name
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name string represenation
+         */
+        EAction( @Nonnull final String p_name )
+        {
+            m_name = p_name;
+        }
+
+        @Override
+        public final String toString()
+        {
+            return m_name;
+        }
     }
 }

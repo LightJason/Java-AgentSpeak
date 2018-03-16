@@ -25,59 +25,36 @@ package org.lightjason.agentspeak.language.execution.action;
 
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Stream;
 
 
 /**
- * proxy for action execution
+ *action to pass a boolean
  */
-public final class CActionProxy implements IExecution
+public final class CPassBoolean extends IBaseExecution<Boolean>
 {
-    /**
-     * parallel execution
-     */
-    private final boolean m_parallel;
-    /**
-     * execution reference
-     */
-    private final IExecution m_execution;
+
 
     /**
      * ctor
      *
-     * @param p_parallel parallel execution
-     * @param p_execution execution
+     * @param p_value data
      */
-    public CActionProxy( final boolean p_parallel, @Nonnull final IExecution p_execution )
+    public CPassBoolean( @Nullable final Boolean p_value )
     {
-        m_parallel = p_parallel;
-        m_execution = p_execution;
+        super( p_value );
     }
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
     {
-        return m_execution.execute(
-            m_parallel,
-            p_context,
-            p_argument,
-            p_return
-        );
-    }
-
-    @Nonnull
-    @Override
-    public final Stream<IVariable<?>> variables()
-    {
-        return m_execution.variables();
+        return CFuzzyValue.from( m_value );
     }
 }

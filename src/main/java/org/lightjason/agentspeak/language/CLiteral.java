@@ -35,8 +35,8 @@ import org.lightjason.agentspeak.grammar.CASTVisitorManual;
 import org.lightjason.agentspeak.grammar.CErrorListener;
 import org.lightjason.agentspeak.grammar.IASTVisitorManual;
 import org.lightjason.agentspeak.grammar.IBaseParser;
-import org.lightjason.agentspeak.grammar.TypeLexer;
-import org.lightjason.agentspeak.grammar.TypeParser;
+import org.lightjason.agentspeak.grammar.ManualLexer;
+import org.lightjason.agentspeak.grammar.ManualParser;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -484,7 +484,7 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    private static final class CParser extends IBaseParser<IASTVisitorManual, TypeLexer, TypeParser>
+    private static final class CParser extends IBaseParser<IASTVisitorManual, ManualLexer, ManualParser>
     {
 
         /**
@@ -501,20 +501,20 @@ public final class CLiteral implements ILiteral
         public final IASTVisitorManual parse( @Nonnull final InputStream p_stream ) throws Exception
         {
             final IASTVisitorManual l_visitor = new CASTVisitorManual();
-            l_visitor.visit( this.parser( p_stream ).literal_type() );
+            l_visitor.visit( this.parser( p_stream ).root_literal() );
             return l_visitor;
         }
 
         @Override
-        protected final Class<TypeLexer> lexerclass()
+        protected final Class<ManualLexer> lexerclass()
         {
-            return TypeLexer.class;
+            return ManualLexer.class;
         }
 
         @Override
-        protected final Class<TypeParser> parserclass()
+        protected final Class<ManualParser> parserclass()
         {
-            return TypeParser.class;
+            return ManualParser.class;
         }
     }
 }

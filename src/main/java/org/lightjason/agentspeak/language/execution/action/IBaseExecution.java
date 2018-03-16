@@ -53,7 +53,6 @@ public abstract class IBaseExecution<T> implements IExecution
      *
      * @param p_value data
      */
-    @Nonnull
     protected IBaseExecution( @Nullable final T p_value )
     {
         m_value = p_value;

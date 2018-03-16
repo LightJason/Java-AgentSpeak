@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.grammar.builder;
 
-import com.codepoetics.protonpack.StreamUtils;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.action.IAction;
@@ -31,13 +30,17 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.action.CActionProxy;
-import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
+import org.lightjason.agentspeak.language.execution.action.CBelief;
 import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
+import org.lightjason.agentspeak.language.execution.action.CPassBoolean;
+import org.lightjason.agentspeak.language.execution.action.CPassData;
+import org.lightjason.agentspeak.language.execution.action.CPassVariable;
+import org.lightjason.agentspeak.language.execution.action.CProxy;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
 import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
@@ -60,6 +63,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -277,16 +281,16 @@ public final class CAgentSpeak
      * @param p_literal belief literal
      * @return null or execution
      */
-    @Nullable
+    @Nonnull
     public static IExecution beliefaction( @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief, @Nonnull final ILiteral p_literal )
     {
         if ( Objects.nonNull( p_addbelief ) )
-            return new CBeliefAction( p_literal, CBeliefAction.EAction.ADD );
+            return new CBelief( p_literal, CBelief.EAction.ADD );
 
         if ( Objects.nonNull( p_deletebelief ) )
-            return new CBeliefAction( p_literal, CBeliefAction.EAction.DELETE );
+            return new CBelief( p_literal, CBelief.EAction.DELETE );
 
-        return null;
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "beliefaction" ) );
     }
 
     /**
@@ -321,7 +325,7 @@ public final class CAgentSpeak
         if ( p_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
 
-        return new CActionProxy( p_actionliteral.hasAt(), l_action );
+        return new CProxy( p_actionliteral.hasAt(), l_action );
     }
 
     /**
@@ -350,6 +354,73 @@ public final class CAgentSpeak
             );
 
         return new CDefaultUnify( p_parallel, p_literal );
+    }
+
+    /**
+     * build a variable pass execution
+     *
+     * @param p_variable variable
+     * @return variable pass execution
+     */
+    @Nonnull
+    public static IExecution passvariable( @Nonnull final IVariable<?> p_variable )
+    {
+        return new CPassVariable( p_variable );
+    }
+
+    /**
+     * build a data pass execution
+     *
+     * @param p_data native data
+     * @tparam T data type
+     * @return data pass execution
+     */
+    @Nonnull
+    public static <T> IExecution passdata( @Nonnull final T p_data )
+    {
+        return new CPassData<>( p_data );
+    }
+
+    /**
+     * build a boolean execution
+     *
+     * @param p_value value
+     * @return execution
+     */
+    @Nonnull
+    public static IExecution passboolean( final boolean p_value )
+    {
+        return new CPassBoolean( p_value );
+    }
+
+    /**
+     * build a lambda initialization
+     *
+     * @return lambda initialization expression
+     */
+    @Nonnull
+    public static IExecution lambdainitialization( @Nullable final IVariable<?> p_variable, @Nullable final Collection<?> p_collection )
+    {
+        if ( Objects.nonNull( p_variable ) )
+            return passvariable( p_variable );
+
+        if ( Objects.nonNull( p_collection ) )
+            return passdata( p_collection );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdainitialization" ) );
+    }
+
+    /**
+     * build a lambda expression
+     *
+     * @param p_parallel parallel call
+     * @param p_iterator base iterator
+     * @return lambda expression
+     */
+    @Nonnull
+    public static IExpression lambda( boolean p_parallel, @Nonnull final IExecution p_iterator )
+    {
+        return null;
     }
 
 }

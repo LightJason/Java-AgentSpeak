@@ -23,98 +23,61 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * belief action
+ * proxy for action execution
  */
-public final class CBeliefAction extends IBaseExecution<ILiteral>
+public final class CProxy implements IExecution
 {
     /**
-     * serial id
+     * parallel execution
      */
-    private static final long serialVersionUID = -2856258502338708361L;
+    private final boolean m_parallel;
     /**
-     * running action
+     * execution reference
      */
-    private final EAction m_action;
+    private final IExecution m_execution;
 
     /**
      * ctor
      *
-     * @param p_literal literal
-     * @param p_action action
+     * @param p_parallel parallel execution
+     * @param p_execution execution
      */
-    public CBeliefAction( @Nonnull final ILiteral p_literal, @Nonnull final EAction p_action )
+    public CProxy( final boolean p_parallel, @Nonnull final IExecution p_execution )
     {
-        super( p_literal );
-        m_action = p_action;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}{1}", m_action, m_value );
+        m_parallel = p_parallel;
+        m_execution = p_execution;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return
+    )
     {
-        switch ( m_action )
-        {
-            case ADD:
-                p_context.agent().beliefbase().add( m_value.unify( p_context ) );
-                break;
-
-            case DELETE:
-                p_context.agent().beliefbase().remove( m_value.unify( p_context ) );
-                break;
-
-            default:
-                throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", m_action ) );
-        }
-
-        return CFuzzyValue.from( true );
+        return m_execution.execute(
+            m_parallel,
+            p_context,
+            p_argument,
+            p_return
+        );
     }
 
-    /**
-     * belief action definition
-     */
-    public enum EAction
+    @Nonnull
+    @Override
+    public final Stream<IVariable<?>> variables()
     {
-        ADD( "+" ),
-        DELETE( "-" );
-        /**
-         * name
-         */
-        private final String m_name;
-
-        /**
-         * ctor
-         *
-         * @param p_name string represenation
-         */
-        EAction( @Nonnull final String p_name )
-        {
-            m_name = p_name;
-        }
-
-        @Override
-        public final String toString()
-        {
-            return m_name;
-        }
+        return m_execution.variables();
     }
 }

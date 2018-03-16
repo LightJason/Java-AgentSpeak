@@ -23,64 +23,42 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 
 /**
- * defines an execution element with a repair call
+ * action to pass static data into the return structure
+ * @tparam T any raw data
  */
-public class CRepair extends IBaseExecution<Collection<IExecution>>
+public final class CPassData<T> extends IBaseExecution<ITerm>
 {
-    /**
-     * serial id
-     */
-    private static final long serialVersionUID = 7095678561033158953L;
-
     /**
      * ctor
      *
-     * @param p_chain execution chain
+     * @param p_value data
      */
-    public CRepair( @Nonnull final Stream<IExecution> p_chain )
+    public CPassData( @Nullable final T p_value )
     {
-        super( Collections.unmodifiableList( p_chain.collect( Collectors.toList() ) ) );
+        super( CRawTerm.from( p_value ) );
     }
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
     {
-        return m_value.stream()
-                      .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
-                      .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
-                      .findFirst()
-                      .get();
-    }
+        if ( Objects.nonNull( m_value ) )
+            p_return.add( m_value );
 
-    @Nonnull
-    @Override
-    public final Stream<IVariable<?>> variables()
-    {
-        return m_value.stream().flatMap( IExecution::variables );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_value.stream()
-                      .map( Object::toString )
-                      .collect( Collectors.joining( " << " ) );
+        return CFuzzyValue.from( true );
     }
 }

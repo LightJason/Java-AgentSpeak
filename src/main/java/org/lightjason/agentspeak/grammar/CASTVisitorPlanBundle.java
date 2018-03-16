@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.grammar;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
@@ -34,19 +33,9 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.action.CBeliefAction;
-import org.lightjason.agentspeak.language.execution.action.CDeconstruct;
-import org.lightjason.agentspeak.language.execution.action.CLambdaExpression;
-import org.lightjason.agentspeak.language.execution.action.CMultiAssignment;
-import org.lightjason.agentspeak.language.execution.action.CProxyAction;
-import org.lightjason.agentspeak.language.execution.action.CRawAction;
-import org.lightjason.agentspeak.language.execution.action.CRepair;
-import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
-import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
@@ -54,15 +43,7 @@ import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnif
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.expression.EOperator;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.expressionbinary.COperatorAssign;
-import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
-import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
-import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.instantiable.rule.CRule;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
@@ -74,12 +55,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -134,94 +115,209 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
+    // --- AgentSpeak(L++) rules -------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final Object visitBelief( final PlanBundleParser.BeliefContext p_context )
     {
-        if ( Objects.isNull( p_context.literal() ) )
-            return null;
-
-        m_initialbeliefs.add( (ILiteral) this.visitLiteral( p_context.literal() ) );
-        return null;
+        return this.visit( p_context.literal() );
     }
 
     @Override
     public final Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
     {
-        final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );
-        return p_context.logicalruledefinition().stream()
-                        .map( i -> new CRule( (ILiteral) l_literal.deepcopy(), (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
-                        .collect( Collectors.toList() );
+        // @todo add body
+
+        final ILiteral l_literal = (ILiteral) this.visit( p_context.literal() );
+        m_rules.put(
+            l_literal.fqnfunctor(),
+            CAgentSpeak.rule(
+                l_literal,
+                Objects.isNull( p_context.ANNOTATION() )
+                ? Stream.empty()
+                : p_context.ANNOTATION().stream()
+            )
+        );
+        return null;
     }
 
     @Override
     public final Object visitPlan( final PlanBundleParser.PlanContext p_context )
     {
-        final Set<IAnnotation<?>> l_annotation = (Set<IAnnotation<?>>) this.visitAnnotations( p_context.annotations() );
-        final CTrigger l_trigger = new CTrigger(
-            (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),
-            (ILiteral) this.visitLiteral( p_context.literal() )
-        );
+        // @todo add body
 
-        return p_context.plandefinition()
-                        .stream()
-                        .map( i ->
-                        {
-                            final Pair<IExpression, List<IExecution>> l_content = (Pair<IExpression, List<IExecution>>) this.visitPlandefinition( i );
-                            return new CPlan( l_trigger, l_content.getLeft(), l_content.getRight(), l_annotation );
-                        } )
-                        .collect( Collectors.toList() );
+        return CAgentSpeak.plan(
+            p_context.PLANTRIGGER(),
+
+            Objects.isNull( p_context.ANNOTATION() )
+            ? Stream.empty()
+            : p_context.ANNOTATION().stream()
+        );
     }
 
     @Override
     public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
-        // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
-        return p_context.body_formula().stream()
-                        .filter( i -> Objects.nonNull( i ) )
-                        .map( i -> this.visitBody_formula( i ) )
-                        .filter( i -> i instanceof IExecution )
-                        // expression are encapsulate to get result
-                        .map( i -> i instanceof IExpression ? new CRawAction<>( i ) : i )
-                        .collect( Collectors.toList() );
+        return CAgentSpeak.repair(
+            p_context.repair_formula()
+                     .stream()
+                     .map( i -> (IExecution) this.visit( i ) )
+        );
     }
 
+    //Checkstyle:OFF:NPathComplexity
     @Override
     public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( Objects.nonNull( p_context.ternary_operation() ) )
+            return this.visit( p_context.ternary_operation() );
+
+        if ( Objects.nonNull( p_context.belief_action() ) )
+            return this.visit( p_context.belief_action() );
+
+        if ( Objects.nonNull( p_context.expression() ) )
+            return this.visit( p_context.expression() );
+
+        if ( Objects.nonNull( p_context.deconstruct_expression() ) )
+            return this.visit( p_context.deconstruct_expression() );
+
+        if ( Objects.nonNull( p_context.assignment_expression() ) )
+            return this.visit( p_context.assignment_expression() );
+
+        if ( Objects.nonNull( p_context.unary_expression() ) )
+            return this.visit( p_context.unary_expression() );
+
+        if ( Objects.nonNull( p_context.test_action() ) )
+            return this.visit( p_context.test_action() );
+
+        if ( Objects.nonNull( p_context.achievement_goal_action() ) )
+            return this.visit( p_context.achievement_goal_action() );
+
+        if ( Objects.nonNull( p_context.unification() ) )
+            return this.visit( p_context.unification() );
+
+        if ( Objects.nonNull( p_context.lambda() ) )
+            return this.visit( p_context.lambda() );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
+    //Checkstyle:ON:NPathComplexity
 
     @Override
     public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
-        // a non-existing repair formula can return any object-item, so convert it
-        // to executable structure, because the grammar rule must return an executable item
-        if ( Objects.isNull( p_context.repair_formula() ) )
-            return this.visitChildren( p_context );
+        return Stream.concat(
+            Stream.of(
+                this.visit( p_context.body_formula() )
+            ).map( i -> (IExecution) i ),
+            (Stream<IExecution>) this.visit( p_context.repair_formula() )
+        );
+    }
 
+    @Override
+    public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
+    {
+        if ( Objects.nonNull( p_context.literal() ) )
+            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
 
-        // if there exists any repair element, build a sequential hierarchie of repair calls
-        if ( Objects.nonNull( p_context.executable_term() ) )
-            return new CRepair(
-                (IExecution) this.visitExecutable_term( p_context.executable_term() ),
-                (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+        if ( Objects.nonNull( p_context.variable_evaluate() ) )
+            return new CAchievementGoalVariable(
+                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
+                p_context.DOUBLEEXCLAMATIONMARK() != null
             );
 
-        if ( Objects.nonNull( p_context.test_action() ) )
-            return new CRepair(
-                (IExecution) this.visitTest_action( p_context.test_action() ),
-                (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
+    }
+
+    @Override
+    public final Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
+    {
+        return CAgentSpeak.testgoal(
+            p_context.DOLLAR(),
+            p_context.ATOM()
+        );
+    }
+
+    @Override
+    public final Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
+    {
+        return CAgentSpeak.beliefaction(
+            p_context.PLUS(),
+            p_context.MINUS(),
+            (ILiteral) this.visit( p_context.literal() )
+        );
+    }
+
+    @Override
+    public final Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
+    {
+        return CAgentSpeak.deconstruct(
+            this,
+            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visit( i ) ),
+            (ITerm) this.visit( p_context.literal() ),
+            (ITerm) this.visit( p_context.variable() )
+        );
+    }
+
+    @Override
+    public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
+    {
+        return CAgentSpeak.lambda(
+            Objects.nonNull( p_context.AT() ),
+            (IExecution) this.visit( p_context.lambda_initialization() )
+        );
+
+        /*
+        if ( Objects.nonNull( p_context.lambda_return() ) )
+            return new CLambdaExpression(
+                Objects.nonNull( p_context.AT() ),
+                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
+                (IVariable<?>) this.visitVariable( p_context.variable() ),
+                (IVariable<?>) this.visitLambda_return( p_context.lambda_return() ),
+                (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
             );
 
-        if ( Objects.nonNull( p_context.achievement_goal_action() ) )
-            return new CRepair(
-                (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
-                (IExecution) this.visitRepair_formula( p_context.repair_formula() )
-            );
+        return new CLambdaExpression(
+            Objects.nonNull( p_context.AT() ),
+            (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
+            (IVariable<?>) this.visitVariable( p_context.variable() ),
+            (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
+        );
+        */
+    }
 
-        throw new CSyntaxErrorException( CCommon.languagestring( this, "repairelement", p_context.getText() ) );
+    @Override
+    public final Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
+    {
+        return CAgentSpeak.lambdainitialization(
+
+            Objects.nonNull( p_context.variable() )
+            ? (IVariable<?>) this.visit( p_context.variable() )
+            : null,
+
+            Objects.nonNull( p_context.lambda_range() )
+            ? (Collection<?>) this.visit( p_context.lambda_range() )
+            : null
+
+        );
+    }
+
+    @Override
+    public final Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
+    {
+        return CAgentSpeak.singleassignment(
+            (IVariable<?>) this.visit( p_context.variable() ),
+            (IExecution) this.visit( p_context.expression() )
+        );
+    }
+
+    @Override
+    public final Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
+    {
+        return CAgentSpeak.multiassignment(
+            (Stream<IVariable<?>>) this.visit( p_context.variablelist() ),
+            (IExecution) this.visit( p_context.expression() )
+        );
     }
 
     @Override
@@ -274,151 +370,81 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return this.visitBody( p_context.body() );
     }
 
-    @Override
-    public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
-    {
-        if ( Objects.nonNull( p_context.lambda_return() ) )
-            return new CLambdaExpression(
-                Objects.nonNull( p_context.AT() ),
-                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
-                (IVariable<?>) this.visitVariable( p_context.variable() ),
-                (IVariable<?>) this.visitLambda_return( p_context.lambda_return() ),
-                (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
-            );
 
-        return new CLambdaExpression(
-            Objects.nonNull( p_context.AT() ),
-            (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
-            (IVariable<?>) this.visitVariable( p_context.variable() ),
-            (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
-        );
-    }
 
-    @Override
-    public final Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
-    {
-        if ( Objects.nonNull( p_context.variable() ) )
-            return new CRawAction<>( this.visitVariable( p_context.variable() ) );
 
-        if ( Objects.nonNull( p_context.literal() ) )
-            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( this, "lambdainitialization", p_context.getText() ) );
-    }
-
-    @Override
-    public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
-    {
-        return this.visitVariable( p_context.variable() );
-    }
-
-    @Override
-    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public final Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
-    {
-        return new CSingleAssignment<>(
-            (IVariable<?>) this.visitVariable( p_context.variable() ),
-            (IExecution) this.visitExecutable_term( p_context.executable_term() )
-        );
-    }
-
-    @Override
-    public final Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
-    {
-        return new CMultiAssignment<>(
-            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) )
-                     .collect( Collectors.toList() ),
-            (IExecution) this.visitExecutable_term( p_context.executable_term() )
-        );
-    }
 
     @Override
     public final Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
     {
-        switch ( p_context.UNARYOPERATOR().getText() )
-        {
-            case "++":
-                return new CIncrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
-
-            case "--":
-                return new CDecrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
-
-            default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "unaryoperator", p_context.getText() ) );
-        }
-    }
-
-    @Override
-    public final Object visitBinary_expression( final PlanBundleParser.Binary_expressionContext p_context )
-    {
-        final IVariable<Number> l_lhs = (IVariable<Number>) this.visitVariable( p_context.variable( 0 ) );
-        final ITerm l_rhs = p_context.variable().size() == 2
-                            ? (IVariable<Number>) this.visitVariable( p_context.variable( 1 ) )
-                            : CRawTerm.from( numbervalue( p_context.NUMBER() ) );
-
-        return new COperatorAssign(
-            l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.from( p_context.BINARYOPERATOR().getText() )
+        return CAgentSpeak.unary(
+            p_context.UNARYOPERATOR(),
+            (IVariable<Number>) this.visit( p_context.variable() )
         );
-    }
-
-    @Override
-    public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
-    {
-        if ( Objects.nonNull( p_context.literal() ) )
-            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
-
-        if ( Objects.nonNull( p_context.variable_evaluate() ) )
-            return new CAchievementGoalVariable(
-                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
-                p_context.DOUBLEEXCLAMATIONMARK() != null
-            );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
     }
 
     @Override
     public final Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
     {
-        return new CTernaryOperation(
-            (IExpression) this.visitExpression( p_context.expression() ),
-            (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),
-            (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )
+        return CAgentSpeak.ternary(
+            (IExpression) this.visit( p_context.expression() ),
+            (IExecution) this.visit( p_context.ternary_operation_true() ),
+            (IExecution) this.visit( p_context.ternary_operation_false() )
         );
     }
 
     @Override
-    public final Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
+    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
-        return CAgentSpeak.testgoal(
-            p_context.DOLLAR(),
-            p_context.ATOM()
-        );
+        return null;
     }
 
     @Override
-    public final Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
+    public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
     {
-        if ( Objects.nonNull( p_context.PLUS() ) )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.ADD );
-
-        if ( Objects.nonNull( p_context.MINUS() ) )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "beliefaction", p_context.getText() ) );
+        return CAgentSpeak.passboolean( true );
     }
 
     @Override
-    public final Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
+    public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
     {
-        return new CDeconstruct<>(
-            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-            (ITerm) ( p_context.literal() != null ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
-        );
+        return CAgentSpeak.passboolean( false );
+    }
+
+    @Override
+    public final Object visitLambda_range( final PlanBundleParser.Lambda_rangeContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitExecute_action( final PlanBundleParser.Execute_actionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitExecute_rule( final PlanBundleParser.Execute_ruleContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitExecute_variable( final PlanBundleParser.Execute_variableContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
+    {
+        return p_context.variable().stream().map( i -> this.visit( i ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
