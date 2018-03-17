@@ -54,7 +54,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -283,14 +282,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
     {
-        if ( Objects.nonNull( p_context.body_formula() ) )
-        {
-            final LinkedList<IExecution> l_statement = new LinkedList<>();
-            l_statement.add( (IExecution) this.visitBody_formula( p_context.body_formula() ) );
-            return l_statement;
-        }
-
-        return this.visitBody( p_context.body() );
+        return Objects.nonNull( p_context.body_formula() )
+               ? Stream.concat( Stream.of( this.visit( p_context.body() ) ), (Stream<?>) this.visit( p_context.body_formula() ) )
+               : Stream.of( this.visit( p_context.body() ) );
     }
 
     @Override
