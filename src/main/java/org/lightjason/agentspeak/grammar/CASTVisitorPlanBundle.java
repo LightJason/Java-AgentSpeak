@@ -350,22 +350,11 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
     {
         return CAgentSpeak.lambdainitialization(
-
-            Objects.nonNull( p_context.variable() )
-            ? (IVariable<?>) this.visit( p_context.variable() )
-            : null,
-
-            Objects.nonNull( p_context.lambda_range() )
-            ? (Collection<?>) this.visit( p_context.lambda_range() )
-            : null
-
+            this,
+            p_context.NUMBER(),
+            p_context.variable(),
+            p_context.lambda_element()
         );
-    }
-
-    @Override
-    public final Object visitLambda_range( final PlanBundleParser.Lambda_rangeContext p_context )
-    {
-        return null;
     }
 
     @Override

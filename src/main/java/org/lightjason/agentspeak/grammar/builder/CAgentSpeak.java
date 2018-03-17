@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.grammar.builder;
 
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.action.IAction;
@@ -31,6 +32,7 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.grammar.Terminal;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -63,7 +65,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -399,16 +401,72 @@ public final class CAgentSpeak
      * @return lambda initialization expression
      */
     @Nonnull
-    public static IExecution lambdainitialization( @Nullable final IVariable<?> p_variable, @Nullable final Collection<?> p_collection )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution lambdainitialization( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                                   @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable,
+                                                   @Nullable final List<? extends RuleContext> p_additional )
     {
-        if ( Objects.nonNull( p_variable ) )
-            return passvariable( p_variable );
+        final IExecution[] l_execution = org.lightjason.agentspeak.language.CCommon.streamconcat(
 
-        if ( Objects.nonNull( p_collection ) )
-            return passdata( p_collection );
+            Objects.nonNull( p_number )
+            ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
+            : Stream.empty(),
+
+            Objects.nonNull( p_variable )
+            ? Stream.of( passvariable( (IVariable<?>) p_visitor.visit( p_variable ) ) )
+            : Stream.empty(),
+
+            Objects.nonNull( p_additional )
+            ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+            : Stream.empty()
+        )
+        .toArray( IExecution[]::new );
+
+        // @todo lambda initialize
+
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdainitialization" ) );
     }
+
+    /**
+     * build a lambda element
+     *
+     * @param p_number number
+     * @param p_variable variable
+     * @return execution
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static IExecution lambdaelement( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                            @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable )
+    {
+        if ( Objects.nonNull( p_number ) )
+            return passdata( CRaw.numbervalue( p_number ) );
+
+        if ( Objects.nonNull( p_variable ) )
+            return passvariable( (IVariable<?>) p_visitor.visit( p_variable ) );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdaelement" ) );
+    }
+
+    /*
+    @Nonnull
+    public static Stream<? extends Number> lambdarange( @Nonnull final List<TerminalNode> p_numbers )
+    {
+        final Number[] l_numbers = p_numbers.stream().map( CRaw::numbervalue ).toArray( Number[]::new );
+
+        if ( l_numbers.length == 1 )
+            return LongStream.range( 0, l_numbers[0].longValue() ).boxed();
+
+        if ( l_numbers.length == 2 )
+            return LongStream.range( l_numbers[0].longValue(), l_numbers[1].longValue() ).boxed();
+
+        if ( l_numbers.length == 3 )
+            return LongStream.range( l_numbers[0].longValue(), l_numbers[1].longValue() / l_numbers[2].longValue() ).map( i -> i * l_numbers[2].longValue() ).boxed();
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdarange" ) );
+    }
+    */
 
     /**
      * build a lambda expression

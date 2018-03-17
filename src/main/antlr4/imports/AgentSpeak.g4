@@ -71,7 +71,13 @@ body :
     ( SEMICOLON repair_formula )*
     ;
 
-// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
+/**
+ * block-formula of subsection
+ */
+block_formula :
+    LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
+    | body_formula
+    ;
 
 /**
  * expression rule
@@ -267,28 +273,21 @@ lambda :
     ;
 
 /**
- * block-formula of subsection
- */
-block_formula :
-    LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
-    | body_formula
-    ;
-
-/**
  * initialization of lambda expression
  */
 lambda_initialization :
     LEFTROUNDBRACKET
-    ( variable | lambda_range )
+    ( variable | NUMBER )
+    lambda_element*
     RIGHTROUNDBRACKET
     ;
 
 /**
- * lambda range
+ * defines additional lambda initialize parameter
  */
-lambda_range :
-    NUMBER
-    ( COMMA NUMBER )?
+lambda_element :
+    COMMA
+    ( variable | NUMBER )
     ;
 
 /**

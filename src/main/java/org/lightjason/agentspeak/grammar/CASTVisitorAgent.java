@@ -390,22 +390,21 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitLambda_initialization( final AgentParser.Lambda_initializationContext p_context )
     {
         return CAgentSpeak.lambdainitialization(
-
-            Objects.nonNull( p_context.variable() )
-            ? (IVariable<?>) this.visit( p_context.variable() )
-            : null,
-
-            Objects.nonNull( p_context.lambda_range() )
-            ? (Collection<?>) this.visit( p_context.lambda_range() )
-            : null
-
+            this,
+            p_context.NUMBER(),
+            p_context.variable(),
+            p_context.lambda_element()
         );
     }
 
     @Override
-    public final Object visitLambda_range( final AgentParser.Lambda_rangeContext p_context )
+    public final Object visitLambda_element( final AgentParser.Lambda_elementContext p_context )
     {
-        return null;
+        return CAgentSpeak.lambdaelement(
+            this,
+            p_context.NUMBER(),
+            p_context.variable()
+        );
     }
 
     @Override
