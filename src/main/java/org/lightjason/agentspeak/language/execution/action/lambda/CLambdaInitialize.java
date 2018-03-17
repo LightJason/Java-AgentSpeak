@@ -55,5 +55,4 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
     {
         return null;
     }
-    
 }

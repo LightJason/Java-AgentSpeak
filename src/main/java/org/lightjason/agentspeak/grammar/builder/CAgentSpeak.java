@@ -48,7 +48,6 @@ import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
 import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitialize;
-import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitializeSingle;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
