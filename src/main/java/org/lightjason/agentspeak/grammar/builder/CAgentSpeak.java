@@ -47,6 +47,8 @@ import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
+import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitializeMultiple;
+import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitializeSingle;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
@@ -421,8 +423,10 @@ public final class CAgentSpeak
         )
         .toArray( IExecution[]::new );
 
-        // @todo lambda initialize
-
+        if ( l_execution.length == 1 )
+            return new CLambdaInitializeSingle( l_execution[0] );
+        if ( ( l_execution.length == 2 ) || ( l_execution.length == 3 ) )
+            return new CLambdaInitializeMultiple( l_execution );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdainitialization" ) );
     }
