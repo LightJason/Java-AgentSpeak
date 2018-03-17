@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.language.execution.action.achievement_test.CAch
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
-import org.lightjason.agentspeak.language.execution.expression.EOperator;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
@@ -113,6 +112,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
     // --- AgentSpeak(L++) rules -------------------------------------------------------------------------------------------------------------------------------
 
@@ -202,6 +202,59 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
     //Checkstyle:ON:NPathComplexity
 
+
+
+
+
+    @Override
+    public final Object visitUnification( final PlanBundleParser.UnificationContext p_context )
+    {
+        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
+
+        if ( l_constraint instanceof IExpression )
+            return new CExpressionUnify(
+                p_context.AT() != null,
+                (ILiteral) this.visitLiteral( p_context.literal() ),
+                (IExpression) l_constraint
+            );
+
+        if ( l_constraint instanceof IVariable<?> )
+            return new CVariableUnify(
+                p_context.AT() != null,
+                (ILiteral) this.visitLiteral( p_context.literal() ),
+                (IVariable<?>) l_constraint
+            );
+
+        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
+
+    @Override
+    public final Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
+    {
+        if ( Objects.isNull( p_context ) )
+            return null;
+
+        if ( Objects.nonNull( p_context.expression() ) )
+            return this.visitExpression( p_context.expression() );
+
+        if ( Objects.nonNull( p_context.variable() ) )
+            return this.visitVariable( p_context.variable() );
+
+        return null;
+    }
+
+
+
+
+
+    @Override
+    public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
+    {
+        return Objects.nonNull( p_context.body_formula() )
+               ? Stream.concat( Stream.of( this.visit( p_context.body() ) ), (Stream<?>) this.visit( p_context.body_formula() ) )
+               : Stream.of( this.visit( p_context.body() ) );
+    }
+
     @Override
     public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
@@ -212,6 +265,10 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             (Stream<IExecution>) this.visit( p_context.repair_formula() )
         );
     }
+
+
+
+
 
     @Override
     public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
@@ -258,6 +315,10 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         );
     }
 
+
+
+
+
     @Override
     public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
@@ -302,6 +363,36 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
+    public final Object visitLambda_range( final PlanBundleParser.Lambda_rangeContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
+    {
+        return null;
+    }
+
+
+
+
+
+    @Override
+    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
+    {
+        // @todo fix exception
+
+        if ( Objects.nonNull( p_context.assignment_expression_singlevariable() ) )
+            return this.visit( p_context.assignment_expression_singlevariable() );
+
+        if ( Objects.nonNull( p_context.assignment_expression_multivariable() ) )
+            return this.visit( p_context.assignment_expression_multivariable() );
+
+        throw new CSyntaxErrorException();
+    }
+
+    @Override
     public final Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
     {
         return CAgentSpeak.singleassignment(
@@ -320,51 +411,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public final Object visitUnification( final PlanBundleParser.UnificationContext p_context )
-    {
-        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
-
-        if ( l_constraint instanceof IExpression )
-            return new CExpressionUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IExpression) l_constraint
-            );
-
-        if ( l_constraint instanceof IVariable<?> )
-            return new CVariableUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IVariable<?>) l_constraint
-            );
-
-        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
-    }
-
-    @Override
-    public final Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
-    {
-        if ( Objects.isNull( p_context ) )
-            return null;
-
-        if ( Objects.nonNull( p_context.expression() ) )
-            return this.visitExpression( p_context.expression() );
-
-        if ( Objects.nonNull( p_context.variable() ) )
-            return this.visitVariable( p_context.variable() );
-
-        return null;
-    }
-
-    @Override
-    public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
-    {
-        return Objects.nonNull( p_context.body_formula() )
-               ? Stream.concat( Stream.of( this.visit( p_context.body() ) ), (Stream<?>) this.visit( p_context.body_formula() ) )
-               : Stream.of( this.visit( p_context.body() ) );
-    }
-
-    @Override
     public final Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
     {
         return CAgentSpeak.unary(
@@ -372,6 +418,10 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             (IVariable<Number>) this.visit( p_context.variable() )
         );
     }
+
+
+
+
 
     @Override
     public final Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
@@ -384,34 +434,20 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
-    {
-        return null;
-    }
-
-    @Override
     public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
     {
-        return CAgentSpeak.passboolean( true );
+        return this.visit( p_context.expression() );
     }
 
     @Override
     public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
     {
-        return CAgentSpeak.passboolean( false );
+        return this.visit( p_context.expression() );
     }
 
-    @Override
-    public final Object visitLambda_range( final PlanBundleParser.Lambda_rangeContext p_context )
-    {
-        return null;
-    }
 
-    @Override
-    public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
-    {
-        return null;
-    }
+
+
 
     @Override
     public final Object visitExecute_action( final PlanBundleParser.Execute_actionContext p_context )
@@ -431,33 +467,9 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return null;
     }
 
-    @Override
-    public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
-    {
-        return p_context.variable().stream().map( i -> this.visit( i ) );
-    }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public final Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
-    {
-        return CTerm.literal(
-            p_context.AT(),
-            p_context.STRONGNEGATION(),
-            p_context.ATOM(),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
-        );
-    }
-
-    @Override
-    public final Object visitVariable( final PlanBundleParser.VariableContext p_context )
-    {
-        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
-    }
 
     @Override
     public final Object visitTerm( final PlanBundleParser.TermContext p_context )
@@ -482,6 +494,17 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
+    public final Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
+    {
+        return CTerm.literal(
+            p_context.AT(),
+            p_context.STRONGNEGATION(),
+            p_context.ATOM(),
+            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
+        );
+    }
+
+    @Override
     public final Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
     {
         return ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() )
@@ -489,26 +512,27 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                : CTerm.termlist( this, p_context.term().stream() );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+    @Override
+    public final Object visitVariable( final PlanBundleParser.VariableContext p_context )
+    {
+        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
+    }
 
 
-    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+    @Override
+    public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
+    {
+        return p_context.variable().stream().map( i -> this.visit( i ) );
+    }
+
+
+
+
 
     @Override
     public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
-        // bracket expression
-        if ( Objects.nonNull( p_context.expression_bracket() ) )
-            return this.visitExpression_bracket( p_context.expression_bracket() );
-
-        // or-expression
-        return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(
-            EOperator.OR,
-            (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
-            p_context.expression() != null
-            ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
-            : Collections.emptyList()
-        );
+        return null;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

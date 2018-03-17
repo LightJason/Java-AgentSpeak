@@ -245,6 +245,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
     //Checkstyle:ON:NPathComplexity
 
+
+
+
+
     @Override
     public final Object visitUnification( final AgentParser.UnificationContext p_context )
     {
@@ -279,6 +283,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         throw new CSyntaxErrorException( CCommon.languagestring( this, "unificationunknown", p_context.getText() ) );
     }
 
+
+
+
+
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
     {
@@ -297,6 +305,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             (Stream<IExecution>) this.visit( p_context.repair_formula() )
         );
     }
+
+
+
+
 
     @Override
     public final Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
@@ -343,6 +355,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         );
     }
 
+
+
+
+
     @Override
     public final Object visitLambda( final AgentParser.LambdaContext p_context )
     {
@@ -387,6 +403,36 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
+    public final Object visitLambda_range( final AgentParser.Lambda_rangeContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public final Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
+    {
+        return null;
+    }
+
+
+
+
+
+    @Override
+    public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
+    {
+        // @todo fix exception
+
+        if ( Objects.nonNull( p_context.assignment_expression_singlevariable() ) )
+            return this.visit( p_context.assignment_expression_singlevariable() );
+
+        if ( Objects.nonNull( p_context.assignment_expression_multivariable() ) )
+            return this.visit( p_context.assignment_expression_multivariable() );
+
+        throw new CSyntaxErrorException();
+    }
+
+    @Override
     public final Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
         return CAgentSpeak.singleassignment(
@@ -413,6 +459,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         );
     }
 
+
+
+
+
     @Override
     public final Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
     {
@@ -423,6 +473,20 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         );
     }
 
+    @Override
+    public final Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
+    {
+        return this.visit( p_context.expression() );
+    }
+
+    @Override
+    public final Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
+    {
+        return this.visit( p_context.expression() );
+    }
+
+
+
 
     @Override
     public final Object visitExecute_action( final AgentParser.Execute_actionContext p_context )
@@ -431,42 +495,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             (ILiteral) this.visit( p_context.literal() ),
             m_actions
         );
-    }
-
-    @Override
-    public final Object visitExpression( final AgentParser.ExpressionContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public final Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
-    {
-        return CAgentSpeak.passboolean( true );
-    }
-
-    @Override
-    public final Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
-    {
-        return CAgentSpeak.passboolean( false );
-    }
-
-    @Override
-    public final Object visitLambda_range( final AgentParser.Lambda_rangeContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public final Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
-    {
-        return null;
     }
 
     @Override
@@ -481,16 +509,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return null;
     }
 
-    @Override
-    public final Object visitVariablelist( final AgentParser.VariablelistContext p_context )
-    {
-        return p_context.variable().stream().map( i -> this.visit( i ) );
-    }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
 
     @Override
     public final Object visitTerm( final AgentParser.TermContext p_context )
@@ -526,12 +547,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitVariable( final AgentParser.VariableContext p_context )
-    {
-        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
-    }
-
-    @Override
     public final Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
         return ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() )
@@ -539,13 +554,29 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                : CTerm.termlist( this, p_context.term().stream() );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+    @Override
+    public final Object visitVariable( final AgentParser.VariableContext p_context )
+    {
+        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
+    }
+
+    @Override
+    public final Object visitVariablelist( final AgentParser.VariablelistContext p_context )
+    {
+        return p_context.variable().stream().map( i -> this.visit( i ) );
+    }
 
 
-    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    @Override
+    public final Object visitExpression( final AgentParser.ExpressionContext p_context )
+    {
+        return null;
+    }
 
 /*
-
     @Override
     public final Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
