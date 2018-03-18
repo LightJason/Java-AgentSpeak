@@ -50,7 +50,9 @@ import java.util.stream.Stream;
 
 /**
  * lambda expression definition
+ * @deprecated old
  */
+@Deprecated
 public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 {
     /**

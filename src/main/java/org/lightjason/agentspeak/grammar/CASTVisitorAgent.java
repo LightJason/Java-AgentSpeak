@@ -363,27 +363,12 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitLambda( final AgentParser.LambdaContext p_context )
     {
         return CAgentSpeak.lambda(
+            this,
             Objects.nonNull( p_context.AT() ),
-            (IExecution) this.visit( p_context.lambda_initialization() )
+            p_context.lambda_initialization(),
+            p_context.lambda_return(),
+            p_context.block_formula()
         );
-
-        /*
-        if ( Objects.nonNull( p_context.lambda_return() ) )
-            return new CLambdaExpression(
-                p_context.AT() != null,
-                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
-                (IVariable<?>) this.visitVariable( p_context.variable() ),
-                (IVariable<?>) this.visitLambda_return( p_context.lambda_return() ),
-                (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
-            );
-
-        return new CLambdaExpression(
-            p_context.AT() != null,
-            (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
-            (IVariable<?>) this.visitVariable( p_context.variable() ),
-            (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
-        );
-        */
     }
 
     @Override
@@ -410,7 +395,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
     {
-        return null;
+        return this.visit( p_context.variable() );
     }
 
 

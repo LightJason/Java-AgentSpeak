@@ -75,8 +75,8 @@ body :
  * block-formula of subsection
  */
 block_formula :
-    LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
-    | body_formula
+    body_formula
+    | ( LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET )
     ;
 
 /**

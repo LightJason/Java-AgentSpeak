@@ -396,6 +396,20 @@ public final class CAgentSpeak
     }
 
     /**
+     * build a lambda expression
+     *
+     * @param p_parallel parallel call
+     * @param p_iterator base iterator
+     * @return lambda expression
+     */
+    @Nonnull
+    public static IExpression lambda( @Nonnull final ParseTreeVisitor<?> p_visitor, boolean p_parallel,
+                                      @Nonnull final RuleContext p_iterator, @Nullable final RuleContext p_return, @Nonnull final RuleContext p_execution )
+    {
+        return null;
+    }
+
+    /**
      * build a lambda initialization
      *
      * @return lambda initialization expression
@@ -413,7 +427,7 @@ public final class CAgentSpeak
             : Stream.empty(),
 
             Objects.nonNull( p_variable )
-            ? Stream.of( passvariable( (IVariable<?>) p_visitor.visit( p_variable ) ) )
+            ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
             : Stream.empty(),
 
             Objects.nonNull( p_additional )
@@ -447,38 +461,6 @@ public final class CAgentSpeak
             return passvariable( (IVariable<?>) p_visitor.visit( p_variable ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdaelement" ) );
-    }
-
-    /*
-    @Nonnull
-    public static Stream<? extends Number> lambdarange( @Nonnull final List<TerminalNode> p_numbers )
-    {
-        final Number[] l_numbers = p_numbers.stream().map( CRaw::numbervalue ).toArray( Number[]::new );
-
-        if ( l_numbers.length == 1 )
-            return LongStream.range( 0, l_numbers[0].longValue() ).boxed();
-
-        if ( l_numbers.length == 2 )
-            return LongStream.range( l_numbers[0].longValue(), l_numbers[1].longValue() ).boxed();
-
-        if ( l_numbers.length == 3 )
-            return LongStream.range( l_numbers[0].longValue(), l_numbers[1].longValue() / l_numbers[2].longValue() ).map( i -> i * l_numbers[2].longValue() ).boxed();
-
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdarange" ) );
-    }
-    */
-
-    /**
-     * build a lambda expression
-     *
-     * @param p_parallel parallel call
-     * @param p_iterator base iterator
-     * @return lambda expression
-     */
-    @Nonnull
-    public static IExpression lambda( boolean p_parallel, @Nonnull final IExecution p_iterator )
-    {
-        return null;
     }
 
 }
