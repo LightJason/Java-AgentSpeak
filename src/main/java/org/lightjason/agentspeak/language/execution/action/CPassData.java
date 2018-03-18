@@ -42,6 +42,11 @@ import java.util.Objects;
 public final class CPassData<T> extends IBaseExecution<ITerm>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2491167578583340270L;
+
+    /**
      * ctor
      *
      * @param p_value data

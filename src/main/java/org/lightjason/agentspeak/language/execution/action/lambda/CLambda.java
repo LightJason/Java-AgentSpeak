@@ -48,6 +48,10 @@ import java.util.stream.Stream;
 public final class CLambda extends IBaseExecution<IExecution[]>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7221932027365007256L;
+    /**
      * initialize
      */
     private final IExecution m_init;
@@ -59,6 +63,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * return variable
      */
     private final IVariable<?> m_return;
+
 
     /**
      * ctor

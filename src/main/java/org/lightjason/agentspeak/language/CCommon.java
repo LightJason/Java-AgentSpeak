@@ -182,7 +182,7 @@ public final class CCommon
     @Nonnull
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public static <T> Stream<T> streamconcat( @Nonnull final Stream<T>... p_streams )
+    public static <T> Stream<? extends T> streamconcat( @Nonnull final Stream<? extends T>... p_streams )
     {
         return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );
     }

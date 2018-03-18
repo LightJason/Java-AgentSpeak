@@ -21,45 +21,30 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.action.lambda;
+package org.lightjason.agentspeak.action.builtin.math.bit.vector;
+
+import cern.colt.matrix.tbit.BitVector;
+import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
-import java.util.function.Function;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
 /**
- * streaming interface to define stream structure
- *
- * @tparam T any input type
+ * streaming a bit vector
  */
-public interface ILambdaStreaming<T> extends Function<T, Stream<?>>
+public final class CLambdaStreaming implements ILambdaStreaming<BitVector>
 {
-    /**
-     * empty streaming
-     */
-    ILambdaStreaming<?> EMPTY = new ILambdaStreaming<>()
+    @Override
+    public final boolean instaceof( @Nonnull final Object p_object )
     {
-        @Override
-        public final boolean instaceof( @Nonnull final Object p_object )
-        {
-            return false;
-        }
+        return p_object instanceof BitVector;
+    }
 
-        @Override
-        public final Stream<?> apply( final Object p_value )
-        {
-            return Stream.of( p_value );
-        }
-    };
-
-
-    /**
-     * check if tha object is a type of
-     *
-     * @param p_object any object
-     * @return is an instace
-     */
-    boolean instaceof( @Nonnull final Object p_object );
-
+    @Override
+    public final Stream<?> apply( final BitVector p_vector )
+    {
+        return IntStream.range( 0, p_vector.size() ).boxed().map( i -> p_vector.getQuick( i ) ? 1 : 0 );
+    }
 }

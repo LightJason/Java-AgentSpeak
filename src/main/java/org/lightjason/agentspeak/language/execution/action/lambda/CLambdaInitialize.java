@@ -47,6 +47,13 @@ import java.util.stream.Stream;
  */
 public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4625794081981849579L;
+    /**
+     * streaming elements
+     */
     private final Set<ILambdaStreaming<?>> m_streaming = new HashSet<>();
 
     /**
@@ -92,7 +99,7 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
     {
         return p_value.raw() instanceof Number
                ? LongStream.range( 0, p_value.<Number>raw().longValue() ).boxed()
-               : this.streaming( p_value.raw() );
+               : this.streaming( p_value );
     }
 
     /**
@@ -108,8 +115,8 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
                ? LongStream.range( p_start.<Number>raw().longValue(), p_end.<Number>raw().longValue() )
                            .boxed()
                : CCommon.streamconcat(
-                    this.streaming( p_start.raw() ),
-                    this.streaming( p_end.raw() )
+                    this.streaming( p_start ),
+                    this.streaming( p_end )
                );
     }
 
@@ -128,9 +135,9 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
                            .map( i -> i * p_step.<Number>raw().longValue() )
                            .boxed()
                : CCommon.streamconcat(
-                   this.streaming( p_start.raw() ),
-                   this.streaming( p_end.raw() ),
-                   this.streaming( p_step.raw() )
+                   this.streaming( p_start ),
+                   this.streaming( p_end ),
+                   this.streaming( p_step )
                );
     }
 
@@ -140,13 +147,13 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
      * @param p_value value
      * @return object stream
      */
-    private Stream<Object> streaming( @Nonnull final Object p_value )
+    private Stream<?> streaming( @Nonnull final ITerm p_value )
     {
         return m_streaming.parallelStream()
-                          .filter( i -> i.instaceof( p_value ) )
+                          .filter( i -> i.instaceof( p_value.raw() ) )
                           .findFirst()
                           .orElse( ILambdaStreaming.EMPTY )
-                          .apply( p_value );
+                          .apply( p_value.raw() );
 
     }
 
