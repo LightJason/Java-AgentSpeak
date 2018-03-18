@@ -36,6 +36,25 @@ import java.util.stream.Stream;
 public interface ILambdaStreaming<T> extends Function<T, Stream<?>>
 {
     /**
+     * empty streaming
+     */
+    ILambdaStreaming<?> EMPTY = new ILambdaStreaming<>()
+    {
+        @Override
+        public final boolean instaceof( @Nonnull final Object p_object )
+        {
+            return false;
+        }
+
+        @Override
+        public final Stream<Object> apply( final Object p_value )
+        {
+            return Stream.of( p_value );
+        }
+    };
+
+
+    /**
      * check if tha object is a type of
      *
      * @param p_object any object
