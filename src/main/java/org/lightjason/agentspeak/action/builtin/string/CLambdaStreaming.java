@@ -21,43 +21,32 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.action.lambda;
+package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
- * lambda initialize with multiple arguments
+ * stream of string
  */
-public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
+public final class CLambdaStreaming implements ILambdaStreaming<String>
 {
-    /**
-     * ctor
-     *
-     * @param p_value data
-     */
-    public CLambdaInitialize( @Nonnull final IExecution[] p_value )
+    @Override
+    public final boolean instaceof( @Nonnull final Object p_object )
     {
-        super( p_value );
+        return p_object instanceof String;
     }
 
-    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public final Stream<?> apply( @Nonnull final String p_value )
     {
-        Arrays.stream( m_value )
-              .forEach( i -> i.execute( p_parallel, p_context, p_argument, p_return ) );
-
-        return CFuzzyValue.from( true );
+        return IntStream.range( 0, p_value.length() )
+                        .boxed()
+                        .map( p_value::charAt )
+                        .map( String::valueOf );
     }
 }

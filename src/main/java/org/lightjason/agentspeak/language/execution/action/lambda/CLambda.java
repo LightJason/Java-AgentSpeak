@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -68,7 +67,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_init initialize
      * @param p_value execution list
      */
-    public CLambda( final boolean p_parallel, @Nonnull IExpression p_init, @Nonnull final IExecution[] p_value )
+    public CLambda( final boolean p_parallel, @Nonnull final IExpression p_init, @Nonnull final IExecution[] p_value )
     {
         this( p_parallel, p_init, p_value, null );
     }
@@ -81,7 +80,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_value execution list
      * @param p_return return variable
      */
-    public CLambda( final boolean p_parallel, @Nonnull IExpression p_init, @Nonnull final IExecution[] p_value, @Nullable final IVariable<?> p_return )
+    public CLambda( final boolean p_parallel, @Nonnull final IExpression p_init, @Nonnull final IExecution[] p_value, @Nullable final IVariable<?> p_return )
     {
         super( p_value );
         m_init = p_init;
@@ -97,19 +96,13 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         final List<ITerm> l_init = new ArrayList<>();
         m_init.execute( p_parallel, p_context, p_argument, l_init );
 
-        final Stream<?> l_stream;
-        if ( l_init.size() == 1 )
-            return CFuzzyValue.from( false );
-
-
-
-
-
+        /*
         (
             m_parallel
             ? Arrays.stream( m_value ).parallel()
             : Arrays.stream( m_value )
         )
+        */
 
         return null;
     }
