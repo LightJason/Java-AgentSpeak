@@ -205,11 +205,23 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
     {
-        return CAgentSpeak.repair(
-            p_context.repair_formula()
-                     .stream()
-                     .map( i -> (IExecution) this.visit( i ) )
-        );
+        // @todo ckeck return
+
+        return CAgentSpeak.repair( this, p_context.repair_formula() );
+    }
+
+    @Override
+    public final Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
+    {
+        // @todo check
+
+        return CAgentSpeak.repairformula( this, p_context.body_formula(), p_context.repair_formula() );
+    }
+
+    @Override
+    public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
+    {
+        return CAgentSpeak.blockformular( this, p_context.body(), p_context.body_formula() );
     }
 
 
@@ -258,59 +270,27 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitUnification( final AgentParser.UnificationContext p_context )
     {
-        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
-
-        if ( l_constraint instanceof IExpression )
-            return new CExpressionUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IExpression) l_constraint
-            );
-
-        if ( l_constraint instanceof IVariable<?> )
-            return new CVariableUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IVariable<?>) l_constraint
-            );
-
-        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return CAgentSpeak.unification(
+            this,
+            p_context.AT(),
+            p_context.literal(),
+            p_context.unification_constraint()
+        );
     }
 
     @Override
     public final Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
     {
-        if ( Objects.nonNull( p_context.expression() ) )
-            return this.visitExpression( p_context.expression() );
-
-        if ( Objects.nonNull( p_context.variable() ) )
-            return this.visitVariable( p_context.variable() );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( this, "unificationunknown", p_context.getText() ) );
+        return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
     }
 
 
 
 
 
-    @Override
-    public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
-    {
-        return Objects.nonNull( p_context.body_formula() )
-               ? Stream.concat( Stream.of( this.visit( p_context.body() ) ), (Stream<?>) this.visit( p_context.body_formula() ) )
-               : Stream.of( this.visit( p_context.body() ) );
-    }
 
-    @Override
-    public final Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
-    {
-        return Stream.concat(
-            Stream.of(
-                this.visit( p_context.body_formula() )
-            ).map( i -> (IExecution) i ),
-            (Stream<IExecution>) this.visit( p_context.repair_formula() )
-        );
-    }
+
+
 
 
 

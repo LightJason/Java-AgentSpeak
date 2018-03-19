@@ -163,11 +163,19 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
-        return CAgentSpeak.repair(
-            p_context.repair_formula()
-                     .stream()
-                     .map( i -> (IExecution) this.visit( i ) )
-        );
+        return CAgentSpeak.repair( this, p_context.repair_formula() );
+    }
+
+    @Override
+    public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
+    {
+        return CAgentSpeak.blockformular( this, p_context.body(), p_context.body_formula() );
+    }
+
+    @Override
+    public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
+    {
+        return CAgentSpeak.repairformula( this, p_context.body_formula(), p_context.repair_formula() );
     }
 
     //Checkstyle:OFF:NPathComplexity
@@ -215,62 +223,25 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
-        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
-
-        if ( l_constraint instanceof IExpression )
-            return new CExpressionUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IExpression) l_constraint
-            );
-
-        if ( l_constraint instanceof IVariable<?> )
-            return new CVariableUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IVariable<?>) l_constraint
-            );
-
-        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return CAgentSpeak.unification(
+            this,
+            p_context.AT(),
+            p_context.literal(),
+            p_context.unification_constraint()
+        );
     }
 
     @Override
     public final Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
     {
-        if ( Objects.isNull( p_context ) )
-            return null;
-
-        if ( Objects.nonNull( p_context.expression() ) )
-            return this.visitExpression( p_context.expression() );
-
-        if ( Objects.nonNull( p_context.variable() ) )
-            return this.visitVariable( p_context.variable() );
-
-        return null;
+        return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
     }
 
 
 
 
 
-    @Override
-    public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
-    {
-        return Objects.nonNull( p_context.body_formula() )
-               ? Stream.concat( Stream.of( this.visit( p_context.body() ) ), (Stream<?>) this.visit( p_context.body_formula() ) )
-               : Stream.of( this.visit( p_context.body() ) );
-    }
 
-    @Override
-    public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
-    {
-        return Stream.concat(
-            Stream.of(
-                this.visit( p_context.body_formula() )
-            ).map( i -> (IExecution) i ),
-            (Stream<IExecution>) this.visit( p_context.repair_formula() )
-        );
-    }
 
 
 

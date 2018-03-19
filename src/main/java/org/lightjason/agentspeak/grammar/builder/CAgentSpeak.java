@@ -204,10 +204,31 @@ public final class CAgentSpeak
      * @param p_chain input chain elements
      * @return null or repair
      */
-    @Nullable
-    public static IExecution repair( @Nonnull final Stream<IExecution> p_chain )
+    @Nonnull
+    public static IExecution repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        return new CRepair( p_chain );
+        return new CRepair( p_chain.stream().map( i -> (IExecution) p_visitor.visit( i ) ) );
+    }
+
+    /**
+     * build repair formular
+     *
+     * @param p_visitor visitor
+     * @param p_body body
+     * @param p_next next formula
+     * @return execution stream
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static Stream<IExecution> repairformula( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                                    @Nonnull final RuleContext p_body, @Nullable final RuleContext p_next )
+    {
+        return Stream.concat(
+            Stream.of( (IExecution) p_visitor.visit( p_body ) ),
+            Objects.nonNull( p_next )
+            ? (Stream<IExecution>) p_visitor.visit( p_next )
+            : Stream.empty()
+        );
     }
 
     /**
@@ -353,32 +374,76 @@ public final class CAgentSpeak
         return new CProxy( p_actionliteral.hasAt(), l_action );
     }
 
+
+
     /**
      * unification
      *
+     * @param p_visitor visitor
      * @param p_parallel parallel call
      * @param p_literal literal call
      * @param p_constraint unficiation constraint
      * @return unification execution
      */
     @Nonnull
-    public static IExecution unification( boolean p_parallel, @Nonnull final ILiteral p_literal, @Nullable final ITerm p_constraint )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution unification( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable TerminalNode p_parallel,
+                                          @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
     {
+        final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
+        final Object l_constraint = p_visitor.visit( p_constraint );
+
         if ( p_constraint instanceof IExpression )
             return new CExpressionUnify(
-                p_parallel,
-                p_literal,
-                p_constraint.raw()
+                Objects.nonNull( p_parallel ),
+                l_literal,
+                (IExpression) l_constraint
             );
 
         if ( p_constraint instanceof IVariable<?> )
             return new CVariableUnify(
-                p_parallel,
-                p_literal,
-                p_constraint.raw()
+                Objects.nonNull( p_parallel ),
+                l_literal,
+                (IVariable<?>) l_constraint
             );
 
-        return new CDefaultUnify( p_parallel, p_literal );
+        return new CDefaultUnify( Objects.nonNull( p_parallel ), l_literal );
+    }
+
+    /**
+     * unification constraint
+     *
+     * @param p_visitor visitor
+     * @param p_variable variable
+     * @param p_expression expression
+     * @return unification constraint as variable or expression
+     */
+    public static Object unificationconstraint( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                                @Nullable final RuleContext p_variable, @Nullable final RuleContext p_expression )
+    {
+        if ( Objects.nonNull( p_expression ) )
+            return p_visitor.visit( p_expression );
+
+        if ( Objects.nonNull( p_variable ) )
+            return p_visitor.visit( p_variable );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unification" ) );
+    }
+
+    /**
+     * define block formula
+     *
+     * @param p_visitor visitor
+     * @param p_body body
+     * @param p_bodyformula other elements
+     * @return stream of execution elements
+     */
+    public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                        @Nonnull final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
+    {
+        return Objects.nonNull( p_bodyformula )
+               ? Stream.concat( Stream.of( p_visitor.visit( p_body ) ), (Stream<?>) p_visitor.visit( p_bodyformula ) )
+               : Stream.of( p_visitor.visit( p_body ) );
     }
 
     /**
