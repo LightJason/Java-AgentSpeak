@@ -47,7 +47,8 @@ import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
-import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitialize;
+import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitializeRange;
+import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
@@ -387,7 +388,7 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IExecution unification( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable TerminalNode p_parallel,
+    public static IExecution unification( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_parallel,
                                           @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
     {
         final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
@@ -500,32 +501,57 @@ public final class CAgentSpeak
     /**
      * build a lambda initialization
      *
+     * @param p_visitor visitor
+     * @param p_lambdastreaming lambda streaming
+     * @param p_hash hash value (range or variable list)
+     * @param p_number number values
+     * @param p_variable variable
+     * @param p_additional additional defintion
      * @return lambda initialization expression
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution lambdainitialization( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming,
-                                                   @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable,
-                                                   @Nullable final List<? extends RuleContext> p_additional )
+                                                   @Nullable final TerminalNode p_hash, @Nullable final TerminalNode p_number,
+                                                   @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional )
     {
-        return new CLambdaInitialize(
+        return Objects.nonNull( p_hash )
+
+            ? new CLambdaInitializeRange(
                 org.lightjason.agentspeak.language.CCommon.streamconcat(
 
-                Objects.nonNull( p_number )
-                ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
-                : Stream.empty(),
+                    Objects.nonNull( p_number )
+                    ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
+                    : Stream.empty(),
 
-                Objects.nonNull( p_variable )
-                ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
-                : Stream.empty(),
+                    Objects.nonNull( p_variable )
+                    ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
+                    : Stream.empty(),
 
-                Objects.nonNull( p_additional )
-                ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
-                : Stream.empty()
-            ).toArray( IExecution[]::new ),
+                    Objects.nonNull( p_additional )
+                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+                    : Stream.empty()
+                ).toArray( IExecution[]::new )
+            )
 
-            p_lambdastreaming
-        );
+            : new CLambdaInitializeStream(
+                org.lightjason.agentspeak.language.CCommon.streamconcat(
+
+                    Objects.nonNull( p_number )
+                    ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
+                    : Stream.empty(),
+
+                    Objects.nonNull( p_variable )
+                    ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
+                    : Stream.empty(),
+
+                    Objects.nonNull( p_additional )
+                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+                    : Stream.empty()
+                ).toArray( IExecution[]::new ),
+
+                p_lambdastreaming
+            );
     }
 
     /**

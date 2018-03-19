@@ -40,9 +40,6 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
 import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
-import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
-import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
-import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
@@ -362,6 +359,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return CAgentSpeak.lambdainitialization(
             this,
+            m_lambdastream,
+            p_context.HASH(),
             p_context.NUMBER(),
             p_context.variable(),
             p_context.lambda_element()

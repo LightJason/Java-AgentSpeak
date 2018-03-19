@@ -23,22 +23,20 @@
 
 package org.lightjason.agentspeak.language.execution.action.lambda;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 
@@ -63,34 +61,29 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * return variable
      */
     private final IVariable<?> m_return;
-
-
     /**
-     * ctor
-     *
-     * @param p_parallel parallel execution
-     * @param p_init initialize
-     * @param p_value execution list
+     * iterator variable
      */
-    public CLambda( final boolean p_parallel, @Nonnull final IExpression p_init, @Nonnull final IExecution[] p_value )
-    {
-        this( p_parallel, p_init, p_value, null );
-    }
+    private final IVariable<?> m_iterator;
+
 
     /**
      * ctor
      *
      * @param p_parallel parallel execution
      * @param p_init initialize
+     * @param p_iterator p_iterator
      * @param p_value execution list
      * @param p_return return variable
      */
-    public CLambda( final boolean p_parallel, @Nonnull final IExpression p_init, @Nonnull final IExecution[] p_value, @Nullable final IVariable<?> p_return )
+    public CLambda( final boolean p_parallel, @Nonnull final IExpression p_init, @Nonnull final IVariable<?> p_iterator,
+                    @Nonnull final IExecution[] p_value, @Nonnull final IVariable<?> p_return )
     {
         super( p_value );
         m_init = p_init;
         m_return = p_return;
         m_parallel = p_parallel;
+        m_iterator = p_iterator;
     }
 
     @Nonnull
@@ -99,7 +92,9 @@ public final class CLambda extends IBaseExecution<IExecution[]>
                                          @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_init = new ArrayList<>();
-        m_init.execute( p_parallel, p_context, p_argument, l_init );
+        if ( ( !m_init.execute( p_parallel, p_context, p_argument, l_init ).value() ) || ( l_init.size() != 1 ) )
+            return CFuzzyValue.from( false );
+
 
         /*
         (
@@ -112,23 +107,6 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         return null;
     }
 
-    private static Stream<?> initialize( @Nonnull final List<ITerm> p_init )
-    {
-        if ( p_init.size() == 1 )
-        {
-            if ( p_init.get( 0 ).raw() instanceof Number )
-                return LongStream.range( 0, p_init.get( 0 ).<Number>raw().longValue() ).boxed();
-
-            if ( p_init.get( 0 ).raw() instanceof Collection<?> )
-                return p_init.get( 0 ).<Collection<?>>raw().stream();
-
-
-
-            if ( p_init.get( 0 ).raw() instanceof Stream<?> )
-                return p_init.get( 0 ).raw();
-        }
-    }
-
     /**
      * returns the inner variables
      *
@@ -136,9 +114,10 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      */
     private Stream<IVariable<?>> innervariables()
     {
-        return Stream.concat(
+        return CCommon.streamconcatstrict(
             Arrays.stream( m_value ).flatMap( IExecution::variables ),
-            Objects.nonNull( m_return )
+            Stream.of( m_iterator ),
+            m_return.equals( IVariable.EMPTY )
             ? Stream.of( m_return )
             : Stream.empty()
         );
@@ -150,7 +129,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     {
         return Stream.concat(
             m_init.variables(),
-            Objects.nonNull( m_return )
+            m_return.equals( IVariable.EMPTY )
             ? Stream.of( m_return )
             : Stream.empty()
         );

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action.lambda;
 
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -37,14 +36,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 
 /**
- * lambda initialize with multiple arguments
+ * lambda initialize with streaming arguments
  */
-public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
+public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
 {
     /**
      * serial id
@@ -61,9 +59,7 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
      * @param p_value data
      * @param p_streaming lambda streaming
      */
-    public CLambdaInitialize( @Nonnull final IExecution[] p_value,
-                              final Set<ILambdaStreaming<?>> p_streaming
-    )
+    public CLambdaInitializeStream( @Nonnull final IExecution[] p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
     {
         super( p_value );
         m_streaming = p_streaming;
@@ -71,77 +67,31 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = new ArrayList<>();
-        Arrays.stream( m_value )
-              .forEach( i -> i.execute( p_parallel, p_context, p_argument, l_return ) );
+        final IFuzzyValue<Boolean> l_result = Arrays.stream( m_value )
+                                                    .map( i -> i.execute( p_parallel, p_context, p_argument, l_return ) )
+                                                    .filter( i -> !i.value() )
+                                                    .findFirst()
+                                                    .orElse( CFuzzyValue.from( true ) );
 
-        if ( l_return.size() == 1 )
-            p_return.add( CRawTerm.from( this.buildstream( l_return.get( 0 ) ) ) );
+        if ( !l_result.value() )
+            return l_result;
 
-        if ( l_return.size() == 2 )
-            p_return.add( CRawTerm.from( this.buildstream( l_return.get( 0 ), l_return.get( 1 ) ) ) );
+        if ( l_return.size() == 0 )
+            return CFuzzyValue.from( false );
 
-        if ( l_return.size() == 3 )
-            p_return.add( CRawTerm.from( this.buildstream( l_return.get( 0 ), l_return.get( 1 ), l_return.get( 2 ) ) ) );
 
-        // @todo multiple arguments
+        p_return.add(
+            CRawTerm.from(
+                l_return.stream()
+                        .flatMap( this::streaming )
+            )
+        );
 
-        return CFuzzyValue.from( true );
-    }
-
-    /**
-     * build a stream
-     *
-     * @param p_value value
-     * @return stream
-     */
-    private Stream<?> buildstream( @Nonnull final ITerm p_value )
-    {
-        return p_value.raw() instanceof Number
-               ? LongStream.range( 0, p_value.<Number>raw().longValue() ).boxed()
-               : this.streaming( p_value );
-    }
-
-    /**
-     * build stream
-     *
-     * @param p_start start value
-     * @param p_end end value
-     * @return stream
-     */
-    private Stream<?> buildstream( @Nonnull final ITerm p_start, @Nonnull final ITerm p_end )
-    {
-        return ( p_start.raw() instanceof Number ) && ( p_end.raw() instanceof Number )
-               ? LongStream.range( p_start.<Number>raw().longValue(), p_end.<Number>raw().longValue() )
-                           .boxed()
-               : CCommon.streamconcat(
-                    this.streaming( p_start ),
-                    this.streaming( p_end )
-               );
-    }
-
-    /**
-     * build stream
-     *
-     * @param p_start start value
-     * @param p_end end value
-     * @param p_step step value
-     * @return stream
-     */
-    private Stream<?> buildstream( @Nonnull final ITerm p_start, @Nonnull final ITerm p_end, @Nonnull final ITerm p_step )
-    {
-        return ( p_start.raw() instanceof Number ) && ( p_end.raw() instanceof Number ) && ( p_step.raw() instanceof Number )
-               ? LongStream.range( p_start.<Number>raw().longValue(), p_end.<Number>raw().longValue() / p_step.<Number>raw().longValue() )
-                           .map( i -> i * p_step.<Number>raw().longValue() )
-                           .boxed()
-               : CCommon.streamconcat(
-                   this.streaming( p_start ),
-                   this.streaming( p_end ),
-                   this.streaming( p_step )
-               );
+        return l_result;
     }
 
     /**

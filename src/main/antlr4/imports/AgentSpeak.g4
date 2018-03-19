@@ -277,6 +277,7 @@ lambda :
  */
 lambda_initialization :
     LEFTROUNDBRACKET
+    HASH?
     ( variable | NUMBER )
     lambda_element*
     RIGHTROUNDBRACKET

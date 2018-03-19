@@ -209,6 +209,7 @@ DOUBLEEXCLAMATIONMARK      : '!!';
 QUESTIONMARK               : '?';
 DOLLAR                     : '$';
 VLINE                      : '|';
+HASH                       : '#';
 
 LEFTARROW                  : '<-';
 RIGHTARROW                 : '->';
@@ -281,9 +282,9 @@ fragment EQUAL             : '==';
 fragment NOTEQUAL          : '\\==' | '!=';
 
 
-POW                        : '**';
-MULTIPLY                   : '*';
-MODULO                     : '%';
+fragment POW               : '**';
+fragment MULTIPLY          : '*';
+fragment MODULO            : '%';
 
 /**
  * string can be definied in single- and double-quotes
@@ -309,7 +310,7 @@ DIGITSEQUENCE              : DIGIT+ ('.' DIGIT+)?;
  */
 WHITESPACE                 : (' ' | '\n' | '\t' | '\r')+ -> skip;
 /**
- * add for line-comment also #
+ * add for line-comment also
  */
 LINECOMMENT                : ('//' | '#') .*? '\r'? '\n' -> skip;
 /**
