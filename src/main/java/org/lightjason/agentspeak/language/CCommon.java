@@ -238,6 +238,7 @@ public final class CCommon
     }
 
 
+
     /**
      * replace variables with context variables
      *

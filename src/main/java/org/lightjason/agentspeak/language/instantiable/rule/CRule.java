@@ -86,8 +86,8 @@ public final class CRule extends IBaseInstantiable implements IRule
     {
         return new CRule(
             m_id,
-            m_action.stream()
-                    .map( i ->
+            m_execution.stream()
+                       .map( i ->
                        i instanceof CRulePlaceholder
                        // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
                        ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
@@ -114,7 +114,7 @@ public final class CRule extends IBaseInstantiable implements IRule
             "{0} ({1} ==>> {2})",
             super.toString(),
             m_id,
-            m_action
+            m_execution
         );
     }
 

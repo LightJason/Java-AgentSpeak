@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * achievement for rule-variable execution
  */
-public final class CAchievementRuleVariable extends IAchievementRule<IVariableEvaluate>
+public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?>>
 {
     /**
      * serial id
@@ -49,11 +50,11 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     /**
      * ctor
      *
-     * @param p_type value of the rule
+     * @param p_value value of the rule
      */
-    public CAchievementRuleVariable( @Nonnull final IVariableEvaluate p_type )
+    public CAchievementRuleVariable( @Nonnull final IVariable<?> p_value )
     {
-        super( p_type );
+        super( p_value );
     }
 
     @Nonnull
@@ -61,7 +62,11 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CAchievementRuleVariable.execute( m_value.mutex(), p_context, m_value.evaluate( p_context ) );
+        return CAchievementRuleVariable.execute(
+            m_value.mutex(),
+            p_context,
+            CCommon.replaceFromContext( p_context, m_value ).term()
+        );
     }
 
     @Override
@@ -74,6 +79,6 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Objects.isNull( m_value ) ? Stream.empty() : m_value.variables();
+        return Stream.of( m_value );
     }
 }

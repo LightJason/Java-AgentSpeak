@@ -40,7 +40,9 @@ import java.util.stream.Stream;
 
 /**
  * structure for creating evaluate variables
+ * @deprecated unused
  */
+@Deprecated
 public final class CVariableEvaluate implements IVariableEvaluate
 {
     /**

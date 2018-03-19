@@ -45,6 +45,8 @@ import org.lightjason.agentspeak.language.execution.action.CProxy;
 import org.lightjason.agentspeak.language.execution.action.CRepair;
 import org.lightjason.agentspeak.language.execution.action.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
+import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
 import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitializeRange;
@@ -66,6 +68,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -97,6 +100,11 @@ public final class CAgentSpeak
     {
 
     }
+
+
+
+
+    // --- base structure --------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * build a plan object
@@ -199,6 +207,11 @@ public final class CAgentSpeak
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "annotation" ) );
     }
 
+
+
+
+    // --- execution content -----------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * builds a repair chain
      *
@@ -233,6 +246,27 @@ public final class CAgentSpeak
     }
 
     /**
+     * define block formula
+     *
+     * @param p_visitor visitor
+     * @param p_body body
+     * @param p_bodyformula other elements
+     * @return stream of execution elements
+     */
+    public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                        @Nonnull final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
+    {
+        return Objects.nonNull( p_bodyformula )
+               ? Stream.concat( Stream.of( p_visitor.visit( p_body ) ), (Stream<?>) p_visitor.visit( p_bodyformula ) )
+               : Stream.of( p_visitor.visit( p_body ) );
+    }
+
+
+
+
+    // --- execution elements ----------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      * create a test-goal
      *
      * @param p_dollar dollar sign (rule / plan)
@@ -245,6 +279,25 @@ public final class CAgentSpeak
         return Objects.nonNull( p_dollar )
             ? new CTestRule( CPath.from( p_atom.getText() ) )
             : new CTestGoal( CPath.from( p_atom.getText() ) );
+    }
+
+    @Nonnull
+    public static IExecution achievementgoal( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                              @Nullable final TerminalNode p_doubleexclamationmark,
+                                              @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable,
+                                              @Nullable final RuleContext p_arguments )
+    {
+        if ( Objects.nonNull( p_literal ) )
+            return new CAchievementGoalLiteral( (ILiteral) p_visitor.visit( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
+
+        if ( Objects.nonNull( p_variable ) )
+            return new CAchievementGoalVariable(
+                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
+                Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() )
+            );
+
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
+        */
     }
 
     /**
@@ -375,7 +428,47 @@ public final class CAgentSpeak
         return new CProxy( p_actionliteral.hasAt(), l_action );
     }
 
+    /**
+     * build a variable pass execution
+     *
+     * @param p_variable variable
+     * @return variable pass execution
+     */
+    @Nonnull
+    public static IExecution passvariable( @Nonnull final IVariable<?> p_variable )
+    {
+        return new CPassVariable( p_variable );
+    }
 
+    /**
+     * build a data pass execution
+     *
+     * @param p_data native data
+     * @tparam T data type
+     * @return data pass execution
+     */
+    @Nonnull
+    public static <T> IExecution passdata( @Nonnull final T p_data )
+    {
+        return new CPassData<>( p_data );
+    }
+
+    /**
+     * build a boolean execution
+     *
+     * @param p_value value
+     * @return execution
+     */
+    @Nonnull
+    public static IExecution passboolean( final boolean p_value )
+    {
+        return new CPassBoolean( p_value );
+    }
+
+
+
+
+    // --- unification -----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * unification
@@ -431,58 +524,10 @@ public final class CAgentSpeak
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unification" ) );
     }
 
-    /**
-     * define block formula
-     *
-     * @param p_visitor visitor
-     * @param p_body body
-     * @param p_bodyformula other elements
-     * @return stream of execution elements
-     */
-    public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                        @Nonnull final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
-    {
-        return Objects.nonNull( p_bodyformula )
-               ? Stream.concat( Stream.of( p_visitor.visit( p_body ) ), (Stream<?>) p_visitor.visit( p_bodyformula ) )
-               : Stream.of( p_visitor.visit( p_body ) );
-    }
 
-    /**
-     * build a variable pass execution
-     *
-     * @param p_variable variable
-     * @return variable pass execution
-     */
-    @Nonnull
-    public static IExecution passvariable( @Nonnull final IVariable<?> p_variable )
-    {
-        return new CPassVariable( p_variable );
-    }
 
-    /**
-     * build a data pass execution
-     *
-     * @param p_data native data
-     * @tparam T data type
-     * @return data pass execution
-     */
-    @Nonnull
-    public static <T> IExecution passdata( @Nonnull final T p_data )
-    {
-        return new CPassData<>( p_data );
-    }
 
-    /**
-     * build a boolean execution
-     *
-     * @param p_value value
-     * @return execution
-     */
-    @Nonnull
-    public static IExecution passboolean( final boolean p_value )
-    {
-        return new CPassBoolean( p_value );
-    }
+    // --- lambda expression -----------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * build a lambda expression

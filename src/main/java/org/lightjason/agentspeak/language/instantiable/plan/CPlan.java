@@ -151,7 +151,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             m_annotation.values(),
             m_triggerevent,
             Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),
-            StringUtils.join( m_action, "; " )
+            StringUtils.join( m_execution, "; " )
         );
     }
 

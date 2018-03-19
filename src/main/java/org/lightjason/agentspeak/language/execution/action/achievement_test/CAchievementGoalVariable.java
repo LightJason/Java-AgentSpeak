@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -40,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * achievement-goal action based on variables
  */
-public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEvaluate>
+public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
 {
     /**
      * serial id
@@ -50,12 +51,12 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
     /**
      * ctor
      *
-     * @param p_type value of the achievment-goal
+     * @param p_value value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalVariable( @Nonnull final IVariableEvaluate p_type, final boolean p_immediately )
+    public CAchievementGoalVariable( @Nonnull final IVariable<?> p_value, final boolean p_immediately )
     {
-        super( p_type, p_immediately );
+        super( p_value, p_immediately );
     }
 
     @Override
@@ -70,7 +71,9 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().trigger(
-            ITrigger.EType.ADDGOAL.builddefault( m_value.evaluate( p_context ) ),
+            ITrigger.EType.ADDGOAL.builddefault(
+                CCommon.replaceFromContext( p_context, m_value ).term()
+            ),
             m_immediately
         );
     }
@@ -79,6 +82,6 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Objects.isNull( m_value ) ? Stream.empty() : m_value.variables();
+        return Stream.of( m_value );
     }
 }

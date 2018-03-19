@@ -296,16 +296,13 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
-        if ( Objects.nonNull( p_context.literal() ) )
-            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
-
-        if ( Objects.nonNull( p_context.variable_evaluate() ) )
-            return new CAchievementGoalVariable(
-                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
-                Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() )
-            );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
+        return CAgentSpeak.achievementgoal(
+            this,
+            p_context.DOUBLEEXCLAMATIONMARK(),
+            p_context.literal(),
+            p_context.variable(),
+            p_context.termlist()
+        );
     }
 
     @Override

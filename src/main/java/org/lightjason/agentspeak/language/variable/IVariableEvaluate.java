@@ -33,7 +33,9 @@ import java.util.stream.Stream;
 
 /**
  * interface for evaluate variables
+ * @deprecated not used anymore
  */
+@Deprecated
 public interface IVariableEvaluate extends ITerm
 {
 

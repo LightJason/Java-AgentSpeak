@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotati
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -55,7 +56,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     /**
      * action list
      */
-    protected final List<IExecution> m_action;
+    protected final IExecution[] m_execution;
 
     /**
      * map with annotation (enum value for getting annotation object)
@@ -70,14 +71,14 @@ public abstract class IBaseInstantiable implements IInstantiable
     /**
      * ctor
      *
-     * @param p_action executed actions
+     * @param p_execution executed actions
      * @param p_annotation annotation map
      * @param p_hash hash code
      */
-    protected IBaseInstantiable( final Stream<IExecution> p_action, final Stream<IAnnotation<?>> p_annotation, final int p_hash )
+    protected IBaseInstantiable( final Stream<IExecution> p_execution, final Stream<IAnnotation<?>> p_annotation, final int p_hash )
     {
         m_hash = p_hash;
-        m_action = Collections.unmodifiableList( p_action.collect( Collectors.toList() ) );
+        m_execution = p_execution.toArray( IExecution[]::new );
         m_annotation = Collections.unmodifiableMap( p_annotation.collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
     }
 
@@ -104,7 +105,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return m_action.stream().flatMap( IExecution::variables );
+        return Arrays.stream( m_execution ).flatMap( IExecution::variables );
     }
 
     @Nonnull
@@ -138,7 +139,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     {
         final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new LinkedList<>() );
 
-        m_action.stream()
+        Arrays.stream( m_execution )
                 .map( i ->
                 {
                     final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() );
@@ -161,9 +162,9 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     private List<IFuzzyValue<Boolean>> executeparallel( final IContext p_context )
     {
-        return m_action.parallelStream()
-                       .map( i -> i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() ) )
-                       .collect( Collectors.toList() );
+        return Arrays.stream( m_execution ).parallel()
+                     .map( i -> i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() ) )
+                     .collect( Collectors.toList() );
     }
 
 }
