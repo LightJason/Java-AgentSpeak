@@ -93,7 +93,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             p_body,
             p_annotation,
 
-            CCommon.streamconcat(
+            CCommon.streamconcatstrict(
                 Stream.of(
                     p_event.hashCode(),
                     p_condition.hashCode()
@@ -133,19 +133,6 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @Override
     public final IFuzzyValue<Boolean> condition( final IContext p_context )
     {
-                /*
-        // check condition for bounded variables
-        if ( m_condition.variables()
-                        .parallel()
-                        .map( i -> CCommon.replaceFromContext( p_context, i ) )
-                        .filter( ITerm::hasVariable )
-                        .map( i -> (IVariable) i )
-                        .anyMatch( i -> !i.allocated() )
-            )
-            return CFuzzyValue.from( false );
-
-        */
-
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
             m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
@@ -172,11 +159,11 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return CCommon.streamconcat(
-            m_condition != null ? m_condition.variables() : Stream.empty(),
+        return CCommon.streamconcatstrict(
+            m_condition.variables(),
             super.variables(),
             m_annotation.values().stream().flatMap( IAnnotation::variables ),
-            CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+            CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
         );
     }
 

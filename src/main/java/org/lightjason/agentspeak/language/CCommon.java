@@ -188,6 +188,21 @@ public final class CCommon
     }
 
     /**
+     * concat multiple streams
+     *
+     * @param p_streams streams
+     * @tparam T any value type
+     * @return concated stream
+     */
+    @Nonnull
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
+    public static <T> Stream<T> streamconcatstrict( @Nonnull final Stream<T>... p_streams )
+    {
+        return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );
+    }
+
+    /**
      * consts the variables within a literal
      *
      * @param p_literal literal

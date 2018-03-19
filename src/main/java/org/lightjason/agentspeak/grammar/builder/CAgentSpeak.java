@@ -106,7 +106,7 @@ public final class CAgentSpeak
     @Nonnull
     public static IPlan plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
                               @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
-                              @Nonnull final List<RuleContext> p_expression, @Nonnull final List<RuleContext> p_body )
+                              @Nonnull final List<? extends RuleContext> p_expression, @Nonnull final List<? extends RuleContext> p_body )
     {
         final ITrigger l_trigger = CTrigger.from(
             ITrigger.EType.from( p_trigger.getText() ),
@@ -118,7 +118,7 @@ public final class CAgentSpeak
                                                   : p_annotation.stream()
                                                                 .map( CAgentSpeak::annotation )
                                                                 .filter( i -> !i.equals( IAnnotation.EMPTY ) )
-                                                                .collect(Collectors.toList() );
+                                                                .collect( Collectors.toList() );
 
         // @todo handle body & expression
         return new CPlan(

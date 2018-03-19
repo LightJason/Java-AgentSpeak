@@ -192,12 +192,12 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitPlan( final AgentParser.PlanContext p_context )
     {
-        // @todo add body
-
-        return CAgentSpeak.plan(,
+        return CAgentSpeak.plan(
+            this,
             p_context.ANNOTATION(),
             p_context.PLANTRIGGER(),
             p_context.literal(),
+            p_context.expression(),
             p_context.body()
         );
     }

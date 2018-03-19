@@ -150,14 +150,13 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitPlan( final PlanBundleParser.PlanContext p_context )
     {
-        // @todo add body
-
         return CAgentSpeak.plan(
+            this,
+            p_context.ANNOTATION(),
             p_context.PLANTRIGGER(),
-
-            Objects.isNull( p_context.ANNOTATION() )
-            ? Stream.empty()
-            : p_context.ANNOTATION().stream()
+            p_context.literal(),
+            p_context.expression(),
+            p_context.body()
         );
     }
 
