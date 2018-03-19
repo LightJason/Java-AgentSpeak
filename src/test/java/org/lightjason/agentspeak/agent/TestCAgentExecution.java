@@ -154,7 +154,7 @@ public final class TestCAgentExecution extends IBaseTest
 
         LongStream.range( 0, m_result.asMap().size() ).forEach( i -> assertTrue(
             MessageFormat.format( "expected result {0} for index {2} is not equal to log {1}", m_result.get( i ), m_log.get( i ), i ),
-            m_result.get( i ).stream().allMatch( j -> m_log.get( i ).contains( j ) )
+            m_log.get( i ).containsAll( m_result.get( i ) )
         ) );
 
     }
@@ -181,7 +181,8 @@ public final class TestCAgentExecution extends IBaseTest
                         new CStop(),
                         new CLog()
                     )
-                ).collect( Collectors.toSet() )
+                ).collect( Collectors.toSet() ),
+                CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() )
             );
         }
 

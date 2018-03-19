@@ -35,13 +35,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.configuration.IAgentConfiguration;
-import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
@@ -56,7 +53,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -124,15 +120,23 @@ public final class TestCAgent extends IBaseTest
             final InputStream l_stream = new FileInputStream( p_asl.getLeft() )
         )
         {
-            final IAgent<?> l_agent = new CAgent.CAgentGenerator(
-                                          l_stream,
-                                          Stream.concat(
-                                              PRINTENABLE
-                                              ? Stream.of( new CTestResult() )
-                                              : Stream.of( new CTestResult(), new CEmptyPrint() ),
-                                              CCommon.actionsFromPackage()
-                                          ).collect( Collectors.toSet() )
-                                      ).generatesingle();
+            final IAgent<?> l_agent = new CAgentGenerator(
+                l_stream,
+
+                Stream.concat(
+                    PRINTENABLE
+                    ? Stream.of( new CTestResult() )
+                    : Stream.of( new CTestResult(), new CEmptyPrint() ),
+                    CCommon.actionsFromPackage()
+                ).collect( Collectors.toSet() ),
+
+                CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() ),
+
+                ( p_agent, p_runningcontext ) -> Stream.of(
+                    new CConstant<>( "MyConstInt", 123 ),
+                    new CConstant<>( "MyConstString", "here is a test string" )
+                )
+            ).generatesingle();
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
                      .forEach( i ->
@@ -236,56 +240,6 @@ public final class TestCAgent extends IBaseTest
 
             return CFuzzyValue.from( p_argument.get( 0 ).<Boolean>raw() );
         }
-    }
-
-    /**
-     * agent class
-     */
-    private static final class CAgent extends IBaseAgent<IAgent<?>>
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 7077303993134371057L;
-
-        /**
-         * ctor
-         *
-         * @param p_configuration agent configuration
-         */
-        private CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
-        {
-            super( p_configuration );
-        }
-
-        /**
-         * agent generator class
-         */
-        private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
-        {
-
-            /**
-             * ctor
-             *
-             * @param p_stream input stream
-             * @param p_actions set with action
-             * @throws Exception thrown on error
-             */
-            CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
-            {
-                super( p_stream, p_actions, ( p_agent, p_runningcontext ) -> Stream.of(
-                    new CConstant<>( "MyConstInt", 123 ),
-                    new CConstant<>( "MyConstString", "here is a test string" )
-                ) );
-            }
-
-            @Override
-            public IAgent<?> generatesingle( final Object... p_data )
-            {
-                return new CAgent( m_configuration );
-            }
-        }
-
     }
 
 }

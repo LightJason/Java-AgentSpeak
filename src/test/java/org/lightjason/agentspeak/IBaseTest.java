@@ -29,13 +29,16 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 
 /**
@@ -61,7 +64,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator() throws Exception
         {
-            this( "", Collections.emptySet() );
+            this( "", Collections.emptySet(), Collections.emptySet() );
         }
 
         /**
@@ -72,7 +75,32 @@ public abstract class IBaseTest
          */
         public CAgentGenerator( @Nonnull final String p_asl ) throws Exception
         {
-            this( p_asl, Collections.emptySet() );
+            this( p_asl, Collections.emptySet(), Collections.emptySet() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final InputStream p_asl ) throws Exception
+        {
+            super( p_asl, Collections.emptySet(), Collections.emptySet() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @param p_action actions
+         * @param p_lambdastreaming lambda streaming
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Set<IAction> p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+            throws Exception
+        {
+            super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambdastreaming );
         }
 
         /**
@@ -82,9 +110,36 @@ public abstract class IBaseTest
          * @param p_action actions
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Collection<IAction> p_action ) throws Exception
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Set<IAction> p_action,
+                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
         {
-            super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet() );
+            super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambdastreaming, p_variablebuilder );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @param p_action actions
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final Set<IAction> p_action,
+                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+        {
+            super( p_asl, p_action, p_lambdastreaming, p_variablebuilder );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_asl asl code
+         * @param p_action actions
+         * @throws Exception is thrown on any error
+         */
+        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final Set<IAction> p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+            throws Exception
+        {
+            super( p_asl, p_action, p_lambdastreaming );
         }
 
         @Nullable

@@ -28,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.builtin.agent.CAddPlan;
 import org.lightjason.agentspeak.action.builtin.agent.CBeliefList;
 import org.lightjason.agentspeak.action.builtin.agent.CClearBeliefbase;
@@ -36,9 +35,6 @@ import org.lightjason.agentspeak.action.builtin.agent.CCycleTime;
 import org.lightjason.agentspeak.action.builtin.agent.CGetPlan;
 import org.lightjason.agentspeak.action.builtin.agent.CPlanList;
 import org.lightjason.agentspeak.action.builtin.agent.CRemovePlan;
-import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.configuration.IAgentConfiguration;
-import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -55,7 +51,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -95,7 +90,7 @@ public final class TestCActionAgent extends IBaseTest
     public void initialize() throws Exception
     {
         m_context = new CContext(
-            new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
+            new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
             new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "contextplan" ) ) ),
             Collections.emptyList()
         );
@@ -331,48 +326,6 @@ public final class TestCActionAgent extends IBaseTest
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * agent class
-     */
-    private static final class CAgent extends IBaseAgent<CAgent>
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 8036930915838541805L;
-
-        /**
-         * ctor
-         *
-         * @param p_configuration agent configuration
-         */
-        private CAgent( final IAgentConfiguration<CAgent> p_configuration )
-        {
-            super( p_configuration );
-        }
-
-
-
-        /**
-         * agent generator
-         */
-        private static final class CGenerator extends IBaseAgentGenerator<CAgent>
-        {
-
-            CGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
-            {
-                super( p_stream, p_actions );
-            }
-
-            @Override
-            public final CAgent generatesingle( final Object... p_data )
-            {
-                return new CAgent( m_configuration );
-            }
-        }
-
-    }
-
-    /**
      * empty plan
      */
     private static class CEmptyPlan extends IBaseInstantiable implements IPlan
@@ -393,7 +346,7 @@ public final class TestCActionAgent extends IBaseTest
          */
         CEmptyPlan( final ITrigger p_trigger )
         {
-            super( Collections.emptyList(), Collections.emptySet(), 0 );
+            super( Stream.empty(), Stream.empty(), 0 );
             m_trigger = p_trigger;
         }
 

@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;
@@ -144,6 +145,21 @@ public final class CCommon
         return PROPERTIES;
     }
 
+
+    // --- access to lambda-streaming instantiation ------------------------------------------------------------------------------------------------------------
+
+    /**
+     * read lambda-streaming class from package
+     *
+     * @param p_package full-qualified package name or empty for default package
+     * @return lambda-streaming stream
+     */
+    public static Stream<ILambdaStreaming<?>> lambdastreamingFromPackage( @Nullable final String... p_package )
+    {
+        return CCommon.classfrompackage( ILambdaStreaming.class, p_package );
+    }
+
+
     // --- access to action instantiation ----------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -153,35 +169,9 @@ public final class CCommon
      * @return action stream
      */
     @Nonnull
-    @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
-        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
-                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
-                 : Arrays.stream( p_package ) )
-            .flatMap( j -> new Reflections( j ).getSubTypesOf( IAction.class )
-                                               .parallelStream()
-                                               .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
-                                               .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
-                                               .filter( i -> Modifier.isPublic( i.getModifiers() ) )
-                                               .map( i ->
-                                               {
-                                                   try
-                                                   {
-                                                       return (IAction) i.getConstructor().newInstance();
-                                                   }
-                                                   catch ( final NoSuchMethodException | InvocationTargetException
-                                                       | IllegalAccessException | InstantiationException l_exception )
-                                                   {
-                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
-                                                       return null;
-                                                   }
-                                               } )
-                                               // action can be instantiate
-                                               .filter( Objects::nonNull )
-                                               // check usable action name
-                                               .filter( CCommon::actionusable )
-            );
+        return CCommon.<IAction>classfrompackage( IAction.class, p_package ).filter( CCommon::actionusable );
     }
 
 
@@ -328,6 +318,42 @@ public final class CCommon
 
 
     // --- resource access -------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * read classes from package
+     *
+     * @param p_class class
+     * @param p_package full-qualified package name or empty for default package
+     * @tparam T class type
+     * @return object stream
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nullable final String... p_package )
+    {
+        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
+                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
+                 : Arrays.stream( p_package ) )
+            .flatMap( j -> new Reflections( j ).getSubTypesOf( p_class )
+                                               .parallelStream()
+                                               .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
+                                               .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
+                                               .filter( i -> Modifier.isPublic( i.getModifiers() ) )
+                                               .map( i ->
+                                               {
+                                                   try
+                                                   {
+                                                       return (T) i.getConstructor().newInstance();
+                                                   }
+                                                   catch ( final NoSuchMethodException | InvocationTargetException
+                                                       | IllegalAccessException | InstantiationException l_exception )
+                                                   {
+                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "classinstantiate", i, l_exception ) );
+                                                       return null;
+                                                   }
+                                               } )
+                                               .filter( Objects::nonNull )
+            );
+    }
 
     /**
      * concats an URL with a path

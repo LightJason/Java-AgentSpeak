@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementGoalVariable;
+import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
@@ -95,16 +96,22 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
      * map with action definition
      */
     private final Map<IPath, IAction> m_actions;
+    /**
+     * set with lambda-streaming structure
+     */
+    private final Set<ILambdaStreaming<?>> m_lambdastream;
 
     /**
      * ctor
      *
      * @param p_actions set with actions
+     * @param p_lambdastreaming lambda streaming
      */
-    public CASTVisitorAgent( @Nonnull final Set<IAction> p_actions )
+    public CASTVisitorAgent( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
     {
+        m_lambdastream = p_lambdastreaming;
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
-        LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions.keySet(), m_rules.keySet() ) );
+        LOGGER.info( MessageFormat.format( "create parser with actions : {0}", m_actions.keySet() ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

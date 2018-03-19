@@ -118,7 +118,7 @@ public final class TestCPropertyBeliefbase extends IBaseTest
              */
             CAgentGenerator( final String p_asl ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet() );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet(), Collections.emptySet() );
             }
 
             @Override

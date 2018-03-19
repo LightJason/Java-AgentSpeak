@@ -29,14 +29,10 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.builtin.storage.CAdd;
 import org.lightjason.agentspeak.action.builtin.storage.CClear;
 import org.lightjason.agentspeak.action.builtin.storage.CExists;
 import org.lightjason.agentspeak.action.builtin.storage.CRemove;
-import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.configuration.IAgentConfiguration;
-import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,7 +42,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -83,8 +78,8 @@ public final class TestCActionStorage extends IBaseTest
     public final void initialize() throws Exception
     {
         m_context = new CContext(
-            new CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
-            new CPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "nothing" ) ), Collections.emptyList(), Collections.emptySet() ),
+            new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
+            new CPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "nothing" ) ), Stream.empty(), Stream.empty() ),
             Collections.emptyList()
         );
     }
@@ -417,52 +412,6 @@ public final class TestCActionStorage extends IBaseTest
             new CExists( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray(),
             Stream.of( true, false ).toArray()
         );
-    }
-
-
-    /**
-     * test agent
-     */
-    private static final class CAgent extends IBaseAgent<CAgent>
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 5077720620041316609L;
-
-        /**
-         * ctor
-         *
-         * @param p_configuration agent configuration
-         */
-        CAgent( final IAgentConfiguration<CAgent> p_configuration )
-        {
-            super( p_configuration );
-        }
-    }
-
-    /**
-     * agent generator
-     */
-    private static final class CGenerator extends IBaseAgentGenerator<CAgent>
-    {
-        /**
-         * ctor
-         *
-         * @param p_stream asl stream
-         * @param p_actions actions
-         * @throws Exception is thrown on any error
-         */
-        CGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
-        {
-            super( p_stream, p_actions );
-        }
-
-        @Override
-        public final CAgent generatesingle( final Object... p_data )
-        {
-            return new CAgent( m_configuration );
-        }
     }
 
 }

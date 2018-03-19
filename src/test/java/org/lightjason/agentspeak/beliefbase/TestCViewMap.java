@@ -305,9 +305,9 @@ public final class TestCViewMap extends IBaseTest
              * @param p_actions actions
              * @throws Exception thrown on error
              */
-            CAgentGenerator( final String p_asl, final Map<String, Object> p_map, final Set<IAction> p_actions ) throws Exception
+            CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Map<String, Object> p_map, @Nonnull final Set<IAction> p_actions ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_actions );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_actions, CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() ) );
                 m_map = p_map;
             }
 

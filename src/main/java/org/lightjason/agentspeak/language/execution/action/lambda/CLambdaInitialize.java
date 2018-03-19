@@ -35,7 +35,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.LongStream;
@@ -54,16 +53,20 @@ public final class CLambdaInitialize extends IBaseExecution<IExecution[]>
     /**
      * streaming elements
      */
-    private final Set<ILambdaStreaming<?>> m_streaming = new HashSet<>();
+    private final Set<ILambdaStreaming<?>> m_streaming;
 
     /**
      * ctor
      *
      * @param p_value data
+     * @param p_streaming lambda streaming
      */
-    public CLambdaInitialize( @Nonnull final IExecution[] p_value )
+    public CLambdaInitialize( @Nonnull final IExecution[] p_value,
+                              final Set<ILambdaStreaming<?>> p_streaming
+    )
     {
         super( p_value );
+        m_streaming = p_streaming;
     }
 
     @Nonnull

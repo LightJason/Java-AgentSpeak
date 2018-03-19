@@ -48,6 +48,7 @@ import org.lightjason.agentspeak.language.execution.action.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CTestRule;
 import org.lightjason.agentspeak.language.execution.action.lambda.CLambdaInitialize;
+import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
@@ -68,6 +69,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -416,30 +418,28 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IExecution lambdainitialization( @Nonnull final ParseTreeVisitor<?> p_visitor,
+    public static IExecution lambdainitialization( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming,
                                                    @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable,
                                                    @Nullable final List<? extends RuleContext> p_additional )
     {
-        final IExecution[] l_execution = org.lightjason.agentspeak.language.CCommon.streamconcat(
+        return new CLambdaInitialize(
+                org.lightjason.agentspeak.language.CCommon.streamconcat(
 
-            Objects.nonNull( p_number )
-            ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
-            : Stream.empty(),
+                Objects.nonNull( p_number )
+                ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
+                : Stream.empty(),
 
-            Objects.nonNull( p_variable )
-            ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
-            : Stream.empty(),
+                Objects.nonNull( p_variable )
+                ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
+                : Stream.empty(),
 
-            Objects.nonNull( p_additional )
-            ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
-            : Stream.empty()
-        )
-        .toArray( IExecution[]::new );
+                Objects.nonNull( p_additional )
+                ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+                : Stream.empty()
+            ).toArray( IExecution[]::new ),
 
-        if ( ( l_execution.length > 0 ) && ( l_execution.length < 4 ) )
-            return new CLambdaInitialize( l_execution );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdainitialization" ) );
+            p_lambdastreaming
+        );
     }
 
     /**
