@@ -194,12 +194,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         // @todo add body
 
-        return CAgentSpeak.plan(
+        return CAgentSpeak.plan(,
+            p_context.ANNOTATION(),
             p_context.PLANTRIGGER(),
-
-            Objects.isNull( p_context.ANNOTATION() )
-            ? Stream.empty()
-            : p_context.ANNOTATION().stream()
+            p_context.literal(),
+            p_context.body()
         );
     }
 

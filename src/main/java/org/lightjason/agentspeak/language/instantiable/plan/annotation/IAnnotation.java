@@ -40,6 +40,64 @@ import java.util.stream.Stream;
 public interface IAnnotation<T> extends IAssignable<T>
 {
     /**
+     * empty annotation
+     */
+    IAnnotation<?> EMPTY = new IAnnotation<>()
+    {
+        @Nonnull
+        @Override
+        public final EType id()
+        {
+            return EType.EMPTY;
+        }
+
+        @Nullable
+        @Override
+        public final <N> N value()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IVariable<?>> variables()
+        {
+            return Stream.empty();
+        }
+
+        @Override
+        public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+        {
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public final Object throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+        {
+            return null;
+        }
+
+        @Override
+        public final String toString()
+        {
+            return this.id().toString();
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return this.id().hashCode();
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
+        }
+    };
+
+    /**
      * returns the type of the annotation
      *
      * @return type
@@ -71,7 +129,8 @@ public interface IAnnotation<T> extends IAssignable<T>
     {
         CONSTANT( "@Constant" ),
         ATOMIC( "@Atomic" ),
-        PARALLEL( "@Parallel" );
+        PARALLEL( "@Parallel" ),
+        EMPTY( "" );
 
         /**
          * text name of the enum

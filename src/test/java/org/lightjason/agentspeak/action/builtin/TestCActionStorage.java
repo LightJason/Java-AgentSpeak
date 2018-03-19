@@ -79,7 +79,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         m_context = new CContext(
             new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
-            new CPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "nothing" ) ), Stream.empty(), Stream.empty() ),
+            new CPlan( Stream.empty(), ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "nothing" ) ), Stream.empty() ),
             Collections.emptyList()
         );
     }

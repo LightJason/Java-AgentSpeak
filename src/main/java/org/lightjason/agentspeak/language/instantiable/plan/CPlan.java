@@ -67,25 +67,27 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     /**
      * ctor
      *
+     * @param p_annotation annotations
      * @param p_event trigger event
      * @param p_body plan body
-     * @param p_annotation annotations
      */
-    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final Stream<IExecution> p_body, @Nonnull final Stream<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final Stream<IAnnotation<?>> p_annotation, @Nonnull final ITrigger p_event, @Nonnull final Stream<IExecution> p_body
+    )
     {
-        this( p_event, IExpression.EMPTY, p_body, p_annotation );
+        this( p_annotation, p_event, IExpression.EMPTY, p_body );
     }
 
     /**
      * ctor
      *
+     * @param p_annotation annotations
      * @param p_event trigger event
      * @param p_condition execution condition
      * @param p_body plan body
-     * @param p_annotation annotations
      */
-    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
-                  @Nonnull final Stream<IExecution> p_body, @Nonnull final Stream<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final Stream<IAnnotation<?>> p_annotation, @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
+                  @Nonnull final Stream<IExecution> p_body
+    )
     {
         super(
             p_body,

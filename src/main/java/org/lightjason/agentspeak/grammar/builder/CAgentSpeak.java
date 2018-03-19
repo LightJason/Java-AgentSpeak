@@ -55,10 +55,12 @@ import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
 import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
+import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
@@ -66,12 +68,14 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -100,15 +104,31 @@ public final class CAgentSpeak
      * @return plan
      */
     @Nonnull
-    public static IPlan plan( @Nonnull final TerminalNode p_trigger, @Nonnull final Stream<TerminalNode> p_annotation )
+    public static IPlan plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                              @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
+                              @Nonnull final List<RuleContext> p_expression, @Nonnull final List<RuleContext> p_body )
     {
-        p_annotation.map( CAgentSpeak::annotation ).filter( Objects::nonNull );
+        final ITrigger l_trigger = CTrigger.from(
+            ITrigger.EType.from( p_trigger.getText() ),
+            (ILiteral) p_visitor.visit( p_literal )
+        );
 
-        switch ( ITrigger.EType.from( p_trigger.getText() ) )
-        {
-            default:
-                return IPlan.EMPTY;
-        }
+        final List<IAnnotation<?>> l_annotation = Objects.isNull( p_annotation )
+                                                  ? Collections.emptyList()
+                                                  : p_annotation.stream()
+                                                                .map( CAgentSpeak::annotation )
+                                                                .filter( i -> !i.equals( IAnnotation.EMPTY ) )
+                                                                .collect(Collectors.toList() );
+
+        // @todo handle body & expression
+        return new CPlan(
+            l_annotation.stream(),
+            l_trigger,
+
+            IExpression.EMPTY,
+
+            Stream.empty()
+        );
     }
 
     /**
@@ -121,6 +141,7 @@ public final class CAgentSpeak
     @Nonnull
     public static IRule rule( @Nonnull final ILiteral p_literal, @Nonnull final Stream<TerminalNode> p_annotation )
     {
+        // @todo set rule
         return IRule.EMPTY;
     }
 
@@ -143,11 +164,11 @@ public final class CAgentSpeak
      * @param p_annotation annotation terminal
      * @return null or annoation
      */
-    @Nullable
+    @Nonnull
     public static IAnnotation<?> annotation( @Nullable final TerminalNode p_annotation )
     {
         if ( Objects.isNull( p_annotation ) )
-            return null;
+            return IAnnotation.EMPTY;
 
         if ( p_annotation.getText().contains( "parallel" ) )
             return new CAtomAnnotation<>( IAnnotation.EType.PARALLEL );
@@ -161,7 +182,7 @@ public final class CAgentSpeak
         {
             final Matcher l_match = ANNOTATIONCONSTANT.matcher( p_annotation.getText() );
             if ( !l_match.find() )
-                return null;
+                return IAnnotation.EMPTY;
 
             final String l_data = l_match.group( 2 ).replace( "'", "" ).replace( "\"", "" );
             try
@@ -174,7 +195,7 @@ public final class CAgentSpeak
             }
         }
 
-        return null;
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "annotation" ) );
     }
 
     /**
