@@ -21,11 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.annotation;
 
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
+
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -33,19 +31,43 @@ import java.util.stream.Stream;
 
 
 /**
- * interface for (instantiable) plans and logical-rules
+ * annotation without parameter
  */
-public interface IInstantiable extends IExecution
+public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
 {
 
     /**
-     * creates an individual execution context
+     * ctor
      *
-     * @param p_agent agent
-     * @param p_variable variable stream
-     * @return individual context
+     * @param p_type type
      */
-    @Nonnull
-    IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable );
+    public CAtomAnnotation( @Nonnull final EType p_type )
+    {
+        super( p_type, null );
+    }
 
+    @Override
+    public final String toString()
+    {
+        return m_type.toString();
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_type.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
+    @Nonnull
+    @Override
+    public final Stream<IVariable<?>> variables()
+    {
+        return Stream.empty();
+    }
 }

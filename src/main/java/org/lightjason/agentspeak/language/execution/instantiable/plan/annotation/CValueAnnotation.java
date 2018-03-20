@@ -21,41 +21,49 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan.annotation;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.annotation;
 
-
+import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.stream.Stream;
 
 
 /**
- * annotation without parameter
+ * number annotation
  */
-public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
+public final class CValueAnnotation<T> extends IBaseAnnotation<T>
 {
+    /**
+     * name of the annotation
+     */
+    private final String m_name;
 
     /**
      * ctor
      *
      * @param p_type type
+     * @param p_name name of the annotation
+     * @param p_data number
      */
-    public CAtomAnnotation( @Nonnull final EType p_type )
+    public CValueAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
     {
-        super( p_type, null );
+        super( p_type, p_data );
+        m_name = p_name;
     }
 
     @Override
     public final String toString()
     {
-        return m_type.toString();
+        return MessageFormat.format( "{0}({1}, {1})", m_type, m_name, m_value );
     }
 
     @Override
     public final int hashCode()
     {
-        return m_type.hashCode();
+        return m_type.hashCode() ^ m_name.hashCode();
     }
 
     @Override
@@ -68,6 +76,6 @@ public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.empty();
+        return Stream.of( new CConstant<>( m_name, m_value ) );
     }
 }

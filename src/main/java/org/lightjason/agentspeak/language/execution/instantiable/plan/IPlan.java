@@ -21,18 +21,15 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.rule;
+package org.lightjason.agentspeak.language.execution.instantiable.plan;
 
-import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -41,37 +38,39 @@ import java.util.stream.Stream;
 
 
 /**
- * interface of logical rule
+ * interface of plan
  */
-public interface IRule extends IInstantiable
+public interface IPlan extends IInstantiable
 {
-    /** empty rule **/
-    IRule EMPTY = new IRule()
+    /**
+     * empty plan
+     */
+    IPlan EMPTY = new IPlan()
     {
         /**
          * serial id
          */
-        private static final long serialVersionUID = 6850403064097706468L;
+        private static final long serialVersionUID = -8137749419571919583L;
 
         @Nonnull
         @Override
-        public final ILiteral identifier()
+        public final ITrigger trigger()
         {
-            return CLiteral.from( "empty" );
+            return ITrigger.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
+        public final IFuzzyValue<Boolean> condition( final IContext p_context )
         {
-            return this;
+            return CFuzzyValue.from( true );
         }
 
         @Nonnull
         @Override
         public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
         {
-            return IContext.EMPTYRULE;
+            return IContext.EMPTYPLAN;
         }
 
         @Nonnull
@@ -90,22 +89,21 @@ public interface IRule extends IInstantiable
         }
     };
 
-
     /**
-     * returns the identifier of the rule
+     * returns the trigger event
      *
-     * @return literal
+     * @return trigger event
      */
     @Nonnull
-    ILiteral identifier();
+    ITrigger trigger();
 
     /**
-     * replaces all placeholder objects and reinstantiate object
+     * execute the plan condition
      *
-     * @param p_rules full instantiated rules
-     * @return new object instance without placeholders
+     * @param p_context execution context
+     * @return execution result
      */
     @Nonnull
-    IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules );
+    IFuzzyValue<Boolean> condition( final IContext p_context );
 
 }

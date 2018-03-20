@@ -21,104 +21,112 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution;
+package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
+import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * execution context
+ * placeholder rule to define correct rule referencing
  *
- * @tparam T instance type (plan or rule)
+ * @note rules are the first executable elements which are parsed,
+ * so if a rule calls itself (recursive) the reference does not exists,
+ * with this class a placeholder is used first and after that we replace
+ * the placeholder with the correct rule object
  */
-public final class CContext implements IContext
+public final class CRulePlaceholder implements IRule
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 2813094837634259389L;
+    private static final long serialVersionUID = 6857304030640970668L;
     /**
-     * agent of the running context
+     * identifier of the rule
      */
-    private final IAgent<?> m_agent;
-    /**
-     * current instance object
-     */
-    private final IInstantiable m_instance;
-    /**
-     * plan variables with their data
-     */
-    private final Map<IPath, IVariable<?>> m_variables;
-
+    private final ILiteral m_id;
 
     /**
      * ctor
      *
-     * @param p_agent agent
-     * @param p_instance instance object
-     * @param p_variables instance variables
+     * @param p_id rule literal
      */
-    public CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Collection<IVariable<?>> p_variables )
+    public CRulePlaceholder( final ILiteral p_id )
     {
-        m_agent = p_agent;
-        m_instance = p_instance;
-        m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i ) ) );
+        m_id = p_id;
+    }
+
+
+    @Nonnull
+    @Override
+    public final ILiteral identifier()
+    {
+        return m_id;
     }
 
     @Nonnull
     @Override
-    public final IContext duplicate()
+    public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
     {
-        return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
+        return this;
     }
 
     @Nonnull
     @Override
-    public final IAgent<?> agent()
+    public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
-        return m_agent;
+        return CCommon.instantiate( this, p_agent, p_variable );
     }
 
     @Nonnull
     @Override
-    public final IInstantiable instance()
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return m_instance;
+        return CFuzzyValue.from( false );
     }
 
     @Nonnull
     @Override
-    public final Map<IPath, IVariable<?>> instancevariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return m_variables;
+        return Stream.empty();
     }
 
     @Override
     public final int hashCode()
     {
-        return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();
+        return m_id.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IContext ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IRule ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_variables.values(), m_instance, m_agent );
+        return MessageFormat.format(
+            "{0} ({1} ==>> ?)",
+            super.toString(),
+            m_id
+        );
     }
 
 }

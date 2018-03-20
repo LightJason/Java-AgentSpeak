@@ -21,112 +21,91 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.rule;
+package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
 import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * placeholder rule to define correct rule referencing
- *
- * @note rules are the first executable elements which are parsed,
- * so if a rule calls itself (recursive) the reference does not exists,
- * with this class a placeholder is used first and after that we replace
- * the placeholder with the correct rule object
+ * interface of logical rule
  */
-public final class CRulePlaceholder implements IRule
+public interface IRule extends IInstantiable
 {
-    /**
-     * serial id
-     */
-    private static final long serialVersionUID = 6857304030640970668L;
-    /**
-     * identifier of the rule
-     */
-    private final ILiteral m_id;
+    /** empty rule **/
+    IRule EMPTY = new IRule()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6850403064097706468L;
+
+        @Nonnull
+        @Override
+        public final ILiteral identifier()
+        {
+            return CLiteral.from( "empty" );
+        }
+
+        @Nonnull
+        @Override
+        public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+        {
+            return IContext.EMPTYRULE;
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IVariable<?>> variables()
+        {
+            return Stream.empty();
+        }
+    };
+
 
     /**
-     * ctor
+     * returns the identifier of the rule
      *
-     * @param p_id rule literal
+     * @return literal
      */
-    public CRulePlaceholder( final ILiteral p_id )
-    {
-        m_id = p_id;
-    }
-
-
     @Nonnull
-    @Override
-    public final ILiteral identifier()
-    {
-        return m_id;
-    }
+    ILiteral identifier();
 
+    /**
+     * replaces all placeholder objects and reinstantiate object
+     *
+     * @param p_rules full instantiated rules
+     * @return new object instance without placeholders
+     */
     @Nonnull
-    @Override
-    public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
-    {
-        return this;
-    }
-
-    @Nonnull
-    @Override
-    public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
-    {
-        return CCommon.instantiate( this, p_agent, p_variable );
-    }
-
-    @Nonnull
-    @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
-    {
-        return CFuzzyValue.from( false );
-    }
-
-    @Nonnull
-    @Override
-    public final Stream<IVariable<?>> variables()
-    {
-        return Stream.empty();
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_id.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return ( p_object instanceof IRule ) && ( this.hashCode() == p_object.hashCode() );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format(
-            "{0} ({1} ==>> ?)",
-            super.toString(),
-            m_id
-        );
-    }
+    IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules );
 
 }

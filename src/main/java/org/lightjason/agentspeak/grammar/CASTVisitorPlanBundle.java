@@ -38,8 +38,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -157,19 +157,23 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
+        // @todo ckeck return
+
         return CAgentSpeak.repair( this, p_context.repair_formula() );
+    }
+
+    @Override
+    public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
+    {
+        // @todo check
+
+        return CAgentSpeak.repairformula( this, p_context.body_formula(), p_context.repair_formula() );
     }
 
     @Override
     public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
     {
         return CAgentSpeak.blockformular( this, p_context.body(), p_context.body_formula() );
-    }
-
-    @Override
-    public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
-    {
-        return CAgentSpeak.repairformula( this, p_context.body_formula(), p_context.repair_formula() );
     }
 
     //Checkstyle:OFF:NPathComplexity
@@ -213,7 +217,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public final Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
@@ -230,13 +233,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     {
         return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
     }
-
-
-
-
-
-
-
 
 
 
@@ -286,7 +282,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
@@ -313,14 +308,29 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
+    public final Object visitLambda_element( final PlanBundleParser.Lambda_elementContext p_context )
+    {
+        return CAgentSpeak.lambdaelement(
+            this,
+            p_context.NUMBER(),
+            p_context.variable()
+        );
+    }
+
+    @Override
     public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
     {
-        return null;
+        return this.visit( p_context.variable() );
     }
 
 
 
 
+    @Override
+    public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
+    {
+        return null;
+    }
 
     @Override
     public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
@@ -366,7 +376,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public final Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
     {
@@ -392,7 +401,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public final Object visitExecute_action( final PlanBundleParser.Execute_actionContext p_context )
     {
@@ -410,7 +418,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     {
         return null;
     }
-
 
 
 
@@ -467,16 +474,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
     {
         return p_context.variable().stream().map( i -> this.visit( i ) );
-    }
-
-
-
-
-
-    @Override
-    public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
-    {
-        return null;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

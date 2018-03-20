@@ -21,61 +21,73 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan.annotation;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.annotation;
 
-import org.lightjason.agentspeak.language.variable.CConstant;
-import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
-import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Objects;
 
 
 /**
- * number annotation
+ * annotation base
+ *
+ * @tparam T annotation data
  */
-public final class CValueAnnotation<T> extends IBaseAnnotation<T>
+public abstract class IBaseAnnotation<T> implements IAnnotation<T>
 {
     /**
-     * name of the annotation
+     * number data
      */
-    private final String m_name;
+    protected final T m_value;
+    /**
+     * annotation type
+     */
+    protected final EType m_type;
 
     /**
      * ctor
      *
      * @param p_type type
-     * @param p_name name of the annotation
-     * @param p_data number
+     * @param p_value data
      */
-    public CValueAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
+    protected IBaseAnnotation( @Nonnull final EType p_type, @Nullable final T p_value )
     {
-        super( p_type, p_data );
-        m_name = p_name;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}({1}, {1})", m_type, m_name, m_value );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_type.hashCode() ^ m_name.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
+        m_value = p_value;
+        m_type = p_type;
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public final EType id()
     {
-        return Stream.of( new CConstant<>( m_name, m_value ) );
+        return m_type;
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final <N> N value()
+    {
+        return (N) m_value;
+    }
+
+    @Override
+    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    {
+        return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+    }
+
+    @Nullable
+    @Override
+    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    {
+        if ( !this.valueassignableto( p_class ) )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+
+        return m_value;
     }
 }

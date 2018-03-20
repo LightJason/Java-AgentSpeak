@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan.annotation;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.annotation;
 
 
 import org.lightjason.agentspeak.language.IAssignable;

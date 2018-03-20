@@ -21,73 +21,31 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan.annotation;
+package org.lightjason.agentspeak.language.execution.instantiable;
 
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.stream.Stream;
 
 
 /**
- * annotation base
- *
- * @tparam T annotation data
+ * interface for (instantiable) plans and logical-rules
  */
-public abstract class IBaseAnnotation<T> implements IAnnotation<T>
+public interface IInstantiable extends IExecution
 {
-    /**
-     * number data
-     */
-    protected final T m_value;
-    /**
-     * annotation type
-     */
-    protected final EType m_type;
 
     /**
-     * ctor
+     * creates an individual execution context
      *
-     * @param p_type type
-     * @param p_value data
+     * @param p_agent agent
+     * @param p_variable variable stream
+     * @return individual context
      */
-    protected IBaseAnnotation( @Nonnull final EType p_type, @Nullable final T p_value )
-    {
-        m_value = p_value;
-        m_type = p_type;
-    }
-
     @Nonnull
-    @Override
-    public final EType id()
-    {
-        return m_type;
-    }
+    IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable );
 
-    @Nullable
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final <N> N value()
-    {
-        return (N) m_value;
-    }
-
-    @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
-    {
-        return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
-    }
-
-    @Nullable
-    @Override
-    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
-    {
-        if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
-
-        return m_value;
-    }
 }

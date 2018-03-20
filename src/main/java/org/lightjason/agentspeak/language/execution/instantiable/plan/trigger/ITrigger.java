@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan.trigger;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.trigger;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;

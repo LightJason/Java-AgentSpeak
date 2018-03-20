@@ -28,7 +28,7 @@ import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.beliefbase.IStructure;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

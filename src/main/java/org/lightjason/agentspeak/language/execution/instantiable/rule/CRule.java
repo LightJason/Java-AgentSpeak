@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.rule;
+package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
 import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.common.IPath;
@@ -30,12 +30,13 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.achievement_test.CAchievementRuleLiteral;
-import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -86,8 +87,8 @@ public final class CRule extends IBaseInstantiable implements IRule
     {
         return new CRule(
             m_id,
-            m_execution.stream()
-                       .map( i ->
+            Arrays.stream( m_execution )
+                  .map( i ->
                        i instanceof CRulePlaceholder
                        // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
                        ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
@@ -100,7 +101,7 @@ public final class CRule extends IBaseInstantiable implements IRule
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return CCommon.streamconcat(
+        return CCommon.streamconcatstrict(
             super.variables(),
             m_annotation.values().stream().flatMap( IAnnotation::variables ),
             CCommon.flattenrecursive( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )

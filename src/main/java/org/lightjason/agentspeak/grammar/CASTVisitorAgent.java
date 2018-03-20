@@ -39,8 +39,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -260,7 +260,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
     @Override
     public final Object visitUnification( final AgentParser.UnificationContext p_context )
     {
@@ -277,15 +276,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -335,7 +325,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
     @Override
     public final Object visitLambda( final AgentParser.LambdaContext p_context )
     {
@@ -380,6 +369,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
+    @Override
+    public final Object visitExpression( final AgentParser.ExpressionContext p_context )
+    {
+        return null;
+    }
 
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
@@ -421,7 +415,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             (IVariable<Number>) this.visit( p_context.variable() )
         );
     }
-
 
 
 
@@ -471,7 +464,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return null;
     }
-
 
 
 
@@ -531,13 +523,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
-
-    @Override
-    public final Object visitExpression( final AgentParser.ExpressionContext p_context )
-    {
-        return null;
-    }
 
 /*
     @Override

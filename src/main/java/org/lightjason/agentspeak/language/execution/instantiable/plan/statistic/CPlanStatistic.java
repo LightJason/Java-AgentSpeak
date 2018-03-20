@@ -22,10 +22,10 @@
  */
 
 
-package org.lightjason.agentspeak.language.instantiable.plan.statistic;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.statistic;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 

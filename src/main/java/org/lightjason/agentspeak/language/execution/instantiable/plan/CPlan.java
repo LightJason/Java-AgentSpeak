@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan;
+package org.lightjason.agentspeak.language.execution.instantiable.plan;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,9 +31,9 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;

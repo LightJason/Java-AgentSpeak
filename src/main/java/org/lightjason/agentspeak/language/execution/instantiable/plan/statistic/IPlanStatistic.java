@@ -21,9 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.instantiable.plan.statistic;
+package org.lightjason.agentspeak.language.execution.instantiable.plan.statistic;
 
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnegative;
