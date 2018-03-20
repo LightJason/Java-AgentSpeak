@@ -189,7 +189,7 @@ assignment_expression_singlevariable :
  */
 assignment_expression_multivariable :
     variablelist
-    ASSIGN
+    ASSIGNOPERATOR
     ( ternary_operation | expression )
     ;
 

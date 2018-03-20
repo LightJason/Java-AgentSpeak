@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.expressionassign.EExpressionAssignOperator;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -58,7 +57,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     /**
      * operator
      */
-    private final EExpressionAssignOperator m_operator;
+    private final EAssignOperator m_operator;
 
     /**
      * ctor
@@ -66,7 +65,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
      * @param p_lefthand left-hand argument (variable)
      * @param p_righthand right-hand argument
      */
-    public CSingleAssignment( @Nonnull final IVariable<?> p_lefthand, @Nonnull final IExecution p_righthand, @Nonnull final EExpressionAssignOperator p_operator )
+    public CSingleAssignment( @Nonnull final IVariable<?> p_lefthand, @Nonnull final IExecution p_righthand, @Nonnull final EAssignOperator p_operator )
     {
         super( p_lefthand );
         m_operator = p_operator;

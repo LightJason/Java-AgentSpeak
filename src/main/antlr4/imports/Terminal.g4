@@ -264,7 +264,7 @@ fragment XOR               : '^';
 
 
 DECONSTRUCT                : '=..';
-ASSIGN                     : '=';
+fragment ASSIGN            : '=';
 fragment ASSIGNINCREMENT   : '+=';
 fragment ASSIGNDECREMENT   : '-=';
 fragment ASSIGNMULTIPLY    : '*=';

@@ -46,7 +46,7 @@ import org.lightjason.agentspeak.language.execution.assignment.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.assignment.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.assignment.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.expressionassign.EExpressionAssignOperator;
+import org.lightjason.agentspeak.language.execution.assignment.EAssignOperator;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
@@ -355,14 +355,14 @@ public final class CAgentSpeak
             return new CSingleAssignment(
                 (IVariable<?>) p_visitor.visit( p_lhs ),
                 passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) ),
-                EExpressionAssignOperator.from( p_operator.getText() )
+                EAssignOperator.from( p_operator.getText() )
             );
 
         if ( Objects.nonNull( p_expression ) )
             return new CSingleAssignment(
                 (IVariable<?>) p_visitor.visit( p_lhs ),
                 (IExecution) p_visitor.visit( p_expression ),
-                EExpressionAssignOperator.from( p_operator.getText() )
+                EAssignOperator.from( p_operator.getText() )
             );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "assignment" ) );

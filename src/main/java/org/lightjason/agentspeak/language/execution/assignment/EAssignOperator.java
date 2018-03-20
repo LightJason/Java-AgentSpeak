@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expressionassign;
+package org.lightjason.agentspeak.language.execution.assignment;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
@@ -35,7 +35,7 @@ import java.util.function.BiFunction;
 /**
  * binary operator
  */
-public enum EExpressionAssignOperator implements BiFunction<ITerm, ITerm, Object>
+public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
 {
     ASSIGNINCREMENT( "+=" ),
     ASSIGNDECREMENT( "-=" ),
@@ -55,7 +55,7 @@ public enum EExpressionAssignOperator implements BiFunction<ITerm, ITerm, Object
      *
      * @param p_operator operator string
      */
-    EExpressionAssignOperator( final String p_operator )
+    EAssignOperator( final String p_operator )
     {
         m_operator = p_operator;
     }
@@ -75,7 +75,7 @@ public enum EExpressionAssignOperator implements BiFunction<ITerm, ITerm, Object
                 return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
 
             case ASSIGNDIVIDE:
-                return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
+                return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
 
             case ASSIGNMODULO:
                 return p_lhs.<Number>raw().longValue() < 0
@@ -105,7 +105,7 @@ public enum EExpressionAssignOperator implements BiFunction<ITerm, ITerm, Object
      * @param p_value string
      * @return operator
      */
-    public static EExpressionAssignOperator from( @Nonnull final String p_value )
+    public static EAssignOperator from( @Nonnull final String p_value )
     {
         switch ( p_value )
         {
@@ -131,7 +131,7 @@ public enum EExpressionAssignOperator implements BiFunction<ITerm, ITerm, Object
                 return ASSIGN;
 
             default:
-                throw new CIllegalArgumentException( CCommon.languagestring( EExpressionAssignOperator.class, "notexist", p_value ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( EAssignOperator.class, "notexist", p_value ) );
         }
     }
 }
