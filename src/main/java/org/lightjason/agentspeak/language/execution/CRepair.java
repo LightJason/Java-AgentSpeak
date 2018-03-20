@@ -21,62 +21,67 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IBaseExecution;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * defines an execution element with a repair call
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public class CRepair extends IBaseExecution<Collection<IExecution>>
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
-    /**
-     * lambda streaming
-     */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private static final long serialVersionUID = 7095678561033158953L;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_chain execution chain
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CRepair( @Nonnull final Stream<IExecution> p_chain )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        super( Collections.unmodifiableList( p_chain.collect( Collectors.toList() ) ) );
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        return m_value.stream()
+                      .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
+                      .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
+                      .findFirst()
+                      .get();
+    }
+
+    @Nonnull
+    @Override
+    public final Stream<IVariable<?>> variables()
+    {
+        return m_value.stream().flatMap( IExecution::variables );
     }
 
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public final String toString()
     {
-        return PlanBundleLexer.class;
-    }
-
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
+        return m_value.stream()
+                      .map( Object::toString )
+                      .collect( Collectors.joining( " << " ) );
     }
 }

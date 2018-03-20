@@ -31,7 +31,7 @@ import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;

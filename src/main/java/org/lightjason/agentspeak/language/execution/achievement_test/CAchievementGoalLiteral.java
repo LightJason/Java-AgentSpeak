@@ -21,62 +21,52 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.achievement_test;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.List;
 
 
 /**
- * default planbundle parser
+ * achievement-goal action based on a literal
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
-    /**
-     * lambda streaming
-     */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private static final long serialVersionUID = -8534258655371085840L;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CAchievementGoalLiteral( @Nonnull final ILiteral p_type, final boolean p_immediately )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        super( p_type, p_immediately );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        return p_context.agent().trigger( ITrigger.EType.ADDGOAL.builddefault( m_value.unify( p_context ) ), m_immediately );
     }
 
-    @Override
-    protected final Class<PlanBundleLexer> lexerclass()
-    {
-        return PlanBundleLexer.class;
-    }
-
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

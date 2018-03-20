@@ -30,7 +30,7 @@ import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
 import org.lightjason.agentspeak.grammar.CParserPlanBundle;
 import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
-import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

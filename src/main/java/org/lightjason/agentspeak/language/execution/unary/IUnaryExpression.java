@@ -21,62 +21,17 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.unary;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
-
-import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import org.lightjason.agentspeak.language.execution.IExecution;
 
 
 /**
- * default planbundle parser
+ * interface of variable unary expression
+ *
+ * @tparam T variable data type
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public interface IUnaryExpression<T> extends IExecution
 {
-    /**
-     * set with actions
-     */
-    private final Set<IAction> m_actions;
-    /**
-     * lambda streaming
-     */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
 
-    /**
-     * ctor
-     *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
-     */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
-    {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
-    }
-
-    @Nonnull
-    @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
-    {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
-    }
-
-    @Override
-    protected final Class<PlanBundleLexer> lexerclass()
-    {
-        return PlanBundleLexer.class;
-    }
-
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

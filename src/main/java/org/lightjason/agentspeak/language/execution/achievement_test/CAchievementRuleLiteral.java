@@ -21,62 +21,67 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.achievement_test;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * achievement for rule-literal execution
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
-    /**
-     * lambda streaming
-     */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private static final long serialVersionUID = -1575197582635138960L;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_literal literal of the call
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CAchievementRuleLiteral( @Nonnull final ILiteral p_literal )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        super( p_literal );
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        return CAchievementRuleLiteral.execute( m_value.hasAt(), p_context, m_value );
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final Stream<IVariable<?>> variables()
+    {
+        return Objects.isNull( m_value )
+               ? Stream.empty()
+               : CCommon.flattenrecursive( m_value.orderedvalues() )
+                        .parallel()
+                        .filter( i -> i instanceof IVariable<?> )
+                        .map( i -> (IVariable<?>) i );
     }
 
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public final String toString()
     {
-        return PlanBundleLexer.class;
+        return MessageFormat.format( "$", m_value );
     }
 
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

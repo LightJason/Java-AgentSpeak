@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math.bit.vector;
 
 import cern.colt.matrix.tbit.BitVector;
-import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.stream.IntStream;

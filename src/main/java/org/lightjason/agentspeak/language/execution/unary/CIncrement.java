@@ -21,62 +21,69 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.unary;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * unary increment
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CIncrement<T extends Number> implements IUnaryExpression<T>
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
+    private static final long serialVersionUID = 8985578891714581618L;
     /**
-     * lambda streaming
+     * variable
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private final IVariable<T> m_variable;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_variable variable
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    @Nonnull
+    public CIncrement( @Nonnull final IVariable<T> p_variable )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        m_variable = p_variable;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_variable.toString() + "++";
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
+        if ( l_variable.valueassignableto( Number.class ) )
+            l_variable.set( l_variable.<Number>raw().doubleValue() + 1 );
+
+        return CFuzzyValue.from( true );
     }
 
+    @Nonnull
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public final Stream<IVariable<?>> variables()
     {
-        return PlanBundleLexer.class;
+        return Stream.of( m_variable );
     }
 
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

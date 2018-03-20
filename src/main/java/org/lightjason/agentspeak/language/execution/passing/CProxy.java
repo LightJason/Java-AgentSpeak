@@ -21,62 +21,63 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.passing;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * proxy for action execution
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CProxy implements IExecution
 {
     /**
-     * set with actions
+     * parallel execution
      */
-    private final Set<IAction> m_actions;
+    private final boolean m_parallel;
     /**
-     * lambda streaming
+     * execution reference
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private final IExecution m_execution;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_parallel parallel execution
+     * @param p_execution execution
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CProxy( final boolean p_parallel, @Nonnull final IExecution p_execution )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        m_parallel = p_parallel;
+        m_execution = p_execution;
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return
+    )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        return m_execution.execute(
+            m_parallel,
+            p_context,
+            p_argument,
+            p_return
+        );
     }
 
+    @Nonnull
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public final Stream<IVariable<?>> variables()
     {
-        return PlanBundleLexer.class;
-    }
-
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
+        return m_execution.variables();
     }
 }

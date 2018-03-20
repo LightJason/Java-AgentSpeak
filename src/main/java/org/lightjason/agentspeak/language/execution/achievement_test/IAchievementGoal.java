@@ -21,62 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.achievement_test;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.IBaseExecution;
 
-import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.util.Objects;
 
 
 /**
- * default planbundle parser
+ * abstract achievement-goal class for goal execution
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
 {
     /**
-     * set with actions
+     * serial
      */
-    private final Set<IAction> m_actions;
+    private static final long serialVersionUID = -4470789276770008098L;
     /**
-     * lambda streaming
+     * flag to run immediately
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    protected final boolean m_immediately;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    protected IAchievementGoal( final T p_type, final boolean p_immediately )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
-    }
-
-    @Nonnull
-    @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
-    {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        super( p_type );
+        m_immediately = p_immediately;
     }
 
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public final int hashCode()
     {
-        return PlanBundleLexer.class;
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
     @Override
-    protected final Class<PlanBundleParser> parserclass()
+    public final boolean equals( final Object p_object )
     {
-        return PlanBundleParser.class;
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
+
 }

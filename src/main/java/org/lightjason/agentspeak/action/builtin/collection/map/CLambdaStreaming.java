@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.collection.map;
 
-import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.Map;

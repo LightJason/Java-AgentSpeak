@@ -21,62 +21,33 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.achievement_test;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.execution.IBaseExecution;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
 
 
 /**
- * default planbundle parser
+ * abstract class of test-goal / test-rule action
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+abstract class ITest extends IBaseExecution<IPath>
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
-    /**
-     * lambda streaming
-     */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private static final long serialVersionUID = 500291351344481097L;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_value atom
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
-    {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
-    }
-
     @Nonnull
-    @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    ITest( @Nonnull final IPath p_value )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        super( p_value );
     }
 
-    @Override
-    protected final Class<PlanBundleLexer> lexerclass()
-    {
-        return PlanBundleLexer.class;
-    }
-
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

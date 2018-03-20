@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;

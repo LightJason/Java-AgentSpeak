@@ -21,62 +21,76 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * test goal action
+ *
+ * @tparam T value type
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public abstract class IBaseExecution<T> implements IExecution
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
+    private static final long serialVersionUID = 2572294057575105363L;
     /**
-     * lambda streaming
+     * data
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    protected final T m_value;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_value data
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    protected IBaseExecution( @Nullable final T p_value )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        m_value = p_value;
+    }
+
+    /**
+     * checkes assinable of the value
+     *
+     * @param p_class class
+     * @return assinable (on null always true)
+     */
+    public final boolean isValueAssignableTo( final Class<?> p_class )
+    {
+        return ( Objects.nonNull( m_value ) ) &&  p_class.isAssignableFrom( m_value.getClass() );
+    }
+
+    /**
+     * returns the value of the action
+     *
+     * @return value
+     */
+    @Nullable
+    public final T getValue()
+    {
+        return m_value;
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public Stream<IVariable<?>> variables()
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        return Stream.empty();
     }
 
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public String toString()
     {
-        return PlanBundleLexer.class;
+        return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

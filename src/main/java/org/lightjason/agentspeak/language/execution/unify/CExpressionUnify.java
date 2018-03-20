@@ -21,62 +21,72 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.language.execution.unify;
 
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * unify expression
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CExpressionUnify extends CDefaultUnify
 {
     /**
-     * set with actions
+     * serial id
      */
-    private final Set<IAction> m_actions;
+    private static final long serialVersionUID = 6897299610175239719L;
     /**
-     * lambda streaming
+     * unification expression
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private final IExpression m_expression;
 
     /**
      * ctor
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_parallel parallel execution
+     * @param p_literal literal
+     * @param p_expression expression
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CExpressionUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IExpression p_expression )
     {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
+        super( p_parallel, p_literal );
+        m_expression = p_expression;
+    }
+
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_expression );
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
+        return p_context.agent().unifier().unify( p_context, m_value, m_variablenumber, m_expression, m_parallel );
     }
 
+    @Nonnull
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    public final Stream<IVariable<?>> variables()
     {
-        return PlanBundleLexer.class;
+        return Stream.concat(
+            m_expression.variables(),
+            CExpressionUnify.super.variables()
+        );
     }
 
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

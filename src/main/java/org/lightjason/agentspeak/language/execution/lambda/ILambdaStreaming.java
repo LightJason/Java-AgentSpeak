@@ -21,62 +21,45 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
-
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+package org.lightjason.agentspeak.language.execution.lambda;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
-import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
- * default planbundle parser
+ * streaming interface to define stream structure
+ *
+ * @tparam T any input type
  */
-public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public interface ILambdaStreaming<T> extends Function<T, Stream<?>>
 {
     /**
-     * set with actions
+     * empty streaming
      */
-    private final Set<IAction> m_actions;
-    /**
-     * lambda streaming
-     */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    ILambdaStreaming<?> EMPTY = new ILambdaStreaming<>()
+    {
+        @Override
+        public final boolean instaceof( @Nonnull final Object p_object )
+        {
+            return false;
+        }
+
+        @Override
+        public final Stream<?> apply( final Object p_value )
+        {
+            return Stream.of( p_value );
+        }
+    };
+
 
     /**
-     * ctor
+     * check if tha object is a type of
      *
-     * @param p_actions agent actions
-     * @param p_lambdastreaming lambda streaming structure
-     * @throws NoSuchMethodException on ctor-method call
+     * @param p_object any object
+     * @return is an instace
      */
-    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
-    {
-        super( new CErrorListener() );
-        m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
-    }
+    boolean instaceof( @Nonnull final Object p_object );
 
-    @Nonnull
-    @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
-    {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
-        l_visitor.visit( this.parser( p_stream ).planbundle() );
-        return l_visitor;
-    }
-
-    @Override
-    protected final Class<PlanBundleLexer> lexerclass()
-    {
-        return PlanBundleLexer.class;
-    }
-
-    @Override
-    protected final Class<PlanBundleParser> parserclass()
-    {
-        return PlanBundleParser.class;
-    }
 }

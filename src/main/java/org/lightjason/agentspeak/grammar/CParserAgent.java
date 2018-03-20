@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.execution.action.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
