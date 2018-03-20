@@ -46,6 +46,7 @@ import org.lightjason.agentspeak.language.execution.assignment.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.assignment.CSingleAssignment;
 import org.lightjason.agentspeak.language.execution.assignment.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.execution.expressionassign.EExpressionAssignOperator;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
@@ -339,17 +340,32 @@ public final class CAgentSpeak
     /**
      * build single assignment
      *
-     * @param p_variable variable
-     * @param p_execution execution structure
+     * @param p_lhs left-hand-side
+     * @param p_ternary ternary
+     * @param p_expression expression
      * @return assignment execution
      */
     @Nonnull
-    public static IExecution singleassignment( @Nonnull final IVariable<?> p_variable, @Nonnull final IExecution p_execution )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution singleassignment( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_lhs,
+                                               @Nonnull final TerminalNode p_operator, @Nullable final RuleContext p_ternary,
+                                               @Nullable final RuleContext p_expression )
     {
-        return new CSingleAssignment<>(
-            p_variable,
-            p_execution
-        );
+        if ( Objects.nonNull( p_ternary ) )
+            return new CSingleAssignment(
+                (IVariable<?>) p_visitor.visit( p_lhs ),
+                passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) ),
+                EExpressionAssignOperator.from( p_operator.getText() )
+            );
+
+        if ( Objects.nonNull( p_expression ) )
+            return new CSingleAssignment(
+                (IVariable<?>) p_visitor.visit( p_lhs ),
+                (IExecution) p_visitor.visit( p_expression ),
+                EExpressionAssignOperator.from( p_operator.getText() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "assignment" ) );
     }
 
     /**

@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.expressionassign.EExpressionAssignOperator;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -44,7 +45,7 @@ import java.util.stream.Stream;
 /**
  * assignment action of a single-variable
  */
-public final class CSingleAssignment<M extends IExecution> extends IBaseExecution<IVariable<?>>
+public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
 {
     /**
      * serial id
@@ -53,7 +54,11 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
     /**
      * right-hand argument
      */
-    private final M m_righthand;
+    private final IExecution m_righthand;
+    /**
+     * operator
+     */
+    private final EExpressionAssignOperator m_operator;
 
     /**
      * ctor
@@ -61,9 +66,10 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
      * @param p_lefthand left-hand argument (variable)
      * @param p_righthand right-hand argument
      */
-    public CSingleAssignment( @Nonnull final IVariable<?> p_lefthand, @Nonnull final M p_righthand )
+    public CSingleAssignment( @Nonnull final IVariable<?> p_lefthand, @Nonnull final IExecution p_righthand, @Nonnull final EExpressionAssignOperator p_operator )
     {
         super( p_lefthand );
+        m_operator = p_operator;
         m_righthand = p_righthand;
     }
 
@@ -73,12 +79,13 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute(
-            p_parallel, p_context, Collections.emptyList(), l_return );
-        if ( ( !l_rightreturn.value() ) || ( l_return.isEmpty() ) )
+        final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute( p_parallel, p_context, Collections.emptyList(), l_return );
+        if ( ( !l_rightreturn.value() ) || ( l_return.size() != 1 ) )
             return CFuzzyValue.from( false );
 
-        CCommon.replaceFromContext( p_context, m_value ).<IVariable<Object>>term().set( l_return.get( 0 ).raw() );
+        final IVariable<Object> l_lhs = CCommon.replaceFromContext( p_context, m_value ).term();
+        l_lhs.set( m_operator.apply( l_lhs, l_return.get( 0 ) ) );
+
         return CFuzzyValue.from( true );
     }
 

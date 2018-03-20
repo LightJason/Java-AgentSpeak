@@ -350,8 +350,11 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
     {
         return CAgentSpeak.singleassignment(
-            (IVariable<?>) this.visit( p_context.variable() ),
-            (IExecution) this.visit( p_context.expression() )
+            this,
+            p_context.variable(),
+            p_context.ASSIGNOPERATOR(),
+            p_context.ternary_operation(),
+            p_context.expression()
         );
     }
 
