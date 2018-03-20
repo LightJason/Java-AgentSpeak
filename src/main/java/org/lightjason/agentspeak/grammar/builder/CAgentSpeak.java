@@ -297,7 +297,6 @@ public final class CAgentSpeak
             );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
-        */
     }
 
     /**
