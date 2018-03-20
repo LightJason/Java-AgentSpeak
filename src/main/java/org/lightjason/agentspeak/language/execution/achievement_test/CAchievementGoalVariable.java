@@ -23,15 +23,17 @@
 
 package org.lightjason.agentspeak.language.execution.achievement_test;
 
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * achievement-goal action based on variables
  */
-public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
+public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
 {
     /**
      * serial id
@@ -52,7 +54,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?
      * @param p_value value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalVariable( @Nonnull final IVariable<?> p_value, final boolean p_immediately )
+    public CAchievementGoalVariable( @Nonnull final IExecution p_value, final boolean p_immediately )
     {
         super( p_value, p_immediately );
     }
@@ -68,9 +70,14 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
+        final List<ITerm> l_return = new ArrayList<>();
+        if ( ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() != 1 ) )
+            return CFuzzyValue.from( false );
+
+
         return p_context.agent().trigger(
             ITrigger.EType.ADDGOAL.builddefault(
-                CCommon.replaceFromContext( p_context, m_value ).term()
+                l_return.get( 0 ).term()
             ),
             m_immediately
         );
@@ -80,6 +87,6 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.of( m_value );
+        return m_value.variables();
     }
 }

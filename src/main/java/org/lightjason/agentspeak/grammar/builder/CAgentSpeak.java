@@ -34,30 +34,31 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.CBelief;
-import org.lightjason.agentspeak.language.execution.assignment.CDeconstruct;
-import org.lightjason.agentspeak.language.execution.assignment.CMultiAssignment;
-import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
-import org.lightjason.agentspeak.language.execution.passing.CPassData;
-import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
-import org.lightjason.agentspeak.language.execution.passing.CProxy;
 import org.lightjason.agentspeak.language.execution.CRepair;
-import org.lightjason.agentspeak.language.execution.assignment.CSingleAssignment;
-import org.lightjason.agentspeak.language.execution.assignment.CTernaryOperation;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.achievement_test.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.achievement_test.CAchievementGoalVariable;
 import org.lightjason.agentspeak.language.execution.achievement_test.CTestGoal;
 import org.lightjason.agentspeak.language.execution.achievement_test.CTestRule;
+import org.lightjason.agentspeak.language.execution.assignment.CDeconstruct;
+import org.lightjason.agentspeak.language.execution.assignment.CMultiAssignment;
+import org.lightjason.agentspeak.language.execution.assignment.CSingleAssignment;
+import org.lightjason.agentspeak.language.execution.assignment.CTernaryOperation;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
+import org.lightjason.agentspeak.language.execution.passing.CPassData;
+import org.lightjason.agentspeak.language.execution.passing.CPassExecutionVariable;
+import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
+import org.lightjason.agentspeak.language.execution.passing.CPassExecution;
+import org.lightjason.agentspeak.language.execution.unary.CDecrement;
+import org.lightjason.agentspeak.language.execution.unary.CIncrement;
 import org.lightjason.agentspeak.language.execution.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.unify.CVariableUnify;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.unary.CDecrement;
-import org.lightjason.agentspeak.language.execution.unary.CIncrement;
 import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
@@ -68,7 +69,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.CRulePlaceholder;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -253,6 +253,7 @@ public final class CAgentSpeak
      * @param p_bodyformula other elements
      * @return stream of execution elements
      */
+    @Nonnull
     public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                         @Nonnull final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
     {
@@ -281,6 +282,16 @@ public final class CAgentSpeak
             : new CTestGoal( CPath.from( p_atom.getText() ) );
     }
 
+    /**
+     * build an achievment goal action
+     *
+     * @param p_visitor visitor
+     * @param p_doubleexclamationmark immediatly
+     * @param p_literal  literal
+     * @param p_variable variable
+     * @param p_arguments arguments
+     * @return achievment goal
+     */
     @Nonnull
     public static IExecution achievementgoal( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                               @Nullable final TerminalNode p_doubleexclamationmark,
@@ -292,11 +303,14 @@ public final class CAgentSpeak
 
         if ( Objects.nonNull( p_variable ) )
             return new CAchievementGoalVariable(
-                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
-                Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() )
+                new CPassExecutionVariable(
+                    (IVariable<?>) p_visitor.visit( p_variable ),
+                    Stream.empty()
+                ),
+                Objects.nonNull( p_doubleexclamationmark )
             );
 
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "achievmentgoal" ) );
     }
 
     /**
@@ -306,7 +320,7 @@ public final class CAgentSpeak
      * @param p_variable variable
      * @return null or execution
      */
-    @Nullable
+    @Nonnull
     public static IExecution unary( @Nonnull final TerminalNode p_operator, @Nonnull final IVariable<Number> p_variable )
     {
         switch ( p_operator.getText() )
@@ -318,7 +332,7 @@ public final class CAgentSpeak
                 return new CDecrement<>( p_variable );
 
             default:
-                return null;
+                throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unary" ) );
         }
     }
 
@@ -424,7 +438,7 @@ public final class CAgentSpeak
         if ( p_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
 
-        return new CProxy( p_actionliteral.hasAt(), l_action );
+        return new CPassExecution( p_actionliteral.hasAt(), l_action );
     }
 
     /**
@@ -511,6 +525,7 @@ public final class CAgentSpeak
      * @param p_expression expression
      * @return unification constraint as variable or expression
      */
+    @Nonnull
     public static Object unificationconstraint( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                                 @Nullable final RuleContext p_variable, @Nullable final RuleContext p_expression )
     {

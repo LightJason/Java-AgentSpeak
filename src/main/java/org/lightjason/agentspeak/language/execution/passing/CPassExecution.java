@@ -35,10 +35,14 @@ import java.util.stream.Stream;
 
 
 /**
- * proxy for action execution
+ * proxy for any execution
  */
-public final class CProxy implements IExecution
+public final class CPassExecution implements IExecution
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6403311021295080608L;
     /**
      * parallel execution
      */
@@ -54,7 +58,7 @@ public final class CProxy implements IExecution
      * @param p_parallel parallel execution
      * @param p_execution execution
      */
-    public CProxy( final boolean p_parallel, @Nonnull final IExecution p_execution )
+    public CPassExecution( final boolean p_parallel, @Nonnull final IExecution p_execution )
     {
         m_parallel = p_parallel;
         m_execution = p_execution;

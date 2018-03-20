@@ -36,14 +36,11 @@ import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.achievement_test.CAchievementGoalLiteral;
-import org.lightjason.agentspeak.language.execution.achievement_test.CAchievementGoalVariable;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
@@ -247,16 +244,13 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
     {
-        if ( Objects.nonNull( p_context.literal() ) )
-            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
-
-        if ( Objects.nonNull( p_context.variable_evaluate() ) )
-            return new CAchievementGoalVariable(
-                (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
-                p_context.DOUBLEEXCLAMATIONMARK() != null
-            );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
+        return CAgentSpeak.achievementgoal(
+            this,
+            p_context.DOUBLEEXCLAMATIONMARK(),
+            p_context.literal(),
+            p_context.variable(),
+            p_context.termlist()
+        );
     }
 
     @Override
@@ -297,27 +291,12 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
         return CAgentSpeak.lambda(
+            this,
             Objects.nonNull( p_context.AT() ),
-            (IExecution) this.visit( p_context.lambda_initialization() )
+            p_context.lambda_initialization(),
+            p_context.lambda_return(),
+            p_context.block_formula()
         );
-
-        /*
-        if ( Objects.nonNull( p_context.lambda_return() ) )
-            return new CLambdaExpression(
-                Objects.nonNull( p_context.AT() ),
-                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
-                (IVariable<?>) this.visitVariable( p_context.variable() ),
-                (IVariable<?>) this.visitLambda_return( p_context.lambda_return() ),
-                (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
-            );
-
-        return new CLambdaExpression(
-            Objects.nonNull( p_context.AT() ),
-            (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
-            (IVariable<?>) this.visitVariable( p_context.variable() ),
-            (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
-        );
-        */
     }
 
     @Override

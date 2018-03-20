@@ -45,6 +45,10 @@ import java.util.stream.Stream;
 public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5298598410240776248L;
+    /**
      * term list
      */
     private final ITerm[] m_termlist;

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution;
 
-import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;

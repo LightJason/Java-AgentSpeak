@@ -26,7 +26,9 @@ package org.lightjason.agentspeak.grammar.builder;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -98,7 +100,7 @@ public final class CTerm
      * @param p_logicalvalue logical terminal
      * @return data object or null
      */
-    @Nullable
+    @Nonnull
     public static Object termterminals( @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number, @Nullable final TerminalNode p_logicalvalue )
     {
         if ( Objects.nonNull( p_string ) )
@@ -110,7 +112,7 @@ public final class CTerm
         if ( Objects.nonNull( p_logicalvalue ) )
             return CRaw.logicalvalue( p_logicalvalue );
 
-        return null;
+        throw new CSyntaxErrorException( CCommon.languagestring( CTerm.class, "terminals" ) );
     }
 
     /**

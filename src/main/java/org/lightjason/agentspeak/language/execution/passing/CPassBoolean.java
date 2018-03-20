@@ -39,7 +39,10 @@ import java.util.List;
  */
 public final class CPassBoolean extends IBaseExecution<Boolean>
 {
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3194588988262987118L;
 
     /**
      * ctor

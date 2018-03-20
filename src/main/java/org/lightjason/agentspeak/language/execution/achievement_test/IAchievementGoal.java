@@ -23,9 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.achievement_test;
 
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
+import org.lightjason.agentspeak.language.execution.IExecution;
 
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ import java.util.Objects;
 /**
  * abstract achievement-goal class for goal execution
  */
-abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
+abstract class IAchievementGoal<T> extends IBaseExecution<T>
 {
     /**
      * serial
