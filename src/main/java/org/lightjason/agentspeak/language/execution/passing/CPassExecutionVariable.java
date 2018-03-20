@@ -24,9 +24,12 @@
 package org.lightjason.agentspeak.language.execution.passing;
 
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -72,10 +75,15 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        final IVariable<?> l_variable = CCommon.replaceFromContext( p_context, m_value ).term();
-        if ( !l_variable.allocated() )
+        final IVariable<?> l_variable = CCommon.replaceFromContext( p_context, m_value ).<IVariable<?>>term().thrownotallocated();
 
-        return null;
+        if ( l_variable.valueassignableto( String.class ) )
+            p_return.add( this.bystring( l_variable.raw(), p_context ) );
+
+        if ( l_variable.valueassignableto( ILiteral.class ) )
+            p_return.add( this.byliteral( l_variable.raw(), p_context ) );
+
+        return CFuzzyValue.from( true );
     }
 
     @Nonnull
@@ -88,5 +96,36 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
                    .filter( i -> i instanceof IVariable<?> )
                    .map( ITerm::term )
         );
+    }
+
+    /**
+     * creates the result literal from an input string
+     *
+     * @param p_value input string (literal functor)
+     * @param p_context execution context
+     * @return result literal
+     */
+    private ILiteral bystring( final String p_value, final IContext p_context )
+    {
+        return CLiteral.from( p_value, Arrays.stream( m_termlist ) ).unify( p_context );
+    }
+
+    /**
+     * creates the result literal from an input literal
+     *
+     * @param p_literal input literal
+     * @param p_context execution context
+     * @return result literal
+     */
+    private ILiteral byliteral( final ILiteral p_literal, final IContext p_context )
+    {
+        return m_termlist.length == 0
+               ? p_literal.unify( p_context )
+               : CLiteral.from(
+                   p_literal.hasAt(),
+                   p_literal.negated(),
+                   p_literal.fqnfunctor(),
+                   m_termlist
+               ).unify( p_context );
     }
 }
