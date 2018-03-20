@@ -57,10 +57,11 @@ ATOM :
     ;
 
 /**
- * binary operator
+ * assign operator
  */
-BINARYOPERATOR :
-    ASSIGNINCREMENT
+ASSIGNOPERATOR :
+    ASSIGN
+    | ASSIGNINCREMENT
     | ASSIGNDECREMENT
     | ASSIGNMULTIPLY
     | ASSIGNDIVIDE
@@ -262,16 +263,16 @@ fragment OR                : '||';
 fragment XOR               : '^';
 
 
-fragment INCREMENT         : '++';
-fragment DECREMENT         : '--';
-ASSIGN                     : '=';
 DECONSTRUCT                : '=..';
+ASSIGN                     : '=';
 fragment ASSIGNINCREMENT   : '+=';
 fragment ASSIGNDECREMENT   : '-=';
 fragment ASSIGNMULTIPLY    : '*=';
 fragment ASSIGNDIVIDE      : '//=';
 fragment ASSIGNMODULO      : '%=';
 fragment ASSIGNPOW         : '^=';
+fragment INCREMENT         : '++';
+fragment DECREMENT         : '--';
 
 
 fragment LESS              : '<';

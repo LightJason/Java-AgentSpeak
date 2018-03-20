@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.execution.expressionassign;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
@@ -34,14 +35,15 @@ import java.util.function.BiFunction;
 /**
  * binary operator
  */
-public enum EExpressionAssignOperator implements BiFunction<Number, Number, Number>
+public enum EExpressionAssignOperator implements BiFunction<ITerm, ITerm, Object>
 {
     ASSIGNINCREMENT( "+=" ),
     ASSIGNDECREMENT( "-=" ),
     ASSIGNMULTIPLY( "*=" ),
     ASSIGNDIVIDE( "/=" ),
     ASSIGNMODULO( "%=" ),
-    ASSIGNPOW( "^=" );
+    ASSIGNPOW( "^=" ),
+    ASSIGN( "=" );
 
     /**
      * operator
@@ -59,27 +61,32 @@ public enum EExpressionAssignOperator implements BiFunction<Number, Number, Numb
     }
 
     @Override
-    public final Number apply( final Number p_lhs, final Number p_rhs )
+    public final Object apply( final ITerm p_lhs, final ITerm p_rhs )
     {
         switch ( this )
         {
             case ASSIGNINCREMENT:
-                return p_lhs.doubleValue() + p_rhs.doubleValue();
+                return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
 
             case ASSIGNDECREMENT:
-                return p_lhs.doubleValue() - p_rhs.doubleValue();
+                return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
 
             case ASSIGNMULTIPLY:
-                return p_lhs.doubleValue() * p_rhs.doubleValue();
+                return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
 
             case ASSIGNDIVIDE:
-                return p_lhs.doubleValue() * p_rhs.doubleValue();
+                return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
 
             case ASSIGNMODULO:
-                return p_lhs.longValue() % p_rhs.longValue();
+                return p_lhs.<Number>raw().longValue() < 0
+                       ? ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue()
+                       : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
 
             case ASSIGNPOW:
-                return Math.pow( p_lhs.doubleValue(), p_rhs.doubleValue() );
+                return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
+
+            case ASSIGN:
+                return p_rhs.raw();
 
             default:
                 throw new CSyntaxErrorException( CCommon.languagestring( this, "operatorunknown", this ) );
@@ -119,6 +126,9 @@ public enum EExpressionAssignOperator implements BiFunction<Number, Number, Numb
 
             case "^=":
                 return ASSIGNPOW;
+
+            case "=":
+                return ASSIGN;
 
             default:
                 throw new CIllegalArgumentException( CCommon.languagestring( EExpressionAssignOperator.class, "notexist", p_value ) );

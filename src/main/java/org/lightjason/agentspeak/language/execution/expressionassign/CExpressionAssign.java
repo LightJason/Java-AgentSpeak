@@ -69,8 +69,8 @@ public final class CExpressionAssign implements IExpressionAssign
     public CExpressionAssign( @Nonnull final IVariable<?> p_lhs, @Nonnull final ITerm p_rhs, @Nonnull final EExpressionAssignOperator p_operator )
     {
         m_lhs = p_lhs;
-        m_operator = p_operator;
         m_rhs = p_rhs;
+        m_operator = p_operator;
     }
 
     @Nonnull
@@ -78,8 +78,8 @@ public final class CExpressionAssign implements IExpressionAssign
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        final IVariable<Number> l_lhs = CCommon.replaceFromContext( p_context, m_lhs ).term();
-        l_lhs.set( m_operator.apply( l_lhs.raw(), CCommon.replaceFromContext( p_context, m_rhs ).raw() ) );
+        final IVariable<Object> l_lhs = CCommon.replaceFromContext( p_context, m_lhs ).term();
+        l_lhs.set( m_operator.apply( l_lhs, CCommon.replaceFromContext( p_context, m_rhs ) ) );
 
         return CFuzzyValue.from( true );
     }

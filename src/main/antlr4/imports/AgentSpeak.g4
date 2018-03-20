@@ -180,7 +180,7 @@ assignment_expression :
  */
 assignment_expression_singlevariable :
     variable
-    ASSIGN
+    ASSIGNOPERATOR
     ( ternary_operation | expression )
     ;
 
@@ -241,12 +241,12 @@ ternary_operation_false :
  * unification expression
  */
 unification :
- AT? RIGHTSHIFT
- (
-   literal
-   | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
- )
- ;
+    AT? RIGHTSHIFT
+    (
+        literal
+        | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
+    )
+    ;
 
 /**
  * unification constraint
