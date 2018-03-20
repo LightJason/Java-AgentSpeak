@@ -147,7 +147,9 @@ public final class CMultiplicative extends IBaseBinary
     @Nonnull
     private <N extends Number, M extends Number> Number modulo( @Nonnull final N p_left, @Nonnull final M p_right )
     {
-        return p_left.longValue() % p_right.longValue();
+        return p_left.longValue() < 0
+            ? ( p_right.longValue() + p_left.longValue() ) % p_right.longValue()
+            : p_left.longValue() % p_right.longValue();
     }
 
 }
