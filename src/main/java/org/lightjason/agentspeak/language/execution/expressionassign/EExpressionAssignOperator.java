@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expressionbinary;
+package org.lightjason.agentspeak.language.execution.expressionassign;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
 /**
  * binary operator
  */
-public enum EOperator implements BiFunction<Number, Number, Number>
+public enum EExpressionAssignOperator implements BiFunction<Number, Number, Number>
 {
     ASSIGNINCREMENT( "+=" ),
     ASSIGNDECREMENT( "-=" ),
@@ -53,7 +53,7 @@ public enum EOperator implements BiFunction<Number, Number, Number>
      *
      * @param p_operator operator string
      */
-    EOperator( final String p_operator )
+    EExpressionAssignOperator( final String p_operator )
     {
         m_operator = p_operator;
     }
@@ -98,7 +98,7 @@ public enum EOperator implements BiFunction<Number, Number, Number>
      * @param p_value string
      * @return operator
      */
-    public static EOperator from( @Nonnull final String p_value )
+    public static EExpressionAssignOperator from( @Nonnull final String p_value )
     {
         switch ( p_value )
         {
@@ -121,7 +121,7 @@ public enum EOperator implements BiFunction<Number, Number, Number>
                 return ASSIGNPOW;
 
             default:
-                throw new CIllegalArgumentException( CCommon.languagestring( EOperator.class, "notexist", p_value ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( EExpressionAssignOperator.class, "notexist", p_value ) );
         }
     }
 }

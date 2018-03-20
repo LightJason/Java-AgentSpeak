@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expressionbinary;
+package org.lightjason.agentspeak.language.execution.expressionassign;
 
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * assign operator expression
  */
-public final class COperatorAssign implements IBinaryExpression
+public final class CExpressionAssign implements IExpressionAssign
 {
     /**
      * serial id
@@ -56,7 +56,7 @@ public final class COperatorAssign implements IBinaryExpression
     /**
      * operator
      */
-    private final EOperator m_operator;
+    private final EExpressionAssignOperator m_operator;
 
 
     /**
@@ -66,7 +66,7 @@ public final class COperatorAssign implements IBinaryExpression
      * @param p_rhs right-hand-side data
      * @param p_operator operator
      */
-    public COperatorAssign( final IVariable<?> p_lhs, final ITerm p_rhs, final EOperator p_operator )
+    public CExpressionAssign( @Nonnull final IVariable<?> p_lhs, @Nonnull final ITerm p_rhs, @Nonnull final EExpressionAssignOperator p_operator )
     {
         m_lhs = p_lhs;
         m_operator = p_operator;

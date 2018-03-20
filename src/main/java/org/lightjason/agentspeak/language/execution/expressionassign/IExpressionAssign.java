@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expressionbinary;
+package org.lightjason.agentspeak.language.execution.expressionassign;
 
 import org.lightjason.agentspeak.language.execution.IExecution;
 
@@ -31,6 +31,6 @@ import org.lightjason.agentspeak.language.execution.IExecution;
  *
  * @tparam T right-hand-side type
  */
-public interface IBinaryExpression extends IExecution
+public interface IExpressionAssign extends IExecution
 {
 }
