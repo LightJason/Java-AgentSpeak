@@ -24,16 +24,10 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
-import org.lightjason.agentspeak.language.ITerm;
-
-import javax.annotation.Nonnull;
-import java.util.function.Function;
-
-
 /**
  * interface of unary expressions
  */
-public interface IExpressionUnary extends IExpression
+public interface IUnaryExpression extends IExpression
 {
 
 }

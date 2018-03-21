@@ -23,54 +23,10 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.variable.IVariable;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.stream.Stream;
-
 
 /**
- * expression interface
+ * interface of any binary expression type
  */
-public interface IExpression extends IExecution
+public interface IBinaryExpression extends IExpression
 {
-    /**
-     * empty expression, is always true
-     */
-    IExpression EMPTY = new IExpression()
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 1051229233293816991L;
-
-        @Nonnull
-        @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-        {
-            return CFuzzyValue.of( true );
-        }
-
-        @Nonnull
-        @Override
-        public final Stream<IVariable<?>> variables()
-        {
-            return Stream.empty();
-        }
-
-        @Override
-        public final String toString()
-        {
-            return "";
-        }
-    };
-
-
 }

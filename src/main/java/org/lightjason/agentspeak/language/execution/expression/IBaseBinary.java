@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * @deprecated remove
  */
 @Deprecated
-public abstract class IBaseBinary implements IExpressionBinary
+public abstract class IBaseBinary implements IBinaryExpression
 {
     /**
      * serial id

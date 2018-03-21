@@ -23,16 +23,33 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.function.BiFunction;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * interface of any binary expression type
+ * unary expression
  */
-public interface IExpressionBinary extends IExpression
+public final class CUnaryExpression implements IUnaryExpression
 {
+    @Nonnull
+    @Override
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
+    {
+        return null;
+    }
+
+    @Nonnull
+    @Override
+    public final Stream<IVariable<?>> variables()
+    {
+        return Stream.empty()
+    }
 }

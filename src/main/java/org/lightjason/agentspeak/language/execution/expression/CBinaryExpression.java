@@ -25,8 +25,6 @@ package org.lightjason.agentspeak.language.execution.expression;
 
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -36,41 +34,22 @@ import java.util.stream.Stream;
 
 
 /**
- * expression interface
+ * binary expression
  */
-public interface IExpression extends IExecution
+public class CBinaryExpression implements IBinaryExpression
 {
-    /**
-     * empty expression, is always true
-     */
-    IExpression EMPTY = new IExpression()
+    @Nonnull
+    @Override
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return )
     {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 1051229233293816991L;
+        return null;
+    }
 
-        @Nonnull
-        @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-        {
-            return CFuzzyValue.of( true );
-        }
-
-        @Nonnull
-        @Override
-        public final Stream<IVariable<?>> variables()
-        {
-            return Stream.empty();
-        }
-
-        @Override
-        public final String toString()
-        {
-            return "";
-        }
-    };
-
-
+    @Nonnull
+    @Override
+    public final Stream<IVariable<?>> variables()
+    {
+        return Stream.empty();
+    }
 }
