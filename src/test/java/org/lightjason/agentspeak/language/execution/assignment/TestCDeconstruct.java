@@ -65,4 +65,31 @@ public final class TestCDeconstruct extends IBaseTest
         Assert.assertEquals( "test", l_inner.<List<ITerm>>raw().get( 1 ).raw() );
     }
 
+    /**
+     * test deconstruct variable argument
+     */
+    @Test
+    public final void variableargument()
+    {
+        final IVariable<?> l_outer = new CVariable<>( "Outer" );
+        final IVariable<?> l_inner = new CVariable<>( "Inner" );
+        final IVariable<Object> l_argument = new CVariable<>( "Arg" );
+
+        l_argument.set( CLiteral.of( "foo", CRawTerm.of( "bar" ), CRawTerm.of( 7 ) ) );
+
+        new CDeconstruct( Stream.of( l_outer, l_inner ), l_argument ).execute(
+            false,
+            new CLocalContext( l_outer, l_inner, l_argument ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( "foo", l_outer.raw() );
+        Assert.assertTrue( l_inner.raw() instanceof List<?> );
+        Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
+        Assert.assertEquals( "bar", l_inner.<List<ITerm>>raw().get( 0 ).<Number>raw() );
+        Assert.assertEquals( 7, l_inner.<List<ITerm>>raw().get( 1 ).<Number>raw() );
+    }
+
+
 }
