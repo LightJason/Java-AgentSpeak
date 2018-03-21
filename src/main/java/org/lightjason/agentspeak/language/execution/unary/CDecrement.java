@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 /**
  * unary increment
  */
-public final class CDecrement<T extends Number> implements IUnaryExpression<T>
+public final class CDecrement implements IUnaryExpression
 {
     /**
      * serial id
@@ -47,7 +47,7 @@ public final class CDecrement<T extends Number> implements IUnaryExpression<T>
     /**
      * variable
      */
-    private final IVariable<T> m_variable;
+    private final IVariable<?> m_variable;
 
     /**
      * ctor
@@ -55,7 +55,7 @@ public final class CDecrement<T extends Number> implements IUnaryExpression<T>
      * @param p_variable variable
      */
     @Nonnull
-    public CDecrement( @Nonnull final IVariable<T> p_variable )
+    public CDecrement( @Nonnull final IVariable<?> p_variable )
     {
         m_variable = p_variable;
     }

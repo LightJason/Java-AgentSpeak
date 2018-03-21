@@ -46,7 +46,7 @@ import java.util.stream.Stream;
 /**
  * assignment action of a multi-variable list
  */
-public final class CMultiAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
+public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
 {
     /**
      * serial id
@@ -55,7 +55,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     /**
      * right-hand argument
      */
-    private final M m_righthand;
+    private final IExecution m_righthand;
 
     /**
      * ctor
@@ -63,7 +63,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
      * @param p_lefthand left-hand variable list
      * @param p_righthand right-hand argument
      */
-    public CMultiAssignment( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
+    public CMultiAssignment( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final IExecution p_righthand )
     {
         super( Collections.unmodifiableList( p_lefthand.collect( Collectors.toList() ) ) );
         m_righthand = p_righthand;

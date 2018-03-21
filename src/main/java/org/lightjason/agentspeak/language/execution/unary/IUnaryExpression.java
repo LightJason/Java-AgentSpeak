@@ -31,7 +31,7 @@ import org.lightjason.agentspeak.language.execution.IExecution;
  *
  * @tparam T variable data type
  */
-public interface IUnaryExpression<T> extends IExecution
+public interface IUnaryExpression extends IExecution
 {
 
 }

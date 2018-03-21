@@ -39,9 +39,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -68,15 +66,19 @@ public final class CTerm
      * @return literal
      */
     @Nonnull
-    public static ILiteral literal( @Nullable final TerminalNode p_at, @Nullable final TerminalNode p_strongnegation,
-                                    @Nonnull final TerminalNode p_atom, @Nonnull final Collection<ITerm> p_termlist )
+    @SuppressWarnings( "unchecked" )
+    public static ILiteral literal( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                    @Nullable final TerminalNode p_at, @Nullable final TerminalNode p_strongnegation,
+                                    @Nonnull final TerminalNode p_atom, @Nullable final RuleContext p_termlist )
     {
-        return CLiteral.of(
-            Objects.nonNull( p_at ),
-            Objects.nonNull( p_strongnegation ),
-            CPath.of( p_atom.getText() ),
-            p_termlist.stream()
-        );
+        return Objects.isNull( p_termlist )
+            ? CLiteral.of( Objects.nonNull( p_at ), Objects.nonNull( p_strongnegation ), CPath.of( p_atom.getText() ) )
+            : CLiteral.of(
+                Objects.nonNull( p_at ),
+                Objects.nonNull( p_strongnegation ),
+                CPath.of( p_atom.getText() ),
+                (Stream<ITerm>) p_visitor.visit( p_termlist )
+            );
     }
 
     /**
@@ -123,12 +125,11 @@ public final class CTerm
      * @return term list
      */
     @Nonnull
-    public static Collection<ITerm> termlist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<? extends RuleContext> p_termstream )
+    public static Stream<ITerm> termlist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<? extends RuleContext> p_termstream )
     {
         return p_termstream
                     .map( p_visitor::visit )
                     .filter( Objects::nonNull )
-                    .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) )
-                    .collect( Collectors.toList() );
+                    .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) );
     }
 }

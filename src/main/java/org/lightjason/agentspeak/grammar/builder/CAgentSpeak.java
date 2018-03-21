@@ -322,15 +322,16 @@ public final class CAgentSpeak
      * @return null or execution
      */
     @Nonnull
-    public static IExecution unary( @Nonnull final TerminalNode p_operator, @Nonnull final IVariable<Number> p_variable )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution unary( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final TerminalNode p_operator, @Nonnull final RuleContext p_variable )
     {
         switch ( p_operator.getText() )
         {
             case "++":
-                return new CIncrement<>( p_variable );
+                return new CIncrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
 
             case "--":
-                return new CDecrement<>( p_variable );
+                return new CDecrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
 
             default:
                 throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unary" ) );
@@ -376,11 +377,13 @@ public final class CAgentSpeak
      * @return assignment execution
      */
     @Nonnull
-    public static IExecution multiassignment( @Nonnull final Stream<IVariable<?>> p_variable, @Nonnull final IExecution p_execution )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution multiassignment( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                              @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution )
     {
-        return new CMultiAssignment<>(
-            p_variable,
-            p_execution
+        return new CMultiAssignment(
+            (Stream<IVariable<?>>) p_visitor.visit( p_variable ),
+            (IExecution) p_visitor.visit( p_execution )
         );
     }
 
@@ -393,12 +396,13 @@ public final class CAgentSpeak
      * @return ternary operator
      */
     @Nonnull
-    public static IExecution ternary( @Nonnull final IExpression p_expression, @Nonnull final IExecution p_true, @Nonnull final IExecution p_false )
+    public static IExecution ternary( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                      @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false )
     {
         return new CTernaryOperation(
-            p_expression,
-            p_true,
-            p_false
+            (IExpression) p_visitor.visit( p_expression ),
+            (IExecution) p_visitor.visit( p_true ),
+            (IExecution) p_visitor.visit( p_false )
         );
     }
 
@@ -445,16 +449,19 @@ public final class CAgentSpeak
      * @return wrapped action
      */
     @Nonnull
-    public static IExecution action( @Nonnull final ILiteral p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
+    public static IExecution action( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                     @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
     {
-        final IAction l_action = p_actions.get( p_actionliteral.fqnfunctor() );
+        final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
+
+        final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "actionunknown", p_actionliteral ) );
 
-        if ( p_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
+        if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
 
-        return new CPassExecution( p_actionliteral.hasAt(), l_action );
+        return new CPassExecution( l_actionliteral.hasAt(), l_action );
     }
 
     /**
@@ -606,6 +613,7 @@ public final class CAgentSpeak
                     Objects.nonNull( p_additional )
                     ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
                     : Stream.empty()
+
                 ).toArray( IExecution[]::new )
             )
 
@@ -623,6 +631,7 @@ public final class CAgentSpeak
                     Objects.nonNull( p_additional )
                     ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
                     : Stream.empty()
+
                 ).toArray( IExecution[]::new ),
 
                 p_lambdastreaming

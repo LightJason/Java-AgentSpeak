@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -107,12 +106,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitLiteral( final ManualParser.LiteralContext p_context )
     {
-        return CTerm.literal(
-            p_context.AT(),
-            p_context.STRONGNEGATION(),
-            p_context.ATOM(),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
-        );
+        return CTerm.literal( this, p_context.AT(), p_context.STRONGNEGATION(), p_context.ATOM(), p_context.termlist() );
     }
 
     @Override

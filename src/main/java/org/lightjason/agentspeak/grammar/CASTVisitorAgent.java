@@ -36,8 +36,6 @@ import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
@@ -45,7 +43,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -404,19 +401,13 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
     {
-        return CAgentSpeak.multiassignment(
-            (Stream<IVariable<?>>) this.visit( p_context.variablelist() ),
-            (IExecution) this.visit( p_context.expression() )
-        );
+        return CAgentSpeak.multiassignment( this, p_context.variablelist(), p_context.expression() );
     }
 
     @Override
     public final Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
     {
-        return CAgentSpeak.unary(
-            p_context.UNARYOPERATOR(),
-            (IVariable<Number>) this.visit( p_context.variable() )
-        );
+        return CAgentSpeak.unary( this, p_context.UNARYOPERATOR(), p_context.variable() );
     }
 
 
@@ -426,9 +417,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
     {
         return CAgentSpeak.ternary(
-            (IExpression) this.visit( p_context.expression() ),
-            (IExecution) this.visit( p_context.ternary_operation_true() ),
-            (IExecution) this.visit( p_context.ternary_operation_false() )
+            this,
+            p_context.expression(),
+            p_context.ternary_operation_true(),
+            p_context.ternary_operation_false()
         );
     }
 
@@ -450,10 +442,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExecute_action( final AgentParser.Execute_actionContext p_context )
     {
-        return CAgentSpeak.action(
-            (ILiteral) this.visit( p_context.literal() ),
-            m_actions
-        );
+        return CAgentSpeak.action( this, p_context.literal(), m_actions );
     }
 
     @Override
@@ -496,12 +485,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
-        return CTerm.literal(
-            p_context.AT(),
-            p_context.STRONGNEGATION(),
-            p_context.ATOM(),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
-        );
+        return CTerm.literal( this, p_context.AT(), p_context.STRONGNEGATION(), p_context.ATOM(), p_context.termlist() );
     }
 
     @Override

@@ -80,13 +80,13 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_value.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value() )
+        if ( ( !m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.of( false );
 
         return l_argument.get( 0 ).raw()
-               ? m_true.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_return )
-               : m_false.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_return );
+               ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )
+               : m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
     }
 
     @Override
