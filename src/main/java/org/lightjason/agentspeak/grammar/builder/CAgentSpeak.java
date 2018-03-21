@@ -431,7 +431,7 @@ public final class CAgentSpeak
     public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<IVariable<?>> p_variables,
                                           @Nullable final ITerm p_literal, @Nullable final ITerm p_variable )
     {
-        return new CDeconstruct<>(
+        return new CDeconstruct(
             p_variables,
             Objects.nonNull( p_literal ) ? p_literal : p_variable
         );

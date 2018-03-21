@@ -57,7 +57,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -247,9 +246,9 @@ public final class CCommon
      * @return result term list
      */
     @Nonnull
-    public static List<ITerm> replaceFromContext( @Nonnull final IContext p_context, @Nonnull final Collection<? extends ITerm> p_terms )
+    public static Stream<ITerm> replaceFromContext( @Nonnull final IContext p_context, @Nonnull final Stream<? extends ITerm> p_terms )
     {
-        return p_terms.stream().map( i -> replaceFromContext( p_context, i ) ).collect( Collectors.toList() );
+        return p_terms.map( i -> replaceFromContext( p_context, i ) );
     }
 
     /**
@@ -369,7 +368,7 @@ public final class CCommon
      * @param p_replaceweight replace weight
      * @param p_deleteweight delete weight
      * @return distance
-     * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
+     * {@see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java}
      */
     public static double levenshtein( @Nonnull final String p_first, @Nonnull final String p_second, final double p_insertweight,
                                       final double p_replaceweight, final double p_deleteweight )

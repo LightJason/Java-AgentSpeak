@@ -29,21 +29,13 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -51,7 +43,7 @@ import java.util.stream.Stream;
  * test single assignment
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCSingleAssignment
+public final class TestCSingleAssignment extends IBaseTest
 {
 
     /**
@@ -70,15 +62,14 @@ public final class TestCSingleAssignment
             testcase( 11, 11, EAssignOperator.ASSIGNMULTIPLY, 121.0 ),
             testcase( 33, 3, EAssignOperator.ASSIGNDIVIDE, 11.0 ),
 
-            testcase( 21,17, EAssignOperator.ASSIGNMODULO, 4L ),
-            testcase( -1,17, EAssignOperator.ASSIGNMODULO, 16L ),
-            testcase( -18,17, EAssignOperator.ASSIGNMODULO, 1L ),
+            testcase( 21, 17, EAssignOperator.ASSIGNMODULO, 4L ),
+            testcase( -1, 17, EAssignOperator.ASSIGNMODULO, 16L ),
+            testcase( -18, 17, EAssignOperator.ASSIGNMODULO,  1L ),
 
-            testcase( 2,3, EAssignOperator.ASSIGNPOW, 8.0 ),
-            testcase( 9,0.5, EAssignOperator.ASSIGNPOW, 3.0 ),
+            testcase( 2, 3, EAssignOperator.ASSIGNPOW,  8.0 ),
+            testcase( 9, 0.5, EAssignOperator.ASSIGNPOW,  3.0 ),
 
-            testcase( 2,3, EAssignOperator.ASSIGN, 3 )
-
+            testcase( 2, 3, EAssignOperator.ASSIGN,  3 )
 
         ).toArray();
     }
@@ -122,7 +113,7 @@ public final class TestCSingleAssignment
             (EAssignOperator) p_data[2]
         ).execute(
             false,
-            new CContext( l_lhs, l_rhs ),
+            new CLocalContext( l_lhs, l_rhs ),
             Collections.emptyList(),
             Collections.emptyList()
         );
@@ -131,53 +122,4 @@ public final class TestCSingleAssignment
         Assert.assertEquals( p_data[1],  l_rhs.raw() );
     }
 
-    /**
-     * local context
-     */
-    private static final class CContext implements IContext
-    {
-        /**
-         * variable map
-         */
-        private final Map<IPath, IVariable<?>> m_variables;
-
-        /**
-         * ctor
-         *
-         * @param p_variables variables
-         */
-        CContext( @Nonnull final IVariable<?>... p_variables )
-        {
-            m_variables = Arrays.stream( p_variables )
-                                .collect( Collectors.toMap( ITerm::fqnfunctor, i -> i ) );
-        }
-
-        @Nonnull
-        @Override
-        public final IAgent<?> agent()
-        {
-            return IAgent.EMPTY;
-        }
-
-        @Nonnull
-        @Override
-        public final IInstantiable instance()
-        {
-            return IPlan.EMPTY;
-        }
-
-        @Nonnull
-        @Override
-        public final Map<IPath, IVariable<?>> instancevariables()
-        {
-            return m_variables;
-        }
-
-        @Nonnull
-        @Override
-        public final IContext duplicate()
-        {
-            return this;
-        }
-    }
 }

@@ -27,18 +27,27 @@ import org.apache.commons.io.IOUtils;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -168,6 +177,60 @@ public abstract class IBaseTest
         CAgent( @Nonnull final IAgentConfiguration<IAgent<?>> p_configuration )
         {
             super( p_configuration );
+        }
+    }
+
+    /**
+     * local context
+     */
+    protected static final class CLocalContext implements IContext
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1766581015543678832L;
+        /**
+         * variable map
+         */
+        private final Map<IPath, IVariable<?>> m_variables;
+
+        /**
+         * ctor
+         *
+         * @param p_variables variables
+         */
+        public CLocalContext( @Nonnull final IVariable<?>... p_variables )
+        {
+            m_variables = Arrays.stream( p_variables )
+                                .collect( Collectors.toMap( ITerm::fqnfunctor, i -> i ) );
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<?> agent()
+        {
+            return IAgent.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+            return IPlan.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Map<IPath, IVariable<?>> instancevariables()
+        {
+            return m_variables;
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+            return this;
         }
     }
 }

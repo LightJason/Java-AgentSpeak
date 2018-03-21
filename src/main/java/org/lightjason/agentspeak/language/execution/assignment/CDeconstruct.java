@@ -35,7 +35,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 /**
  * deconstruct assignment
  */
-public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVariable<?>>>
+public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
 {
     /**
      * serial id
@@ -54,7 +54,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     /**
      * right-hand argument (literal)
      */
-    private final M m_righthand;
+    private final ITerm m_righthand;
 
     /**
      * ctor
@@ -63,9 +63,9 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
      * @param p_righthand right-hand argument
      */
     @Nonnull
-    public CDeconstruct( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
+    public CDeconstruct( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final ITerm p_righthand )
     {
-        super( Collections.unmodifiableList( p_lefthand.collect( Collectors.toList() ) ) );
+        super( p_lefthand.toArray( IVariable<?>[]::new ) );
         m_righthand = p_righthand;
     }
 
@@ -74,14 +74,16 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
+        this.set( CCommon.replaceFromContext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
         return CFuzzyValue.from( true );
     }
 
     @Override
     public final int hashCode()
     {
-        return Objects.isNull( m_value ) ? 0 : m_value.hashCode() ^ m_righthand.hashCode();
+        return
+
+            Objects.isNull( m_value ) ? 0 : Arrays.hashCode( m_value ) ^ m_righthand.hashCode();
     }
 
     @Override
@@ -100,7 +102,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Objects.isNull( m_value ) ? Stream.empty() : m_value.stream();
+        return Arrays.stream( m_value );
     }
 
     /**
@@ -109,11 +111,11 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
      * @param p_assignment variable list
      * @param p_term term
      */
-    private void set( @Nonnull final List<ITerm> p_assignment, @Nonnull final ILiteral p_term )
+    private void set( @Nonnull final ITerm[] p_assignment, @Nonnull final ILiteral p_term )
     {
-        if ( p_assignment.size() >= 1 )
-            p_assignment.get( 0 ).<IVariable<Object>>term().set( p_term.fqnfunctor().toString() );
-        if ( p_assignment.size() >= 2 )
-            p_assignment.get( 1 ).<IVariable<Object>>term().set( p_term.values().collect( Collectors.toList() ) );
+        if ( p_assignment.length >= 1 )
+            p_assignment[0].<IVariable<Object>>term().set( p_term.fqnfunctor().toString() );
+        if ( p_assignment.length >= 2 )
+            p_assignment[1].<IVariable<Object>>term().set( p_term.values().collect( Collectors.toList() ) );
     }
 }
