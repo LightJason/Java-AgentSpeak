@@ -29,7 +29,6 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
@@ -43,7 +42,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -463,23 +461,20 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTerm( final AgentParser.TermContext p_context )
     {
-        final Object l_terminal = CTerm.termterminals( p_context.STRING(), p_context.NUMBER(), p_context.LOGICALVALUE() );
-        if ( Objects.nonNull( l_terminal ) )
-            return l_terminal;
+        return CTerm.term(
+            this,
 
-        if ( Objects.nonNull( p_context.execute_action() ) )
-            return this.visit( p_context.execute_action() );
-        if ( Objects.nonNull( p_context.execute_rule() ) )
-            return this.visit( p_context.execute_rule() );
-        if ( Objects.nonNull( p_context.execute_variable() ) )
-            return this.visit( p_context.execute_variable() );
+            p_context.STRING(),
+            p_context.NUMBER(),
+            p_context.LOGICALVALUE(),
 
-        if ( Objects.nonNull( p_context.literal() ) )
-            return this.visit( p_context.literal() );
-        if ( Objects.nonNull( p_context.variable() ) )
-            return this.visit( p_context.variable() );
+            p_context.execute_action(),
+            p_context.execute_rule(),
+            p_context.execute_variable(),
 
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
+            p_context.variable(),
+            p_context.literal()
+        );
     }
 
     @Override
@@ -491,9 +486,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
-        return ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() )
-               ? Collections.emptyList()
-               : CTerm.termlist( this, p_context.term().stream() );
+        return CTerm.termlist( this, p_context.term() );
     }
 
     @Override

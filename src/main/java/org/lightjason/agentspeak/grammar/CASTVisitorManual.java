@@ -24,17 +24,10 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -66,23 +59,20 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitTerm( final ManualParser.TermContext p_context )
     {
-        final Object l_terminal = CTerm.termterminals( p_context.STRING(), p_context.NUMBER(), p_context.LOGICALVALUE() );
-        if ( Objects.nonNull( l_terminal ) )
-            return l_terminal;
+        return CTerm.term(
+            this,
 
-        if ( Objects.nonNull( p_context.execute_action() ) )
-            return this.visit( p_context.execute_action() );
-        if ( Objects.nonNull( p_context.execute_rule() ) )
-            return this.visit( p_context.execute_rule() );
-        if ( Objects.nonNull( p_context.execute_variable() ) )
-            return this.visit( p_context.execute_variable() );
+            p_context.STRING(),
+            p_context.NUMBER(),
+            p_context.LOGICALVALUE(),
 
-        if ( Objects.nonNull( p_context.literal() ) )
-            return this.visit( p_context.literal() );
-        if ( Objects.nonNull( p_context.variable() ) )
-            return this.visit( p_context.variable() );
+            p_context.execute_action(),
+            p_context.execute_rule(),
+            p_context.execute_variable(),
 
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
+            p_context.variable(),
+            p_context.literal()
+        );
     }
 
     @Override
@@ -118,14 +108,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitTermlist( final ManualParser.TermlistContext p_context )
     {
-        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )
-            return Collections.<ITerm>emptyList();
-
-        return p_context.term().stream()
-                        .map( i -> this.visitTerm( i ) )
-                        .filter( i -> Objects.nonNull( i ) )
-                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) )
-                        .collect( Collectors.toList() );
+        return CTerm.termlist( this, p_context.term() );
     }
 
     @Override

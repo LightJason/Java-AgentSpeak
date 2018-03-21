@@ -28,7 +28,7 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
-import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -95,14 +96,14 @@ public final class CTerm
     }
 
     /**
-     * build term.terminal values
+     * build term terminal values
      *
      * @param p_string string terminal
      * @param p_number number terminal
      * @param p_logicalvalue logical terminal
      * @return data object or null
      */
-    @Nonnull
+    @Nullable
     public static Object termterminals( @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number, @Nullable final TerminalNode p_logicalvalue )
     {
         if ( Objects.nonNull( p_string ) )
@@ -114,22 +115,63 @@ public final class CTerm
         if ( Objects.nonNull( p_logicalvalue ) )
             return CRaw.logicalvalue( p_logicalvalue );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CTerm.class, "terminals" ) );
+        return null;
     }
+
+    /**
+     * build term
+     *
+     * @param p_visitor visitor
+     * @param p_string string
+     * @param p_number number
+     * @param p_logic logical value
+     * @param p_executeaction action execution
+     * @param p_executerule rule execution
+     * @param p_executevariable variable execution
+     * @param p_variable variable
+     * @param p_literal literal
+     * @return term
+     */
+    @Nonnull
+    public static Object term( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
+                               @Nullable final TerminalNode p_logic, @Nullable final RuleContext p_executeaction, @Nullable final RuleContext p_executerule,
+                               @Nullable final RuleContext p_executevariable, @Nullable final RuleContext p_variable, @Nullable final RuleContext p_literal )
+    {
+        final Object l_terminal = termterminals( p_string, p_number, p_logic );
+        if ( Objects.nonNull( l_terminal ) )
+            return l_terminal;
+
+        if ( Objects.nonNull( p_executeaction ) )
+            return p_visitor.visit( p_executeaction );
+        if ( Objects.nonNull( p_executerule ) )
+            return p_visitor.visit( p_executerule );
+        if ( Objects.nonNull( p_executevariable ) )
+            return p_visitor.visit( p_executevariable );
+
+        if ( Objects.nonNull( p_literal ) )
+            return p_visitor.visit( p_literal );
+        if ( Objects.nonNull( p_variable ) )
+            return p_visitor.visit( p_variable );
+
+        throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "termunknown" ) );
+    }
+
 
     /**
      * build termlist
      *
      * @param p_visitor visitor
-     * @param p_termstream term stream
+     * @param p_termlist term stream
      * @return term list
      */
     @Nonnull
-    public static Stream<ITerm> termlist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<? extends RuleContext> p_termstream )
+    public static Stream<ITerm> termlist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final List<? extends RuleContext> p_termlist )
     {
-        return p_termstream
-                    .map( p_visitor::visit )
-                    .filter( Objects::nonNull )
-                    .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) );
+        return Objects.isNull( p_termlist )
+            ? Stream.empty()
+            : p_termlist.stream()
+                          .map( p_visitor::visit )
+                          .filter( Objects::nonNull )
+                          .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) );
     }
 }
