@@ -66,8 +66,18 @@ public final class TestCSingleAssignment
 
             testcase( 5, 2, EAssignOperator.ASSIGNINCREMENT, 7.0 ),
             testcase( 7, 3, EAssignOperator.ASSIGNDECREMENT, 4.0 ),
+
             testcase( 11, 11, EAssignOperator.ASSIGNMULTIPLY, 121.0 ),
-            testcase( 33, 3, EAssignOperator.ASSIGNDIVIDE, 11.0 )
+            testcase( 33, 3, EAssignOperator.ASSIGNDIVIDE, 11.0 ),
+
+            testcase( 21,17, EAssignOperator.ASSIGNMODULO, 4L ),
+            testcase( -1,17, EAssignOperator.ASSIGNMODULO, 16L ),
+            testcase( -18,17, EAssignOperator.ASSIGNMODULO, 1L ),
+
+            testcase( 2,3, EAssignOperator.ASSIGNPOW, 8.0 ),
+            testcase( 9,0.5, EAssignOperator.ASSIGNPOW, 3.0 ),
+
+            testcase( 2,3, EAssignOperator.ASSIGN, 3 )
 
 
         ).toArray();
@@ -82,7 +92,8 @@ public final class TestCSingleAssignment
      * @param p_result result
      * @return test-case
      */
-    private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull EAssignOperator p_operator, @Nonnull Object p_result )
+    private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs,
+                                    @Nonnull final EAssignOperator p_operator, @Nonnull final Object p_result )
     {
         return Stream.of( p_lhs, p_rhs, p_operator, p_result ).toArray();
     }
@@ -119,71 +130,6 @@ public final class TestCSingleAssignment
         Assert.assertEquals( p_data[3], l_lhs.raw() );
         Assert.assertEquals( p_data[1],  l_rhs.raw() );
     }
-
-    /**
-    public final void modulopositivevariable()
-    {
-        final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Number> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( 21 );
-        l_rhs.set( 17 );
-
-        new CSingleAssignment(
-            l_lhs,
-            new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNMODULO
-        ).execute(
-            false,
-            new CContext( l_lhs, l_rhs ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_lhs.<Number>raw(), 4L );
-        Assert.assertEquals( l_rhs.<Number>raw(), 17 );
-    }
-
-    public final void modulonegativevariable()
-    {
-        final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Number> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( -1 );
-        l_rhs.set( 17 );
-
-        new CSingleAssignment(
-            l_lhs,
-            new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNMODULO
-        ).execute(
-            false,
-            new CContext( l_lhs, l_rhs ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_lhs.<Number>raw(), 16L );
-        Assert.assertEquals( l_rhs.<Number>raw(), 17 );
-
-
-        l_lhs.set( -20 );
-        l_rhs.set( 17 );
-
-        new CSingleAssignment(
-            l_lhs,
-            new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNMODULO
-        ).execute(
-            false,
-            new CContext( l_lhs, l_rhs ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
-
-        System.out.println( l_lhs );
-    }
-    */
 
     /**
      * local context

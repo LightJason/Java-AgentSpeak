@@ -39,10 +39,13 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
 {
     ASSIGNINCREMENT( "+=" ),
     ASSIGNDECREMENT( "-=" ),
+
     ASSIGNMULTIPLY( "*=" ),
     ASSIGNDIVIDE( "/=" ),
     ASSIGNMODULO( "%=" ),
+
     ASSIGNPOW( "^=" ),
+
     ASSIGN( "=" );
 
     /**
@@ -79,7 +82,7 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
 
             case ASSIGNMODULO:
                 return p_lhs.<Number>raw().longValue() < 0
-                       ? ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue()
+                       ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
                        : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
 
             case ASSIGNPOW:
