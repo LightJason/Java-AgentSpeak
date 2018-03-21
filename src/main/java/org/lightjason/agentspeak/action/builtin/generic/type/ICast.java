@@ -71,7 +71,7 @@ public abstract class ICast extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             CCommon.flatten( p_argument )
                .allMatch( i -> this.cast( i, p_return ) )
         );

@@ -77,7 +77,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         final List<ITerm> l_result = new LinkedList<>();
         if ( ( !m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ).value() )
              || ( l_result.isEmpty() ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         // position matching on list index
@@ -93,7 +93,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         if ( l_assign.size() < l_flatresult.size() )
             l_assign.get( l_assign.size() - 1 ).<IVariable<Object>>term().set( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Override

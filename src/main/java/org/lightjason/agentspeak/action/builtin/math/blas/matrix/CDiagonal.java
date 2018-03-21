@@ -77,18 +77,18 @@ public final class CDiagonal extends IAlgebra
                                     .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
-                                    .map( EType::from )
+                                    .map( EType::of )
                                     .orElse( EType.SPARSE );
 
         CCommon.flatten( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix1D.class ) )
                .map( ITerm::<DoubleMatrix1D>raw )
                .map( i  -> generate( i, l_type ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

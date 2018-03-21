@@ -75,17 +75,17 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
                                                     .map( i -> i.execute( p_parallel, p_context, p_argument, l_return ) )
                                                     .filter( i -> !i.value() )
                                                     .findFirst()
-                                                    .orElse( CFuzzyValue.from( true ) );
+                                                    .orElse( CFuzzyValue.of( true ) );
 
         if ( !l_result.value() )
             return l_result;
 
         if ( l_return.size() == 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 l_return.stream()
                         .flatMap( this::streaming )
             )

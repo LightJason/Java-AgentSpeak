@@ -83,10 +83,10 @@ public final class CSingleInterpolate extends IBuiltinAction
                    .map( Number::doubleValue )
                    .mapToDouble( i -> l_arguments.get( 0 ).<UnivariateFunction>raw().value( i ) )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -84,7 +84,7 @@ public final class CTrigger implements ITrigger
      * @param p_literal trigger literal
      * @return trigger object
      */
-    public static ITrigger from( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )
+    public static ITrigger of( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )
     {
         return new CTrigger( p_event, p_literal );
     }

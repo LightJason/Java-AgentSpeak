@@ -80,7 +80,7 @@ public final class CSubList extends IBuiltinAction
                                               .collect( Collectors.toList() );
 
         if ( ( l_arguments.size() % 2 == 0 ) || ( l_arguments.size() < 3 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed(
             l_arguments.stream()
@@ -92,10 +92,10 @@ public final class CSubList extends IBuiltinAction
         )
             .map( i -> l_arguments.get( 0 ).<List<?>>raw().subList( i.get( 0 ), i.get( 1 ) ) )
             .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -137,10 +137,10 @@ public class CEqual extends IBuiltinAction
     private IFuzzyValue<Boolean> pack( @Nonnull final List<ITerm> p_return, @Nonnull final Stream<Boolean> p_stream )
     {
         p_stream.map( this::apply )
-                .map( CRawTerm::from )
+                .map( CRawTerm::of )
                 .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

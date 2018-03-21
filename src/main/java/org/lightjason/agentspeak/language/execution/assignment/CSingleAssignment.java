@@ -80,12 +80,12 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
         final List<ITerm> l_return = new LinkedList<>();
         final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute( p_parallel, p_context, Collections.emptyList(), l_return );
         if ( ( !l_rightreturn.value() ) || ( l_return.size() != 1 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final IVariable<Object> l_lhs = CCommon.replaceFromContext( p_context, m_value ).term();
         l_lhs.set( m_operator.apply( l_lhs, l_return.get( 0 ) ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Override

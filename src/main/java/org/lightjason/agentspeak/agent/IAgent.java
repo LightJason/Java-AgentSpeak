@@ -86,7 +86,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
         @Override
         public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
 
         @Nonnull

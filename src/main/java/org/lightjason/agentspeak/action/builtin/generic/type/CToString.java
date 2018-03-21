@@ -53,7 +53,7 @@ public final class CToString extends ICast
      */
     protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_value.raw().toString() ) );
+        p_return.add( CRawTerm.of( p_value.raw().toString() ) );
         return true;
     }
 

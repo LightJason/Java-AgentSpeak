@@ -79,7 +79,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         m_context = new CContext(
             new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
-            new CPlan( Stream.empty(), ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "nothing" ) ), Stream.empty() ),
+            new CPlan( Stream.empty(), ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "nothing" ) ), Stream.empty() ),
             Collections.emptyList()
         );
     }
@@ -94,7 +94,7 @@ public final class TestCActionStorage extends IBaseTest
 
         new CAdd().execute(
             false, m_context,
-            Stream.of(  "testnumber", 123, "teststring", "foobar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of(  "testnumber", 123, "teststring", "foobar" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -111,7 +111,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         new CAdd( "bar" ).execute(
             false, m_context,
-            Stream.of( "bar", 123 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "bar", 123 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -128,7 +128,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         new CAdd( Stream.of( "abc" ) ).execute(
             false, m_context,
-            Stream.of( "abc", 123 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "abc", 123 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -150,7 +150,7 @@ public final class TestCActionStorage extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         new CRemove().execute(
             false, m_context,
-            Stream.of( "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -199,7 +199,7 @@ public final class TestCActionStorage extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         new CRemove( "foo" ).execute(
             false, m_context,
-            Stream.of( "foo", "bar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "foo", "bar" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -224,7 +224,7 @@ public final class TestCActionStorage extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         new CRemove( Stream.of( "xx" ) ).execute(
             false, m_context,
-            Stream.of( "xx", "yy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "xx", "yy" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -296,7 +296,7 @@ public final class TestCActionStorage extends IBaseTest
         final List<ITerm> l_content = IntStream.range( 0, 100 )
                                                .mapToObj( i -> RandomStringUtils.random( 25 ) )
                                                .peek( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) )
-                                               .map( CRawTerm::from )
+                                               .map( CRawTerm::of )
                                                .collect( Collectors.toList() );
 
         final List<ITerm> l_return = new ArrayList<>();
@@ -325,7 +325,7 @@ public final class TestCActionStorage extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         new CExists( "value 9", "value 77", "57" ).execute(
             false, m_context,
-            Stream.of( "value 9", "value 7", "value 23", "value 77", "57", "123" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "value 9", "value 7", "value 23", "value 77", "57", "123" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -351,7 +351,7 @@ public final class TestCActionStorage extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         new CExists( Stream.of( "value 33", "value 88", "23" ) ).execute(
             false, m_context,
-            Stream.of( "value 33", "value 177", "value 23", "value 137" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "value 33", "value 177", "value 23", "value 137" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

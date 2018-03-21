@@ -162,7 +162,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
                 p_classes,
@@ -212,7 +212,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -233,7 +233,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CToVector().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -259,7 +259,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CColumn().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -283,7 +283,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CRow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -307,7 +307,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CNumericValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -324,7 +324,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CBoolValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -342,7 +342,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
 
         new CToBlas().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

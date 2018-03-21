@@ -31,8 +31,8 @@ import java.util.List;
 
 
 /**
- * removes edges from any graph instance.
- * The action removes any edge from a single
+ * removes edges of any graph instance.
+ * The action removes any edge of a single
  * graph instace, the first argument is the
  * graph all other arguments are edges, the
  * action never fails

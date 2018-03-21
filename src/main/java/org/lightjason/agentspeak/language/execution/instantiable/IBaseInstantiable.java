@@ -122,7 +122,7 @@ public abstract class IBaseInstantiable implements IInstantiable
                                                     : this.executesequential( p_context );
         // if atomic flag if exists use this for return value
         return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
-               ? CFuzzyValue.from( true )
+               ? CFuzzyValue.of( true )
                : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
     }
 

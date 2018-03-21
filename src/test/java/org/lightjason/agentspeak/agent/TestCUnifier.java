@@ -61,13 +61,13 @@ public final class TestCUnifier extends IBaseTest
             CLiteral.parse( "first('Foo')" )
         ).collect( Collectors.toSet() );
 
-        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
+        final ILiteral l_literal = CLiteral.of( "toplevel", Stream.concat( l_test.stream(), Stream.of(
             CLiteral.parse( "second/sub(1)" ),
             CLiteral.parse( "second/sub(2)" ),
             CLiteral.parse( "second/sub(3)" )
         ) ).collect( Collectors.toSet() ) );
 
-        final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
+        final List<ITerm> l_result = l_literal.values( CPath.of( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
     }
 
@@ -85,7 +85,7 @@ public final class TestCUnifier extends IBaseTest
             CLiteral.parse( "first('Foo')" )
         ).toArray( ILiteral[]::new );
 
-        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat(
+        final ILiteral l_literal = CLiteral.of( "toplevel", Stream.concat(
             Arrays.stream( l_test ),
             Stream.of(
                 CLiteral.parse( "second/sub(1)" ),
@@ -96,7 +96,7 @@ public final class TestCUnifier extends IBaseTest
 
         Assert.assertArrayEquals(
             MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
-            l_literal.orderedvalues( CPath.from( "first" ) ).toArray(),
+            l_literal.orderedvalues( CPath.of( "first" ) ).toArray(),
             l_test
         );
     }

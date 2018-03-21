@@ -211,7 +211,7 @@ public final class TestCActionMath extends IBaseTest
     private static Stream<Object> singlevaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
                                                        final Function<Number, ?>... p_result )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
             p_class,
@@ -234,7 +234,7 @@ public final class TestCActionMath extends IBaseTest
     private static Stream<Object> aggregationvaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
                                                             final Function<Stream<Number>, ?>... p_result )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
             p_class,
@@ -313,7 +313,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CBinomial().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 49, 30, 6, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 49, 30, 6, 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -332,7 +332,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CFactorial().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -354,7 +354,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CPrimeFactors().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 8, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 8, 120 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -373,7 +373,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CSigmoid().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -393,7 +393,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CStirling().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3, 2, 8, 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -411,7 +411,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CPow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -432,7 +432,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CGeometricMean().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -451,7 +451,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CHarmonicMean().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 150, 50 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 150, 50 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -472,7 +472,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CHypot().execute(
             false, IContext.EMPTYPLAN,
-            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -496,7 +496,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CMaxIndex().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -514,7 +514,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CMinIndex().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

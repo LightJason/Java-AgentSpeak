@@ -133,11 +133,11 @@ public final class CSolve extends IBuiltinAction
         final SimplexSolver l_lp = new SimplexSolver();
         final PointValuePair l_result = l_lp.optimize( l_settings.toArray( new OptimizationData[l_settings.size()] ) );
 
-        p_return.add( CRawTerm.from( l_result.getValue() ) );
-        p_return.add( CRawTerm.from( l_result.getPoint().length ) );
-        Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::from ).forEach( p_return::add );
+        p_return.add( CRawTerm.of( l_result.getValue() ) );
+        p_return.add( CRawTerm.of( l_result.getPoint().length ) );
+        Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::of ).forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -44,7 +44,7 @@ import java.util.stream.IntStream;
  * The action converts each bit matrix argument
  * into a bit vector with the size of the matrix,
  * the bit within the vector are row-wise copied
- * from the matrix and the action never fails
+ * of the matrix and the action never fails
  *
  * {@code [V1|V2] = math/bit/matrix/tovector( Matrix1, Matrix2 );}
  */
@@ -70,10 +70,10 @@ public final class CToVector extends IBuiltinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<BitMatrix>raw )
                .map( CToVector::transform )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

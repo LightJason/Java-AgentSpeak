@@ -74,14 +74,14 @@ public final class CCreateLiteral extends IBuiltinAction
     )
     {
         p_return.add(
-            CLiteral.from(
+            CLiteral.of(
                 p_argument.get( 0 ).<String>raw(),
                 p_argument.size() > 1
                 ? p_argument.subList( 1, p_argument.size() )
                 : Collections.emptyList()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -76,10 +76,10 @@ public final class CDimension extends IBuiltinAction
                .map( ITerm::<BitMatrix>raw )
                .forEach( i ->
                {
-                   p_return.add( CRawTerm.from( (double) i.rows() ) );
-                   p_return.add( CRawTerm.from( (double) i.columns() ) );
+                   p_return.add( CRawTerm.of( (double) i.rows() ) );
+                   p_return.add( CRawTerm.of( (double) i.columns() ) );
                } );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

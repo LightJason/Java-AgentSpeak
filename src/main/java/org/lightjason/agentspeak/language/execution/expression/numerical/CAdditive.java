@@ -72,27 +72,27 @@ public final class CAdditive extends IBaseBinary
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         switch ( m_operator )
         {
             case PLUS:
-                p_return.add( CRawTerm.from( this.add(
+                p_return.add( CRawTerm.of( this.add(
                     l_argument.get( 0 ).<Number>raw(),
                     l_argument.get( 1 ).<Number>raw()
                 ) ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case MINUS:
-                p_return.add( CRawTerm.from( this.subtract(
+                p_return.add( CRawTerm.of( this.subtract(
                     l_argument.get( 0 ).<Number>raw(),
                     l_argument.get( 1 ).<Number>raw()
                 ) ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
 
     }

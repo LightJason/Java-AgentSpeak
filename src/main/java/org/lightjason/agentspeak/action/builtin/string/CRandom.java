@@ -70,10 +70,10 @@ public final class CRandom extends IBuiltinAction
         CCommon.flatten( p_argument )
                .skip( 1 )
                .map( i -> new RandomStringGenerator.Builder().filteredBy( l_characters  ).build().generate( i.<Number>raw().intValue() ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

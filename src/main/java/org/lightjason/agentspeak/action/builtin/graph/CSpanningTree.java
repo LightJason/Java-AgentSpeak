@@ -44,7 +44,7 @@ import java.util.Map;
 
 /**
  * creates a minimal spanning tree of any graph instance.
- * The action creates from each graph argument a spanning
+ * The action creates of each graph argument a spanning
  * tree, the first map instance will be used as weight-map,
  * a tuple of the string "defaultweight" and a numeric value
  * defines the default weight value of the weight-map
@@ -95,9 +95,9 @@ public final class CSpanningTree extends IBuiltinAction
                .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( l_treefactory )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

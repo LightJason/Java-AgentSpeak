@@ -76,18 +76,18 @@ public final class CJsonObject extends IBaseRest
 
             p_return.add(
                 p_argument.size() == 2
-                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
+                ? CLiteral.of( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
                 : IBaseRest.baseliteral(
                     p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
                     flatterm( l_data )
                 )
             );
 
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
         catch ( final IOException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     }
 

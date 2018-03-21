@@ -74,6 +74,6 @@ public final class CAdd extends IBuiltinAction
                   .map( ITerm::<List<Object>>raw )
                   .forEach( i -> i.add( p_argument.get( 0 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -72,7 +72,7 @@ public final class CIsNull extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             CCommon.flatten( p_argument )
                    .map( ITerm::raw )
                    .allMatch( Objects::isNull )

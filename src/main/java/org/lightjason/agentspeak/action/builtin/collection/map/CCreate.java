@@ -71,14 +71,14 @@ public final class CCreate extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final Map<Object, Object> l_map = p_parallel ? new ConcurrentHashMap<>() : new HashMap<>();
         StreamUtils.windowed( l_arguments.stream(), 2, 2 )
                    .forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
-        p_return.add( CRawTerm.from( l_map ) );
+        p_return.add( CRawTerm.of( l_map ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

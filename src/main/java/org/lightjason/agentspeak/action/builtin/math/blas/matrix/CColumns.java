@@ -77,9 +77,9 @@ public final class CColumns extends IBuiltinAction
                .map( ITerm::<DoubleMatrix2D>raw )
                .mapToDouble( AbstractMatrix2D::columns )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

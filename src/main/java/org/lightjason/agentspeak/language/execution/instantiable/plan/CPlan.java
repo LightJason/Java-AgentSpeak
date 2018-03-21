@@ -134,7 +134,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final IFuzzyValue<Boolean> condition( final IContext p_context )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
             && ( l_return.size() == 1 )
             ? l_return.get( 0 ).<Boolean>raw()

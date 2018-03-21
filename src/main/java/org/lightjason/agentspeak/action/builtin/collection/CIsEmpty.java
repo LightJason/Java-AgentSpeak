@@ -69,10 +69,10 @@ public final class CIsEmpty extends IBuiltinAction
     {
         p_argument.stream()
                .map( CIsEmpty::empty )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

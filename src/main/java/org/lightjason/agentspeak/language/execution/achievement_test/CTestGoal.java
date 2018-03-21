@@ -65,7 +65,7 @@ public final class CTestGoal extends ITest
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from( p_context.agent().runningplans().keySet().contains( m_value ) );
+        return CFuzzyValue.of( p_context.agent().runningplans().keySet().contains( m_value ) );
     }
 
 }

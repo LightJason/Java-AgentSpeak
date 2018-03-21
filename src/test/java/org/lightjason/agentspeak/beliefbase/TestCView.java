@@ -55,7 +55,7 @@ public final class TestCView extends IBaseTest
 
         IntStream.range( 0, l_max )
                  .boxed()
-                 .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
+                 .map( i -> CLiteral.of( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
                  .forEach( i -> l_beliefbase.generate( l_generator, i.functorpath() ).add( i ) );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
@@ -71,17 +71,17 @@ public final class TestCView extends IBaseTest
         final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator l_gen = new CGenerator();
 
-        l_beliefbase.add( CLiteral.from( "toplevel" ) )
+        l_beliefbase.add( CLiteral.of( "toplevel" ) )
 
-                    .generate( l_gen, CPath.from( "first" ) )
-                    .add( CLiteral.from( "first/sub1" ) )
-                    .add( CLiteral.from( "first/sub2" ) )
+                    .generate( l_gen, CPath.of( "first" ) )
+                    .add( CLiteral.of( "first/sub1" ) )
+                    .add( CLiteral.of( "first/sub2" ) )
 
-                    .generate( l_gen, CPath.from( "second/sub" ) )
-                    .add( CLiteral.from( "second/sub3" ) )
-                    .add( CLiteral.from( "second/sub4" ) )
+                    .generate( l_gen, CPath.of( "second/sub" ) )
+                    .add( CLiteral.of( "second/sub3" ) )
+                    .add( CLiteral.of( "second/sub4" ) )
 
-                    .add( CLiteral.from( "second/sub/sub5" ) );
+                    .add( CLiteral.of( "second/sub/sub5" ) );
 
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );

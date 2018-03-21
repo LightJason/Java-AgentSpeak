@@ -116,13 +116,13 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CKeys().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CValues().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -147,7 +147,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CAsMap().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -156,7 +156,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 0 ).<Map<?, ?>>raw().keySet().toArray(), l_map.keySet().toArray() );
 
         Assert.assertArrayEquals(
-            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::from ) ).map( ITerm::raw ).toArray(),
+            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::of ) ).map( ITerm::raw ).toArray(),
             l_map.values().toArray()
         );
     }
@@ -173,7 +173,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CPutSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, "foo", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, "foo", l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -195,7 +195,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CPutMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, 1, "xxx", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, 1, "xxx", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -221,7 +221,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CGetMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -247,7 +247,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CGetSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

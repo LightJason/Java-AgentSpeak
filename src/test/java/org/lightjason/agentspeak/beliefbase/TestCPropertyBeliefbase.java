@@ -60,8 +60,8 @@ public final class TestCPropertyBeliefbase extends IBaseTest
 
         Assert.assertArrayEquals(
             Stream.of(
-                CLiteral.from( "self/m_stringvalue", CRawTerm.EMPTY ),
-                CLiteral.from( "self/m_integervalue", CRawTerm.from( 42 ) )
+                CLiteral.of( "self/m_stringvalue", CRawTerm.EMPTY ),
+                CLiteral.of( "self/m_integervalue", CRawTerm.of( 42 ) )
             ).toArray(),
             l_agent.beliefbase().stream().toArray()
         );

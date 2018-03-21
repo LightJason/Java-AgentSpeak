@@ -194,7 +194,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
          * @param p_sequence sequence
          * @return trigger type
          */
-        public static EType from( @Nonnull final String p_sequence )
+        public static EType of( @Nonnull final String p_sequence )
         {
             final EType l_type = ELEMENTS.get( p_sequence.trim() );
             if ( Objects.isNull( l_type ) )
@@ -212,7 +212,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         @Nonnull
         public ITrigger builddefault( @Nonnull final ILiteral p_literal )
         {
-            return CTrigger.from( this, p_literal );
+            return CTrigger.of( this, p_literal );
         }
     }
 

@@ -73,7 +73,7 @@ public final class CMaxIndex extends IBuiltinAction
                                            .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) IntStream.range( 0, l_list.size() )
                                 .parallel()
                                 .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? j : i )
@@ -81,6 +81,6 @@ public final class CMaxIndex extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

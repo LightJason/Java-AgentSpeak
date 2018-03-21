@@ -59,14 +59,14 @@ public final class TestCActionWebGraphQL extends IBaseTest
                 false,
                 IContext.EMPTYPLAN,
                 Stream.of(
-                    CRawTerm.from( "https://fakerql.com/graphql" ),
-                    CLiteral.from(
+                    CRawTerm.of( "https://fakerql.com/graphql" ),
+                    CLiteral.of(
                         "allUsers",
-                        CLiteral.from( "id" ),
-                        CLiteral.from( "firstName" ),
-                        CLiteral.from( "lastName" )
+                        CLiteral.of( "id" ),
+                        CLiteral.of( "firstName" ),
+                        CLiteral.of( "lastName" )
                     ),
-                    CRawTerm.from( "graphql" )
+                    CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return
             ).value()
@@ -91,9 +91,9 @@ public final class TestCActionWebGraphQL extends IBaseTest
                 false,
                 IContext.EMPTYPLAN,
                 Stream.of(
-                    CRawTerm.from( "https://fakerql.com/graphql" ),
-                    CRawTerm.from( "{Product(id: \"cjdn6szou00dw25107gcuy114\") {id price name}}" ),
-                    CRawTerm.from( "graphql" )
+                    CRawTerm.of( "https://fakerql.com/graphql" ),
+                    CRawTerm.of( "{Product(id: \"cjdn6szou00dw25107gcuy114\") {id price name}}" ),
+                    CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return
             ).value()
@@ -104,20 +104,20 @@ public final class TestCActionWebGraphQL extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
 
         // test-case returns random datasets back
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().structurehash(), CLiteral.from(
-            "graphql", CLiteral.from(
-                "data", CLiteral.from(
-                    "product", CLiteral.from(
+        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().structurehash(), CLiteral.of(
+            "graphql", CLiteral.of(
+                "data", CLiteral.of(
+                    "product", CLiteral.of(
                         "id",
-                        CRawTerm.from( "cjdn6szou00dw25107gcuy114" )
+                        CRawTerm.of( "cjdn6szou00dw25107gcuy114" )
                     ),
-                    CLiteral.from(
+                    CLiteral.of(
                         "price",
-                        CRawTerm.from( 126D )
+                        CRawTerm.of( 126D )
                     ),
-                    CLiteral.from(
+                    CLiteral.of(
                         "name",
-                        CRawTerm.from( "Handmade Granite Cheese" )
+                        CRawTerm.of( "Handmade Granite Cheese" )
                     )
                 )
             )

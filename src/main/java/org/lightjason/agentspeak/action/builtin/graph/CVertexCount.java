@@ -69,9 +69,9 @@ public final class CVertexCount extends IBuiltinAction
                .map( ITerm::<Graph<?, ?>>raw )
                .mapToDouble( Hypergraph::getVertexCount )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

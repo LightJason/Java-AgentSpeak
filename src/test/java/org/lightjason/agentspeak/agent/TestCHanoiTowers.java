@@ -312,7 +312,7 @@ public final class TestCHanoiTowers extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "generic/print" );
+            return CPath.of( "generic/print" );
         }
 
         @Nonnegative
@@ -327,7 +327,7 @@ public final class TestCHanoiTowers extends IBaseTest
         public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -345,7 +345,7 @@ public final class TestCHanoiTowers extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "stop" );
+            return CPath.of( "stop" );
         }
 
         @Nonnegative
@@ -362,7 +362,7 @@ public final class TestCHanoiTowers extends IBaseTest
         )
         {
             m_running.set( false );
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -381,7 +381,7 @@ public final class TestCHanoiTowers extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "tower/size" );
+            return CPath.of( "tower/size" );
         }
 
         @Nonnegative
@@ -398,10 +398,10 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
-            p_return.add( CRawTerm.from( l_tower.size() ) );
-            return CFuzzyValue.from( true );
+            p_return.add( CRawTerm.of( l_tower.size() ) );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -434,7 +434,7 @@ public final class TestCHanoiTowers extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "tower/push" );
+            return CPath.of( "tower/push" );
         }
 
         @Nonnegative
@@ -451,22 +451,22 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
             try
             {
                 l_tower.push( p_argument.get( 1 ).<CSlice>raw() );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
             }
             catch ( final IllegalStateException l_exception )
             {
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
             }
         }
     }
 
     /**
-     * pops an elements from a tower
+     * pops an elements of a tower
      */
     private final class CTowerPop extends IBaseAction
     {
@@ -479,7 +479,7 @@ public final class TestCHanoiTowers extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "tower/pop" );
+            return CPath.of( "tower/pop" );
         }
 
         @Nonnegative
@@ -496,16 +496,16 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
             try
             {
-                p_return.add( CRawTerm.from( l_tower.pop() ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( l_tower.pop() ) );
+                return CFuzzyValue.of( true );
             }
             catch ( final IllegalStateException l_exception )
             {
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
             }
         }
     }

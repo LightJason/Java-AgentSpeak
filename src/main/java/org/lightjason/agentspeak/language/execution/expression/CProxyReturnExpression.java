@@ -71,7 +71,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
 
         // compare returning arguments, on empty return execution result, otherwise return arguments
         if ( l_returnarguments.isEmpty() )
-            p_return.add( CRawTerm.from( l_return.value() ) );
+            p_return.add( CRawTerm.of( l_return.value() ) );
         else
             p_return.addAll( l_returnarguments );
 

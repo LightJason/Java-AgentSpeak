@@ -91,7 +91,7 @@ public abstract class ISelection extends IBuiltinAction
         );
 
         if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // select a random value and scale with the sum
         double l_random = m_random.nextDouble() * l_weight.stream().mapToDouble( i -> i ).sum();
@@ -100,14 +100,14 @@ public abstract class ISelection extends IBuiltinAction
             l_random -= l_weight.get( i );
             if ( l_random <= 0 )
             {
-                p_return.add( CRawTerm.from( l_items.get( i ) ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( l_items.get( i ) ) );
+                return CFuzzyValue.of( true );
             }
         }
 
         // on rounding error return last element
-        p_return.add( CRawTerm.from( l_items.get( l_items.size() - 1 ) ) );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.of( l_items.get( l_items.size() - 1 ) ) );
+        return CFuzzyValue.of( true );
     }
 
     /**

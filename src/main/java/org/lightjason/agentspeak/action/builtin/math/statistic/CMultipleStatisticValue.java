@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 /**
  * gets multiple statistic values of a single statistic object.
- * The action returns different statistic values from a
+ * The action returns different statistic values of a
  * single statistic object, the first argument is the statistic
  * object, all other values are string with statistic value names:
  * geometricmean, max, min, count, populationvariance, quadraticmean, secondmoment,
@@ -82,21 +82,21 @@ public final class CMultipleStatisticValue extends IBuiltinAction
             l_arguments.stream()
                        .skip( 1 )
                        .map( ITerm::<String>raw )
-                       .map( EStatisticValue::from )
+                       .map( EStatisticValue::of )
                        .mapToDouble( i -> i.value( l_arguments.get( 0 ).<SummaryStatistics>raw() ) )
                        .boxed()
-                       .map( CRawTerm::from )
+                       .map( CRawTerm::of )
                        .forEach( p_return::add );
         else
             l_arguments.stream()
                        .skip( 1 )
                        .map( ITerm::<String>raw )
-                       .map( EStatisticValue::from )
+                       .map( EStatisticValue::of )
                        .mapToDouble( i -> i.value( l_arguments.get( 0 ).<DescriptiveStatistics>raw() ) )
                        .boxed()
-                       .map( CRawTerm::from )
+                       .map( CRawTerm::of )
                        .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

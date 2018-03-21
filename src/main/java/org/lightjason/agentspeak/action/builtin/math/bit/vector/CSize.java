@@ -75,9 +75,9 @@ public final class CSize extends IBuiltinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<BitVector>raw )
                .map( BitVector::size )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

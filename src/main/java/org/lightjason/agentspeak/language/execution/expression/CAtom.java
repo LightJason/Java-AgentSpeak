@@ -59,7 +59,7 @@ public class CAtom implements IExpression
     @SuppressWarnings( "unchecked" )
     public <T> CAtom( final T p_value )
     {
-        m_value = ( p_value instanceof IVariable<?> ) ? (IVariable<?>) p_value : CRawTerm.from( p_value );
+        m_value = ( p_value instanceof IVariable<?> ) ? (IVariable<?>) p_value : CRawTerm.of( p_value );
     }
 
     @Nonnull
@@ -67,8 +67,8 @@ public class CAtom implements IExpression
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( CCommon.replaceFromContext( p_context, m_value ).raw() ).thrownotallocated() );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.of( CCommon.replaceFromContext( p_context, m_value ).raw() ).thrownotallocated() );
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull

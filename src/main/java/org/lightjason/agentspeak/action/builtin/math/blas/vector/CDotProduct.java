@@ -77,13 +77,13 @@ public final class CDotProduct extends IBuiltinAction
     {
         final List<DoubleMatrix1D> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed( l_arguments.stream(), 2 )
                    .map( i -> i.get( 0 ).zDotProduct( i.get( 1 ) ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

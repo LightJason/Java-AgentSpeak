@@ -68,7 +68,7 @@ public final class CThrow extends IBuiltinAction
                 p_argument.get( 1 ).<String>raw(),
                 p_context
             );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

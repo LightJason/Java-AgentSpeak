@@ -69,20 +69,20 @@ public final class CComparable extends IBaseBinary
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         switch ( m_operator )
         {
             case EQUAL:
-                p_return.add( CRawTerm.from( checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
+                return CFuzzyValue.of( true );
 
             case NOTEQUAL:
-                p_return.add( CRawTerm.from( !checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( !checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
+                return CFuzzyValue.of( true );
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 

@@ -31,7 +31,7 @@ import java.util.List;
 
 
 /**
- * removes a vertex from each graph instance.
+ * removes a vertex of each graph instance.
  * The action removes of all graph instances the given
  * vertex, the action never fails
  *

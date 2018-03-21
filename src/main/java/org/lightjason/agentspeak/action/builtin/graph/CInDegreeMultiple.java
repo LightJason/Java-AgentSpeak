@@ -56,7 +56,7 @@ public final class CInDegreeMultiple extends IApplyMultiple
                                 @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) p_graph.inDegree( p_window.get( 0 ).raw() )
             )
         );

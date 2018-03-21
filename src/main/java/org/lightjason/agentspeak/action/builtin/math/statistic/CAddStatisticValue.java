@@ -83,7 +83,7 @@ public final class CAddStatisticValue extends IBuiltinAction
                                            .map( ITerm::<Number>raw )
                                            .mapToDouble( Number::doubleValue ).toArray();
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             l_arguments.parallelStream()
                    .filter( i -> CCommon.rawvalueAssignableTo( i, StatisticalSummary.class ) )
                    .allMatch( i ->

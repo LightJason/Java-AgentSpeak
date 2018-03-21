@@ -81,9 +81,9 @@ public final class CPower extends IAlgebra
                   .skip( 1 )
                   .map( ITerm::<DoubleMatrix2D>raw )
                   .map( i -> DENSEALGEBRA.pow( i, l_argument.get( 0 ).<Number>raw().intValue() ) )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

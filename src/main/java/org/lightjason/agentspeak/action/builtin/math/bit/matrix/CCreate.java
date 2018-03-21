@@ -81,10 +81,10 @@ public final class CCreate extends IBuiltinAction
             2
         )
                    .map( i -> new BitMatrix( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

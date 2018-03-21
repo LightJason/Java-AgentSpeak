@@ -80,7 +80,7 @@ public final class CInTriangle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 8 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
                    .peek( i ->
@@ -105,10 +105,10 @@ public final class CInTriangle extends IBuiltinAction
                                                              + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
                                                              + l_arguments.get( 2 ) * l_arguments.get( 5 ) )
                    )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

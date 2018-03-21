@@ -79,10 +79,10 @@ public final class CEigen extends IBuiltinAction
                .map( DenseDoubleEigenvalueDecomposition::new )
                .forEach( i ->
                {
-                   p_return.add( CRawTerm.from( i.getRealEigenvalues() ) );
-                   p_return.add( CRawTerm.from( i.getV() ) );
+                   p_return.add( CRawTerm.of( i.getRealEigenvalues() ) );
+                   p_return.add( CRawTerm.of( i.getV() ) );
                } );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

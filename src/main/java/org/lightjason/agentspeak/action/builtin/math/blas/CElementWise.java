@@ -78,7 +78,7 @@ public final class CElementWise extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
                 StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
             3,
@@ -137,14 +137,14 @@ public final class CElementWise extends IBuiltinAction
             if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix2D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix2D>raw(), p_matrixfunction );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
                 l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
         }
@@ -157,14 +157,14 @@ public final class CElementWise extends IBuiltinAction
             if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix1D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix1D>raw(), p_matrixfunction );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
                 l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
         }

@@ -75,14 +75,14 @@ public final class CSolve extends IAlgebra
             2
         )
             .map( i -> DENSEALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**
-     * creates a matrix from the input term
+     * creates a matrix of the input term
      *
      * @param p_term term with vector or matrix
      * @return matrix

@@ -69,14 +69,14 @@ public final class CAnyMatch extends IBuiltinAction
         final List<?> l_arguments = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 l_arguments.stream()
                            .skip( 1 )
                            .anyMatch( i -> l_arguments.get( 0 ).equals( i ) )
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -80,9 +80,9 @@ public final class CGet extends IBuiltinAction
                    .map( ITerm::<Number>raw )
                    .map( Number::intValue )
                    .map( i -> l_arguments.get( 0 ).<DoubleMatrix1D>raw().get( i ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -88,7 +88,7 @@ public final class TestCActionProlog extends IBaseTest
             new CSolveAll().execute(
                     false,
                     IContext.EMPTYPLAN,
-                    Stream.of( "q(X)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    Stream.of( "q(X)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
                     l_return
             ).value()
         );
@@ -105,16 +105,16 @@ public final class TestCActionProlog extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         m_agent.beliefbase().add(
-            CLiteral.from( "q", CRawTerm.from( 5 ) ),
-            CLiteral.from( "s", CRawTerm.from( "hello world" ) ),
-            CLiteral.from( "l", CRawTerm.from( new HashSet<>() ) )
+            CLiteral.of( "q", CRawTerm.of( 5 ) ),
+            CLiteral.of( "s", CRawTerm.of( "hello world" ) ),
+            CLiteral.of( "l", CRawTerm.of( new HashSet<>() ) )
         );
 
         Assert.assertTrue(
             new CSolveAll().execute(
                     false,
                     m_context,
-                    Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
                     l_return
             ).value()
         );
@@ -136,14 +136,14 @@ public final class TestCActionProlog extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         m_agent.beliefbase().add(
-            CLiteral.from( "data", CRawTerm.from( 5 ) ),
-            CLiteral.from( "data", CRawTerm.from( 10 ) )
+            CLiteral.of( "data", CRawTerm.of( 5 ) ),
+            CLiteral.of( "data", CRawTerm.of( 10 ) )
         );
 
         new CTheory().execute(
             false,
             IContext.EMPTYPLAN,
-            Stream.of( "query(X) :- data(X), X > 6." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "query(X) :- data(X), X > 6." ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -151,7 +151,7 @@ public final class TestCActionProlog extends IBaseTest
             new CSolveAll().execute(
                 false,
                 m_context,
-                Stream.of( "query(X).", l_return.get( 0 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "query(X).", l_return.get( 0 ) ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
@@ -172,14 +172,14 @@ public final class TestCActionProlog extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         m_agent.beliefbase().add(
-            CLiteral.from( "a", CRawTerm.from( 8 ) )
+            CLiteral.of( "a", CRawTerm.of( 8 ) )
         );
 
         Assert.assertTrue(
             new CSolveAny().execute(
                 false,
                 m_context,
-                Stream.of( "a(X).", "foo(_).", "bar(5)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "a(X).", "foo(_).", "bar(5)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );

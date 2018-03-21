@@ -79,7 +79,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, 3, 4, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 3, 4, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -96,7 +96,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
     {
         new CValueConstraint().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -115,7 +115,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
         new CEquationConstraint().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_linearprogram, 2, 7, 12, 19.0, "=", 1, 2, 3, 5.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_linearprogram, 2, 7, 12, 19.0, "=", 1, 2, 3, 5.0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -156,7 +156,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
         new CSolve().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -185,7 +185,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
         new CSolve().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

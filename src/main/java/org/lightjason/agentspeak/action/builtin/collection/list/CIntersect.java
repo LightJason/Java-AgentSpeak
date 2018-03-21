@@ -91,11 +91,11 @@ public final class CIntersect extends IBuiltinAction
                                         ).collect( Collectors.toList() );
         l_result.sort( Comparator.comparing( Object::hashCode ) );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

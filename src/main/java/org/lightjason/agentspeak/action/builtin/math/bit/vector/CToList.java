@@ -78,9 +78,9 @@ public final class CToList extends IBuiltinAction
                .map( ITerm::<BitVector>raw )
                .map( i -> IntStream.range( 0, i.size() ).boxed().map( j -> i.getQuick( j ) ? 1D : 0D ).collect( Collectors.toList() ) )
                .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

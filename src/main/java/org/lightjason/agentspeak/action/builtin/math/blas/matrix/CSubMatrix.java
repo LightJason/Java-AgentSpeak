@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * returns a submatrix.
  * The first four arguments defines the index values of the
- * submatrix ( from/to row, from/to column ) and each matrix
+ * submatrix ( of/to row, of/to column ) and each matrix
  * object that starts at the fiveth position will
  *
  * {@code [M1|M2] = math/blas/matrix/submatrix( FromRow, ToRow, FromColumn, ToColumn, Matrix1, [ Matrix2 ] );}
@@ -84,9 +84,9 @@ public final class CSubMatrix extends IAlgebra
                        l_arguments.get( 2 ).<Number>raw().intValue(),
                        l_arguments.get( 3 ).<Number>raw().intValue()
                    ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

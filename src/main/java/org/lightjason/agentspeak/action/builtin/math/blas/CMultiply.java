@@ -74,7 +74,7 @@ public final class CMultiply extends IAlgebra
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
@@ -131,7 +131,7 @@ public final class CMultiply extends IAlgebra
      */
     private static <U, V> boolean apply( final ITerm p_left, final ITerm p_right, final BiFunction<U, V, ?> p_function, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_function.apply( p_left.<U>raw(), p_right.<V>raw() ) ) );
+        p_return.add( CRawTerm.of( p_function.apply( p_left.<U>raw(), p_right.<V>raw() ) ) );
         return true;
     }
 

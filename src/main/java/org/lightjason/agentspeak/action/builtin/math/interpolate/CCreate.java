@@ -90,12 +90,12 @@ public final class CCreate extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final int l_datasize = ( l_arguments.size() - 1 ) / 2;
         p_return.add(
-            CRawTerm.from(
-                EType.from( l_arguments.get( 0 ).<String>raw() )
+            CRawTerm.of(
+                EType.of( l_arguments.get( 0 ).<String>raw() )
                      .get(
 
                          l_arguments.stream()
@@ -114,7 +114,7 @@ public final class CCreate extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -136,7 +136,7 @@ public final class CCreate extends IBuiltinAction
          * @param p_value string
          * @return enum
          */
-        public static EType from( final String p_value )
+        public static EType of( final String p_value )
         {
             return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }

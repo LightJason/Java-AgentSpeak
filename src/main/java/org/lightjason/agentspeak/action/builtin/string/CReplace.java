@@ -71,10 +71,10 @@ public final class CReplace extends IBuiltinAction
         CCommon.flatten( p_argument )
                .skip( 2 )
                .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

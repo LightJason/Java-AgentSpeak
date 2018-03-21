@@ -70,9 +70,9 @@ public final class CVertices extends IBuiltinAction
                .map( ITerm::<Graph<?, ?>>raw )
                .map( Hypergraph::getVertices )
                .map( ArrayList::new )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

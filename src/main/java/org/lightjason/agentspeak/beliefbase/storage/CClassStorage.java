@@ -127,7 +127,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
 
         try
         {
-            l_field.set( m_instance, p_value.values().findFirst().orElseGet( () -> CRawTerm.from( null ) ).raw() );
+            l_field.set( m_instance, p_value.values().findFirst().orElseGet( () -> CRawTerm.of( null ) ).raw() );
             return true;
         }
         catch ( final IllegalAccessException l_exception )
@@ -210,7 +210,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
         try
         {
             final Object l_value = p_field.get( m_instance );
-            return Objects.isNull( l_value ) ? CLiteral.from( p_name, CRawTerm.EMPTY ) : CLiteral.from( p_name, CRawTerm.from( l_value ) );
+            return Objects.isNull( l_value ) ? CLiteral.of( p_name, CRawTerm.EMPTY ) : CLiteral.of( p_name, CRawTerm.of( l_value ) );
         }
         catch ( final IllegalAccessException l_exception )
         {

@@ -51,7 +51,7 @@ public final class TestCDeconstruct extends IBaseTest
         final IVariable<?> l_outer = new CVariable<>( "Outer" );
         final IVariable<?> l_inner = new CVariable<>( "Inner" );
 
-        new CDeconstruct( Stream.of( l_outer, l_inner ), CLiteral.from( "foobar", CRawTerm.from( 5 ), CRawTerm.from( "test" ) ) ).execute(
+        new CDeconstruct( Stream.of( l_outer, l_inner ), CLiteral.of( "foobar", CRawTerm.of( 5 ), CRawTerm.of( "test" ) ) ).execute(
             false,
             new CLocalContext( l_outer, l_inner ),
             Collections.emptyList(),

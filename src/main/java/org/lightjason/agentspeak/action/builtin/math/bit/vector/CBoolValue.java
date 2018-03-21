@@ -81,9 +81,9 @@ public final class CBoolValue extends IBuiltinAction
                    .mapToInt( Number::intValue )
                    .boxed()
                    .map( i -> l_arguments.get( 0 ).<BitVector>raw().getQuick( i ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

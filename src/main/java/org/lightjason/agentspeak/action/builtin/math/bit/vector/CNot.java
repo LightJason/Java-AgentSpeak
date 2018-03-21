@@ -76,6 +76,6 @@ public final class CNot extends IBuiltinAction
                .map( ITerm::<BitVector>raw )
                .forEach( BitVector::not );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

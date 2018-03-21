@@ -71,33 +71,33 @@ public final class CMultiplicative extends IBaseBinary
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         switch ( m_operator )
         {
             case MULTIPLY:
-                p_return.add( CRawTerm.from( this.multiply(
+                p_return.add( CRawTerm.of( this.multiply(
                     l_argument.get( 0 ).<Number>raw(),
                     l_argument.get( 1 ).<Number>raw()
                 ) ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case DIVIDE:
-                p_return.add( CRawTerm.from( this.divide(
+                p_return.add( CRawTerm.of( this.divide(
                     l_argument.get( 0 ).<Number>raw(),
                     l_argument.get( 1 ).<Number>raw()
                 ) ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case MODULO:
-                p_return.add( CRawTerm.from( this.modulo(
+                p_return.add( CRawTerm.of( this.modulo(
                     l_argument.get( 0 ).<Number>raw(),
                     l_argument.get( 1 ).<Number>raw()
                 ) ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
 
     }

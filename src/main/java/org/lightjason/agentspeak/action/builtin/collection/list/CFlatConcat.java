@@ -74,8 +74,8 @@ public final class CFlatConcat extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_list = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-        p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
+        return CFuzzyValue.of( true );
     }
 
 }

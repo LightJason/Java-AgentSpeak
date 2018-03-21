@@ -76,9 +76,9 @@ public final class CNonZero extends IBuiltinAction
                .map( ITerm::<DoubleMatrix1D>raw )
                .mapToDouble( DoubleMatrix1D::cardinality )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

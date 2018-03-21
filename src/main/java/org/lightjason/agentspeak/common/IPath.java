@@ -278,7 +278,7 @@ public interface IPath extends Serializable, Comparable<IPath>
     IPath remove( final int p_index );
 
     /**
-     * removes all elements from start index until end index (exclusive)
+     * removes all elements of start index until end index (exclusive)
      *
      * @param p_start start index
      * @param p_end end index (exclusive)
@@ -305,7 +305,7 @@ public interface IPath extends Serializable, Comparable<IPath>
     /**
      * returns an part of the path
      *
-     * @param p_index index position (negativ index is element from the end)
+     * @param p_index index position (negativ index is element of the end)
      * @return element
      */
     @Nonnull
@@ -374,7 +374,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * creates a path of the indices
      *
      * @param p_fromindex start index
-     * @param p_toindex end index (exclusive) / negative values from the end
+     * @param p_toindex end index (exclusive) / negative values of the end
      * @return path
      */
     @Nonnull
@@ -425,7 +425,7 @@ public interface IPath extends Serializable, Comparable<IPath>
     IPath pushfront( @Nonnull final IPath p_path );
 
     /**
-     * remove the suffix from the path
+     * remove the suffix of the path
      *
      * @return last item of the path
      */

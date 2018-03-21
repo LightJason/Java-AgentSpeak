@@ -64,13 +64,13 @@ public final class CConcat extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument )
                    .filter( i -> Objects.nonNull( i.raw() ) )
                    .map( i -> i.raw().toString() )
                    .collect( Collectors.joining() )
         ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

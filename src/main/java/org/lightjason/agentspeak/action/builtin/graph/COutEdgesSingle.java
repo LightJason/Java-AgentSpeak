@@ -62,7 +62,7 @@ public final class COutEdgesSingle extends IApplySingle
         final List<?> l_return = new ArrayList<>( p_graph.getOutEdges( p_window.get( 0 ).raw() ) );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_return )
                 : l_return

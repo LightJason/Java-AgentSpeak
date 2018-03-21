@@ -78,12 +78,12 @@ public final class TestCMetric extends IBaseTest
         m_agentgenerator = new CAgentGenerator();
 
         m_literals = Stream.of(
-            CLiteral.from( "toplevel" ),
-            CLiteral.from( "first/sub1" ),
-            CLiteral.from( "first/sub2" ),
-            CLiteral.from( "second/sub3" ),
-            CLiteral.from( "second/sub4" ),
-            CLiteral.from( "second/sub/sub5" )
+            CLiteral.of( "toplevel" ),
+            CLiteral.of( "first/sub1" ),
+            CLiteral.of( "first/sub2" ),
+            CLiteral.of( "second/sub3" ),
+            CLiteral.of( "second/sub4" ),
+            CLiteral.of( "second/sub/sub5" )
         ).collect( Collectors.toSet() );
     }
 
@@ -119,7 +119,7 @@ public final class TestCMetric extends IBaseTest
             "symmetric difference inequality",
             new CAll(), new CSymmetricDifference(),
             m_literals,
-            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.of( "diff" ) ) ).collect( Collectors.toSet() ),
             1, 0
         );
     }
@@ -158,7 +158,7 @@ public final class TestCMetric extends IBaseTest
             new CAll(),
             new CWeightedDifference(),
             m_literals,
-            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.of( "diff" ) ) ).collect( Collectors.toSet() ),
             28 + 1.0 / 6, 0
         );
     }

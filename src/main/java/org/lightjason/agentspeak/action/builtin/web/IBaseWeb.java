@@ -148,7 +148,7 @@ public abstract class IBaseWeb extends IBuiltinAction
     }
 
     /**
-     * creates a literal structure from a stream of string elements,
+     * creates a literal structure of a stream of string elements,
      * the string stream will be build in a tree structure
      *
      * @param p_functor stream with functor strings
@@ -160,9 +160,9 @@ public abstract class IBaseWeb extends IBuiltinAction
     {
         final Stack<String> l_tree = p_functor.collect( Collectors.toCollection( Stack::new ) );
 
-        ILiteral l_literal = CLiteral.from( l_tree.pop(), p_values );
+        ILiteral l_literal = CLiteral.of( l_tree.pop(), p_values );
         while ( !l_tree.isEmpty() )
-            l_literal = CLiteral.from( l_tree.pop(), l_literal );
+            l_literal = CLiteral.of( l_tree.pop(), l_literal );
 
         return l_literal;
     }
@@ -184,7 +184,7 @@ public abstract class IBaseWeb extends IBuiltinAction
                ? flatmap( (Map<String, ?>) p_object )
                : p_object instanceof Collection
                  ? flatcollection( (Collection) p_object )
-                 : Stream.of( CRawTerm.from( p_object ) );
+                 : Stream.of( CRawTerm.of( p_object ) );
     }
 
 
@@ -201,7 +201,7 @@ public abstract class IBaseWeb extends IBuiltinAction
         return p_map.entrySet()
                     .stream()
                     .map( i ->
-                              CLiteral.from(
+                              CLiteral.of(
                                   i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/]", "-" ),
                                   flatterm( i.getValue() )
                               )

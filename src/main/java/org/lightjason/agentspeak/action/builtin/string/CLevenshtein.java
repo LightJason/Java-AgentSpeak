@@ -76,7 +76,7 @@ public final class CLevenshtein extends IBuiltinAction
                                              .collect( Collectors.toList() );
 
         if ( l_strings.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         // create weight
@@ -95,9 +95,9 @@ public final class CLevenshtein extends IBuiltinAction
                  .skip( 1 )
                  .mapToDouble( i -> CCommon.levenshtein( l_strings.get( 0 ), i, l_weights.get( 1 ), l_weights.get( 1 ), l_weights.get( 2 ) ) )
                  .boxed()
-                 .map( CRawTerm::from )
+                 .map( CRawTerm::of )
                  .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

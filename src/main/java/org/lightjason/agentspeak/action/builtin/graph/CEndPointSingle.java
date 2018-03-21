@@ -33,7 +33,7 @@ import java.util.List;
 
 
 /**
- * returns of an edge the vertices from each graph instance.
+ * returns of an edge the vertices of each graph instance.
  * The actions returns for a single edge
  * the connected vertices of each graph instance,
  * the action never fails
@@ -59,7 +59,7 @@ public final class CEndPointSingle extends IApplySingle
     {
         p_graph.getEndpoints( p_window.get( 0 ).raw() )
                .stream()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
     }
 

@@ -49,7 +49,7 @@ public final class CToNumber extends ICast
     {
         try
         {
-            p_return.add( CRawTerm.from( p_value.<Number>raw().doubleValue() ) );
+            p_return.add( CRawTerm.of( p_value.<Number>raw().doubleValue() ) );
             return true;
         }
         catch ( final Exception l_exception )

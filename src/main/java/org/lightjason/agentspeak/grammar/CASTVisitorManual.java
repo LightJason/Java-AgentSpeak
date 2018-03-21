@@ -130,7 +130,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
         return p_context.term().stream()
                         .map( i -> this.visitTerm( i ) )
                         .filter( i -> Objects.nonNull( i ) )
-                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
+                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) )
                         .collect( Collectors.toList() );
     }
 

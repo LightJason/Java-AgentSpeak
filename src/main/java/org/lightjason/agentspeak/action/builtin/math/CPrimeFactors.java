@@ -72,10 +72,10 @@ public final class CPrimeFactors extends IBuiltinAction
                .boxed()
                .map( Primes::primeFactors )
                .map( i -> i.stream().mapToDouble( j -> j ).boxed().collect( Collectors.toList() ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

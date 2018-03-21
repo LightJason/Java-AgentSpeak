@@ -65,6 +65,6 @@ public final class CFlat extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument ).forEach( p_return::add );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

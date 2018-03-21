@@ -32,7 +32,7 @@ import java.util.Map;
 
 
 /**
- * action for parsing a number from string.
+ * action for parsing a number of string.
  * Parses each argument to a number value
  * and returns the value, the action fails on
  * parsing errors
@@ -57,11 +57,11 @@ public final class CParseNumber extends IParse
     {
         try
         {
-            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.from( Double.parseDouble( p_value ) ) );
+            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.of( Double.parseDouble( p_value ) ) );
         }
         catch ( final Exception l_exception )
         {
-            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.from( null ) );
+            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.of( null ) );
         }
     }
 

@@ -85,7 +85,7 @@ public final class CBelief extends IBaseExecution<ILiteral>
                 throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", m_action ) );
         }
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

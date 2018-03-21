@@ -75,9 +75,9 @@ public final class CSum extends IBuiltinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix1D>raw )
                .map( DoubleMatrix1D::zSum )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

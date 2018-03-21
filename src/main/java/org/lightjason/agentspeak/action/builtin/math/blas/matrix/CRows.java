@@ -77,9 +77,9 @@ public final class CRows extends IBuiltinAction
                .map( ITerm::<DoubleMatrix2D>raw )
                .mapToDouble( AbstractMatrix2D::rows )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

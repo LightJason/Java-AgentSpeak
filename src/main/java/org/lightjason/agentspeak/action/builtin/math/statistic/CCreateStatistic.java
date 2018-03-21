@@ -77,11 +77,11 @@ public final class CCreateStatistic extends IBuiltinAction
         (
             p_argument.size() == 0
             ? Stream.of( EType.SUMMARY )
-            : CCommon.flatten( p_argument ).map( ITerm::<String>raw ).map( EType::from )
+            : CCommon.flatten( p_argument ).map( ITerm::<String>raw ).map( EType::of )
         ).map( i -> i.generate( p_parallel ) )
-         .map( CRawTerm::from ).forEach( p_return::add );
+         .map( CRawTerm::of ).forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -100,7 +100,7 @@ public final class CCreateStatistic extends IBuiltinAction
          * @return enum
          */
         @Nonnull
-        public static EType from( @Nonnull final String p_value )
+        public static EType of( @Nonnull final String p_value )
         {
             return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }

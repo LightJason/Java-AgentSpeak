@@ -64,11 +64,11 @@ public final class CAverage extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()
                    .orElseThrow( () -> new CRuntimeException( p_context ) )
         ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

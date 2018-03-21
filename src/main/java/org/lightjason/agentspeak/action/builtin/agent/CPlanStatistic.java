@@ -70,7 +70,7 @@ public final class CPlanStatistic extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             CCommon.flatten( p_argument )
                    .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().trigger(), p_context.agent(), p_return ) )
         );
@@ -93,9 +93,9 @@ public final class CPlanStatistic extends IBuiltinAction
         final double l_success = l_plans.parallelStream().mapToDouble( IPlanStatistic::successful ).sum();
         final double l_fail = l_plans.parallelStream().mapToDouble( IPlanStatistic::fail ).sum();
 
-        p_return.add( CRawTerm.from( l_success ) );
-        p_return.add( CRawTerm.from( l_fail ) );
-        p_return.add( CRawTerm.from( l_success + l_fail ) );
+        p_return.add( CRawTerm.of( l_success ) );
+        p_return.add( CRawTerm.of( l_fail ) );
+        p_return.add( CRawTerm.of( l_success + l_fail ) );
 
         return true;
     }

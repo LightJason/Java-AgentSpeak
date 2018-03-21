@@ -50,19 +50,19 @@ public final class TestCTermVariablesConstant extends IBaseTest
     @Test
     public final void literal()
     {
-        final ILiteral l_emptyliteral = CLiteral.from( "foo/bar" );
+        final ILiteral l_emptyliteral = CLiteral.of( "foo/bar" );
 
         Assert.assertEquals( l_emptyliteral.functor(), "bar" );
-        Assert.assertEquals( l_emptyliteral.fqnfunctor(), CPath.from( "foo/bar" ) );
+        Assert.assertEquals( l_emptyliteral.fqnfunctor(), CPath.of( "foo/bar" ) );
         Assert.assertFalse( l_emptyliteral.hasAt() );
         Assert.assertTrue( l_emptyliteral.emptyValues() );
 
 
 
-        final ILiteral l_valueliteral = CLiteral.from( "foo/value", CRawTerm.from( 5 ), CRawTerm.from( "hello" ) );
+        final ILiteral l_valueliteral = CLiteral.of( "foo/value", CRawTerm.of( 5 ), CRawTerm.of( "hello" ) );
 
         Assert.assertEquals( l_valueliteral.functor(), "value" );
-        Assert.assertEquals( l_valueliteral.fqnfunctor(), CPath.from( "foo/value" ) );
+        Assert.assertEquals( l_valueliteral.fqnfunctor(), CPath.of( "foo/value" ) );
         Assert.assertFalse( l_valueliteral.hasAt() );
         Assert.assertFalse( l_valueliteral.emptyValues() );
 
@@ -82,14 +82,14 @@ public final class TestCTermVariablesConstant extends IBaseTest
     @Test
     public final void rawterm()
     {
-        final ITerm l_stringterm = CRawTerm.from( "hello" );
+        final ITerm l_stringterm = CRawTerm.of( "hello" );
 
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_stringterm, String.class ) );
         Assert.assertEquals( l_stringterm.raw(), "hello" );
 
 
         final double l_value = Math.random();
-        final ITerm l_numberterm = CRawTerm.from( l_value );
+        final ITerm l_numberterm = CRawTerm.of( l_value );
 
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_numberterm, Number.class ) );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_numberterm, Double.class ) );
@@ -135,7 +135,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
         );
 
         Assert.assertEquals(
-            new CConstant<>( "const/value", "test" ).shallowcopy( CPath.from( "xxx" ) ).fqnfunctor().toString(),
+            new CConstant<>( "const/value", "test" ).shallowcopy( CPath.of( "xxx" ) ).fqnfunctor().toString(),
             "xxx/const/value"
         );
     }
@@ -231,7 +231,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
     {
         Assert.assertEquals(
             new CVariable<>( "prefix/name" ).functorpath(),
-            CPath.from( "prefix" )
+            CPath.of( "prefix" )
         );
     }
 
@@ -271,16 +271,16 @@ public final class TestCTermVariablesConstant extends IBaseTest
     {
         final IVariable<?> l_variable = new CVariable<>( "prefix/copy", new Object()  );
 
-        Assert.assertEquals( l_variable.shallowcopysuffix().fqnfunctor(), CPath.from( "copy" ) );
-        Assert.assertEquals( l_variable.shallowcopy( CPath.from( "xxx" ) ).fqnfunctor(), CPath.from( "xxx/prefix/copy" ) );
+        Assert.assertEquals( l_variable.shallowcopysuffix().fqnfunctor(), CPath.of( "copy" ) );
+        Assert.assertEquals( l_variable.shallowcopy( CPath.of( "xxx" ) ).fqnfunctor(), CPath.of( "xxx/prefix/copy" ) );
         Assert.assertEquals( l_variable.shallowcopysuffix().<Object>raw(), l_variable.<Object>raw() );
 
-        final ITerm l_deep = l_variable.deepcopy( CPath.from( "foo" ) );
-        Assert.assertEquals( l_deep.fqnfunctor(), CPath.from( "prefix/copy/foo" ) );
+        final ITerm l_deep = l_variable.deepcopy( CPath.of( "foo" ) );
+        Assert.assertEquals( l_deep.fqnfunctor(), CPath.of( "prefix/copy/foo" ) );
         Assert.assertNotEquals( l_deep.<Object>raw(), l_variable.<Object>raw() );
 
         final ITerm l_deepsuffix = l_variable.deepcopysuffix();
-        Assert.assertEquals( l_deepsuffix.fqnfunctor(), CPath.from( "copy" ) );
+        Assert.assertEquals( l_deepsuffix.fqnfunctor(), CPath.of( "copy" ) );
         Assert.assertNotEquals( l_deepsuffix.<Object>raw(), l_variable.<Object>raw() );
     }
 

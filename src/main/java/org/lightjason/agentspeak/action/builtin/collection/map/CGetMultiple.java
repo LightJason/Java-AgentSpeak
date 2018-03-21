@@ -52,7 +52,7 @@ public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
                                 @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_instance.get( p_key )
             )
         );

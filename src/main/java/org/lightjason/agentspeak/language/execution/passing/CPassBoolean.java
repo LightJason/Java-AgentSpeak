@@ -59,6 +59,6 @@ public final class CPassBoolean extends IBaseExecution<Boolean>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from( m_value );
+        return CFuzzyValue.of( m_value );
     }
 }

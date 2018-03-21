@@ -70,7 +70,7 @@ public final class CType extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::from ).forEach(  p_return::add );
-        return CFuzzyValue.from( true );
+        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::of ).forEach( p_return::add );
+        return CFuzzyValue.of( true );
     }
 }

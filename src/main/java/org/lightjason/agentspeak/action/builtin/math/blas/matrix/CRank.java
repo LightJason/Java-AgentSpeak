@@ -77,9 +77,9 @@ public final class CRank extends IAlgebra
                .map( ITerm::<DoubleMatrix2D>raw )
                .mapToDouble( DENSEALGEBRA::rank )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

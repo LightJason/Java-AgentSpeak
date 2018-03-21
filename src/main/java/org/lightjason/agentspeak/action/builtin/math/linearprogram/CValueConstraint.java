@@ -92,7 +92,7 @@ public final class CValueConstraint extends IConstraint
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

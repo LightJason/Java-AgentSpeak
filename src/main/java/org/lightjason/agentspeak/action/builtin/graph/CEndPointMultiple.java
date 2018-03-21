@@ -32,7 +32,7 @@ import java.util.List;
 
 
 /**
- * returns of any edge the vertices from a single graph instance.
+ * returns of any edge the vertices of a single graph instance.
  * The actions returns for any edges the connected vertices
  * of a single graph instance,
  * the action never fails
@@ -58,7 +58,7 @@ public final class CEndPointMultiple extends IApplyMultiple
     {
         p_graph.getEndpoints( p_window.get( 0 ).raw() )
                .stream()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
     }
 

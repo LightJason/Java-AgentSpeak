@@ -76,14 +76,14 @@ public final class CDecrypt extends IBuiltinAction
         final EAlgorithm l_algorithm;
         try
         {
-            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+            l_algorithm = EAlgorithm.of( l_key.getAlgorithm() );
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
                    CCommon.flatten( p_argument.stream().skip( 1 ) )
                           .map( ITerm::<String>raw )
                           .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
@@ -105,7 +105,7 @@ public final class CDecrypt extends IBuiltinAction
         try
         {
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     SerializationUtils.deserialize(
                         p_algorithm.getDecryptCipher( p_key ).doFinal(
                             Base64.getDecoder().decode( p_dataset )

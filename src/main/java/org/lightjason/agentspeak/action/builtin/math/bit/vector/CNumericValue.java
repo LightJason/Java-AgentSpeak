@@ -83,9 +83,9 @@ public final class CNumericValue extends IBuiltinAction
                    .boxed()
                    .mapToDouble( i -> l_arguments.get( 0 ).<BitVector>raw().getQuick( i ) ? 1 : 0 )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

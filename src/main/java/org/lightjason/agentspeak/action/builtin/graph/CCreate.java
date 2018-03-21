@@ -83,12 +83,12 @@ public class CCreate extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> EGraphTypes.exist( i ) ? EGraphTypes.from( i ) : EGraphTypes.SPARSE )
+               .map( i -> EGraphTypes.exist( i ) ? EGraphTypes.of( i ) : EGraphTypes.SPARSE )
                .map( EGraphTypes::get )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -164,7 +164,7 @@ public class CCreate extends IBuiltinAction
          * @return graph type
          */
         @Nonnull
-        public static EGraphTypes from( @Nonnull final String p_value )
+        public static EGraphTypes of( @Nonnull final String p_value )
         {
             return EGraphTypes.valueOf( p_value.toUpperCase( Locale.ROOT ) );
         }

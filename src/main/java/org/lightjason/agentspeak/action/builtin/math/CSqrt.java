@@ -67,10 +67,10 @@ public final class CSqrt extends IBuiltinAction
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::sqrt )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

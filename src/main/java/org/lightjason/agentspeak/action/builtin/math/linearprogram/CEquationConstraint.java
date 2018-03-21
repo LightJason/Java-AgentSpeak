@@ -89,7 +89,7 @@ public final class CEquationConstraint extends IConstraint
 
         // test content
         if ( ( l_lhs.size() < 2 ) || ( l_rhs.size() < 3 ) || ( !CCommon.rawvalueAssignableTo( l_rhs.get( 0 ), String.class ) ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // create constraint
         l_arguments.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
@@ -124,7 +124,7 @@ public final class CEquationConstraint extends IConstraint
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

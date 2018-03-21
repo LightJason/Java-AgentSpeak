@@ -85,6 +85,6 @@ public final class CClear extends IBuiltinAction
                    .map( ITerm::<BitVector>raw )
                    .forEach( i -> Arrays.stream( l_index ).forEach( i::clear ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

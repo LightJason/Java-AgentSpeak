@@ -130,7 +130,7 @@ public final class CPath implements IPath
     }
 
     /**
-     * creates a path object from different items
+     * creates a path object of different items
      *
      * @param p_varargs list of strings
      * @return path object
@@ -163,7 +163,7 @@ public final class CPath implements IPath
      * @return path
      */
     @Nonnull
-    public static IPath from( @Nonnull final String p_string )
+    public static IPath of( @Nonnull final String p_string )
     {
         return p_string.isEmpty() ? EMPTY : createPathWithSeperator( DEFAULTSEPERATOR, p_string );
     }
@@ -499,7 +499,7 @@ public final class CPath implements IPath
     }
 
     /**
-     * returns a collector to build a path from strings
+     * returns a collector to build a path of strings
      *
      * @return collector
      */

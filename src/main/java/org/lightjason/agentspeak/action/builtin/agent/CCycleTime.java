@@ -56,11 +56,11 @@ public class CCycleTime extends IBuiltinAction
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 System.nanoTime() - p_context.agent().cycletime()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

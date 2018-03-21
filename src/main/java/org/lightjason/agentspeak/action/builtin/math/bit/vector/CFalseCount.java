@@ -75,9 +75,9 @@ public final class CFalseCount extends IBuiltinAction
                .map( ITerm::<BitVector>raw )
                .mapToDouble( i -> i.size() - i.cardinality() )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -76,14 +76,14 @@ public final class CComplement extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( ( p_argument.get( 0 ).<List<?>>raw().isEmpty() ) && ( p_argument.get( 1 ).<List<?>>raw().isEmpty() ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // all arguments must be lists, first argument is the full list
         final Collection<Object> l_result = new LinkedList<>( p_argument.get( 0 ).<Collection<Object>>raw() );
         l_result.removeAll( p_argument.get( 1 ).<Collection<Object>>raw() );
-        p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
+        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

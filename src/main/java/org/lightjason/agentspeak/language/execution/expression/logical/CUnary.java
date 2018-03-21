@@ -70,18 +70,18 @@ public final class CUnary extends IBaseUnary
         final List<ITerm> l_argument = new LinkedList<>();
         final boolean l_result = m_expression.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value();
         if ( l_argument.size() != 1 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         switch ( m_operator )
         {
             case NEGATION:
-                p_return.add( CRawTerm.from(
+                p_return.add( CRawTerm.of(
                     !( l_result && l_argument.get( 0 ).<Boolean>raw() )
                 ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 

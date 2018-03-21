@@ -108,7 +108,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateMutexVariable<>( CPath.from( m_functor.suffix() ), m_relocate, CCommon.deepclone( m_value ) );
+        return new CRelocateMutexVariable<>( CPath.of( m_functor.suffix() ), m_relocate, CCommon.deepclone( m_value ) );
     }
 
     @Nonnull

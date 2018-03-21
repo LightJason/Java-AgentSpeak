@@ -92,7 +92,7 @@ public abstract class IBaseSolve extends IBuiltinAction
         catch ( final Exception l_exception )
         {
             LOGGER.warning( l_exception.getMessage() );
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
 
         // add theory objects to the current theory
@@ -118,7 +118,7 @@ public abstract class IBaseSolve extends IBuiltinAction
 
         // result checking
         if ( !this.issuccess( l_result  ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // result extraction to result values
         Arrays.stream( l_result )
@@ -136,10 +136,10 @@ public abstract class IBaseSolve extends IBuiltinAction
               } )
               .filter( Var::isVar )
               .map( CSolveAll::fromprologterm )
-              .map( CRawTerm::from )
+              .map( CRawTerm::of )
               .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
 
     }
 

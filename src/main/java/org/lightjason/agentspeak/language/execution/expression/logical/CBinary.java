@@ -69,26 +69,26 @@ public final class CBinary extends IBaseBinary
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // calculate return of both expression results
         switch ( m_operator )
         {
 
             case AND:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>raw() && l_argument.get( 1 ).<Boolean>raw() ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( l_argument.get( 0 ).<Boolean>raw() && l_argument.get( 1 ).<Boolean>raw() ) );
+                return CFuzzyValue.of( true );
 
             case OR:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>raw() || l_argument.get( 1 ).<Boolean>raw() ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( l_argument.get( 0 ).<Boolean>raw() || l_argument.get( 1 ).<Boolean>raw() ) );
+                return CFuzzyValue.of( true );
 
             case XOR:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>raw() ^ l_argument.get( 1 ).<Boolean>raw() ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( l_argument.get( 0 ).<Boolean>raw() ^ l_argument.get( 1 ).<Boolean>raw() ) );
+                return CFuzzyValue.of( true );
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 

@@ -69,7 +69,7 @@ public class CVariable<T> implements IVariable<T>
      */
     public CVariable( @Nonnull final String p_functor )
     {
-        this( CPath.from( p_functor ), null );
+        this( CPath.of( p_functor ), null );
     }
 
     /**
@@ -80,7 +80,7 @@ public class CVariable<T> implements IVariable<T>
      */
     public CVariable( @Nonnull final String p_functor, @Nullable final T p_value )
     {
-        this( CPath.from( p_functor ), p_value );
+        this( CPath.of( p_functor ), p_value );
     }
 
     /**

@@ -66,12 +66,12 @@ public final class COr extends IBuiltinAction
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .anyMatch( ITerm::<Boolean>raw )
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

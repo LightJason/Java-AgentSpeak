@@ -76,17 +76,17 @@ public final class CGetPlan extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
                 2
-            ).allMatch( i -> CGetPlan.query( ITrigger.EType.from( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
+            ).allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
         );
     }
 
     /**
-     * query tha plan from an agent
+     * query tha plan of an agent
      *
      * @param p_trigger trigger type
      * @param p_literal literal as string or literal object
@@ -116,7 +116,7 @@ public final class CGetPlan extends IBuiltinAction
             return false;
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 l_plans.stream().map( IPlanStatistic::plan ).collect( Collectors.toList() )
             )
         );

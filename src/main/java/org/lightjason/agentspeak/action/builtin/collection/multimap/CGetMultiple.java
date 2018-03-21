@@ -54,7 +54,7 @@ public class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>>
                                 @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( new ArrayList<>( p_instance.asMap().get( p_key ) ) )
                 : new ArrayList<>( p_instance.asMap().get( p_key ) )

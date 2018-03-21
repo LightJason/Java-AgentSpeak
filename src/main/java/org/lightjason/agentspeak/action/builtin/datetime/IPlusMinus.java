@@ -82,10 +82,10 @@ public abstract class IPlusMinus extends IBuiltinAction
                                .map( ITerm::<ZonedDateTime>raw ),
                     l_arguments.get( 1 ).<Number>raw().longValue()
                 )
-                    .map( CRawTerm::from )
+                    .map( CRawTerm::of )
                     .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             case "plus" :
@@ -95,14 +95,14 @@ public abstract class IPlusMinus extends IBuiltinAction
                                .map( ITerm::<ZonedDateTime>raw ),
                     l_arguments.get( 1 ).<Number>raw().longValue()
                 )
-                    .map( CRawTerm::from )
+                    .map( CRawTerm::of )
                     .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
         }
     }

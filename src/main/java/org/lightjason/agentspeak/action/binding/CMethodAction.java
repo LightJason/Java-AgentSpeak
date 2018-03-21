@@ -87,7 +87,7 @@ public final class CMethodAction extends IBaseAction
     {
         m_method = p_method;
         m_arguments = m_method.getParameterCount();
-        m_name = CPath.from(
+        m_name = CPath.of(
             m_method.isAnnotationPresent( IAgentActionName.class ) && !m_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
             ? m_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
             : m_method.getName().toLowerCase( Locale.ROOT )
@@ -172,7 +172,7 @@ public final class CMethodAction extends IBaseAction
         catch ( final Throwable l_throwable )
         {
             LOGGER.warning( MessageFormat.format( "binding method [{0}] throws error [{1}] in agent: ", m_name, l_throwable, p_context.agent() ) );
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     }
 
@@ -188,10 +188,10 @@ public final class CMethodAction extends IBaseAction
     {
         // void result of the execution
         if ( ( Objects.isNull( p_result ) ) || ( void.class.equals( p_result.getClass() ) ) )
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
 
         // otherwise object is returned
-        p_return.add( CRawTerm.from( p_result ) );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.of( p_result ) );
+        return CFuzzyValue.of( true );
     }
 }

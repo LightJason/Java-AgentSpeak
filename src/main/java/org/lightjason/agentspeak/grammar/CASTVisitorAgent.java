@@ -118,7 +118,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         m_initialgoal = Objects.isNull( p_context.INITIALGOAL() )
                         ? null
-                        : CLiteral.from(
+                        : CLiteral.of(
                             p_context.INITIALGOAL().getText().replace( "!", "" ).replace( ".", "" )
                         );
 

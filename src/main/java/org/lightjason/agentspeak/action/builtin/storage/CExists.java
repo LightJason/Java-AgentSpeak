@@ -106,10 +106,10 @@ public final class CExists extends IStorage
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( i -> ( !m_resolver.apply( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

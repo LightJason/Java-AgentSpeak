@@ -77,10 +77,10 @@ public final class CCreate extends IBuiltinAction
                .mapToInt( Number::intValue )
                .boxed()
                .map( BitVector::new )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

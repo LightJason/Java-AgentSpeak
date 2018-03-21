@@ -59,7 +59,7 @@ public interface IUnifier
         public final IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
                                                  @Nonnull final IExpression p_expression, final boolean p_parallel )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     };
 

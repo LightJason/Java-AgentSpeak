@@ -118,14 +118,14 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         // run initialization
         final List<ITerm> l_initialization = new LinkedList<>();
         if ( !m_initialize.execute( p_parallel, p_context, p_argument, l_initialization ).value() )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // run lambda expression
         final List<?> l_return = m_parallel ? this.executeParallel( p_context, l_initialization ) : this.executeSequential( p_context, l_initialization );
         if ( Objects.nonNull( m_return ) )
             CCommon.replaceFromContext( p_context, m_return ).<IVariable<List<?>>>term().set( l_return );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Override

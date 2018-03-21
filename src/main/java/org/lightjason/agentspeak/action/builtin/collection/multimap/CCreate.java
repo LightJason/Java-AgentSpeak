@@ -73,13 +73,13 @@ public final class CCreate extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final HashMultimap<Object, Object> l_map = HashMultimap.create();
         StreamUtils.windowed( l_arguments.stream(), 2 ).forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
-        p_return.add( CRawTerm.from( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
+        p_return.add( CRawTerm.of( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

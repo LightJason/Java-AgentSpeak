@@ -85,7 +85,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
         else
         {
             m_value = (T) p_value;
-            m_functor = Objects.isNull( p_value ) ? IPath.EMPTY : CPath.from( p_value.toString() );
+            m_functor = Objects.isNull( p_value ) ? IPath.EMPTY : CPath.of( p_value.toString() );
         }
 
         m_hashcode = Objects.isNull( m_value ) ? 0 : m_value.hashCode();
@@ -101,7 +101,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
      *
      * @tparam N type
      */
-    public static <N> CRawTerm<N> from( final N p_value )
+    public static <N> CRawTerm<N> of( final N p_value )
     {
         return new CRawTerm<>( p_value );
     }
@@ -205,14 +205,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
-        return CRawTerm.from( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
+        return CRawTerm.of( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
     }
 
     @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {
-        return CRawTerm.from( m_value );
+        return CRawTerm.of( m_value );
     }
 
     @Override

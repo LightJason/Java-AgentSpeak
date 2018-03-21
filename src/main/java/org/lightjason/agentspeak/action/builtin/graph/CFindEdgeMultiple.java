@@ -57,7 +57,7 @@ public final class CFindEdgeMultiple extends IApplyMultiple
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.findEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

@@ -63,7 +63,7 @@ public abstract class IApplySingle extends IBuiltinAction
                .skip( this.skipsize() )
                .forEach( i -> this.apply( p_parallel, i.<Graph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

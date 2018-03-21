@@ -79,9 +79,9 @@ public final class CContains extends IBuiltinAction
         CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )
                .map( l_set::contains )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

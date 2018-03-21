@@ -31,8 +31,8 @@ import java.util.List;
 
 
 /**
- * remove an edge from any graph instance.
- * The action removes an edge aas first argument from
+ * remove an edge of any graph instance.
+ * The action removes an edge aas first argument of
  * all graph arguments, the action never fails
  *
  * {@code graph/removeedgesingle( Edge, Graph1, Graph2 );}

@@ -58,11 +58,11 @@ public final class CUuid extends IBuiltinAction
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 UUID.randomUUID().toString()
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

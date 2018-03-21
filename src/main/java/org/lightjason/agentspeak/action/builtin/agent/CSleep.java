@@ -56,7 +56,7 @@ public final class CSleep extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             p_context.agent().sleep(
 
                 p_argument.size() > 0

@@ -126,7 +126,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValue<N> from( @Nonnull final N p_value )
+    public static <N> IFuzzyValue<N> of( @Nonnull final N p_value )
     {
         return new CFuzzyValue<>( p_value );
     }
@@ -141,7 +141,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValue<N> from( @Nonnull final N p_value, final double p_fuzzy )
+    public static <N> IFuzzyValue<N> of( @Nonnull final N p_value, final double p_fuzzy )
     {
         return new CFuzzyValue<>( p_value, p_fuzzy );
     }

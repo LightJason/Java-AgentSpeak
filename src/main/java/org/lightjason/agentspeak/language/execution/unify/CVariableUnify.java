@@ -86,10 +86,10 @@ public final class CVariableUnify extends CDefaultUnify
                                                        );
 
         if ( l_variables.size() != m_variablenumber )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         CCommon.updatecontext( p_context, l_variables.stream() );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull

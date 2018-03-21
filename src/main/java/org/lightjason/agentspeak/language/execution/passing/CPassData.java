@@ -54,7 +54,7 @@ public final class CPassData<T> extends IBaseExecution<ITerm>
      */
     public CPassData( @Nullable final T p_value )
     {
-        super( CRawTerm.from( p_value ) );
+        super( CRawTerm.of( p_value ) );
     }
 
     @Nonnull
@@ -65,6 +65,6 @@ public final class CPassData<T> extends IBaseExecution<ITerm>
         if ( Objects.nonNull( m_value ) )
             p_return.add( m_value );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

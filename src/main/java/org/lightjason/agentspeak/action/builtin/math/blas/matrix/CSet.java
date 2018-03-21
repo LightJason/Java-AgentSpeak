@@ -85,6 +85,6 @@ public final class CSet extends IBuiltinAction
                        l_arguments.get( 2 ).<Number>raw().doubleValue()
                    ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

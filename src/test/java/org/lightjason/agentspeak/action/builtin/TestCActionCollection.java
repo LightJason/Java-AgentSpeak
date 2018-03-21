@@ -72,47 +72,47 @@ public final class TestCActionCollection extends IBaseTest
         return Stream.of(
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from( new Object() ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( new Object() ) ).collect( Collectors.toList() ),
                 new int[]{0}
             ),
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from( new ArrayList<>() ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( new ArrayList<>() ) ).collect( Collectors.toList() ),
                 new int[]{0}
             ),
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from( Stream.of( 1, "test" ).collect( Collectors.toList() ) ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( Stream.of( 1, "test" ).collect( Collectors.toList() ) ) ).collect( Collectors.toList() ),
                 new int[]{2}
             ),
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from( new AbstractMap.SimpleEntry<>( "a", 1 ) ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( new AbstractMap.SimpleEntry<>( "a", 1 ) ) ).collect( Collectors.toList() ),
                 new int[]{2}
             ),
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from( Stream.of( 1, 1, "test" ).collect( Collectors.toSet() ) ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( Stream.of( 1, 1, "test" ).collect( Collectors.toSet() ) ) ).collect( Collectors.toList() ),
                 new int[]{2}
             ),
 
             new ImmutablePair<>(
                 Stream.of(
-                    CRawTerm.from( Stream.of( "abcd", "xyz", 12, 12 ).collect( Collectors.toSet() ) ),
-                    CRawTerm.from( Stream.of( 1, 2, 3, 3, 4, 4 ).collect( Collectors.toList() )  )
+                    CRawTerm.of( Stream.of( "abcd", "xyz", 12, 12 ).collect( Collectors.toSet() ) ),
+                    CRawTerm.of( Stream.of( 1, 2, 3, 3, 4, 4 ).collect( Collectors.toList() )  )
                 ).collect( Collectors.toList() ),
                 new int[]{3, 6}
             ),
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from(
+                Stream.of( CRawTerm.of(
                     StreamUtils.windowed( Stream.of( 1, 2, 3, 4 ), 2 ).collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) )
                 ) ).collect( Collectors.toList() ),
                 new int[]{3}
             ),
 
             new ImmutablePair<>(
-                Stream.of( CRawTerm.from(
+                Stream.of( CRawTerm.of(
                     StreamUtils.windowed( Stream.of( 1, 2, 3, 4 ), 2 ).collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) )
                 ) ).collect( Collectors.toList() ),
                 new int[]{3}
@@ -157,7 +157,7 @@ public final class TestCActionCollection extends IBaseTest
         new CIsEmpty().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( new ArrayList<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -183,7 +183,7 @@ public final class TestCActionCollection extends IBaseTest
 
         new CClear().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 

@@ -68,10 +68,10 @@ public final class CExp extends IBuiltinAction
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::exp )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

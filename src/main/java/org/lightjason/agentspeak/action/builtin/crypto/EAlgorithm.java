@@ -138,7 +138,7 @@ public enum EAlgorithm
      * @return enum
      */
     @Nonnull
-    public static EAlgorithm from( @Nonnull final String p_value )
+    public static EAlgorithm of( @Nonnull final String p_value )
     {
         return EAlgorithm.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }

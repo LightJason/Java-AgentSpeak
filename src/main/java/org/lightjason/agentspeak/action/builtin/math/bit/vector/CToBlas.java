@@ -81,7 +81,7 @@ public final class CToBlas extends IBuiltinAction
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final EType l_type = l_arguments.parallelStream()
                                         .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
-                                        .findFirst().map( i -> EType.from( i.<String>raw() ) )
+                                        .findFirst().map( i -> EType.of( i.<String>raw() ) )
                                         .orElse( EType.SPARSE );
 
         switch ( l_type )
@@ -92,10 +92,10 @@ public final class CToBlas extends IBuiltinAction
                            .map( ITerm::<BitVector>raw )
                            .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
                            .map( DenseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             case SPARSE:
@@ -104,14 +104,14 @@ public final class CToBlas extends IBuiltinAction
                            .map( ITerm::<BitVector>raw )
                            .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
                            .map( SparseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
 
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 }

@@ -104,7 +104,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     @Override
     public final IFuzzyValue<T> immutable()
     {
-        return CFuzzyValue.<T>from( m_value, m_fuzzy );
+        return CFuzzyValue.<T>of( m_value, m_fuzzy );
     }
 
     @Nonnull
@@ -145,7 +145,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValueMutable<N> from( @Nonnull final N p_value )
+    public static <N> IFuzzyValueMutable<N> of( @Nonnull final N p_value )
     {
         return new CFuzzyValueMutable<>( p_value );
     }
@@ -160,7 +160,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValueMutable<N> from( @Nonnull final N p_value, final double p_fuzzy )
+    public static <N> IFuzzyValueMutable<N> of( @Nonnull final N p_value, final double p_fuzzy )
     {
         return new CFuzzyValueMutable<>( p_value, p_fuzzy );
     }

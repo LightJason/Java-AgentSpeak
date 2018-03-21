@@ -108,9 +108,9 @@ public final class CPerronFrobenius extends IAlgebra
                      } ) );
 
         l_eigenvector.stream()
-                     .map( CRawTerm::from )
+                     .map( CRawTerm::of )
                      .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

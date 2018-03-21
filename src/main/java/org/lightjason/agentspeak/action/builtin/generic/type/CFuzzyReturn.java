@@ -73,6 +73,6 @@ public class CFuzzyReturn extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = CCommon.flatten( p_argument ).limit( 2 ).collect( Collectors.toList() );
-        return CFuzzyValue.from( l_return.get( 0 ).<Boolean>raw(), l_return.get( 1 ).<Number>raw().doubleValue() );
+        return CFuzzyValue.of( l_return.get( 0 ).<Boolean>raw(), l_return.get( 1 ).<Number>raw().doubleValue() );
     }
 }

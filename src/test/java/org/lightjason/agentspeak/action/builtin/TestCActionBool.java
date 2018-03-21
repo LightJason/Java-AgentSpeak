@@ -151,7 +151,7 @@ public final class TestCActionBool extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
             p_classes,
@@ -198,7 +198,7 @@ public final class TestCActionBool extends IBaseTest
 
         new CEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_return, l_return, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_return, l_return, new Object() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -212,7 +212,7 @@ public final class TestCActionBool extends IBaseTest
 
         new CEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_list1, l_list2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_list1, l_list2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -227,7 +227,7 @@ public final class TestCActionBool extends IBaseTest
 
         new CEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -246,7 +246,7 @@ public final class TestCActionBool extends IBaseTest
 
         new CNotEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_object, l_object, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_object, l_object, new Object() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

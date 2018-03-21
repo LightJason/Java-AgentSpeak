@@ -97,7 +97,7 @@ public final class CRulePlaceholder implements IRule
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from( false );
+        return CFuzzyValue.of( false );
     }
 
     @Nonnull

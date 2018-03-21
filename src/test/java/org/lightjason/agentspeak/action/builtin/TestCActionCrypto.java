@@ -95,7 +95,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         new CCreateKey().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -116,7 +116,7 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertFalse(
             new CEncrypt().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -125,7 +125,7 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertFalse(
             new CDecrypt().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -144,7 +144,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         new CEncrypt().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -152,7 +152,7 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertFalse(
             new CDecrypt().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
@@ -171,7 +171,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         new CHash().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( p_hash.getLeft() ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( p_hash.getLeft() ), CRawTerm.of( "test string" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -186,7 +186,7 @@ public final class TestCActionCrypto extends IBaseTest
     {
         new CHash().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( "xxx" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( "xxx" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
     }
@@ -216,7 +216,7 @@ public final class TestCActionCrypto extends IBaseTest
 
             new CCreateKey().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( CRawTerm.from( "test" ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -235,7 +235,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         new CCreateKey().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_returnkey
         );
 
@@ -246,7 +246,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         new CEncrypt().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_returnkey.get( 0 ), CRawTerm.from( "test string" ), CRawTerm.from( 12345 ) ).collect( Collectors.toList() ),
+            Stream.of( l_returnkey.get( 0 ), CRawTerm.of( "test string" ), CRawTerm.of( 12345 ) ).collect( Collectors.toList() ),
             l_returnencrypt
         );
 

@@ -86,9 +86,9 @@ public final class CGet extends IBuiltinAction
             2
         )
                    .map( i -> l_arguments.get( 0 ).<DoubleMatrix2D>raw().getQuick( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

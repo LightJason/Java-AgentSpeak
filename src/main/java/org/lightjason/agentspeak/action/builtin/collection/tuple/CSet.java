@@ -71,6 +71,6 @@ public final class CSet extends IBuiltinAction
                .map( ITerm::<AbstractMap.Entry<Object, Object>>raw )
                .forEach( i -> i.setValue( l_arguments.get( 0 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

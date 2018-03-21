@@ -103,12 +103,12 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
     }
 
     /**
-     * returns operator from string
+     * returns operator of string
      *
      * @param p_value string
      * @return operator
      */
-    public static EAssignOperator from( @Nonnull final String p_value )
+    public static EAssignOperator of( @Nonnull final String p_value )
     {
         switch ( p_value )
         {

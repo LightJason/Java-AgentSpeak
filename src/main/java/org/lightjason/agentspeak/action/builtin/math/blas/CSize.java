@@ -74,9 +74,9 @@ public final class CSize extends IBuiltinAction
                .map( ITerm::<AbstractMatrix>raw )
                .mapToDouble( AbstractMatrix::size )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

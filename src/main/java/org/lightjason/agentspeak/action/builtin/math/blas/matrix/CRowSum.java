@@ -77,7 +77,7 @@ public final class CRowSum extends IAlgebra
                                     .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
-                                    .map( EType::from )
+                                    .map( EType::of )
                                     .orElse( EType.DENSE );
 
         CCommon.flatten( p_argument )
@@ -85,10 +85,10 @@ public final class CRowSum extends IAlgebra
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( i -> IntStream.range( 0, i.rows() ).boxed().map( i::viewRow ).mapToDouble( DoubleMatrix1D::zSum ).toArray() )
                .map( i -> generate( i, l_type ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

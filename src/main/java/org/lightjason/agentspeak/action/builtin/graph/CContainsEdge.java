@@ -69,15 +69,15 @@ public final class CContainsEdge extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         l_arguments.stream()
                    .skip( 1 )
                    .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> i.containsEdge( l_arguments.get( 0 ).raw() ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

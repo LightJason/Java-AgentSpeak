@@ -71,17 +71,17 @@ public final class CCreateKey extends IBuiltinAction
     {
         try
         {
-            final Pair<Key, Key> l_key = EAlgorithm.from( p_argument.get( 0 ).<String>raw() ).generateKey();
+            final Pair<Key, Key> l_key = EAlgorithm.of( p_argument.get( 0 ).<String>raw() ).generateKey();
 
-            p_return.add( CRawTerm.from( l_key.getLeft() ) );
+            p_return.add( CRawTerm.of( l_key.getLeft() ) );
             if ( Objects.nonNull( l_key.getRight() ) )
-                p_return.add( CRawTerm.from( l_key.getRight() ) );
+                p_return.add( CRawTerm.of( l_key.getRight() ) );
 
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
         catch ( final NoSuchAlgorithmException | IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     }
 

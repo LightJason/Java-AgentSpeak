@@ -68,7 +68,7 @@ public final class CHammingDistance extends IBuiltinAction
     {
         final List<BitVector> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<BitVector>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         l_arguments.stream()
                    .skip( 1 )
@@ -76,9 +76,9 @@ public final class CHammingDistance extends IBuiltinAction
                    .peek( i -> i.xor( l_arguments.get( 0 ) ) )
                    .mapToDouble( BitVector::cardinality )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -65,10 +65,10 @@ public final class CReverse extends IBuiltinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( i -> new StringBuilder( i ).reverse().toString() )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

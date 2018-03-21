@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 /**
  * removes all elements of the storage.
- * The action removes all elements from the storage
+ * The action removes all elements of the storage
  * except the elements wich are forbidden, the action
  * never fails
  *
@@ -98,7 +98,7 @@ public final class CClear extends IStorage
                  .filter( i -> !m_resolver.apply( i ) )
                  .forEach( i -> p_context.agent().storage().remove( i ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

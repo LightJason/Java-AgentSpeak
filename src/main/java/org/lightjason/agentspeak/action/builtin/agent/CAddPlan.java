@@ -68,9 +68,9 @@ public final class CAddPlan extends IBuiltinAction
         CCommon.flatten( p_argument )
                .parallel()
                .map( ITerm::<IPlan>raw )
-               .map( CPlanStatistic::from )
+               .map( CPlanStatistic::of )
                .forEach( i -> p_context.agent().plans().put( i.plan().trigger(), i ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

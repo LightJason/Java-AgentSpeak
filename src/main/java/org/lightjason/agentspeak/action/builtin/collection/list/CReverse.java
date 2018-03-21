@@ -74,7 +74,7 @@ public final class CReverse extends IBuiltinAction
     {
         // all arguments are list references
         p_return.addAll( Lists.reverse( CCommon.flatten( p_argument ).collect( Collectors.toList() ) ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

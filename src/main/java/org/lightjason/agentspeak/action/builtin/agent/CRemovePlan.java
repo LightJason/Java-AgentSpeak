@@ -71,12 +71,12 @@ public final class CRemovePlan extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
                 2
-            ).allMatch( i -> CRemovePlan.remove( ITrigger.EType.from( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
+            ).allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
         );
     }
 

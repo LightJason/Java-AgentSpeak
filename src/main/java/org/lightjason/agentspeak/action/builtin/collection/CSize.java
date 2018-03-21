@@ -71,10 +71,10 @@ public final class CSize extends IBuiltinAction
         // any term type
         p_argument.stream()
                .map( CSize::size )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

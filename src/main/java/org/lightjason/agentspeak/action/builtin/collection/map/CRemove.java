@@ -38,8 +38,8 @@ import java.util.Map;
 
 
 /**
- * removes elements from the map.
- * Removes of possible all arguments from the map,
+ * removes elements of the map.
+ * Removes of possible all arguments of the map,
  * first argument is the map reference all other
  * arguments are key values returns the arguments
  * (or null if not exists) and never fails
@@ -77,10 +77,10 @@ public final class CRemove extends IBuiltinAction
         CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )
                .map( i -> p_argument.get( 0 ).<Map<Object, Object>>raw().remove( i ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

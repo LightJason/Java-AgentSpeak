@@ -38,8 +38,8 @@ import java.util.Set;
 
 
 /**
- * removes any argument from the set and returns it.
- * The action removes from the first set argument, all other arguments
+ * removes any argument of the set and returns it.
+ * The action removes of the first set argument, all other arguments
  * and returns boolean values of the object could be removed, the
  * action never fails
  *
@@ -78,9 +78,9 @@ public final class CRemove extends IBuiltinAction
         CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )
                .map( l_set::remove )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

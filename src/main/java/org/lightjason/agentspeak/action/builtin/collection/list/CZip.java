@@ -78,7 +78,7 @@ public final class CZip extends IBuiltinAction
     {
         final List<?> l_arguments = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
             l_arguments.stream().limit( l_arguments.size() / 2 ),
@@ -87,12 +87,12 @@ public final class CZip extends IBuiltinAction
         ).collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

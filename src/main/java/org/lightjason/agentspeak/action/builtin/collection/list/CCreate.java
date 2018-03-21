@@ -73,13 +73,13 @@ public final class CCreate extends IBuiltinAction
                                ? new ArrayList<>()
                                : CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             p_parallel
             ? Collections.synchronizedList( l_list )
             : l_list
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

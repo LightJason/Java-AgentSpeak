@@ -57,7 +57,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -96,7 +96,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
 
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "blubblub", l_data ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "blubblub", l_data ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -114,7 +114,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
 
         new CFlat().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

@@ -113,7 +113,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "a", 1, "b", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "a", 1, "b", true ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -141,8 +141,8 @@ public final class TestCActionCollectionList extends IBaseTest
         new CComplement().execute(
             false, IContext.EMPTYPLAN,
             Stream.of(
-                CRawTerm.from( Stream.of( "a", "b", 1, 2 ).collect( Collectors.toList() ) ),
-                CRawTerm.from( Stream.of( "x", "y", 4, "a", 5, 1 ).collect( Collectors.toList() ) )
+                CRawTerm.of( Stream.of( "a", "b", 1, 2 ).collect( Collectors.toList() ) ),
+                CRawTerm.of( Stream.of( "x", "y", 4, "a", 5, 1 ).collect( Collectors.toList() ) )
             ).collect( Collectors.toList() ),
             l_return
         );
@@ -165,7 +165,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CGet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_list ), CRawTerm.from( 1 ), CRawTerm.from( 4 ), CRawTerm.from( 5 ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( l_list ), CRawTerm.of( 1 ), CRawTerm.of( 4 ), CRawTerm.of( 5 ) ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -186,7 +186,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CReverse().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( l_list ) ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -219,7 +219,7 @@ public final class TestCActionCollectionList extends IBaseTest
             Stream.concat(
                 Stream.of( l_list ),
                 l_index.stream()
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -243,7 +243,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( 0 ), CRawTerm.from( "xxx" ), CRawTerm.from( l_list1 ), CRawTerm.from( l_list2 ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( 0 ), CRawTerm.of( "xxx" ), CRawTerm.of( l_list1 ), CRawTerm.of( l_list2 ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -265,7 +265,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CAdd().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( "xyz" ), CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( "xyz" ), CRawTerm.of( l_list ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -283,7 +283,7 @@ public final class TestCActionCollectionList extends IBaseTest
         Assert.assertFalse(
             new CRange().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of().map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of().map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -300,13 +300,13 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CRange().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 0, 5, 7, 9 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 0, 5, 7, 9 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CRange().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( 1, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 7 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -328,7 +328,7 @@ public final class TestCActionCollectionList extends IBaseTest
         Assert.assertFalse(
             new CSubList().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( new ArrayList<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( new ArrayList<>() ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -344,13 +344,13 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CSubList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( Stream.of( "ax", "bx", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( Stream.of( "ax", "bx", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CSubList().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( Stream.of( 8, 9, 10 ).collect( Collectors.toList() ), 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( Stream.of( 8, 9, 10 ).collect( Collectors.toList() ), 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -377,7 +377,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CFlat().execute(
             false, IContext.EMPTYPLAN,
-            l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_list.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -401,7 +401,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CFlatConcat().execute(
             false, IContext.EMPTYPLAN,
-            l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_list.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -419,7 +419,7 @@ public final class TestCActionCollectionList extends IBaseTest
         Assert.assertFalse(
             new CZip().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -436,7 +436,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CZip().execute(
             false, IContext.EMPTYPLAN,
-            IntStream.range( 0, 6 ).boxed().map( CRawTerm::from ).collect( Collectors.toList() ),
+            IntStream.range( 0, 6 ).boxed().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -456,7 +456,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CZip().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -476,7 +476,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CUnique().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, 1, 3, 4, 5, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 3, 4, 5, 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -486,7 +486,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CUnique().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

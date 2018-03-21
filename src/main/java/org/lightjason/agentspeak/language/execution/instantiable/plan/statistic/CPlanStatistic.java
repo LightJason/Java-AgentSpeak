@@ -170,7 +170,7 @@ public final class CPlanStatistic implements IPlanStatistic
      * @return statistic object
      */
     @Nonnull
-    public static IPlanStatistic from( @Nonnull final IPlan p_plan )
+    public static IPlanStatistic of( @Nonnull final IPlan p_plan )
     {
         return new CPlanStatistic( p_plan );
     }

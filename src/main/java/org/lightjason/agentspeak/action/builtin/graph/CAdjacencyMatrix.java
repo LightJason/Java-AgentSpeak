@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 
 
 /**
- * creates from a graph the adjacency matrix.
+ * creates of a graph the adjacency matrix.
  * The action converts graphs into a matrix,
  * if a string is put on the argument list
  * it must be "dense|sparse" to define the resulting
@@ -100,7 +100,7 @@ public final class CAdjacencyMatrix extends IBuiltinAction
                                     .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
-                                    .map( EType::from )
+                                    .map( EType::of )
                                     .orElse( EType.SPARSE );
 
         final double l_defaultcost = CCommon.flatten( p_argument )
@@ -124,11 +124,11 @@ public final class CAdjacencyMatrix extends IBuiltinAction
                .map( i -> CAdjacencyMatrix.apply( i, l_costmap, l_defaultcost, l_type ) )
                .forEach( i ->
                {
-                   p_return.add( CRawTerm.from( i.getLeft() ) );
-                   p_return.add( CRawTerm.from( i.getRight() ) );
+                   p_return.add( CRawTerm.of( i.getLeft() ) );
+                   p_return.add( CRawTerm.of( i.getRight() ) );
                } );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**
@@ -146,7 +146,7 @@ public final class CAdjacencyMatrix extends IBuiltinAction
         // index map for matching vertex to index position within matrix
         final Map<Object, Integer> l_index = new HashMap<>();
 
-        // extract vertices from edges
+        // extract vertices of edges
         p_graph.getEdges()
             .stream()
             .map( p_graph::getEndpoints )

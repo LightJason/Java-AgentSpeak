@@ -91,7 +91,7 @@ public final class TestCActionAgent extends IBaseTest
     {
         m_context = new CContext(
             new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
-            new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "contextplan" ) ) ),
+            new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "contextplan" ) ) ),
             Collections.emptyList()
         );
     }
@@ -103,7 +103,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void planlist()
     {
-        final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testplanlist" ) );
+        final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testplanlist" ) );
         final IPlan l_plan = new CEmptyPlan( l_trigger );
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -118,7 +118,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 0 );
 
 
-        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         new CPlanList().execute(
             false, m_context,
@@ -141,11 +141,11 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void addplan()
     {
-        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testaddplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testaddplan" ) ) );
 
         new CAddPlan().execute(
             false, m_context,
-            Stream.of( l_plan ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_plan ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -183,7 +183,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void getplan()
     {
-        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testgetplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testgetplan" ) ) );
         final List<ITerm> l_return = new ArrayList<>();
 
 
@@ -196,11 +196,11 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertTrue( l_return.isEmpty() );
 
 
-        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         new CGetPlan().execute(
             false, m_context,
-            Stream.of( "+!", "testgetplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "+!", "testgetplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -217,13 +217,13 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void removeplan()
     {
-        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testremoveplan" ) ) );
-        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testremoveplan" ) ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         Assert.assertTrue(
             new CRemovePlan().execute(
                 false, m_context,
-                Stream.of( "+!", "testremoveplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "+!", "testremoveplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -239,7 +239,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertFalse(
             new CRemovePlan().execute(
                 false, m_context,
-                Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -254,7 +254,7 @@ public final class TestCActionAgent extends IBaseTest
     {
         IntStream.range( 0, 100 )
                  .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
-                 .map( i -> CLiteral.from( i ) )
+                 .map( i -> CLiteral.of( i ) )
                  .forEach( i -> m_context.agent().beliefbase().add( i ) );
 
         Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
@@ -279,7 +279,7 @@ public final class TestCActionAgent extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         final Set<String> l_list = IntStream.range( 0, 100 )
                                             .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
-                                            .peek( i -> m_context.agent().beliefbase().add( CLiteral.from( i ) ) )
+                                            .peek( i -> m_context.agent().beliefbase().add( CLiteral.of( i ) ) )
                                             .collect( Collectors.toSet() );
 
         Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
@@ -361,7 +361,7 @@ public final class TestCActionAgent extends IBaseTest
         @Override
         public final IFuzzyValue<Boolean> condition( final IContext p_context )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 

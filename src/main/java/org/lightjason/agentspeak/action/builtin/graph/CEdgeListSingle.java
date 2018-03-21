@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * returns all edges of two vertices of each graph instance.
  * The action returns a list of edges between two vertices
- * from each graph instance, the first two
+ * of each graph instance, the first two
  * arguments are vertices, all other arguments
  * are graphs and return values are lists,
  * the action never fails
@@ -63,7 +63,7 @@ public final class CEdgeListSingle extends IApplySingle
         final List<?> l_return = new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() ) );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_return )
                 : l_return

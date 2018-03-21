@@ -56,7 +56,7 @@ public final class CIsSuccessorMultiple extends IApplyMultiple
                                 @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.isSuccessor( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

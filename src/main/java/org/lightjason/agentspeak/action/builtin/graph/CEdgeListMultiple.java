@@ -61,7 +61,7 @@ public final class CEdgeListMultiple extends IApplyMultiple
         final List<?> l_return = new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ) .raw() ) );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_return )
                 : l_return

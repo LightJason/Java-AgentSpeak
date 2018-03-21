@@ -40,7 +40,7 @@ import java.util.List;
 
 
 /**
- * builds a date-time object from elements.
+ * builds a date-time object of elements.
  * The actions creates form an eight-tuple a date-time
  * object and never fails, the seventh argument within
  * the tuple is the time-zone, which can be set to empty
@@ -73,10 +73,10 @@ public final class CBuild extends IBuiltinAction
             8
         )
                    .map( CBuild::apply )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

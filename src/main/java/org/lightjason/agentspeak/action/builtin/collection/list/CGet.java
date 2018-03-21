@@ -77,10 +77,10 @@ public final class CGet extends IBuiltinAction
         CCommon.flatten( p_argument.subList( 1, p_argument.size() ) )
                    .map( i -> i.<Number>raw().intValue() )
                    .map( l_list::get )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

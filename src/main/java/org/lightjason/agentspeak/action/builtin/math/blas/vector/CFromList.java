@@ -40,7 +40,7 @@ import java.util.List;
 
 
 /**
- * creates a dense- or sparse-vector from a list.
+ * creates a dense- or sparse-vector of a list.
  * All input arguments will be converted to a
  * dense or sparse vector, so the arguments must be
  * lists of numbers, the last optional argument can be a string
@@ -81,7 +81,7 @@ public final class CFromList extends IBuiltinAction
         if ( ( CCommon.rawvalueAssignableTo( p_argument.get( p_argument.size() - 1 ), String.class ) )
              && ( EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) ) )
         {
-            l_type = EType.from( p_argument.get( p_argument.size() - 1 ).<String>raw() );
+            l_type = EType.of( p_argument.get( p_argument.size() - 1 ).<String>raw() );
             l_limit = p_argument.size() - 1;
         }
         else
@@ -91,7 +91,7 @@ public final class CFromList extends IBuiltinAction
         }
 
 
-        // create vectors from lists
+        // create vectors of lists
         p_argument.stream()
                   .limit( l_limit )
                   .map( ITerm::<List<Number>>raw )
@@ -106,10 +106,10 @@ public final class CFromList extends IBuiltinAction
                               return new DenseDoubleMatrix1D( i );
                       }
                   } )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

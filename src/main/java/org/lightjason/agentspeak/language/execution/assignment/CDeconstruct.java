@@ -75,7 +75,7 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         this.set( CCommon.replaceFromContext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Override

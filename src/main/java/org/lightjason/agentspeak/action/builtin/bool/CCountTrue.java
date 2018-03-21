@@ -63,14 +63,14 @@ public final class CCountTrue extends IBuiltinAction
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .map( ITerm::<Boolean>raw )
                        .filter( i -> i )
                        .count()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

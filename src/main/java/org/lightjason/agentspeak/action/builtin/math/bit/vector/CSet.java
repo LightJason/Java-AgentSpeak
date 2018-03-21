@@ -86,6 +86,6 @@ public final class CSet extends IBuiltinAction
                    .boxed()
                    .forEach( i -> l_arguments.get( 0 ).<BitVector>raw().put( i, l_value ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

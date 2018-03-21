@@ -93,7 +93,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     {
         final List<ITerm> l_init = new ArrayList<>();
         if ( ( !m_init.execute( p_parallel, p_context, p_argument, l_init ).value() ) || ( l_init.size() != 1 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         /*

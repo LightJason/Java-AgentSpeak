@@ -60,11 +60,11 @@ public abstract class IDateTime extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             (
 
                 p_argument.size() == 0
-                ? Stream.of( CRawTerm.from( "now" ) )
+                ? Stream.of( CRawTerm.of( "now" ) )
                 : CCommon.flatten( p_argument )
 
             )

@@ -113,12 +113,12 @@ public final class TestCActionMathStatistics extends IBaseTest
 
         new CCreateStatistic().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "summary", "descriptive" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
         new CCreateStatistic().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "summary", "descriptive" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -144,13 +144,13 @@ public final class TestCActionMathStatistics extends IBaseTest
 
         new CSinglePercentile().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 50, l_statistic1, l_statistic2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 50, l_statistic1, l_statistic2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CMultiplePercentile().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_statistic1, 25, 75 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_statistic1, 25, 75 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -170,7 +170,7 @@ public final class TestCActionMathStatistics extends IBaseTest
     {
         new CClearStatistic().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -207,7 +207,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         "TRIANGULAR", "WELL44497B", 10, 15, 20,
                         "UNIFORM", "SYNCHRONIZEDWELL44497B", 10, 25,
                         "WEIBULL", 10, 23
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -240,7 +240,7 @@ public final class TestCActionMathStatistics extends IBaseTest
     {
         new CAddStatisticValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -265,7 +265,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "populationvariance", "quadraticmean",
                     "secondmoment", "standarddeviation",
                     "sumlog", "sumsquare"
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -300,7 +300,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "populationvariance", "quadraticmean",
                     "standarddeviation", "sumsquare",
                     "kurtiosis", "count", "sum"
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -328,7 +328,7 @@ public final class TestCActionMathStatistics extends IBaseTest
 
         new CRandomSample().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::from  ).collect( Collectors.toList() ),
+            Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -347,7 +347,7 @@ public final class TestCActionMathStatistics extends IBaseTest
 
         new CRandomSimple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -366,7 +366,7 @@ public final class TestCActionMathStatistics extends IBaseTest
 
         new CSingleStatisticValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -389,7 +389,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         new CExponentialSelection().execute(
                             false, IContext.EMPTYPLAN,
                             Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 1 )
-                                        .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                  .map( CRawTerm::of ).collect( Collectors.toList() ),
                             l_return
                         ) );
 
@@ -422,7 +422,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                                new CExponentialSelection().execute(
                                    false, IContext.EMPTYPLAN,
                                    Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 0.5 )
-                                         .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                         .map( CRawTerm::of ).collect( Collectors.toList() ),
                                    l_return
                                ) );
 
@@ -454,7 +454,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         new CLinearSelection().execute(
                             false, IContext.EMPTYPLAN,
                             Stream.of( Stream.of( "c", "d" ).collect( Collectors.toList() ), Stream.of( 3, 7 ).collect( Collectors.toList() ) )
-                                        .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                  .map( CRawTerm::of ).collect( Collectors.toList() ),
                             l_return
         ) );
 

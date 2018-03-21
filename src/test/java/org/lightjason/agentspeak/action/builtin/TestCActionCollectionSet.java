@@ -60,7 +60,7 @@ public final class TestCActionCollectionSet extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -79,7 +79,7 @@ public final class TestCActionCollectionSet extends IBaseTest
 
         new CCreate().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( 10, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 10, 20 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -99,7 +99,7 @@ public final class TestCActionCollectionSet extends IBaseTest
 
         new CAdd().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_set, 1, 5, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_set, 1, 5, 7 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -117,7 +117,7 @@ public final class TestCActionCollectionSet extends IBaseTest
 
         new CContains().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_set, "foo", 1, "bar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_set, "foo", 1, "bar" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -135,7 +135,7 @@ public final class TestCActionCollectionSet extends IBaseTest
 
         new CRemove().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_set, "foo", 1, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_set, "foo", 1, 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -154,7 +154,7 @@ public final class TestCActionCollectionSet extends IBaseTest
 
         new CToList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_set ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_set ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

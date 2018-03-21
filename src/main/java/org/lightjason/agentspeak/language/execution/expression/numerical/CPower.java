@@ -69,23 +69,23 @@ public final class CPower extends IBaseBinary
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         switch ( m_operator )
         {
             case POWER:
-                p_return.add( CRawTerm.from(
+                p_return.add( CRawTerm.of(
                     Math.pow(
                         l_argument.get( 0 ).<Number>raw().doubleValue(),
                         l_argument.get( 1 ).<Number>raw().doubleValue()
                     )
                 ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
 
     }

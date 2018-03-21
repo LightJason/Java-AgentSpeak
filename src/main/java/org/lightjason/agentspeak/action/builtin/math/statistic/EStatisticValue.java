@@ -58,7 +58,7 @@ public enum EStatisticValue
      * @return enum
      */
     @Nonnull
-    public static EStatisticValue from( @Nonnull final String p_value )
+    public static EStatisticValue of( @Nonnull final String p_value )
     {
         return EStatisticValue.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }

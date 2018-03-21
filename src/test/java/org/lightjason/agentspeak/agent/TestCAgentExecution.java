@@ -252,7 +252,7 @@ public final class TestCAgentExecution extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "stop" );
+            return CPath.of( "stop" );
         }
 
         @Nonnegative
@@ -268,7 +268,7 @@ public final class TestCAgentExecution extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -286,7 +286,7 @@ public final class TestCAgentExecution extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "log" );
+            return CPath.of( "log" );
         }
 
         @Nonnegative
@@ -302,7 +302,7 @@ public final class TestCAgentExecution extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 }

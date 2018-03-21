@@ -76,10 +76,10 @@ public final class CFlat extends IBuiltinAction
         p_argument.stream()
                   .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
                   .flatMap( i -> Stream.of( i.getKey(), i.getValue() ) )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

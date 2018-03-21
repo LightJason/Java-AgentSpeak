@@ -68,10 +68,10 @@ public final class CLog10 extends IBuiltinAction
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::log10 )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

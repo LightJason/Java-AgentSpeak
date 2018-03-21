@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates a dense- or sparse-vector from as string.
+ * creates a dense- or sparse-vector of as string.
  * The action creates for each input argument a vector
  * by parsing the string, the last string can be "dense | sparse"
  * to defining a sparse / dense vector, the action never fails.
@@ -83,7 +83,7 @@ public final class CParse extends IBuiltinAction
         if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
              && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
         {
-            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;
         }
         else
@@ -102,10 +102,10 @@ public final class CParse extends IBuiltinAction
                            .map( ITerm::<String>raw )
                            .map( CParse::parse )
                            .map( DenseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case SPARSE:
                 l_arguments.stream()
@@ -113,15 +113,15 @@ public final class CParse extends IBuiltinAction
                            .map( ITerm::<String>raw )
                            .map( CParse::parse )
                            .map( SparseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
         }
 
-        return CFuzzyValue.from( false );
+        return CFuzzyValue.of( false );
     }
 
     /**

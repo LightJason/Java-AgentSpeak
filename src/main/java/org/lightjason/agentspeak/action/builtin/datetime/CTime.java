@@ -51,10 +51,10 @@ public final class CTime extends IDateTime
     @Override
     protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getHour() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMinute() ) );
-        p_return.add( CRawTerm.from( p_datetime.getSecond() ) );
-        p_return.add( CRawTerm.from( p_datetime.getNano() ) );
+        p_return.add( CRawTerm.of( p_datetime.getHour() ) );
+        p_return.add( CRawTerm.of( p_datetime.getMinute() ) );
+        p_return.add( CRawTerm.of( p_datetime.getSecond() ) );
+        p_return.add( CRawTerm.of( p_datetime.getNano() ) );
         return true;
     }
 

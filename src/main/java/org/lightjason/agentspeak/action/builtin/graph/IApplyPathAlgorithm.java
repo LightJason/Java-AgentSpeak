@@ -72,7 +72,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 3 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final Map<Object, Number> l_weights = l_arguments.parallelStream()
                                                          .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
@@ -102,17 +102,17 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
                                                    .orElseGet( Collections::emptyList );
 
         if ( l_vertices.isEmpty() )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         l_arguments.stream()
                    .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
                    .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> this.apply( l_vertices, i, l_weightfunction ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

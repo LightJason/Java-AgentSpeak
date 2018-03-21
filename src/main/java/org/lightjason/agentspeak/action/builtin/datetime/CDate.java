@@ -51,11 +51,11 @@ public final class CDate extends IDateTime
     @Override
     protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
+        p_return.add( CRawTerm.of( p_datetime.getYear() ) );
+        p_return.add( CRawTerm.of( p_datetime.getMonthValue() ) );
+        p_return.add( CRawTerm.of( p_datetime.getDayOfMonth() ) );
+        p_return.add( CRawTerm.of( p_datetime.getDayOfWeek() ) );
+        p_return.add( CRawTerm.of( p_datetime.getDayOfYear() ) );
         return true;
     }
 

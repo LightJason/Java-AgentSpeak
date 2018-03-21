@@ -76,7 +76,7 @@ public final class CIncrement<T extends Number> implements IUnaryExpression<T>
         if ( l_variable.valueassignableto( Number.class ) )
             l_variable.set( l_variable.<Number>raw().doubleValue() + 1 );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull

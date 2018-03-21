@@ -65,7 +65,7 @@ public final class CGeometricMean extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CGeometricMean.apply(
                     CCommon.flatten( p_argument ).count(),
                     CCommon.flatten( p_argument )
@@ -76,7 +76,7 @@ public final class CGeometricMean extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

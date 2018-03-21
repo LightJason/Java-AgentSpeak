@@ -84,7 +84,7 @@ public final class CRange extends IBuiltinAction
                                                  .boxed()
                                                  .collect( Collectors.toList() );
         if ( ( l_arguments.isEmpty() ) || ( l_arguments.size() % 2 == 1 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed(
             l_arguments.stream(),
@@ -93,10 +93,10 @@ public final class CRange extends IBuiltinAction
         )
             .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
             .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

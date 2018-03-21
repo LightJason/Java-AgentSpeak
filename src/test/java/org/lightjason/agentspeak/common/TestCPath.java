@@ -52,8 +52,8 @@ public final class TestCPath extends IBaseTest
     public final void collision()
     {
         Assert.assertNotEquals(
-            CPath.from( "hashcollision/Ea" ),
-            CPath.from( "hashcollision/FB" )
+            CPath.of( "hashcollision/Ea" ),
+            CPath.of( "hashcollision/FB" )
         );
     }
 
@@ -63,8 +63,8 @@ public final class TestCPath extends IBaseTest
     @Test
     public final void comparing()
     {
-        Assert.assertEquals( CPath.from( "foo/bar" ), "foo/bar" );
-        Assert.assertNotEquals( CPath.from( "foo/bar" ), CPath.from( "bar/foo" ) );
+        Assert.assertEquals( CPath.of( "foo/bar" ), "foo/bar" );
+        Assert.assertNotEquals( CPath.of( "foo/bar" ), CPath.of( "bar/foo" ) );
     }
 
 }

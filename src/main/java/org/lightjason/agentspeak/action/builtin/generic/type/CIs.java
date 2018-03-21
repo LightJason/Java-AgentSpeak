@@ -82,10 +82,10 @@ public final class CIs extends IBuiltinAction
         }
         catch ( final ClassNotFoundException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             l_arguments.stream()
                    .skip( 1 )
                    .map( ITerm::raw )

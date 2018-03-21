@@ -70,9 +70,9 @@ public final class CMin extends IBuiltinAction
                                               .min();
 
         if ( !l_value.isPresent() )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
-        p_return.add( CRawTerm.from( l_value.getAsDouble() ) );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.of( l_value.getAsDouble() ) );
+        return CFuzzyValue.of( true );
     }
 }

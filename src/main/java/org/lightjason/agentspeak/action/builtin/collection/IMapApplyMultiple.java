@@ -74,7 +74,7 @@ public abstract class IMapApplyMultiple<T> extends IBuiltinAction
 
         final List<ITerm> l_list = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_list.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed(
             l_list.stream()
@@ -84,7 +84,7 @@ public abstract class IMapApplyMultiple<T> extends IBuiltinAction
         )
                    .forEach( i ->  this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

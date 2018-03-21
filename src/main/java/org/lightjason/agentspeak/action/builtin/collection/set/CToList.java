@@ -77,9 +77,9 @@ public final class CToList extends IBuiltinAction
                   .map( ITerm::<Set<?>>raw )
                   .map( ArrayList::new )
                   .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

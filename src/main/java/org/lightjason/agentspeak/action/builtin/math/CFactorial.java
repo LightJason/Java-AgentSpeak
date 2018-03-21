@@ -69,9 +69,9 @@ public final class CFactorial extends IBuiltinAction
                .mapToInt( Number::intValue )
                .boxed()
                .map( CombinatoricsUtils::factorial )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -71,10 +71,10 @@ public final class CTerm
     public static ILiteral literal( @Nullable final TerminalNode p_at, @Nullable final TerminalNode p_strongnegation,
                                     @Nonnull final TerminalNode p_atom, @Nonnull final Collection<ITerm> p_termlist )
     {
-        return CLiteral.from(
+        return CLiteral.of(
             Objects.nonNull( p_at ),
             Objects.nonNull( p_strongnegation ),
-            CPath.from( p_atom.getText() ),
+            CPath.of( p_atom.getText() ),
             p_termlist.stream()
         );
     }
@@ -128,7 +128,7 @@ public final class CTerm
         return p_termstream
                     .map( p_visitor::visit )
                     .filter( Objects::nonNull )
-                    .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
+                    .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) )
                     .collect( Collectors.toList() );
     }
 }

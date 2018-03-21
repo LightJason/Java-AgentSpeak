@@ -77,14 +77,14 @@ public final class CEncrypt extends IBuiltinAction
         final EAlgorithm l_algorithm;
         try
         {
-            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+            l_algorithm = EAlgorithm.of( l_key.getAlgorithm() );
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
                    CCommon.flatten( p_argument.stream().skip( 1 ) )
                           .map( ITerm::<Serializable>raw )
                           .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
@@ -107,7 +107,7 @@ public final class CEncrypt extends IBuiltinAction
         try
         {
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     Base64.getEncoder().encodeToString(
                         p_algorithm.getEncryptCipher( p_key ).doFinal(
                             SerializationUtils.serialize( p_dataset )

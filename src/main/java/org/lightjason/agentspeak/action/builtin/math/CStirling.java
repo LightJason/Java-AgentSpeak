@@ -76,10 +76,10 @@ public final class CStirling extends IBuiltinAction
             2
         )
                    .map( i -> CombinatoricsUtils.stirlingS2( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

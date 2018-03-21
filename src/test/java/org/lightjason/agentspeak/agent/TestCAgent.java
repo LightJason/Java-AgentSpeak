@@ -179,7 +179,7 @@ public final class TestCAgent extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "generic/print" );
+            return CPath.of( "generic/print" );
         }
 
         @Nonnegative
@@ -195,7 +195,7 @@ public final class TestCAgent extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -213,7 +213,7 @@ public final class TestCAgent extends IBaseTest
         @Override
         public final IPath name()
         {
-            return CPath.from( "test/result" );
+            return CPath.of( "test/result" );
         }
 
         @Nonnegative
@@ -238,7 +238,7 @@ public final class TestCAgent extends IBaseTest
                 )
             );
 
-            return CFuzzyValue.from( p_argument.get( 0 ).<Boolean>raw() );
+            return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
         }
     }
 

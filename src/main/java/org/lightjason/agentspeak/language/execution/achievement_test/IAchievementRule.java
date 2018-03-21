@@ -63,7 +63,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     }
 
     /**
-     * execute rule from context
+     * execute rule of context
      *
      * @param p_parallel parallel execution
      * @param p_context execution context
@@ -78,9 +78,9 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );
         if ( Objects.isNull( l_rules ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
-        // first step is the unification of the caller literal, so variables will be set from the current execution context
+        // first step is the unification of the caller literal, so variables will be set of the current execution context
         final ILiteral l_unified = p_value.allocate( p_context );
 
         // second step execute backtracking rules sequential / parallel
@@ -123,7 +123,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
          } )
 
          // otherwise rule fails (default behaviour)
-         .orElse( CFuzzyValue.from( false ) );
+         .orElse( CFuzzyValue.of( false ) );
     }
 
     @Override

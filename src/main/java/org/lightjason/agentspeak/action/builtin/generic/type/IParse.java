@@ -67,7 +67,7 @@ public abstract class IParse extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             CCommon.flatten( p_argument )
                    .map( ITerm::<String>raw )
                    .map( this::parse )

@@ -80,9 +80,9 @@ public final class CRow extends IBuiltinAction
                    .skip( 1 )
                    .map( ITerm::<DoubleMatrix2D>raw )
                    .map( i -> i.viewRow( l_arguments.get( 0 ).<Number>raw().intValue() ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

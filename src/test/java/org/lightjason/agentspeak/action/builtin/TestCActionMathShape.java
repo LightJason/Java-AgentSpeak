@@ -54,7 +54,7 @@ public final class TestCActionMathShape extends IBaseTest
 
         new CInCircle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -73,7 +73,7 @@ public final class TestCActionMathShape extends IBaseTest
 
         new CInRectangle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -92,7 +92,7 @@ public final class TestCActionMathShape extends IBaseTest
 
         new CInTriangle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

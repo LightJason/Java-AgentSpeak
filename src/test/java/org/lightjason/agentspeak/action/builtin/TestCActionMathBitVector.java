@@ -150,7 +150,7 @@ public final class TestCActionMathBitVector extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
                 p_classes,
@@ -199,7 +199,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -218,7 +218,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         new CBoolValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -233,7 +233,7 @@ public final class TestCActionMathBitVector extends IBaseTest
     {
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -249,7 +249,7 @@ public final class TestCActionMathBitVector extends IBaseTest
     {
         new CClear().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -266,7 +266,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         new CRange().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -284,7 +284,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         new CNumericValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -301,7 +301,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         new CToList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -320,7 +320,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         new CToBlas().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

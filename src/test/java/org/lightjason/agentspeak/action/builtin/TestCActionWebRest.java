@@ -57,7 +57,7 @@ public final class TestCActionWebRest extends IBaseTest
             new CJsonList().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "jsonlist", "testjsonlist" )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -75,7 +75,7 @@ public final class TestCActionWebRest extends IBaseTest
         new CJsonList().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://api.github.com/repos/LightJason/Examples/commits", "testjsonlist" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -97,7 +97,7 @@ public final class TestCActionWebRest extends IBaseTest
         new CJsonList().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://api.github.com/repos/LightJason/Examples/commits", "testjsonlist", "item" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -119,7 +119,7 @@ public final class TestCActionWebRest extends IBaseTest
             new CJsonObject().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "jsonobject", "testjsonobject" )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -138,7 +138,7 @@ public final class TestCActionWebRest extends IBaseTest
         new CJsonObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -160,7 +160,7 @@ public final class TestCActionWebRest extends IBaseTest
         new CJsonObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject", "loc" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -186,7 +186,7 @@ public final class TestCActionWebRest extends IBaseTest
             new CXMLObject().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "xmlobject", "testxml" )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -205,7 +205,7 @@ public final class TestCActionWebRest extends IBaseTest
         new CXMLObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -227,7 +227,7 @@ public final class TestCActionWebRest extends IBaseTest
         new CXMLObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml", "ncd" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );

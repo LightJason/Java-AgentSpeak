@@ -65,7 +65,7 @@ public final class CClear extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             p_argument.parallelStream()
                   .allMatch( CClear::clear )
         );

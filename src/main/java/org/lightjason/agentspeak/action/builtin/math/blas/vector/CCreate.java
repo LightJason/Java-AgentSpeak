@@ -81,7 +81,7 @@ public final class CCreate extends IBuiltinAction
         if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
              && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
         {
-            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;
         }
         else
@@ -101,10 +101,10 @@ public final class CCreate extends IBuiltinAction
                            .mapToInt( Number::intValue )
                            .boxed()
                            .map( DenseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             case SPARSE:
@@ -114,14 +114,14 @@ public final class CCreate extends IBuiltinAction
                            .mapToInt( Number::intValue )
                            .boxed()
                            .map( SparseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 

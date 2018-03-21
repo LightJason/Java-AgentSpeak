@@ -78,7 +78,7 @@ public final class CSingleStatisticValue extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        final EStatisticValue l_value = EStatisticValue.from( l_arguments.get( 0 ).<String>raw() );
+        final EStatisticValue l_value = EStatisticValue.of( l_arguments.get( 0 ).<String>raw() );
 
         l_arguments.stream()
                    .skip( 1 )
@@ -92,10 +92,10 @@ public final class CSingleStatisticValue extends IBuiltinAction
 
                    } )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

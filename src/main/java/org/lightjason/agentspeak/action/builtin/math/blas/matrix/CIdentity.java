@@ -76,7 +76,7 @@ public final class CIdentity extends IAlgebra
                                     .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
-                                    .map( EType::from )
+                                    .map( EType::of )
                                     .orElse( EType.SPARSE );
 
         CCommon.flatten( p_argument )
@@ -84,10 +84,10 @@ public final class CIdentity extends IAlgebra
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
                .map( i  -> generate( i, l_type ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

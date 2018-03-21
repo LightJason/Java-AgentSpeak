@@ -69,10 +69,10 @@ public final class CNextPrime extends IBuiltinAction
                .map( ITerm::<Number>raw )
                .mapToDouble( i -> Primes.nextPrime( i.intValue() ) )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

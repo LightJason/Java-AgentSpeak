@@ -77,7 +77,7 @@ public final class CNCD extends IBuiltinAction
 
         if ( ( !l_arguments.isEmpty() ) && ( CCommon.ECompression.exist( l_arguments.get( 0 ) ) ) )
         {
-            l_compression = CCommon.ECompression.from( l_arguments.get( 0 ) );
+            l_compression = CCommon.ECompression.of( l_arguments.get( 0 ) );
             l_skip = 1;
         }
         else
@@ -88,7 +88,7 @@ public final class CNCD extends IBuiltinAction
 
         // check input arguments
         if ( l_arguments.size() < 2 + l_skip )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         // calculate distance
@@ -96,9 +96,9 @@ public final class CNCD extends IBuiltinAction
                    .skip( l_skip + 1 )
                    .mapToDouble( i -> CCommon.ncd( l_compression, l_arguments.get( l_skip ), i ) )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

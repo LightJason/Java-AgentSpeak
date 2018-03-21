@@ -82,10 +82,10 @@ public final class CMultipleInterpolate extends IBuiltinAction
                    .map( ITerm::<UnivariateFunction>raw )
                    .mapToDouble( i -> i.value( l_arguments.get( 0 ).<Number>raw().doubleValue() ) )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

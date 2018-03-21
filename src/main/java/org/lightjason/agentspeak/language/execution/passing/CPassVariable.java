@@ -65,12 +65,12 @@ public class CPassVariable extends IBaseExecution<IVariable<?>>
     {
         if ( Objects.nonNull( m_value ) )
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     CCommon.replaceFromContext( p_context, m_value ).raw()
                 )
             );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull

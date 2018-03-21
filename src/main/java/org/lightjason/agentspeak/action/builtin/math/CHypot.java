@@ -64,17 +64,17 @@ public final class CHypot extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( p_argument.size() % 2 != 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
                    .map( i -> Math.hypot(
                        i.get( 0 ).<Number>raw().doubleValue(),
                        i.get( 1 ).<Number>raw().doubleValue()
                    ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

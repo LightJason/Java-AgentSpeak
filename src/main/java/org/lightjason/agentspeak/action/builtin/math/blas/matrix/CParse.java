@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
 
 
 /**
- * creates a dense- or sparse-matrix from a string.
+ * creates a dense- or sparse-matrix of a string.
  * The action parses each argument and returns the matrix object,
  * the last argument can be a string with "dense" or "sparse" to
  * defining a dense or sparse matrix, all other arguments string with
@@ -87,7 +87,7 @@ public final class CParse extends IBuiltinAction
         if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
              && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
         {
-            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;
         }
         else
@@ -106,10 +106,10 @@ public final class CParse extends IBuiltinAction
                            .map( ITerm::<String>raw )
                            .map( i -> CParse.parse( i, p_context ) )
                            .map( DenseDoubleMatrix2D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case SPARSE:
                 l_arguments.stream()
@@ -117,15 +117,15 @@ public final class CParse extends IBuiltinAction
                            .map( ITerm::<String>raw )
                            .map( i -> CParse.parse( i, p_context ) )
                            .map( SparseDoubleMatrix2D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
         }
 
-        return CFuzzyValue.from( false );
+        return CFuzzyValue.of( false );
     }
 
     /**

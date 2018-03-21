@@ -328,7 +328,7 @@ public final class CCommon
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
                    ? flattenstream( ( (Collection<?>) l_value ).stream() )
-                   : Stream.of( CRawTerm.from( l_value ) );
+                   : Stream.of( CRawTerm.of( l_value ) );
         } );
     }
 
@@ -513,7 +513,7 @@ public final class CCommon
          * @return compression value
          */
         @Nonnull
-        public static ECompression from( @Nonnull final String p_value )
+        public static ECompression of( @Nonnull final String p_value )
         {
             return ECompression.valueOf( p_value.toUpperCase( Locale.ROOT ) );
         }

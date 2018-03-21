@@ -68,31 +68,31 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
                                                     .map( i -> i.execute( p_parallel, p_context, p_argument, l_return ) )
                                                     .filter( i -> !i.value() )
                                                     .findFirst()
-                                                    .orElse( CFuzzyValue.from( true ) );
+                                                    .orElse( CFuzzyValue.of( true ) );
 
         if ( !l_result.value() )
             return l_result;
 
         if ( ( l_return.size() == 0 ) || ( l_return.size() > 3 ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         if ( l_return.size() == 1 )
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     LongStream.range( 0, l_return.get( 0 ).<Number>raw().longValue() ).boxed()
                 )
             );
 
         if ( l_return.size() == 2 )
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     LongStream.range( l_return.get( 0 ).<Number>raw().longValue(), l_return.get( 1 ).<Number>raw().longValue() ).boxed()
                 )
             );
 
         if ( l_return.size() == 3 )
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     LongStream.range(
                         l_return.get( 0 ).<Number>raw().longValue(),
                         l_return.get( 1 ).<Number>raw().longValue() / l_return.get( 2 ).<Number>raw().longValue()

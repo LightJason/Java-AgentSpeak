@@ -133,7 +133,7 @@ public final class TestCLanguageLabels extends IBaseTest
     {
         assumeTrue( "no languages are defined for checking", !LANGUAGEPROPERY.isEmpty() );
 
-        // --- read language definitions from the configuration
+        // --- read language definitions of the configuration
         final Set<String> l_translation = Collections.unmodifiableSet(
             Arrays.stream( CCommon.configuration().getObject( "translation" ).toString().split( "," ) )
                   .map( i -> i.trim().toLowerCase() )

@@ -65,10 +65,10 @@ public final class CUpper extends IBuiltinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( String::toUpperCase )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

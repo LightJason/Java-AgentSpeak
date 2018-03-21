@@ -149,7 +149,7 @@ public final class CCommon
     // --- access to lambda-streaming instantiation ------------------------------------------------------------------------------------------------------------
 
     /**
-     * read lambda-streaming class from package
+     * read lambda-streaming class of package
      *
      * @param p_package full-qualified package name or empty for default package
      * @return lambda-streaming stream
@@ -320,7 +320,7 @@ public final class CCommon
     // --- resource access -------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * read classes from package
+     * read classes of package
      *
      * @param p_class class
      * @param p_package full-qualified package name or empty for default package
@@ -383,7 +383,7 @@ public final class CCommon
     }
 
     /**
-     * returns a file from a resource e.g. Jar file
+     * returns a file of a resource e.g. Jar file
      *
      * @param p_file file
      * @return URL of file or null
@@ -398,7 +398,7 @@ public final class CCommon
     }
 
     /**
-     * returns a file from a resource e.g. Jar file
+     * returns a file of a resource e.g. Jar file
      *
      * @param p_file file relative to the CMain
      * @return URL of file or null

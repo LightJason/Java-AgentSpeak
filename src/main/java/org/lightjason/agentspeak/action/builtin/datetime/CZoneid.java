@@ -51,7 +51,7 @@ public final class CZoneid extends IDateTime
     @Override
     protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getZone().getId() ) );
+        p_return.add( CRawTerm.of( p_datetime.getZone().getId() ) );
         return true;
     }
 }

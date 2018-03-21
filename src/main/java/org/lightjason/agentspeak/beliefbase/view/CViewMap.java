@@ -456,7 +456,7 @@ public final class CViewMap implements IView
             return m_data.entrySet()
                          .stream()
                          .filter( i -> !( i.getValue() instanceof Map<?, ?> ) )
-                         .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
+                         .map( i -> CLiteral.of( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
         }
 
         @Nonnull
@@ -543,7 +543,7 @@ public final class CViewMap implements IView
             if ( m_data.get( l_key ) instanceof Map<?, ?> )
                 return Collections.emptySet();
 
-            return Stream.of( CLiteral.from( p_key, this.toterm( l_data ) ) ).collect( Collectors.toSet() );
+            return Stream.of( CLiteral.of( p_key, this.toterm( l_data ) ) ).collect( Collectors.toSet() );
         }
 
         @Nullable
@@ -575,12 +575,12 @@ public final class CViewMap implements IView
 
             if ( p_value instanceof Map<?, ?> )
                 return ( (Map<String, Object>) p_value ).entrySet().stream()
-                                                        .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
+                                                        .map( i -> CLiteral.of( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
 
             if ( p_value instanceof Integer )
-                return Stream.of( CRawTerm.from( ( (Number) p_value ).longValue() ) );
+                return Stream.of( CRawTerm.of( ( (Number) p_value ).longValue() ) );
 
-            return Stream.of( CRawTerm.from( p_value ) );
+            return Stream.of( CRawTerm.of( p_value ) );
         }
     }
 }

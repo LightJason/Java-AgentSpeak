@@ -66,12 +66,12 @@ public final class CAnd extends IBuiltinAction
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .allMatch( ITerm::<Boolean>raw )
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

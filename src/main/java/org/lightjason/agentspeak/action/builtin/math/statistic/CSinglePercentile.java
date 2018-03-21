@@ -73,16 +73,16 @@ public final class CSinglePercentile extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final double l_value = l_arguments.get( 0 ).<Number>raw().doubleValue();
         l_arguments.stream()
                    .skip( 1 )
                    .mapToDouble( i -> i.<DescriptiveStatistics>raw().getPercentile( l_value ) )
-                   .mapToObj( CRawTerm::from )
+                   .mapToObj( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

@@ -78,7 +78,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of(  "a", 1, "b", 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of(  "a", 1, "b", 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -117,13 +117,13 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CKeys().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( l_map ) ).collect( Collectors.toList() ),
             l_return
         );
 
         new CValues().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( l_map ) ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -148,7 +148,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CPutSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "v", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "v", 1, l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
 
             Collections.emptyList()
         );
@@ -162,7 +162,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CPutSingleIfAbsent().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "v", 666, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "v", 666, l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
 
             Collections.emptyList()
         );
@@ -183,7 +183,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CPutMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -194,7 +194,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CPutMultipleIfAbsent().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -219,7 +219,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CRemove().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "a", "z" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "a", "z" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -244,7 +244,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CGetMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -271,7 +271,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CGetSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

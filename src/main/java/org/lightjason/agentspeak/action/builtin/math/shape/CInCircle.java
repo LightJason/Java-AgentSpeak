@@ -81,15 +81,15 @@ public final class CInCircle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 5 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         StreamUtils.windowed( l_arguments.stream().skip( 3 ), 2, 2 )
                    .map( i -> Math.hypot( i.get( 0 ) - l_arguments.get( 0 ), i.get( 1 ) - l_arguments.get( 1 ) ) <= Math.pow( l_arguments.get( 2 ), 2 ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

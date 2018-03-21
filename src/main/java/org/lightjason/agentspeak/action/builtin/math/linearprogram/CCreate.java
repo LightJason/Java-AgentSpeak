@@ -84,7 +84,7 @@ public final class CCreate extends IBuiltinAction
                                                 .map( i -> i.<Number>raw().doubleValue() )
                                                 .collect( Collectors.toList() );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             new ImmutablePair<>(
                 new LinearObjectiveFunction(
                     l_arguments.stream().limit( l_arguments.size() - 1 ).mapToDouble( i -> i ).toArray(),
@@ -94,7 +94,7 @@ public final class CCreate extends IBuiltinAction
             )
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

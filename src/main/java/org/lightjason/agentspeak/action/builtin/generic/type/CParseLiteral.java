@@ -33,7 +33,7 @@ import java.util.Map;
 
 
 /**
- * action for parsing a integer from string.
+ * action for parsing a integer of string.
  * Parses each argument to a integer point value
  * and returns the value, the action fails on
  * parsing errors
@@ -58,11 +58,11 @@ public final class CParseLiteral extends IParse
     {
         try
         {
-            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.from( CLiteral.parse( p_value ) ) );
+            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.of( CLiteral.parse( p_value ) ) );
         }
         catch ( final Exception l_exception )
         {
-            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.from( null ) );
+            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.of( null ) );
         }
     }
 

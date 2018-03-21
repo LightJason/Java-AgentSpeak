@@ -90,7 +90,7 @@ public final class CUnion implements IFuzzyOperator<Boolean>
      */
     private static IFuzzyValueMutable<Boolean> factory()
     {
-        return CFuzzyValueMutable.from( false, 0 );
+        return CFuzzyValueMutable.of( false, 0 );
     }
 
 }

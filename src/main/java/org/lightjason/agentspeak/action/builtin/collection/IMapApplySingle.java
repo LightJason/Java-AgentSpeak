@@ -72,7 +72,7 @@ public abstract class IMapApplySingle<T> extends IBuiltinAction
         CCommon.flatten( p_argument.stream().skip( 2 ) )
                .forEach( i -> this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

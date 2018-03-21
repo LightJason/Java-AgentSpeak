@@ -87,7 +87,7 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
         if ( l_variable.valueassignableto( ILiteral.class ) )
             p_return.add( this.byliteral( l_variable.raw(), p_context ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull
@@ -103,7 +103,7 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
     }
 
     /**
-     * creates the result literal from an input string
+     * creates the result literal of an input string
      *
      * @param p_value input string (literal functor)
      * @param p_context execution context
@@ -111,11 +111,11 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
      */
     private ILiteral bystring( final String p_value, final IContext p_context )
     {
-        return CLiteral.from( p_value, Arrays.stream( m_termlist ) ).unify( p_context );
+        return CLiteral.of( p_value, Arrays.stream( m_termlist ) ).unify( p_context );
     }
 
     /**
-     * creates the result literal from an input literal
+     * creates the result literal of an input literal
      *
      * @param p_literal input literal
      * @param p_context execution context
@@ -125,7 +125,7 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
     {
         return m_termlist.length == 0
                ? p_literal.unify( p_context )
-               : CLiteral.from(
+               : CLiteral.of(
                    p_literal.hasAt(),
                    p_literal.negated(),
                    p_literal.fqnfunctor(),

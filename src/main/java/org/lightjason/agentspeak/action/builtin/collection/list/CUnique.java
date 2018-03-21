@@ -75,11 +75,11 @@ public final class CUnique extends IBuiltinAction
     {
         final List<?> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

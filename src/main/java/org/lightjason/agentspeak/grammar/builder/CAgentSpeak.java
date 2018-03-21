@@ -118,8 +118,8 @@ public final class CAgentSpeak
                               @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
                               @Nonnull final List<? extends RuleContext> p_expression, @Nonnull final List<? extends RuleContext> p_body )
     {
-        final ITrigger l_trigger = CTrigger.from(
-            ITrigger.EType.from( p_trigger.getText() ),
+        final ITrigger l_trigger = CTrigger.of(
+            ITrigger.EType.of( p_trigger.getText() ),
             (ILiteral) p_visitor.visit( p_literal )
         );
 
@@ -279,8 +279,8 @@ public final class CAgentSpeak
     public static IExecution testgoal( @Nullable final TerminalNode p_dollar, @Nonnull final TerminalNode p_atom )
     {
         return Objects.nonNull( p_dollar )
-            ? new CTestRule( CPath.from( p_atom.getText() ) )
-            : new CTestGoal( CPath.from( p_atom.getText() ) );
+            ? new CTestRule( CPath.of( p_atom.getText() ) )
+            : new CTestGoal( CPath.of( p_atom.getText() ) );
     }
 
     /**
@@ -355,14 +355,14 @@ public final class CAgentSpeak
             return new CSingleAssignment(
                 (IVariable<?>) p_visitor.visit( p_lhs ),
                 passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) ),
-                EAssignOperator.from( p_operator.getText() )
+                EAssignOperator.of( p_operator.getText() )
             );
 
         if ( Objects.nonNull( p_expression ) )
             return new CSingleAssignment(
                 (IVariable<?>) p_visitor.visit( p_lhs ),
                 (IExecution) p_visitor.visit( p_expression ),
-                EAssignOperator.from( p_operator.getText() )
+                EAssignOperator.of( p_operator.getText() )
             );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "assignment" ) );

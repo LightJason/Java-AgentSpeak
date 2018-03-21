@@ -40,7 +40,7 @@ import java.util.List;
 
 /**
  * action to encodes a string with Base64.
- * The base64 encoded version is created from each string argument,
+ * The base64 encoded version is created of each string argument,
  * the action never fails
  *
  * {@code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" );}
@@ -68,10 +68,10 @@ public final class CBase64Encode extends IBuiltinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( i -> Base64.getEncoder().encodeToString( i.getBytes( Charset.forName( "UTF-8" ) ) ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

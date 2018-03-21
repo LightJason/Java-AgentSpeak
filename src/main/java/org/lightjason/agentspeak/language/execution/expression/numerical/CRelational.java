@@ -71,36 +71,36 @@ public final class CRelational extends IBaseBinary
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         switch ( m_operator )
         {
             case GREATER:
-                p_return.add( CRawTerm.from(
+                p_return.add( CRawTerm.of(
                     CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) > 0
                 ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case GREATEREQUAL:
-                p_return.add( CRawTerm.from(
+                p_return.add( CRawTerm.of(
                     CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) >= 0
                 ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case LESS:
-                p_return.add( CRawTerm.from(
+                p_return.add( CRawTerm.of(
                     CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) < 0
                 ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case LESSEQUAL:
-                p_return.add( CRawTerm.from(
+                p_return.add( CRawTerm.of(
                     CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) <= 0
                 ) );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 

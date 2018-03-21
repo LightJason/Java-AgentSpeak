@@ -90,7 +90,7 @@ public final class CIntersection implements IFuzzyOperator<Boolean>
      */
     private static IFuzzyValueMutable<Boolean> factory()
     {
-        return CFuzzyValueMutable.from( true, 1 );
+        return CFuzzyValueMutable.of( true, 1 );
     }
 
 }

@@ -91,7 +91,7 @@ public final class TestCActionString extends IBaseTest
 
         new CBase64Encode().execute(
             false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -121,7 +121,7 @@ public final class TestCActionString extends IBaseTest
             new CBase64Decode().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -142,7 +142,7 @@ public final class TestCActionString extends IBaseTest
 
         new CConcat().execute(
             false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -169,7 +169,7 @@ public final class TestCActionString extends IBaseTest
             Stream.concat(
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream()
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -193,7 +193,7 @@ public final class TestCActionString extends IBaseTest
 
         new CLower().execute(
             false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -219,7 +219,7 @@ public final class TestCActionString extends IBaseTest
 
         new CReverse().execute(
             false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -245,7 +245,7 @@ public final class TestCActionString extends IBaseTest
 
         new CSize().execute(
             false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -274,7 +274,7 @@ public final class TestCActionString extends IBaseTest
             Stream.concat(
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream().mapToInt( String::length ).boxed()
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -299,7 +299,7 @@ public final class TestCActionString extends IBaseTest
 
         new CUpper().execute(
             false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -322,7 +322,7 @@ public final class TestCActionString extends IBaseTest
 
         new CStartsWith().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -343,7 +343,7 @@ public final class TestCActionString extends IBaseTest
 
         new CEndsWith().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -380,7 +380,7 @@ public final class TestCActionString extends IBaseTest
 
         new CLevenshtein().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -400,7 +400,7 @@ public final class TestCActionString extends IBaseTest
 
         new CNCD().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -412,7 +412,7 @@ public final class TestCActionString extends IBaseTest
 
         new CNCD().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

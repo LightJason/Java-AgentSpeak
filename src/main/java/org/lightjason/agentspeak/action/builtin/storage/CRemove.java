@@ -40,8 +40,8 @@ import java.util.stream.Stream;
 
 
 /**
- * removes an element by name from the storage.
- * The actions removes any value from the storage
+ * removes an element by name of the storage.
+ * The actions removes any value of the storage
  * which is referenced by the key and returns the
  * value, the action never fails
  *
@@ -108,12 +108,12 @@ public final class CRemove extends IStorage
                .map( ITerm::<String>raw )
                .forEach( i -> this.remove( p_context.agent(), i, p_return ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
     /**
-     * removes a value from the storage
+     * removes a value of the storage
      *
      * @param p_agent agent
      * @param p_key key
@@ -125,7 +125,7 @@ public final class CRemove extends IStorage
             return;
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_agent.storage().remove( p_key )
             )
         );

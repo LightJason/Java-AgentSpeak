@@ -148,7 +148,7 @@ public final class CPrint extends IBuiltinAction
     )
     {
         m_stream.println( MessageFormat.format( "{0}", this.format( p_argument ) ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

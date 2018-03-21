@@ -158,7 +158,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         m_fuzzy = p_configuration.fuzzy();
 
         // initial plans and rules
-        p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );
+        p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.of( i ) ) );
         p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
         if ( Objects.nonNull( p_configuration.initialgoal() ) )
             m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
@@ -324,7 +324,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
     {
         if ( m_sleepingcycles.get() > 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // check if literal does not store any variables
         if ( p_trigger.literal().hasVariable() )
@@ -340,7 +340,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             m_trigger.putIfAbsent( p_trigger.hashCode(), p_trigger );
         }
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Override
@@ -463,10 +463,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             (
                 m_sleepingterm.isEmpty()
 
-                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup" ) ) )
+                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup" ) ) )
 
                 : m_sleepingterm.parallelStream()
-                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup", i ) ) )
+                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup", i ) ) )
 
             ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
 

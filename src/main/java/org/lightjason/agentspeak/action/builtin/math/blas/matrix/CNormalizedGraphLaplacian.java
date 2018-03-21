@@ -85,9 +85,9 @@ public final class CNormalizedGraphLaplacian extends IAlgebra
 
                    return DENSEALGEBRA.mult( DENSEALGEBRA.inverse( l_degree ), l_degree.assign( i, ( n, m ) -> n - m ) );
                } )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -158,9 +158,9 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
+    public static ILiteral of( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
     {
-        return from(
+        return of(
             p_functor,
             ( Objects.isNull( p_values ) ) || ( p_values.length == 0 )
             ? Collections.emptySet()
@@ -175,10 +175,10 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Collection<ITerm> p_values )
+    public static ILiteral of( @Nonnull final String p_functor, @Nonnull final Collection<ITerm> p_values )
     {
         return new CLiteral(
-            p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
+            p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.of( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
             p_values
         );
     }
@@ -190,9 +190,9 @@ public final class CLiteral implements ILiteral
      * @param p_values value stream
      * @return literal
      */
-    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Stream<ITerm> p_values )
+    public static ILiteral of( @Nonnull final String p_functor, @Nonnull final Stream<ITerm> p_values )
     {
-        return from( p_functor, p_values.collect( Collectors.toList() ) );
+        return of( p_functor, p_values.collect( Collectors.toList() ) );
     }
 
     /**
@@ -202,9 +202,9 @@ public final class CLiteral implements ILiteral
      * @param p_values values
      * @return literal
      */
-    public static ILiteral from( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    public static ILiteral of( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return from( false, false, p_functor, p_values );
+        return of( false, false, p_functor, p_values );
     }
 
     /**
@@ -214,9 +214,9 @@ public final class CLiteral implements ILiteral
      * @param p_values values
      * @return literal
      */
-    public static ILiteral from( @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    public static ILiteral of( @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
     {
-        return from( false, false, p_functor, p_values );
+        return of( false, false, p_functor, p_values );
     }
 
     /**
@@ -228,9 +228,9 @@ public final class CLiteral implements ILiteral
      * @param p_values vales
      * @return literal
      */
-    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    public static ILiteral of( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return from( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
+        return of( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
     }
 
     /**
@@ -242,7 +242,7 @@ public final class CLiteral implements ILiteral
      * @param p_values vales
      * @return literal
      */
-    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    public static ILiteral of( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
     {
         return new CLiteral( p_at, p_negated, p_functor, p_values.collect( Collectors.toList() ) );
     }
@@ -335,7 +335,7 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.from( l_variable ) : l_variable;
+                                   return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.of( l_variable ) : l_variable;
                                }
                                if ( i instanceof ILiteral )
                                    return ( (ILiteral) i ).unify( p_context );
@@ -434,7 +434,7 @@ public final class CLiteral implements ILiteral
     public final ILiteral shallowcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.suffix() ),
+            m_at, m_negated, CPath.of( m_functor.suffix() ),
             m_values.values()
         );
     }
@@ -475,7 +475,7 @@ public final class CLiteral implements ILiteral
     public final synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.suffix() ),
+            m_at, m_negated, CPath.of( m_functor.suffix() ),
             m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
         );
     }

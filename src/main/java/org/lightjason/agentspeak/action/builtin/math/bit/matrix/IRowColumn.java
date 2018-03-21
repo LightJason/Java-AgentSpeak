@@ -76,10 +76,10 @@ public abstract class IRowColumn extends IBuiltinAction
                    .skip( 1 )
                    .map( ITerm::<BitMatrix>raw )
                    .map( i -> this.extract( i, l_arguments.get( 0 ).<Number>raw().intValue() ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

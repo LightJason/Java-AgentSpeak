@@ -75,9 +75,9 @@ public final class CTrueCount extends IBuiltinAction
                .map( ITerm::<BitVector>raw )
                .mapToDouble( BitVector::cardinality )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

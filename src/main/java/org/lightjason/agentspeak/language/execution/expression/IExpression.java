@@ -57,8 +57,8 @@ public interface IExpression extends IExecution
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            p_return.add( CRawTerm.from( true ) );
-            return CFuzzyValue.from( true );
+            p_return.add( CRawTerm.of( true ) );
+            return CFuzzyValue.of( true );
         }
 
         @Nonnull

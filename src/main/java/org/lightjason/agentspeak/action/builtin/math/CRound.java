@@ -69,10 +69,10 @@ public final class CRound extends IBuiltinAction
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::round )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

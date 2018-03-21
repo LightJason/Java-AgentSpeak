@@ -87,7 +87,7 @@ public final class CRemove extends IBuiltinAction
                    l_removed.add( i );
                    return l_list.get( i );
                } )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
         final List<Object> l_result = IntStream.range( 0, l_list.size() )
@@ -100,7 +100,7 @@ public final class CRemove extends IBuiltinAction
         l_list.clear();
         l_list.addAll( l_result );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

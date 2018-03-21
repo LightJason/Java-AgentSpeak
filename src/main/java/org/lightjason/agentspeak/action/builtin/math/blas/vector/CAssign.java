@@ -78,7 +78,7 @@ public final class CAssign extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             l_arguments.stream()
                        .skip( 1 )
                        .parallel()

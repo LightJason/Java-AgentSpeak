@@ -31,8 +31,8 @@ import java.util.List;
 
 
 /**
- * removes any vertices from a single graph instance.
- * The action removes from the first graph argument all vertices,
+ * removes any vertices of a single graph instance.
+ * The action removes of the first graph argument all vertices,
  * the action never fails
  *
  * {@code graph/removevertexmultiple( Graph, Vertex1, Vertex2 );}

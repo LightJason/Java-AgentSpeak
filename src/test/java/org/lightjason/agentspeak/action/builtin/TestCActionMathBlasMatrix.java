@@ -165,7 +165,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
                 p_classes,
@@ -215,7 +215,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         new CCreate().execute(
             false,
             IContext.EMPTYPLAN,
-            Stream.of( 2, 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 2, "dense" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -236,7 +236,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CColumn().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -258,7 +258,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CRow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -280,7 +280,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CPower().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -303,7 +303,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     {
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 0, 1, 6.0, MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 0, 1, 6.0, MATRIX1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -320,7 +320,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CToList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -343,7 +343,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CTranspose().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -366,7 +366,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CSubMatrix().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 0, 0, 0, 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 0, 0, 0, 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -389,7 +389,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CSolve().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -412,7 +412,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CAssign().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, l_matrix ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -429,7 +429,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CAssign().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2, l_matrix ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -446,7 +446,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CGet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2, 0, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -465,7 +465,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CParse().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "1,2;3,4", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "1,2;3,4", "dense" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -487,7 +487,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CInvert().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -509,7 +509,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CEigen().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -534,7 +534,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CSingularValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -566,7 +566,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CCopy().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -594,7 +594,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                         {1, 1, 0, 1, 0, 0},
                         {0, 0, 0, 1, 0, 0}
                     } )
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -634,7 +634,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                     {1, 1, 0, 1, 0, 0},
                     {0, 0, 0, 1, 0, 0}
                 } )
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -668,7 +668,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                     {1, 2, 3, 4, 5, 0},
                     {1, 2, 3, -1, -2, -3}
                 } )
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -699,7 +699,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                     {1, 2, 3, 4, 5, 0},
                     {1, 2, 3, -1, -2, -3}
                 } )
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -722,7 +722,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         new CIdentity().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_size ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_size ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -754,7 +754,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             false, IContext.EMPTYPLAN,
             Stream.of(
                 new DenseDoubleMatrix1D( l_data )
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

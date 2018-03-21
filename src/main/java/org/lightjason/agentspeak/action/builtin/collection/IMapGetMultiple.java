@@ -73,7 +73,7 @@ public abstract class IMapGetMultiple<T> extends IBuiltinAction
                .skip( 1 )
                .forEach( i ->  this.apply( p_parallel, p_argument.get( 0 ).<T>raw(), i.raw(), p_return ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

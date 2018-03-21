@@ -112,7 +112,7 @@ public final class CUnifier implements IUnifier
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
@@ -122,10 +122,10 @@ public final class CUnifier implements IUnifier
 
         // if no match
         if ( l_result.isEmpty() )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         CCommon.updatecontext( p_context, l_result.stream() );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

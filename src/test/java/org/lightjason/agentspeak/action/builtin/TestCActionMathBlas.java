@@ -85,7 +85,7 @@ public final class TestCActionMathBlas extends IBaseTest
 
         new CSize().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_matrix1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -103,7 +103,7 @@ public final class TestCActionMathBlas extends IBaseTest
 
         new CMultiply().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -134,7 +134,7 @@ public final class TestCActionMathBlas extends IBaseTest
                     m_matrix1, "-", m_matrix2,
                     m_matrix1, "*", m_matrix2,
                     m_matrix1, "|+|", -9
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -170,7 +170,7 @@ public final class TestCActionMathBlas extends IBaseTest
                     m_vector, "-", m_vector,
                     m_vector, "*", m_vector,
                     m_vector, "|+|", -5
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

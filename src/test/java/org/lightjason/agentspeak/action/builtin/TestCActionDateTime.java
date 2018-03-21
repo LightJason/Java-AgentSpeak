@@ -201,7 +201,7 @@ public final class TestCActionDateTime extends IBaseTest
      */
     private static Object testcasebetween( final IAction p_action, final Stream<String> p_datetime, final Stream<Number> p_results )
     {
-        return new ImmutableTriple<>( p_action, p_datetime.map( ZonedDateTime::parse ).map( CRawTerm::from ), p_results );
+        return new ImmutableTriple<>( p_action, p_datetime.map( ZonedDateTime::parse ).map( CRawTerm::of ), p_results );
     }
 
 
@@ -215,7 +215,7 @@ public final class TestCActionDateTime extends IBaseTest
         Assert.assertFalse(
             new CCreate().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( "error" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -231,7 +231,7 @@ public final class TestCActionDateTime extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "", "2007-12-03T10:15:30+01:00[Europe/Paris]", "now" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "", "2007-12-03T10:15:30+01:00[Europe/Paris]", "now" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -254,7 +254,7 @@ public final class TestCActionDateTime extends IBaseTest
 
         new CBuild().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2013, 3, 13, 12, 11, 10, 9, "current", 2013, 3, 13, 12, 11, 10, 9, "Europe/Moscow" ).map( CRawTerm::from )
+            Stream.of( 2013, 3, 13, 12, 11, 10, 9, "current", 2013, 3, 13, 12, 11, 10, 9, "Europe/Moscow" ).map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -288,7 +288,7 @@ public final class TestCActionDateTime extends IBaseTest
             "action execution error",
             new CTime().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
@@ -311,7 +311,7 @@ public final class TestCActionDateTime extends IBaseTest
 
         new CZoneid().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "2006-10-04T10:17:13-05:00[America/New_York]", "2006-10-04T10:17:13+00:00[Europe/London]" ).map( CRawTerm::from )
+            Stream.of( "2006-10-04T10:17:13-05:00[America/New_York]", "2006-10-04T10:17:13+00:00[Europe/London]" ).map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -335,7 +335,7 @@ public final class TestCActionDateTime extends IBaseTest
 
         p_value.getLeft().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "minus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "minus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -356,7 +356,7 @@ public final class TestCActionDateTime extends IBaseTest
 
         p_value.getLeft().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "plus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "plus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
