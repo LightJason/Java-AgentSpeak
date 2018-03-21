@@ -21,16 +21,13 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expression.numerical;
+package org.lightjason.agentspeak.language.execution.expression;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.expression.EOperator;
-import org.lightjason.agentspeak.language.execution.expression.IBaseBinary;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
@@ -41,7 +38,9 @@ import java.util.List;
 
 /**
  * numerical relation expression
+ * @deprecated remove
  */
+@Deprecated
 public final class CRelational extends IBaseBinary
 {
     /**
@@ -56,7 +55,7 @@ public final class CRelational extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CRelational( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
+    public CRelational( @Nonnull final EBinaryOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
 

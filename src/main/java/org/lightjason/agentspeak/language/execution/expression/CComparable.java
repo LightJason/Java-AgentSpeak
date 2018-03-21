@@ -21,16 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expression.numerical;
+package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.expression.EOperator;
-import org.lightjason.agentspeak.language.execution.expression.IBaseBinary;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
@@ -40,14 +36,16 @@ import java.util.List;
 
 
 /**
- * additve binary expression
+ * comparable binary expression
+ * @deprecated
  */
-public final class CAdditive extends IBaseBinary
+@Deprecated
+public final class CComparable extends IBaseBinary
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 220138218890736772L;
+    private static final long serialVersionUID = 3088316270644309406L;
 
     /**
      * ctor
@@ -56,13 +54,11 @@ public final class CAdditive extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CAdditive( final EOperator p_operator, final IExpression p_lefthandside,
-                      final IExpression p_righthandside
-    )
+    public CComparable( @Nonnull final EBinaryOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-        if ( !m_operator.isAdditive() )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", m_operator ) );
+        if ( !m_operator.isComparable() )
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Nonnull
@@ -74,59 +70,37 @@ public final class CAdditive extends IBaseBinary
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
             return CFuzzyValue.of( false );
 
-
         switch ( m_operator )
         {
-            case PLUS:
-                p_return.add( CRawTerm.of( this.add(
-                    l_argument.get( 0 ).<Number>raw(),
-                    l_argument.get( 1 ).<Number>raw()
-                ) ) );
+            case EQUAL:
+                p_return.add( CRawTerm.of( checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.of( true );
 
-            case MINUS:
-                p_return.add( CRawTerm.of( this.subtract(
-                    l_argument.get( 0 ).<Number>raw(),
-                    l_argument.get( 1 ).<Number>raw()
-                ) ) );
+            case NOTEQUAL:
+                p_return.add( CRawTerm.of( !checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.of( true );
 
             default:
                 return CFuzzyValue.of( false );
         }
-
     }
 
     /**
-     * runs the addition of number types
+     * check method with number handling
      *
-     * @param p_left left number argument
-     * @param p_right right number argument
-     * @return addition value
-     *
-     * @tparam N any number type
-     * @tparam M any number type
+     * @param p_value1 term value
+     * @param p_value2 term value
+     * @return equality flag
      */
-    @Nonnull
-    private <N extends Number, M extends Number> Number add( @Nonnull final N p_left, @Nonnull final M p_right )
+    @SuppressWarnings( "unchecked" )
+    private static boolean checkequal( @Nonnull final ITerm p_value1, @Nonnull final ITerm p_value2 )
     {
-        return p_left.doubleValue() + p_right.doubleValue();
-    }
+        final Object l_value1 = p_value1.raw();
+        final Object l_value2 = p_value2.raw();
 
-    /**
-     * runs the subtraction of number types
-     *
-     * @param p_left left number argument
-     * @param p_right right number argument
-     * @return subtraction value
-     *
-     * @tparam N any number type
-     * @tparam M any number type
-     */
-    @Nonnull
-    private <N extends Number, M extends Number> Number subtract( @Nonnull final N p_left, @Nonnull final M p_right )
-    {
-        return p_left.doubleValue() - p_right.doubleValue();
+        return ( l_value1 instanceof Number ) && ( l_value2 instanceof Number )
+               ? Double.valueOf( ( (Number) l_value1 ).doubleValue() ).equals( ( (Number) l_value2 ).doubleValue() )
+               : l_value1.equals( l_value2 );
     }
 
 }

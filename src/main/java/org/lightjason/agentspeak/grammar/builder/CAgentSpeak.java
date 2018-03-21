@@ -311,7 +311,7 @@ public final class CAgentSpeak
                 Objects.nonNull( p_doubleexclamationmark )
             );
 
-        throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "achievmentgoal" ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownachievmentgoal" ) );
     }
 
     /**
@@ -334,7 +334,7 @@ public final class CAgentSpeak
                 return new CDecrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
 
             default:
-                throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unary" ) );
+                throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunary" ) );
         }
     }
 
@@ -366,7 +366,7 @@ public final class CAgentSpeak
                 EAssignOperator.of( p_operator.getText() )
             );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "assignment" ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownassignment" ) );
     }
 
     /**
@@ -423,7 +423,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_deletebelief ) )
             return new CBelief( p_literal, CBelief.EAction.DELETE );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "beliefaction" ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbeliefaction" ) );
     }
 
     /**
@@ -558,7 +558,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_variable ) )
             return p_visitor.visit( p_variable );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unification" ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }
 
 
@@ -656,7 +656,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_variable ) )
             return passvariable( (IVariable<?>) p_visitor.visit( p_variable ) );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "lambdaelement" ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownlambdaelement" ) );
     }
 
 }

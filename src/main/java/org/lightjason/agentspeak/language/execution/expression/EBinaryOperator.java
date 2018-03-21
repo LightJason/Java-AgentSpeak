@@ -24,10 +24,18 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import java.util.function.BiFunction;
+
+
 /**
  * expression operator
  */
-public enum EOperator
+public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 {
     PLUS( "+" ),
     MINUS( "-" ),
@@ -37,11 +45,9 @@ public enum EOperator
     MODULO( "%" ),
     POWER( "**" ),
 
-
     OR( "||" ),
     AND( "&&" ),
     XOR( "^" ),
-    NEGATION( "~" ),
 
     EQUAL( "==" ),
     NOTEQUAL( "\\==" ),
@@ -63,7 +69,7 @@ public enum EOperator
      *
      * @param p_name text name
      */
-    EOperator( final String p_name )
+    EBinaryOperator( final String p_name )
     {
         m_name = p_name;
     }
@@ -74,93 +80,54 @@ public enum EOperator
         return m_name;
     }
 
-    /**
-     * check of a logical operator
-     *
-     * @return boolean for logical operator
-     */
-    public final boolean isLogical()
+    @Override
+    public final Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
     {
-        return ( this == AND ) || ( this == OR ) || ( this == XOR ) || ( this == NEGATION );
-    }
+        switch ( this )
+        {
+            case PLUS:
+                return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
 
-    /**
-     * check of a numeric operator
-     *
-     * @return boolean for numeric operator
-     */
-    public final boolean isNumerical()
-    {
-        return ( this == PLUS ) || ( this == MINUS ) || ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO ) || ( this == POWER );
-    }
+            case MINUS:
+                return return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
 
-    /**
-     * check of a comparable operator
-     *
-     * @return boolean for comparable operator
-     */
-    public final boolean isComparable()
-    {
-        return ( this == EQUAL ) || ( this == NOTEQUAL );
-    }
+            case MULTIPLY:
+                return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
 
-    /**
-     * check of a relational operator
-     *
-     * @return boolean for relational operator
-     */
-    public final boolean isRelational()
-    {
-        return ( this == LESS ) || ( this == LESSEQUAL ) || ( this == GREATER ) || ( this == GREATEREQUAL );
-    }
+            case DIVIDE:
+                return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
 
-    /**
-     * check of a additive operator
-     *
-     * @return boolean for additive operator
-     */
-    public final boolean isAdditive()
-    {
-        return ( this == PLUS ) || ( this == MINUS );
-    }
+            case MODULO:
+                return return p_lhs.<Number>raw().longValue() < 0
+                              ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
+                              : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
 
-    /**
-     * check of a multiplicative operator
-     *
-     * @return boolean for multiplicative operator
-     */
-    public final boolean isMultiplicative()
-    {
-        return ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO );
-    }
 
-    /**
-     * check of a power operator
-     *
-     * @return boolean for power operator
-     */
-    public final boolean isPower()
-    {
-        return this == POWER;
-    }
+            case POWER:
+                return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
 
-    /**
-     * check of a binary operator
-     *
-     * @return boolean of binary flag
-     */
-    public final boolean isBinary()
-    {
-        return this != NEGATION;
-    }
+            case OR:
+                return p_lhs.<Boolean>raw() || p_rhs.<Boolean>raw();
 
-    /**
-     * check of a unary operator
-     *
-     * @return boolean of unary operator
-     */
-    public final boolean isUnary()
-    {
-        return this == NEGATION;
+            case AND:
+                return p_lhs.<Boolean>raw() && p_rhs.<Boolean>raw();
+
+            case XOR:
+                return p_lhs.<Boolean>raw() ^ p_rhs.<Boolean>raw();
+
+
+            case EQUAL:
+                return p_lhs.raw().equals( p_rhs.raw() );
+
+            case NOTEQUAL:
+                return !p_lhs.raw().equals( p_rhs.raw() );
+
+
+
+
+
+            default:
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", this ) );
+        }
     }
 }

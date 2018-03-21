@@ -25,9 +25,9 @@ package org.lightjason.agentspeak.grammar;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
-import org.lightjason.agentspeak.language.execution.expression.EOperator;
+import org.lightjason.agentspeak.language.execution.expression.EBinaryOperator;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.expression.logical.CBinary;
+import org.lightjason.agentspeak.language.execution.expression.CBinary;
 
 import javax.annotation.Nonnull;
 import java.util.AbstractMap;
@@ -103,7 +103,7 @@ public final class CCommon
      * @return concat expression
      */
     @Nonnull
-    static IExpression createLogicalBinaryExpression( @Nonnull final EOperator p_operator,  @Nonnull final IExpression p_lefthandside,
+    static IExpression createLogicalBinaryExpression( @Nonnull final EBinaryOperator p_operator, @Nonnull final IExpression p_lefthandside,
                                                       @Nonnull final Collection<IExpression> p_righthandside
     )
     {

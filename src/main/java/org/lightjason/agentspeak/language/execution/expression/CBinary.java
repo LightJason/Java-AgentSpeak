@@ -21,16 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expression.numerical;
+package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.expression.EOperator;
-import org.lightjason.agentspeak.language.execution.expression.IBaseBinary;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
@@ -40,14 +36,16 @@ import java.util.List;
 
 
 /**
- * multiplicative binary expression
+ * logical binary expression
+ * @deprecated remove
  */
-public final class CMultiplicative extends IBaseBinary
+@Deprecated
+public final class CBinary extends IBaseBinary
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 3046373876617720672L;
+    private static final long serialVersionUID = 397466749260293866L;
 
     /**
      * ctor
@@ -56,12 +54,11 @@ public final class CMultiplicative extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CMultiplicative( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside
-    )
+    public CBinary( @Nonnull final EBinaryOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-        if ( !m_operator.isMultiplicative() )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", m_operator ) );
+        if ( !m_operator.isLogical() )
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Nonnull
@@ -73,83 +70,25 @@ public final class CMultiplicative extends IBaseBinary
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
             return CFuzzyValue.of( false );
 
+        // calculate return of both expression results
         switch ( m_operator )
         {
-            case MULTIPLY:
-                p_return.add( CRawTerm.of( this.multiply(
-                    l_argument.get( 0 ).<Number>raw(),
-                    l_argument.get( 1 ).<Number>raw()
-                ) ) );
+
+            case AND:
+                p_return.add( CRawTerm.of( l_argument.get( 0 ).<Boolean>raw() && l_argument.get( 1 ).<Boolean>raw() ) );
                 return CFuzzyValue.of( true );
 
-            case DIVIDE:
-                p_return.add( CRawTerm.of( this.divide(
-                    l_argument.get( 0 ).<Number>raw(),
-                    l_argument.get( 1 ).<Number>raw()
-                ) ) );
+            case OR:
+                p_return.add( CRawTerm.of( l_argument.get( 0 ).<Boolean>raw() || l_argument.get( 1 ).<Boolean>raw() ) );
                 return CFuzzyValue.of( true );
 
-            case MODULO:
-                p_return.add( CRawTerm.of( this.modulo(
-                    l_argument.get( 0 ).<Number>raw(),
-                    l_argument.get( 1 ).<Number>raw()
-                ) ) );
+            case XOR:
+                p_return.add( CRawTerm.of( l_argument.get( 0 ).<Boolean>raw() ^ l_argument.get( 1 ).<Boolean>raw() ) );
                 return CFuzzyValue.of( true );
 
             default:
                 return CFuzzyValue.of( false );
         }
-
-    }
-
-    /**
-     * runs the multiply of number types
-     *
-     * @param p_left left number argument
-     * @param p_right right number argument
-     * @return multiply value
-     *
-     * @tparam N any number type
-     * @tparam M any number type
-     */
-    @Nonnull
-    private <N extends Number, M extends Number> Number multiply( @Nonnull final N p_left, @Nonnull final M p_right )
-    {
-        return p_left.doubleValue() * p_right.doubleValue();
-    }
-
-    /**
-     * runs the divide of number types
-     *
-     * @param p_left left number argument
-     * @param p_right right number argument
-     * @return divide value
-     *
-     * @tparam N any number type
-     * @tparam M any number type
-     */
-    @Nonnull
-    private <N extends Number, M extends Number> Number divide( @Nonnull final N p_left, @Nonnull final M p_right )
-    {
-        return p_left.doubleValue() / p_right.doubleValue();
-    }
-
-    /**
-     * runs the modulo of number types
-     *
-     * @param p_left left number argument
-     * @param p_right right number argument
-     * @return modulo value
-     *
-     * @tparam N any number type
-     * @tparam M any number type
-     */
-    @Nonnull
-    private <N extends Number, M extends Number> Number modulo( @Nonnull final N p_left, @Nonnull final M p_right )
-    {
-        return p_left.longValue() < 0
-            ? ( p_right.longValue() + p_left.longValue() ) % p_right.longValue()
-            : p_left.longValue() % p_right.longValue();
     }
 
 }

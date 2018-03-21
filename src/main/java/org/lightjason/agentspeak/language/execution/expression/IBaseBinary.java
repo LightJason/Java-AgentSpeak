@@ -38,8 +38,10 @@ import java.util.stream.Stream;
 
 /**
  * binary expression
+ * @deprecated remove
  */
-public abstract class IBaseBinary implements IBinaryExpression
+@Deprecated
+public abstract class IBaseBinary implements IExpressionBinary
 {
     /**
      * serial id
@@ -48,7 +50,7 @@ public abstract class IBaseBinary implements IBinaryExpression
     /**
      * expression operator
      */
-    protected final EOperator m_operator;
+    protected final EBinaryOperator m_operator;
     /**
      * left-hand-side argument
      */
@@ -67,7 +69,7 @@ public abstract class IBaseBinary implements IBinaryExpression
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    protected IBaseBinary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
+    protected IBaseBinary( @Nonnull final EBinaryOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         if ( !p_operator.isBinary() )
             throw new CIllegalArgumentException( CCommon.languagestring( IBaseBinary.class, "operator", p_operator ) );
@@ -122,7 +124,7 @@ public abstract class IBaseBinary implements IBinaryExpression
 
     @Nonnull
     @Override
-    public final EOperator operator()
+    public final EBinaryOperator operator()
     {
         return m_operator;
     }

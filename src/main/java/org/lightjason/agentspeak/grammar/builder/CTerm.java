@@ -139,7 +139,7 @@ public final class CTerm
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
         if ( Objects.nonNull( l_terminal ) )
-            return l_terminal;
+            return CRawTerm.of( l_terminal );
 
         if ( Objects.nonNull( p_executeaction ) )
             return p_visitor.visit( p_executeaction );
@@ -153,7 +153,7 @@ public final class CTerm
         if ( Objects.nonNull( p_variable ) )
             return p_visitor.visit( p_variable );
 
-        throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "termunknown" ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) );
     }
 
 
