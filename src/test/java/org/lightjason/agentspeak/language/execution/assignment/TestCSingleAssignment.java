@@ -23,8 +23,12 @@
 
 package org.lightjason.agentspeak.language.execution.assignment;
 
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
@@ -40,30 +44,71 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * test single assignment
  */
+@RunWith( DataProviderRunner.class )
 public final class TestCSingleAssignment
 {
 
     /**
-     * plus assignment
+     * assignment operator
+     *
+     * @return 4-tuples as array, first & second input values, 3rd operator, 4th result
+     */
+    @DataProvider
+    public static Object[] assignmentoperator()
+    {
+        return Stream.of(
+
+            testcase( 5, 2, EAssignOperator.ASSIGNINCREMENT, 7.0 ),
+            testcase( 7, 3, EAssignOperator.ASSIGNDECREMENT, 4.0 ),
+            testcase( 11, 11, EAssignOperator.ASSIGNMULTIPLY, 121.0 ),
+            testcase( 33, 3, EAssignOperator.ASSIGNDIVIDE, 11.0 )
+
+
+        ).toArray();
+    }
+
+    /**
+     * test-case generator
+     *
+     * @param p_lhs left-hand-side argument
+     * @param p_rhs right-hand-side argument
+     * @param p_operator operator
+     * @param p_result result
+     * @return test-case
+     */
+    private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull EAssignOperator p_operator, @Nonnull Object p_result )
+    {
+        return Stream.of( p_lhs, p_rhs, p_operator, p_result ).toArray();
+    }
+
+
+    /**
+     * test assignment operator with variables
+     * @param p_data input data
      */
     @Test
-    public final void plusvariable()
+    @UseDataProvider( "assignmentoperator" )
+    @SuppressWarnings( "unchecked" )
+    public final void assignvariable( @Nonnull final Object[] p_data )
     {
-        final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Number> l_rhs = new CVariable<>( "Rhs" );
+        Assert.assertEquals( p_data.length, 4 );
 
-        l_lhs.set( 5 );
-        l_rhs.set( 2 );
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
+        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" );
+
+        l_lhs.set( p_data[0] );
+        l_rhs.set( p_data[1] );
 
         new CSingleAssignment(
             l_lhs,
             new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNINCREMENT
+            (EAssignOperator) p_data[2]
         ).execute(
             false,
             new CContext( l_lhs, l_rhs ),
@@ -71,95 +116,11 @@ public final class TestCSingleAssignment
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_lhs.<Number>raw(), 7.0 );
-        Assert.assertEquals( l_rhs.<Number>raw(), 2 );
+        Assert.assertEquals( p_data[3], l_lhs.raw() );
+        Assert.assertEquals( p_data[1],  l_rhs.raw() );
     }
 
     /**
-     * minus assignment
-     */
-    @Test
-    public final void minusvariable()
-    {
-        final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Number> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( 7 );
-        l_rhs.set( 3 );
-
-        new CSingleAssignment(
-            l_lhs,
-            new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNDECREMENT
-        ).execute(
-            false,
-            new CContext( l_lhs, l_rhs ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_lhs.<Number>raw(), 4.0 );
-        Assert.assertEquals( l_rhs.<Number>raw(), 3 );
-    }
-
-    /**
-     * multiply assignment
-     */
-    @Test
-    public final void multiplyvariable()
-    {
-        final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Number> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( 11 );
-        l_rhs.set( 11 );
-
-        new CSingleAssignment(
-            l_lhs,
-            new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNMULTIPLY
-        ).execute(
-            false,
-            new CContext( l_lhs, l_rhs ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_lhs.<Number>raw(), 121.0 );
-        Assert.assertEquals( l_rhs.<Number>raw(), 11 );
-    }
-
-    /**
-     * divide assignment
-     */
-    @Test
-    public final void dividevariable()
-    {
-        final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Number> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( 33 );
-        l_rhs.set( 3 );
-
-        new CSingleAssignment(
-            l_lhs,
-            new CPassVariable( l_rhs ),
-            EAssignOperator.ASSIGNDIVIDE
-        ).execute(
-            false,
-            new CContext( l_lhs, l_rhs ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_lhs.<Number>raw(), 11.0 );
-        Assert.assertEquals( l_rhs.<Number>raw(), 3 );
-    }
-
-    /**
-     * divide assignment
-     */
-    @Test
     public final void modulopositivevariable()
     {
         final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
@@ -183,10 +144,6 @@ public final class TestCSingleAssignment
         Assert.assertEquals( l_rhs.<Number>raw(), 17 );
     }
 
-    /**
-     * divide assignment
-     */
-    @Test
     public final void modulonegativevariable()
     {
         final IVariable<Number> l_lhs = new CVariable<>( "Lhs" );
@@ -226,7 +183,7 @@ public final class TestCSingleAssignment
 
         System.out.println( l_lhs );
     }
-
+    */
 
     /**
      * local context
