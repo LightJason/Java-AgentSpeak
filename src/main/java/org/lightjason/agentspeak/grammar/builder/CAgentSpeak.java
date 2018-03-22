@@ -51,7 +51,7 @@ import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRang
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
-import org.lightjason.agentspeak.language.execution.passing.CPassData;
+import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassExecutionVariable;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.execution.passing.CPassExecution;
@@ -486,7 +486,7 @@ public final class CAgentSpeak
     @Nonnull
     public static <T> IExecution passdata( @Nonnull final T p_data )
     {
-        return new CPassData<>( p_data );
+        return new CPassRaw<>( p_data );
     }
 
     /**

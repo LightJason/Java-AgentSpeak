@@ -40,7 +40,7 @@ import java.util.Objects;
  * action to pass static data into the return structure
  * @tparam T any raw data
  */
-public final class CPassData<T> extends IBaseExecution<ITerm>
+public final class CPassRaw<T> extends IBaseExecution<ITerm>
 {
     /**
      * serial id
@@ -52,7 +52,7 @@ public final class CPassData<T> extends IBaseExecution<ITerm>
      *
      * @param p_value data
      */
-    public CPassData( @Nullable final T p_value )
+    public CPassRaw( @Nullable final T p_value )
     {
         super( CRawTerm.of( p_value ) );
     }

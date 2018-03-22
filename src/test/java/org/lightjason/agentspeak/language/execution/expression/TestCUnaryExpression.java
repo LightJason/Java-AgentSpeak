@@ -27,12 +27,13 @@ import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.passing.CPassData;
+import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -87,6 +88,8 @@ public final class TestCUnaryExpression extends IBaseTest
     @SuppressWarnings( "unchecked" )
     public final void variable( @Nonnull final Object[] p_data )
     {
+        Assume.assumeTrue( p_data.length == 3 );
+
         final List<ITerm> l_return = new ArrayList<>();
 
         final IVariable<Object> l_var = new CVariable<>( "Value" );
@@ -117,12 +120,14 @@ public final class TestCUnaryExpression extends IBaseTest
     @SuppressWarnings( "unchecked" )
     public final void raw( @Nonnull final Object[] p_data )
     {
+        Assume.assumeTrue( p_data.length == 3 );
+
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
             new CUnaryExpression(
                 (EUnaryOperator) p_data[1],
-                new CPassData<>( p_data[0] )
+                new CPassRaw<>( p_data[0] )
             ).execute(
                 false,
                 IContext.EMPTYPLAN,

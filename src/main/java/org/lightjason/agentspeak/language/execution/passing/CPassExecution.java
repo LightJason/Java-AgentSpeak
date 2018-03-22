@@ -67,8 +67,7 @@ public final class CPassExecution implements IExecution
     @Nonnull
     @Override
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return
-    )
+                                         @Nonnull final List<ITerm> p_return )
     {
         return m_execution.execute(
             m_parallel,

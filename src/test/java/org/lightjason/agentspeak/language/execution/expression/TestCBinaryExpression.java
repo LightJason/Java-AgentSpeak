@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.assignment;
+package org.lightjason.agentspeak.language.execution.expression;
 
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -31,23 +31,26 @@ import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * test single assignment
+ * test binary expression
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCSingleAssignment extends IBaseTest
+public final class TestCBinaryExpression extends IBaseTest
 {
-
     /**
      * assignment operator
      *
@@ -56,22 +59,54 @@ public final class TestCSingleAssignment extends IBaseTest
     @DataProvider
     public static Object[] operator()
     {
+        final Object l_object = new Object();
+
         return Stream.of(
 
-            testcase( 5, 2, EAssignOperator.INCREMENT, 7.0 ),
-            testcase( 7, 3, EAssignOperator.DECREMENT, 4.0 ),
+            testcase( 5, 2, EBinaryOperator.PLUS, 7.0 ),
+            testcase( 3, 5, EBinaryOperator.MINUS, -2.0 ),
 
-            testcase( 11, 11, EAssignOperator.MULTIPLY, 121.0 ),
-            testcase( 33, 3, EAssignOperator.DIVIDE, 11.0 ),
+            testcase( 12, 10, EBinaryOperator.MULTIPLY, 120.0 ),
+            testcase( 360, 12, EBinaryOperator.DIVIDE, 30.0 ),
+            testcase( 2, 8, EBinaryOperator.POWER, 256.0 ),
 
-            testcase( 21, 17, EAssignOperator.MODULO, 4L ),
-            testcase( -1, 17, EAssignOperator.MODULO, 16L ),
-            testcase( -18, 17, EAssignOperator.MODULO, 1L ),
+            testcase( 21, 17, EBinaryOperator.MODULO, 4L ),
+            testcase( -1, 17, EBinaryOperator.MODULO, 16L ),
+            testcase( -18, 17, EBinaryOperator.MODULO,  1L ),
 
-            testcase( 2, 3, EAssignOperator.POWER, 8.0 ),
-            testcase( 9, 0.5, EAssignOperator.POWER, 3.0 ),
+            testcase( 1, 2, EBinaryOperator.LESS,  true ),
+            testcase( 2, 3, EBinaryOperator.LESSEQUAL,  true ),
+            testcase( 3, 3, EBinaryOperator.LESSEQUAL,  true ),
+            testcase( 3, 2, EBinaryOperator.LESSEQUAL,  false ),
 
-            testcase( 2, 3, EAssignOperator.ASSIGN,  3 )
+            testcase( 8, 6, EBinaryOperator.GREATER,  true ),
+            testcase( 8, 6, EBinaryOperator.GREATEREQUAL,  true ),
+            testcase( 8, 8, EBinaryOperator.GREATEREQUAL,  true ),
+            testcase( 6, 8, EBinaryOperator.GREATEREQUAL,  false ),
+
+            testcase( new Object(), new Object(), EBinaryOperator.EQUAL,  false ),
+            testcase( l_object, l_object, EBinaryOperator.EQUAL,  true ),
+            testcase( new Object(), new Object(), EBinaryOperator.NOTEQUAL,  true ),
+            testcase( l_object, l_object, EBinaryOperator.NOTEQUAL,  false ),
+
+            testcase( 5, 5, EBinaryOperator.EQUAL,  true ),
+            testcase( 5.0, 5, EBinaryOperator.EQUAL,  true ),
+            testcase( 5.0000, 5.0000001, EBinaryOperator.NOTEQUAL,  true ),
+
+            testcase( true, true, EBinaryOperator.OR, true ),
+            testcase( true, false, EBinaryOperator.OR, true ),
+            testcase( false, true, EBinaryOperator.OR, true ),
+            testcase( false, false, EBinaryOperator.OR, false ),
+
+            testcase( true, true, EBinaryOperator.AND, true ),
+            testcase( true, false, EBinaryOperator.AND, false ),
+            testcase( false, true, EBinaryOperator.AND, false ),
+            testcase( false, false, EBinaryOperator.AND, false ),
+
+            testcase( true, true, EBinaryOperator.XOR, false ),
+            testcase( true, false, EBinaryOperator.XOR, true ),
+            testcase( false, true, EBinaryOperator.XOR, true ),
+            testcase( false, false, EBinaryOperator.XOR, false )
 
         ).toArray();
     }
@@ -86,11 +121,10 @@ public final class TestCSingleAssignment extends IBaseTest
      * @return test-case
      */
     private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs,
-                                    @Nonnull final EAssignOperator p_operator, @Nonnull final Object p_result )
+                                    @Nonnull final EBinaryOperator p_operator, @Nonnull final Object p_result )
     {
         return Stream.of( p_lhs, p_rhs, p_operator, p_result ).toArray();
     }
-
 
     /**
      * test assignment operator with variables
@@ -99,9 +133,11 @@ public final class TestCSingleAssignment extends IBaseTest
     @Test
     @SuppressWarnings( "unchecked" )
     @UseDataProvider( "operator" )
-    public final void assignvariable( @Nonnull final Object[] p_data )
+    public final void variable( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 4 );
+
+        final List<ITerm> l_return = new ArrayList<>();
 
         final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
         final IVariable<Object> l_rhs = new CVariable<>( "Rhs" );
@@ -110,20 +146,22 @@ public final class TestCSingleAssignment extends IBaseTest
         l_rhs.set( p_data[1] );
 
         Assert.assertTrue(
-            new CSingleAssignment(
-                l_lhs,
-                new CPassVariable( l_rhs ),
-                (EAssignOperator) p_data[2]
+            new CBinaryExpression(
+                (EBinaryOperator) p_data[2],
+                new CPassVariable( l_lhs ),
+                new CPassVariable( l_rhs )
             ).execute(
                 false,
                 new CLocalContext( l_lhs, l_rhs ),
                 Collections.emptyList(),
-                Collections.emptyList()
+                l_return
             ).value()
         );
 
-        Assert.assertEquals( p_data[3], l_lhs.raw() );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( p_data[0], l_lhs.raw() );
         Assert.assertEquals( p_data[1],  l_rhs.raw() );
+        Assert.assertEquals( p_data[3], l_return.get( 0 ).raw() );
     }
 
     /**
@@ -133,27 +171,27 @@ public final class TestCSingleAssignment extends IBaseTest
     @Test
     @SuppressWarnings( "unchecked" )
     @UseDataProvider( "operator" )
-    public final void assignraw( @Nonnull final Object[] p_data )
+    public final void raw( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 4 );
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
-
-        l_lhs.set( p_data[0] );
+        final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CSingleAssignment(
-                l_lhs,
-                new CPassRaw<>( p_data[1] ),
-                (EAssignOperator) p_data[2]
+            new CBinaryExpression(
+                (EBinaryOperator) p_data[2],
+                new CPassRaw<>( p_data[0] ),
+                new CPassRaw<>( p_data[1] )
             ).execute(
                 false,
-                new CLocalContext( l_lhs ),
+                IContext.EMPTYPLAN,
                 Collections.emptyList(),
-                Collections.emptyList()
+                l_return
             ).value()
         );
 
-        Assert.assertEquals( p_data[3], l_lhs.raw() );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( p_data[3], l_return.get( 0 ).raw() );
     }
+
 }

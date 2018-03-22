@@ -37,14 +37,14 @@ import java.util.function.BiFunction;
  */
 public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
 {
-    ASSIGNINCREMENT( "+=" ),
-    ASSIGNDECREMENT( "-=" ),
+    INCREMENT( "+=" ),
+    DECREMENT( "-=" ),
 
-    ASSIGNMULTIPLY( "*=" ),
-    ASSIGNDIVIDE( "/=" ),
-    ASSIGNMODULO( "%=" ),
+    MULTIPLY( "*=" ),
+    DIVIDE( "/=" ),
+    MODULO( "%=" ),
 
-    ASSIGNPOW( "^=" ),
+    POWER( "^=" ),
 
     ASSIGN( "=" );
 
@@ -68,24 +68,24 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
     {
         switch ( this )
         {
-            case ASSIGNINCREMENT:
+            case INCREMENT:
                 return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
 
-            case ASSIGNDECREMENT:
+            case DECREMENT:
                 return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
 
-            case ASSIGNMULTIPLY:
+            case MULTIPLY:
                 return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
 
-            case ASSIGNDIVIDE:
+            case DIVIDE:
                 return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
 
-            case ASSIGNMODULO:
+            case MODULO:
                 return p_lhs.<Number>raw().longValue() < 0
                        ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
                        : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
 
-            case ASSIGNPOW:
+            case POWER:
                 return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
 
             case ASSIGN:
@@ -113,22 +113,22 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
         switch ( p_value )
         {
             case "+=":
-                return ASSIGNINCREMENT;
+                return INCREMENT;
 
             case "-=":
-                return ASSIGNDECREMENT;
+                return DECREMENT;
 
             case "*=":
-                return ASSIGNMULTIPLY;
+                return MULTIPLY;
 
             case "/=":
-                return ASSIGNDIVIDE;
+                return DIVIDE;
 
             case "%=":
-                return ASSIGNMODULO;
+                return MODULO;
 
             case "^=":
-                return ASSIGNPOW;
+                return POWER;
 
             case "=":
                 return ASSIGN;
