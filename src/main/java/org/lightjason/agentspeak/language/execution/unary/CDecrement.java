@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 /**
  * unary increment
  */
-public final class CDecrement implements IUnaryExpression
+public final class CDecrement implements IUnary
 {
     /**
      * serial id

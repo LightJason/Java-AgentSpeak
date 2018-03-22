@@ -52,7 +52,7 @@ import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStre
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
-import org.lightjason.agentspeak.language.execution.passing.CPassExecutionVariable;
+import org.lightjason.agentspeak.language.execution.passing.CPassVariableLiteral;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.execution.passing.CPassExecution;
 import org.lightjason.agentspeak.language.execution.unary.CDecrement;
@@ -304,7 +304,7 @@ public final class CAgentSpeak
 
         if ( Objects.nonNull( p_variable ) )
             return new CAchievementGoalVariable(
-                new CPassExecutionVariable(
+                new CPassVariableLiteral(
                     (IVariable<?>) p_visitor.visit( p_variable ),
                     Stream.empty()
                 ),

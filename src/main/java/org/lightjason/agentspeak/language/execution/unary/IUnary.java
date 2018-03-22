@@ -23,67 +23,15 @@
 
 package org.lightjason.agentspeak.language.execution.unary;
 
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.variable.IVariable;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.stream.Stream;
+import org.lightjason.agentspeak.language.execution.IExecution;
 
 
 /**
- * unary increment
+ * interface of variable unary expression
+ *
+ * @tparam T variable data type
  */
-public final class CIncrement implements IUnary
+public interface IUnary extends IExecution
 {
-    /**
-     * serial id
-     */
-    private static final long serialVersionUID = 8985578891714581618L;
-    /**
-     * variable
-     */
-    private final IVariable<?> m_variable;
-
-    /**
-     * ctor
-     *
-     * @param p_variable variable
-     */
-    @Nonnull
-    public CIncrement( @Nonnull final IVariable<?> p_variable )
-    {
-        m_variable = p_variable;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_variable.toString() + "++";
-    }
-
-    @Nonnull
-    @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
-    {
-        final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
-        if ( l_variable.valueassignableto( Number.class ) )
-            l_variable.set( l_variable.<Number>raw().doubleValue() + 1 );
-
-        return CFuzzyValue.of( true );
-    }
-
-    @Nonnull
-    @Override
-    public final Stream<IVariable<?>> variables()
-    {
-        return Stream.of( m_variable );
-    }
 
 }

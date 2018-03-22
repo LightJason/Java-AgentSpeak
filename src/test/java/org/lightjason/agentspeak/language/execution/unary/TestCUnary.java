@@ -23,15 +23,60 @@
 
 package org.lightjason.agentspeak.language.execution.unary;
 
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import java.util.Collections;
 
 
 /**
- * interface of variable unary expression
- *
- * @tparam T variable data type
+ * test unary operators
  */
-public interface IUnaryExpression extends IExecution
+public final class TestCUnary extends IBaseTest
 {
 
+    /**
+     * decrement
+     */
+    @Test
+    public final void decrement()
+    {
+        final IVariable<Object> l_value = new CVariable<>( "Value" );
+        l_value.set( 5 );
+
+        Assert.assertTrue(
+            new CDecrement( l_value ).execute(
+                false,
+                new CLocalContext( l_value ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals( 4, l_value.<Number>raw().intValue() );
+    }
+
+    /**
+     * decrement
+     */
+    @Test
+    public final void increment()
+    {
+        final IVariable<Object> l_value = new CVariable<>( "Value" );
+        l_value.set( 7 );
+
+        Assert.assertTrue(
+            new CIncrement( l_value ).execute(
+                false,
+                new CLocalContext( l_value ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals( 8, l_value.<Number>raw().intValue() );
+    }
 }

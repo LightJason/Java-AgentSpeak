@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.passing;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -30,7 +31,9 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -72,7 +75,7 @@ public final class CPassExecution implements IExecution
         return m_execution.execute(
             m_parallel,
             p_context,
-            p_argument,
+            Collections.unmodifiableList( CCommon.replaceFromContext( p_context, p_argument.stream() ).collect( Collectors.toList() ) ),
             p_return
         );
     }

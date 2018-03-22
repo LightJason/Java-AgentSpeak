@@ -40,9 +40,9 @@ import java.util.stream.Stream;
 
 
 /**
- * variable execution
+ * variable literal pass
  */
-public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
+public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
 {
     /**
      * serial id
@@ -58,7 +58,7 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
      *
      * @param p_value variable
      */
-    public CPassExecutionVariable( @Nonnull final IVariable<?> p_value )
+    public CPassVariableLiteral( @Nonnull final IVariable<?> p_value )
     {
         this( p_value, Stream.empty() );
     }
@@ -68,7 +68,7 @@ public final class CPassExecutionVariable extends IBaseExecution<IVariable<?>>
      *
      * @param p_value variable
      */
-    public CPassExecutionVariable( @Nonnull final IVariable<?> p_value, @Nonnull final Stream<ITerm> p_termlist )
+    public CPassVariableLiteral( @Nonnull final IVariable<?> p_value, @Nonnull final Stream<ITerm> p_termlist )
     {
         super( p_value );
         m_termlist = p_termlist.toArray( ITerm[]::new );
