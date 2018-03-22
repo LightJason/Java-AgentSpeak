@@ -127,6 +127,21 @@ public final class CCommon
     {
     }
 
+    /**
+     * modulo operator.
+     * used n assignment and binary operator
+     *
+     * @param p_lhs left-hand-side
+     * @param p_rhs right-hand-side
+     * @return result
+     */
+    public static Number modulo( @Nonnull final Number p_lhs, @Nonnull final Number p_rhs )
+    {
+        return p_lhs.longValue() < 0
+            ? Math.abs( ( p_rhs.longValue() + p_lhs.longValue() ) % p_rhs.longValue() )
+            : p_lhs.longValue() % p_rhs.longValue();
+    }
+
     //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------
 
     /**

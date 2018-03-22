@@ -61,6 +61,9 @@ public final class TestCBinaryExpression extends IBaseTest
     {
         final Object l_object = new Object();
 
+        final Object l_compare1 = new CCompare( "foo" );
+        final Object l_compare2 = new CCompare( "bar" );
+
         return Stream.of(
 
             testcase( 5, 2, EBinaryOperator.PLUS, 7.0 ),
@@ -83,6 +86,16 @@ public final class TestCBinaryExpression extends IBaseTest
             testcase( 8, 6, EBinaryOperator.GREATEREQUAL,  true ),
             testcase( 8, 8, EBinaryOperator.GREATEREQUAL,  true ),
             testcase( 6, 8, EBinaryOperator.GREATEREQUAL,  false ),
+
+            testcase( l_compare2, l_compare1, EBinaryOperator.LESS,  true ),
+            testcase( l_compare1, l_compare2, EBinaryOperator.LESS,  false ),
+            testcase( l_compare2, l_compare1, EBinaryOperator.LESSEQUAL,  true ),
+            testcase( l_compare2, l_compare2, EBinaryOperator.LESSEQUAL,  true ),
+
+            testcase( l_compare1, l_compare2, EBinaryOperator.GREATER,  true ),
+            testcase( l_compare2, l_compare1, EBinaryOperator.GREATER,  false ),
+            testcase( l_compare1, l_compare2, EBinaryOperator.GREATEREQUAL,  true ),
+            testcase( l_compare1, l_compare1, EBinaryOperator.GREATEREQUAL,  true ),
 
             testcase( new Object(), new Object(), EBinaryOperator.EQUAL,  false ),
             testcase( l_object, l_object, EBinaryOperator.EQUAL,  true ),
@@ -192,6 +205,33 @@ public final class TestCBinaryExpression extends IBaseTest
 
         Assert.assertEquals( 1, l_return.size() );
         Assert.assertEquals( p_data[3], l_return.get( 0 ).raw() );
+    }
+
+    /**
+     * test comparable
+     */
+    private static final class CCompare implements Comparable<CCompare>
+    {
+        /**
+         * data
+         */
+        private final String m_data;
+
+        /**
+         * ctor
+         *
+         * @param p_data string data
+         */
+        CCompare( @Nonnull final String p_data )
+        {
+            m_data = p_data;
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final CCompare p_object )
+        {
+            return this.m_data.compareTo( p_object.m_data );
+        }
     }
 
 }

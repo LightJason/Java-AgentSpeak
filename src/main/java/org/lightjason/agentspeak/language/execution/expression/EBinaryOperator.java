@@ -98,9 +98,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
 
             case MODULO:
-                return p_lhs.<Number>raw().longValue() < 0
-                       ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
-                       : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
+                return CCommon.modulo( p_lhs.raw(), p_rhs.raw() );
 
             case POWER:
                 return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
