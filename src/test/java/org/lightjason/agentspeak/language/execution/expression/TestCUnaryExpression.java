@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.assignment;
+package org.lightjason.agentspeak.language.execution.expression;
 
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -30,46 +30,38 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.passing.CPassData;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * test single assignment
+ * test unary expression
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCSingleAssignment extends IBaseTest
+public final class TestCUnaryExpression extends IBaseTest
 {
-
     /**
      * assignment operator
      *
-     * @return 4-tuple as array, first & second input values, 3rd operator, 4th result
+     * @return 3-tuple as array, first & second input values, 3rd operator, 4th result
      */
     @DataProvider
-    public static Object[] assignmentoperator()
+    public static Object[] operator()
     {
         return Stream.of(
 
-            testcase( 5, 2, EAssignOperator.ASSIGNINCREMENT, 7.0 ),
-            testcase( 7, 3, EAssignOperator.ASSIGNDECREMENT, 4.0 ),
-
-            testcase( 11, 11, EAssignOperator.ASSIGNMULTIPLY, 121.0 ),
-            testcase( 33, 3, EAssignOperator.ASSIGNDIVIDE, 11.0 ),
-
-            testcase( 21, 17, EAssignOperator.ASSIGNMODULO, 4L ),
-            testcase( -1, 17, EAssignOperator.ASSIGNMODULO, 16L ),
-            testcase( -18, 17, EAssignOperator.ASSIGNMODULO,  1L ),
-
-            testcase( 2, 3, EAssignOperator.ASSIGNPOW,  8.0 ),
-            testcase( 9, 0.5, EAssignOperator.ASSIGNPOW,  3.0 ),
-
-            testcase( 2, 3, EAssignOperator.ASSIGN,  3 )
+            testcase( true, EUnaryOperator.NEGATION, false ),
+            testcase( false, EUnaryOperator.NEGATION, true )
 
         ).toArray();
     }
@@ -77,51 +69,71 @@ public final class TestCSingleAssignment extends IBaseTest
     /**
      * test-case generator
      *
-     * @param p_lhs left-hand-side argument
-     * @param p_rhs right-hand-side argument
+     * @param p_value argument
      * @param p_operator operator
      * @param p_result result
      * @return test-case
      */
-    private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs,
-                                    @Nonnull final EAssignOperator p_operator, @Nonnull final Object p_result )
+    private static Object testcase( @Nonnull final Object p_value, @Nonnull final EUnaryOperator p_operator, @Nonnull final Object p_result )
     {
-        return Stream.of( p_lhs, p_rhs, p_operator, p_result ).toArray();
+        return Stream.of( p_value, p_operator, p_result ).toArray();
     }
 
-
     /**
-     * test assignment operator with variables
-     * @param p_data input data
+     * test with variable
      */
     @Test
+    @UseDataProvider( "operator" )
     @SuppressWarnings( "unchecked" )
-    @UseDataProvider( "assignmentoperator" )
-    public final void assignvariable( @Nonnull final Object[] p_data )
+    public final void variable( @Nonnull final Object[] p_data )
     {
-        Assert.assertEquals( p_data.length, 4 );
+        final List<ITerm> l_return = new ArrayList<>();
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( p_data[0] );
-        l_rhs.set( p_data[1] );
+        final IVariable<Object> l_var = new CVariable<>( "Value" );
+        l_var.set( p_data[0] );
 
         Assert.assertTrue(
-            new CSingleAssignment(
-                l_lhs,
-                new CPassVariable( l_rhs ),
-                (EAssignOperator) p_data[2]
+            new CUnaryExpression(
+                (EUnaryOperator) p_data[1],
+                new CPassVariable( l_var )
             ).execute(
                 false,
-                new CLocalContext( l_lhs, l_rhs ),
+                new CLocalContext( l_var ),
                 Collections.emptyList(),
-                Collections.emptyList()
+                l_return
             ).value()
         );
 
-        Assert.assertEquals( p_data[3], l_lhs.raw() );
-        Assert.assertEquals( p_data[1],  l_rhs.raw() );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( p_data[2], l_return.get( 0 ).raw() );
+        Assert.assertEquals( p_data[0], l_var.raw() );
     }
+
+    /**
+     * test with native data
+     */
+    @Test
+    @UseDataProvider( "operator" )
+    @SuppressWarnings( "unchecked" )
+    public final void raw( @Nonnull final Object[] p_data )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        Assert.assertTrue(
+            new CUnaryExpression(
+                (EUnaryOperator) p_data[1],
+                new CPassData<>( p_data[0] )
+            ).execute(
+                false,
+                IContext.EMPTYPLAN,
+                Collections.emptyList(),
+                l_return
+            ).value()
+        );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( p_data[2], l_return.get( 0 ).raw() );
+    }
+
 
 }
