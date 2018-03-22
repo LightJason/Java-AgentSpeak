@@ -453,7 +453,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExecute_variable( final AgentParser.Execute_variableContext p_context )
     {
-        return null;
+        return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
 
 

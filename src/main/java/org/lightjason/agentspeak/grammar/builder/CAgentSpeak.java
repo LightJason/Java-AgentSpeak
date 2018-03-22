@@ -339,55 +339,6 @@ public final class CAgentSpeak
     }
 
     /**
-     * build single assignment
-     *
-     * @param p_lhs left-hand-side
-     * @param p_ternary ternary
-     * @param p_expression expression
-     * @return assignment execution
-     */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    public static IExecution singleassignment( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_lhs,
-                                               @Nonnull final TerminalNode p_operator, @Nullable final RuleContext p_ternary,
-                                               @Nullable final RuleContext p_expression )
-    {
-        if ( Objects.nonNull( p_ternary ) )
-            return new CSingleAssignment(
-                (IVariable<?>) p_visitor.visit( p_lhs ),
-                passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) ),
-                EAssignOperator.of( p_operator.getText() )
-            );
-
-        if ( Objects.nonNull( p_expression ) )
-            return new CSingleAssignment(
-                (IVariable<?>) p_visitor.visit( p_lhs ),
-                (IExecution) p_visitor.visit( p_expression ),
-                EAssignOperator.of( p_operator.getText() )
-            );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownassignment" ) );
-    }
-
-    /**
-     * build multi assignment
-     *
-     * @param p_variable variable
-     * @param p_execution execution structure
-     * @return assignment execution
-     */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    public static IExecution multiassignment( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                              @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution )
-    {
-        return new CMultiAssignment(
-            (Stream<IVariable<?>>) p_visitor.visit( p_variable ),
-            (IExecution) p_visitor.visit( p_execution )
-        );
-    }
-
-    /**
      * build ternary operator
      *
      * @param p_expression expression definition
@@ -424,21 +375,6 @@ public final class CAgentSpeak
             return new CBelief( p_literal, CBelief.EAction.DELETE );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbeliefaction" ) );
-    }
-
-    /**
-     * build deconstruct
-     *
-     * @return deconstruct execution
-     */
-    @Nonnull
-    public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<IVariable<?>> p_variables,
-                                          @Nullable final ITerm p_literal, @Nullable final ITerm p_variable )
-    {
-        return new CDeconstruct(
-            p_variables,
-            Objects.nonNull( p_literal ) ? p_literal : p_variable
-        );
     }
 
     /**
@@ -501,7 +437,95 @@ public final class CAgentSpeak
         return new CPassBoolean( p_value );
     }
 
+    /**
+     * build a literal by variable
+     *
+     * @param p_visitor visitor
+     * @param p_variable variable rule
+     * @param p_termlist termlist rule
+     * @return literal execution
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static IExecution passvaribaleliteral( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                                  @Nonnull final RuleContext p_variable, @Nullable final RuleContext p_termlist )
+    {
+        return new CPassVariableLiteral(
+            (IVariable<?>) p_visitor.visit( p_variable ),
+            Objects.nonNull( p_termlist )
+            ? (Stream<ITerm>) p_visitor.visit( p_termlist )
+            : Stream.empty()
+        );
+    }
 
+
+
+
+    // --- assignment ------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * build deconstruct
+     *
+     * @return deconstruct execution
+     */
+    @Nonnull
+    public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<IVariable<?>> p_variables,
+                                          @Nullable final ITerm p_literal, @Nullable final ITerm p_variable )
+    {
+        return new CDeconstruct(
+            p_variables,
+            Objects.nonNull( p_literal ) ? p_literal : p_variable
+        );
+    }
+
+    /**
+     * build single assignment
+     *
+     * @param p_lhs left-hand-side
+     * @param p_ternary ternary
+     * @param p_expression expression
+     * @return assignment execution
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static IExecution singleassignment( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_lhs,
+                                               @Nonnull final TerminalNode p_operator, @Nullable final RuleContext p_ternary,
+                                               @Nullable final RuleContext p_expression )
+    {
+        if ( Objects.nonNull( p_ternary ) )
+            return new CSingleAssignment(
+                (IVariable<?>) p_visitor.visit( p_lhs ),
+                passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) ),
+                EAssignOperator.of( p_operator.getText() )
+            );
+
+        if ( Objects.nonNull( p_expression ) )
+            return new CSingleAssignment(
+                (IVariable<?>) p_visitor.visit( p_lhs ),
+                (IExecution) p_visitor.visit( p_expression ),
+                EAssignOperator.of( p_operator.getText() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownassignment" ) );
+    }
+
+    /**
+     * build multi assignment
+     *
+     * @param p_variable variable
+     * @param p_execution execution structure
+     * @return assignment execution
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static IExecution multiassignment( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                              @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution )
+    {
+        return new CMultiAssignment(
+            (Stream<IVariable<?>>) p_visitor.visit( p_variable ),
+            (IExecution) p_visitor.visit( p_execution )
+        );
+    }
 
 
     // --- unification -----------------------------------------------------------------------------------------------------------------------------------------

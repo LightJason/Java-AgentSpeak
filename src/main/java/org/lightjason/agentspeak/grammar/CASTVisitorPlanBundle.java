@@ -409,7 +409,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExecute_variable( final PlanBundleParser.Execute_variableContext p_context )
     {
-        return null;
+        return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
 
 
