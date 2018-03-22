@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -102,9 +102,10 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                        ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
                        : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
 
-
             case POWER:
                 return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
+
+
 
             case OR:
                 return p_lhs.<Boolean>raw() || p_rhs.<Boolean>raw();
@@ -116,18 +117,107 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_lhs.<Boolean>raw() ^ p_rhs.<Boolean>raw();
 
 
+
             case EQUAL:
-                return p_lhs.raw().equals( p_rhs.raw() );
+                return checkequal( p_lhs, p_rhs );
 
             case NOTEQUAL:
-                return !p_lhs.raw().equals( p_rhs.raw() );
+                return !checkequal( p_lhs, p_rhs );
 
 
+
+            case GREATER:
+                return compare( p_lhs, p_rhs ) > 0;
+
+            case GREATEREQUAL:
+                return compare( p_lhs, p_rhs ) >= 0;
+
+            case LESS:
+                return compare( p_lhs, p_rhs ) < 0;
+
+            case LESSEQUAL:
+                return compare( p_lhs, p_rhs ) <= 0;
 
 
 
             default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", this ) );
+                throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", this ) );
         }
     }
+
+
+    /**
+     * equal method with number handling
+     *
+     * @param p_value1 term value
+     * @param p_value2 term value
+     * @return equality flag
+     */
+    @SuppressWarnings( "unchecked" )
+    private static boolean checkequal( @Nonnull final ITerm p_value1, @Nonnull final ITerm p_value2 )
+    {
+        return ( p_value1.raw() instanceof Number ) && ( p_value2.raw() instanceof Number )
+               ? Double.valueOf( p_value1.<Number>raw().doubleValue() ).equals( p_value2.<Number>raw().doubleValue() )
+               : p_value1.raw().equals( p_value2.raw() );
+    }
+
+
+    /**
+     * compares term types
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     */
+    private static int compare( @Nonnull final ITerm p_left, @Nonnull final ITerm p_right )
+    {
+        return CCommon.rawvalueAssignableTo( p_left.raw(), Number.class ) && CCommon.rawvalueAssignableTo( p_right.raw(), Number.class )
+               ? comparenumber( map( p_left.raw() ), map( p_right.raw() ) )
+               : compareobject( map( p_left.raw() ), map( p_right.raw() ) );
+    }
+
+    /**
+     * compare method for any number type
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     *
+     * @tparam T number type
+     */
+    private static <T extends Number & Comparable<T>> int comparenumber( @Nonnull final T p_left, @Nonnull final T p_right )
+    {
+        return Double.compare( p_left.doubleValue(), p_right.doubleValue() );
+    }
+
+
+    /**
+     * compare method for any object type
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     *
+     * @tparam T object type
+     */
+    private static <T extends Comparable<T>> int compareobject( @Nonnull final T p_left, @Nonnull final T p_right )
+    {
+        return p_left.compareTo( p_right );
+    }
+
+    /**
+     * type mapping method
+     *
+     * @param p_value value
+     * @tparam N return type
+     * @tparam M value type
+     * @return casted value
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    private static <N, M> N map( @Nonnull final M p_value )
+    {
+        return (N) p_value;
+    }
+
 }

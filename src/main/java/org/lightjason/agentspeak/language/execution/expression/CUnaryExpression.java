@@ -43,6 +43,10 @@ import java.util.stream.Stream;
 public final class CUnaryExpression implements IUnaryExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2385154799234194316L;
+    /**
      * operator
      */
     private final EUnaryOperator m_operator;
