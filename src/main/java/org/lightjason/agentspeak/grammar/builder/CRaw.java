@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.grammar.builder;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.lightjason.agentspeak.grammar.CCommon;
+import org.lightjason.agentspeak.language.CCommon;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;

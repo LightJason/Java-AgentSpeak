@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  * comparable binary expression
- * @deprecated
+ * @deprecated remove
  */
 @Deprecated
 public final class CComparable extends IBaseBinary
@@ -57,8 +57,8 @@ public final class CComparable extends IBaseBinary
     public CComparable( @Nonnull final EBinaryOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-        if ( !m_operator.isComparable() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
+        //if ( !m_operator.isComparable() )
+        throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Nonnull

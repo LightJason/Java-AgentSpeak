@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
 
 
 /**
- * expression operator
+ * expression binary operator
  */
 public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 {
@@ -89,7 +89,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
 
             case MINUS:
-                return return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
+                return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
 
             case MULTIPLY:
                 return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
@@ -98,9 +98,9 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
 
             case MODULO:
-                return return p_lhs.<Number>raw().longValue() < 0
-                              ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
-                              : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
+                return p_lhs.<Number>raw().longValue() < 0
+                       ? Math.abs( ( p_rhs.<Number>raw().longValue() + p_lhs.<Number>raw().longValue() ) % p_rhs.<Number>raw().longValue() )
+                       : p_lhs.<Number>raw().longValue() % p_rhs.<Number>raw().longValue();
 
 
             case POWER:

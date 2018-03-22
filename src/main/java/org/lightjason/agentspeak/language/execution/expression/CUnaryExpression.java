@@ -23,12 +23,16 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -38,18 +42,49 @@ import java.util.stream.Stream;
  */
 public final class CUnaryExpression implements IUnaryExpression
 {
+    /**
+     * operator
+     */
+    private final EUnaryOperator m_operator;
+    /**
+     * execution element
+     */
+    private final IExecution m_element;
+
+    /**
+     * ctor
+     *
+     * @param p_operator unary operator
+     * @param p_element element
+     */
+    public CUnaryExpression( @Nonnull final EUnaryOperator p_operator, @Nonnull final IExecution p_element )
+    {
+        m_operator = p_operator;
+        m_element = p_element;
+    }
+
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        return null;
+        final List<ITerm> l_return = new ArrayList<>();
+        if ( ( !m_element.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() != 1 ) )
+            return CFuzzyValue.of( false );
+
+        p_return.add(
+            CRawTerm.of(
+                m_operator.apply( l_return.get( 0 ) )
+            )
+        );
+
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.empty()
+        return m_element.variables();
     }
 }

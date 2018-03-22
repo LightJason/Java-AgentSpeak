@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.rits.cloning.Cloner;
@@ -54,6 +55,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -71,6 +73,48 @@ import java.util.stream.Stream;
  */
 public final class CCommon
 {
+    /**
+     * numeric constant values - infinity is defined manually
+     */
+    public static final Map<String, Double> NUMERICCONSTANT = Collections.unmodifiableMap(
+        StreamUtils.zip(
+            Stream.of(
+                "pi",
+                "euler",
+                "lightspeed",
+                "avogadro",
+                "boltzmann",
+                "gravity",
+                "electron",
+                "neutron",
+                "proton",
+                "positiveinfinity",
+                "negativeinfinity",
+                "maximumvalue",
+                "minimumvalue",
+                "nan"
+            ),
+
+            Stream.of(
+                Math.PI,
+                Math.E,
+                299792458.0,
+                6.0221412927e23,
+                8.617330350e-15,
+                6.67408e-11,
+                9.10938356e-31,
+                1674927471214e-27,
+                1.6726219e-27,
+                Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY,
+                Double.MAX_VALUE,
+                Double.MIN_VALUE,
+                Double.NaN
+            ),
+
+            AbstractMap.SimpleImmutableEntry::new
+        ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) ) );
+
     /**
      * cloner
      */
