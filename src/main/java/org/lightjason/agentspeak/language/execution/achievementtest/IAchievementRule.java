@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lightjason.agentspeak.language.ILiteral;

@@ -21,62 +21,50 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.language.execution.IBaseExecution;
+import org.lightjason.agentspeak.language.execution.IExecution;
 
-import javax.annotation.Nonnull;
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 
 /**
- * achievement for rule-variable execution
+ * abstract achievement-goal class for goal execution
  */
-public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?>>
+abstract class IAchievementGoal<T> extends IBaseExecution<T>
 {
     /**
-     * serial id
+     * serial
      */
-    private static final long serialVersionUID = -3462378724593325487L;
+    private static final long serialVersionUID = -4470789276770008098L;
+    /**
+     * flag to run immediately
+     */
+    protected final boolean m_immediately;
 
     /**
      * ctor
      *
-     * @param p_value value of the rule
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    public CAchievementRuleVariable( @Nonnull final IVariable<?> p_value )
+    protected IAchievementGoal( final T p_type, final boolean p_immediately )
     {
-        super( p_value );
-    }
-
-    @Nonnull
-    @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-    {
-        return CAchievementRuleVariable.execute(
-            m_value.mutex(),
-            p_context,
-            CCommon.replaceFromContext( p_context, m_value ).term()
-        );
+        super( p_type );
+        m_immediately = p_immediately;
     }
 
     @Override
-    public final String toString()
+    public final int hashCode()
     {
-        return MessageFormat.format( "${0}", m_value );
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
-    @Nonnull
     @Override
-    public Stream<IVariable<?>> variables()
+    public final boolean equals( final Object p_object )
     {
-        return Stream.of( m_value );
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
+
 }

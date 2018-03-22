@@ -21,48 +21,40 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
 /**
- * achievement-goal action based on variables
+ * achievement for rule-literal execution
  */
-public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
+public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 4338602284287736836L;
+    private static final long serialVersionUID = -1575197582635138960L;
 
     /**
      * ctor
      *
-     * @param p_value value of the achievment-goal
-     * @param p_immediately immediately execution
+     * @param p_literal literal of the call
      */
-    public CAchievementGoalVariable( @Nonnull final IExecution p_value, final boolean p_immediately )
+    public CAchievementRuleLiteral( @Nonnull final ILiteral p_literal )
     {
-        super( p_value, p_immediately );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+        super( p_literal );
     }
 
     @Nonnull
@@ -70,23 +62,26 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_return = new ArrayList<>();
-        if ( ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() != 1 ) )
-            return CFuzzyValue.of( false );
-
-
-        return p_context.agent().trigger(
-            ITrigger.EType.ADDGOAL.builddefault(
-                l_return.get( 0 ).term()
-            ),
-            m_immediately
-        );
+        return CAchievementRuleLiteral.execute( m_value.hasAt(), p_context, m_value );
     }
 
     @Nonnull
     @Override
+    @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return m_value.variables();
+        return Objects.isNull( m_value )
+               ? Stream.empty()
+               : CCommon.flattenrecursive( m_value.orderedvalues() )
+                        .parallel()
+                        .filter( i -> i instanceof IVariable<?> )
+                        .map( i -> (IVariable<?>) i );
     }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "$", m_value );
+    }
+
 }

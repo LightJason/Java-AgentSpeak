@@ -21,50 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.lightjason.agentspeak.language.execution.IBaseExecution;
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import java.util.Objects;
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.List;
 
 
 /**
- * abstract achievement-goal class for goal execution
+ * test-goal action
  */
-abstract class IAchievementGoal<T> extends IBaseExecution<T>
+public final class CTestGoal extends ITest
 {
     /**
-     * serial
+     * serial id
      */
-    private static final long serialVersionUID = -4470789276770008098L;
-    /**
-     * flag to run immediately
-     */
-    protected final boolean m_immediately;
+    private static final long serialVersionUID = 6199668040937864138L;
 
     /**
      * ctor
      *
-     * @param p_type value of the achievment-goal
-     * @param p_immediately immediately execution
+     * @param p_value atom
      */
-    protected IAchievementGoal( final T p_type, final boolean p_immediately )
+    public CTestGoal( @Nonnull final IPath p_value )
     {
-        super( p_type );
-        m_immediately = p_immediately;
+        super( p_value );
     }
 
     @Override
-    public final int hashCode()
+    public final String toString()
     {
-        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
+        return MessageFormat.format( "?{0}", m_value );
     }
 
+    @Nonnull
     @Override
-    public final boolean equals( final Object p_object )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return CFuzzyValue.of( p_context.agent().runningplans().keySet().contains( m_value ) );
     }
 
 }

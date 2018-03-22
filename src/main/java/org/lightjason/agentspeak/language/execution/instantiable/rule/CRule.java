@@ -29,7 +29,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.achievement_test.CAchievementRuleLiteral;
+import org.lightjason.agentspeak.language.execution.achievementtest.CAchievementRuleLiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;

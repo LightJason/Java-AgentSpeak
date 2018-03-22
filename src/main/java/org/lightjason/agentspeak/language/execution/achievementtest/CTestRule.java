@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;

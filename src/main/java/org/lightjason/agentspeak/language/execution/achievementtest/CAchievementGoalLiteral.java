@@ -21,13 +21,13 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
@@ -35,29 +35,30 @@ import java.util.List;
 
 
 /**
- * test-goal action
+ * achievement-goal action based on a literal
  */
-public final class CTestGoal extends ITest
+public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6199668040937864138L;
+    private static final long serialVersionUID = -8534258655371085840L;
 
     /**
      * ctor
      *
-     * @param p_value atom
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    public CTestGoal( @Nonnull final IPath p_value )
+    public CAchievementGoalLiteral( @Nonnull final ILiteral p_type, final boolean p_immediately )
     {
-        super( p_value );
+        super( p_type, p_immediately );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "?{0}", m_value );
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Nonnull
@@ -65,7 +66,7 @@ public final class CTestGoal extends ITest
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of( p_context.agent().runningplans().keySet().contains( m_value ) );
+        return p_context.agent().trigger( ITrigger.EType.ADDGOAL.builddefault( m_value.unify( p_context ) ), m_immediately );
     }
 
 }

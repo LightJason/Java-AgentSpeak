@@ -21,33 +21,62 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievement_test;
+package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.execution.IBaseExecution;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * abstract class of test-goal / test-rule action
+ * achievement for rule-variable execution
  */
-abstract class ITest extends IBaseExecution<IPath>
+public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 500291351344481097L;
+    private static final long serialVersionUID = -3462378724593325487L;
 
     /**
      * ctor
      *
-     * @param p_value atom
+     * @param p_value value of the rule
      */
-    @Nonnull
-    ITest( @Nonnull final IPath p_value )
+    public CAchievementRuleVariable( @Nonnull final IVariable<?> p_value )
     {
         super( p_value );
     }
 
+    @Nonnull
+    @Override
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        return CAchievementRuleVariable.execute(
+            m_value.mutex(),
+            p_context,
+            CCommon.replaceFromContext( p_context, m_value ).term()
+        );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "${0}", m_value );
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IVariable<?>> variables()
+    {
+        return Stream.of( m_value );
+    }
 }
