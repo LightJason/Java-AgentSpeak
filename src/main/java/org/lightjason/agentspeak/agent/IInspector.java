@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.agent;
 
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 
 import javax.annotation.Nonnegative;
@@ -69,6 +70,10 @@ public interface IInspector
 
         @Override
         public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+        {}
+
+        @Override
+        public final void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
         {}
     };
 
@@ -121,5 +126,12 @@ public interface IInspector
      * @param p_value storage values
      */
     void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value );
+
+    /**
+     * inspect pending trigger
+     *
+     * @param p_value trigger stream
+     */
+    void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value );
 
 }

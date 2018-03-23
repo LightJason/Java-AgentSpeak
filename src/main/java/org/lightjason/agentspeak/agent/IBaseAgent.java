@@ -171,24 +171,19 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_beliefbase;
     }
 
-    @Nonnull
     @Override
-    @SafeVarargs
-    @SuppressWarnings( "varargs" )
-    public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
+    public final void inspect( @Nonnull final IInspector... p_inspector )
     {
-        return Arrays.stream( p_inspector )
-                     .parallel()
-                     .peek( i ->
-                     {
-                         i.inspectcycletime( m_cycletime.get() );
-                         i.inspectsleeping( m_sleepingcycles.get() );
-                         i.inspectbelief( m_beliefbase.stream() );
-                         i.inspectplans( m_plans.values().stream() );
-                         i.inspectrunningplans( m_runningplans.values().stream() );
-                         i.inspectstorage( m_storage.entrySet().stream() );
-                         i.inspectrules( m_rules.values().stream() );
-                     } );
+        Arrays.stream( p_inspector )
+              .parallel()
+              .peek( i -> i.inspectcycletime( m_cycletime.get() ) )
+              .peek( i -> i.inspectsleeping( m_sleepingcycles.get() ) )
+              .peek( i -> i.inspectbelief( m_beliefbase.stream() ) )
+              .peek( i -> i.inspectplans( m_plans.values().stream() ) )
+              .peek( i -> i.inspectrunningplans( m_runningplans.values().stream() ) )
+              .peek( i -> i.inspectstorage( m_storage.entrySet().stream() ) )
+              .peek( i -> i.inspectrules( m_rules.values().stream() ) )
+              .forEach( i -> i.inspectpendingtrigger( m_trigger.values().stream() ) );
     }
 
     @Nonnull

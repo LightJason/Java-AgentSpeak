@@ -43,7 +43,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -73,14 +72,9 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
             return this;
         }
 
-        @Nonnull
         @Override
-        @SafeVarargs
-        @SuppressWarnings( "varargs" )
-        public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
-        {
-            return Arrays.stream( p_inspector );
-        }
+        public final void inspect( @Nonnull final IInspector... p_inspector )
+        {}
 
         @Nonnull
         @Override
@@ -212,11 +206,8 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * inspector method
      *
      * @param p_inspector inspector object
-     * @return inspector stream or empty stream
      */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector );
+    void inspect( @Nonnull final IInspector... p_inspector );
 
     /**
      * trigger an event

@@ -23,8 +23,23 @@
 
 package org.lightjason.agentspeak.language.execution.achievementtest;
 
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IInspector;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
@@ -33,12 +48,72 @@ import org.lightjason.agentspeak.IBaseTest;
 public final class TestCTestGoal extends IBaseTest
 {
     /**
+     * agent
+     */
+    private IAgent<?> m_agent;
+
+    /**
+     * init
+     *
+     * @throws Exception on any error
+     */
+    @Before
+    public void init() throws Exception
+    {
+        m_agent = new CAgentGenerator().generatesingle();
+    }
+
+    /**
      * test goal-test
      */
     @Test
     public final void goal()
     {
+        Assume.assumeNotNull( m_agent );
 
+        new CAchievementGoalLiteral( CLiteral.of( "foo" ), false ).execute(
+            false,
+            new CLocalContext( m_agent ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        m_agent.inspect( new IInspector()
+        {
+            @Override
+            public final void inspectsleeping( final long p_value )
+            {}
+
+            @Override
+            public final void inspectcycletime( final long p_value )
+            {}
+
+            @Override
+            public final void inspectbelief( final Stream<ILiteral> p_value )
+            {}
+
+            @Override
+            public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+            {}
+
+            @Override
+            public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+            {}
+
+            @Override
+            public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            {}
+
+            @Override
+            public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            {}
+
+            @Override
+            public final void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            {
+                Assert.assertEquals( "foo", p_value.findFirst().get().literal().functor() );
+            }
+        } );
     }
 
 }

@@ -46,6 +46,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -193,23 +194,43 @@ public abstract class IBaseTest
          * variable map
          */
         private final Map<IPath, IVariable<?>> m_variables;
+        /**
+         * agent
+         */
+        private final IAgent<?> m_agent;
 
         /**
          * ctor
          *
          * @param p_variables variables
          */
-        public CLocalContext( @Nonnull final IVariable<?>... p_variables )
+        public CLocalContext( @Nullable final IVariable<?>... p_variables )
         {
-            m_variables = Arrays.stream( p_variables )
-                                .collect( Collectors.toMap( ITerm::fqnfunctor, i -> i ) );
+            this( IAgent.EMPTY, p_variables );
         }
+
+        /**
+         * ctor
+         *
+         * @param p_agent agent
+         * @param p_variables variables
+         */
+        public CLocalContext( @Nonnull final IAgent<?> p_agent, @Nullable final IVariable<?>... p_variables )
+        {
+            m_agent = p_agent;
+            m_variables = Objects.isNull( p_variables )
+                          ? Collections.emptyMap()
+                          : Arrays.stream( p_variables )
+                                  .collect( Collectors.toMap( ITerm::fqnfunctor, i -> i ) );
+        }
+
+
 
         @Nonnull
         @Override
         public final IAgent<?> agent()
         {
-            return IAgent.EMPTY;
+            return m_agent;
         }
 
         @Nonnull
