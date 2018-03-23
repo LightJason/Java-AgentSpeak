@@ -73,6 +73,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -264,6 +265,26 @@ public final class CAgentSpeak
     }
 
 
+    /**
+     * create a single execution element
+     *
+     * @param p_visitor visitor
+     * @param p_body list of parser element
+     * @return first execution structur
+     */
+    @Nonnull
+    public static Object bodyformular( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext... p_body )
+    {
+        if ( Objects.isNull( p_body ) )
+            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "termunknown" ) );
+
+        return Arrays.stream( p_body )
+                     .filter( Objects::nonNull )
+                     .findFirst()
+                     .map( p_visitor::visit )
+                     .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "termunknown" ) ) );
+    }
+
 
 
     // --- execution elements ----------------------------------------------------------------------------------------------------------------------------------
@@ -276,7 +297,7 @@ public final class CAgentSpeak
      * @return execution
      */
     @Nonnull
-    public static IExecution testgoal( @Nullable final TerminalNode p_dollar, @Nonnull final TerminalNode p_atom )
+    public static IExecution executetestgoal( @Nullable final TerminalNode p_dollar, @Nonnull final TerminalNode p_atom )
     {
         return Objects.nonNull( p_dollar )
             ? new CTestRule( CPath.of( p_atom.getText() ) )
@@ -294,10 +315,10 @@ public final class CAgentSpeak
      * @return achievment goal
      */
     @Nonnull
-    public static IExecution achievementgoal( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                              @Nullable final TerminalNode p_doubleexclamationmark,
-                                              @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable,
-                                              @Nullable final RuleContext p_arguments )
+    public static IExecution executeachievementgoal( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                                     @Nullable final TerminalNode p_doubleexclamationmark,
+                                                     @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable,
+                                                     @Nullable final RuleContext p_arguments )
     {
         if ( Objects.nonNull( p_literal ) )
             return new CAchievementGoalLiteral( (ILiteral) p_visitor.visit( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
@@ -323,7 +344,8 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IExecution unary( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final TerminalNode p_operator, @Nonnull final RuleContext p_variable )
+    public static IExecution executeunary( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                           @Nonnull final TerminalNode p_operator, @Nonnull final RuleContext p_variable )
     {
         switch ( p_operator.getText() )
         {
@@ -347,8 +369,8 @@ public final class CAgentSpeak
      * @return ternary operator
      */
     @Nonnull
-    public static IExecution ternary( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                      @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false )
+    public static IExecution executeternary( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                             @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false )
     {
         return new CTernaryOperation(
             (IExpression) p_visitor.visit( p_expression ),
@@ -366,7 +388,7 @@ public final class CAgentSpeak
      * @return null or execution
      */
     @Nonnull
-    public static IExecution beliefaction( @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief, @Nonnull final ILiteral p_literal )
+    public static IExecution executebelief( @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief, @Nonnull final ILiteral p_literal )
     {
         if ( Objects.nonNull( p_addbelief ) )
             return new CBelief( p_literal, CBelief.EAction.ADD );
@@ -385,8 +407,8 @@ public final class CAgentSpeak
      * @return wrapped action
      */
     @Nonnull
-    public static IExecution action( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                     @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
+    public static IExecution executeaction( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
     {
         final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
 
@@ -456,6 +478,21 @@ public final class CAgentSpeak
             ? (Stream<ITerm>) p_visitor.visit( p_termlist )
             : Stream.empty()
         );
+    }
+
+    /**
+     * build variable list
+     *
+     * @param p_visitor visitor
+     * @param p_list variable list
+     * @return variabel stream
+     */
+    @Nonnull
+    public static Stream<IVariable<?>> variablelist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final List<? extends RuleContext> p_list )
+    {
+        return Objects.isNull( p_list )
+            ? Stream.empty()
+            : p_list.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) );
     }
 
 

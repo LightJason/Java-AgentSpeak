@@ -24,10 +24,12 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 
 
 /**
@@ -78,7 +80,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitExecute_action( final ManualParser.Execute_actionContext p_context )
     {
-        return null;
+        return CAgentSpeak.executeaction( this, p_context.literal(), Collections.emptyMap() );
     }
 
     @Override
@@ -90,7 +92,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitExecute_variable( final ManualParser.Execute_variableContext p_context )
     {
-        return null;
+        return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
 
     @Override
@@ -114,7 +116,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitVariablelist( final ManualParser.VariablelistContext p_context )
     {
-        return null;
+        return CAgentSpeak.variablelist( this, p_context.variable() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -60,7 +60,7 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CAchievementRuleVariable.execute(
+        return execute(
             m_value.mutex(),
             p_context,
             CCommon.replaceFromContext( p_context, m_value ).term()

@@ -62,7 +62,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CAchievementRuleLiteral.execute( m_value.hasAt(), p_context, m_value );
+        return execute( m_value.hasAt(), p_context, m_value );
     }
 
     @Nonnull
@@ -73,9 +73,8 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
         return Objects.isNull( m_value )
                ? Stream.empty()
                : CCommon.flattenrecursive( m_value.orderedvalues() )
-                        .parallel()
                         .filter( i -> i instanceof IVariable<?> )
-                        .map( i -> (IVariable<?>) i );
+                        .map( ITerm::term );
     }
 
     @Override

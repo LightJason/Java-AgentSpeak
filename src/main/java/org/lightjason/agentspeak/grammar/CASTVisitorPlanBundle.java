@@ -171,43 +171,23 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CAgentSpeak.blockformular( this, p_context.body(), p_context.body_formula() );
     }
 
-    //Checkstyle:OFF:NPathComplexity
     @Override
     public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
     {
-        if ( Objects.nonNull( p_context.ternary_operation() ) )
-            return this.visit( p_context.ternary_operation() );
-
-        if ( Objects.nonNull( p_context.belief_action() ) )
-            return this.visit( p_context.belief_action() );
-
-        if ( Objects.nonNull( p_context.expression() ) )
-            return this.visit( p_context.expression() );
-
-        if ( Objects.nonNull( p_context.deconstruct_expression() ) )
-            return this.visit( p_context.deconstruct_expression() );
-
-        if ( Objects.nonNull( p_context.assignment_expression() ) )
-            return this.visit( p_context.assignment_expression() );
-
-        if ( Objects.nonNull( p_context.unary_expression() ) )
-            return this.visit( p_context.unary_expression() );
-
-        if ( Objects.nonNull( p_context.test_action() ) )
-            return this.visit( p_context.test_action() );
-
-        if ( Objects.nonNull( p_context.achievement_goal_action() ) )
-            return this.visit( p_context.achievement_goal_action() );
-
-        if ( Objects.nonNull( p_context.unification() ) )
-            return this.visit( p_context.unification() );
-
-        if ( Objects.nonNull( p_context.lambda() ) )
-            return this.visit( p_context.lambda() );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
+        return CAgentSpeak.bodyformular(
+            this,
+            p_context.ternary_operation(),
+            p_context.belief_action(),
+            p_context.expression(),
+            p_context.deconstruct_expression(),
+            p_context.assignment_expression(),
+            p_context.unary_expression(),
+            p_context.test_action(),
+            p_context.achievement_goal_action(),
+            p_context.unification(),
+            p_context.lambda()
+        );
     }
-    //Checkstyle:ON:NPathComplexity
 
 
 
@@ -235,7 +215,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
     {
-        return CAgentSpeak.achievementgoal(
+        return CAgentSpeak.executeachievementgoal(
             this,
             p_context.DOUBLEEXCLAMATIONMARK(),
             p_context.literal(),
@@ -247,7 +227,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
     {
-        return CAgentSpeak.testgoal(
+        return CAgentSpeak.executetestgoal(
             p_context.DOLLAR(),
             p_context.ATOM()
         );
@@ -256,7 +236,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
     {
-        return CAgentSpeak.beliefaction(
+        return CAgentSpeak.executebelief(
             p_context.PLUS(),
             p_context.MINUS(),
             (ILiteral) this.visit( p_context.literal() )
@@ -362,7 +342,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
     {
-        return CAgentSpeak.unary( this, p_context.UNARYOPERATOR(), p_context.variable() );
+        return CAgentSpeak.executeunary( this, p_context.UNARYOPERATOR(), p_context.variable() );
     }
 
 
@@ -371,7 +351,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
     {
-        return CAgentSpeak.ternary(
+        return CAgentSpeak.executeternary(
             this,
             p_context.expression(),
             p_context.ternary_operation_true(),
@@ -397,7 +377,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExecute_action( final PlanBundleParser.Execute_actionContext p_context )
     {
-        return CAgentSpeak.action( this, p_context.literal(), m_actions );
+        return CAgentSpeak.executeaction( this, p_context.literal(), m_actions );
     }
 
     @Override
@@ -456,7 +436,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
     {
-        return p_context.variable().stream().map( i -> this.visit( i ) );
+        return CAgentSpeak.variablelist( this, p_context.variable() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
