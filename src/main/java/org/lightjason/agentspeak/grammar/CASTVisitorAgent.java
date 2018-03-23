@@ -426,7 +426,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExecute_rule( final AgentParser.Execute_ruleContext p_context )
     {
-        return null;
+        return CAgentSpeak.executerule( this, p_context.literal(), p_context.execute_variable() );
     }
 
     @Override

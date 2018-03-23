@@ -26,11 +26,14 @@ package org.lightjason.agentspeak.language.execution.achievementtest;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -38,21 +41,26 @@ import java.util.stream.Stream;
 /**
  * achievement for rule-variable execution
  */
-public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?>>
+public final class CAchievementRuleVariable extends IAchievementRule<IExecution>
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3462378724593325487L;
+    /**
+     * parallel flag
+     */
+    private final boolean m_parallel;
 
     /**
      * ctor
      *
      * @param p_value value of the rule
      */
-    public CAchievementRuleVariable( @Nonnull final IVariable<?> p_value )
+    public CAchievementRuleVariable( @Nonnull final IExecution p_value )
     {
         super( p_value );
+        m_parallel = p_value.variables().anyMatch( IVariable::mutex );
     }
 
     @Nonnull
@@ -60,10 +68,14 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
+        final List<ITerm> l_return = new ArrayList<>();
+        if ( ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() == 1 ) )
+            return CFuzzyValue.of( false );
+
         return execute(
-            m_value.mutex(),
+            m_parallel,
             p_context,
-            CCommon.replaceFromContext( p_context, m_value ).term()
+            CCommon.replaceFromContext( p_context, l_return.get( 0 ) ).term()
         );
     }
 
@@ -77,6 +89,6 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Stream.of( m_value );
+        return m_value.variables();
     }
 }

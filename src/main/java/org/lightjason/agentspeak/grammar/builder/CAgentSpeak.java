@@ -39,6 +39,8 @@ import org.lightjason.agentspeak.language.execution.CRepair;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.achievementtest.CAchievementGoalLiteral;
 import org.lightjason.agentspeak.language.execution.achievementtest.CAchievementGoalVariable;
+import org.lightjason.agentspeak.language.execution.achievementtest.CAchievementRuleLiteral;
+import org.lightjason.agentspeak.language.execution.achievementtest.CAchievementRuleVariable;
 import org.lightjason.agentspeak.language.execution.achievementtest.CTestGoal;
 import org.lightjason.agentspeak.language.execution.achievementtest.CTestRule;
 import org.lightjason.agentspeak.language.execution.assignment.CDeconstruct;
@@ -420,6 +422,27 @@ public final class CAgentSpeak
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
 
         return new CPassExecution( l_actionliteral.hasAt(), l_action );
+    }
+
+    /**
+     * create a rule execution
+     *
+     * @param p_visitor visitor
+     * @param p_literal literal
+     * @param p_variableexecute variabel execution
+     * @return rule execution
+     */
+    @Nonnull
+    public static IExecution executerule( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                          @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variableexecute )
+    {
+        if ( Objects.nonNull( p_literal ) )
+            return new CAchievementRuleLiteral( (ILiteral) p_visitor.visit( p_literal ) );
+
+        if ( Objects.nonNull( p_variableexecute ) )
+            return new CAchievementRuleVariable( (IExecution) p_visitor.visit( p_variableexecute ) );
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownruleexecution" ) );
     }
 
     /**

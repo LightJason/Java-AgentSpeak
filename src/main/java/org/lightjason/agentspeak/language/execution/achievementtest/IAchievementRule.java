@@ -45,7 +45,7 @@ import java.util.Set;
 /**
  * abstract class for execute a logical-rule
  */
-abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
+abstract class IAchievementRule<T> extends IBaseExecution<T>
 {
     /**
      * serial id
@@ -72,8 +72,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    protected static IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value
-    )
+    protected static IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value )
     {
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );

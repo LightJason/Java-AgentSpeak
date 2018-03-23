@@ -86,7 +86,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public final Object visitExecute_rule( final ManualParser.Execute_ruleContext p_context )
     {
-        return null;
+        return CAgentSpeak.executerule( this, p_context.literal(), p_context.execute_variable() );
     }
 
     @Override
