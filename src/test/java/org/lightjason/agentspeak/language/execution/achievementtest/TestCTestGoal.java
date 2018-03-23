@@ -35,6 +35,9 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.passing.CPassVariableLiteral;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -64,10 +67,10 @@ public final class TestCTestGoal extends IBaseTest
     }
 
     /**
-     * test goal-test
+     * test goal-literal
      */
     @Test
-    public final void goal()
+    public final void goalliteral()
     {
         Assume.assumeNotNull( m_agent );
 
@@ -116,7 +119,59 @@ public final class TestCTestGoal extends IBaseTest
         } );
     }
 
+    /**
+     * test goal-variable
+     */
+    @Test
+    public final void goalvariable()
+    {
+        Assume.assumeNotNull( m_agent );
 
+        final IVariable<?> l_var = new CVariable<>( "Var" ).set( "bar" );
 
+        new CAchievementGoalVariable( new CPassVariableLiteral( l_var ) ).execute(
+            false,
+            new CLocalContext( m_agent, l_var ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        m_agent.inspect( new IInspector()
+        {
+            @Override
+            public final void inspectsleeping( final long p_value )
+            {}
+
+            @Override
+            public final void inspectcycletime( final long p_value )
+            {}
+
+            @Override
+            public final void inspectbelief( final Stream<ILiteral> p_value )
+            {}
+
+            @Override
+            public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+            {}
+
+            @Override
+            public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+            {}
+
+            @Override
+            public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            {}
+
+            @Override
+            public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            {}
+
+            @Override
+            public final void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            {
+                Assert.assertEquals( "bar", p_value.findFirst().get().literal().functor() );
+            }
+        } );
+    }
 
 }

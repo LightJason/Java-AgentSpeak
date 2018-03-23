@@ -52,6 +52,16 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
      * ctor
      *
      * @param p_value value of the achievment-goal
+     */
+    public CAchievementGoalVariable( @Nonnull final IExecution p_value )
+    {
+        this( p_value, false );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value value of the achievment-goal
      * @param p_immediately immediately execution
      */
     public CAchievementGoalVariable( @Nonnull final IExecution p_value, final boolean p_immediately )
