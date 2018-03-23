@@ -103,11 +103,8 @@ public final class TestCSingleAssignment extends IBaseTest
     {
         Assume.assumeTrue( p_data.length == 4 );
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( p_data[0] );
-        l_rhs.set( p_data[1] );
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
+        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_data[1] );
 
         Assert.assertTrue(
             new CSingleAssignment(
@@ -137,9 +134,7 @@ public final class TestCSingleAssignment extends IBaseTest
     {
         Assume.assumeTrue( p_data.length == 4 );
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
-
-        l_lhs.set( p_data[0] );
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
 
         Assert.assertTrue(
             new CSingleAssignment(

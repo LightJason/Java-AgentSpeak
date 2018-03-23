@@ -152,11 +152,8 @@ public final class TestCBinaryExpression extends IBaseTest
 
         final List<ITerm> l_return = new ArrayList<>();
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" );
-        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" );
-
-        l_lhs.set( p_data[0] );
-        l_rhs.set( p_data[1] );
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
+        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_data[1] );
 
         Assert.assertTrue(
             new CBinaryExpression(

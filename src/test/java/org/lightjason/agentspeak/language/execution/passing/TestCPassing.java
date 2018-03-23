@@ -21,79 +21,76 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.assignment;
+package org.lightjason.agentspeak.language.execution.passing;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 
 /**
- * test deconstruct
+ * test passing
  */
-public final class TestCDeconstruct extends IBaseTest
+public final class TestCPassing extends IBaseTest
 {
     /**
-     * test deconstruct static argument
+     * test boolean passing
      */
     @Test
-    public final void staticargument()
+    public final void passboolean()
     {
-        final IVariable<?> l_outer = new CVariable<>( "Outer" );
-        final IVariable<?> l_inner = new CVariable<>( "Inner" );
-
         Assert.assertTrue(
-            new CDeconstruct( Stream.of( l_outer, l_inner ), CLiteral.of( "foobar", CRawTerm.of( 5 ), CRawTerm.of( "test" ) ) ).execute(
+            new CPassBoolean( true ).execute(
                 false,
-                new CLocalContext( l_outer, l_inner ),
+                IContext.EMPTYPLAN,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
-
-        Assert.assertEquals( "foobar", l_outer.raw() );
-        Assert.assertTrue( l_inner.raw() instanceof List<?> );
-        Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
-        Assert.assertEquals( 5, l_inner.<List<ITerm>>raw().get( 0 ).<Number>raw() );
-        Assert.assertEquals( "test", l_inner.<List<ITerm>>raw().get( 1 ).raw() );
     }
 
     /**
-     * test deconstruct variable argument
+     * test raw data
      */
     @Test
-    public final void variableargument()
+    public final void passraw()
     {
-        final IVariable<?> l_outer = new CVariable<>( "Outer" );
-        final IVariable<?> l_inner = new CVariable<>( "Inner" );
-        final IVariable<Object> l_argument = new CVariable<>( "Arg" );
+        final List<ITerm> l_return = new ArrayList<>();
 
-        l_argument.set( CLiteral.of( "foo", CRawTerm.of( "bar" ), CRawTerm.of( 7 ) ) );
+        new CPassRaw<>( "foo" ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return );
+        new CPassRaw<>( false ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return );
+        new CPassRaw<>( 12 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return );
 
-        Assert.assertTrue(
-            new CDeconstruct( Stream.of( l_outer, l_inner ), l_argument ).execute(
-                false,
-                new CLocalContext( l_outer, l_inner, l_argument ),
-                Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
-        );
-
-        Assert.assertEquals( "foo", l_outer.raw() );
-        Assert.assertTrue( l_inner.raw() instanceof List<?> );
-        Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
-        Assert.assertEquals( "bar", l_inner.<List<ITerm>>raw().get( 0 ).raw() );
-        Assert.assertEquals( 7, l_inner.<List<ITerm>>raw().get( 1 ).<Number>raw() );
+        Assert.assertEquals( 3, l_return.size() );
+        Assert.assertEquals( "foo", l_return.get( 0 ).raw() );
+        Assert.assertEquals( false, l_return.get( 1 ).raw() );
+        Assert.assertEquals( 12, l_return.get( 2 ).<Number>raw() );
     }
 
+    /**
+     * test variable
+     */
+    @Test
+    public final void passvariable()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final IVariable<?> l_string = new CVariable<>( "foo" ).set( "hello" );
+        final IVariable<?> l_number = new CVariable<>( "bar" ).set( 5 );
+
+        new CPassVariable( l_string, l_number ).execute( false, new CLocalContext( l_string, l_number ), Collections.emptyList(), l_return );
+
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( "hello", l_return.get( 0 ).raw() );
+        Assert.assertEquals( 5, l_return.get( 1 ).<Number>raw() );
+
+    }
 
 }

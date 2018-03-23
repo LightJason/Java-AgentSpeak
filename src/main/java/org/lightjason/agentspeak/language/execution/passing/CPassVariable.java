@@ -33,27 +33,28 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 
 /**
  * pass variable data into the return structure
  */
-public class CPassVariable extends IBaseExecution<IVariable<?>>
+public class CPassVariable extends IBaseExecution<IVariable<?>[]>
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -5690116900189212762L;
 
+
     /**
      * ctor
      *
      * @param p_value data
      */
-    public CPassVariable( @Nonnull final IVariable<?> p_value )
+    public CPassVariable( @Nonnull final IVariable<?>... p_value )
     {
         super( p_value );
     }
@@ -63,12 +64,10 @@ public class CPassVariable extends IBaseExecution<IVariable<?>>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                          @Nonnull final List<ITerm> p_return )
     {
-        if ( Objects.nonNull( m_value ) )
-            p_return.add(
-                CRawTerm.of(
-                    CCommon.replaceFromContext( p_context, m_value ).raw()
-                )
-            );
+        CCommon.replaceFromContext( p_context, Arrays.stream( m_value ) )
+               .map( ITerm::raw )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
 
         return CFuzzyValue.of( true );
     }
@@ -77,6 +76,6 @@ public class CPassVariable extends IBaseExecution<IVariable<?>>
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.of( m_value );
+        return Arrays.stream( m_value );
     }
 }
