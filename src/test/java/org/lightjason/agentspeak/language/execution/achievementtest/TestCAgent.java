@@ -29,13 +29,11 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.grammar.CParserAgent;
 import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
-import org.lightjason.agentspeak.grammar.IParser;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +53,7 @@ public final class TestCAgent extends IBaseTest
     public final void belief() throws Exception
     {
         final IASTVisitorAgent l_parser = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                            .parse( IOUtils.toInputStream( "foo(123). bar('test')." , "UTF-8") );
+                                            .parse( IOUtils.toInputStream(  "foo(123). bar('test').",  "UTF-8" ) );
 
         final List<ILiteral> l_beliefs = new ArrayList<>( l_parser.initialbeliefs() );
 
@@ -75,21 +73,21 @@ public final class TestCAgent extends IBaseTest
         Assert.assertEquals(
             CLiteral.of( "main" ),
             new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                .parse( IOUtils.toInputStream( "!main." , "UTF-8") ).initialgoal()
+                .parse( IOUtils.toInputStream(  "!main.",  "UTF-8" ) ).initialgoal()
         );
     }
 
     /**
      * test success and fail plan
      *
-     * @throws Exception
+     * @throws Exception thrown on stream and parser error
      */
     @Test
     public final void successfailplan() throws Exception
     {
         final List<IPlan> l_plans = new ArrayList<>(
                                         new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                            .parse( IOUtils.toInputStream( "+!mainsuccess <- success. +!mainfail <- fail." , "UTF-8") )
+                                            .parse( IOUtils.toInputStream(  "+!mainsuccess <- success. +!mainfail <- fail.", "UTF-8" ) )
                                             .plans()
         );
 
