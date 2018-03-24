@@ -60,6 +60,7 @@ execute_rule :
  * like X(1,2,Y), it is possible for passing variables and parameters
  */
 execute_variable :
+    DOT
     variable
     ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
     ;

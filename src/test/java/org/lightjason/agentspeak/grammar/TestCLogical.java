@@ -57,7 +57,8 @@ public final class TestCLogical extends IBaseTest
 
         Assert.assertTrue( l_values.get( 0 ) instanceof IVariable<?> );
         Assert.assertEquals( l_values.get( 0 ).<IVariable<?>>term().functor(), "X" );
-
+        Assert.assertEquals( l_values.get( 1 ).<Number>raw(), 123.0 );
+        Assert.assertEquals( l_values.get( 2 ).raw(), "test" );
     }
 
 }

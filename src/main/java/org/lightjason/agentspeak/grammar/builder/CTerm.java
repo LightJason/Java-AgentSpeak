@@ -146,8 +146,6 @@ public final class CTerm
         if ( Objects.nonNull( p_literal ) )
             return p_visitor.visit( p_literal );
 
-        // @todo execution variable must be used with a dot as prefix to avoid parsing variabel rule
-
         if ( Objects.nonNull( p_executeaction ) )
             return p_visitor.visit( p_executeaction );
         if ( Objects.nonNull( p_executerule ) )
