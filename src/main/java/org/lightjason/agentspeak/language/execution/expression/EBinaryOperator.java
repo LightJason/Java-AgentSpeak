@@ -232,7 +232,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                      .filter( i -> i.m_operator.equals( p_value ) )
                      .findFirst()
                      .orElseThrow( () -> new CIllegalArgumentException(
-                         org.lightjason.agentspeak.common.CCommon.languagestring( EBinaryOperator.class, "notexist", p_value ) )
+                         org.lightjason.agentspeak.common.CCommon.languagestring( EBinaryOperator.class, "unknownoperator", p_value ) )
                      );
     }
 

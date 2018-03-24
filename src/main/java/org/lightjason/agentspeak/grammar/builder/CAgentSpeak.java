@@ -276,13 +276,13 @@ public final class CAgentSpeak
     public static Object bodyformular( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext... p_body )
     {
         if ( Objects.isNull( p_body ) )
-            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownterm" ) );
+            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) );
 
         return Arrays.stream( p_body )
                      .filter( Objects::nonNull )
                      .findFirst()
                      .map( p_visitor::visit )
-                     .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownterm" ) ) );
+                     .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) ) );
     }
 
 
@@ -417,7 +417,7 @@ public final class CAgentSpeak
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral ) );
 
         if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "wrongargumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "wrongargumentnumber", l_action.minimalArgumentNumber(), p_actionliteral ) );
 
         return new CPassExecution( l_actionliteral.hasAt(), l_action );
     }

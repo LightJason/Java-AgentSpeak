@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 
 /**
@@ -71,27 +72,14 @@ public final class CBelief extends IBaseExecution<ILiteral>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        switch ( m_action )
-        {
-            case ADD:
-                p_context.agent().beliefbase().add( m_value.unify( p_context ) );
-                break;
-
-            case DELETE:
-                p_context.agent().beliefbase().remove( m_value.unify( p_context ) );
-                break;
-
-            default:
-                throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", m_action ) );
-        }
-
+        m_action.accept( p_context, m_value );
         return CFuzzyValue.of( true );
     }
 
     /**
      * belief action definition
      */
-    public enum EAction
+    public enum EAction implements BiConsumer<IContext, ILiteral>
     {
         ADD( "+" ),
         DELETE( "-" );
@@ -114,6 +102,24 @@ public final class CBelief extends IBaseExecution<ILiteral>
         public final String toString()
         {
             return m_name;
+        }
+
+        @Override
+        public final void accept( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal )
+        {
+            switch ( this )
+            {
+                case ADD:
+                    p_context.agent().beliefbase().add( p_literal.unify( p_context ) );
+                    break;
+
+                case DELETE:
+                    p_context.agent().beliefbase().remove( p_literal.unify( p_context ) );
+                    break;
+
+                default:
+                    throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", this ) );
+            }
         }
     }
 }

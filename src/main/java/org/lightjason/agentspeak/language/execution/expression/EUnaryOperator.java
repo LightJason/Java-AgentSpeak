@@ -85,6 +85,6 @@ public enum EUnaryOperator implements Function<ITerm, Object>
         return Arrays.stream( EUnaryOperator.values() )
                      .filter( i -> i.m_operator.equals( p_value ) )
                      .findFirst()
-                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EBinaryOperator.class, "notexist", p_value ) ) );
+                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EUnaryOperator.class, "unknownoperator", p_value ) ) );
     }
 }

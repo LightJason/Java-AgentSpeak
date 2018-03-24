@@ -34,10 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -151,32 +148,24 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         EMPTY( "" );
 
         /**
-         * math with elements for intantiation
-         */
-        private static final Map<String, EType> ELEMENTS = Collections.unmodifiableMap(
-                                                                Arrays.stream( EType.values() )
-                                                                      .collect( Collectors.toMap( EType::sequence, i -> i ) )
-                                                           );
-
-        /**
          * text name of the enum
          */
-        private final String m_name;
+        private final String m_operator;
 
         /**
          * ctor
          *
-         * @param p_name text name
+         * @param p_operator text name
          */
-        EType( final String p_name )
+        EType( final String p_operator )
         {
-            m_name = p_name;
+            m_operator = p_operator;
         }
 
         @Override
         public String toString()
         {
-            return m_name;
+            return m_operator;
         }
 
         /**
@@ -186,7 +175,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
          */
         public final String sequence()
         {
-            return m_name;
+            return m_operator;
         }
 
         /**
@@ -196,11 +185,10 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
          */
         public static EType of( @Nonnull final String p_sequence )
         {
-            final EType l_type = ELEMENTS.get( p_sequence.trim() );
-            if ( Objects.isNull( l_type ) )
-                throw new CIllegalArgumentException( CCommon.languagestring( EType.class, "sequencenotfound", p_sequence ) );
-
-            return l_type;
+            return Arrays.stream( EType.values() )
+                         .filter( i -> i.m_operator.equals( p_sequence ) )
+                         .findFirst()
+                         .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EType.class, "unknowntrigger", p_sequence ) ) );
         }
 
         /**

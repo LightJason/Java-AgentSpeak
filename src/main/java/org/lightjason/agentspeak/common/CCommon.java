@@ -347,7 +347,7 @@ public final class CCommon
                                                    catch ( final NoSuchMethodException | InvocationTargetException
                                                        | IllegalAccessException | InstantiationException l_exception )
                                                    {
-                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "classinstantiate", i, l_exception ) );
+                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "classinstantiateerror", i, l_exception ) );
                                                        return null;
                                                    }
                                                } )

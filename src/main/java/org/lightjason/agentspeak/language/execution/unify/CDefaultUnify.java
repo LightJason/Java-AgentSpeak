@@ -77,7 +77,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable" ) );
 
         if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).anyMatch( i -> i.getValue() > 1 ) )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "uniquevariable" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "duplicatedvariable" ) );
 
         // count variables
         m_variablenumber = l_frequency.size();

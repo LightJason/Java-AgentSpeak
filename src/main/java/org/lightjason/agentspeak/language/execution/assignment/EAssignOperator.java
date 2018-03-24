@@ -113,6 +113,6 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
         return Arrays.stream( EAssignOperator.values() )
                      .filter( i -> i.m_operator.equals( p_value ) )
                      .findFirst()
-                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EAssignOperator.class, "notexist", p_value ) ) );
+                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EAssignOperator.class, "unknown", p_value ) ) );
     }
 }
