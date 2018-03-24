@@ -137,10 +137,8 @@ public final class CAgentSpeak
         return new CPlan(
             l_annotation.stream(),
             l_trigger,
-
             IExpression.EMPTY,
-
-            Stream.empty()
+            p_body.stream().map( i -> (IExecution) p_visitor.visit( i ) )
         );
     }
 
@@ -208,7 +206,7 @@ public final class CAgentSpeak
             }
         }
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "annotation" ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownannotation" ) );
     }
 
 
@@ -278,13 +276,13 @@ public final class CAgentSpeak
     public static Object bodyformular( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext... p_body )
     {
         if ( Objects.isNull( p_body ) )
-            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "termunknown" ) );
+            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownterm" ) );
 
         return Arrays.stream( p_body )
                      .filter( Objects::nonNull )
                      .findFirst()
                      .map( p_visitor::visit )
-                     .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "termunknown" ) ) );
+                     .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownterm" ) ) );
     }
 
 
@@ -416,10 +414,10 @@ public final class CAgentSpeak
 
         final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "actionunknown", p_actionliteral ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral ) );
 
         if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "argumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "wrongargumentnumber", p_actionliteral, l_action.minimalArgumentNumber() ) );
 
         return new CPassExecution( l_actionliteral.hasAt(), l_action );
     }

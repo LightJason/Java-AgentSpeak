@@ -68,7 +68,7 @@ public enum EUnaryOperator implements Function<ITerm, Object>
                 return !p_term.<Boolean>raw();
 
             default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", this ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "unknownoperator", this ) );
         }
     }
 }

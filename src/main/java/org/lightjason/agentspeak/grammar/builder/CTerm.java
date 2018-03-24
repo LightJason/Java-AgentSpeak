@@ -115,7 +115,7 @@ public final class CTerm
         if ( Objects.nonNull( p_logicalvalue ) )
             return CRaw.logicalvalue( p_logicalvalue );
 
-        return null;
+        throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownraw" ) );
     }
 
     /**

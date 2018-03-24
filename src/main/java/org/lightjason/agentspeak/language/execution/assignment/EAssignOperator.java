@@ -90,7 +90,7 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_rhs.raw();
 
             default:
-                throw new CSyntaxErrorException( CCommon.languagestring( this, "operatorunknown", this ) );
+                throw new CSyntaxErrorException( CCommon.languagestring( this, "unknownoperator", this ) );
         }
     }
 

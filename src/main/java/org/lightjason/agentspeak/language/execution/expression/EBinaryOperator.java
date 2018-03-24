@@ -139,7 +139,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 
 
             default:
-                throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", this ) );
+                throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknownoperator", this ) );
         }
     }
 
