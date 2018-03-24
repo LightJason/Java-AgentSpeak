@@ -80,7 +80,7 @@ public final class CRaw
      */
     public static boolean logicalvalue( @Nonnull final TerminalNode p_value )
     {
-        return ( !p_value.getText().isEmpty() ) && ( ( "true".equals( p_value.getText() ) ) || ( "success".equals( p_value.getText() ) ) );
+        return ( !p_value.getText().isEmpty() ) && ( ( "#true".equals( p_value.getText() ) ) || ( "#success".equals( p_value.getText() ) ) );
     }
 
     /**

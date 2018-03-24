@@ -87,7 +87,7 @@ public final class TestCAgent extends IBaseTest
     {
         final List<IPlan> l_plans = new ArrayList<>(
                                         new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                            .parse( IOUtils.toInputStream(  "+!mainsuccess <- success. +!mainfail <- fail.", "UTF-8" ) )
+                                            .parse( IOUtils.toInputStream(  "+!mainsuccess <- #success. +!mainfail <- #fail.", "UTF-8" ) )
                                             .plans()
         );
 

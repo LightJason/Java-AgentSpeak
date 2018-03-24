@@ -115,7 +115,7 @@ public final class CTerm
         if ( Objects.nonNull( p_logicalvalue ) )
             return CRaw.logicalvalue( p_logicalvalue );
 
-        throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownraw" ) );
+        return null;
     }
 
     /**
@@ -142,16 +142,16 @@ public final class CTerm
             return CRawTerm.of( l_terminal );
 
         if ( Objects.nonNull( p_variable ) )
-            return p_visitor.visit( p_variable );
+            return p_visitor.visitChildren( p_variable );
         if ( Objects.nonNull( p_literal ) )
-            return p_visitor.visit( p_literal );
+            return p_visitor.visitChildren( p_literal );
 
         if ( Objects.nonNull( p_executeaction ) )
-            return p_visitor.visit( p_executeaction );
+            return p_visitor.visitChildren( p_executeaction );
         if ( Objects.nonNull( p_executerule ) )
-            return p_visitor.visit( p_executerule );
+            return p_visitor.visitChildren( p_executerule );
         if ( Objects.nonNull( p_executevariable ) )
-            return p_visitor.visit( p_executevariable );
+            return p_visitor.visitChildren( p_executevariable );
 
         throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) );
     }

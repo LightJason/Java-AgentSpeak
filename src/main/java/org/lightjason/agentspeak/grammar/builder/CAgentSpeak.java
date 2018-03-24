@@ -117,12 +117,14 @@ public final class CAgentSpeak
      * @return plan
      */
     @Nonnull
+    @SuppressWarnings( "unchecked" )
     public static IPlan plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
                               @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
                               @Nonnull final List<? extends RuleContext> p_expression, @Nonnull final List<? extends RuleContext> p_body )
     {
         final ITrigger l_trigger = CTrigger.of(
             ITrigger.EType.of( p_trigger.getText() ),
+            // @todo check for visitChildren
             (ILiteral) p_visitor.visit( p_literal )
         );
 
@@ -138,7 +140,7 @@ public final class CAgentSpeak
             l_annotation.stream(),
             l_trigger,
             IExpression.EMPTY,
-            p_body.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+            p_body.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ).peek( i -> System.out.println( i ) )
         );
     }
 
@@ -223,7 +225,7 @@ public final class CAgentSpeak
     @Nonnull
     public static IExecution repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        return new CRepair( p_chain.stream().map( i -> (IExecution) p_visitor.visit( i ) ) );
+        return new CRepair( p_chain.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) ) );
     }
 
     /**
@@ -240,9 +242,9 @@ public final class CAgentSpeak
                                                     @Nonnull final RuleContext p_body, @Nullable final RuleContext p_next )
     {
         return Stream.concat(
-            Stream.of( (IExecution) p_visitor.visit( p_body ) ),
+            Stream.of( (IExecution) p_visitor.visitChildren( p_body ) ),
             Objects.nonNull( p_next )
-            ? (Stream<IExecution>) p_visitor.visit( p_next )
+            ? (Stream<IExecution>) p_visitor.visitChildren( p_next )
             : Stream.empty()
         );
     }
@@ -260,8 +262,8 @@ public final class CAgentSpeak
                                         @Nonnull final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
     {
         return Objects.nonNull( p_bodyformula )
-               ? Stream.concat( Stream.of( p_visitor.visit( p_body ) ), (Stream<?>) p_visitor.visit( p_bodyformula ) )
-               : Stream.of( p_visitor.visit( p_body ) );
+               ? Stream.concat( Stream.of( p_visitor.visitChildren( p_body ) ), (Stream<?>) p_visitor.visitChildren( p_bodyformula ) )
+               : Stream.of( p_visitor.visitChildren( p_body ) );
     }
 
 
@@ -281,7 +283,7 @@ public final class CAgentSpeak
         return Arrays.stream( p_body )
                      .filter( Objects::nonNull )
                      .findFirst()
-                     .map( p_visitor::visit )
+                     .map( p_visitor::visitChildren )
                      .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) ) );
     }
 
@@ -321,12 +323,12 @@ public final class CAgentSpeak
                                                      @Nullable final RuleContext p_arguments )
     {
         if ( Objects.nonNull( p_literal ) )
-            return new CAchievementGoalLiteral( (ILiteral) p_visitor.visit( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
+            return new CAchievementGoalLiteral( (ILiteral) p_visitor.visitChildren( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
 
         if ( Objects.nonNull( p_variable ) )
             return new CAchievementGoalVariable(
                 new CPassVariableLiteral(
-                    (IVariable<?>) p_visitor.visit( p_variable ),
+                    (IVariable<?>) p_visitor.visitChildren( p_variable ),
                     Stream.empty()
                 ),
                 Objects.nonNull( p_doubleexclamationmark )
@@ -350,10 +352,10 @@ public final class CAgentSpeak
         switch ( p_operator.getText() )
         {
             case "++":
-                return new CIncrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
+                return new CIncrement( (IVariable<Number>) p_visitor.visitChildren( p_variable ) );
 
             case "--":
-                return new CDecrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
+                return new CDecrement( (IVariable<Number>) p_visitor.visitChildren( p_variable ) );
 
             default:
                 throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunary" ) );
@@ -373,9 +375,9 @@ public final class CAgentSpeak
                                              @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false )
     {
         return new CTernaryOperation(
-            (IExpression) p_visitor.visit( p_expression ),
-            (IExecution) p_visitor.visit( p_true ),
-            (IExecution) p_visitor.visit( p_false )
+            (IExpression) p_visitor.visitChildren( p_expression ),
+            (IExecution) p_visitor.visitChildren( p_true ),
+            (IExecution) p_visitor.visitChildren( p_false )
         );
     }
 
@@ -410,7 +412,7 @@ public final class CAgentSpeak
     public static IExecution executeaction( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                             @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
     {
-        final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
+        final ILiteral l_actionliteral = (ILiteral) p_visitor.visitChildren( p_actionliteral );
 
         final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
@@ -435,10 +437,10 @@ public final class CAgentSpeak
                                           @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variableexecute )
     {
         if ( Objects.nonNull( p_literal ) )
-            return new CAchievementRuleLiteral( (ILiteral) p_visitor.visit( p_literal ) );
+            return new CAchievementRuleLiteral( (ILiteral) p_visitor.visitChildren( p_literal ) );
 
         if ( Objects.nonNull( p_variableexecute ) )
-            return new CAchievementRuleVariable( (IExecution) p_visitor.visit( p_variableexecute ) );
+            return new CAchievementRuleVariable( (IExecution) p_visitor.visitChildren( p_variableexecute ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownruleexecution" ) );
     }
@@ -494,9 +496,9 @@ public final class CAgentSpeak
                                                   @Nonnull final RuleContext p_variable, @Nullable final RuleContext p_termlist )
     {
         return new CPassVariableLiteral(
-            (IVariable<?>) p_visitor.visit( p_variable ),
+            (IVariable<?>) p_visitor.visitChildren( p_variable ),
             Objects.nonNull( p_termlist )
-            ? (Stream<ITerm>) p_visitor.visit( p_termlist )
+            ? (Stream<ITerm>) p_visitor.visitChildren( p_termlist )
             : Stream.empty()
         );
     }
@@ -513,7 +515,7 @@ public final class CAgentSpeak
     {
         return Objects.isNull( p_list )
             ? Stream.empty()
-            : p_list.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) );
+            : p_list.stream().map( i -> (IVariable<?>) p_visitor.visitChildren( i ) );
     }
 
 
@@ -552,15 +554,15 @@ public final class CAgentSpeak
     {
         if ( Objects.nonNull( p_ternary ) )
             return new CSingleAssignment(
-                (IVariable<?>) p_visitor.visit( p_lhs ),
-                passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) ),
+                (IVariable<?>) p_visitor.visitChildren( p_lhs ),
+                passvariable( (IVariable<?>) p_visitor.visitChildren( p_ternary ) ),
                 EAssignOperator.of( p_operator.getText() )
             );
 
         if ( Objects.nonNull( p_expression ) )
             return new CSingleAssignment(
-                (IVariable<?>) p_visitor.visit( p_lhs ),
-                (IExecution) p_visitor.visit( p_expression ),
+                (IVariable<?>) p_visitor.visitChildren( p_lhs ),
+                (IExecution) p_visitor.visitChildren( p_expression ),
                 EAssignOperator.of( p_operator.getText() )
             );
 
@@ -580,8 +582,8 @@ public final class CAgentSpeak
                                               @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution )
     {
         return new CMultiAssignment(
-            (Stream<IVariable<?>>) p_visitor.visit( p_variable ),
-            (IExecution) p_visitor.visit( p_execution )
+            (Stream<IVariable<?>>) p_visitor.visitChildren( p_variable ),
+            (IExecution) p_visitor.visitChildren( p_execution )
         );
     }
 
@@ -602,8 +604,8 @@ public final class CAgentSpeak
     public static IExecution unification( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_parallel,
                                           @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
     {
-        final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
-        final Object l_constraint = p_visitor.visit( p_constraint );
+        final ILiteral l_literal = (ILiteral) p_visitor.visitChildren( p_literal );
+        final Object l_constraint = p_visitor.visitChildren( p_constraint );
 
         if ( p_constraint instanceof IExpression )
             return new CExpressionUnify(
@@ -635,10 +637,10 @@ public final class CAgentSpeak
                                                 @Nullable final RuleContext p_variable, @Nullable final RuleContext p_expression )
     {
         if ( Objects.nonNull( p_expression ) )
-            return p_visitor.visit( p_expression );
+            return p_visitor.visitChildren( p_expression );
 
         if ( Objects.nonNull( p_variable ) )
-            return p_visitor.visit( p_variable );
+            return p_visitor.visitChildren( p_variable );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }
@@ -689,11 +691,11 @@ public final class CAgentSpeak
                     : Stream.empty(),
 
                     Objects.nonNull( p_variable )
-                    ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
+                    ? Stream.of( (IExecution) p_visitor.visitChildren( p_variable ) )
                     : Stream.empty(),
 
                     Objects.nonNull( p_additional )
-                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) )
                     : Stream.empty()
 
                 ).toArray( IExecution[]::new )
@@ -707,11 +709,11 @@ public final class CAgentSpeak
                     : Stream.empty(),
 
                     Objects.nonNull( p_variable )
-                    ? Stream.of( (IExecution) p_visitor.visit( p_variable ) )
+                    ? Stream.of( (IExecution) p_visitor.visitChildren( p_variable ) )
                     : Stream.empty(),
 
                     Objects.nonNull( p_additional )
-                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) )
                     : Stream.empty()
 
                 ).toArray( IExecution[]::new ),
@@ -736,7 +738,7 @@ public final class CAgentSpeak
             return passdata( CRaw.numbervalue( p_number ) );
 
         if ( Objects.nonNull( p_variable ) )
-            return passvariable( (IVariable<?>) p_visitor.visit( p_variable ) );
+            return passvariable( (IVariable<?>) p_visitor.visitChildren( p_variable ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownlambdaelement" ) );
     }

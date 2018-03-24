@@ -159,8 +159,8 @@ ANNOTATIONATOM :
  * boolean values
  */
 LOGICALVALUE :
-    TRUE
-    | FALSE
+    HASH
+    ( TRUE | FALSE )
     ;
 
 /**
