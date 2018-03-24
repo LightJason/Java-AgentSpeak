@@ -23,7 +23,16 @@
 
 package org.lightjason.agentspeak.grammar;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -31,4 +40,24 @@ import org.lightjason.agentspeak.IBaseTest;
  */
 public final class TestCLogical extends IBaseTest
 {
+    /**
+     * test literal parsing
+     *
+     * @throws Exception parsing exception
+     */
+    @Test
+    public final void literal() throws Exception
+    {
+        final ILiteral l_literal =  CLiteral.parse( "foo(X, 123, 'test')" );
+
+        Assert.assertEquals( "foo", l_literal.functor() );
+
+        final List<ITerm> l_values = l_literal.orderedvalues().collect( Collectors.toList() );
+        Assert.assertEquals( 3, l_values.size() );
+
+        Assert.assertTrue( l_values.get( 0 ) instanceof IVariable<?> );
+        Assert.assertEquals( l_values.get( 0 ).<IVariable<?>>term().functor(), "X" );
+
+    }
+
 }

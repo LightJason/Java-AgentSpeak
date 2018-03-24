@@ -33,12 +33,12 @@ term :
     | NUMBER
     | LOGICALVALUE
 
+    | variable
+    | literal
+
     | execute_action
     | execute_rule
     | execute_variable
-
-    | literal
-    | variable
     ;
 
 /**

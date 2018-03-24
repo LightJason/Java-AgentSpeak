@@ -141,17 +141,19 @@ public final class CTerm
         if ( Objects.nonNull( l_terminal ) )
             return CRawTerm.of( l_terminal );
 
+        if ( Objects.nonNull( p_variable ) )
+            return p_visitor.visit( p_variable );
+        if ( Objects.nonNull( p_literal ) )
+            return p_visitor.visit( p_literal );
+
+        // @todo execution variable must be used with a dot as prefix to avoid parsing variabel rule
+
         if ( Objects.nonNull( p_executeaction ) )
             return p_visitor.visit( p_executeaction );
         if ( Objects.nonNull( p_executerule ) )
             return p_visitor.visit( p_executerule );
         if ( Objects.nonNull( p_executevariable ) )
             return p_visitor.visit( p_executevariable );
-
-        if ( Objects.nonNull( p_literal ) )
-            return p_visitor.visit( p_literal );
-        if ( Objects.nonNull( p_variable ) )
-            return p_visitor.visit( p_variable );
 
         throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) );
     }
