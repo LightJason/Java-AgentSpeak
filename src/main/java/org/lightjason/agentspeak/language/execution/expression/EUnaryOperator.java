@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.function.Function;
 
 
@@ -41,22 +42,22 @@ public enum EUnaryOperator implements Function<ITerm, Object>
     /**
      * text name of the enum
      */
-    private final String m_name;
+    private final String m_operator;
 
     /**
      * ctor
      *
-     * @param p_name text name
+     * @param p_operator text name
      */
-    EUnaryOperator( final String p_name )
+    EUnaryOperator( final String p_operator )
     {
-        m_name = p_name;
+        m_operator = p_operator;
     }
 
     @Override
     public final String toString()
     {
-        return m_name;
+        return m_operator;
     }
 
     @Override
@@ -70,5 +71,20 @@ public enum EUnaryOperator implements Function<ITerm, Object>
             default:
                 throw new CIllegalArgumentException( CCommon.languagestring( this, "unknownoperator", this ) );
         }
+    }
+
+    /**
+     * returns operator of a string
+     *
+     * @param p_value string
+     * @return operator
+     */
+    @Nonnull
+    public static EUnaryOperator of( @Nonnull final String p_value )
+    {
+        return Arrays.stream( EUnaryOperator.values() )
+                     .filter( i -> i.m_operator.equals( p_value ) )
+                     .findFirst()
+                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EBinaryOperator.class, "notexist", p_value ) ) );
     }
 }

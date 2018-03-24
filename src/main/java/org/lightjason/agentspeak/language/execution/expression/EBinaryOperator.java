@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 
@@ -62,22 +63,22 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     /**
      * text name of the enum
      */
-    private final String m_name;
+    private final String m_operator;
 
     /**
      * ctor
      *
-     * @param p_name text name
+     * @param p_operator text name
      */
-    EBinaryOperator( final String p_name )
+    EBinaryOperator( final String p_operator )
     {
-        m_name = p_name;
+        m_operator = p_operator;
     }
 
     @Override
     public final String toString()
     {
-        return m_name;
+        return m_operator;
     }
 
     @Override
@@ -216,6 +217,23 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     private static <N, M> N map( @Nonnull final M p_value )
     {
         return (N) p_value;
+    }
+
+    /**
+     * returns operator of a string
+     *
+     * @param p_value string
+     * @return operator
+     */
+    @Nonnull
+    public static EBinaryOperator of( @Nonnull final String p_value )
+    {
+        return Arrays.stream( EBinaryOperator.values() )
+                     .filter( i -> i.m_operator.equals( p_value ) )
+                     .findFirst()
+                     .orElseThrow( () -> new CIllegalArgumentException(
+                         org.lightjason.agentspeak.common.CCommon.languagestring( EBinaryOperator.class, "notexist", p_value ) )
+                     );
     }
 
 }

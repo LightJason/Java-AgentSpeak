@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 
@@ -101,38 +102,17 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
     }
 
     /**
-     * returns operator of string
+     * returns operator of a string
      *
      * @param p_value string
      * @return operator
      */
+    @Nonnull
     public static EAssignOperator of( @Nonnull final String p_value )
     {
-        switch ( p_value )
-        {
-            case "+=":
-                return INCREMENT;
-
-            case "-=":
-                return DECREMENT;
-
-            case "*=":
-                return MULTIPLY;
-
-            case "/=":
-                return DIVIDE;
-
-            case "%=":
-                return MODULO;
-
-            case "^=":
-                return POWER;
-
-            case "=":
-                return ASSIGN;
-
-            default:
-                throw new CIllegalArgumentException( CCommon.languagestring( EAssignOperator.class, "notexist", p_value ) );
-        }
+        return Arrays.stream( EAssignOperator.values() )
+                     .filter( i -> i.m_operator.equals( p_value ) )
+                     .findFirst()
+                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EAssignOperator.class, "notexist", p_value ) ) );
     }
 }
