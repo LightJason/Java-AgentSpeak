@@ -92,7 +92,7 @@ public final class TestCAgent extends IBaseTest
                                             .plans()
         );
 
-        System.out.println( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ) );
-        System.out.println( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ) );
+        Assert.assertFalse( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
+        Assert.assertTrue( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
     }
 }
