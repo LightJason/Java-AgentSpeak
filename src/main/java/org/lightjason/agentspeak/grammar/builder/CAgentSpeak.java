@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.grammar.builder;
 
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.action.IAction;
@@ -33,6 +34,7 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CBelief;
 import org.lightjason.agentspeak.language.execution.CRepair;
@@ -140,7 +142,7 @@ public final class CAgentSpeak
             l_annotation.stream(),
             l_trigger,
             IExpression.EMPTY,
-            p_body.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ).peek( i -> System.out.println( i ) )
+            p_body.stream().map( i -> (IExecution) p_visitor.visit( i ) ).peek( i -> System.out.println( i ) )
         );
     }
 
@@ -223,9 +225,10 @@ public final class CAgentSpeak
      * @return null or repair
      */
     @Nonnull
+    @SuppressWarnings( "unchecked" )
     public static IExecution repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        return new CRepair( p_chain.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) ) );
+        return new CRepair( p_chain.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ) );
     }
 
     /**
@@ -516,6 +519,47 @@ public final class CAgentSpeak
         return Objects.isNull( p_list )
             ? Stream.empty()
             : p_list.stream().map( i -> (IVariable<?>) p_visitor.visitChildren( i ) );
+    }
+
+
+    // --- expression ------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * build an expression
+     *
+     * @param p_visitor visitor
+     * @param p_term single term
+     * @param p_operator operator
+     * @param p_lhs left-hand-side argument
+     * @param p_rhs right-hand-side argument
+     * @return execution
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static IExecution expression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext p_term,
+                                         @Nullable final Token p_operator, @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
+    {
+        if ( Objects.nonNull( p_term ) )
+        {
+            final Object l_term = p_visitor.visit( p_term );
+
+            if ( l_term instanceof IExecution )
+                return (IExecution) l_term;
+
+            if ( l_term instanceof IRawTerm<?> )
+                return new CPassRaw<>( ( (IRawTerm<?>) l_term ).raw() );
+
+            if ( l_term instanceof IVariable<?> )
+                return new CPassVariable( (IVariable<?>) l_term );
+
+            if ( Objects.nonNull( l_term ) )
+                return new CPassRaw<>( l_term );
+
+            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpressionterm", l_term ) );
+        }
+
+
+        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
     }
 
 

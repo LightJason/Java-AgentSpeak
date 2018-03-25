@@ -85,9 +85,9 @@ block_formula :
 expression :
     STRONGNEGATION expression
     | LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
-    | lhs=expression  operator=ARITHMETICOPERATOR1 rhs=expression
-    | lhs=expression  operator=ARITHMETICOPERATOR2 rhs=expression
-    | lhs=expression  operator=ARITHMETICOPERATOR3 rhs=expression
+    | lhs=expression operator=ARITHMETICOPERATOR1 rhs=expression
+    | lhs=expression operator=ARITHMETICOPERATOR2 rhs=expression
+    | lhs=expression operator=ARITHMETICOPERATOR3 rhs=expression
     | lhs=expression operator=RELATIONALOPERATOR rhs=expression
     | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
     | lhs=expression operator=LOGICALOPERATOR2 rhs=expression

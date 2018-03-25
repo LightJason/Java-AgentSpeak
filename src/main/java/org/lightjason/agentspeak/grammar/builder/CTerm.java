@@ -131,7 +131,7 @@ public final class CTerm
      */
     @Nonnull
     public static Object term( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
-                               @Nullable final TerminalNode p_logic, @Nonnull RuleContext... p_rules )
+                               @Nullable final TerminalNode p_logic, @Nonnull final RuleContext... p_rules )
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
         if ( Objects.nonNull( l_terminal ) )
