@@ -36,6 +36,11 @@ import java.util.Objects;
 public final class CRaw
 {
     /**
+     * constant prefix
+     */
+    private static String CONSTANTPREFIX = "#";
+
+    /**
      *
      */
     private CRaw()
@@ -64,7 +69,7 @@ public final class CRaw
     public static Number numbervalue( @Nonnull final String p_number )
     {
         // try to match to a numeric constant
-        final Double l_constant = CCommon.NUMERICCONSTANT.get( p_number );
+        final Double l_constant = CCommon.NUMERICCONSTANT.get( p_number.replace( CONSTANTPREFIX, "" ) );
         if ( Objects.nonNull( l_constant ) )
             return l_constant;
 
@@ -80,7 +85,8 @@ public final class CRaw
      */
     public static boolean logicalvalue( @Nonnull final TerminalNode p_value )
     {
-        return ( !p_value.getText().isEmpty() ) && ( ( "#true".equals( p_value.getText() ) ) || ( "#success".equals( p_value.getText() ) ) );
+        return ( !p_value.getText().isEmpty() ) && ( ( "true".equals( p_value.getText().replace( CONSTANTPREFIX, "" ) ) )
+                                                     || ( "success".equals( p_value.getText().replace( CONSTANTPREFIX, "" ) ) ) );
     }
 
     /**

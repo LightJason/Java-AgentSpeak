@@ -183,20 +183,23 @@ STRING :
  * floating-point constants
  */
 CONSTANTNUMBER :
-    PI
-    | EULER
-    | GRAVITY
-    | AVOGADRO
-    | BOLTZMANN
-    | ELECTRON
-    | PROTON
-    | NEUTRON
-    | LIGHTSPEED
-    | POSITIVEINFINITY
-    | NEGATIVEINFINITY
-    | MAXIMUMVALUE
-    | MINIMUMVALUE
-    | NAN
+    HASH
+    (
+        PI
+        | EULER
+        | GRAVITY
+        | AVOGADRO
+        | BOLTZMANN
+        | ELECTRON
+        | PROTON
+        | NEUTRON
+        | LIGHTSPEED
+        | POSITIVEINFINITY
+        | NEGATIVEINFINITY
+        | MAXIMUMVALUE
+        | MINIMUMVALUE
+        | NAN
+    )
     ;
 
 // --- character structures --------------------------------------------------------------
