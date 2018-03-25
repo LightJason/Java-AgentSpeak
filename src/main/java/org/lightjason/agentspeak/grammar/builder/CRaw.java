@@ -38,7 +38,7 @@ public final class CRaw
     /**
      * constant prefix
      */
-    private static String CONSTANTPREFIX = "#";
+    private static final String CONSTANTPREFIX = "#";
 
     /**
      *
