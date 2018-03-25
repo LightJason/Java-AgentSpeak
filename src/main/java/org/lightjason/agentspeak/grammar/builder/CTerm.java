@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -125,35 +126,22 @@ public final class CTerm
      * @param p_string string
      * @param p_number number
      * @param p_logic logical value
-     * @param p_executeaction action execution
-     * @param p_executerule rule execution
-     * @param p_executevariable variable execution
-     * @param p_variable variable
-     * @param p_literal literal
+     * @param p_rules other rules
      * @return term
      */
     @Nonnull
     public static Object term( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
-                               @Nullable final TerminalNode p_logic, @Nullable final RuleContext p_executeaction, @Nullable final RuleContext p_executerule,
-                               @Nullable final RuleContext p_executevariable, @Nullable final RuleContext p_variable, @Nullable final RuleContext p_literal )
+                               @Nullable final TerminalNode p_logic, @Nonnull RuleContext... p_rules )
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
         if ( Objects.nonNull( l_terminal ) )
             return CRawTerm.of( l_terminal );
 
-        if ( Objects.nonNull( p_variable ) )
-            return p_visitor.visitChildren( p_variable );
-        if ( Objects.nonNull( p_literal ) )
-            return p_visitor.visitChildren( p_literal );
-
-        if ( Objects.nonNull( p_executeaction ) )
-            return p_visitor.visitChildren( p_executeaction );
-        if ( Objects.nonNull( p_executerule ) )
-            return p_visitor.visitChildren( p_executerule );
-        if ( Objects.nonNull( p_executevariable ) )
-            return p_visitor.visitChildren( p_executevariable );
-
-        throw new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) );
+        return Arrays.stream( p_rules )
+                     .filter( Objects::nonNull )
+                     .findFirst()
+                     .map( p_visitor::visitChildren )
+                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
     }
 
 
