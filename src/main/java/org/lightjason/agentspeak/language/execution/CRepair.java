@@ -29,7 +29,9 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,14 +59,31 @@ public class CRepair extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return Arrays.stream( m_value )
-                     .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
+                     .map( i -> execute( p_context, i ) )
                      .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
                      .findFirst()
-                     .orElseGet( () -> CFuzzyValue.of( false ) );
+                     .orElseGet( () -> CFuzzyValue.of( true ) );
+    }
+
+    /**
+     * execute single execution
+     *
+     * @param p_context context
+     * @param p_execution execution
+     * @return execution result
+     */
+    private static IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final IFuzzyValue<Boolean> l_result = p_execution.execute( false, p_context, Collections.emptyList(), l_return );
+
+        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).raw() instanceof Boolean )
+               ? CFuzzyValue.of( l_return.get( 0 ).raw() )
+               : l_result;
     }
 
     @Nonnull
