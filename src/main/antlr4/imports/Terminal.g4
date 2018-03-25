@@ -296,10 +296,10 @@ fragment DOUBLEQUOTESTRING : '"' ~('"')* '"';
 /**
  * char definitions
  */
-LOWERCASELETTER            : [a-z];
-UPPERCASELETTER            : [A-Z];
-DIGIT                      : [0-9];
-DIGITSEQUENCE              : DIGIT+ ('.' DIGIT+)?;
+fragment LOWERCASELETTER   : [a-z];
+fragment UPPERCASELETTER   : [A-Z];
+fragment DIGIT             : [0-9];
+fragment DIGITSEQUENCE     : DIGIT+ ('.' DIGIT+)?;
 
 // ---------------------------------------------------------------------------------------
 
