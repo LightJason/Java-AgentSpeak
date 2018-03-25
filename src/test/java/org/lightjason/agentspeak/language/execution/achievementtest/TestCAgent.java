@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 
 import java.util.ArrayList;
@@ -91,6 +92,7 @@ public final class TestCAgent extends IBaseTest
                                             .plans()
         );
 
-        System.out.println( l_plans );
+        System.out.println( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ) );
+        System.out.println( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ) );
     }
 }
