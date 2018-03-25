@@ -24,12 +24,12 @@
 package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 /**
  * defines an execution element with a repair call
  */
-public class CRepair extends IBaseExecution<Collection<IExecution>>
+public class CRepair extends IBaseExecution<IExecution[]>
 {
     /**
      * serial id
@@ -52,7 +52,7 @@ public class CRepair extends IBaseExecution<Collection<IExecution>>
      */
     public CRepair( @Nonnull final Stream<IExecution> p_chain )
     {
-        super( Collections.unmodifiableList( p_chain.collect( Collectors.toList() ) ) );
+        super( p_chain.toArray( IExecution[]::new ) );
     }
 
     @Nonnull
@@ -60,25 +60,25 @@ public class CRepair extends IBaseExecution<Collection<IExecution>>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return m_value.stream()
-                      .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
-                      .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
-                      .findFirst()
-                      .get();
+        return Arrays.stream( m_value )
+                     .map( i -> i.execute( p_parallel, p_context, p_argument, p_return ) )
+                     .filter( i -> !p_context.agent().fuzzy().getValue().defuzzify( i ) )
+                     .findFirst()
+                     .orElseGet( () -> CFuzzyValue.of( false ) );
     }
 
     @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_value.stream().flatMap( IExecution::variables );
+        return Arrays.stream( m_value ).flatMap( IExecution::variables );
     }
 
     @Override
     public final String toString()
     {
-        return m_value.stream()
-                      .map( Object::toString )
-                      .collect( Collectors.joining( " << " ) );
+        return Arrays.stream( m_value )
+                     .map( Object::toString )
+                     .collect( Collectors.joining( " << " ) );
     }
 }

@@ -41,6 +41,8 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
@@ -346,7 +348,7 @@ public final class TestCActionAgent extends IBaseTest
          */
         CEmptyPlan( final ITrigger p_trigger )
         {
-            super( Stream.empty(), Stream.empty(), 0 );
+            super( new IExecution[0], new IAnnotation<?>[0], 0 );
             m_trigger = p_trigger;
         }
 

@@ -60,14 +60,14 @@ public final class CRule extends IBaseInstantiable implements IRule
      * @param p_id literal with signature
      * @param p_body rule body
      */
-    public CRule( @Nonnull final ILiteral p_id, @Nonnull final Stream<IExecution> p_body )
+    public CRule( @Nonnull final ILiteral p_id, @Nonnull final IExecution[] p_body )
     {
         super(
             p_body,
-            Stream.empty(),
+            new IAnnotation<?>[0],
             Stream.concat(
                 Stream.of( p_id.hashCode() ),
-                p_body.map( Object::hashCode )
+                Arrays.stream( p_body ).map( Object::hashCode )
             ).reduce( 0, ( i, j ) -> i ^ j )
         );
         m_id = p_id;
@@ -93,7 +93,7 @@ public final class CRule extends IBaseInstantiable implements IRule
                        // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
                        ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
                        : i
-            )
+            ).toArray( IExecution[]::new )
         );
     }
 

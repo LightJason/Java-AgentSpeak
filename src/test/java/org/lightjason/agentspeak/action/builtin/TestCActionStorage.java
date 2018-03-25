@@ -38,7 +38,9 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import java.io.ByteArrayInputStream;
@@ -79,7 +81,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         m_context = new CContext(
             new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
-            new CPlan( Stream.empty(), ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "nothing" ) ), Stream.empty() ),
+            new CPlan( new IAnnotation<?>[0], ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "nothing" ) ), new IExecution[0] ),
             Collections.emptyList()
         );
     }

@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +72,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_event trigger event
      * @param p_body plan body
      */
-    public CPlan( @Nonnull final Stream<IAnnotation<?>> p_annotation, @Nonnull final ITrigger p_event, @Nonnull final Stream<IExecution> p_body
+    public CPlan( @Nonnull final IAnnotation<?>[] p_annotation, @Nonnull final ITrigger p_event, @Nonnull final IExecution[] p_body
     )
     {
         this( p_annotation, p_event, IExpression.EMPTY, p_body );
@@ -85,9 +86,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_condition execution condition
      * @param p_body plan body
      */
-    public CPlan( @Nonnull final Stream<IAnnotation<?>> p_annotation, @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
-                  @Nonnull final Stream<IExecution> p_body
-    )
+    public CPlan( @Nonnull final IAnnotation<?>[] p_annotation, @Nonnull final ITrigger p_event,
+                  @Nonnull final IExpression p_condition, @Nonnull final IExecution[] p_body )
     {
         super(
             p_body,
@@ -98,8 +98,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
                     p_event.hashCode(),
                     p_condition.hashCode()
                 ),
-                p_body.map( Object::hashCode ),
-                p_annotation.map( Object::hashCode )
+                Arrays.stream( p_body ).map( Object::hashCode ),
+                Arrays.stream( p_annotation ).map( Object::hashCode )
             ).reduce( 0, ( i, j ) -> i ^ j )
         );
 

@@ -78,14 +78,12 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -126,23 +124,22 @@ public final class CAgentSpeak
     {
         final ITrigger l_trigger = CTrigger.of(
             ITrigger.EType.of( p_trigger.getText() ),
-            // @todo check for visitChildren
             (ILiteral) p_visitor.visit( p_literal )
         );
 
-        final List<IAnnotation<?>> l_annotation = Objects.isNull( p_annotation )
-                                                  ? Collections.emptyList()
-                                                  : p_annotation.stream()
-                                                                .map( CAgentSpeak::annotation )
-                                                                .filter( i -> !i.equals( IAnnotation.EMPTY ) )
-                                                                .collect( Collectors.toList() );
+        final IAnnotation<?>[] l_annotation = Objects.isNull( p_annotation )
+                                              ? new IAnnotation<?>[0]
+                                              : p_annotation.stream()
+                                                            .map( CAgentSpeak::annotation )
+                                                            .filter( i -> !i.equals( IAnnotation.EMPTY ) )
+                                                            .toArray( IAnnotation<?>[]::new );
 
         // @todo handle body & expression
         return new CPlan(
-            l_annotation.stream(),
+            l_annotation,
             l_trigger,
             IExpression.EMPTY,
-            p_body.stream().map( i -> (IExecution) p_visitor.visit( i ) ).peek( i -> System.out.println( i ) )
+            p_body.stream().map( i -> (IExecution) p_visitor.visit( i ) ).toArray( IExecution[]::new )
         );
     }
 
@@ -228,6 +225,7 @@ public final class CAgentSpeak
     @SuppressWarnings( "unchecked" )
     public static IExecution repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
+        // @todo check to direct passing if argument is equal to 1
         return new CRepair( p_chain.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ) );
     }
 

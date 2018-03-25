@@ -75,11 +75,11 @@ public abstract class IBaseInstantiable implements IInstantiable
      * @param p_annotation annotation map
      * @param p_hash hash code
      */
-    protected IBaseInstantiable( final Stream<IExecution> p_execution, final Stream<IAnnotation<?>> p_annotation, final int p_hash )
+    protected IBaseInstantiable( @Nonnull final IExecution[] p_execution, @Nonnull final IAnnotation<?>[] p_annotation, final int p_hash )
     {
         m_hash = p_hash;
-        m_execution = p_execution.toArray( IExecution[]::new );
-        m_annotation = Collections.unmodifiableMap( p_annotation.collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
+        m_execution = p_execution;
+        m_annotation = Collections.unmodifiableMap( Arrays.stream( p_annotation ).collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
     }
 
     @Override
