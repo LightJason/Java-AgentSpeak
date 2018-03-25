@@ -225,7 +225,7 @@ public final class CAgentSpeak
     @SuppressWarnings( "unchecked" )
     public static IExecution repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        // @todo check to direct passing if argument is equal to 1
+        // @todo check to direct passing if argument is equal to 1 & pass value to plan execution
         return new CRepair( p_chain.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ) );
     }
 
