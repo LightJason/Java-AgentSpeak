@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -125,4 +127,60 @@ public final class TestCPlanBundleParser extends IBaseTest
         );
     }
 
+    /**
+     * test deconstruct
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void deconstructsimple() throws Exception
+    {
+        final IPlan l_plan = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
+                                .parse( streamfromstring(  "+!mainsuccess <- [A|B] =.. bar('test')." ) )
+                                .plans()
+                                .stream()
+                                .findFirst()
+                                .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_avar = new CVariable<>( "A" );
+        final IVariable<?> l_bvar = new CVariable<>( "B" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_avar, l_bvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals( "bar", l_avar.raw() );
+        Assert.assertTrue( l_bvar.toString(), ( l_bvar.raw() instanceof List<?> ) && ( l_bvar.<List<?>>raw().size() == 1 ) );
+        Assert.assertEquals( "test", l_bvar.<List<Number>>raw().get( 0 ) );
+    }
+
+    /**
+     * test number expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void numberexpression() throws Exception
+    {
+        final IPlan l_plan = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
+                                .parse( streamfromstring(  "+!mainsuccess <- X = 5 + 4 * 3 + 1 - ( 3 + 1 ) * 2 + 2 ** 2 * 3." ) )
+                                .plans()
+                                .stream()
+                                .findFirst()
+                                .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_xvar = new CVariable<>( "X" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_xvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals( 22.0, l_xvar.<Number>raw() );
+    }
 }
