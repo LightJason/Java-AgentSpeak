@@ -166,7 +166,7 @@ public final class TestCPlanBundleParser extends IBaseTest
     public final void numberexpression() throws Exception
     {
         final IPlan l_plan = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-                                .parse( streamfromstring(  "+!mainsuccess <- X = 5 + 4 * 3 + 1 - ( 3 + 1 ) * 2 + 2 ** 2 * 3." ) )
+                                .parse( streamfromstring(  "+!calculate <- X = 5 + 4 * 3 + 1 - ( 3 + 1 ) * 2 + 2 ** 2 * 3." ) )
                                 .plans()
                                 .stream()
                                 .findFirst()

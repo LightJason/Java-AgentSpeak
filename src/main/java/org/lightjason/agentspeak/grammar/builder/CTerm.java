@@ -140,7 +140,7 @@ public final class CTerm
         return Arrays.stream( p_rules )
                      .filter( Objects::nonNull )
                      .findFirst()
-                     .map( p_visitor::visitChildren )
+                     .map( p_visitor::visit )
                      .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
     }
 

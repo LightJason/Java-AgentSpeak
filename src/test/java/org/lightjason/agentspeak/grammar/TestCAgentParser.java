@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -181,7 +182,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void numberexpression() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-            .parse( streamfromstring(  "+!mainsuccess <- X = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3." ) )
+            .parse( streamfromstring(  "+!calculate <- X = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3." ) )
             .plans()
             .stream()
             .findFirst()
@@ -199,4 +200,46 @@ public final class TestCAgentParser extends IBaseTest
         Assert.assertEquals( 20.0, l_xvar.<Number>raw() );
     }
 
+    /**
+     * test number expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void numbervariableexpression() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            .parse( streamfromstring(  "+!calculate <- X = A * 2 - B * ( 3 + C ) + 2 ** D." ) )
+            .plans()
+            .stream()
+            .findFirst()
+            .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final Random l_random = new Random();
+
+        final IVariable<?> l_avar = new CVariable<>( "A" ).set( l_random.nextDouble() );
+        final IVariable<?> l_bvar = new CVariable<>( "B" ).set( l_random.nextInt( 40 ) );
+        final IVariable<?> l_cvar = new CVariable<>( "C" ).set( l_random.nextInt( 30 ) );
+        final IVariable<?> l_dvar = new CVariable<>( "D" ).set( l_random.nextInt( 20 ) );
+        final IVariable<?> l_xvar = new CVariable<>( "X" ).set( l_random.nextInt( 10 ) );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_xvar, l_avar, l_bvar, l_cvar, l_dvar ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals(
+            l_avar.<Number>raw().doubleValue() * 2 - l_bvar.<Number>raw().doubleValue() * ( 3 + l_cvar.<Number>raw().doubleValue() )
+            + Math.pow( 2, l_dvar.<Number>raw().doubleValue() ),
+            l_xvar.<Number>raw().doubleValue(),
+            0.000001
+        );
+    }
 }
