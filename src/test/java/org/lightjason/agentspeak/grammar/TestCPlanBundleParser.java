@@ -73,7 +73,7 @@ public final class TestCPlanBundleParser extends IBaseTest
     public final void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( IOUtils.toInputStream(  "+!testsuccess <- #success. +!testfail <- #fail.", "UTF-8" ) )
+                                                .parse( IOUtils.toInputStream(  "+!testsuccess <- success. +!testfail <- fail.", "UTF-8" ) )
                                                 .plans()
                                                 .stream()
                                                 .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
@@ -104,7 +104,7 @@ public final class TestCPlanBundleParser extends IBaseTest
     public final void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-            .parse( IOUtils.toInputStream(  "+!threesuccess <- #fail << #fail << #success. +!twofail <- #fail << #fail.", "UTF-8" ) )
+            .parse( IOUtils.toInputStream(  "+!threesuccess <- fail << fail << success. +!twofail <- fail << fail.", "UTF-8" ) )
             .plans()
             .stream()
             .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );

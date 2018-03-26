@@ -89,7 +89,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- #success. +!mainfail <- #fail.", "UTF-8" ) )
+                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- success. +!mainfail <- fail.", "UTF-8" ) )
                                                 .plans()
                                                 .stream()
                                                 .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
@@ -120,7 +120,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- #fail << #fail << #success. +!mainfail <- #fail << #fail.", "UTF-8" ) )
+                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- fail << fail << success. +!mainfail <- fail << fail.", "UTF-8" ) )
                                                 .plans()
                                                 .stream()
                                                 .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );

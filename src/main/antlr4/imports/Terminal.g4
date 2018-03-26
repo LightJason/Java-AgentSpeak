@@ -23,6 +23,37 @@
 
 lexer grammar Terminal;
 
+// --- keyword lexer rule s must me on top of the lexer rules --------------------------------------------------------------------------------------------------
+
+/**
+ * boolean values
+ */
+LOGICALVALUE :
+    TRUE
+    | FALSE
+    ;
+
+/**
+ * floating-point constants
+ */
+CONSTANTNUMBER :
+    PI
+    | EULER
+    | GRAVITY
+    | AVOGADRO
+    | BOLTZMANN
+    | ELECTRON
+    | PROTON
+    | NEUTRON
+    | LIGHTSPEED
+    | POSITIVEINFINITY
+    | NEGATIVEINFINITY
+    | MAXIMUMVALUE
+    | MINIMUMVALUE
+    | NAN
+    ;
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
  * rule to represent the initial goal
@@ -156,14 +187,6 @@ ANNOTATIONATOM :
     ;
 
 /**
- * boolean values
- */
-LOGICALVALUE :
-    HASH
-    ( TRUE | FALSE )
-    ;
-
-/**
  * using floating-point number (double) and constants are used
  */
 NUMBER :
@@ -177,29 +200,6 @@ NUMBER :
 STRING :
     SINGLEQUOTESTRING
     | DOUBLEQUOTESTRING
-    ;
-
-/**
- * floating-point constants
- */
-CONSTANTNUMBER :
-    HASH
-    (
-        PI
-        | EULER
-        | GRAVITY
-        | AVOGADRO
-        | BOLTZMANN
-        | ELECTRON
-        | PROTON
-        | NEUTRON
-        | LIGHTSPEED
-        | POSITIVEINFINITY
-        | NEGATIVEINFINITY
-        | MAXIMUMVALUE
-        | MINIMUMVALUE
-        | NAN
-    )
     ;
 
 // --- character structures --------------------------------------------------------------
