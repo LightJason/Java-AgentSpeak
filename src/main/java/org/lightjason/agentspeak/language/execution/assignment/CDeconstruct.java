@@ -74,7 +74,7 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        this.set( CCommon.replaceFromContext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
+        set( CCommon.replaceFromContext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
         return CFuzzyValue.of( true );
     }
 
@@ -111,11 +111,11 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
      * @param p_assignment variable list
      * @param p_term term
      */
-    private void set( @Nonnull final ITerm[] p_assignment, @Nonnull final ILiteral p_term )
+    private static void set( @Nonnull final ITerm[] p_assignment, @Nonnull final ILiteral p_term )
     {
         if ( p_assignment.length >= 1 )
-            p_assignment[0].<IVariable<Object>>term().set( p_term.fqnfunctor().toString() );
+            p_assignment[0].<IVariable<Object>>term().set( p_term.functor() );
         if ( p_assignment.length >= 2 )
-            p_assignment[1].<IVariable<Object>>term().set( p_term.values().collect( Collectors.toList() ) );
+            p_assignment[1].<IVariable<Object>>term().set( p_term.values().map( ITerm::raw ).collect( Collectors.toList() ) );
     }
 }

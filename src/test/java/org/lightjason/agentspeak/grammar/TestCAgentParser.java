@@ -32,6 +32,8 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -138,6 +140,33 @@ public final class TestCAgentParser extends IBaseTest
                    .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
                    .value()
         );
+    }
+
+    /**
+     * test deconstruct
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void deconstructsimple() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- [X|Y] =.. foo(123).", "UTF-8" ) )
+                                .plans()
+                                .stream()
+                                .findFirst()
+                                .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_xvar = new CVariable<>( "X" );
+        final IVariable<?> l_yvar = new CVariable<>( "Y" );
+
+        l_plan.execute( false, new CLocalContext( l_xvar, l_yvar ), Collections.emptyList(), Collections.emptyList() );
+
+        Assert.assertEquals( "foo", l_xvar.raw() );
+        Assert.assertTrue( l_yvar.toString(), ( l_yvar.raw() instanceof List<?> ) && ( l_yvar.<List<?>>raw().size() == 1 ) );
+        Assert.assertEquals( 123.0, l_yvar.<List<Number>>raw().get( 0 ) );
     }
 
 }

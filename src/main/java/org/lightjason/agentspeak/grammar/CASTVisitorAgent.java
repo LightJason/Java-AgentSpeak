@@ -286,9 +286,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return CAgentSpeak.deconstruct(
             this,
-            p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visit( i ) ),
-            (ITerm) this.visit( p_context.literal() ),
-            (ITerm) this.visit( p_context.variable() )
+            p_context.variablelist().variable(),
+            p_context.literal(),
+            p_context.variable()
         );
     }
 

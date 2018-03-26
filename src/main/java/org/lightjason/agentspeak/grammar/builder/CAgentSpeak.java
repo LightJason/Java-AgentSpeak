@@ -549,7 +549,6 @@ public final class CAgentSpeak
             throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpressionterm", l_term ) );
         }
 
-
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
     }
 
@@ -564,12 +563,18 @@ public final class CAgentSpeak
      * @return deconstruct execution
      */
     @Nonnull
-    public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Stream<IVariable<?>> p_variables,
-                                          @Nullable final ITerm p_literal, @Nullable final ITerm p_variable )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_variables,
+                                          @Nullable final RuleContext p_literal, @Nullable RuleContext p_variable )
     {
+        if ( ( Objects.nonNull( p_literal ) ) && ( Objects.nonNull( p_variable ) ) )
+            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknowndeconstruct" ) );
+
         return new CDeconstruct(
-            p_variables,
-            Objects.nonNull( p_literal ) ? p_literal : p_variable
+            p_variables.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) ),
+            Objects.nonNull( p_literal )
+            ? (ITerm) p_visitor.visit( p_literal )
+            : (ITerm) p_visitor.visit( p_variable )
         );
     }
 
