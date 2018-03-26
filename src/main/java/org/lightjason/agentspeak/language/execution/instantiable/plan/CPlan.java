@@ -93,14 +93,12 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             p_body,
             p_annotation,
 
-            CCommon.streamconcatstrict(
                 Stream.of(
                     p_event.hashCode(),
-                    p_condition.hashCode()
-                ),
-                Arrays.stream( p_body ).map( Object::hashCode ),
-                Arrays.stream( p_annotation ).map( Object::hashCode )
-            ).reduce( 0, ( i, j ) -> i ^ j )
+                    p_condition.hashCode(),
+                    Arrays.hashCode( p_body ),
+                    Arrays.hashCode( p_annotation )
+                ).reduce( 0, ( i, j ) -> i ^ j )
         );
 
         m_triggerevent = p_event;

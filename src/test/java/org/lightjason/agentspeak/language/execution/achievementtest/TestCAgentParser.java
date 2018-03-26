@@ -38,12 +38,14 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
  * test for agent grammar elements
  */
-public final class TestCAgent extends IBaseTest
+public final class TestCAgentParser extends IBaseTest
 {
     /**
      * test belief
@@ -86,15 +88,27 @@ public final class TestCAgent extends IBaseTest
     @Test
     public final void successfailplan() throws Exception
     {
-        final List<IPlan> l_plans = new ArrayList<>(
-                                        new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                            .parse( IOUtils.toInputStream(  "+!mainsuccess <- #success. +!mainfail <- #fail.", "UTF-8" ) )
-                                            .plans()
-        );
+        final Map<ILiteral, IPlan> l_plans = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- #success. +!mainfail <- #fail.", "UTF-8" ) )
+                                                .plans()
+                                                .stream()
+                                                .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
         Assert.assertEquals( 2, l_plans.size() );
-        Assert.assertFalse( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
-        Assert.assertTrue( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
+
+        Assert.assertTrue(
+            l_plans.get( CLiteral.of( "mainsuccess" ) ).toString(),
+            l_plans.get( CLiteral.of( "mainsuccess" ) )
+                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
+                   .value()
+        );
+
+        Assert.assertFalse(
+            l_plans.get( CLiteral.of( "mainfail" ) ).toString(),
+            l_plans.get( CLiteral.of( "mainfail" ) )
+                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
+                   .value()
+        );
     }
 
     /**
@@ -105,15 +119,26 @@ public final class TestCAgent extends IBaseTest
     @Test
     public final void repair() throws Exception
     {
-        final List<IPlan> l_plans = new ArrayList<>(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                .parse( IOUtils.toInputStream(  "+!mainsuccess <- #fail << #fail << #success. +!mainfail <- #fail << #fail.", "UTF-8" ) )
-                .plans()
+        final Map<ILiteral, IPlan> l_plans = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- #fail << #fail << #success. +!mainfail <- #fail << #fail.", "UTF-8" ) )
+                                                .plans()
+                                                .stream()
+                                                .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
+
+        Assert.assertEquals( 2, l_plans.size() );
+
+        Assert.assertTrue(
+            l_plans.get( CLiteral.of( "mainsuccess" ) ).toString(),
+            l_plans.get( CLiteral.of( "mainsuccess" ) )
+                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
+                   .value()
         );
 
-        System.out.println( l_plans );
-        Assert.assertEquals( 2, l_plans.size() );
-        Assert.assertTrue( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
-        Assert.assertFalse( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
+        Assert.assertFalse(
+            l_plans.get( CLiteral.of( "mainfail" ) ).toString(),
+            l_plans.get( CLiteral.of( "mainfail" ) )
+                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
+                   .value()
+        );
     }
 }

@@ -65,9 +65,9 @@ public final class CRule extends IBaseInstantiable implements IRule
         super(
             p_body,
             new IAnnotation<?>[0],
-            Stream.concat(
-                Stream.of( p_id.hashCode() ),
-                Arrays.stream( p_body ).map( Object::hashCode )
+            Stream.of(
+                p_id.hashCode(),
+                Arrays.hashCode( p_body )
             ).reduce( 0, ( i, j ) -> i ^ j )
         );
         m_id = p_id;
