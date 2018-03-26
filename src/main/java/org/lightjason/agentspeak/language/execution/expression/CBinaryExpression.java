@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -101,5 +102,11 @@ public class CBinaryExpression implements IBinaryExpression
     public final Stream<IVariable<?>> variables()
     {
         return Stream.concat( m_lhs.variables(), m_rhs.variables() );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "( {0} {1} {2} )", m_lhs, m_operator, m_rhs );
     }
 }

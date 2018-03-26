@@ -108,9 +108,8 @@ public final class TestCSingleAssignment extends IBaseTest
 
         Assert.assertTrue(
             new CSingleAssignment(
-                l_lhs,
-                new CPassVariable( l_rhs ),
-                (EAssignOperator) p_data[2]
+                (EAssignOperator) p_data[2], l_lhs,
+                new CPassVariable( l_rhs )
             ).execute(
                 false,
                 new CLocalContext( l_lhs, l_rhs ),
@@ -138,9 +137,8 @@ public final class TestCSingleAssignment extends IBaseTest
 
         Assert.assertTrue(
             new CSingleAssignment(
-                l_lhs,
-                new CPassRaw<>( p_data[1] ),
-                (EAssignOperator) p_data[2]
+                (EAssignOperator) p_data[2], l_lhs,
+                new CPassRaw<>( p_data[1] )
             ).execute(
                 false,
                 new CLocalContext( l_lhs ),

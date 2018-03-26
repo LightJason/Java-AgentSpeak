@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -90,5 +91,11 @@ public final class CUnaryExpression implements IUnaryExpression
     public final Stream<IVariable<?>> variables()
     {
         return m_element.variables();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "( {0}({1})", m_operator, m_element );
     }
 }

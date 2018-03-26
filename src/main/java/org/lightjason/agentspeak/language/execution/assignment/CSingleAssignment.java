@@ -53,7 +53,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     /**
      * right-hand argument
      */
-    private final IExecution m_righthand;
+    private final IExecution m_rhs;
     /**
      * operator
      */
@@ -61,15 +61,15 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
 
     /**
      * ctor
-     *
-     * @param p_lefthand left-hand argument (variable)
-     * @param p_righthand right-hand argument
+     *  @param p_lhs left-hand argument (variable)
+     * @param p_rhs right-hand argument
      */
-    public CSingleAssignment( @Nonnull final IVariable<?> p_lefthand, @Nonnull final IExecution p_righthand, @Nonnull final EAssignOperator p_operator )
+    public CSingleAssignment( @Nonnull final EAssignOperator p_operator, @Nonnull final IVariable<?> p_lhs, @Nonnull final IExecution p_rhs
+    )
     {
-        super( p_lefthand );
+        super( p_lhs );
         m_operator = p_operator;
-        m_righthand = p_righthand;
+        m_rhs = p_rhs;
     }
 
     @Nonnull
@@ -78,7 +78,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute( p_parallel, p_context, Collections.emptyList(), l_return );
+        final IFuzzyValue<Boolean> l_rightreturn = m_rhs.execute( p_parallel, p_context, Collections.emptyList(), l_return );
         if ( ( !l_rightreturn.value() ) || ( l_return.size() != 1 ) )
             return CFuzzyValue.of( false );
 
@@ -91,7 +91,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     @Override
     public final int hashCode()
     {
-        return ( Objects.isNull( m_value ) ? 0 : m_value.hashCode() ) ^ m_righthand.hashCode();
+        return ( Objects.isNull( m_value ) ? 0 : m_value.hashCode() ) ^ m_rhs.hashCode();
     }
 
     @Override
@@ -103,7 +103,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} = {1}", m_value, m_righthand );
+        return MessageFormat.format( "{0} = {1}", m_value, m_rhs );
     }
 
     @Override
@@ -112,7 +112,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     {
         return Stream.concat(
             Stream.of( m_value ),
-            m_righthand.variables()
+            m_rhs.variables()
         );
     }
 }

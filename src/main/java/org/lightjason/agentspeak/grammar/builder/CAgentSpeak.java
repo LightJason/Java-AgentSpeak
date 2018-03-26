@@ -614,16 +614,16 @@ public final class CAgentSpeak
     {
         if ( Objects.nonNull( p_ternary ) )
             return new CSingleAssignment(
-                (IVariable<?>) p_visitor.visitChildren( p_lhs ),
-                passvariable( (IVariable<?>) p_visitor.visitChildren( p_ternary ) ),
-                EAssignOperator.of( p_operator.getText() )
+                EAssignOperator.of( p_operator.getText() ),
+                (IVariable<?>) p_visitor.visit( p_lhs ),
+                passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) )
             );
 
         if ( Objects.nonNull( p_expression ) )
             return new CSingleAssignment(
-                (IVariable<?>) p_visitor.visitChildren( p_lhs ),
-                (IExecution) p_visitor.visitChildren( p_expression ),
-                EAssignOperator.of( p_operator.getText() )
+                EAssignOperator.of( p_operator.getText() ),
+                (IVariable<?>) p_visitor.visit( p_lhs ),
+                (IExecution) p_visitor.visit( p_expression )
             );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownassignment" ) );

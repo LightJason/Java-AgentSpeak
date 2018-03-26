@@ -162,7 +162,10 @@ public final class TestCAgentParser extends IBaseTest
         final IVariable<?> l_xvar = new CVariable<>( "X" );
         final IVariable<?> l_yvar = new CVariable<>( "Y" );
 
-        l_plan.execute( false, new CLocalContext( l_xvar, l_yvar ), Collections.emptyList(), Collections.emptyList() );
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_xvar, l_yvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
 
         Assert.assertEquals( "foo", l_xvar.raw() );
         Assert.assertTrue( l_yvar.toString(), ( l_yvar.raw() instanceof List<?> ) && ( l_yvar.<List<?>>raw().size() == 1 ) );
@@ -178,11 +181,22 @@ public final class TestCAgentParser extends IBaseTest
     public final void numberexpression() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-            .parse( streamfromstring(  "+!mainsuccess <- X = 3 + 5." ) )
+            .parse( streamfromstring(  "+!mainsuccess <- X = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3." ) )
             .plans()
             .stream()
             .findFirst()
             .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_xvar = new CVariable<>( "X" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_xvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals( 20.0, l_xvar.<Number>raw() );
     }
 
 }
