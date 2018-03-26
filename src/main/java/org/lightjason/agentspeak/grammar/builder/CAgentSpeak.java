@@ -233,21 +233,14 @@ public final class CAgentSpeak
      * build repair formular
      *
      * @param p_visitor visitor
-     * @param p_body body
-     * @param p_next next formula
+     * @param p_chain chain
      * @return execution stream
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static Stream<IExecution> repairformula( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                                    @Nonnull final RuleContext p_body, @Nullable final RuleContext p_next )
+    public static Stream<IExecution> repairformula( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        return Stream.concat(
-            Stream.of( (IExecution) p_visitor.visitChildren( p_body ) ),
-            Objects.nonNull( p_next )
-            ? (Stream<IExecution>) p_visitor.visitChildren( p_next )
-            : Stream.empty()
-        );
+        return p_chain.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) );
     }
 
     /**

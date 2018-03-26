@@ -92,7 +92,28 @@ public final class TestCAgent extends IBaseTest
                                             .plans()
         );
 
+        Assert.assertEquals( 2, l_plans.size() );
         Assert.assertFalse( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
         Assert.assertTrue( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
+    }
+
+    /**
+     * test repair-chain
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void repair() throws Exception
+    {
+        final List<IPlan> l_plans = new ArrayList<>(
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+                .parse( IOUtils.toInputStream(  "+!mainsuccess <- #fail << #fail << #success. +!mainfail <- #fail << #fail.", "UTF-8" ) )
+                .plans()
+        );
+
+        System.out.println( l_plans );
+        Assert.assertEquals( 2, l_plans.size() );
+        Assert.assertTrue( l_plans.get( 0 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
+        Assert.assertFalse( l_plans.get( 1 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() ).value() );
     }
 }

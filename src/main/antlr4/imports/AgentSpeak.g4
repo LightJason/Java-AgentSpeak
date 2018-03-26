@@ -105,7 +105,7 @@ expression :
  */
 repair_formula :
     body_formula
-    ( LEFTSHIFT repair_formula )?
+    ( LEFTSHIFT body_formula )*
     ;
 
 /**

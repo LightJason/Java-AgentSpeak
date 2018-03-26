@@ -204,7 +204,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         // @todo check
 
-        return CAgentSpeak.repairformula( this, p_context.body_formula(), p_context.repair_formula() );
+        return CAgentSpeak.repairformula( this, p_context.body_formula() );
     }
 
     @Override
