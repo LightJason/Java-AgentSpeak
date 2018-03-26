@@ -34,6 +34,14 @@ LOGICALVALUE :
     ;
 
 /**
+ * using floating-point number (double) and constants are used
+ */
+NUMBER :
+    MINUS?
+    ( CONSTANTNUMBER | DIGITSEQUENCE )
+    ;
+
+/**
  * floating-point constants
  */
 CONSTANTNUMBER :
@@ -51,6 +59,14 @@ CONSTANTNUMBER :
     | MAXIMUMVALUE
     | MINIMUMVALUE
     | NAN
+    ;
+
+/**
+ * string define with single or double quotes
+ */
+STRING :
+    SINGLEQUOTESTRING
+    | DOUBLEQUOTESTRING
     ;
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -190,22 +206,6 @@ ANNOTATION_LITERAL :
 ANNOTATIONATOM :
     PARALLEL
     | ATOMIC
-    ;
-
-/**
- * string define with single or double quotes
- */
-STRING :
-    SINGLEQUOTESTRING
-    | DOUBLEQUOTESTRING
-    ;
-
-/**
- * using floating-point number (double) and constants are used
- */
-NUMBER :
-    MINUS?
-    ( CONSTANTNUMBER | DIGITSEQUENCE )
     ;
 
 // --- character structures --------------------------------------------------------------

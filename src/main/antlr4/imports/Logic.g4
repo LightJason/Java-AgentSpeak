@@ -29,9 +29,9 @@ import Terminal;
  * terms are non-predictable structures
  */
 term :
-    STRING
+    LOGICALVALUE
     | NUMBER
-    | LOGICALVALUE
+    | STRING
 
     | variable
     | literal
