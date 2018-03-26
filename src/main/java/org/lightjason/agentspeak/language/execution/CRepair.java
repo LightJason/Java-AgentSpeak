@@ -63,9 +63,7 @@ public class CRepair extends IBaseExecution<IExecution[]>
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return Arrays.stream( m_value )
-                     .peek( i -> System.out.println( i ) )
                      .map( i -> execute( p_context, i ) )
-                     .peek( i -> System.out.println( i ) )
                      .filter( i -> p_context.agent().fuzzy().getValue().defuzzify( i ) )
                      .findFirst()
                      .orElseGet( () -> CFuzzyValue.of( false ) );
