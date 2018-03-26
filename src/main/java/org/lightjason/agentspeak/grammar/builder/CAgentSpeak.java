@@ -50,6 +50,10 @@ import org.lightjason.agentspeak.language.execution.assignment.CTernaryOperation
 import org.lightjason.agentspeak.language.execution.assignment.EAssignOperator;
 import org.lightjason.agentspeak.language.execution.base.CBelief;
 import org.lightjason.agentspeak.language.execution.base.CRepair;
+import org.lightjason.agentspeak.language.execution.expression.CBinaryExpression;
+import org.lightjason.agentspeak.language.execution.expression.CUnaryExpression;
+import org.lightjason.agentspeak.language.execution.expression.EBinaryOperator;
+import org.lightjason.agentspeak.language.execution.expression.EUnaryOperator;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
@@ -520,7 +524,9 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_term single term
-     * @param p_operator operator
+     * @param p_unaryoperator unary operator
+     * @param p_expression expression
+     * @param p_binaryoperator binary operator
      * @param p_lhs left-hand-side argument
      * @param p_rhs right-hand-side argument
      * @return execution
@@ -528,7 +534,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution expression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext p_term,
-                                         @Nullable final Token p_operator, @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
+                                         @Nullable final TerminalNode p_unaryoperator, @Nullable final RuleContext p_expression,
+                                         @Nullable final Token p_binaryoperator, @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
     {
         if ( Objects.nonNull( p_term ) )
         {
@@ -548,6 +555,19 @@ public final class CAgentSpeak
 
             throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpressionterm", l_term ) );
         }
+
+        if ( Objects.nonNull( p_unaryoperator ) && ( Objects.nonNull( p_expression ) ) )
+            return new CUnaryExpression( EUnaryOperator.of( p_unaryoperator.getText() ), (IExecution) p_visitor.visit( p_expression ) );
+
+        if ( Objects.nonNull( p_expression ) )
+            return (IExecution) p_visitor.visit( p_expression );
+
+        if ( ( Objects.nonNull( p_binaryoperator ) ) && ( Objects.nonNull( p_lhs ) ) && ( Objects.nonNull( p_rhs ) ) )
+            return new CBinaryExpression(
+                EBinaryOperator.of( p_binaryoperator.getText() ),
+                (IExecution) p_visitor.visit( p_lhs ),
+                (IExecution) p_visitor.visit( p_rhs )
+            );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
     }

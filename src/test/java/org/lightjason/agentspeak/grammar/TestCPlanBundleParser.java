@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
@@ -55,7 +54,7 @@ public final class TestCPlanBundleParser extends IBaseTest
     public final void belief() throws Exception
     {
         final IASTVisitorPlanBundle l_parser = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-                                                    .parse( IOUtils.toInputStream( "bar(1234). foo('tests').", "UTF-8" ) );
+                                                    .parse( streamfromstring( "bar(1234). foo('tests')." ) );
 
         final List<ILiteral> l_beliefs = new ArrayList<>( l_parser.initialbeliefs() );
 
@@ -73,7 +72,7 @@ public final class TestCPlanBundleParser extends IBaseTest
     public final void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( IOUtils.toInputStream(  "+!testsuccess <- success. +!testfail <- fail.", "UTF-8" ) )
+                                                .parse( streamfromstring(  "+!testsuccess <- success. +!testfail <- fail." ) )
                                                 .plans()
                                                 .stream()
                                                 .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
@@ -104,7 +103,7 @@ public final class TestCPlanBundleParser extends IBaseTest
     public final void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-            .parse( IOUtils.toInputStream(  "+!threesuccess <- fail << fail << success. +!twofail <- fail << fail.", "UTF-8" ) )
+            .parse( streamfromstring(  "+!threesuccess <- fail << fail << success. +!twofail <- fail << fail." ) )
             .plans()
             .stream()
             .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );

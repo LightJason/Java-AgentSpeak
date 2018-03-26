@@ -308,7 +308,15 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
-        return CAgentSpeak.expression( this, p_context.term(), p_context.operator, p_context.lhs, p_context.rhs );
+        return CAgentSpeak.expression(
+            this,
+            p_context.term(),
+            p_context.STRONGNEGATION(),
+            p_context.single,
+            p_context.binaryoperator,
+            p_context.lhs,
+            p_context.rhs
+        );
     }
 
     @Override

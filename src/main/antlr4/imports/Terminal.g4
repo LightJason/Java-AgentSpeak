@@ -23,7 +23,7 @@
 
 lexer grammar Terminal;
 
-// --- keyword lexer rule s must me on top of the lexer rules --------------------------------------------------------------------------------------------------
+// --- keyword rules must be first rules -----------------------------------------------------------------------------------------------------------------------
 
 /**
  * boolean values
@@ -55,37 +55,8 @@ CONSTANTNUMBER :
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-/**
- * rule to represent the initial goal
- */
-INITIALGOAL :
-    EXCLAMATIONMARK
-    ATOM
-    DOT
-    ;
 
-/**
- * plan trigger
- */
-PLANTRIGGER :
-    (PLUS | MINUS) EXCLAMATIONMARK?
-    ;
-
-/**
- * name structure of a variable
- */
-VARIABLEATOM :
-    ( UPPERCASELETTER | UNDERSCORE )
-    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH )*
-    ;
-
-/**
- * atoms are defined like Prolog atoms
- */
-ATOM :
-    LOWERCASELETTER
-    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH | MINUS | UNDERSCORE )*
-    ;
+// --- arithmetic operators must be second rules----------------------------------------------------------------------------------------------------------------
 
 /**
  * assign operator
@@ -98,14 +69,6 @@ ASSIGNOPERATOR :
     | ASSIGNDIVIDE
     | ASSIGNMODULO
     | ASSIGNPOW
-    ;
-
-/**
- * unary operator
- */
-UNARYOPERATOR :
-    INCREMENT
-    | DECREMENT
     ;
 
 /**
@@ -160,6 +123,49 @@ ARITHMETICOPERATOR3 :
     ;
 
 /**
+ * unary operator
+ */
+UNARYOPERATOR :
+    INCREMENT
+    | DECREMENT
+    ;
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/**
+ * rule to represent the initial goal
+ */
+INITIALGOAL :
+    EXCLAMATIONMARK
+    ATOM
+    DOT
+    ;
+
+/**
+ * plan trigger
+ */
+PLANTRIGGER :
+    (PLUS | MINUS) EXCLAMATIONMARK?
+    ;
+
+/**
+ * name structure of a variable
+ */
+VARIABLEATOM :
+    ( UPPERCASELETTER | UNDERSCORE )
+    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH )*
+    ;
+
+/**
+ * atoms are defined like Prolog atoms
+ */
+ATOM :
+    LOWERCASELETTER
+    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH | MINUS | UNDERSCORE )*
+    ;
+
+/**
  * annotation for rules and plans
  */
 ANNOTATION :
@@ -187,19 +193,19 @@ ANNOTATIONATOM :
     ;
 
 /**
- * using floating-point number (double) and constants are used
- */
-NUMBER :
-    MINUS?
-    ( CONSTANTNUMBER | DIGITSEQUENCE )
-    ;
-
-/**
  * string define with single or double quotes
  */
 STRING :
     SINGLEQUOTESTRING
     | DOUBLEQUOTESTRING
+    ;
+
+/**
+ * using floating-point number (double) and constants are used
+ */
+NUMBER :
+    MINUS?
+    ( CONSTANTNUMBER | DIGITSEQUENCE )
     ;
 
 // --- character structures --------------------------------------------------------------

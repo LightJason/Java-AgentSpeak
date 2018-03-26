@@ -340,7 +340,15 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
-        return CAgentSpeak.expression( this, p_context.term(), p_context.operator, p_context.lhs, p_context.rhs );
+        return CAgentSpeak.expression(
+            this,
+            p_context.term(),
+            p_context.STRONGNEGATION(),
+            p_context.single,
+            p_context.binaryoperator,
+            p_context.lhs,
+            p_context.rhs
+        );
     }
 
     @Override

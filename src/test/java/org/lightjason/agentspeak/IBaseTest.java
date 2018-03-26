@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -61,6 +62,17 @@ public abstract class IBaseTest
      */
     protected static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
 
+    /**
+     * creates a stream of a string value
+     *
+     * @param p_input string input
+     * @return input stream
+     * @throws IOException thrown on error
+     */
+    protected static InputStream streamfromstring( @Nonnull final String p_input ) throws IOException
+    {
+        return IOUtils.toInputStream(  p_input,  "UTF-8" );
+    }
 
     /**
      * generator of empty agents

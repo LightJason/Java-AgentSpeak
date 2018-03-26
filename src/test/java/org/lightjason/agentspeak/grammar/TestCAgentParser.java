@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
@@ -47,6 +46,7 @@ import java.util.stream.Collectors;
  */
 public final class TestCAgentParser extends IBaseTest
 {
+
     /**
      * test belief
      *
@@ -56,7 +56,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void belief() throws Exception
     {
         final IASTVisitorAgent l_parser = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                            .parse( IOUtils.toInputStream(  "foo(123). bar('test').",  "UTF-8" ) );
+                                            .parse( streamfromstring(  "foo(123). bar('test')." ) );
 
         final List<ILiteral> l_beliefs = new ArrayList<>( l_parser.initialbeliefs() );
 
@@ -76,7 +76,7 @@ public final class TestCAgentParser extends IBaseTest
         Assert.assertEquals(
             CLiteral.of( "main" ),
             new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                .parse( IOUtils.toInputStream(  "!main.",  "UTF-8" ) ).initialgoal()
+                .parse( streamfromstring(  "!main." ) ).initialgoal()
         );
     }
 
@@ -89,7 +89,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- success. +!mainfail <- fail.", "UTF-8" ) )
+                                                .parse( streamfromstring(  "+!mainsuccess <- success. +!mainfail <- fail." ) )
                                                 .plans()
                                                 .stream()
                                                 .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
@@ -120,7 +120,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- fail << fail << success. +!mainfail <- fail << fail.", "UTF-8" ) )
+                                                .parse( streamfromstring(  "+!mainsuccess <- fail << fail << success. +!mainfail <- fail << fail." ) )
                                                 .plans()
                                                 .stream()
                                                 .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
@@ -151,7 +151,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void deconstructsimple() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                .parse( IOUtils.toInputStream(  "+!mainsuccess <- [X|Y] =.. foo(123).", "UTF-8" ) )
+                                .parse( streamfromstring(  "+!mainsuccess <- [X|Y] =.. foo(123)." ) )
                                 .plans()
                                 .stream()
                                 .findFirst()
@@ -167,6 +167,22 @@ public final class TestCAgentParser extends IBaseTest
         Assert.assertEquals( "foo", l_xvar.raw() );
         Assert.assertTrue( l_yvar.toString(), ( l_yvar.raw() instanceof List<?> ) && ( l_yvar.<List<?>>raw().size() == 1 ) );
         Assert.assertEquals( 123.0, l_yvar.<List<Number>>raw().get( 0 ) );
+    }
+
+    /**
+     * test number expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void numberexpression() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            .parse( streamfromstring(  "+!mainsuccess <- X = 3 + 5." ) )
+            .plans()
+            .stream()
+            .findFirst()
+            .orElse( IPlan.EMPTY );
     }
 
 }

@@ -83,14 +83,14 @@ block_formula :
  * expression rule
  */
 expression :
-    STRONGNEGATION expression
-    | LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
-    | lhs=expression operator=ARITHMETICOPERATOR1 rhs=expression
-    | lhs=expression operator=ARITHMETICOPERATOR2 rhs=expression
-    | lhs=expression operator=ARITHMETICOPERATOR3 rhs=expression
-    | lhs=expression operator=RELATIONALOPERATOR rhs=expression
-    | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
-    | lhs=expression operator=LOGICALOPERATOR2 rhs=expression
+    STRONGNEGATION single=expression
+    | LEFTROUNDBRACKET single=expression RIGHTROUNDBRACKET
+    | lhs=expression binaryoperator=ARITHMETICOPERATOR1 rhs=expression
+    | lhs=expression binaryoperator=ARITHMETICOPERATOR2 rhs=expression
+    | lhs=expression binaryoperator=ARITHMETICOPERATOR3 rhs=expression
+    | lhs=expression binaryoperator=RELATIONALOPERATOR rhs=expression
+    | lhs=expression binaryoperator=LOGICALOPERATOR1 rhs=expression
+    | lhs=expression binaryoperator=LOGICALOPERATOR2 rhs=expression
     | term
     ;
 
