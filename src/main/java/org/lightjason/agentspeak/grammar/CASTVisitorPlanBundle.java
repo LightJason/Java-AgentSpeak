@@ -104,7 +104,17 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitPlanbundle( final PlanBundleParser.PlanbundleContext p_context )
     {
-        return this.visitChildren( p_context );
+        p_context.belief()
+                 .stream()
+                 .map( i -> (ILiteral) this.visit( i ) )
+                 .forEach( i -> m_initialbeliefs.add( i ) );
+
+        p_context.plan()
+                 .stream()
+                 .map( i -> (IPlan) this.visit( i ) )
+                 .forEach( i -> m_plans.add( i ) );
+
+        return null;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -152,16 +162,12 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
-        // @todo ckeck return
-
         return CAgentSpeak.repair( this, p_context.repair_formula() );
     }
 
     @Override
     public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
-        // @todo check
-
         return CAgentSpeak.repairformula( this, p_context.body_formula() );
     }
 
@@ -304,7 +310,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
-        return null;
+        return CAgentSpeak.expression( this, p_context.term(), p_context.operator, p_context.lhs, p_context.rhs );
     }
 
     @Override

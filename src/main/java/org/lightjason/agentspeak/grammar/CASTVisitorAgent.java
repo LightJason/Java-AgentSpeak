@@ -194,16 +194,12 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
     {
-        // @todo ckeck return
-
         return CAgentSpeak.repair( this, p_context.repair_formula() );
     }
 
     @Override
     public final Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
     {
-        // @todo check
-
         return CAgentSpeak.repairformula( this, p_context.body_formula() );
     }
 

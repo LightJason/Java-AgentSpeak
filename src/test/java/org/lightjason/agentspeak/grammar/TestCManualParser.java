@@ -36,9 +36,9 @@ import java.util.stream.Collectors;
 
 
 /**
- * test for logical grammar elements
+ * test for manual parser
  */
-public final class TestCLogical extends IBaseTest
+public final class TestCManualParser extends IBaseTest
 {
     /**
      * test literal parsing

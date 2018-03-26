@@ -21,14 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.achievementtest;
+package org.lightjason.agentspeak.grammar;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.grammar.CParserAgent;
-import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -43,7 +41,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * test for agent grammar elements
+ * test for agent parser
  */
 public final class TestCAgentParser extends IBaseTest
 {
@@ -141,4 +139,5 @@ public final class TestCAgentParser extends IBaseTest
                    .value()
         );
     }
+
 }
