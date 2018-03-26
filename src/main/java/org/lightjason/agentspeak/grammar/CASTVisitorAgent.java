@@ -34,11 +34,9 @@ import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
