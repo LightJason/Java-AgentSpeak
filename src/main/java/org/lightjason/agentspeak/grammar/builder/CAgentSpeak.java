@@ -68,7 +68,7 @@ import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRang
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
-import org.lightjason.agentspeak.language.execution.passing.CPassExecution;
+import org.lightjason.agentspeak.language.execution.passing.CPassAction;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariableLiteral;
@@ -143,7 +143,7 @@ public final class CAgentSpeak
             l_annotation,
             l_trigger,
             IExpression.EMPTY,
-            p_body.stream().map( i -> (IExecution) p_visitor.visit( i ) ).toArray( IExecution[]::new )
+            p_body.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ).toArray( IExecution[]::new )
         );
     }
 
@@ -170,9 +170,7 @@ public final class CAgentSpeak
     @Nonnull
     public static IRule ruleplaceholder( @Nonnull final ILiteral p_literal )
     {
-        return new CRulePlaceholder(
-            p_literal
-        );
+        return new CRulePlaceholder( p_literal );
     }
 
     /**
@@ -227,10 +225,10 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IExecution repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
+    public static Stream<IExecution> repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
         // @todo check to direct passing if argument is equal to 1 & pass value to plan execution
-        return new CRepair( p_chain.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ) );
+        return p_chain.stream().map( i -> (IExecution) p_visitor.visit( i ) );
     }
 
     /**
@@ -242,9 +240,9 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static Stream<IExecution> repairformula( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
+    public static IExecution repairformula( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        return p_chain.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) );
+        return new CRepair( p_chain.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) ) );
     }
 
     /**
@@ -419,7 +417,7 @@ public final class CAgentSpeak
         if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
             throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "wrongargumentnumber", l_action.minimalArgumentNumber(), p_actionliteral ) );
 
-        return new CPassExecution( l_actionliteral.hasAt(), l_action );
+        return new CPassAction( l_actionliteral.hasAt(), l_action );
     }
 
     /**

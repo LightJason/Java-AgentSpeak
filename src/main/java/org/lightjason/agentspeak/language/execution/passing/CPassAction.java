@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * proxy for any execution
  */
-public final class CPassExecution implements IExecution
+public final class CPassAction implements IExecution
 {
     /**
      * serial id
@@ -61,7 +61,7 @@ public final class CPassExecution implements IExecution
      * @param p_parallel parallel execution
      * @param p_execution execution
      */
-    public CPassExecution( final boolean p_parallel, @Nonnull final IExecution p_execution )
+    public CPassAction( final boolean p_parallel, @Nonnull final IExecution p_execution )
     {
         m_parallel = p_parallel;
         m_execution = p_execution;

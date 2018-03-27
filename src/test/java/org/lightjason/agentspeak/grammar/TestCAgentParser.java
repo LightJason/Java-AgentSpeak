@@ -284,7 +284,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void ternarytrue() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-            .parse( streamfromstring(  "+!calculate <- P = 3 < 5 ? euler : pi; Y = 5 < 3 ? boltzmann : lightspeed." ) )
+            .parse( streamfromstring(  "+!calculate <- P = 3 < 5 ? euler : pi." ) )
             .plans()
             .stream()
             .findFirst()
@@ -327,5 +327,37 @@ public final class TestCAgentParser extends IBaseTest
         );
 
         Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "lightspeed" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
+    }
+
+
+    /**
+     * test multiple items in a plan
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void multipleplanitems() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            .parse( streamfromstring(  "+!items <- N = 'test'; P = 5; C = fail." ) )
+            .plans()
+            .stream()
+            .findFirst()
+            .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_nvar = new CVariable<>( "N" );
+        final IVariable<?> l_pvar = new CVariable<>( "P" );
+        final IVariable<?> l_cvar = new CVariable<>( "C" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_nvar, l_pvar, l_cvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals( "test", l_nvar.raw() );
+        Assert.assertEquals( 5.0, l_pvar.<Number>raw() );
+        Assert.assertEquals( false, l_cvar.raw() );
     }
 }
