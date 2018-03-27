@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.grammar;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -240,6 +241,37 @@ public final class TestCAgentParser extends IBaseTest
             + Math.pow( 2, l_dvar.<Number>raw().doubleValue() ),
             l_xvar.<Number>raw().doubleValue(),
             0.000001
+        );
+    }
+
+    /**
+     * test number expression with constants
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void constantexpression() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            .parse( streamfromstring(  "+!calculate <- X = pi * euler + gravity." ) )
+            .plans()
+            .stream()
+            .findFirst()
+            .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_xvar = new CVariable<>( "X" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_xvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals(
+            CCommon.NUMERICCONSTANT.get( "pi" ) * CCommon.NUMERICCONSTANT.get( "euler" ) + CCommon.NUMERICCONSTANT.get( "gravity" ),
+            l_xvar.<Number>raw().doubleValue(),
+            0.00000001
         );
     }
 }
