@@ -373,9 +373,9 @@ public final class CAgentSpeak
                                              @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false )
     {
         return new CTernaryOperation(
-            (IExpression) p_visitor.visitChildren( p_expression ),
-            (IExecution) p_visitor.visitChildren( p_true ),
-            (IExecution) p_visitor.visitChildren( p_false )
+            (IExpression) p_visitor.visit( p_expression ),
+            (IExecution) p_visitor.visit( p_true ),
+            (IExecution) p_visitor.visit( p_false )
         );
     }
 
@@ -616,7 +616,7 @@ public final class CAgentSpeak
             return new CSingleAssignment(
                 EAssignOperator.of( p_operator.getText() ),
                 (IVariable<?>) p_visitor.visit( p_lhs ),
-                passvariable( (IVariable<?>) p_visitor.visit( p_ternary ) )
+                (IExecution) p_visitor.visit( p_ternary )
             );
 
         if ( Objects.nonNull( p_expression ) )

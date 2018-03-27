@@ -61,11 +61,12 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
 
     /**
      * ctor
-     *  @param p_lhs left-hand argument (variable)
+     *
+     * @param p_operator assignment operator
+     * @param p_lhs left-hand argument (variable)
      * @param p_rhs right-hand argument
      */
-    public CSingleAssignment( @Nonnull final EAssignOperator p_operator, @Nonnull final IVariable<?> p_lhs, @Nonnull final IExecution p_rhs
-    )
+    public CSingleAssignment( @Nonnull final EAssignOperator p_operator, @Nonnull final IVariable<?> p_lhs, @Nonnull final IExecution p_rhs )
     {
         super( p_lhs );
         m_operator = p_operator;

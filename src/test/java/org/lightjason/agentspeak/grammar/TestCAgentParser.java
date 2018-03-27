@@ -183,7 +183,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void numberexpression() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-            .parse( streamfromstring(  "+!calculate <- X = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3." ) )
+            .parse( streamfromstring(  "+!calculate <- R = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3." ) )
             .plans()
             .stream()
             .findFirst()
@@ -191,14 +191,14 @@ public final class TestCAgentParser extends IBaseTest
 
         Assert.assertNotEquals( IPlan.EMPTY, l_plan );
 
-        final IVariable<?> l_xvar = new CVariable<>( "X" );
+        final IVariable<?> l_resultvar = new CVariable<>( "R" );
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_xvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            l_plan.execute( false, new CLocalContext( l_resultvar ), Collections.emptyList(), Collections.emptyList() ).value()
         );
 
-        Assert.assertEquals( 20.0, l_xvar.<Number>raw() );
+        Assert.assertEquals( 20.0, l_resultvar.<Number>raw() );
     }
 
     /**
@@ -210,7 +210,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void numbervariableexpression() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-            .parse( streamfromstring(  "+!calculate <- X = A * 2 - B * ( 3 + C ) + 2 ** D." ) )
+            .parse( streamfromstring(  "+!calculate <- W = A * 2 - B * ( 3 + C ) + 2 ** D." ) )
             .plans()
             .stream()
             .findFirst()
@@ -224,13 +224,13 @@ public final class TestCAgentParser extends IBaseTest
         final IVariable<?> l_bvar = new CVariable<>( "B" ).set( l_random.nextInt( 40 ) );
         final IVariable<?> l_cvar = new CVariable<>( "C" ).set( l_random.nextInt( 30 ) );
         final IVariable<?> l_dvar = new CVariable<>( "D" ).set( l_random.nextInt( 20 ) );
-        final IVariable<?> l_xvar = new CVariable<>( "X" ).set( l_random.nextInt( 10 ) );
+        final IVariable<?> l_result = new CVariable<>( "W" ).set( l_random.nextInt( 10 ) );
 
         Assert.assertTrue(
             l_plan.toString(),
             l_plan.execute(
                 false,
-                new CLocalContext( l_xvar, l_avar, l_bvar, l_cvar, l_dvar ),
+                new CLocalContext( l_result, l_avar, l_bvar, l_cvar, l_dvar ),
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -239,7 +239,7 @@ public final class TestCAgentParser extends IBaseTest
         Assert.assertEquals(
             l_avar.<Number>raw().doubleValue() * 2 - l_bvar.<Number>raw().doubleValue() * ( 3 + l_cvar.<Number>raw().doubleValue() )
             + Math.pow( 2, l_dvar.<Number>raw().doubleValue() ),
-            l_xvar.<Number>raw().doubleValue(),
+            l_result.<Number>raw().doubleValue(),
             0.000001
         );
     }
@@ -253,7 +253,7 @@ public final class TestCAgentParser extends IBaseTest
     public final void constantexpression() throws Exception
     {
         final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-            .parse( streamfromstring(  "+!calculate <- X = pi * euler + gravity." ) )
+            .parse( streamfromstring(  "+!calculate <- O = pi * euler + gravity." ) )
             .plans()
             .stream()
             .findFirst()
@@ -261,17 +261,71 @@ public final class TestCAgentParser extends IBaseTest
 
         Assert.assertNotEquals( IPlan.EMPTY, l_plan );
 
-        final IVariable<?> l_xvar = new CVariable<>( "X" );
+        final IVariable<?> l_result = new CVariable<>( "O" );
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_xvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
         );
 
         Assert.assertEquals(
             CCommon.NUMERICCONSTANT.get( "pi" ) * CCommon.NUMERICCONSTANT.get( "euler" ) + CCommon.NUMERICCONSTANT.get( "gravity" ),
-            l_xvar.<Number>raw().doubleValue(),
+            l_result.<Number>raw().doubleValue(),
             0.00000001
         );
+    }
+
+    /**
+     * test ternary operator true case
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void ternarytrue() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            .parse( streamfromstring(  "+!calculate <- P = 3 < 5 ? euler : pi; Y = 5 < 3 ? boltzmann : lightspeed." ) )
+            .plans()
+            .stream()
+            .findFirst()
+            .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_result = new CVariable<>( "P" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "euler" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
+    }
+
+    /**
+     * test ternary operator true case
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void ternaryfalse() throws Exception
+    {
+        final IPlan l_plan = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            .parse( streamfromstring(  "+!calculate <- N = 5 < 3 ? boltzmann : lightspeed." ) )
+            .plans()
+            .stream()
+            .findFirst()
+            .orElse( IPlan.EMPTY );
+
+        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+
+        final IVariable<?> l_result = new CVariable<>( "N" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "lightspeed" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
     }
 }
