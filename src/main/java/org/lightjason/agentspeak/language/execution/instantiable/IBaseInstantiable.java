@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,7 +87,8 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public final String description()
     {
-        return m_annotation.get( IAnnotation.EType.DESCRIPTION ).toString();
+        final String l_description = m_annotation.getOrDefault( IAnnotation.EType.DESCRIPTION, IAnnotation.EMPTY ).value();
+        return Objects.isNull( l_description ) ? "" : l_description;
     }
 
     @Override

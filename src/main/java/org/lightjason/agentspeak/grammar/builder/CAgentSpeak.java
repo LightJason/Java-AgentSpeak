@@ -58,6 +58,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CAtomAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CDescriptionAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CValueAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
@@ -97,9 +98,13 @@ import java.util.stream.Stream;
 public final class CAgentSpeak
 {
     /**
-     * reg pattern for matching annotation constant values
+     * regular pattern for matching annotation constant values
      */
-    private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( ".+\\( .+, .+ \\)" );
+    private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( ".+\\(.+,.+\\)" );
+    /**
+     * regular pattern for matching annotation description values
+     */
+    private static final Pattern ANNOTATIONDESCRIPTION = Pattern.compile( ".+\\(.+\\)" );
 
     /**
      * ctor
@@ -190,7 +195,15 @@ public final class CAgentSpeak
         if ( p_annotation.getText().contains( "atomic" ) )
             return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
 
-        // @todo description annoation
+        // description annotation with extracted string
+        if ( p_annotation.getText().contains( "description" ) )
+        {
+            final Matcher l_match = ANNOTATIONDESCRIPTION.matcher( p_annotation.getText() );
+            if ( !l_match.find() )
+                return IAnnotation.EMPTY;
+
+            return new CDescriptionAnnotation( l_match.group( 1 ).replace( "'", "" ).replace( "\"", "" ) );
+        }
 
         // on a constant annoation object, the data and name must be split at the comma,
         // the value can be a number value or a string
