@@ -82,6 +82,13 @@ public abstract class IBaseInstantiable implements IInstantiable
         m_annotation = Collections.unmodifiableMap( Arrays.stream( p_annotation ).collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
     }
 
+    @Nonnull
+    @Override
+    public final String description()
+    {
+        return m_annotation.get( IAnnotation.EType.DESCRIPTION ).toString();
+    }
+
     @Override
     public final int hashCode()
     {

@@ -48,4 +48,12 @@ public interface IInstantiable extends IExecution
     @Nonnull
     IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable );
 
+    /**
+     * returns the description
+     *
+     * @return description
+     */
+    @Nonnull
+    String description();
+
 }

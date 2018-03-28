@@ -190,6 +190,8 @@ public final class CAgentSpeak
         if ( p_annotation.getText().contains( "atomic" ) )
             return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
 
+        // @todo description annoation
+
         // on a constant annoation object, the data and name must be split at the comma,
         // the value can be a number value or a string
         if ( p_annotation.getText().contains( "constant" ) )

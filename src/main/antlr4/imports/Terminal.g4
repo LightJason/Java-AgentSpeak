@@ -185,7 +185,7 @@ ATOM :
  * annotation for rules and plans
  */
 ANNOTATION :
-    AT ( ANNOTATIONATOM | ANNOTATION_LITERAL )
+    AT ( ANNOTATIONATOM | ANNOTATION_LITERAL | ANNOTATION_DESCRIPTION )
     ;
 
 /**
@@ -197,6 +197,16 @@ ANNOTATION_LITERAL :
     VARIABLEATOM
     COMMA
     ( NUMBER | STRING )
+    RIGHTROUNDBRACKET
+    ;
+
+/**
+ * annotation for description
+ */
+ANNOTATION_DESCRIPTION :
+    DESCRIPTION
+    LEFTROUNDBRACKET
+    STRING
     RIGHTROUNDBRACKET
     ;
 
@@ -262,9 +272,10 @@ fragment TRUE              : 'true' | 'success';
 fragment FALSE             : 'false' | 'fail';
 
 
-CONSTANT                   : 'constant';
+fragment CONSTANT          : 'constant';
 fragment PARALLEL          : 'parallel';
 fragment ATOMIC            : 'atomic';
+fragment DESCRIPTION       : 'description';
 
 
 fragment AND               : '&&';

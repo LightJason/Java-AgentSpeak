@@ -127,9 +127,10 @@ public interface IAnnotation<T> extends IAssignable<T>
      */
     enum EType
     {
-        CONSTANT( "@Constant" ),
-        ATOMIC( "@Atomic" ),
-        PARALLEL( "@Parallel" ),
+        CONSTANT( "@constant" ),
+        ATOMIC( "@atomic" ),
+        PARALLEL( "@parallel" ),
+        DESCRIPTION( "@description" ),
         EMPTY( "" );
 
         /**
