@@ -148,21 +148,46 @@ UNARYOPERATOR :
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
 /**
- * rule to represent the initial goal
+ * annotation for rules and plans
  */
-INITIALGOAL :
-    EXCLAMATIONMARK
-    ATOM
-    DOT
+ANNOTATION :
+    AT
+    (
+        ANNOTATION_CONSTANT
+        | ANNOTATION_DESCRIPTION
+        | ANNOTATIONATOM
+    )
     ;
 
 /**
- * plan trigger
+ * annotation atom
  */
-PLANTRIGGER :
-    (PLUS | MINUS) EXCLAMATIONMARK?
+ANNOTATIONATOM :
+    PARALLEL
+    | ATOMIC
+    ;
+
+/**
+ * annotation for description
+ */
+ANNOTATION_DESCRIPTION :
+    DESCRIPTION
+    LEFTROUNDBRACKET
+    STRING
+    RIGHTROUNDBRACKET
+    ;
+
+/**
+ * annotation (with parameter)
+ */
+ANNOTATION_CONSTANT :
+    CONSTANT
+    LEFTROUNDBRACKET
+    VARIABLEATOM
+    COMMA
+    ( NUMBER | STRING )
+    RIGHTROUNDBRACKET
     ;
 
 /**
@@ -182,40 +207,19 @@ ATOM :
     ;
 
 /**
- * annotation for rules and plans
+ * rule to represent the initial goal
  */
-ANNOTATION :
-    AT ( ANNOTATIONATOM | ANNOTATION_LITERAL | ANNOTATION_DESCRIPTION )
+INITIALGOAL :
+    EXCLAMATIONMARK
+    ATOM
+    DOT
     ;
 
 /**
- * annotation (with parameter)
+ * plan trigger
  */
-ANNOTATION_LITERAL :
-    CONSTANT
-    LEFTROUNDBRACKET
-    VARIABLEATOM
-    COMMA
-    ( NUMBER | STRING )
-    RIGHTROUNDBRACKET
-    ;
-
-/**
- * annotation for description
- */
-ANNOTATION_DESCRIPTION :
-    DESCRIPTION
-    LEFTROUNDBRACKET
-    STRING
-    RIGHTROUNDBRACKET
-    ;
-
-/**
- * annotation atom
- */
-ANNOTATIONATOM :
-    PARALLEL
-    | ATOMIC
+PLANTRIGGER :
+    (PLUS | MINUS) EXCLAMATIONMARK?
     ;
 
 // --- character structures --------------------------------------------------------------
