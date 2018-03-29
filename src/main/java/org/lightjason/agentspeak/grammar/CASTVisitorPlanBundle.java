@@ -109,7 +109,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
         p_context.plan()
                  .stream()
-                 .map( i -> (IPlan) this.visit( i ) )
+                 .flatMap( i -> (Stream<IPlan>) this.visit( i ) )
                  .forEach( i -> m_plans.add( i ) );
 
         return null;
@@ -152,9 +152,14 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             p_context.ANNOTATION(),
             p_context.PLANTRIGGER(),
             p_context.literal(),
-            p_context.expression(),
-            p_context.body()
+            p_context.plandefinition()
         );
+    }
+
+    @Override
+    public Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
+    {
+        return CAgentSpeak.plandefinition( this, p_context.expression(), p_context.body() );
     }
 
     @Override

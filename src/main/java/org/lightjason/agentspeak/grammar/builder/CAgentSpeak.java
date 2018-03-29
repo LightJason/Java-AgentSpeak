@@ -27,6 +27,8 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -122,14 +124,18 @@ public final class CAgentSpeak
     /**
      * build a plan object
      *
-     * @param p_trigger trigger terminal
+     * @param p_visitor visitor
+     * @param p_annotation annotation
+     * @param p_trigger trigger
+     * @param p_literal plan literal
+     * @param p_definition plan definition
      * @return plan
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IPlan plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                              @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
-                              @Nonnull final List<? extends RuleContext> p_expression, @Nonnull final List<? extends RuleContext> p_body )
+    public static Stream<IPlan> plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                      @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
+                                      @Nonnull final List<? extends RuleContext> p_definition )
     {
         final ITrigger l_trigger = CTrigger.of(
             ITrigger.EType.of( p_trigger.getText() ),
@@ -143,12 +149,29 @@ public final class CAgentSpeak
                                                             .filter( i -> !i.equals( IAnnotation.EMPTY ) )
                                                             .toArray( IAnnotation<?>[]::new );
 
-        // @todo handle body & expression
-        return new CPlan(
-            l_annotation,
-            l_trigger,
-            IExpression.EMPTY,
-            p_body.stream().flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) ).toArray( IExecution[]::new )
+
+        return p_definition.stream()
+                           .map( i -> (Pair<IExpression, IExecution[]>) p_visitor.visit( i ) )
+                           .map( i -> new CPlan( l_annotation, l_trigger, i.getLeft(), i.getRight() ) );
+    }
+
+    /**
+     * build a plan body
+     *
+     * @param p_visitor visitor
+     * @param p_expression expression
+     * @param p_body body
+     * @return pair of expression and body
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Pair<IExpression, IExecution[]> plandefinition( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                                                  @Nullable final RuleContext p_expression, @Nonnull final RuleContext p_body )
+    {
+        return new ImmutablePair<>(
+            Objects.nonNull( p_expression )
+            ? (IExpression) p_visitor.visit( p_expression )
+            : IExpression.EMPTY,
+            ( (Stream<IExecution>) p_visitor.visit( p_body ) ).toArray( IExecution[]::new )
         );
     }
 

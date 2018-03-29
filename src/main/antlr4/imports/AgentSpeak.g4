@@ -48,8 +48,15 @@ plan :
     ANNOTATION*
     PLANTRIGGER
     literal
-    ( ( COLON expression )? LEFTARROW body )+
+    plandefinition+
     DOT
+    ;
+
+/**
+ * plan definition
+ */
+plandefinition :
+    ( COLON expression )? LEFTARROW body
     ;
 
 /**
