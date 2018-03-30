@@ -94,8 +94,20 @@ public final class CRaw
     @Nonnull
     public static String stringvalue( @Nonnull final TerminalNode p_value )
     {
+        return cleanstring( p_value.getText() );
+    }
+
+    /**
+     * clean string
+     *
+     * @param p_value string value
+     * @return cleaned string
+     */
+    @Nonnull
+    public static String cleanstring( @Nonnull final String p_value )
+    {
         // on a string the single- and double-quotes must be removed
-        return p_value.getText().length() < 3 ? "" : p_value.getText().substring( 1, p_value.getText().length() - 1 );
+        return p_value.length() < 3 ? "" : p_value.substring( 1, p_value.length() - 1 );
     }
 
 }

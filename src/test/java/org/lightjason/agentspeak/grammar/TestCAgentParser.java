@@ -82,17 +82,6 @@ public final class TestCAgentParser extends IBaseGrammarTest
     }
 
     /**
-     * test plan description
-     *
-     * @throws Exception thrown on stream and parser error
-     */
-    @Test
-    public final void testplandescription() throws Exception
-    {
-
-    }
-
-    /**
      * test success and fail plan
      *
      * @throws Exception thrown on stream and parser error
@@ -101,9 +90,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
-                                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                                "+!mainsuccess <- success. +!mainfail <- fail."
-                                            ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!mainsuccess <- success. +!mainfail <- fail."
+        ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
         Assert.assertEquals( 2, l_plans.size() );
 
@@ -131,9 +120,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
-                                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                            "+!mainsuccess <- fail << fail << success. +!mainfail <- fail << fail."
-                                            ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!mainsuccess <- fail << fail << success. +!mainfail <- fail << fail."
+        ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
         Assert.assertEquals( 2, l_plans.size() );
 
@@ -161,9 +150,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void deconstructsimple() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!mainsuccess <- [X|Y] =.. foo(123)."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!mainsuccess <- [X|Y] =.. foo(123)."
+        );
 
         final IVariable<?> l_xvar = new CVariable<>( "X" );
         final IVariable<?> l_yvar = new CVariable<>( "Y" );
@@ -175,7 +164,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertEquals( "foo", l_xvar.raw() );
         Assert.assertTrue( l_yvar.toString(), ( l_yvar.raw() instanceof List<?> ) && ( l_yvar.<List<?>>raw().size() == 1 ) );
-        Assert.assertEquals( 123.0, l_yvar.<List<Number>>raw().get( 0 ) );
+        Assert.assertEquals( 123.0, l_yvar.<List<?>>raw().get( 0 ) );
     }
 
     /**
@@ -187,9 +176,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void numberexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- R = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- R = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3."
+        );
 
         final IVariable<?> l_resultvar = new CVariable<>( "R" );
 
@@ -210,9 +199,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void numbervariableexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- W = A * 2 - B * ( 3 + C ) + 2 ** D."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- W = A * 2 - B * ( 3 + C ) + 2 ** D."
+        );
 
         final Random l_random = new Random();
 
@@ -249,9 +238,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void constantexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- O = pi * euler + gravity."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- O = pi * euler + gravity."
+        );
 
         final IVariable<?> l_result = new CVariable<>( "O" );
 
@@ -276,9 +265,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void ternarytrue() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- P = 3 < 5 ? euler : pi."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- P = 3 < 5 ? euler : pi."
+        );
 
         final IVariable<?> l_result = new CVariable<>( "P" );
 
@@ -299,9 +288,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void ternaryfalse() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- N = 5 < 3 ? boltzmann : lightspeed."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- N = 5 < 3 ? boltzmann : lightspeed."
+        );
 
         final IVariable<?> l_result = new CVariable<>( "N" );
 
@@ -323,9 +312,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void multipleplanitems() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-                                "+!items <- N = 'test'; P = 5; C = fail."
-                            );
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!items <- N = 'test'; P = 5; C = fail."
+        );
 
         final IVariable<?> l_nvar = new CVariable<>( "N" );
         final IVariable<?> l_pvar = new CVariable<>( "P" );
@@ -339,5 +328,21 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertEquals( "test", l_nvar.raw() );
         Assert.assertEquals( 5.0, l_pvar.<Number>raw() );
         Assert.assertEquals( false, l_cvar.raw() );
+    }
+
+    /**
+     * test plan description
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void plandescription() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "@description('a long plan description') +!description <- success."
+        );
+
+        Assert.assertEquals( "a long plan description", l_plan.description() );
     }
 }

@@ -46,6 +46,7 @@ public abstract class IBaseGrammarTest extends IBaseTest
      * @return single plan
      * @throws Exception is thrown on any parser error
      */
+    @Nonnull
     protected static <T extends IASTVisitorAgentSpeak> IPlan parsesingleplan( @Nonnull final IParser<T> p_parser,
                                                                               @Nonnull final String p_source ) throws Exception
     {
@@ -67,6 +68,7 @@ public abstract class IBaseGrammarTest extends IBaseTest
      * @return plan stream
      * @throws Exception is thrown on any parser error
      */
+    @Nonnull
     protected static <T extends IASTVisitorAgentSpeak> Stream<IPlan> parsemultipleplans( @Nonnull final IParser<T> p_parser,
                                                                                          @Nonnull final String p_source ) throws Exception
     {

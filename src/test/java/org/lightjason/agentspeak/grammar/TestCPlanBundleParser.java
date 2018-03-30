@@ -74,11 +74,10 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     @Test
     public final void successfailplan() throws Exception
     {
-        final Map<ILiteral, IPlan> l_plans = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
-                                                .parse( streamfromstring(  "+!testsuccess <- success. +!testfail <- fail." ) )
-                                                .plans()
-                                                .stream()
-                                                .collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
+        final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!testsuccess <- success. +!testfail <- fail."
+        ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
         Assert.assertEquals( 2, l_plans.size() );
 
@@ -106,9 +105,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
-                                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                        "+!threesuccess <- fail << fail << success. +!twofail <- fail << fail."
-                                            ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!threesuccess <- fail << fail << success. +!twofail <- fail << fail."
+        ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
         Assert.assertEquals( 2, l_plans.size() );
 
@@ -136,9 +135,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void deconstructsimple() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!mainsuccess <- [A|B] =.. bar('test')."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!mainsuccess <- [A|B] =.. bar('test')."
+        );
 
         final IVariable<?> l_avar = new CVariable<>( "A" );
         final IVariable<?> l_bvar = new CVariable<>( "B" );
@@ -150,7 +149,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertEquals( "bar", l_avar.raw() );
         Assert.assertTrue( l_bvar.toString(), ( l_bvar.raw() instanceof List<?> ) && ( l_bvar.<List<?>>raw().size() == 1 ) );
-        Assert.assertEquals( "test", l_bvar.<List<Number>>raw().get( 0 ) );
+        Assert.assertEquals( "test", l_bvar.<List<?>>raw().get( 0 ) );
     }
 
     /**
@@ -162,9 +161,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void numberexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- X = 5 + 4 * 3 + 1 - ( 3 + 1 ) * 2 + 2 ** 2 * 3."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- X = 5 + 4 * 3 + 1 - ( 3 + 1 ) * 2 + 2 ** 2 * 3."
+        );
 
         final IVariable<?> l_xvar = new CVariable<>( "X" );
 
@@ -185,9 +184,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void numbervariableexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- Z = A * 3 - B * ( 5 + C ) + 4.2 ** D."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- Z = A * 3 - B * ( 5 + C ) + 4.2 ** D."
+        );
 
         final Random l_random = new Random();
 
@@ -224,9 +223,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void constantexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- S = electron * boltzmann * lightspeed."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- S = electron * boltzmann * lightspeed."
+        );
 
         final IVariable<?> l_result = new CVariable<>( "S" );
 
@@ -251,9 +250,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void ternarytrue() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- T = 3 < 5 ? gravity : positiveinfinity."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- T = 3 < 5 ? gravity : positiveinfinity."
+        );
 
         final IVariable<?> l_result = new CVariable<>( "T" );
 
@@ -274,9 +273,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void ternaryfalse() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!calculate <- V = 5 < 3 ? negativeinfinity : minimumvalue."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- V = 5 < 3 ? negativeinfinity : minimumvalue."
+        );
 
         final IVariable<?> l_result = new CVariable<>( "V" );
 
@@ -297,9 +296,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void multipleplanitems() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-                                new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-                                "+!items <- N = 'foo'; P = 'bar'; C = success."
-                            );
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!items <- N = 'foo'; P = 'bar'; C = success."
+        );
 
         final IVariable<?> l_nvar = new CVariable<>( "N" );
         final IVariable<?> l_pvar = new CVariable<>( "P" );
@@ -313,5 +312,21 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         Assert.assertEquals( "foo", l_nvar.raw() );
         Assert.assertEquals( "bar", l_pvar.raw() );
         Assert.assertEquals( true, l_cvar.raw() );
+    }
+
+    /**
+     * test plan description
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void plandescription() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "@description('a long plan description') +!description <- success."
+        );
+
+        Assert.assertEquals( "a long plan description", l_plan.description() );
     }
 }

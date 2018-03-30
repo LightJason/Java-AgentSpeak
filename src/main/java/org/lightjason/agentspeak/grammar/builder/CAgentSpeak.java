@@ -106,7 +106,7 @@ public final class CAgentSpeak
     /**
      * regular pattern for matching annotation description values
      */
-    private static final Pattern ANNOTATIONDESCRIPTION = Pattern.compile( ".+\\(.+\\)" );
+    private static final Pattern ANNOTATIONDESCRIPTION = Pattern.compile( "\\(.+\\)" );
 
     /**
      * ctor
@@ -225,7 +225,7 @@ public final class CAgentSpeak
             if ( !l_match.find() )
                 return IAnnotation.EMPTY;
 
-            return new CDescriptionAnnotation( l_match.group( 1 ).replace( "'", "" ).replace( "\"", "" ) );
+            return new CDescriptionAnnotation( CRaw.cleanstring( l_match.group( 0 ).replaceAll( "\\(|\\)", "" ) ) );
         }
 
         // on a constant annoation object, the data and name must be split at the comma,
@@ -236,7 +236,7 @@ public final class CAgentSpeak
             if ( !l_match.find() )
                 return IAnnotation.EMPTY;
 
-            final String l_data = l_match.group( 2 ).replace( "'", "" ).replace( "\"", "" );
+            final String l_data = CRaw.cleanstring( l_match.group( 2 ) );
             try
             {
                 return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), CRaw.numbervalue( l_data ) );

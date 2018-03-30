@@ -55,7 +55,6 @@ public final class CTerm
      */
     private CTerm()
     {
-
     }
 
     /**
