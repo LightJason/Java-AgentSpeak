@@ -44,7 +44,7 @@
  * test webservice via json list
  **/
 +!testjsonlist <-
-    GH = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
+    GH = .web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
     +rest-service( GH )
 .
 
@@ -53,7 +53,7 @@
  * test webservice via json object
  **/
 +!testjsonobject <-
-    GO = web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
+    GO = .web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
     +rest-service( GO )
 .
 
@@ -62,7 +62,7 @@
  * test webservice via xml object
  **/
 +!testxmlobject <-
-    WP = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
+    WP = .web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
     +rest-service( WP )
 .
 
@@ -70,8 +70,8 @@
  * test graphql service with literals
  **/
 +!testgraphqlliteral <-
-    L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" );
-    GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql" );
+    L = allUsers(id, firstName, lastName);
+    GQ = .web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql" );
     +graphql-fake-literal(GQ)
 .
 
@@ -79,7 +79,7 @@
  * test graphql service with native string query
  **/
 +!testgraphqlnative <-
-    GQ = web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql" );
+    GQ = .web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql" );
     +graphql-fake-native(GQ)
 .
 
@@ -88,10 +88,10 @@
  **/
 +rest-service(X) <-
     [_|D] =.. X;
-    D = collection/list/get(D, 0);
+    D = .collection/list/get(D, 0);
     [N] =.. D;
 
-    test/result( bool/or( bool/equal( N, "elements" ), bool/equal( N, "schemalocation" ), bool/equal( N, "location" ) ) )
+    .test/result( .bool/or( .bool/equal( N, "elements" ), .bool/equal( N, "schemalocation" ), .bool/equal( N, "location" ) ) )
 .
 
 /**
@@ -99,12 +99,12 @@
  **/
 +graphql-fake-literal(X) <-
     [_|D] =.. X;
-    D = collection/list/get(D, 0);
+    D = .collection/list/get(D, 0);
     [N|M] =.. D;
-    M = collection/list/get(M, 0);
+    M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
-    test/result( bool/and( bool/equal( N, "data" ), bool/equal( L, "allusers" ) ) )
+    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "allusers" ) ) )
 .
 
 /**
@@ -113,10 +113,10 @@
 +graphql-fake-native(X) <-
     generic/print(X);
     [_|D] =.. X;
-    D = collection/list/get(D, 0);
+    D = .collection/list/get(D, 0);
     [N|M] =.. D;
-    M = collection/list/get(M, 0);
+    M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
-    test/result( bool/and( bool/equal( N, "data" ), bool/equal( L, "product" ) ) )
+    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "product" ) ) )
 .

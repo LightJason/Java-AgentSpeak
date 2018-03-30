@@ -60,12 +60,12 @@ foo(blub(1),hello("test")).
  * test date / time
  */
 +!testdatetime <-
-    [Hour | Minute | Second | Nano ] = datetime/time();
-    [Year | Month | Day | DayOfWeek | DayOfYear] = datetime/date();
-    Zone = datetime/zoneid();
-    generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear, "--", Zone);
+    [Hour | Minute | Second | Nano ] = .datetime/time();
+    [Year | Month | Day | DayOfWeek | DayOfYear] = .datetime/date();
+    Zone = .datetime/zoneid();
+    .generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear, "--", Zone);
 
-    test/result( success )
+    .test/result( success )
 .
 
 
@@ -73,12 +73,12 @@ foo(blub(1),hello("test")).
  * test boolean operator
  */
 +!testbool <-
-    BAnd = bool/and( true, false, true );
+    BAnd = .bool/and( true, false, true );
     BAnd = ~BAnd;
-    test/result( BAnd, "bool-and has been failed" );
+    .test/result( BAnd, "bool-and has been failed" );
 
-    test/result( bool/or( true, false, false ), "bool-or has been failed" );
-    test/result( bool/xor( true, false, true, false ), "bool-xor has been failed" )
+    .test/result( .bool/or( true, false, false ), "bool-or has been failed" );
+    .test/result( .bool/xor( true, false, true, false ), "bool-xor has been failed" )
 .
 
 
@@ -86,23 +86,23 @@ foo(blub(1),hello("test")).
  * test string
  */
 +!teststring <-
-    SBase64 = string/base64encode( "Base64 encoded string" );
-    test/result( bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
+    SBase64 = .string/base64encode( "Base64 encoded string" );
+    .test/result( bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
 
-    SReverse = string/reverse( "abcdefg" );
-    test/result( bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
+    SReverse = .string/reverse( "abcdefg" );
+    .test/result( bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
 
-    SUpper = string/upper("AbCdefg");
-    test/result( bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
+    SUpper = .string/upper("AbCdefg");
+    .test/result( bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
 
-    SLower = string/lower("AbCdefg");
-    test/result( bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
+    SLower = .string/lower("AbCdefg");
+    .test/result( bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
 
-    SReplace = string/replace( "1", "-", "a1b1defg1xyz1ui" );
-    test/result( bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
+    SReplace = .string/replace( "1", "-", "a1b1defg1xyz1ui" );
+    .test/result( bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
 
-    SRand = string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
-    generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand )
+    SRand = .string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
+    .generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand )
 .
 
 
@@ -112,48 +112,48 @@ foo(blub(1),hello("test")).
 +!testunification <-
         // unify default
         >>hello( UN1 );
-        generic/print( "first unification", UN1 );
-        test/result( bool/equal( UN1, 123 ), "first unification has been failed" );
+        .generic/print( "first unification", UN1 );
+        .test/result( .bool/equal( UN1, 123 ), "first unification has been failed" );
 
         // unify subitem
         >>foo( blub(1), hello( UN2 ) );
-        generic/print( "second unification", UN2 );
-        test/result( bool/equal( UN2, "test" ), "second unification has been failed" );
+        .generic/print( "second unification", UN2 );
+        .test/result( .bool/equal( UN2, "test" ), "second unification has been failed" );
 
         // unify two items
         >>foo( blub( UN3a ), hello( UN3b ) );
-        generic/print( "third unification", UN3a, UN3b );
-        test/result( bool/equal( UN3a, 1 ), "third unification first part has been failed" );
-        test/result( bool/equal( UN3b, "test" ), "third unification second part has been failed" );
+        .generic/print( "third unification", UN3a, UN3b );
+        .test/result( .bool/equal( UN3a, 1 ), "third unification first part has been failed" );
+        .test/result( .bool/equal( UN3b, "test" ), "third unification second part has been failed" );
 
         // unify by parsing literal
-        Literal = generic/type/parseliteral( "foo(12345)" );
+        Literal = foo(12345);
         >>( foo(UN4), Literal );
-        generic/print( "forth unification", UN4 );
-        test/result( bool/equal( UN4, 12345 ), "forth unification has been failed" );
+        .generic/print( "forth unification", UN4 );
+        .test/result( .bool/equal( UN4, 12345 ), "forth unification has been failed" );
 
         // recursive unification
         >>foo( UN5a, UN5b );
-        generic/print( "fifth unification", UN5a, UN5b );
-        test/result( bool/equal( generic/type/tostring(UN5a), "blub[1.0]" ), "fifth unification first part has been failed" );
-        test/result( bool/equal( generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
+        .generic/print( "fifth unification", UN5a, UN5b );
+        .test/result( .bool/equal( .generic/type/tostring(UN5a), "blub[1.0]" ), "fifth unification first part has been failed" );
+        .test/result( .bool/equal( .generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
 
 
         // unify with expression
-        >>( hello( UN6 ), generic/type/isstring(UN6) );
-        generic/print( "sixth unification", UN6 );
-        test/result( bool/equal( UN6, "foo" ), "sixth unification has been failed" );
+        >>( hello( UN6 ), .generic/type/isstring(UN6) );
+        .generic/print( "sixth unification", UN6 );
+        .test/result( .bool/equal( UN6, "foo" ), "sixth unification has been failed" );
 
         // parallel unfiy with expression
-        @>>( hello( UN7 ), generic/type/isnumeric(UN7) && (UN7 > 1000) );
-        generic/print( "seventh unification", UN7 );
-        test/result( bool/equal( UN7, 1111 ), "seventh unification has been failed" );
+        @>>( hello( UN7 ), .generic/type/isnumeric(UN7) && (UN7 > 1000) );
+        .generic/print( "seventh unification", UN7 );
+        .test/result( .bool/equal( UN7, 1111 ), "seventh unification has been failed" );
 
         // failing unify
         >>notexist( UN8 ) << true;
-        generic/type/isnull( UN8 );
-        generic/print( "eighth unification successful" );
-        test/result( success, "eighth unification has been failed" );
+        .generic/type/isnull( UN8 );
+        .generic/print( "eighth unification successful" );
+        .test/result( success, "eighth unification has been failed" );
 
         !unifyany
 .
@@ -164,11 +164,11 @@ foo(blub(1),hello("test")).
  */
 +!unifyany
     : >>hello(X) <-
-        generic/print( "first unifyany:", X );
-        test/result( bool/equal( X, 123 ), "first unifyany failed" )
+        .generic/print( "first unifyany:", X );
+        .test/result( .bool/equal( X, 123 ), "first unifyany failed" )
     : ~>>foobar( _ ) <-
-        generic/print( "second unifyany" );
-        test/result( success )
+        .generic/print( "second unifyany" );
+        .test/result( success )
 .
 
 
@@ -178,40 +178,40 @@ foo(blub(1),hello("test")).
  */
 +!testdeconstruct <-
         [O|P] =.. foo( blub(1), blah(3) );
-        generic/print("first deconstruct", O, P);
-        test/result( bool/equal( O, "foo" ), "first deconstruct has been failed" );
+        .generic/print("first deconstruct", O, P);
+        .test/result( .bool/equal( O, "foo" ), "first deconstruct has been failed" );
 
         [H|I] = P;
         [A|C] =.. H;
         [B|D] =.. I;
 
-        generic/print("second deconstruct", H, I, A, C, B, D);
+        .generic/print("second deconstruct", H, I, A, C, B, D);
 
-        test/result( bool/equal( A, "blub" ), "second deconstruct has been failed" );
-        test/result( bool/equal( B, "blah" ), "third deconstruct has been failed" );
+        .test/result( .bool/equal( A, "blub" ), "second deconstruct has been failed" );
+        .test/result( .bool/equal( B, "blah" ), "third deconstruct has been failed" );
 
-        test/result( bool/equal( collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
-        test/result( bool/equal( collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
+        .test/result( .bool/equal( .collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
+        .test/result( .bool/equal( .collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
 
-        generic/print("deconstruct executed completly")
+        .generic/print("deconstruct executed completly")
 .
 
 /**
  * test lambda expression
  */
 +!testlambda <-
-    L = collection/list/range(1, 20);
-    (L) -> Y : generic/print( "lambda value", Y);
+    L = .collection/list/range(1, 20);
+    (L) -> Y : .generic/print( "lambda value", Y);
 
     @(L) -> Y | R : R = Y+1;
-    generic/print("lambda return", R);
+    .generic/print("lambda return", R);
 
-    BL = agent/belieflist( "hallo" );
-    (BL) -> Y : generic/print( "lambda belief items", Y);
+    BL = .agent/belieflist( "hallo" );
+    (BL) -> Y : .generic/print( "lambda belief items", Y);
 
 
-    PL = agent/planlist();
-    (PL) -> Y : generic/print( "lambda plan items", Y);
+    PL = .agent/planlist();
+    (PL) -> Y : .generic/print( "lambda plan items", Y);
 
-    test/result( success )
+    .test/result( success )
 .
