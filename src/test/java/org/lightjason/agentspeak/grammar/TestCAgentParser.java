@@ -31,15 +31,18 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -344,5 +347,44 @@ public final class TestCAgentParser extends IBaseGrammarTest
         );
 
         Assert.assertEquals( "a long plan description", l_plan.description() );
+    }
+
+    /**
+     * test multiple plan execution
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void multipleplanexecution() throws Exception
+    {
+        final IPlan[] l_plans = parsemultipleplans(
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!multi(X) : X > 5 <- Y = X + 3 : X <= 5 <- Y = X * 3."
+        ).toArray( IPlan[]::new );
+
+        final IVariable<?> l_var = new CVariable<>( "Y" );
+
+        Assert.assertArrayEquals(
+            Stream.of(
+                11.0,
+                6.0
+            ).toArray(),
+
+            Stream.of(
+                new CVariable<>( "X" ).set( 8 ),
+                new CVariable<>( "X" ).set( 2 )
+            )
+                  .map( i -> new CLocalContext( i, l_var ) )
+                  .map( i -> Arrays.stream( l_plans )
+                                   .filter( j -> j.condition( i ).value() )
+                                   .map( j -> j.execute( false, i, Collections.emptyList(), Collections.emptyList() ) )
+                                   .filter( IFuzzyValue::value )
+                                   .findFirst()
+                                   .map( j -> l_var )
+                                   .get()
+                  )
+                  .map( i -> l_var.raw() )
+                  .toArray()
+        );
     }
 }
