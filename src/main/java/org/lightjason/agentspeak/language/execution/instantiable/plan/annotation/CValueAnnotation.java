@@ -57,7 +57,7 @@ public final class CValueAnnotation<T> extends IBaseAnnotation<T>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}({1}, {1})", m_type, m_name, m_value );
+        return MessageFormat.format( "{0}({1}, {2})", m_type, m_name, m_value );
     }
 
     @Override

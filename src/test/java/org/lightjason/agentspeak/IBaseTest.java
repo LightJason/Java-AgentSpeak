@@ -42,6 +42,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -61,6 +63,48 @@ public abstract class IBaseTest
      * enable printing of test-data
      */
     protected static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
+
+    /**
+     * returns a class property
+     *
+     * @param p_name name
+     * @param p_object object
+     * @tparam N return type
+     * @return value of the field
+     *
+     * @throws NoSuchFieldException is thrown if field does not exists
+     * @throws IllegalAccessException is thrown if field cannot be read
+     */
+    @Nullable
+    @SuppressWarnings( "unchecked" )
+    protected static <N> N property( @Nonnull final String p_name, @Nonnull final Object p_object ) throws NoSuchFieldException, IllegalAccessException
+    {
+
+        final Field l_field = fields( p_object.getClass() )
+                                .filter( i -> i.getName().equals( p_name ) )
+                                .findFirst()
+                                .orElseThrow( IllegalArgumentException::new );
+        l_field.setAccessible( true );
+        return (N) l_field.get( p_object );
+    }
+
+    /**
+     * stream of all class fields
+     *
+     * @param p_class class or null
+     * @return field stream
+     */
+    @Nonnull
+    private static Stream<Field> fields( @Nullable final Class<?> p_class )
+    {
+        if ( Objects.isNull( p_class ) )
+            return Stream.empty();
+
+        return Stream.concat(
+            Arrays.stream( p_class.getDeclaredFields() ),
+            fields( p_class.getSuperclass() )
+        );
+    }
 
     /**
      * creates a stream of a string value

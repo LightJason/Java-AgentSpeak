@@ -28,19 +28,16 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,11 +55,22 @@ public abstract class IBaseInstantiable implements IInstantiable
      * action list
      */
     protected final IExecution[] m_execution;
-
     /**
-     * map with annotation (enum value for getting annotation object)
+     * description
      */
-    protected final Map<IAnnotation.EType, IAnnotation<?>> m_annotation;
+    protected final String m_description;
+    /**
+     * parallel execution
+     */
+    protected final boolean m_parallel;
+    /**
+     * atomic execution
+     */
+    protected final boolean m_atomic;
+    /**
+     * constants
+     */
+    protected final IVariable<?>[] m_constant;
     /**
      * hash code
      */
@@ -80,15 +88,29 @@ public abstract class IBaseInstantiable implements IInstantiable
     {
         m_hash = p_hash;
         m_execution = p_execution;
-        m_annotation = Collections.unmodifiableMap( Arrays.stream( p_annotation ).collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
+
+        m_description = Arrays.stream( p_annotation )
+                              .parallel()
+                              .filter( i -> IAnnotation.EType.DESCRIPTION.equals( i.id() ) )
+                              .findFirst()
+                              .map( i -> i.value().toString() )
+                              .orElse( "" );
+
+        m_constant = Arrays.stream( p_annotation )
+                           .parallel()
+                           .filter( i -> IAnnotation.EType.CONSTANT.equals( i.id() ) )
+                           .flatMap( IAnnotation::variables )
+                           .toArray( IVariable<?>[]::new );
+
+        m_parallel = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.PARALLEL.equals( i.id() ) );
+        m_atomic = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.ATOMIC.equals( i.id() ) );
     }
 
     @Nonnull
     @Override
     public final String description()
     {
-        final String l_description = m_annotation.getOrDefault( IAnnotation.EType.DESCRIPTION, IAnnotation.EMPTY ).value();
-        return Objects.isNull( l_description ) ? "" : l_description;
+        return m_description;
     }
 
     @Override
@@ -126,11 +148,11 @@ public abstract class IBaseInstantiable implements IInstantiable
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        final List<IFuzzyValue<Boolean>> l_result = m_annotation.containsKey( IAnnotation.EType.PARALLEL )
+        final List<IFuzzyValue<Boolean>> l_result = m_parallel
                                                     ? this.executeparallel( p_context )
                                                     : this.executesequential( p_context );
         // if atomic flag if exists use this for return value
-        return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
+        return m_atomic
                ? CFuzzyValue.of( true )
                : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
     }

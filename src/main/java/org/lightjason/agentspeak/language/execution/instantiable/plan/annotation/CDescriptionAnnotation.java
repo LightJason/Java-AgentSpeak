@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.execution.instantiable.plan.annotatio
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.stream.Stream;
 
 
@@ -43,6 +44,24 @@ public final class CDescriptionAnnotation extends IBaseAnnotation<String>
     public CDescriptionAnnotation( @Nonnull final String p_value )
     {
         super( EType.DESCRIPTION, p_value );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_type.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_type, m_value );
     }
 
     @Nonnull

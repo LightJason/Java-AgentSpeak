@@ -29,11 +29,11 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -144,9 +145,16 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final String toString()
     {
         return MessageFormat.format(
-            "{0} ({1} | {2}{3} ==>> {4})",
+            "{0} ({1} {2} {3} {4} | {5}{6} ==>> {7})",
             super.toString(),
-            m_annotation.values(),
+
+            m_parallel ? IAnnotation.EType.PARALLEL : "",
+            m_atomic ? IAnnotation.EType.ATOMIC : "",
+            Arrays.stream( m_constant )
+                  .map( i -> MessageFormat.format( "{0}({1},{2})", IAnnotation.EType.CONSTANT, i.functor(), i.raw() ) )
+                  .collect( Collectors.joining( " " ) ),
+            m_description.isEmpty() ? "" : MessageFormat.format( "{0}({1})", IAnnotation.EType.DESCRIPTION, m_description ),
+
             m_triggerevent,
             Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),
             StringUtils.join( m_execution, "; " )
@@ -160,7 +168,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         return CCommon.streamconcatstrict(
             m_condition.variables(),
             super.variables(),
-            m_annotation.values().stream().flatMap( IAnnotation::variables ),
+            Arrays.stream( m_constant ),
             CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
         );
     }

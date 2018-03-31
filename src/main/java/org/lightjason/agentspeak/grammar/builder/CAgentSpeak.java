@@ -102,7 +102,7 @@ public final class CAgentSpeak
     /**
      * regular pattern for matching annotation constant values
      */
-    private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( ".+\\(.+,.+\\)" );
+    private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( "\\(.+,.+\\)" );
     /**
      * regular pattern for matching annotation description values
      */
@@ -236,14 +236,14 @@ public final class CAgentSpeak
             if ( !l_match.find() )
                 return IAnnotation.EMPTY;
 
-            final String l_data = CRaw.cleanstring( l_match.group( 2 ) );
+            final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
             try
             {
-                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), CRaw.numbervalue( l_data ) );
+                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_data[0], CRaw.numbervalue( l_data[1] ) );
             }
             catch ( final NumberFormatException l_exception )
             {
-                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_match.group( 1 ), l_data );
+                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_data[0], CRaw.cleanstring( l_data[1] ) );
             }
         }
 
