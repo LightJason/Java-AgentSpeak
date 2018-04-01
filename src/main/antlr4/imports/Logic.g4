@@ -30,6 +30,7 @@ import Terminal;
  */
 term :
     value
+    | valuelist
     | literal
 
     | execute_action
@@ -45,6 +46,15 @@ value :
     | NUMBER
     | STRING
     | variable
+    ;
+
+/**
+ * value list
+ */
+valuelist :
+    LEFTANGULARBRACKET
+    value ( COMMA value )*
+    RIGHTANGULARBRACKET
     ;
 
 /**
