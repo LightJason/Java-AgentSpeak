@@ -29,16 +29,22 @@ import Terminal;
  * terms are non-predictable structures
  */
 term :
-    LOGICALVALUE
-    | NUMBER
-    | STRING
-
-    | variable
+    value
     | literal
 
     | execute_action
     | execute_rule
     | execute_variable
+    ;
+
+/**
+ * value
+ */
+value :
+    LOGICALVALUE
+    | NUMBER
+    | STRING
+    | variable
     ;
 
 /**

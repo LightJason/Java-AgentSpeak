@@ -122,15 +122,32 @@ public final class CTerm
      * build term
      *
      * @param p_visitor visitor
-     * @param p_string string
-     * @param p_number number
-     * @param p_logic logical value
-     * @param p_rules other rules
+     * @param p_rules rules
      * @return term
      */
     @Nonnull
-    public static Object term( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
-                               @Nullable final TerminalNode p_logic, @Nonnull final RuleContext... p_rules )
+    public static Object term( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext... p_rules )
+    {
+        return Arrays.stream( p_rules )
+                     .filter( Objects::nonNull )
+                     .findFirst()
+                     .map( p_visitor::visit )
+                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
+    }
+
+    /**
+     * build value
+     *
+     * @param p_visitor visitor
+     * @param p_string string
+     * @param p_number number
+     * @param p_logic logical value
+     * @param p_rules any rule
+     * @return term value
+     */
+    @Nonnull
+    public static Object value( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
+                                @Nullable final TerminalNode p_logic, @Nonnull final RuleContext... p_rules )
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
         if ( Objects.nonNull( l_terminal ) )
@@ -142,6 +159,7 @@ public final class CTerm
                      .map( p_visitor::visit )
                      .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
     }
+
 
 
     /**

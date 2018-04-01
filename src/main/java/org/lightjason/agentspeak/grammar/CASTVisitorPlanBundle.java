@@ -418,16 +418,25 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CTerm.term(
             this,
 
-            p_context.STRING(),
-            p_context.NUMBER(),
-            p_context.LOGICALVALUE(),
+            p_context.value(),
+            p_context.literal(),
 
             p_context.execute_action(),
             p_context.execute_rule(),
-            p_context.execute_variable(),
+            p_context.execute_variable()
+        );
+    }
 
-            p_context.variable(),
-            p_context.literal()
+    @Override
+    public final Object visitValue( final PlanBundleParser.ValueContext p_context )
+    {
+        return CTerm.value(
+            this,
+
+            p_context.STRING(),
+            p_context.NUMBER(),
+            p_context.LOGICALVALUE(),
+            p_context.variable()
         );
     }
 
