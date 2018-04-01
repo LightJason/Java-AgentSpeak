@@ -418,7 +418,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CTerm.term(
             this,
 
-            p_context.value(),
+            p_context.termvalue(),
             p_context.literal(),
 
             p_context.execute_action(),
@@ -428,9 +428,9 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public final Object visitValue( final PlanBundleParser.ValueContext p_context )
+    public final Object visitTermvalue( final PlanBundleParser.TermvalueContext p_context )
     {
-        return CTerm.value(
+        return CTerm.termvalue(
             this,
 
             p_context.STRING(),
@@ -438,6 +438,12 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             p_context.LOGICALVALUE(),
             p_context.variable()
         );
+    }
+
+    @Override
+    public final Object visitValuelist( final PlanBundleParser.ValuelistContext p_context )
+    {
+        return CTerm.termvaluelist( this, p_context.termvalue() );
     }
 
     @Override

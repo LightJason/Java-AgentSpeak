@@ -146,8 +146,8 @@ public final class CTerm
      * @return term value
      */
     @Nonnull
-    public static Object value( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
-                                @Nullable final TerminalNode p_logic, @Nonnull final RuleContext... p_rules )
+    public static Object termvalue( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
+                                    @Nullable final TerminalNode p_logic, @Nonnull final RuleContext... p_rules )
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
         if ( Objects.nonNull( l_terminal ) )
@@ -160,7 +160,18 @@ public final class CTerm
                      .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
     }
 
-
+    /**
+     * build term value list
+     *
+     * @param p_visitor visitor
+     * @param p_termvalue term list
+     * @return termlist object
+     */
+    @Nonnull
+    public static ITerm termvaluelist( @Nonnull final ParseTreeVisitor<?> p_visitor, final @Nonnull List<? extends RuleContext> p_termvalue )
+    {
+        return null;
+    }
 
     /**
      * build termlist

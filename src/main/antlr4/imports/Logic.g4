@@ -29,7 +29,7 @@ import Terminal;
  * terms are non-predictable structures
  */
 term :
-    value
+    termvalue
     | valuelist
     | literal
 
@@ -41,7 +41,7 @@ term :
 /**
  * value
  */
-value :
+termvalue :
     LOGICALVALUE
     | NUMBER
     | STRING
@@ -53,7 +53,7 @@ value :
  */
 valuelist :
     LEFTANGULARBRACKET
-    value ( COMMA value )*
+    termvalue ( COMMA termvalue )*
     RIGHTANGULARBRACKET
     ;
 
