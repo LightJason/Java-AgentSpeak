@@ -60,7 +60,7 @@ foo(blub(1),hello("test")).
  * test date / time
  */
 +!testdatetime <-
-    [Hour | Minute | Second | Nano ] = .datetime/time();
+    [Hour | Minute | Second | Nano ] = .datetime/time;
     [Year | Month | Day | DayOfWeek | DayOfYear] = .datetime/date();
     Zone = .datetime/zoneid();
     .generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear, "--", Zone);

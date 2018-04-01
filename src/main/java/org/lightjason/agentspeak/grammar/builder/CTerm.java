@@ -142,22 +142,16 @@ public final class CTerm
      * @param p_string string
      * @param p_number number
      * @param p_logic logical value
-     * @param p_rules any rule
-     * @return term value
+     * @return term value or null
      */
-    @Nonnull
+    @Nullable
     public static Object termvalue( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
-                                    @Nullable final TerminalNode p_logic, @Nonnull final RuleContext... p_rules )
+                                    @Nullable final TerminalNode p_logic )
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
-        if ( Objects.nonNull( l_terminal ) )
-            return CRawTerm.of( l_terminal );
-
-        return Arrays.stream( p_rules )
-                     .filter( Objects::nonNull )
-                     .findFirst()
-                     .map( p_visitor::visit )
-                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
+        return Objects.nonNull( l_terminal )
+               ? CRawTerm.of( l_terminal )
+               : null;
     }
 
     /**

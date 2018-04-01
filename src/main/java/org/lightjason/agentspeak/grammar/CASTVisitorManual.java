@@ -65,6 +65,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
             this,
 
             p_context.termvalue(),
+            p_context.variable(),
             p_context.literal(),
 
             p_context.execute_action(),
@@ -81,8 +82,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
 
             p_context.STRING(),
             p_context.NUMBER(),
-            p_context.LOGICALVALUE(),
-            p_context.variable()
+            p_context.LOGICALVALUE()
         );
     }
 

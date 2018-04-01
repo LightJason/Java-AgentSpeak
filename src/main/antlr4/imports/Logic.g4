@@ -31,6 +31,7 @@ import Terminal;
 term :
     termvalue
     | valuelist
+    | variable
     | literal
 
     | execute_action
@@ -45,7 +46,6 @@ termvalue :
     LOGICALVALUE
     | NUMBER
     | STRING
-    | variable
     ;
 
 /**

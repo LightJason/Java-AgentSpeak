@@ -140,7 +140,7 @@
  * test statistic
  */
 +!teststatistic <-
-        Statistic = .math/statistic/createstatistic();
+        Statistic = .math/statistic/createstatistic;
         Distribution = .math/statistic/createdistribution( "normal", 20, 100 );
 
         RV = .math/statistic/randomsample( Distribution, 8 );
