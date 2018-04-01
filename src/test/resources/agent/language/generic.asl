@@ -62,7 +62,7 @@ foo(blub(1),hello("test")).
 +!testdatetime <-
     [Hour | Minute | Second | Nano ] = .datetime/time;
     [Year | Month | Day | DayOfWeek | DayOfYear] = .datetime/date;
-    Zone = .datetime/zoneid();
+    Zone = .datetime/zoneid;
     .generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear, "--", Zone);
 
     .test/result( success )

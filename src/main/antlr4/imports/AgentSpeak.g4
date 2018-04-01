@@ -136,6 +136,7 @@ body_formula :
 
 /**
  * belief-action operator
+ * @todo not working correctly
  */
 belief_action :
     ( PLUS | MINUS ) literal
