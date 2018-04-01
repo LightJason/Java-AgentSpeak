@@ -62,7 +62,7 @@ execute_rule :
 execute_variable :
     DOT
     variable
-    ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
+    termlist
     ;
 
 /**
@@ -72,14 +72,14 @@ execute_variable :
 literal :
     ( AT | STRONGNEGATION )?
     ATOM
-    ( LEFTROUNDBRACKET termlist? RIGHTROUNDBRACKET )?
+    termlist?
     ;
 
 /**
  * generic list equal to collcations with empty clause
  */
 termlist :
-    term ( COMMA term )*
+    LEFTROUNDBRACKET term ( COMMA term )* RIGHTROUNDBRACKET
     ;
 
 /**
