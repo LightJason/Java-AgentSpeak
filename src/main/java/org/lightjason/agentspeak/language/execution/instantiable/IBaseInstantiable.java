@@ -52,9 +52,9 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     private static final long serialVersionUID = 8843291880722926104L;
     /**
-     * description
+     * action list
      */
-    protected final String m_description;
+    protected final IExecution[] m_execution;
     /**
      * parallel execution
      */
@@ -64,17 +64,17 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     protected final boolean m_atomic;
     /**
-     * tags
-     */
-    protected final String[] m_tags;
-    /**
-     * action list
-     */
-    protected final IExecution[] m_execution;
-    /**
      * constants
      */
     protected final IVariable<?>[] m_constant;
+    /**
+     * description
+     */
+    private final String m_description;
+    /**
+     * tags
+     */
+    private final String[] m_tags;
     /**
      * hash code
      */

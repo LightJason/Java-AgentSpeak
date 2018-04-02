@@ -131,6 +131,7 @@ public interface IAnnotation<T> extends IAssignable<T>
         CONSTANT( "@constant" ),
         ATOMIC( "@atomic" ),
         PARALLEL( "@parallel" ),
+        VARIABLE( "@variable" ),
         DESCRIPTION( "@description" ),
         TAG( "@tag" ),
         EMPTY( "" );

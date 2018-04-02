@@ -153,7 +153,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             Arrays.stream( m_constant )
                   .map( i -> MessageFormat.format( "{0}({1},{2})", IAnnotation.EType.CONSTANT, i.functor(), i.raw() ) )
                   .collect( Collectors.joining( " " ) ),
-            m_description.isEmpty() ? "" : MessageFormat.format( "{0}({1})", IAnnotation.EType.DESCRIPTION, m_description ),
+            this.description().isEmpty() ? "" : MessageFormat.format( "{0}({1})", IAnnotation.EType.DESCRIPTION, this.description() ),
 
             m_triggerevent,
             Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),

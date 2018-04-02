@@ -102,7 +102,7 @@ public final class CAgentSpeak
     /**
      * regular pattern for matching annotation constant values
      */
-    private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( "\\(.+,.+\\)" );
+    private static final Pattern ANNOTATIONTWOPARAMETER = Pattern.compile( "\\(.+,.+\\)" );
     /**
      * regular pattern for matching annotation string values
      */
@@ -201,6 +201,9 @@ public final class CAgentSpeak
         return new CRulePlaceholder( p_literal );
     }
 
+
+    // --- annotation ------------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * build annotation object
      * @param p_annotation annotation terminal
@@ -213,47 +216,83 @@ public final class CAgentSpeak
             return IAnnotation.EMPTY;
 
         final IAnnotation.EType l_type = IAnnotation.EType.of( p_annotation.getText() );
-
-
-        if ( ( IAnnotation.EType.PARALLEL.equals( l_type ) ) || ( IAnnotation.EType.ATOMIC.equals( l_type ) ) )
-            return new CAtomAnnotation<>( l_type );
-
-        // on a constant annoation object, the data and name must be split at the comma,
-        // the value can be a number value or a string
-        if ( IAnnotation.EType.CONSTANT.equals( l_type ) )
+        switch ( l_type )
         {
-            final Matcher l_match = ANNOTATIONCONSTANT.matcher( p_annotation.getText() );
-            if ( !l_match.find() )
-                return IAnnotation.EMPTY;
+            case PARALLEL:
+            case ATOMIC:
+                return new CAtomAnnotation<>( l_type );
 
-            final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
-            try
-            {
-                return new CValueAnnotation<>( l_type, l_data[0], CRaw.numbervalue( l_data[1] ) );
-            }
-            catch ( final NumberFormatException l_exception )
-            {
-                return new CValueAnnotation<>( l_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
-            }
+            case VARIABLE:
+                return annotationvariable( l_type, p_annotation.getText() );
+
+            case CONSTANT:
+                return annotationconstant( l_type, p_annotation.getText() );
+
+            case TAG :
+            case DESCRIPTION :
+                return annotationdescription( l_type, p_annotation.getText() );
+
+            default:
+                throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownannotation" ) );
         }
-
-        // description annotation with extracted string
-        if ( ( IAnnotation.EType.DESCRIPTION.equals( l_type ) ) || ( IAnnotation.EType.TAG.equals( l_type ) ) )
-        {
-            final Matcher l_match = ANNOTATIONSTRING.matcher( p_annotation.getText() );
-            if ( !l_match.find() )
-                return IAnnotation.EMPTY;
-
-            return new CStringAnnotation(
-                l_type,
-                CRaw.cleanstring( l_match.group( 0 ).replaceAll( "\\(|\\)", "" ) )
-            );
-        }
-
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownannotation" ) );
     }
 
+    /**
+     * build description annotation
+     *
+     * @param p_type annotation type
+     * @param p_value annotation value string
+     * @return annotation
+     */
+    private static IAnnotation<?> annotationdescription( @Nonnull final IAnnotation.EType p_type, @Nonnull final String p_value )
+    {
+        final Matcher l_match = ANNOTATIONSTRING.matcher( p_value );
+        if ( !l_match.find() )
+            return IAnnotation.EMPTY;
 
+        return new CStringAnnotation( p_type, CRaw.cleanstring( l_match.group( 0 ).replaceAll( "\\(|\\)", "" ) ) );
+    }
+
+    /**
+     * build constant annotation
+     *
+     * @param p_type annotation type
+     * @param p_value annotation value string
+     * @return annotation
+     */
+    private static IAnnotation<?> annotationconstant( @Nonnull final IAnnotation.EType p_type, @Nonnull final String p_value )
+    {
+        final Matcher l_match = ANNOTATIONTWOPARAMETER.matcher( p_value );
+        if ( !l_match.find() )
+            return IAnnotation.EMPTY;
+
+        final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
+        try
+        {
+            return new CValueAnnotation<>( p_type, l_data[0], CRaw.numbervalue( l_data[1] ) );
+        }
+        catch ( final NumberFormatException l_exception )
+        {
+            return new CValueAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
+        }
+    }
+
+    /**
+     * build variable description annotation
+     *
+     * @param p_type annotation type
+     * @param p_value annotation value string
+     * @return annotation
+     */
+    private static IAnnotation<?> annotationvariable( @Nonnull final IAnnotation.EType p_type, @Nonnull final String p_value )
+    {
+        final Matcher l_match = ANNOTATIONTWOPARAMETER.matcher( p_value );
+        if ( !l_match.find() )
+            return IAnnotation.EMPTY;
+
+        final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
+        return new CValueAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
+    }
 
 
     // --- execution content -----------------------------------------------------------------------------------------------------------------------------------

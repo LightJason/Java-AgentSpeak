@@ -155,6 +155,7 @@ ANNOTATION :
     AT
     (
         ANNOTATION_CONSTANT
+        | ANNOTATION_VARIABLEDESCRIPTION
         | ANNOTATION_STRING
         | PARALLEL
         | ATOMIC
@@ -172,7 +173,19 @@ ANNOTATION_STRING :
     ;
 
 /**
- * annotation (with parameter)
+ * variable description annotation
+ */
+ANNOTATION_VARIABLEDESCRIPTION :
+    CONSTANT
+    LEFTROUNDBRACKET
+    VARIABLEATOM
+    COMMA
+    STRING
+    RIGHTROUNDBRACKET
+    ;
+
+/**
+ * constant annotation
  */
 ANNOTATION_CONSTANT :
     CONSTANT
@@ -274,7 +287,7 @@ fragment PARALLEL          : 'parallel';
 fragment ATOMIC            : 'atomic';
 fragment DESCRIPTION       : 'description';
 fragment TAG               : 'tag';
-fragment INPUTPARAMETEr    : 'input';
+fragment VARIABLE          : 'variable';
 
 
 fragment AND               : '&&';
