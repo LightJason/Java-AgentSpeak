@@ -155,24 +155,17 @@ ANNOTATION :
     AT
     (
         ANNOTATION_CONSTANT
-        | ANNOTATION_DESCRIPTION
-        | ANNOTATIONATOM
+        | ANNOTATION_STRING
+        | PARALLEL
+        | ATOMIC
     )
     ;
 
 /**
- * annotation atom
+ * annotation with string value
  */
-ANNOTATIONATOM :
-    PARALLEL
-    | ATOMIC
-    ;
-
-/**
- * annotation for description
- */
-ANNOTATION_DESCRIPTION :
-    DESCRIPTION
+ANNOTATION_STRING :
+    ( DESCRIPTION | TAG )
     LEFTROUNDBRACKET
     STRING
     RIGHTROUNDBRACKET
@@ -280,6 +273,8 @@ fragment CONSTANT          : 'constant';
 fragment PARALLEL          : 'parallel';
 fragment ATOMIC            : 'atomic';
 fragment DESCRIPTION       : 'description';
+fragment TAG               : 'tag';
+fragment INPUTPARAMETEr    : 'input';
 
 
 fragment AND               : '&&';

@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -131,6 +132,7 @@ public interface IAnnotation<T> extends IAssignable<T>
         ATOMIC( "@atomic" ),
         PARALLEL( "@parallel" ),
         DESCRIPTION( "@description" ),
+        TAGS( "@tag" ),
         EMPTY( "" );
 
         /**
@@ -152,6 +154,20 @@ public interface IAnnotation<T> extends IAssignable<T>
         public final String toString()
         {
             return m_name;
+        }
+
+        /**
+         * returns enum value by string
+         *
+         * @param p_value string value
+         * @return type
+         */
+        public static EType of( @Nonnull final String p_value )
+        {
+            return Arrays.stream( EType.values() )
+                         .filter( i -> ( !i.m_name.isEmpty() ) && ( p_value.startsWith( i.m_name ) ) )
+                         .findFirst()
+                         .orElseGet( () -> EMPTY );
         }
     }
 

@@ -82,6 +82,13 @@ public interface IPlan extends IInstantiable
 
         @Nonnull
         @Override
+        public final Stream<String> tags()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
         public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {

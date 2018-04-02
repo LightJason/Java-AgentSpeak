@@ -56,4 +56,12 @@ public interface IInstantiable extends IExecution
     @Nonnull
     String description();
 
+    /**
+     * plan tags
+     *
+     * @return tag stream
+     */
+    @Nonnull
+    Stream<String> tags();
+
 }

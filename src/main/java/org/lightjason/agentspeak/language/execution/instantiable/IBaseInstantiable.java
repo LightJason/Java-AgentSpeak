@@ -52,10 +52,6 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     private static final long serialVersionUID = 8843291880722926104L;
     /**
-     * action list
-     */
-    protected final IExecution[] m_execution;
-    /**
      * description
      */
     protected final String m_description;
@@ -67,6 +63,14 @@ public abstract class IBaseInstantiable implements IInstantiable
      * atomic execution
      */
     protected final boolean m_atomic;
+    /**
+     * tags
+     */
+    protected final String[] m_tags;
+    /**
+     * action list
+     */
+    protected final IExecution[] m_execution;
     /**
      * constants
      */
@@ -102,6 +106,13 @@ public abstract class IBaseInstantiable implements IInstantiable
                            .flatMap( IAnnotation::variables )
                            .toArray( IVariable<?>[]::new );
 
+        m_tags = Arrays.stream( p_annotation )
+                       .parallel()
+                       .filter( i -> IAnnotation.EType.TAGS.equals( i.id() ) )
+                       .map( i -> i.value().toString() )
+                       .toArray( String[]::new );
+
+
         m_parallel = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.PARALLEL.equals( i.id() ) );
         m_atomic = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.ATOMIC.equals( i.id() ) );
     }
@@ -111,6 +122,13 @@ public abstract class IBaseInstantiable implements IInstantiable
     public final String description()
     {
         return m_description;
+    }
+
+    @Nonnull
+    @Override
+    public final Stream<String> tags()
+    {
+        return Arrays.stream( m_tags );
     }
 
     @Override

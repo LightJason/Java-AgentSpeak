@@ -382,7 +382,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-            "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @description('description text') +!annotation <- success."
+            "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @description('description text') @tag('test') @tag('hello') +!annotation <- success."
         );
 
         Assert.assertEquals( "description text", property( "m_description", l_plan ) );
@@ -390,6 +390,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         Assert.assertTrue( l_plan.toString(), property( "m_parallel", l_plan ) );
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "StringValue".equals( i.functor() ) ) );
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "NumberValue".equals( i.functor() ) ) );
+        Assert.assertArrayEquals( Stream.of( "test", "hello" ).toArray(), l_plan.tags().toArray() );
     }
 
     /**

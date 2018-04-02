@@ -60,7 +60,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CAtomAnnotation;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CDescriptionAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CStringAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CValueAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
@@ -104,9 +104,9 @@ public final class CAgentSpeak
      */
     private static final Pattern ANNOTATIONCONSTANT = Pattern.compile( "\\(.+,.+\\)" );
     /**
-     * regular pattern for matching annotation description values
+     * regular pattern for matching annotation string values
      */
-    private static final Pattern ANNOTATIONDESCRIPTION = Pattern.compile( "\\(.+\\)" );
+    private static final Pattern ANNOTATIONSTRING = Pattern.compile( "\\(.+\\)" );
 
     /**
      * ctor
@@ -212,25 +212,15 @@ public final class CAgentSpeak
         if ( Objects.isNull( p_annotation ) )
             return IAnnotation.EMPTY;
 
-        if ( p_annotation.getText().contains( "parallel" ) )
-            return new CAtomAnnotation<>( IAnnotation.EType.PARALLEL );
+        final IAnnotation.EType l_type = IAnnotation.EType.of( p_annotation.getText() );
 
-        if ( p_annotation.getText().contains( "atomic" ) )
-            return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
 
-        // description annotation with extracted string
-        if ( p_annotation.getText().contains( "description" ) )
-        {
-            final Matcher l_match = ANNOTATIONDESCRIPTION.matcher( p_annotation.getText() );
-            if ( !l_match.find() )
-                return IAnnotation.EMPTY;
-
-            return new CDescriptionAnnotation( CRaw.cleanstring( l_match.group( 0 ).replaceAll( "\\(|\\)", "" ) ) );
-        }
+        if ( ( IAnnotation.EType.PARALLEL.equals( l_type ) ) || ( IAnnotation.EType.ATOMIC.equals( l_type ) ) )
+            return new CAtomAnnotation<>( l_type );
 
         // on a constant annoation object, the data and name must be split at the comma,
         // the value can be a number value or a string
-        if ( p_annotation.getText().contains( "constant" ) )
+        if ( IAnnotation.EType.CONSTANT.equals( l_type ) )
         {
             final Matcher l_match = ANNOTATIONCONSTANT.matcher( p_annotation.getText() );
             if ( !l_match.find() )
@@ -239,12 +229,25 @@ public final class CAgentSpeak
             final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
             try
             {
-                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_data[0], CRaw.numbervalue( l_data[1] ) );
+                return new CValueAnnotation<>( l_type, l_data[0], CRaw.numbervalue( l_data[1] ) );
             }
             catch ( final NumberFormatException l_exception )
             {
-                return new CValueAnnotation<>( IAnnotation.EType.CONSTANT, l_data[0], CRaw.cleanstring( l_data[1] ) );
+                return new CValueAnnotation<>( l_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
             }
+        }
+
+        // description annotation with extracted string
+        if ( ( IAnnotation.EType.DESCRIPTION.equals( l_type ) ) || ( IAnnotation.EType.TAGS.equals( l_type ) ) )
+        {
+            final Matcher l_match = ANNOTATIONSTRING.matcher( p_annotation.getText() );
+            if ( !l_match.find() )
+                return IAnnotation.EMPTY;
+
+            return new CStringAnnotation(
+                l_type,
+                CRaw.cleanstring( l_match.group( 0 ).replaceAll( "\\(|\\)", "" ) )
+            );
         }
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownannotation" ) );

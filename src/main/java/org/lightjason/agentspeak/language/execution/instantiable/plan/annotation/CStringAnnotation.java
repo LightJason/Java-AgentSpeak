@@ -33,17 +33,18 @@ import java.util.stream.Stream;
 /**
  * description annotation
  */
-public final class CDescriptionAnnotation extends IBaseAnnotation<String>
+public final class CStringAnnotation extends IBaseAnnotation<String>
 {
 
     /**
      * ctor
      *
+     * @param p_annotation annotation type
      * @param p_value data
      */
-    public CDescriptionAnnotation( @Nonnull final String p_value )
+    public CStringAnnotation( @Nonnull final EType p_annotation, @Nonnull final String p_value )
     {
-        super( EType.DESCRIPTION, p_value );
+        super( p_annotation, p_value );
     }
 
     @Override

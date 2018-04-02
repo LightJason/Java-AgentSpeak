@@ -398,7 +398,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-            "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @description('description text') +!annotation <- success."
+            "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @tag('foo') @tag('bar') @description('description text') +!annotation <- success."
         );
 
         Assert.assertEquals( "description text", property( "m_description", l_plan ) );
@@ -406,6 +406,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertTrue( l_plan.toString(), property( "m_parallel", l_plan ) );
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "StringValue".equals( i.functor() ) ) );
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "NumberValue".equals( i.functor() ) ) );
+        Assert.assertArrayEquals( Stream.of( "foo", "bar" ).toArray(), l_plan.tags().toArray() );
     }
 
     /**
