@@ -357,7 +357,7 @@ public final class CAgentSpeak
                                                      @Nullable final RuleContext p_arguments )
     {
         if ( Objects.nonNull( p_literal ) )
-            return new CAchievementGoalLiteral( (ILiteral) p_visitor.visitChildren( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
+            return new CAchievementGoalLiteral( (ILiteral) p_visitor.visit( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
 
         if ( Objects.nonNull( p_variable ) )
             return new CAchievementGoalVariable(
@@ -446,7 +446,7 @@ public final class CAgentSpeak
     public static IExecution executeaction( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                             @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
     {
-        final ILiteral l_actionliteral = (ILiteral) p_visitor.visitChildren( p_actionliteral );
+        final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
 
         final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
@@ -471,10 +471,10 @@ public final class CAgentSpeak
                                           @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variableexecute )
     {
         if ( Objects.nonNull( p_literal ) )
-            return new CAchievementRuleLiteral( (ILiteral) p_visitor.visitChildren( p_literal ) );
+            return new CAchievementRuleLiteral( (ILiteral) p_visitor.visit( p_literal ) );
 
         if ( Objects.nonNull( p_variableexecute ) )
-            return new CAchievementRuleVariable( (IExecution) p_visitor.visitChildren( p_variableexecute ) );
+            return new CAchievementRuleVariable( (IExecution) p_visitor.visit( p_variableexecute ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownruleexecution" ) );
     }
@@ -530,9 +530,9 @@ public final class CAgentSpeak
                                                   @Nonnull final RuleContext p_variable, @Nullable final RuleContext p_termlist )
     {
         return new CPassVariableLiteral(
-            (IVariable<?>) p_visitor.visitChildren( p_variable ),
+            (IVariable<?>) p_visitor.visit( p_variable ),
             Objects.nonNull( p_termlist )
-            ? (Stream<ITerm>) p_visitor.visitChildren( p_termlist )
+            ? (Stream<ITerm>) p_visitor.visit( p_termlist )
             : Stream.empty()
         );
     }
@@ -549,7 +549,7 @@ public final class CAgentSpeak
     {
         return Objects.isNull( p_list )
             ? Stream.empty()
-            : p_list.stream().map( i -> (IVariable<?>) p_visitor.visitChildren( i ) );
+            : p_list.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) );
     }
 
 
@@ -678,8 +678,8 @@ public final class CAgentSpeak
                                               @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution )
     {
         return new CMultiAssignment(
-            (Stream<IVariable<?>>) p_visitor.visitChildren( p_variable ),
-            (IExecution) p_visitor.visitChildren( p_execution )
+            (Stream<IVariable<?>>) p_visitor.visit( p_variable ),
+            (IExecution) p_visitor.visit( p_execution )
         );
     }
 
@@ -700,8 +700,8 @@ public final class CAgentSpeak
     public static IExecution unification( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_parallel,
                                           @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
     {
-        final ILiteral l_literal = (ILiteral) p_visitor.visitChildren( p_literal );
-        final Object l_constraint = p_visitor.visitChildren( p_constraint );
+        final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
+        final Object l_constraint = p_visitor.visit( p_constraint );
 
         if ( p_constraint instanceof IExpression )
             return new CExpressionUnify(
@@ -733,10 +733,10 @@ public final class CAgentSpeak
                                                 @Nullable final RuleContext p_variable, @Nullable final RuleContext p_expression )
     {
         if ( Objects.nonNull( p_expression ) )
-            return p_visitor.visitChildren( p_expression );
+            return p_visitor.visit( p_expression );
 
         if ( Objects.nonNull( p_variable ) )
-            return p_visitor.visitChildren( p_variable );
+            return p_visitor.visit( p_variable );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }

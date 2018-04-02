@@ -51,7 +51,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     XOR( "^" ),
 
     EQUAL( "==" ),
-    NOTEQUAL( "\\==" ),
+    NOTEQUAL( "\\==", "!=" ),
 
     LESS( "<" ),
     LESSEQUAL( "<=" ),
@@ -63,14 +63,14 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     /**
      * text name of the enum
      */
-    private final String m_operator;
+    private final String[] m_operator;
 
     /**
      * ctor
      *
      * @param p_operator text name
      */
-    EBinaryOperator( final String p_operator )
+    EBinaryOperator( @Nonnull final String... p_operator )
     {
         m_operator = p_operator;
     }
@@ -78,7 +78,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     @Override
     public final String toString()
     {
-        return m_operator;
+        return m_operator[0];
     }
 
     @Override
@@ -229,7 +229,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     public static EBinaryOperator of( @Nonnull final String p_value )
     {
         return Arrays.stream( EBinaryOperator.values() )
-                     .filter( i -> i.m_operator.equals( p_value ) )
+                     .filter( i -> Arrays.stream( i.m_operator ).anyMatch( j -> j.equals( p_value ) ) )
                      .findFirst()
                      .orElseThrow( () -> new CIllegalArgumentException(
                          org.lightjason.agentspeak.common.CCommon.languagestring( EBinaryOperator.class, "unknownoperator", p_value ) )
