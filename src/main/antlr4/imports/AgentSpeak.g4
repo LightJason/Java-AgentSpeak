@@ -64,7 +64,6 @@ plandefinition :
  * but without context and trigger event
  */
 logicrule :
-    ANNOTATION*
     literal
     ( RULEOPERATOR body )+
     DOT

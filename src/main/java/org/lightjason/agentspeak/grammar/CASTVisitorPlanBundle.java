@@ -129,19 +129,11 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
     {
-        // @todo add body
-
-        final ILiteral l_literal = (ILiteral) this.visit( p_context.literal() );
-        m_rules.put(
-            l_literal.fqnfunctor(),
-            CAgentSpeak.rule(
-                l_literal,
-                Objects.isNull( p_context.ANNOTATION() )
-                ? Stream.empty()
-                : p_context.ANNOTATION().stream()
-            )
+        return CAgentSpeak.rule(
+            this,
+            p_context.literal(),
+            p_context.body()
         );
-        return null;
     }
 
     @Override

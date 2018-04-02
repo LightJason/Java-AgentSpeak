@@ -122,6 +122,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                  .forEach( i -> m_initialbeliefs.add( i ) );
 
 
+        p_context.logicrule()
+                 .stream()
+                 .flatMap( i -> (Stream<IRule>) this.visit( i ) )
+                 .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
 
         /*
         // create placeholder objects first and run parsing again to build full-qualified rule objects
@@ -163,19 +167,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
-        // @todo add body
-
-        final ILiteral l_literal = (ILiteral) this.visit( p_context.literal() );
-        m_rules.put(
-            l_literal.fqnfunctor(),
-            CAgentSpeak.rule(
-                l_literal,
-                Objects.isNull( p_context.ANNOTATION() )
-                ? Stream.empty()
-                : p_context.ANNOTATION().stream()
-            )
+        return CAgentSpeak.rule(
+            this,
+            p_context.literal(),
+            p_context.body()
         );
-        return null;
     }
 
     @Override

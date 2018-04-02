@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -78,7 +79,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void initialgoal() throws Exception
     {
         Assert.assertEquals(
-            CLiteral.of( "main" ),
+            ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "main" ) ),
             new CParserAgent( Collections.emptySet(), Collections.emptySet() )
                 .parse( streamfromstring(  "!main." ) ).initialgoal()
         );

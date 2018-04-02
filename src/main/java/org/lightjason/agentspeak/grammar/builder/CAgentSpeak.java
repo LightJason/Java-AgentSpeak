@@ -142,14 +142,7 @@ public final class CAgentSpeak
             (ILiteral) p_visitor.visit( p_literal )
         );
 
-        final IAnnotation<?>[] l_annotation = Objects.isNull( p_annotation )
-                                              ? new IAnnotation<?>[0]
-                                              : p_annotation.stream()
-                                                            .map( CAgentSpeak::annotation )
-                                                            .filter( i -> !i.equals( IAnnotation.EMPTY ) )
-                                                            .toArray( IAnnotation<?>[]::new );
-
-
+        final IAnnotation<?>[] l_annotation = annotation( p_annotation );
         return p_definition.stream()
                            .map( i -> (Pair<IExpression, IExecution[]>) p_visitor.visit( i ) )
                            .map( i -> new CPlan( l_annotation, l_trigger, i.getLeft(), i.getRight() ) );
@@ -178,15 +171,19 @@ public final class CAgentSpeak
     /**
      * build a rule
      *
+     * @param p_visitor visitor
      * @param p_literal literal
-     * @param p_annotation annotation stream
-     * @return rule
+     * @return rule stream
      */
     @Nonnull
-    public static IRule rule( @Nonnull final ILiteral p_literal, @Nonnull final Stream<TerminalNode> p_annotation )
+    public static Stream<IRule> rule( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                      @Nullable final RuleContext p_literal, @Nullable final List<? extends RuleContext> p_body )
     {
-        // @todo set rule
-        return IRule.EMPTY;
+        if ( ( Objects.isNull( p_literal ) ) || ( Objects.isNull( p_body ) ) || ( p_body.isEmpty() ) )
+            return Stream.empty();
+
+
+        return Stream.of( IRule.EMPTY );
     }
 
     /**
@@ -205,12 +202,29 @@ public final class CAgentSpeak
     // --- annotation ------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * build array of annotation
+     *
+     * @param p_annotation list of annoations
+     * @return annotation array
+     */
+    @Nonnull
+    private static IAnnotation<?>[] annotation( @Nullable final List<TerminalNode> p_annotation )
+    {
+        return Objects.isNull( p_annotation )
+               ? new IAnnotation<?>[0]
+               : p_annotation.stream()
+                             .map( CAgentSpeak::annotation )
+                             .filter( i -> !i.equals( IAnnotation.EMPTY ) )
+                             .toArray( IAnnotation<?>[]::new );
+    }
+
+    /**
      * build annotation object
      * @param p_annotation annotation terminal
      * @return null or annoation
      */
     @Nonnull
-    public static IAnnotation<?> annotation( @Nullable final TerminalNode p_annotation )
+    private static IAnnotation<?> annotation( @Nullable final TerminalNode p_annotation )
     {
         if ( Objects.isNull( p_annotation ) )
             return IAnnotation.EMPTY;
