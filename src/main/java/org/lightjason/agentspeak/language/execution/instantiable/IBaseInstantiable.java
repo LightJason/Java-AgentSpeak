@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -56,17 +57,17 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     protected final IExecution[] m_execution;
     /**
-     * parallel execution
-     */
-    protected final boolean m_parallel;
-    /**
-     * atomic execution
-     */
-    protected final boolean m_atomic;
-    /**
      * constants
      */
     protected final IVariable<?>[] m_constant;
+    /**
+     * parallel execution
+     */
+    private final boolean m_parallel;
+    /**
+     * atomic execution
+     */
+    private final boolean m_atomic;
     /**
      * description
      */
@@ -216,4 +217,27 @@ public abstract class IBaseInstantiable implements IInstantiable
                      .collect( Collectors.toList() );
     }
 
+    /**
+     * returns all data as a string
+     *
+     * @return string represenation
+     */
+    protected final String datatoString()
+    {
+        return MessageFormat.format(
+            "{0} {1} {2} {3} {4}",
+
+            m_parallel ? IAnnotation.EType.PARALLEL : "",
+
+            m_atomic ? IAnnotation.EType.ATOMIC : "",
+
+            Arrays.stream( m_constant )
+                  .map( i -> MessageFormat.format( "{0}({1},{2})", IAnnotation.EType.CONSTANT, i.functor(), i.raw() ) )
+                  .collect( Collectors.joining( " " ) ),
+
+            this.tags().map( i -> MessageFormat.format( "{0}({1})", IAnnotation.EType.TAG, i ) ).collect( Collectors.joining( " " ) ),
+
+            m_description.isEmpty() ? "" : MessageFormat.format( "{0}({1})", IAnnotation.EType.DESCRIPTION, this.description() )
+        );
+    }
 }

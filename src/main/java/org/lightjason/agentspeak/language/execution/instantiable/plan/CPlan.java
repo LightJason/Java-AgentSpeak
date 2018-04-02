@@ -43,7 +43,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -145,15 +144,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final String toString()
     {
         return MessageFormat.format(
-            "{0} ({1} {2} {3} {4} | {5}{6} ==>> {7})",
+            "{0} ({1} | {2}{3} ==>> {4})",
             super.toString(),
-
-            m_parallel ? IAnnotation.EType.PARALLEL : "",
-            m_atomic ? IAnnotation.EType.ATOMIC : "",
-            Arrays.stream( m_constant )
-                  .map( i -> MessageFormat.format( "{0}({1},{2})", IAnnotation.EType.CONSTANT, i.functor(), i.raw() ) )
-                  .collect( Collectors.joining( " " ) ),
-            this.description().isEmpty() ? "" : MessageFormat.format( "{0}({1})", IAnnotation.EType.DESCRIPTION, this.description() ),
+            this.datatoString(),
 
             m_triggerevent,
             Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),
