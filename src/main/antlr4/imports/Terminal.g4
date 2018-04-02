@@ -23,6 +23,8 @@
 
 lexer grammar Terminal;
 
+
+
 // --- keyword rules must be first rules -----------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -69,10 +71,14 @@ STRING :
     | DOUBLEQUOTESTRING
     ;
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-// --- arithmetic operators must be second rules----------------------------------------------------------------------------------------------------------------
+// --- operators must be second rules---------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * strong negation must get a high priority
+ */
+STRONGNEGATION : '~' | 'not';
 
 /**
  * assign operator
@@ -91,12 +97,12 @@ ASSIGNOPERATOR :
  * relational operator
  */
 RELATIONALOPERATOR :
-    LESSEQUAL
-    | GREATEREQUAL
-    | EQUAL
+    EQUAL
     | NOTEQUAL
     | LESS
+    | LESSEQUAL
     | GREATER
+    | GREATEREQUAL
     ;
 
 /**
@@ -146,7 +152,9 @@ UNARYOPERATOR :
     | DECREMENT
     ;
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// --- annotation and base structure ---------------------------------------------------------------------------------------------------------------------------
 
 /**
  * annotation for rules and plans
@@ -228,10 +236,11 @@ PLANTRIGGER :
     (PLUS | MINUS) EXCLAMATIONMARK?
     ;
 
-// --- character structures --------------------------------------------------------------
+
+
+// --- character structures ------------------------------------------------------------------------------------------------------------------------------------
 
 EXCLAMATIONMARK            : '!';
-STRONGNEGATION             : '~';
 COMMA                      : ',';
 PLUS                       : '+';
 MINUS                      : '-';
@@ -261,7 +270,6 @@ RIGHTANGULARBRACKET        : ']';
 LEFTCURVEDBRACKET          : '{';
 RIGHTCURVEDBRACKET         : '}';
 
-
 fragment PI                : 'pi';
 fragment EULER             : 'euler';
 fragment GRAVITY           : 'gravity';
@@ -277,6 +285,9 @@ fragment MAXIMUMVALUE      : 'maximumvalue';
 fragment MINIMUMVALUE      : 'minimumvalue';
 fragment NAN               : 'notanumber';
 
+fragment AND               : '&&' | 'and';
+fragment OR                : '||' | 'or';
+fragment XOR               : '^' | 'xor';
 
 fragment TRUE              : 'true' | 'success';
 fragment FALSE             : 'false' | 'fail';
@@ -288,11 +299,6 @@ fragment ATOMIC            : 'atomic';
 fragment DESCRIPTION       : 'description';
 fragment TAG               : 'tag';
 fragment VARIABLE          : 'variable';
-
-
-fragment AND               : '&&';
-fragment OR                : '||';
-fragment XOR               : '^';
 
 
 DECONSTRUCT                : '=..';
@@ -317,7 +323,7 @@ fragment NOTEQUAL          : '\\==' | '!=';
 
 fragment POW               : '**';
 fragment MULTIPLY          : '*';
-fragment MODULO            : '%';
+fragment MODULO            : '%' | 'mod';
 
 /**
  * string can be definied in single- and double-quotes
@@ -333,10 +339,9 @@ fragment UPPERCASELETTER   : [A-Z];
 fragment DIGIT             : [0-9];
 fragment DIGITSEQUENCE     : DIGIT+ ('.' DIGIT+)?;
 
-// ---------------------------------------------------------------------------------------
 
 
-// --- skip items ------------------------------------------------------------------------
+// --- skip items ----------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
  * any whitespace
@@ -351,5 +356,3 @@ LINECOMMENT                : ('//' | '#') .*? '\r'? '\n' -> skip;
  * default behaviour does not allow block comments
  */
 BLOCKCOMMENT                    :   '/*' .*? '*/' -> skip;
-
-// ---------------------------------------------------------------------------------------

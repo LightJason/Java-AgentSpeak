@@ -37,19 +37,20 @@ import java.util.function.Function;
  */
 public enum EUnaryOperator implements Function<ITerm, Object>
 {
-    NEGATION( "~" );
+    NEGATION( "~", "not" );
 
     /**
      * text name of the enum
      */
-    private final String m_operator;
+    private final String[] m_operator;
+
 
     /**
      * ctor
      *
      * @param p_operator text name
      */
-    EUnaryOperator( final String p_operator )
+    EUnaryOperator( @Nonnull final String... p_operator )
     {
         m_operator = p_operator;
     }
@@ -57,7 +58,7 @@ public enum EUnaryOperator implements Function<ITerm, Object>
     @Override
     public final String toString()
     {
-        return m_operator;
+        return m_operator[0];
     }
 
     @Override
@@ -83,7 +84,7 @@ public enum EUnaryOperator implements Function<ITerm, Object>
     public static EUnaryOperator of( @Nonnull final String p_value )
     {
         return Arrays.stream( EUnaryOperator.values() )
-                     .filter( i -> i.m_operator.equals( p_value ) )
+                     .filter( i -> Arrays.stream( i.m_operator ).anyMatch( j -> j.equals( p_value ) ) )
                      .findFirst()
                      .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EUnaryOperator.class, "unknownoperator", p_value ) ) );
     }

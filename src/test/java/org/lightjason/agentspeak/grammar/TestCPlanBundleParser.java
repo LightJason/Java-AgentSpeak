@@ -244,6 +244,54 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         );
     }
 
+
+    /**
+     * test boolean operators
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void booleanoperators() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- OrTrue = true || false; OrFalse = false or false; AndTrue = true && true; AndFalse = true and false;"
+            + "XorFalse = true ^ true; NotFalse = not true; NotTrue = ~false; XorTrue = true xor false."
+        );
+
+        final IVariable<?> l_ortrue = new CVariable<>( "OrTrue" );
+        final IVariable<?> l_orfalse = new CVariable<>( "OrFalse" );
+        final IVariable<?> l_xortrue = new CVariable<>( "XorTrue" );
+        final IVariable<?> l_xorfalse = new CVariable<>( "XorFalse" );
+        final IVariable<?> l_andtrue = new CVariable<>( "AndTrue" );
+        final IVariable<?> l_andfalse = new CVariable<>( "AndFalse" );
+
+        final IVariable<?> l_notfalse = new CVariable<>( "NotFalse" );
+        final IVariable<?> l_nottrue = new CVariable<>( "NotTrue" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_andtrue, l_andfalse, l_ortrue, l_orfalse, l_xortrue, l_xorfalse, l_notfalse, l_nottrue ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertTrue( l_plan.toString(),  l_andtrue.raw() );
+        Assert.assertFalse( l_plan.toString(), l_andfalse.raw() );
+
+        Assert.assertTrue( l_plan.toString(),  l_ortrue.raw() );
+        Assert.assertFalse( l_plan.toString(), l_orfalse.raw() );
+
+        Assert.assertTrue( l_plan.toString(),  l_xortrue.raw() );
+        Assert.assertFalse( l_plan.toString(), l_xorfalse.raw() );
+
+        Assert.assertTrue( l_plan.toString(),  l_nottrue.raw() );
+        Assert.assertFalse( l_plan.toString(), l_notfalse.raw() );
+    }
+
     /**
      * test ternary operator true case
      *
@@ -381,7 +429,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void annotation() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
             "@parallel @atomic @constant(StringValue,'xyz') @constant(NumberValue,-777) @tag('foobar')"
             + "@variable(Y,'y value description') @tag('test') @description('description text') +!annotation(Y) <- success."
         );

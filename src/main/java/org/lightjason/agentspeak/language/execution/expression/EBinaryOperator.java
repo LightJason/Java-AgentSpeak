@@ -43,12 +43,12 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 
     MULTIPLY( "*" ),
     DIVIDE( "/" ),
-    MODULO( "%" ),
+    MODULO( "%", "mod" ),
     POWER( "**" ),
 
-    OR( "||" ),
-    AND( "&&" ),
-    XOR( "^" ),
+    OR( "||", "or" ),
+    AND( "&&", "and" ),
+    XOR( "^", "xor" ),
 
     EQUAL( "==" ),
     NOTEQUAL( "\\==", "!=" ),
