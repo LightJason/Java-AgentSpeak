@@ -407,8 +407,14 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertTrue( l_plan.toString(), property( "m_atomic", l_plan ) );
         Assert.assertTrue( l_plan.toString(), property( "m_parallel", l_plan ) );
 
-        Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "StringValue".equals( i.functor() ) ) );
-        Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "NumberValue".equals( i.functor() ) ) );
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.variables().parallel().anyMatch( i -> ( "StringValue".equals( i.functor() ) ) && ( "abcd".equals( i.raw() ) ) )
+        );
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.variables().parallel().anyMatch( i -> ( "NumberValue".equals( i.functor() ) ) && ( Double.valueOf( 12345 ).equals( i.raw() ) ) )
+        );
 
         Assert.assertArrayEquals( Stream.of( "foo", "bar" ).toArray(), l_plan.tags().toArray() );
 

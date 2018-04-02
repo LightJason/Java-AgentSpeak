@@ -381,16 +381,31 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void annotation() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
-            "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @description('description text') @tag('test') @tag('hello') +!annotation <- success."
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "@parallel @atomic @constant(StringValue,'xyz') @constant(NumberValue,-777) @tag('foobar')"
+            + "@variable(Y,'y value description') @tag('test') @description('description text') +!annotation(Y) <- success."
         );
 
         Assert.assertEquals( "description text", property( "m_description", l_plan ) );
+
         Assert.assertTrue( l_plan.toString(), property( "m_atomic", l_plan ) );
         Assert.assertTrue( l_plan.toString(), property( "m_parallel", l_plan ) );
-        Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "StringValue".equals( i.functor() ) ) );
-        Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "NumberValue".equals( i.functor() ) ) );
-        Assert.assertArrayEquals( Stream.of( "test", "hello" ).toArray(), l_plan.tags().toArray() );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.variables().parallel().anyMatch( i -> ( "StringValue".equals( i.functor() ) ) && ( "xyz".equals( i.raw() ) ) )
+        );
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.variables().parallel().anyMatch( i -> ( "NumberValue".equals( i.functor() ) ) && ( Double.valueOf( -777 ).equals( i.raw() ) ) )
+        );
+
+        Assert.assertArrayEquals( Stream.of( "foobar", "test" ).toArray(), l_plan.tags().toArray() );
+
+        Assert.assertArrayEquals(
+            Stream.of( new CVariable<>( "Y" ).set( "y value description" ) ).toArray(),
+            l_plan.variabledescription().toArray()
+        );
     }
 
     /**

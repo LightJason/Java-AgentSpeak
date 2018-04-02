@@ -61,7 +61,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CAtomAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CStringAnnotation;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CValueAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CConstantAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
@@ -269,11 +269,11 @@ public final class CAgentSpeak
         final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
         try
         {
-            return new CValueAnnotation<>( p_type, l_data[0], CRaw.numbervalue( l_data[1] ) );
+            return new CConstantAnnotation<>( p_type, l_data[0], CRaw.numbervalue( l_data[1] ) );
         }
         catch ( final NumberFormatException l_exception )
         {
-            return new CValueAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
+            return new CConstantAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
         }
     }
 
@@ -291,7 +291,7 @@ public final class CAgentSpeak
             return IAnnotation.EMPTY;
 
         final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
-        return new CValueAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
+        return new CConstantAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
     }
 
 

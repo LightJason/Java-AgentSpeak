@@ -32,9 +32,9 @@ import java.util.stream.Stream;
 
 
 /**
- * number annotation
+ * constant annotation with constant and value definition
  */
-public final class CValueAnnotation<T> extends IBaseAnnotation<T>
+public final class CConstantAnnotation<T> extends IBaseAnnotation<T>
 {
     /**
      * name of the annotation
@@ -48,7 +48,7 @@ public final class CValueAnnotation<T> extends IBaseAnnotation<T>
      * @param p_name name of the annotation
      * @param p_data number
      */
-    public CValueAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
+    public CConstantAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
     {
         super( p_type, p_data );
         m_name = p_name;
