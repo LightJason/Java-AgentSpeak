@@ -96,15 +96,21 @@ public final class CLambda extends IBaseExecution<IExecution[]>
             return CFuzzyValue.of( false );
 
 
-        /*
-        (
-            m_parallel
-            ? Arrays.stream( m_value ).parallel()
-            : Arrays.stream( m_value )
-        )
-        */
+        this.stream( l_init.get( 0 ).raw() )
+            .forEach( System.out::println );
 
-        return null;
+        return CFuzzyValue.of( true );
+    }
+
+    /**
+     * create element stream
+     *
+     * @param p_stream input stream
+     * @return output stream
+     */
+    private Stream<?> stream( @Nonnull final Stream<?> p_stream )
+    {
+        return m_parallel ? p_stream.parallel() : p_stream;
     }
 
     /**

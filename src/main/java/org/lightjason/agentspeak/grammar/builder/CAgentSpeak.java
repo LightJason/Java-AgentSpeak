@@ -757,6 +757,7 @@ public final class CAgentSpeak
     public static IExpression lambda( @Nonnull final ParseTreeVisitor<?> p_visitor, boolean p_parallel,
                                       @Nonnull final RuleContext p_iterator, @Nullable final RuleContext p_return, @Nonnull final RuleContext p_execution )
     {
+        // @todo incomplete
         return null;
     }
 
