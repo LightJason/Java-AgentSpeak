@@ -30,7 +30,7 @@ import Terminal;
  */
 term :
     termvalue
-    | valuelist
+    | termvaluelist
     | variable
     | literal
 
@@ -51,7 +51,7 @@ termvalue :
 /**
  * value list
  */
-valuelist :
+termvaluelist :
     LEFTANGULARBRACKET
     termvalue ( COMMA termvalue )*
     RIGHTANGULARBRACKET

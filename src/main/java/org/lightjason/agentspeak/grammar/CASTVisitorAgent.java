@@ -451,6 +451,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             this,
 
             p_context.termvalue(),
+            p_context.termvaluelist(),
+
             p_context.variable(),
             p_context.literal(),
 
@@ -473,7 +475,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitValuelist( final AgentParser.ValuelistContext p_context )
+    public final Object visitTermvaluelist( final AgentParser.TermvaluelistContext p_context )
     {
         return CTerm.termvaluelist( this, p_context.termvalue() );
     }

@@ -407,4 +407,36 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "StringValue".equals( i.functor() ) ) );
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "NumberValue".equals( i.functor() ) ) );
     }
+
+    /**
+     * test term-value list
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void termlist() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!list <- L = ['a', 1, true]."
+        );
+
+        final IVariable<?> l_var = new CVariable<>( "L" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_var ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertTrue( l_var.toString(), l_var.raw() instanceof List<?> );
+        Assert.assertEquals( 3, l_var.<List<?>>raw().size() );
+        Assert.assertEquals( "a", l_var.<List<?>>raw().get( 0 ) );
+        Assert.assertEquals( 1.0, l_var.<List<?>>raw().get( 1 ) );
+        Assert.assertEquals( true, l_var.<List<?>>raw().get( 2 ) );
+    }
 }

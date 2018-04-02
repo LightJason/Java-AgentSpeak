@@ -391,4 +391,36 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "StringValue".equals( i.functor() ) ) );
         Assert.assertTrue( l_plan.toString(), l_plan.variables().parallel().anyMatch( i -> "NumberValue".equals( i.functor() ) ) );
     }
+
+    /**
+     * test term-value list
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void termlist() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!list <- L = [123, false, 'hello']."
+        );
+
+        final IVariable<?> l_var = new CVariable<>( "L" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_var ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertTrue( l_var.toString(), l_var.raw() instanceof List<?> );
+        Assert.assertEquals( 3, l_var.<List<?>>raw().size() );
+        Assert.assertEquals( 123.0, l_var.<List<?>>raw().get( 0 ) );
+        Assert.assertEquals( false, l_var.<List<?>>raw().get( 1 ) );
+        Assert.assertEquals( "hello", l_var.<List<?>>raw().get( 2 ) );
+    }
 }

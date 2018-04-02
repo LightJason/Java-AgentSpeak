@@ -65,6 +65,8 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
             this,
 
             p_context.termvalue(),
+            p_context.termvaluelist(),
+
             p_context.variable(),
             p_context.literal(),
 
@@ -87,7 +89,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
-    public final Object visitValuelist( final ManualParser.ValuelistContext p_context )
+    public final Object visitTermvaluelist( final ManualParser.TermvaluelistContext p_context )
     {
         return CTerm.termvaluelist( this, p_context.termvalue() );
     }
