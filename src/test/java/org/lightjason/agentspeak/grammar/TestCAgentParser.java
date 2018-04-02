@@ -306,6 +306,31 @@ public final class TestCAgentParser extends IBaseGrammarTest
     }
 
     /**
+     * test complex boolean expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void booleanexpression() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate <- R = false || false and not ( true and false ) xor ( 2 < 3 )."
+        );
+
+        final IVariable<?> l_result = new CVariable<>( "R" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        //Checkstyle:OFF:SimplifyBooleanExpression
+        Assert.assertEquals( false || false && !( true && false ) ^  ( 2 < 3 ), l_result.raw() );
+        //Checkstyle:ON:SimplifyBooleanExpression
+    }
+
+    /**
      * test ternary operator true case
      *
      * @throws Exception thrown on stream and parser error

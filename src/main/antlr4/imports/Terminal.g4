@@ -109,14 +109,20 @@ RELATIONALOPERATOR :
  * logical operator with precendece 1
  */
 LOGICALOPERATOR1 :
-    AND
-    | XOR
+    XOR
     ;
 
 /**
  * logical operator with precendece 2
  */
 LOGICALOPERATOR2 :
+    AND
+    ;
+
+/**
+ * logical operator with precendece 3
+ */
+LOGICALOPERATOR3 :
     OR
     ;
 

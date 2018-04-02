@@ -98,6 +98,7 @@ expression :
     | lhs=expression binaryoperator=RELATIONALOPERATOR rhs=expression
     | lhs=expression binaryoperator=LOGICALOPERATOR1 rhs=expression
     | lhs=expression binaryoperator=LOGICALOPERATOR2 rhs=expression
+    | lhs=expression binaryoperator=LOGICALOPERATOR3 rhs=expression
     | term
     ;
 
