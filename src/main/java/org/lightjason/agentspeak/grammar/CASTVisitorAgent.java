@@ -35,6 +35,8 @@ import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
@@ -66,7 +68,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     /**
      * initial goal
      */
-    private ILiteral m_initialgoal;
+    private ITrigger m_initialgoal;
     /**
      * set with initial beliefs
      */
@@ -110,16 +112,16 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public Object visitAgent( final AgentParser.AgentContext p_context )
     {
         m_initialgoal = Objects.isNull( p_context.INITIALGOAL() )
-                        ? null
-                        : CLiteral.of(
-                            p_context.INITIALGOAL().getText().replace( "!", "" ).replace( ".", "" )
-                        );
+                        ? ITrigger.EMPTY
+                        : CTrigger.EType.ADDGOAL.builddefault( CLiteral.of( p_context.INITIALGOAL().getText().replace( "!", "" ).replace( ".", "" ) ) );
 
 
         p_context.belief()
                  .stream()
                  .map( i -> (ILiteral) this.visit( i ) )
                  .forEach( i -> m_initialbeliefs.add( i ) );
+
+
 
         /*
         // create placeholder objects first and run parsing again to build full-qualified rule objects
@@ -530,8 +532,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return new HashSet<>( m_rules.values() );
     }
 
+    @Nonnull
     @Override
-    public final ILiteral initialgoal()
+    public final ITrigger initialgoal()
     {
         return m_initialgoal;
     }

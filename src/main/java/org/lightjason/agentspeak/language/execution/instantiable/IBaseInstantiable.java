@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -180,15 +181,13 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Nonnull
     @Override
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        final List<IFuzzyValue<Boolean>> l_result = m_parallel
-                                                    ? this.executeparallel( p_context )
-                                                    : this.executesequential( p_context );
+        final List<IFuzzyValue<Boolean>> l_result = m_parallel ? this.executeparallel( p_context ) : this.executesequential( p_context );
+
         // if atomic flag if exists use this for return value
         return m_atomic
                ? CFuzzyValue.of( true )
@@ -203,12 +202,11 @@ public abstract class IBaseInstantiable implements IInstantiable
      *
      * @note stream is stopped iif an execution is failed
      */
-    @SuppressWarnings( "ResultOfMethodCallIgnored" )
-    private List<IFuzzyValue<Boolean>> executesequential( final IContext p_context )
+    @Nonnull
+    private List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context )
     {
-        final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new LinkedList<>() );
-
-        Arrays.stream( m_execution )
+        final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new ArrayList<>() );
+        return Arrays.stream( m_execution )
                 .map( i ->
                 {
                     final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() );
@@ -216,9 +214,9 @@ public abstract class IBaseInstantiable implements IInstantiable
                     return p_context.agent().fuzzy().getValue().defuzzify( l_return );
                 } )
                 .filter( i -> !i )
-                .findFirst();
-
-        return l_result;
+                .findFirst()
+                .map( i -> l_result )
+                .orElseGet( () -> l_result );
     }
 
     /**
@@ -229,7 +227,8 @@ public abstract class IBaseInstantiable implements IInstantiable
      *
      * @note each element is executed
      */
-    private List<IFuzzyValue<Boolean>> executeparallel( final IContext p_context )
+    @Nonnull
+    private List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context )
     {
         return Arrays.stream( m_execution ).parallel()
                      .map( i -> i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() ) )

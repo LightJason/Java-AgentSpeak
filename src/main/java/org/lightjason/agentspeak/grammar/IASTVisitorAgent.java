@@ -23,9 +23,9 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 
 /**
@@ -37,9 +37,9 @@ public interface IASTVisitorAgent extends IASTVisitorAgentSpeak, AgentVisitor<Ob
     /**
      * returns the initial goal
      *
-     * @return literal or null
+     * @return trigger
      */
-    @Nullable
-    ILiteral initialgoal();
+    @Nonnull
+    ITrigger initialgoal();
 
 }

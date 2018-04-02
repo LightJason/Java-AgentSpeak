@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.IT
 import org.lightjason.agentspeak.language.unify.IUnifier;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 
@@ -55,9 +54,9 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
     /**
      * returns the initial goal
      *
-     * @return initial goal literal
+     * @return initial goal
      */
-    @Nullable
+    @Nonnull
     ITrigger initialgoal();
 
     /**

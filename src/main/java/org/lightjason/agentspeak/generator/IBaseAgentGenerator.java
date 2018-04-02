@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.grammar.CParserAgent;
 import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
@@ -148,7 +149,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      */
     protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                                     @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
-                                                    @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                                    @Nonnull final ITrigger p_initialgoal, @Nonnull final IUnifier p_unifier,
                                                     @Nonnull final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(

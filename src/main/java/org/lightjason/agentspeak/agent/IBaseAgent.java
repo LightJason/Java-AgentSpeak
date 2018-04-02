@@ -160,7 +160,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // initial plans and rules
         p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.of( i ) ) );
         p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-        if ( Objects.nonNull( p_configuration.initialgoal() ) )
+        if ( !ITrigger.EMPTY.equals( p_configuration.initialgoal() ) )
             m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
     }
 
