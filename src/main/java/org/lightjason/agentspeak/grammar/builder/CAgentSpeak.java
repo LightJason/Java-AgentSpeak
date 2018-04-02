@@ -238,7 +238,7 @@ public final class CAgentSpeak
         }
 
         // description annotation with extracted string
-        if ( ( IAnnotation.EType.DESCRIPTION.equals( l_type ) ) || ( IAnnotation.EType.TAGS.equals( l_type ) ) )
+        if ( ( IAnnotation.EType.DESCRIPTION.equals( l_type ) ) || ( IAnnotation.EType.TAG.equals( l_type ) ) )
         {
             final Matcher l_match = ANNOTATIONSTRING.matcher( p_annotation.getText() );
             if ( !l_match.find() )

@@ -108,7 +108,7 @@ public abstract class IBaseInstantiable implements IInstantiable
 
         m_tags = Arrays.stream( p_annotation )
                        .parallel()
-                       .filter( i -> IAnnotation.EType.TAGS.equals( i.id() ) )
+                       .filter( i -> IAnnotation.EType.TAG.equals( i.id() ) )
                        .map( i -> i.value().toString() )
                        .toArray( String[]::new );
 

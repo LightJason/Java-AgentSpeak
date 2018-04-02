@@ -132,7 +132,7 @@ public interface IAnnotation<T> extends IAssignable<T>
         ATOMIC( "@atomic" ),
         PARALLEL( "@parallel" ),
         DESCRIPTION( "@description" ),
-        TAGS( "@tag" ),
+        TAG( "@tag" ),
         EMPTY( "" );
 
         /**
