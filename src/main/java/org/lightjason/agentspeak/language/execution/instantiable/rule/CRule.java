@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -58,11 +59,11 @@ public final class CRule extends IBaseInstantiable implements IRule
      * @param p_id literal with signature
      * @param p_body rule body
      */
-    public CRule( @Nonnull final ILiteral p_id, @Nonnull final IExecution p_body )
+    public CRule( @Nonnull final ILiteral p_id, @Nonnull final IExecution[] p_body )
     {
         super(
-            Stream.of( p_body ).toArray( IExecution[]::new ),
-            p_id.hashCode() ^ p_body.hashCode()
+            p_body,
+            p_id.hashCode() ^ Arrays.hashCode( p_body )
         );
         m_id = p_id;
     }
@@ -108,7 +109,7 @@ public final class CRule extends IBaseInstantiable implements IRule
     public final String toString()
     {
         return MessageFormat.format(
-            "{0} ({1} ==>> {2})",
+            "{0} ({1} ==>> {2}.)",
             super.toString(),
             m_id,
             StringUtils.join( m_execution, "; " )

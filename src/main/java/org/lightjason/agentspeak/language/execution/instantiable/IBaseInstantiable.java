@@ -224,16 +224,16 @@ public abstract class IBaseInstantiable implements IInstantiable
     {
         final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new ArrayList<>() );
         return Arrays.stream( m_execution )
-                .map( i ->
-                {
-                    final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() );
-                    l_result.add( l_return );
-                    return p_context.agent().fuzzy().getValue().defuzzify( l_return );
-                } )
-                .filter( i -> !i )
-                .findFirst()
-                .map( i -> l_result )
-                .orElseGet( () -> l_result );
+                     .map( i ->
+                     {
+                         final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), new LinkedList<>() );
+                         l_result.add( l_return );
+                         return p_context.agent().fuzzy().getValue().defuzzify( l_return );
+                     } )
+                     .filter( i -> !i )
+                     .findFirst()
+                     .map( i -> l_result )
+                     .orElseGet( () -> l_result );
     }
 
     /**

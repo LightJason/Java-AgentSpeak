@@ -142,7 +142,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final String toString()
     {
         return MessageFormat.format(
-            "{0} ({1} | {2}{3} ==>> {4})",
+            "{0} ({1} | {2}{3} ==>> {4}.)",
             super.toString(),
             this.datatoString(),
 

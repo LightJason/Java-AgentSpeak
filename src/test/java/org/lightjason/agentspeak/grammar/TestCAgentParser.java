@@ -96,21 +96,32 @@ public final class TestCAgentParser extends IBaseGrammarTest
     {
         final IRule l_rule = parsesinglerule(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
-            "foo(X) :- X++."
+            "nexttower(T, M) :- T--; T = T < 0 ? M - 1 + T : T."
         );
 
-        final IVariable<?> l_var = new CVariable<>( "X" ).set( 5 );
+        final IVariable<Object> l_tvar = new CVariable<>( "T" ).set( 0 );
+        final IVariable<Object> l_mvar = new CVariable<>( "M" ).set( 3 );
 
         Assert.assertTrue(
             l_rule.execute(
                 false,
-                new CLocalContext( l_var ),
+                new CLocalContext( l_tvar, l_mvar ),
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
+        Assert.assertEquals( 1.0, l_tvar.<Number>raw() );
 
-        Assert.assertEquals( 6.0, l_var.<Number>raw() );
+        l_tvar.set( 3 );
+        Assert.assertTrue(
+            l_rule.execute(
+                false,
+                new CLocalContext( l_tvar, l_mvar ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+        Assert.assertEquals( 2.0, l_tvar.<Number>raw() );
     }
 
     /**

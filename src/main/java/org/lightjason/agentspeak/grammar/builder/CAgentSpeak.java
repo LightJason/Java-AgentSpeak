@@ -184,7 +184,7 @@ public final class CAgentSpeak
 
         final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
         return p_body.stream()
-                     .flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) )
+                     .map( i -> ( (Stream<IExecution>) p_visitor.visit( i ) ).toArray( IExecution[]::new ) )
                      .map( i -> new CRule( l_literal, i ) );
     }
 
