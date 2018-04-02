@@ -77,6 +77,10 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     private final String[] m_tags;
     /**
+     * variable description as constants
+     */
+    private final IVariable<?>[] m_variabledescription;
+    /**
      * hash code
      */
     private final int m_hash;
@@ -113,6 +117,11 @@ public abstract class IBaseInstantiable implements IInstantiable
                        .map( i -> i.value().toString() )
                        .toArray( String[]::new );
 
+        m_variabledescription = Arrays.stream( p_annotation )
+                                      .parallel()
+                                      .filter( i -> IAnnotation.EType.VARIABLE.equals( i.id() ) )
+                                      .flatMap( i -> i.variables() )
+                                      .toArray( IVariable<?>[]::new );
 
         m_parallel = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.PARALLEL.equals( i.id() ) );
         m_atomic = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.ATOMIC.equals( i.id() ) );
@@ -130,6 +139,13 @@ public abstract class IBaseInstantiable implements IInstantiable
     public final Stream<String> tags()
     {
         return Arrays.stream( m_tags );
+    }
+
+    @Nonnull
+    @Override
+    public final Stream<IVariable<?>> variabledescription()
+    {
+        return Arrays.stream( m_variabledescription );
     }
 
     @Override

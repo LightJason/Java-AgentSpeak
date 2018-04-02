@@ -64,4 +64,12 @@ public interface IInstantiable extends IExecution
     @Nonnull
     Stream<String> tags();
 
+    /**
+     * returns for variables a description
+     *
+     * @return constants with with description
+     */
+    @Nonnull
+    Stream<IVariable<?>> variabledescription();
+
 }

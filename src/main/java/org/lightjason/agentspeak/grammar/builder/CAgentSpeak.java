@@ -223,7 +223,7 @@ public final class CAgentSpeak
                 return new CAtomAnnotation<>( l_type );
 
             case VARIABLE:
-                return annotationvariable( l_type, p_annotation.getText() );
+                return annotationvariabledescription( l_type, p_annotation.getText() );
 
             case CONSTANT:
                 return annotationconstant( l_type, p_annotation.getText() );
@@ -284,7 +284,7 @@ public final class CAgentSpeak
      * @param p_value annotation value string
      * @return annotation
      */
-    private static IAnnotation<?> annotationvariable( @Nonnull final IAnnotation.EType p_type, @Nonnull final String p_value )
+    private static IAnnotation<?> annotationvariabledescription( @Nonnull final IAnnotation.EType p_type, @Nonnull final String p_value )
     {
         final Matcher l_match = ANNOTATIONTWOPARAMETER.matcher( p_value );
         if ( !l_match.find() )
