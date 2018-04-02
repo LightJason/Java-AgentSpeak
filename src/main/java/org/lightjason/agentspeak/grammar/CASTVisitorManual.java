@@ -49,7 +49,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     @Override
     public Object visitRoot_literal( final ManualParser.Root_literalContext p_context )
     {
-        m_literal = (ILiteral) this.visitChildren( p_context );
+        m_literal = (ILiteral) this.visit( p_context.literal() );
         return null;
     }
 
@@ -95,6 +95,34 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
+    public final Object visitLiteral( final ManualParser.LiteralContext p_context )
+    {
+        return CTerm.literal( this, p_context.AT(), p_context.STRONGNEGATION(), p_context.ATOM(), p_context.termlist() );
+    }
+
+    @Override
+    public final Object visitTermlist( final ManualParser.TermlistContext p_context )
+    {
+        return CTerm.termlist( this, p_context.term() );
+    }
+
+    @Override
+    public final Object visitVariable( final ManualParser.VariableContext p_context )
+    {
+        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
+    }
+
+    @Override
+    public final Object visitVariablelist( final ManualParser.VariablelistContext p_context )
+    {
+        return CAgentSpeak.variablelist( this, p_context.variable() );
+    }
+
+
+
+
+
+    @Override
     public final Object visitExecute_action( final ManualParser.Execute_actionContext p_context )
     {
         return CAgentSpeak.executeaction( this, p_context.literal(), Collections.emptyMap() );
@@ -110,30 +138,6 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     public final Object visitExecute_variable( final ManualParser.Execute_variableContext p_context )
     {
         return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
-    }
-
-    @Override
-    public final Object visitLiteral( final ManualParser.LiteralContext p_context )
-    {
-        return CTerm.literal( this, p_context.AT(), p_context.STRONGNEGATION(), p_context.ATOM(), p_context.termlist() );
-    }
-
-    @Override
-    public final Object visitVariable( final ManualParser.VariableContext p_context )
-    {
-        return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
-    }
-
-    @Override
-    public final Object visitTermlist( final ManualParser.TermlistContext p_context )
-    {
-        return CTerm.termlist( this, p_context.term() );
-    }
-
-    @Override
-    public final Object visitVariablelist( final ManualParser.VariablelistContext p_context )
-    {
-        return CAgentSpeak.variablelist( this, p_context.variable() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -120,8 +120,8 @@ public final class TestCUnifier extends IBaseTest
             l_second.structurehash()
         );
 
-        final ILiteral l_third = CLiteral.parse( "foo()" );
-        final ILiteral l_fourth = CLiteral.parse( "hallo()" );
+        final ILiteral l_third = CLiteral.parse( "foo" );
+        final ILiteral l_fourth = CLiteral.parse( "hallo" );
         assertNotEquals(
             MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.structurehash() ),
             l_third.structurehash(),

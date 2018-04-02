@@ -80,7 +80,7 @@ nexttower(T, M) :-
     : .tower/size(TowerMaxIndex) == SliceCount
         <-
             .generic/print( "everything done" );
-            .stop()
+            .stop
 .
 
 
