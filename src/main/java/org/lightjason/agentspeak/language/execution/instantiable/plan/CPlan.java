@@ -159,9 +159,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final Stream<IVariable<?>> variables()
     {
         return CCommon.streamconcatstrict(
-            m_condition.variables(),
             super.variables(),
-            Arrays.stream( m_constant ),
+            m_condition.variables(),
             CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
         );
     }

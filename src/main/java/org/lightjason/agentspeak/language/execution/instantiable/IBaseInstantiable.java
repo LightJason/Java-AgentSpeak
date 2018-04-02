@@ -59,7 +59,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     /**
      * constants
      */
-    protected final IVariable<?>[] m_constant;
+    private final IVariable<?>[] m_constant;
     /**
      * parallel execution
      */
@@ -155,7 +155,10 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Arrays.stream( m_execution ).flatMap( IExecution::variables );
+        return Stream.concat(
+            Arrays.stream( m_constant ),
+            Arrays.stream( m_execution ).flatMap( IExecution::variables )
+        );
     }
 
     @Nonnull

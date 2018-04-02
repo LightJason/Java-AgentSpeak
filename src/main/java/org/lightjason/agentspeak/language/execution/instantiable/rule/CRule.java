@@ -103,7 +103,6 @@ public final class CRule extends IBaseInstantiable implements IRule
     {
         return CCommon.streamconcatstrict(
             super.variables(),
-            Arrays.stream( m_constant ),
             CCommon.flattenrecursive( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
         );
     }
