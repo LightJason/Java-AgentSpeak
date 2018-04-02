@@ -348,7 +348,7 @@ public final class TestCActionAgent extends IBaseTest
          */
         CEmptyPlan( final ITrigger p_trigger )
         {
-            super( new IExecution[0], new IAnnotation<?>[0], 0 );
+            super( new IAnnotation<?>[0], new IExecution[0], 0 );
             m_trigger = p_trigger;
         }
 

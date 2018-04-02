@@ -90,10 +90,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
                   @Nonnull final IExpression p_condition, @Nonnull final IExecution[] p_body )
     {
         super(
-            p_body,
-            p_annotation,
+            p_annotation, p_body,
 
-                Stream.of(
+            Stream.of(
                     p_event.hashCode(),
                     p_condition.hashCode(),
                     Arrays.hashCode( p_body ),

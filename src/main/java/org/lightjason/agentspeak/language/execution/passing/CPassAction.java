@@ -86,4 +86,10 @@ public final class CPassAction implements IExecution
     {
         return m_execution.variables();
     }
+
+    @Override
+    public final String toString()
+    {
+        return "." + m_execution.toString();
+    }
 }

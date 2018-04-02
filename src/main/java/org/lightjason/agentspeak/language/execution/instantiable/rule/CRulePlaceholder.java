@@ -47,7 +47,10 @@ import java.util.stream.Stream;
  * so if a rule calls itself (recursive) the reference does not exists,
  * with this class a placeholder is used first and after that we replace
  * the placeholder with the correct rule object
+ *
+ * @deprecated is not necessary
  */
+@Deprecated
 public final class CRulePlaceholder implements IRule
 {
     /**

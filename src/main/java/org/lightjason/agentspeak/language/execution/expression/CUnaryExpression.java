@@ -96,6 +96,6 @@ public final class CUnaryExpression implements IUnaryExpression
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "( {0}({1})", m_operator, m_element );
+        return MessageFormat.format( "{0}({1})", m_operator, m_element );
     }
 }

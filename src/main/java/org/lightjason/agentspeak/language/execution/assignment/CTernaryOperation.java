@@ -104,7 +104,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "[ {0} ] ? [ {1} ] : [ {2} ]", m_value, m_true, m_false );
+        return MessageFormat.format( "{0} ? {1} : {2}", m_value, m_true, m_false );
     }
 
     @Nonnull

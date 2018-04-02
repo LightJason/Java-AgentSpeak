@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -83,6 +84,33 @@ public final class TestCAgentParser extends IBaseGrammarTest
             new CParserAgent( Collections.emptySet(), Collections.emptySet() )
                 .parse( streamfromstring(  "!main." ) ).initialgoal()
         );
+    }
+
+    /**
+     * test simple rule
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void simplerule() throws Exception
+    {
+        final IRule l_rule = parsesinglerule(
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "foo(X) :- X++."
+        );
+
+        final IVariable<?> l_var = new CVariable<>( "X" ).set( 5 );
+
+        Assert.assertTrue(
+            l_rule.execute(
+                false,
+                new CLocalContext( l_var ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals( 6.0, l_var.<Number>raw() );
     }
 
     /**

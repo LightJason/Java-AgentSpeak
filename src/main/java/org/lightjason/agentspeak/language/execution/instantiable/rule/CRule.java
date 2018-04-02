@@ -24,19 +24,17 @@
 package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.achievementtest.CAchievementRuleLiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -60,15 +58,11 @@ public final class CRule extends IBaseInstantiable implements IRule
      * @param p_id literal with signature
      * @param p_body rule body
      */
-    public CRule( @Nonnull final ILiteral p_id, @Nonnull final IExecution[] p_body )
+    public CRule( @Nonnull final ILiteral p_id, @Nonnull final IExecution p_body )
     {
         super(
-            p_body,
-            new IAnnotation<?>[0],
-            Stream.of(
-                p_id.hashCode(),
-                Arrays.hashCode( p_body )
-            ).reduce( 0, ( i, j ) -> i ^ j )
+            Stream.of( p_body ).toArray( IExecution[]::new ),
+            p_id.hashCode() ^ p_body.hashCode()
         );
         m_id = p_id;
     }
@@ -85,8 +79,8 @@ public final class CRule extends IBaseInstantiable implements IRule
     @SuppressWarnings( "unchecked" )
     public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
     {
+        /*
         return new CRule(
-
             m_id,
             Arrays.stream( m_execution )
                   .map( i ->
@@ -96,6 +90,8 @@ public final class CRule extends IBaseInstantiable implements IRule
                        : i
             ).toArray( IExecution[]::new )
         );
+        */
+        return IRule.EMPTY;
     }
 
     @Nonnull
@@ -115,7 +111,7 @@ public final class CRule extends IBaseInstantiable implements IRule
             "{0} ({1} ==>> {2})",
             super.toString(),
             m_id,
-            m_execution
+            StringUtils.join( m_execution, "; " )
         );
     }
 

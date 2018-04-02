@@ -65,7 +65,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.execution.instantiable.rule.CRulePlaceholder;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.CRule;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
@@ -118,7 +118,6 @@ public final class CAgentSpeak
 
 
 
-
     // --- base structure --------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -128,14 +127,14 @@ public final class CAgentSpeak
      * @param p_annotation annotation
      * @param p_trigger trigger
      * @param p_literal plan literal
-     * @param p_definition plan definition
+     * @param p_body plan definition
      * @return plan
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static Stream<IPlan> plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                      @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger, @Nonnull final RuleContext p_literal,
-                                      @Nonnull final List<? extends RuleContext> p_definition )
+                                      @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger,
+                                      @Nonnull final RuleContext p_literal, @Nonnull final List<? extends RuleContext> p_body )
     {
         final ITrigger l_trigger = CTrigger.of(
             ITrigger.EType.of( p_trigger.getText() ),
@@ -143,9 +142,9 @@ public final class CAgentSpeak
         );
 
         final IAnnotation<?>[] l_annotation = annotation( p_annotation );
-        return p_definition.stream()
-                           .map( i -> (Pair<IExpression, IExecution[]>) p_visitor.visit( i ) )
-                           .map( i -> new CPlan( l_annotation, l_trigger, i.getLeft(), i.getRight() ) );
+        return p_body.stream()
+                     .map( i -> (Pair<IExpression, IExecution[]>) p_visitor.visit( i ) )
+                     .map( i -> new CPlan( l_annotation, l_trigger, i.getLeft(), i.getRight() ) );
     }
 
     /**
@@ -176,27 +175,19 @@ public final class CAgentSpeak
      * @return rule stream
      */
     @Nonnull
+    @SuppressWarnings( "unchecked" )
     public static Stream<IRule> rule( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                       @Nullable final RuleContext p_literal, @Nullable final List<? extends RuleContext> p_body )
     {
         if ( ( Objects.isNull( p_literal ) ) || ( Objects.isNull( p_body ) ) || ( p_body.isEmpty() ) )
             return Stream.empty();
 
-
-        return Stream.of( IRule.EMPTY );
+        final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
+        return p_body.stream()
+                     .flatMap( i -> (Stream<IExecution>) p_visitor.visit( i ) )
+                     .map( i -> new CRule( l_literal, i ) );
     }
 
-    /**
-     * create a rule placeholder
-     *
-     * @param p_literal literal
-     * @return place holder rule
-     */
-    @Nonnull
-    public static IRule ruleplaceholder( @Nonnull final ILiteral p_literal )
-    {
-        return new CRulePlaceholder( p_literal );
-    }
 
 
     // --- annotation ------------------------------------------------------------------------------------------------------------------------------------------
@@ -307,6 +298,7 @@ public final class CAgentSpeak
         final String[] l_data = l_match.group().replaceAll( "\\(|\\)", "" ).split( "," );
         return new CConstantAnnotation<>( p_type, l_data[0], CRaw.cleanstring( l_data[1] ) );
     }
+
 
 
     // --- execution content -----------------------------------------------------------------------------------------------------------------------------------
@@ -442,10 +434,10 @@ public final class CAgentSpeak
         switch ( p_operator.getText() )
         {
             case "++":
-                return new CIncrement( (IVariable<Number>) p_visitor.visitChildren( p_variable ) );
+                return new CIncrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
 
             case "--":
-                return new CDecrement( (IVariable<Number>) p_visitor.visitChildren( p_variable ) );
+                return new CDecrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
 
             default:
                 throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunary" ) );
@@ -609,6 +601,7 @@ public final class CAgentSpeak
     }
 
 
+
     // --- expression ------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -663,7 +656,6 @@ public final class CAgentSpeak
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
     }
-
 
 
 
@@ -740,6 +732,7 @@ public final class CAgentSpeak
     }
 
 
+
     // --- unification -----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -796,7 +789,6 @@ public final class CAgentSpeak
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }
-
 
 
 

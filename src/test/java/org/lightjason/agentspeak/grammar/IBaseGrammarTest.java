@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.grammar;
 import org.junit.Assert;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
@@ -50,12 +51,8 @@ public abstract class IBaseGrammarTest extends IBaseTest
     protected static <T extends IASTVisitorAgentSpeak> IPlan parsesingleplan( @Nonnull final IParser<T> p_parser,
                                                                               @Nonnull final String p_source ) throws Exception
     {
-        final IPlan l_plan = parsemultipleplans( p_parser, p_source )
-            .findFirst()
-            .orElse( IPlan.EMPTY );
-
+        final IPlan l_plan = parsemultipleplans( p_parser, p_source ).findFirst().orElse( IPlan.EMPTY );
         Assert.assertNotEquals( IPlan.EMPTY, l_plan );
-
         return l_plan;
     }
 
@@ -72,9 +69,55 @@ public abstract class IBaseGrammarTest extends IBaseTest
     protected static <T extends IASTVisitorAgentSpeak> Stream<IPlan> parsemultipleplans( @Nonnull final IParser<T> p_parser,
                                                                                          @Nonnull final String p_source ) throws Exception
     {
-        return p_parser
-                .parse( streamfromstring(  p_source ) )
-                .plans()
-                .stream();
+        return parse( p_parser, p_source ).plans().stream();
+    }
+
+    /**
+     * parse a single rule
+     *
+     * @param p_parser parser
+     * @param p_source source
+     * @tparam T AST visitor type
+     * @return single plan
+     * @throws Exception is thrown on any parser error
+     */
+    @Nonnull
+    protected static <T extends IASTVisitorAgentSpeak> IRule parsesinglerule( @Nonnull final IParser<T> p_parser,
+                                                                              @Nonnull final String p_source ) throws Exception
+    {
+        final IRule l_rule = parsemultiplerules( p_parser, p_source ).findFirst().orElse( IRule.EMPTY );
+        Assert.assertNotEquals( IRule.EMPTY, l_rule );
+        return l_rule;
+    }
+
+    /**
+     * parse all rules
+     *
+     * @param p_parser parser
+     * @param p_source source
+     * @tparam T AST visitor type
+     * @return rule stream
+     * @throws Exception is thrown on any parser error
+     */
+    @Nonnull
+    protected static <T extends IASTVisitorAgentSpeak> Stream<IRule> parsemultiplerules( @Nonnull final IParser<T> p_parser,
+                                                                                         @Nonnull final String p_source ) throws Exception
+    {
+        return parse( p_parser, p_source ).rules().stream();
+    }
+
+    /**
+     * parse source
+     *
+     * @param p_parser parser
+     * @param p_source source
+     * @tparam T ASR visitor type
+     * @return visitor
+     * @throws Exception is thrown on any parser error
+     */
+    private static <T extends IASTVisitorAgentSpeak> T parse( @Nonnull final IParser<T> p_parser,
+                                                              @Nonnull final String p_source ) throws Exception
+    {
+        return p_parser.parse( streamfromstring(  p_source ) );
     }
 }

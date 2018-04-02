@@ -173,7 +173,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}({1})", m_functor, Objects.isNull( m_value ) ? "" : m_value );
+        return MessageFormat.format( "{0}({1})", m_functor, Objects.nonNull( m_value ) ? m_value : "" );
     }
 
     @Nonnull

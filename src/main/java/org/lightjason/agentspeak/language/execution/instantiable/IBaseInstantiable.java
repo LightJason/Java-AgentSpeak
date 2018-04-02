@@ -86,15 +86,32 @@ public abstract class IBaseInstantiable implements IInstantiable
      */
     private final int m_hash;
 
-
     /**
      * ctor
      *
-     * @param p_execution executed actions
-     * @param p_annotation annotation map
+     * @param p_execution execution elements
      * @param p_hash hash code
      */
-    protected IBaseInstantiable( @Nonnull final IExecution[] p_execution, @Nonnull final IAnnotation<?>[] p_annotation, final int p_hash )
+    protected IBaseInstantiable( @Nonnull final IExecution[] p_execution, final int p_hash )
+    {
+        m_hash = p_hash;
+        m_execution = p_execution;
+
+        m_atomic = false;
+        m_parallel = false;
+        m_description = "";
+        m_tags = new String[0];
+        m_constant = new IVariable<?>[0];
+        m_variabledescription = new IVariable<?>[0];
+    }
+
+    /**
+     * ctor
+     *  @param p_annotation annotation map
+     * @param p_execution execution elements
+     * @param p_hash hash code
+     */
+    protected IBaseInstantiable( @Nonnull final IAnnotation<?>[] p_annotation, @Nonnull final IExecution[] p_execution, final int p_hash )
     {
         m_hash = p_hash;
         m_execution = p_execution;

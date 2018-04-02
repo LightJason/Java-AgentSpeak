@@ -35,6 +35,8 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -77,5 +79,11 @@ public class CPassVariable extends IBaseExecution<IVariable<?>[]>
     public final Stream<IVariable<?>> variables()
     {
         return Arrays.stream( m_value );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return Objects.isNull( m_value ) ? "" : Arrays.stream( m_value ).map( i -> i.toString() ).collect( Collectors.joining( " " ) );
     }
 }
