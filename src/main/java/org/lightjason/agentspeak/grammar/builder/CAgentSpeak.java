@@ -498,12 +498,19 @@ public final class CAgentSpeak
 
         final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
 
         if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "wrongargumentnumber", l_action.minimalArgumentNumber(), p_actionliteral ) );
+            throw new CIllegalArgumentException(
+                CCommon.languagestring(
+                    CAgentSpeak.class,
+                    "wrongargumentnumber",
+                    l_action.minimalArgumentNumber(),
+                    p_actionliteral.getText()
+                )
+            );
 
-        return new CPassAction( l_actionliteral.hasAt(), l_action );
+        return new CPassAction( l_actionliteral.hasAt(), l_action, l_actionliteral.orderedvalues() );
     }
 
     /**

@@ -141,10 +141,11 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @Override
     public final String toString()
     {
+        final String l_data = this.datatoString().trim();
         return MessageFormat.format(
-            "{0} ({1} | {2}{3} ==>> {4}.)",
+            "{0} ({1}{2}{3} ==>> {4}.)",
             super.toString(),
-            this.datatoString(),
+            l_data.isEmpty() ? "" : l_data + " | ",
 
             m_triggerevent,
             Objects.isNull( m_condition ) ? "" : MessageFormat.format( " |- {0}", m_condition ),

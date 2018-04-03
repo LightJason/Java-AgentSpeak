@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.passing;
 
+import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -31,8 +32,11 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,28 +58,35 @@ public final class CPassAction implements IExecution
      * execution reference
      */
     private final IExecution m_execution;
+    /**
+     * arguments
+     */
+    private final ITerm[] m_arguments;
+
 
     /**
      * ctor
      *
      * @param p_parallel parallel execution
      * @param p_execution execution
+     * @param p_arguments arguments
      */
-    public CPassAction( final boolean p_parallel, @Nonnull final IExecution p_execution )
+    public CPassAction( final boolean p_parallel, @Nonnull final IExecution p_execution, @Nonnull Stream<ITerm> p_arguments )
     {
         m_parallel = p_parallel;
         m_execution = p_execution;
+        m_arguments = p_arguments.toArray( ITerm[]::new );
     }
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
     {
         return m_execution.execute(
             m_parallel,
             p_context,
-            Collections.unmodifiableList( CCommon.replaceFromContext( p_context, p_argument.stream() ).collect( Collectors.toList() ) ),
+            Collections.unmodifiableList( CCommon.replaceFromContext( p_context, Arrays.stream( m_arguments ) ).collect( Collectors.toList() ) ),
             p_return
         );
     }
@@ -90,6 +101,10 @@ public final class CPassAction implements IExecution
     @Override
     public final String toString()
     {
-        return "." + m_execution.toString();
+        return MessageFormat.format(
+            ".{0}{1}{2}",
+            m_execution,
+            m_parallel ? "@" : "",
+            m_arguments.length == 0 ? "" : "[" + StringUtils.join( m_arguments, ", " ) + "]" );
     }
 }

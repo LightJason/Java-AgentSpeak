@@ -81,48 +81,43 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
         final ILiteral l_unified = p_value.allocate( p_context );
 
         // second step execute backtracking rules sequential / parallel
-        return (
-            p_parallel
-            ? l_rules.parallelStream()
-            : l_rules.stream()
-        ).map( i ->
-        {
+        return l_rules.stream()
+                      .map( i ->
+                      {
 
-            // instantiate variables by unification of the rule literal
-            final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( l_unified, i.identifier() );
+                          // instantiate variables by unification of the rule literal
+                          final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( l_unified, i.identifier() );
 
-            // execute rule
-            final IFuzzyValue<Boolean> l_return = i.execute(
-                false,
-                i.instantiate( p_context.agent(), l_variables.stream() ),
-                Collections.emptyList(),
-                Collections.emptyList()
-            );
+                          // execute rule
+                          final IFuzzyValue<Boolean> l_return = i.execute(
+                              false,
+                              i.instantiate( p_context.agent(), l_variables.stream() ),
+                              Collections.emptyList(),
+                              Collections.emptyList()
+                          );
 
-            // create rule result with fuzzy- and defuzzificated value and instantiate variable set
-            return new ImmutableTriple<>( p_context.agent().fuzzy().getValue().defuzzify( l_return ), l_return, l_variables );
+                          // create rule result with fuzzy- and defuzzificated value and instantiate variable set
+                          return new ImmutableTriple<>( p_context.agent().fuzzy().getValue().defuzzify( l_return ), l_return, l_variables );
 
-        } )
+                      } )
 
-         // find successfully ended rule
-         .filter( ImmutableTriple::getLeft )
-         .findFirst()
+                       // find successfully ended rule
+                       .filter( ImmutableTriple::getLeft )
+                       .findFirst()
 
-         // realocate rule instantiated variables back to execution context
-         .map( i ->
-         {
+                       // realocate rule instantiated variables back to execution context
+                       .map( i ->
+                       {
+                           i.getRight()
+                            .parallelStream()
+                            .filter( j -> j instanceof IRelocateVariable )
+                            .forEach( j -> j.<IRelocateVariable>term().relocate() );
 
-             i.getRight()
-              .parallelStream()
-              .filter( j -> j instanceof IRelocateVariable )
-              .forEach( j -> j.<IRelocateVariable>term().relocate() );
+                           return i.getMiddle();
+                       } )
 
-             return i.getMiddle();
-
-         } )
-
-         // otherwise rule fails (default behaviour)
-         .orElse( CFuzzyValue.of( false ) );
+                       // otherwise rule fails (default behaviour)
+                       .orElse( CFuzzyValue.of( false ) );
     }
 
     @Override

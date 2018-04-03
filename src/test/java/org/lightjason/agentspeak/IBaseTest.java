@@ -25,17 +25,22 @@ package org.lightjason.agentspeak;
 
 import org.apache.commons.io.IOUtils;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -45,11 +50,14 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -234,6 +242,71 @@ public abstract class IBaseTest
         CAgent( @Nonnull final IAgentConfiguration<IAgent<?>> p_configuration )
         {
             super( p_configuration );
+        }
+    }
+
+    /**
+     * action to store values
+     */
+    protected static final class CCollectValues extends IBaseAction
+    {
+        /**
+         * list with native values
+         */
+        private final List<ITerm> m_value;
+
+        /**
+         * ctor
+         */
+        public CCollectValues()
+        {
+            this( Collections.synchronizedList( new ArrayList<>() ) );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_value value list
+         */
+        public CCollectValues( @Nonnull final List<ITerm> p_value )
+        {
+            m_value = p_value;
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 1;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath name()
+        {
+            return CPath.of( "push/value" );
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        {
+            CCommon.flatten( p_argument )
+                   .map( i -> CCommon.replaceFromContext( p_context, i ) )
+                   .forEach( m_value::add );
+
+            return CFuzzyValue.of( true );
+        }
+
+        /**
+         * returns all values
+         *
+         * @return value list
+         */
+        @Nonnull
+        public final List<ITerm> value()
+        {
+            return m_value;
         }
     }
 

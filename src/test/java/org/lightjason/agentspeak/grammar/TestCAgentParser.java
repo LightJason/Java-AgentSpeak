@@ -25,10 +25,12 @@ package org.lightjason.agentspeak.grammar;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
@@ -43,6 +45,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -133,10 +136,53 @@ public final class TestCAgentParser extends IBaseGrammarTest
     @Test
     public final void complexrule() throws Exception
     {
-        final IRule l_rule = parsesinglerule(
-            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+        final IAgent<?> l_agent = new CAgentGenerator(
             "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
+            + "+!fib(X) <- $fibonacci(X,R); .push/value(X,R).",
+            Stream.of( new CCollectValues() ).collect(Collectors.toSet() ),
+            Collections.emptySet()
+        ).generatesingle();
+
+        l_agent.trigger( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib(5)" ) ), true );
+
+        // @todo incomplete
+    }
+
+    /**
+     * test action call with parameter
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void action() throws Exception
+    {
+        final CCollectValues l_values = new CCollectValues();
+
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent( Stream.of( l_values ).collect(Collectors.toSet() ), Collections.emptySet() ),
+            "+!actiontest <- X=5; .push/value(X, [1,2,3], 'test data', inner('foobar'), 555, fail)."
         );
+
+        final IVariable<?> l_xvar = new CVariable<>( "X" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_xvar ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals( 5.0, l_xvar.<Number>raw() );
+        Assert.assertEquals( 6, l_values.value().size() );
+
+        Assert.assertEquals( 5.0, l_values.value().get( 0 ).<Number>raw() );
+        Assert.assertEquals( "test data", l_values.value().get( 2 ).raw() );
+        Assert.assertEquals( CLiteral.of( "inner", CRawTerm.of( "foobar" ) ), l_values.value().get( 3 ).raw() );
+        Assert.assertEquals( 555.0, l_values.value().get( 4 ).<Number>raw() );
+        Assert.assertEquals( false, l_values.value().get( 5 ).raw() );
     }
 
     /**

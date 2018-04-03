@@ -147,4 +147,10 @@ public final class CRawList implements IRawTerm<List<?>>
     {
         return 0;
     }
+
+    @Override
+    public final String toString()
+    {
+        return m_value.toString();
+    }
 }
