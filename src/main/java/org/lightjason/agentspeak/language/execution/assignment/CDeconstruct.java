@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -37,7 +36,6 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -81,15 +79,13 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
     @Override
     public final int hashCode()
     {
-        return
-
-            Objects.isNull( m_value ) ? 0 : Arrays.hashCode( m_value ) ^ m_righthand.hashCode();
+        return Arrays.hashCode( m_value ) ^ m_righthand.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return super.equals( p_object );
     }
 
     @Override

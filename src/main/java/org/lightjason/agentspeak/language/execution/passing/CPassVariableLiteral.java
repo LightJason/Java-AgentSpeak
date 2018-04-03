@@ -82,12 +82,18 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
         final IVariable<?> l_variable = CCommon.replaceFromContext( p_context, m_value ).<IVariable<?>>term().thrownotallocated();
 
         if ( l_variable.valueassignableto( String.class ) )
+        {
             p_return.add( this.bystring( p_context, l_variable.raw() ) );
+            return CFuzzyValue.of( true );
+        }
 
         if ( l_variable.valueassignableto( ILiteral.class ) )
+        {
             p_return.add( this.byliteral( p_context, l_variable.raw() ) );
+            return CFuzzyValue.of( true );
+        }
 
-        return CFuzzyValue.of( true );
+        return CFuzzyValue.of( false );
     }
 
     @Nonnull

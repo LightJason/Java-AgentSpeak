@@ -92,4 +92,16 @@ public abstract class IBaseExecution<T> implements IExecution
         return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
+    @Override
+    public int hashCode()
+    {
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
 }

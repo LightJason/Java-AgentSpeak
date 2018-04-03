@@ -37,7 +37,6 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -92,13 +91,13 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     @Override
     public final int hashCode()
     {
-        return ( Objects.isNull( m_value ) ? 0 : m_value.hashCode() ) ^ m_rhs.hashCode();
+        return super.hashCode() ^ m_rhs.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return super.equals( p_object );
     }
 
     @Override

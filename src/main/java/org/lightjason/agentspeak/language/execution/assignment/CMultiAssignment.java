@@ -99,13 +99,13 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     @Override
     public final int hashCode()
     {
-        return ( Objects.isNull( m_value ) ? 0 : m_value.hashCode() ) ^ m_righthand.hashCode();
+        return super.hashCode() ^ m_righthand.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return super.equals( p_object );
     }
 
     @Override

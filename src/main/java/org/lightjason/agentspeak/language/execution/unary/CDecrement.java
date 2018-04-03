@@ -73,9 +73,12 @@ public final class CDecrement implements IUnary
     {
         final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( l_variable.valueassignableto( Number.class ) )
+        {
             l_variable.set( l_variable.<Number>raw().doubleValue() - 1 );
+            return CFuzzyValue.of( true );
+        }
 
-        return CFuzzyValue.of( true );
+        return CFuzzyValue.of( false );
     }
 
     @Nonnull
