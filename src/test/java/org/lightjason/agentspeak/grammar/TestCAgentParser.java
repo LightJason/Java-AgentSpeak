@@ -134,15 +134,18 @@ public final class TestCAgentParser extends IBaseGrammarTest
     @Test
     public final void complexrule() throws Exception
     {
+        final CCollectValues l_values = new CCollectValues();
+
         final IAgent<?> l_agent = new CAgentGenerator(
             "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
-            + "+!fib(X) <- $fibonacci(X,R); .push/value(X,R).",
-            Stream.of( new CCollectValues() ).collect( Collectors.toSet() ),
+            + "+!fib(X) <- .push/value(X).",
+            Stream.of( l_values ).collect( Collectors.toSet() ),
             Collections.emptySet()
         ).generatesingle();
 
         l_agent.trigger( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib(5)" ) ), true );
 
+        System.out.println( l_values.value() );
         // @todo incomplete
     }
 

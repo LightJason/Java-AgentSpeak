@@ -94,7 +94,10 @@ public final class CPassAction implements IExecution
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_execution.variables();
+        return CCommon.streamconcatstrict(
+            m_execution.variables(),
+            Arrays.stream( m_arguments ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
+        );
     }
 
     @Override
