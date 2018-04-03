@@ -96,7 +96,9 @@ public final class CPassAction implements IExecution
     {
         return CCommon.streamconcatstrict(
             m_execution.variables(),
-            Arrays.stream( m_arguments ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
+            CCommon.flattenrecursive( Arrays.stream( m_arguments ) )
+                   .filter( i -> i instanceof IVariable<?> )
+                   .map( ITerm::term )
         );
     }
 
