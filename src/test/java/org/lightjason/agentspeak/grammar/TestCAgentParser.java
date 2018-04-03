@@ -101,11 +101,12 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IVariable<Object> l_tvar = new CVariable<>( "T" ).set( 0 );
         final IVariable<Object> l_mvar = new CVariable<>( "M" ).set( 3 );
+        final IContext l_context = new CLocalContext( l_tvar, l_mvar );
 
         Assert.assertTrue(
             l_rule.execute(
                 false,
-                new CLocalContext( l_tvar, l_mvar ),
+                l_context,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -116,12 +117,26 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertTrue(
             l_rule.execute(
                 false,
-                new CLocalContext( l_tvar, l_mvar ),
+                l_context,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
         Assert.assertEquals( 2.0, l_tvar.<Number>raw() );
+    }
+
+    /**
+     * test complex rule
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void complexrule() throws Exception
+    {
+        final IRule l_rule = parsesinglerule(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
+        );
     }
 
     /**

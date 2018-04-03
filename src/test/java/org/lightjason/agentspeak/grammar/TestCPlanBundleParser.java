@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -67,6 +68,33 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         Assert.assertEquals( 2, l_beliefs.size() );
         Assert.assertEquals( CLiteral.of( "bar", CRawTerm.of( 1234.0 ) ), l_beliefs.get( 0 ) );
         Assert.assertEquals( CLiteral.of( "foo", CRawTerm.of( "tests" ) ), l_beliefs.get( 1 ) );
+    }
+
+    /**
+     * test simple rule
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void simplerule() throws Exception
+    {
+        final IRule l_rule = parsesinglerule(
+            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            "nexttower(T) :- T++."
+        );
+
+        final IVariable<?> l_tvar = new CVariable<>( "T" ).set( 0 );
+
+        Assert.assertTrue(
+            l_rule.execute(
+                false,
+                new CLocalContext( l_tvar ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals( 1.0, l_tvar.<Number>raw() );
     }
 
     /**

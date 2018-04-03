@@ -107,6 +107,11 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                  .map( i -> (ILiteral) this.visit( i ) )
                  .forEach( i -> m_initialbeliefs.add( i ) );
 
+        p_context.logicrule()
+                 .stream()
+                 .flatMap( i -> (Stream<IRule>) this.visit( i ) )
+                 .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
+
         p_context.plan()
                  .stream()
                  .flatMap( i -> (Stream<IPlan>) this.visit( i ) )
