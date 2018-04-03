@@ -54,10 +54,10 @@ public final class CBelief extends IBaseExecution<ILiteral>
     /**
      * ctor
      *
-     * @param p_literal literal
      * @param p_action action
+     * @param p_literal literal
      */
-    public CBelief( @Nonnull final ILiteral p_literal, @Nonnull final EAction p_action )
+    public CBelief( @Nonnull final EAction p_action, @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
         m_action = p_action;

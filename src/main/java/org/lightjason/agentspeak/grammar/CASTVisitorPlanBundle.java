@@ -243,9 +243,10 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
     {
         return CAgentSpeak.executebelief(
+            this,
+            p_context.literal(),
             p_context.PLUS(),
-            p_context.MINUS(),
-            (ILiteral) this.visit( p_context.literal() )
+            p_context.MINUS()
         );
     }
 

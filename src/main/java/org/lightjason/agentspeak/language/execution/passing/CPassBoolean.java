@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 
@@ -49,7 +48,7 @@ public final class CPassBoolean extends IBaseExecution<Boolean>
      *
      * @param p_value data
      */
-    public CPassBoolean( @Nullable final Boolean p_value )
+    public CPassBoolean( final boolean p_value )
     {
         super( p_value );
     }

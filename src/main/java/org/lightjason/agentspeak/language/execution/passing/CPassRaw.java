@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -62,9 +61,7 @@ public final class CPassRaw<T> extends IBaseExecution<ITerm>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        if ( Objects.nonNull( m_value ) )
-            p_return.add( m_value );
-
+        p_return.add( m_value );
         return CFuzzyValue.of( true );
     }
 }

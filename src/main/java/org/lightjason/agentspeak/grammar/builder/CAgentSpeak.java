@@ -447,6 +447,7 @@ public final class CAgentSpeak
     /**
      * build ternary operator
      *
+     * @param p_visitor visitor
      * @param p_expression expression definition
      * @param p_true true execution
      * @param p_false false execution
@@ -466,19 +467,22 @@ public final class CAgentSpeak
     /**
      * build belief action
      *
+     * @param p_visitor visitor
+     * @param p_literal belief literal
      * @param p_addbelief add-belief terminal
      * @param p_deletebelief delete-belief terminal
-     * @param p_literal belief literal
      * @return null or execution
      */
     @Nonnull
-    public static IExecution executebelief( @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief, @Nonnull final ILiteral p_literal )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution executebelief( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_literal,
+                                            @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief )
     {
         if ( Objects.nonNull( p_addbelief ) )
-            return new CBelief( p_literal, CBelief.EAction.ADD );
+            return new CBelief( CBelief.EAction.ADD, (ILiteral) p_visitor.visit( p_literal ) );
 
         if ( Objects.nonNull( p_deletebelief ) )
-            return new CBelief( p_literal, CBelief.EAction.DELETE );
+            return new CBelief( CBelief.EAction.DELETE, (ILiteral) p_visitor.visit( p_literal ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbeliefaction" ) );
     }
