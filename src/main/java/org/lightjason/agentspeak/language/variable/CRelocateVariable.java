@@ -39,7 +39,7 @@ import java.util.Objects;
  *
  * @tparam T variable type
  */
-public final class CRelocateVariable<T> extends CVariable<T> implements IRelocateVariable
+public final class CRelocateVariable<T> extends CVariable<T> implements IRelocateVariable<T>
 {
     /**
      * serial id

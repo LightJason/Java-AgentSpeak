@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language.execution.achievementtest;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -71,7 +70,6 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
      * @return boolean result
      */
     @Nonnull
-    @SuppressWarnings( "unchecked" )
     protected static IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value )
     {
         // read current rules, if not exists execution fails
@@ -95,9 +93,10 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
-                false, i.instantiate( p_context.agent(), l_variables.stream() ),
-                Collections.<ITerm>emptyList(),
-                Collections.<ITerm>emptyList()
+                false,
+                i.instantiate( p_context.agent(), l_variables.stream() ),
+                Collections.emptyList(),
+                Collections.emptyList()
             );
 
             // create rule result with fuzzy- and defuzzificated value and instantiate variable set
@@ -113,9 +112,10 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
          .map( i ->
          {
 
-             i.getRight().parallelStream()
+             i.getRight()
+              .parallelStream()
               .filter( j -> j instanceof IRelocateVariable )
-              .forEach( j -> ( (IRelocateVariable) j ).relocate() );
+              .forEach( j -> j.<IRelocateVariable>term().relocate() );
 
              return i.getMiddle();
 

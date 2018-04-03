@@ -38,7 +38,7 @@ import java.util.Objects;
  *
  * @tparam T variable type
  */
-public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implements IRelocateVariable
+public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implements IRelocateVariable<T>
 {
     /**
      * serial id

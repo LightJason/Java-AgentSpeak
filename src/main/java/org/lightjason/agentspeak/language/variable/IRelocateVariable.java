@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
  * interface for relocated variables (linkage
  * between two variables for transfering the value)
  */
-public interface IRelocateVariable
+public interface IRelocateVariable<T> extends IVariable<T>
 {
 
     /**
