@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -250,6 +249,10 @@ public abstract class IBaseTest
      */
     protected static final class CCollectValues extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 4609716230937689449L;
         /**
          * list with native values
          */

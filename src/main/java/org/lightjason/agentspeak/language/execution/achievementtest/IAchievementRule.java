@@ -108,10 +108,9 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
                        // realocate rule instantiated variables back to execution context
                        .map( i ->
                        {
-                           i.getRight()
-                            .parallelStream()
-                            .filter( j -> j instanceof IRelocateVariable )
-                            .forEach( j -> j.<IRelocateVariable>term().relocate() );
+                           i.getRight().parallelStream()
+                                       .filter( j -> j instanceof IRelocateVariable<?> )
+                                       .forEach( j -> j.<IRelocateVariable<?>>term().relocate() );
 
                            return i.getMiddle();
                        } )

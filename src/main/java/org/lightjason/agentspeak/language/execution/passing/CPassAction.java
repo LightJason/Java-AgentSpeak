@@ -36,7 +36,6 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,7 +70,7 @@ public final class CPassAction implements IExecution
      * @param p_execution execution
      * @param p_arguments arguments
      */
-    public CPassAction( final boolean p_parallel, @Nonnull final IExecution p_execution, @Nonnull Stream<ITerm> p_arguments )
+    public CPassAction( final boolean p_parallel, @Nonnull final IExecution p_execution, @Nonnull final Stream<ITerm> p_arguments )
     {
         m_parallel = p_parallel;
         m_execution = p_execution;
