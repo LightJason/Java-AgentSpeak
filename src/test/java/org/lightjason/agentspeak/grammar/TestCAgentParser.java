@@ -138,15 +138,22 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IAgent<?> l_agent = new CAgentGenerator(
             "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
-            + "+!fib(X) <- .push/value(X).",
+            + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
             Stream.of( l_values ).collect( Collectors.toSet() ),
             Collections.emptySet()
         ).generatesingle();
 
-        l_agent.trigger( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib(5)" ) ), true );
+        Assert.assertTrue(
+            l_agent.trigger(
+                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( 13 ) ) ),
+                true
+            )
+            .value()
+        );
 
-        System.out.println( l_values.value() );
-        // @todo incomplete
+        Assert.assertEquals( 2, l_values.value().size() );
+        Assert.assertEquals( 13, l_values.value().get( 0 ).<Number>raw() );
+        Assert.assertEquals( 233.0, l_values.value().get( 1 ).<Number>raw() );
     }
 
     /**
