@@ -128,10 +128,33 @@ public abstract class IBaseGrammarTest extends IBaseTest
      * @param p_value value
      * @return result value
      */
-    protected static Number fibonacci( @Nonnegative Number p_value )
+    protected static Number fibonacci( @Nonnegative final Number p_value )
     {
         return p_value.intValue() <= 2
                ? 1
                : fibonacci( p_value.intValue() - 1 ).intValue() + fibonacci( p_value.intValue() - 2 ).intValue();
+    }
+
+    /**
+     * ackermann
+     *
+     * @param p_nvalue n-value
+     * @param p_mvalue m-value
+     * @return ackermann function value
+     */
+    protected static Number ackermann( @Nonnegative final Number p_nvalue, @Nonnegative final Number p_mvalue )
+    {
+        return p_nvalue.intValue() == 0
+               ? p_mvalue.intValue() + 1
+               : p_mvalue.intValue() == 0
+                 ? ackermann( p_nvalue.intValue() - 1, 1 )
+                 : ackermann( p_nvalue.intValue() - 1, ackermann( p_nvalue, p_mvalue.intValue() - 1 ) );
+        /*
+        ackermann(N, M, R)
+            :- N == 0; R = M+1
+            :- M == 0; TN = N-1; $ackermann(TN, 1, R);
+            :- TM = M-1; $ackermann(N, TM, RI); TN = N-1; $ackermann(TN, RI, R).
+        */
+
     }
 }

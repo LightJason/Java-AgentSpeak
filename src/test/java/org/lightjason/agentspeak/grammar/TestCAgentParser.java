@@ -138,7 +138,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
         final CCollectValues l_values = new CCollectValues();
 
         final IAgent<?> l_agent = new CAgentGenerator(
-            "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
+            "fibonacci(X, R)"
+                + " :- X <= 2;  R = 1 "
+                + " :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
             + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
             Stream.of( l_values ).collect( Collectors.toSet() ),
             Collections.emptySet()

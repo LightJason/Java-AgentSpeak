@@ -107,27 +107,35 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     @Test
     public final void complexrule() throws Exception
     {
-        final int l_fibonacci = new Random().nextInt( 25 );
+        final Random l_random = new Random();
+        final int l_nvalue = l_random.nextInt( 4 );
+        final int l_mvalue = l_random.nextInt( 6 );
+
         final CCollectValues l_values = new CCollectValues();
 
         final IAgent<?> l_agent = new CAgentGenerator(
-            "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
-            + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
+            "ackermann(N, M, R)"
+                + " :- N == 0; R = M+1"
+                + " :- M == 0; TN = N - 1; $ackermann(TN, 1, R)"
+                + " :- TM = M - 1; $ackermann(N, TM, RI); TN = N - 1; $ackermann(TN, RI, R)."
+            + " +!ack(N,M) <- $ackermann(N, M, R); .push/value(N, M, R).",
             Stream.of( l_values ).collect( Collectors.toSet() ),
             Collections.emptySet()
         ).generatesingle();
 
         Assert.assertTrue(
             l_agent.trigger(
-                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( l_fibonacci ) ) ),
+                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "ack", CRawTerm.of( l_nvalue ), CRawTerm.of( l_mvalue ) ) ),
                 true
             )
                    .value()
         );
 
-        Assert.assertEquals( 2, l_values.value().size() );
-        Assert.assertEquals( l_fibonacci, l_values.value().get( 0 ).<Number>raw() );
-        Assert.assertEquals( fibonacci( l_fibonacci ).doubleValue(), l_values.value().get( 1 ).<Number>raw() );
+        System.out.println( l_values.value() );
+        Assert.assertEquals( 3, l_values.value().size() );
+        Assert.assertEquals( l_nvalue, l_values.value().get( 0 ).<Number>raw() );
+        Assert.assertEquals( l_mvalue, l_values.value().get( 1 ).<Number>raw() );
+        Assert.assertEquals( ackermann( l_nvalue, l_mvalue ).doubleValue(), l_values.value().get( 2 ).<Number>raw() );
     }
 
     /**
