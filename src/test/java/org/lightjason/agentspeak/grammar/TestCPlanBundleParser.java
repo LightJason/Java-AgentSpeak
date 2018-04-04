@@ -25,12 +25,14 @@ package org.lightjason.agentspeak.grammar;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
@@ -95,6 +97,37 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         );
 
         Assert.assertEquals( 1.0, l_tvar.<Number>raw() );
+    }
+
+    /**
+     * test complex rule
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void complexrule() throws Exception
+    {
+        final int l_fibonacci = new Random().nextInt( 25 );
+        final CCollectValues l_values = new CCollectValues();
+
+        final IAgent<?> l_agent = new CAgentGenerator(
+            "fibonacci(X, R) :- X <= 2;  R = 1 :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
+            + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
+            Stream.of( l_values ).collect( Collectors.toSet() ),
+            Collections.emptySet()
+        ).generatesingle();
+
+        Assert.assertTrue(
+            l_agent.trigger(
+                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( l_fibonacci ) ) ),
+                true
+            )
+                   .value()
+        );
+
+        Assert.assertEquals( 2, l_values.value().size() );
+        Assert.assertEquals( l_fibonacci, l_values.value().get( 0 ).<Number>raw() );
+        Assert.assertEquals( fibonacci( l_fibonacci ).doubleValue(), l_values.value().get( 1 ).<Number>raw() );
     }
 
     /**

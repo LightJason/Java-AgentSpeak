@@ -134,6 +134,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     @Test
     public final void complexrule() throws Exception
     {
+        final int l_fibonacci = new Random().nextInt( 25 );
         final CCollectValues l_values = new CCollectValues();
 
         final IAgent<?> l_agent = new CAgentGenerator(
@@ -145,15 +146,15 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_agent.trigger(
-                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( 13 ) ) ),
+                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( l_fibonacci ) ) ),
                 true
             )
             .value()
         );
 
         Assert.assertEquals( 2, l_values.value().size() );
-        Assert.assertEquals( 13, l_values.value().get( 0 ).<Number>raw() );
-        Assert.assertEquals( 233.0, l_values.value().get( 1 ).<Number>raw() );
+        Assert.assertEquals( l_fibonacci, l_values.value().get( 0 ).<Number>raw() );
+        Assert.assertEquals( fibonacci( l_fibonacci ).doubleValue(), l_values.value().get( 1 ).<Number>raw() );
     }
 
     /**

@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
@@ -119,5 +120,18 @@ public abstract class IBaseGrammarTest extends IBaseTest
                                                               @Nonnull final String p_source ) throws Exception
     {
         return p_parser.parse( streamfromstring(  p_source ) );
+    }
+
+    /**
+     * calculate fibonacci sequence
+     *
+     * @param p_value value
+     * @return result value
+     */
+    protected static Number fibonacci( @Nonnegative Number p_value )
+    {
+        return p_value.intValue() <= 2
+               ? 1
+               : fibonacci( p_value.intValue() - 1 ).intValue() + fibonacci( p_value.intValue() - 2 ).intValue();
     }
 }
