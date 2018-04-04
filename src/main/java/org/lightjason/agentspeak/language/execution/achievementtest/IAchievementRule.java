@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -62,7 +61,7 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
     }
 
     /**
-     * execute rule of context
+     * find and execute rule of context
      *
      * @param p_parallel parallel execution
      * @param p_context execution context
@@ -70,7 +69,7 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
      * @return boolean result
      */
     @Nonnull
-    protected static IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value )
+    protected static IFuzzyValue<Boolean> findandexecute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value )
     {
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );
@@ -82,41 +81,38 @@ abstract class IAchievementRule<T> extends IBaseExecution<T>
 
         // second step execute backtracking rules sequential / parallel
         return l_rules.stream()
-                      .map( i ->
-                      {
+                      .map( i -> executerule( p_context, l_unified, i ) )
+                      .filter( IFuzzyValue::value )
+                      .findFirst()
+                      .orElse( CFuzzyValue.of( false ) );
+    }
 
-                          // instantiate variables by unification of the rule literal
-                          final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( l_unified, i.identifier() );
+    /**
+     * execute single rule content
+     *
+     * @param p_context context
+     * @param p_literal binding literal
+     * @param p_rule rule
+     * @return execution result
+     */
+    private static IFuzzyValue<Boolean> executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
+    {
+        final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
 
-                          // execute rule
-                          final IFuzzyValue<Boolean> l_return = i.execute(
-                              false,
-                              i.instantiate( p_context.agent(), l_variables.stream() ),
-                              Collections.emptyList(),
-                              Collections.emptyList()
-                          );
+        if ( p_rule.execute(
+            false,
+            p_rule.instantiate( p_context.agent(), l_variables.stream() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        ).value() )
+        {
+            l_variables.parallelStream()
+                       .filter( i -> i instanceof IRelocateVariable<?> )
+                       .forEach( i -> i.<IRelocateVariable<?>>term().relocate() );
+            return CFuzzyValue.of( true );
+        }
 
-                          // create rule result with fuzzy- and defuzzificated value and instantiate variable set
-                          return new ImmutableTriple<>( p_context.agent().fuzzy().getValue().defuzzify( l_return ), l_return, l_variables );
-
-                      } )
-
-                       // find successfully ended rule
-                       .filter( ImmutableTriple::getLeft )
-                       .findFirst()
-
-                       // realocate rule instantiated variables back to execution context
-                       .map( i ->
-                       {
-                           i.getRight().parallelStream()
-                                       .filter( j -> j instanceof IRelocateVariable<?> )
-                                       .forEach( j -> j.<IRelocateVariable<?>>term().relocate() );
-
-                           return i.getMiddle();
-                       } )
-
-                       // otherwise rule fails (default behaviour)
-                       .orElse( CFuzzyValue.of( false ) );
+        return CFuzzyValue.of( false );
     }
 
     @Override

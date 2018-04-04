@@ -72,7 +72,7 @@ public final class CAchievementRuleVariable extends IAchievementRule<IExecution>
         if ( ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() == 1 ) )
             return CFuzzyValue.of( false );
 
-        return execute(
+        return findandexecute(
             m_parallel,
             p_context,
             CCommon.replaceFromContext( p_context, l_return.get( 0 ) ).term()

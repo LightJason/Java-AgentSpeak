@@ -62,7 +62,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return execute( m_value.hasAt(), p_context, m_value );
+        return findandexecute( m_value.hasAt(), p_context, m_value );
     }
 
     @Nonnull
