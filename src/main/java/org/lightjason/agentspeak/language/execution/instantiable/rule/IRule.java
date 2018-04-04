@@ -23,9 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
-import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -58,13 +56,6 @@ public interface IRule extends IInstantiable
         public final ILiteral identifier()
         {
             return CLiteral.of( "empty" );
-        }
-
-        @Nonnull
-        @Override
-        public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
-        {
-            return this;
         }
 
         @Nonnull
@@ -119,14 +110,5 @@ public interface IRule extends IInstantiable
      */
     @Nonnull
     ILiteral identifier();
-
-    /**
-     * replaces all placeholder objects and reinstantiate object
-     *
-     * @param p_rules full instantiated rules
-     * @return new object instance without placeholders
-     */
-    @Nonnull
-    IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules );
 
 }

@@ -23,9 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
-import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.StringUtils;
-import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -73,26 +71,6 @@ public final class CRule extends IBaseInstantiable implements IRule
     public final ILiteral identifier()
     {
         return m_id;
-    }
-
-    @Nonnull
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
-    {
-        /*
-        return new CRule(
-            m_id,
-            Arrays.stream( m_execution )
-                  .map( i ->
-                       i instanceof CRulePlaceholder
-                       // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
-                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
-                       : i
-            ).toArray( IExecution[]::new )
-        );
-        */
-        return IRule.EMPTY;
     }
 
     @Nonnull
