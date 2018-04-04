@@ -115,35 +115,15 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                         ? ITrigger.EMPTY
                         : CTrigger.EType.ADDGOAL.builddefault( CLiteral.of( p_context.INITIALGOAL().getText().replace( "!", "" ).replace( ".", "" ) ) );
 
-
         p_context.belief()
                  .stream()
                  .map( i -> (ILiteral) this.visit( i ) )
                  .forEach( i -> m_initialbeliefs.add( i ) );
 
-
         p_context.logicrule()
                  .stream()
                  .flatMap( i -> (Stream<IRule>) this.visit( i ) )
                  .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
-        /*
-        // create placeholder objects first and run parsing again to build full-qualified rule objects
-        p_context.logicrule().stream()
-                 .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
-                 .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
-        final Multimap<IPath, IRule> l_rules = LinkedHashMultimap.create();
-        p_context.logicrule().stream()
-                 .flatMap( i -> ( (List<IRule>) this.visitLogicrule( i ) ).stream() )
-                 .forEach( i -> l_rules.put( i.identifier().fqnfunctor(), i ) );
-
-        // clear rule list and replace placeholder objects
-        m_rules.clear();
-        l_rules.values().stream()
-               .map( i -> i.replaceplaceholder( l_rules ) )
-               .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-        */
 
         p_context.plan()
                  .stream()
