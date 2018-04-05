@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
@@ -57,10 +56,6 @@ public final class CRawTerm<T> implements IRawTerm<T>
      */
     private final T m_value;
     /**
-     * functor
-     */
-    private final IPath m_functor;
-    /**
      * hash code cache
      */
     private final int m_hashcode;
@@ -76,17 +71,9 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressWarnings( "unchecked" )
     public <N> CRawTerm( @Nullable final N p_value )
     {
-        if ( p_value instanceof ITerm )
-        {
-            final ITerm l_term = (ITerm) p_value;
-            m_value = l_term.raw();
-            m_functor = l_term.fqnfunctor();
-        }
-        else
-        {
-            m_value = (T) p_value;
-            m_functor = Objects.isNull( p_value ) ? IPath.EMPTY : CPath.of( p_value.toString() );
-        }
+        m_value = p_value instanceof ITerm
+                  ? ( (ITerm) p_value ).raw()
+                  : (T) p_value;
 
         m_hashcode = Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
@@ -139,21 +126,21 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final String functor()
     {
-        return m_functor.suffix();
+        return IPath.EMPTY.toString();
     }
 
     @Nonnull
     @Override
     public final IPath functorpath()
     {
-        return m_functor.subpath( 0, m_functor.size() - 1 );
+        return IPath.EMPTY;
     }
 
     @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
-        return m_functor;
+        return IPath.EMPTY;
     }
 
     @Override
