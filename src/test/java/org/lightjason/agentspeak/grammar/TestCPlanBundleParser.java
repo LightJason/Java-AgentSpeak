@@ -103,13 +103,16 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * test complex rule
      *
      * @throws Exception thrown on stream and parser error
+     * @todo check stack-overflow on different calls
      */
     @Test
     public final void complexrule() throws Exception
     {
         final Random l_random = new Random();
         final int l_nvalue = l_random.nextInt( 4 );
-        final int l_mvalue = l_random.nextInt( 6 );
+        final int l_mvalue = l_random.nextInt( 4 );
+
+        System.out.println( l_nvalue + "   " + l_mvalue + "   " + ackermann( l_nvalue, l_mvalue ) );
 
         final CCollectValues l_values = new CCollectValues();
 

@@ -80,7 +80,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "$", m_value );
+        return MessageFormat.format( "${0}", super.toString() );
     }
 
 }

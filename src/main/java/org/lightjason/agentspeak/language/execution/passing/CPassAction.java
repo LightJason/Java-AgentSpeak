@@ -107,8 +107,8 @@ public final class CPassAction implements IExecution
     {
         return MessageFormat.format(
             ".{0}{1}{2}",
-            m_execution,
             m_parallel ? "@" : "",
+            m_execution,
             m_arguments.length == 0 ? "" : "[" + StringUtils.join( m_arguments, ", " ) + "]" );
     }
 }

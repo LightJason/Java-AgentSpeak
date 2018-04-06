@@ -360,12 +360,13 @@ public final class CLiteral implements ILiteral
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
                                    return Objects.isNull( l_variable )
-                                          ? CRawTerm.EMPTY
+                                          ? IRawTerm.EMPTY
                                           : l_variable;
                                }
-                               if ( i instanceof ILiteral )
-                                   return ( (ILiteral) i ).unify( p_context );
-                               return i;
+
+                               return i instanceof ILiteral
+                                      ? i.<ILiteral>term().unify( p_context )
+                                      : i;
                            } )
                            .collect( Collectors.toList() )
         );
