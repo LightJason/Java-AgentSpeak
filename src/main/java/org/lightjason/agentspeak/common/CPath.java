@@ -49,7 +49,6 @@ import java.util.stream.Stream;
 
 /**
  * class to create a path structure
- * @todo reduce memory consumption
  */
 public final class CPath implements IPath
 {
