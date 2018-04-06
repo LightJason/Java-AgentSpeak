@@ -24,10 +24,13 @@
 package org.lightjason.agentspeak.language.variable;
 
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
@@ -35,19 +38,24 @@ import java.util.Objects;
  *
  * @tparam T data type
  */
-public class CMutexVariable<T> extends CVariable<T>
+public class CMutexVariable<T> extends IBaseVariable<T>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 9040218112516254186L;
+    private static final long serialVersionUID = -5373030465593522996L;
+    /**
+     * thread-safe value
+     */
+    private final AtomicReference<T> m_value = new AtomicReference<>();
+
 
     /**
      * ctor
      *
-     * @param p_functor name
+     * @param p_functor functor
      */
-    public CMutexVariable( final String p_functor )
+    public CMutexVariable( @Nonnull final String p_functor )
     {
         super( p_functor );
     }
@@ -55,10 +63,10 @@ public class CMutexVariable<T> extends CVariable<T>
     /**
      * ctor
      *
-     * @param p_functor name
+     * @param p_functor functor
      * @param p_value value
      */
-    public CMutexVariable( final String p_functor, final T p_value )
+    public CMutexVariable( @Nonnull final String p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
@@ -66,9 +74,9 @@ public class CMutexVariable<T> extends CVariable<T>
     /**
      * ctor
      *
-     * @param p_functor name
+     * @param p_functor functor
      */
-    public CMutexVariable( final IPath p_functor )
+    public CMutexVariable( @Nonnull final IPath p_functor )
     {
         super( p_functor );
     }
@@ -76,7 +84,7 @@ public class CMutexVariable<T> extends CVariable<T>
     /**
      * ctor
      *
-     * @param p_functor name
+     * @param p_functor functor
      * @param p_value value
      */
     public CMutexVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
@@ -84,49 +92,10 @@ public class CMutexVariable<T> extends CVariable<T>
         super( p_functor, p_value );
     }
 
-    @Nonnull
     @Override
-    public final synchronized IVariable<T> set( final T p_value )
+    public final boolean mutex()
     {
-        return super.set( p_value );
-    }
-
-    @Override
-    public final synchronized <N> N raw()
-    {
-        return super.raw();
-    }
-
-    @Nonnull
-    @Override
-    public final synchronized IVariable<T> thrownotallocated() throws IllegalStateException
-    {
-        return super.thrownotallocated();
-    }
-
-    @Nonnull
-    @Override
-    public final synchronized IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
-    {
-        return super.throwvaluenotassignableto( p_class );
-    }
-
-    @Override
-    public final synchronized boolean allocated()
-    {
-        return super.allocated();
-    }
-
-    @Override
-    public final synchronized boolean valueassignableto( @Nonnull final Class<?>... p_class )
-    {
-        return super.valueassignableto( p_class );
-    }
-
-    @Override
-    public final synchronized String toString()
-    {
-        return super.toString();
+        return true;
     }
 
     @Nonnull
@@ -134,20 +103,48 @@ public class CMutexVariable<T> extends CVariable<T>
     public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
-               ? new CMutexVariable<>( m_functor, m_value )
-               : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value );
+               ? new CMutexVariable<>( m_functor, m_value.get() )
+               : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value.get() );
     }
 
     @Nonnull
     @Override
-    public IVariable<T> shallowcopysuffix()
+    public final IVariable<T> shallowcopysuffix()
     {
-        return new CMutexVariable<>( m_functor.suffix(), m_value );
+        return new CMutexVariable<>( m_functor.suffix(), m_value.get() );
     }
 
+    @Nonnull
     @Override
-    public final boolean mutex()
+    public final ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
-        return true;
+        return new CMutexVariable<>(
+            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+            ? m_functor
+            : m_functor.append( p_prefix[0] ),
+            CCommon.deepclone( m_value.get() )
+        );
+    }
+
+    @Nonnull
+    @Override
+    public final ITerm deepcopysuffix()
+    {
+        return new CMutexVariable<>( m_functor.suffix(), CCommon.deepclone( m_value.get() ) );
+    }
+
+    @Nonnull
+    @Override
+    protected final IVariable<T> setvalue( @Nullable final T p_value )
+    {
+        m_value.set( p_value );
+        return this;
+    }
+
+    @Nullable
+    @Override
+    protected final T getvalue()
+    {
+        return m_value.get();
     }
 }

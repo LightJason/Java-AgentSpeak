@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.variable;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,12 +38,16 @@ import java.util.Objects;
  *
  * @tparam T data type
  */
-public final class CConstant<T> extends CVariable<T>
+public final class CConstant<T> extends IBaseVariable<T>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -8207552612082585231L;
+    private static final long serialVersionUID = 3739116051855195960L;
+    /**
+     * static value
+     */
+    private final T m_value;
 
     /**
      * ctor
@@ -52,7 +57,8 @@ public final class CConstant<T> extends CVariable<T>
      */
     public CConstant( @Nonnull final String p_functor, @Nullable final T p_value )
     {
-        super( p_functor, p_value );
+        super( p_functor );
+        m_value = p_value;
     }
 
     /**
@@ -63,14 +69,8 @@ public final class CConstant<T> extends CVariable<T>
      */
     public CConstant( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
-        super( p_functor, p_value );
-    }
-
-    @Nonnull
-    @Override
-    public final IVariable<T> set( final T p_value )
-    {
-        throw new CIllegalStateException( CCommon.languagestring( this, "set", m_functor ) );
+        super( p_functor );
+        m_value = p_value;
     }
 
     @Nonnull
@@ -90,4 +90,42 @@ public final class CConstant<T> extends CVariable<T>
         return new CConstant<>( m_functor.suffix(), m_value );
     }
 
+    @Nonnull
+    @Override
+    public ITerm deepcopy( @Nullable final IPath... p_prefix )
+    {
+        return new CConstant<>(
+            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+            ? m_functor
+            : m_functor.append( p_prefix[0] ),
+            org.lightjason.agentspeak.language.CCommon.deepclone( m_value )
+        );
+    }
+
+    @Nonnull
+    @Override
+    public ITerm deepcopysuffix()
+    {
+        return new CConstant<>( m_functor.suffix(), org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
+    }
+
+    @Override
+    public final boolean mutex()
+    {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    protected final IVariable<T> setvalue( @Nullable final T p_value )
+    {
+        throw new CIllegalStateException( CCommon.languagestring( this, "set", m_functor ) );
+    }
+
+    @Nullable
+    @Override
+    protected final T getvalue()
+    {
+        return m_value;
+    }
 }

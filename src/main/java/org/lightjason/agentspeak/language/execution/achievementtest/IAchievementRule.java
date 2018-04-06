@@ -98,7 +98,6 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
     private static IFuzzyValue<Boolean> executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
-        System.out.println( l_variables );
 
         if ( p_rule.execute(
             false,
