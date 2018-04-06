@@ -77,7 +77,7 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
             return CFuzzyValue.of( false );
 
         // first step is the unification of the caller literal, so variables will be set of the current execution context
-        final ILiteral l_unified = p_value.allocate( p_context );
+        final ILiteral l_unified = p_value.unify( p_context );
 
         // second step execute backtracking rules sequential / parallel
         return l_rules.stream()
