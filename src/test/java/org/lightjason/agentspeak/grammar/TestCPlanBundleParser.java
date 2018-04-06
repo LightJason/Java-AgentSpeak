@@ -131,7 +131,6 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
                    .value()
         );
 
-        System.out.println( l_values.value() );
         Assert.assertEquals( 3, l_values.value().size() );
         Assert.assertEquals( l_nvalue, l_values.value().get( 0 ).<Number>raw() );
         Assert.assertEquals( l_mvalue, l_values.value().get( 1 ).<Number>raw() );

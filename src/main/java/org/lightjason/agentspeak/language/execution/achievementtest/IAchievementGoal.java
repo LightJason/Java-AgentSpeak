@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * abstract achievement-goal class for goal execution
  */
-abstract class IAchievementGoal<T> extends IBaseExecution<T>
+public abstract class IAchievementGoal<T> extends IBaseExecution<T>
 {
     /**
      * serial
