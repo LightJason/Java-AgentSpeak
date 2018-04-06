@@ -337,9 +337,9 @@ public final class CLiteral implements ILiteral
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
                                    return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.of( l_variable ) : l_variable;
                                }
-                               if ( i instanceof ILiteral )
-                                   return ( (ILiteral) i ).unify( p_context );
-                               return i;
+                               return i instanceof ILiteral
+                                      ? i.<ILiteral>term().unify( p_context )
+                                      : i;
                            } )
                            .collect( Collectors.toList() )
         );
@@ -359,13 +359,11 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return Objects.isNull( l_variable )
-                                          ? IRawTerm.EMPTY
-                                          : l_variable;
+                                   return Objects.isNull( l_variable ) ? IRawTerm.EMPTY : l_variable;
                                }
 
                                return i instanceof ILiteral
-                                      ? i.<ILiteral>term().unify( p_context )
+                                      ? i.<ILiteral>term().allocate( p_context )
                                       : i;
                            } )
                            .collect( Collectors.toList() )
