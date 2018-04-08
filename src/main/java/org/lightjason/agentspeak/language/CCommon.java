@@ -169,15 +169,17 @@ public final class CCommon
     @Nonnull
     public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
-        final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
-        Stream.concat(
-            p_variable,
-            p_agent.variablebuilder().apply( p_agent, p_instance )
-        )
-               .peek( l_variables::remove )
-               .forEach( l_variables::add );
-
-        return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
+        return new CContext(
+            p_agent,
+            p_instance,
+            Collections.unmodifiableSet(
+                CCommon.streamconcat(
+                    p_variable,
+                    p_agent.variablebuilder().apply( p_agent, p_instance ),
+                    p_instance.variables().map( i -> i.shallowcopy() )
+                ).collect( Collectors.toSet() )
+            )
+        );
     }
 
 
