@@ -106,8 +106,8 @@ public final class CUnifier implements IUnifier
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                       @Nonnull final IExpression p_expression, final boolean p_parallel )
+    public final IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                             @Nonnull final IExpression p_expression, final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
@@ -115,10 +115,10 @@ public final class CUnifier implements IUnifier
             return CFuzzyValue.of( false );
 
         // otherwise the expression must be checked, first match will be used
-        final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
-                                                      .filter( i -> evaluateexpression( p_context, p_expression, i ) )
-                                                      .findFirst()
-                                                      .orElse( Collections.emptySet() );
+        final Set<IVariable<?>> l_result = CCommon.parallelstream( l_variables.stream(), p_parallel )
+                                                  .filter( i -> evaluateexpression( p_context, p_expression, i ) )
+                                                  .findFirst()
+                                                  .orElse( Collections.emptySet() );
 
         // if no match
         if ( l_result.isEmpty() )
@@ -147,19 +147,6 @@ public final class CUnifier implements IUnifier
     public final String toString()
     {
         return MessageFormat.format( "hash-based unification: {0} / recursive unification: {1}", m_hashbased, m_recursive );
-    }
-
-    /**
-     * execute stream in parallel
-     *
-     * @param p_stream stream
-     * @param p_parallel parallel
-     * @tparam T stream elements
-     * @return modified stream
-     */
-    private static <T> Stream<T> parallelstream( final Stream<T> p_stream, final boolean p_parallel )
-    {
-        return p_parallel ? p_stream.parallel() : p_stream;
     }
 
     /**

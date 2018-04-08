@@ -263,6 +263,19 @@ public final class CCommon
     }
 
     /**
+     * execute stream in parallel
+     *
+     * @param p_stream stream
+     * @param p_parallel parallel
+     * @tparam T stream elements
+     * @return modified stream
+     */
+    public static <T> Stream<T> parallelstream( final Stream<T> p_stream, final boolean p_parallel )
+    {
+        return p_parallel ? p_stream.parallel() : p_stream;
+    }
+
+    /**
      * consts the variables within a literal
      *
      * @param p_literal literal
