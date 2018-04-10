@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,8 +45,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -182,7 +181,7 @@ public final class TestCMetric extends IBaseTest
             p_filter.apply( this.agent( p_belief1 ) ),
             p_filter.apply( this.agent( p_belief2 ) )
         );
-        assertEquals( p_message, p_excepted, l_value, p_delta );
+        Assert.assertEquals( p_message, p_excepted, l_value, p_delta );
     }
 
 

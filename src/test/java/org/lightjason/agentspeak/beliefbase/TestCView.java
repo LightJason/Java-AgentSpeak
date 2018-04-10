@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
@@ -33,8 +34,6 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 
 import java.util.stream.IntStream;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -58,7 +57,7 @@ public final class TestCView extends IBaseTest
                  .map( i -> CLiteral.of( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
                  .forEach( i -> l_beliefbase.generate( l_generator, i.functorpath() ).add( i ) );
 
-        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
+        Assert.assertEquals( "number of beliefs is incorrect", l_max, l_beliefbase.size() );
     }
 
 
@@ -84,7 +83,7 @@ public final class TestCView extends IBaseTest
                     .add( CLiteral.of( "second/sub/sub5" ) );
 
 
-        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
+        Assert.assertEquals( "number of beliefs is incorrect", 6, l_beliefbase.size() );
     }
 
 

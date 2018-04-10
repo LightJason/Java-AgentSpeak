@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.agent;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,7 +110,7 @@ public final class TestCAgentExecution extends IBaseTest
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
-            assertTrue( "asl could not be read: {0}", true );
+            Assert.fail( "asl could not be read: {0}" );
         }
 
 
@@ -152,7 +153,7 @@ public final class TestCAgentExecution extends IBaseTest
                       .allMatch( i -> m_result.get( i ).size() == m_log.asMap().getOrDefault( i, Collections.emptyList() ).size() )
         );
 
-        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> assertTrue(
+        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> Assert.assertTrue(
             MessageFormat.format( "expected result {0} for index {2} is not equal to log {1}", m_result.get( i ), m_log.get( i ), i ),
             m_log.get( i ).containsAll( m_result.get( i ) )
         ) );

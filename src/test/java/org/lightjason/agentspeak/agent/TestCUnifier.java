@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 
 /**
@@ -68,7 +67,7 @@ public final class TestCUnifier extends IBaseTest
         ) ).collect( Collectors.toSet() ) );
 
         final List<ITerm> l_result = l_literal.values( CPath.of( "first" ) ).collect( Collectors.toList() );
-        assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
+        Assert.assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_test.size(), l_result.size() );
     }
 
 
@@ -96,8 +95,8 @@ public final class TestCUnifier extends IBaseTest
 
         Assert.assertArrayEquals(
             MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
-            l_literal.orderedvalues( CPath.of( "first" ) ).toArray(),
-            l_test
+            l_test,
+            l_literal.orderedvalues( CPath.of( "first" ) ).toArray()
         );
     }
 
@@ -122,10 +121,10 @@ public final class TestCUnifier extends IBaseTest
 
         final ILiteral l_third = CLiteral.parse( "foo" );
         final ILiteral l_fourth = CLiteral.parse( "hallo" );
-        assertNotEquals(
+        Assert.assertNotEquals(
             MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.structurehash() ),
-            l_third.structurehash(),
-            l_fourth.structurehash()
+            l_fourth.structurehash(),
+            l_third.structurehash()
         );
     }
 

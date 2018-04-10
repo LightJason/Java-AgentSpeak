@@ -38,9 +38,9 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -61,8 +61,6 @@ import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -171,7 +169,7 @@ public final class TestCHanoiTowers extends IBaseTest
         catch ( final IOException l_exception )
         {
             l_exception.printStackTrace();
-            assertTrue( "asl could not be read", true );
+            Assert.fail( "asl could not be read" );
         }
         m_agents = Collections.unmodifiableMap( l_agentmap );
     }
