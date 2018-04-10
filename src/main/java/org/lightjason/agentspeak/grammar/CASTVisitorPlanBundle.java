@@ -29,7 +29,6 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -305,9 +304,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return this.visit( p_context.variable() );
     }
 
-
-
-
     @Override
     public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
@@ -325,15 +321,11 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
-        // @todo fix exception
-
-        if ( Objects.nonNull( p_context.assignment_expression_singlevariable() ) )
-            return this.visit( p_context.assignment_expression_singlevariable() );
-
-        if ( Objects.nonNull( p_context.assignment_expression_multivariable() ) )
-            return this.visit( p_context.assignment_expression_multivariable() );
-
-        throw new CSyntaxErrorException();
+        return CAgentSpeak.assignmentexpression(
+            this,
+            p_context.assignment_expression_singlevariable(),
+            p_context.assignment_expression_multivariable()
+        );
     }
 
     @Override

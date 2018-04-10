@@ -675,6 +675,10 @@ public final class CAgentSpeak
     /**
      * build deconstruct
      *
+     * @param p_visitor visitor
+     * @param p_variable lhs variable list
+     * @param p_literal rhs literal
+     * @param p_variables rhs variable
      * @return deconstruct execution
      */
     @Nonnull
@@ -691,6 +695,23 @@ public final class CAgentSpeak
             ? (ITerm) p_visitor.visit( p_literal )
             : (ITerm) p_visitor.visit( p_variable )
         );
+    }
+
+    /**
+     * build expression
+     *
+     * @param p_visitor visitor
+     * @param p_expression expressions
+     * @return expression execution
+     */
+    @Nonnull
+    public static Object assignmentexpression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext... p_expression )
+    {
+        return Arrays.stream( p_expression )
+                     .filter( Objects::nonNull )
+                     .findFirst()
+                     .map( p_visitor::visit )
+                     .orElseThrow( () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) ) );
     }
 
     /**
