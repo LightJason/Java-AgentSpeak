@@ -49,6 +49,7 @@ import java.util.stream.Stream;
 
 /**
  * test math linear program functions
+ * @todo fix assert
  */
 public final class TestCActionMathLinearprogram extends IBaseTest
 {

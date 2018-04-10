@@ -70,6 +70,7 @@ import java.util.stream.Stream;
 
 /**
  * test for bit vector actions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBitVector extends IBaseTest

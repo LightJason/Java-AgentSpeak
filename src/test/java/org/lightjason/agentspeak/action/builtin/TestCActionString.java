@@ -89,23 +89,27 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         final List<ITerm> l_result = new ArrayList<>();
 
-        new CBase64Encode().execute(
-            false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CBase64Encode().execute(
+                false, IContext.EMPTYPLAN,
+                p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        new CBase64Decode().execute(
-            false, IContext.EMPTYPLAN,
-            l_return,
-            l_result
+        Assert.assertTrue(
+            new CBase64Decode().execute(
+                false, IContext.EMPTYPLAN,
+                l_return,
+                l_result
+            ).value()
         );
 
         StreamUtils.zip(
             p_input.stream(),
             l_result.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        ).forEach( i -> Assert.assertEquals( i.getValue(), i.getKey() ) );
     }
 
 
@@ -140,15 +144,17 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CConcat().execute(
-            false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CConcat().execute(
+                false, IContext.EMPTYPLAN,
+                p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals(
-            l_return.get( 0 ).<String>raw(),
-            p_input.stream().collect( Collectors.joining() )
+            p_input.stream().collect( Collectors.joining() ),
+            l_return.get( 0 ).<String>raw()
         );
     }
 
@@ -164,13 +170,15 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CContains().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.concat(
-                Stream.of( p_input.stream().collect( Collectors.joining() ) ),
-                p_input.stream()
-            ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CContains().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.concat(
+                    Stream.of( p_input.stream().collect( Collectors.joining() ) ),
+                    p_input.stream()
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertTrue(
@@ -191,18 +199,19 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CLower().execute(
-            false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CLower().execute(
+                false, IContext.EMPTYPLAN,
+                p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
-
 
         StreamUtils.zip(
             p_input.stream().map( i -> i.toLowerCase( Locale.ROOT ) ),
             l_return.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        ).forEach( i -> Assert.assertEquals( i.getValue(), i.getKey() ) );
     }
 
 
@@ -217,18 +226,19 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CReverse().execute(
-            false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CReverse().execute(
+                false, IContext.EMPTYPLAN,
+                p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
-
 
         StreamUtils.zip(
             p_input.stream().map( i -> new StringBuilder( i ).reverse().toString() ),
             l_return.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        ).forEach( i -> Assert.assertEquals( i.getValue(), i.getKey() ) );
     }
 
 
@@ -243,18 +253,19 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CSize().execute(
-            false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CSize().execute(
+                false, IContext.EMPTYPLAN,
+                p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
-
 
         StreamUtils.zip(
             p_input.stream().mapToLong( String::length ).boxed(),
             l_return.stream().map( ITerm::<Number>raw ).map( Number::longValue ),
             AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        ).forEach( i -> Assert.assertEquals( i.getValue(), i.getKey() ) );
     }
 
 
@@ -269,20 +280,22 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CRandom().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.concat(
-                Stream.of( p_input.stream().collect( Collectors.joining() ) ),
-                p_input.stream().mapToInt( String::length ).boxed()
-            ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CRandom().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.concat(
+                    Stream.of( p_input.stream().collect( Collectors.joining() ) ),
+                    p_input.stream().mapToInt( String::length ).boxed()
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         StreamUtils.zip(
             p_input.stream().mapToInt( String::length ).boxed(),
             l_return.stream().map( ITerm::<String>raw ).mapToInt( String::length ).boxed(),
             AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        ).forEach( i -> Assert.assertEquals( i.getValue(), i.getKey() ) );
     }
 
 
@@ -297,18 +310,19 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CUpper().execute(
-            false, IContext.EMPTYPLAN,
-            p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CUpper().execute(
+                false, IContext.EMPTYPLAN,
+                p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
-
 
         StreamUtils.zip(
             p_input.stream().map( i -> i.toUpperCase( Locale.ROOT ) ),
             l_return.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        ).forEach( i -> Assert.assertEquals( i.getValue(), i.getKey() ) );
     }
 
 
@@ -320,10 +334,12 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CStartsWith().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CStartsWith().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals( 3, l_return.size() );
@@ -341,10 +357,12 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CEndsWith().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CEndsWith().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals( 3, l_return.size() );
@@ -378,15 +396,17 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CLevenshtein().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CLevenshtein().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw().intValue(), 3 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw().intValue(), 5 );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 3, l_return.get( 0 ).<Number>raw().intValue() );
+        Assert.assertEquals( 5, l_return.get( 1 ).<Number>raw().intValue() );
     }
 
 
@@ -398,28 +418,31 @@ public final class TestCActionString extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CNCD().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CNCD().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw().doubleValue(), 0.04878048780487805, 0.0001 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw().doubleValue(), 0.38333333333333336, 0.0001 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw().doubleValue(), 0, 0 );
+        Assert.assertEquals( 3, l_return.size() );
+        Assert.assertEquals( 0.04878048780487805, l_return.get( 0 ).<Number>raw().doubleValue(), 0.0001 );
+        Assert.assertEquals( 0.38333333333333336, l_return.get( 1 ).<Number>raw().doubleValue(), 0.0001 );
+        Assert.assertEquals( 0, l_return.get( 2 ).<Number>raw().doubleValue(), 0 );
 
-
-        new CNCD().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CNCD().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 6 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw().doubleValue(), 0.12, 0 );
-        Assert.assertEquals( l_return.get( 4 ).<Number>raw().doubleValue(), 0.5833333333333334, 0.0001 );
-        Assert.assertEquals( l_return.get( 5 ).<Number>raw().doubleValue(), 0, 0 );
+        Assert.assertEquals( 6, l_return.size() );
+        Assert.assertEquals( 0.12, l_return.get( 3 ).<Number>raw().doubleValue(), 0 );
+        Assert.assertEquals( 0.5833333333333334, l_return.get( 4 ).<Number>raw().doubleValue(),  0.0001 );
+        Assert.assertEquals( 0, l_return.get( 5 ).<Number>raw().doubleValue(), 0 );
     }
 
 

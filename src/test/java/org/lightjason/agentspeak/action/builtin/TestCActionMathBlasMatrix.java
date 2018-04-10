@@ -92,6 +92,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test math blas matrix functions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBlasMatrix extends IBaseTest

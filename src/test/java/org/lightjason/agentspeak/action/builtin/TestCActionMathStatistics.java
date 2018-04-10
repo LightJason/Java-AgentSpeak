@@ -73,6 +73,7 @@ import java.util.stream.Stream;
 
 /**
  * test for statistics actions
+ * @todo fix assert
  */
 public final class TestCActionMathStatistics extends IBaseTest
 {

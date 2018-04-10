@@ -45,6 +45,7 @@ import java.util.stream.Stream;
 
 /**
  * test math blas functions
+ * @todo fix assert
  */
 public final class TestCActionMathBlas extends IBaseTest
 {

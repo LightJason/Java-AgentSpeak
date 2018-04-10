@@ -107,6 +107,7 @@ import java.util.stream.Stream;
 
 /**
  * test graph actions
+ * @todo fix assert
  */
 public final class TestCActionGraph extends IBaseTest
 {

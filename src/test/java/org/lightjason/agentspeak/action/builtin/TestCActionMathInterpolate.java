@@ -47,6 +47,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test for math interpolate
+ * @todo fix assert
  */
 public final class TestCActionMathInterpolate extends IBaseTest
 {

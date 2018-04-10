@@ -62,6 +62,7 @@ import java.util.stream.Stream;
 
 /**
  * test math blas vector functions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBlasVector extends IBaseTest

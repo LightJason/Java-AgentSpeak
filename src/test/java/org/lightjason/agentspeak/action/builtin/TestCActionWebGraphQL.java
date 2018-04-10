@@ -72,9 +72,9 @@ public final class TestCActionWebGraphQL extends IBaseTest
             ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ) instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
+        Assert.assertEquals( "graphql", l_return.get( 0 ).<ILiteral>raw().functor() );
     }
 
 
@@ -99,13 +99,13 @@ public final class TestCActionWebGraphQL extends IBaseTest
             ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ) instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
+        Assert.assertEquals( "graphql", l_return.get( 0 ).<ILiteral>raw().functor() );
 
         // test-case returns random datasets back
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().structurehash(), CLiteral.of(
-            "graphql", CLiteral.of(
+        Assert.assertEquals(
+            CLiteral.of( "graphql", CLiteral.of(
                 "data", CLiteral.of(
                     "product", CLiteral.of(
                         "id",
@@ -120,8 +120,9 @@ public final class TestCActionWebGraphQL extends IBaseTest
                         CRawTerm.of( "Handmade Granite Cheese" )
                     )
                 )
-            )
-        ).structurehash() );
+            ) ).structurehash(),
+            l_return.get( 0 ).<ILiteral>raw().structurehash()
+        );
     }
 
 }

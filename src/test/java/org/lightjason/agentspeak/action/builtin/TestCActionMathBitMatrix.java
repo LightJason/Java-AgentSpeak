@@ -73,6 +73,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test math bit matrix functions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public class TestCActionMathBitMatrix extends IBaseTest
