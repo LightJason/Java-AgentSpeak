@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.beliefbase.storage;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -31,7 +33,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
@@ -46,8 +47,6 @@ import java.util.stream.Stream;
  * belief storage to get access to all class attributes
  *
  * @note all object attributes which are not transient will be read
- * @todo implement recursive descent of properties
- * @todo implement renaming function of properties
  */
 public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
 {
@@ -67,7 +66,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
      */
     public CClassStorage( @Nonnull final Object p_instance )
     {
-        this( p_instance, i -> i );
+        this( p_instance, i -> i.getName().toLowerCase( Locale.ROOT ).replace( "\\s+", "" ) );
     }
 
     /**
@@ -76,17 +75,17 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
      * @param p_instance object
      * @param p_fieldnameformater function to reformat field names
      */
-    public CClassStorage( @Nonnull final Object p_instance, @Nonnull final Function<String, String> p_fieldnameformater )
+    public CClassStorage( @Nonnull final Object p_instance, @Nonnull final Function<Field, String> p_fieldnameformater )
     {
         m_instance = p_instance;
         m_fields = Collections.unmodifiableMap(
-            Arrays.stream( m_instance.getClass().getDeclaredFields() )
-                  .peek( i -> i.setAccessible( true ) )
-                  .filter( i -> !Modifier.isTransient( i.getModifiers() ) )
-                  .filter( i -> !Modifier.isStatic( i.getModifiers() ) )
-                  .collect( Collectors.toMap(
-                      i -> p_fieldnameformater.apply( i.getName() ).toLowerCase( Locale.ROOT ).replace( "\\s+", "" ), i -> i )
-                  )
+            CCommon.classfields( m_instance.getClass() )
+                   .peek( i -> i.setAccessible( true ) )
+                   .filter( i -> !Modifier.isTransient( i.getModifiers() ) )
+                   .filter( i -> !Modifier.isStatic( i.getModifiers() ) )
+                   .map( i -> new ImmutablePair<>( i, p_fieldnameformater.apply( i ) ) )
+                   .filter( i -> ( Objects.nonNull( i.right ) ) && ( !i.right.isEmpty() ) )
+                   .collect( Collectors.toMap( i -> i.right, i -> i.left, ( i, j ) -> i ) )
         );
     }
 

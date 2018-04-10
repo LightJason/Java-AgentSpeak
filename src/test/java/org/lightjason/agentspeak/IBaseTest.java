@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -87,30 +86,12 @@ public abstract class IBaseTest
     protected static <N> N property( @Nonnull final String p_name, @Nonnull final Object p_object ) throws NoSuchFieldException, IllegalAccessException
     {
 
-        final Field l_field = fields( p_object.getClass() )
+        final Field l_field = CCommon.classfields( p_object.getClass() )
                                 .filter( i -> i.getName().equals( p_name ) )
                                 .findFirst()
                                 .orElseThrow( IllegalArgumentException::new );
         l_field.setAccessible( true );
         return (N) l_field.get( p_object );
-    }
-
-    /**
-     * stream of all class fields
-     *
-     * @param p_class class or null
-     * @return field stream
-     */
-    @Nonnull
-    private static Stream<Field> fields( @Nullable final Class<?> p_class )
-    {
-        if ( Objects.isNull( p_class ) )
-            return Stream.empty();
-
-        return Stream.concat(
-            Arrays.stream( p_class.getDeclaredFields() ),
-            fields( p_class.getSuperclass() )
-        );
     }
 
     /**

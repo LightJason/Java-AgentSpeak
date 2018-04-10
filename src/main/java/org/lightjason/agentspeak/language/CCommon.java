@@ -54,6 +54,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -233,6 +234,24 @@ public final class CCommon
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * stream of all class fields
+     *
+     * @param p_class class or null
+     * @return field stream
+     */
+    @Nonnull
+    public static Stream<Field> classfields( @Nullable final Class<?> p_class )
+    {
+        if ( Objects.isNull( p_class ) )
+            return Stream.empty();
+
+        return Stream.concat(
+            Arrays.stream( p_class.getDeclaredFields() ),
+            classfields( p_class.getSuperclass() )
+        );
+    }
+
+    /**
      * concat multiple streams
      *
      * @param p_streams streams
@@ -309,8 +328,6 @@ public final class CCommon
 
         return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( p_value.getClass() ) );
     }
-
-
 
     /**
      * replace variables with context variables
