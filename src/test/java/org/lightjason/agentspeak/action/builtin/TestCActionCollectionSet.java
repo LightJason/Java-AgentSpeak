@@ -64,9 +64,9 @@ public final class TestCActionCollectionSet extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Set<?> );
-        Assert.assertArrayEquals( l_return.get( 0 ).<Set<?>>raw().toArray(), Stream.of( 1, 2 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 1, 2 ).toArray(), l_return.get( 0 ).<Set<?>>raw().toArray() );
     }
 
     /**
@@ -83,9 +83,9 @@ public final class TestCActionCollectionSet extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedSet( Collections.emptySet() ).getClass() );
-        Assert.assertArrayEquals( l_return.get( 0 ).<Set<?>>raw().toArray(), Stream.of( 20, 10 ).toArray() );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( Collections.synchronizedSet( Collections.emptySet() ).getClass(), l_return.get( 0 ).raw().getClass() );
+        Assert.assertArrayEquals( Stream.of( 20, 10 ).toArray(), l_return.get( 0 ).<Set<?>>raw().toArray() );
     }
 
 
@@ -103,7 +103,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_set.toArray(), Stream.of( 1, 5, 7 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 1, 5, 7 ).toArray(), l_set.toArray() );
     }
 
     /**
@@ -121,7 +121,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( true, true, false ).toArray() );
+        Assert.assertArrayEquals( Stream.of( true, true, false ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
     /**
@@ -140,7 +140,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( true, true, false ).toArray() );
-        Assert.assertArrayEquals( l_set.toArray(), Stream.of( 2 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 2 ).toArray(), l_set.toArray() );
     }
 
     /**
@@ -158,9 +158,9 @@ public final class TestCActionCollectionSet extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), l_set.toArray() );
+        Assert.assertArrayEquals( l_set.toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
     }
 
 }

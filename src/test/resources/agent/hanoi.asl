@@ -41,7 +41,7 @@
  **/
 nexttower(T, M) :-
     T--;
-    T = T < 0 ? M - 1 + T : T
+    T = T < 0 ? M - 1 + T : T;
 .
 
 
@@ -68,7 +68,7 @@ nexttower(T, M) :-
         <-
             // try to get a slice from tower
             .generic/print( "agent", MyID, "tries to take slice from tower", T );
-            S = tower/pop( T );
+            S = .tower/pop( T );
             .generic/print( "agent", MyID, "gets", S, "from tower", T );
 
             // move the slice clockwise and push it if possible

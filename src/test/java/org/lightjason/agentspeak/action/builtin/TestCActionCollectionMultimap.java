@@ -74,7 +74,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Multimap<?, ?> );
         Assert.assertTrue( l_return.get( 0 ).<Multimap<?, ?>>raw().isEmpty() );
     }
@@ -93,8 +93,8 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Multimaps.synchronizedSetMultimap( HashMultimap.create() ).getClass() );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( Multimaps.synchronizedSetMultimap( HashMultimap.create() ).getClass(), l_return.get( 0 ).raw().getClass() );
     }
 
 
@@ -127,9 +127,9 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         );
 
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "a", "b", "c" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1, 2, 3, 1, 10 ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( "a", "b", "c" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1, 2, 3, 1, 10 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
     /**
@@ -151,13 +151,13 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Map<?, ?> );
-        Assert.assertArrayEquals( l_return.get( 0 ).<Map<?, ?>>raw().keySet().toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), l_return.get( 0 ).<Map<?, ?>>raw().keySet().toArray() );
 
         Assert.assertArrayEquals(
-            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::of ) ).map( ITerm::raw ).toArray(),
-            l_map.values().toArray()
+            l_map.values().toArray(),
+            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::of ) ).map( ITerm::raw ).toArray()
         );
     }
 
@@ -177,11 +177,11 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_map1.keys().toArray(), Stream.of( 1 ).toArray() );
-        Assert.assertArrayEquals( l_map2.keys().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map1.keys().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map2.keys().toArray() );
 
-        Assert.assertArrayEquals( l_map1.values().toArray(), Stream.of( "foo" ).toArray() );
-        Assert.assertArrayEquals( l_map1.values().toArray(), Stream.of( "foo" ).toArray() );
+        Assert.assertArrayEquals( Stream.of( "foo" ).toArray(), l_map1.values().toArray() );
+        Assert.assertArrayEquals( Stream.of( "foo" ).toArray(), l_map1.values().toArray() );
     }
 
 
@@ -199,9 +199,9 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 4 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( 1, 2, 3 ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( "xxx", "blub", "yyy", "xxx" ).toArray() );
+        Assert.assertEquals( 4, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( 1, 2, 3 ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( "xxx", "blub", "yyy", "xxx" ).toArray(), l_map.values().toArray() );
     }
 
 
@@ -225,9 +225,9 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), l_map.asMap().get( 1 ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), l_map.asMap().get( 2 ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( l_map.asMap().get( 1 ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( l_map.asMap().get( 2 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 
@@ -251,9 +251,9 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "foo" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "foobar" ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( "foo" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( "foobar" ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 }

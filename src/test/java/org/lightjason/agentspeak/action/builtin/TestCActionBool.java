@@ -202,7 +202,7 @@ public final class TestCActionBool extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
 
@@ -216,7 +216,7 @@ public final class TestCActionBool extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
         Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
 
 
@@ -231,7 +231,7 @@ public final class TestCActionBool extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
         Assert.assertFalse( l_return.get( 3 ).<Boolean>raw() );
     }
 
@@ -250,7 +250,7 @@ public final class TestCActionBool extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }

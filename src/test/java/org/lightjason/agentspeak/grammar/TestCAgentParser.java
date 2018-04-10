@@ -466,6 +466,39 @@ public final class TestCAgentParser extends IBaseGrammarTest
     }
 
     /**
+     * test ternary operator with expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void ternarycalculation() throws Exception
+    {
+        final Random l_random = new Random();
+
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            "+!calculate(XVal, YVal) <- Res = XVal < YVal ? XVal + YVal - 2 : XVal + 3 - YVal + 4."
+        );
+
+        final IVariable<?> l_result = new CVariable<>( "Res" );
+        final IVariable<?> l_xvar = new CVariable<>( "XVal" ).set( l_random.nextInt() );
+        final IVariable<?> l_yvar = new CVariable<>( "YVal" ).set( l_random.nextInt() );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute( false, new CLocalContext( l_result, l_xvar, l_yvar ), Collections.emptyList(), Collections.emptyList() ).value()
+        );
+
+        Assert.assertEquals(
+            l_xvar.<Number>raw().doubleValue() < l_yvar.<Number>raw().doubleValue()
+            ? l_xvar.<Number>raw().doubleValue() + l_yvar.<Number>raw().doubleValue() - 2
+            : l_xvar.<Number>raw().doubleValue() + 3 - l_yvar.<Number>raw().doubleValue() + 4,
+
+            l_result.<Number>raw()
+        );
+    }
+
+    /**
      * test ternary operator true case
      *
      * @throws Exception thrown on stream and parser error

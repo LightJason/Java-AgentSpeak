@@ -128,13 +128,13 @@ public final class TestCActionCollectionMap extends IBaseTest
         );
 
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 4 );
-        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().size(), 4 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<List<?>>raw().size() );
+        Assert.assertEquals( 4, l_return.get( 1 ).<List<?>>raw().size() );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "bar", "foo", "xxx", "yyy" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2, 1, 3, 4 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( "bar", "foo", "xxx", "yyy" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 2, 1, 3, 4 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 
@@ -153,9 +153,9 @@ public final class TestCActionCollectionMap extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertEquals( 1, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( "v" ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map.values().toArray() );
 
 
 
@@ -167,9 +167,9 @@ public final class TestCActionCollectionMap extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertEquals( 1, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( "v" ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map.values().toArray() );
     }
 
 
@@ -198,9 +198,9 @@ public final class TestCActionCollectionMap extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 3 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "zz", "yyy" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 4, 3 ).toArray() );
+        Assert.assertEquals( 3, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( "xx", "zz", "yyy" ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( 2, 4, 3 ).toArray(), l_map.values().toArray() );
     }
 
 
@@ -223,9 +223,9 @@ public final class TestCActionCollectionMap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1, 3 ).toArray() );
+        Assert.assertEquals( 1, l_map.size() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( 1, 3 ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -248,9 +248,9 @@ public final class TestCActionCollectionMap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 2 );
+        Assert.assertEquals( 3, l_return.size() );
+        Assert.assertEquals( 1, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 2, l_return.get( 1 ).<Number>raw() );
         Assert.assertNull( l_return.get( 2 ).<Number>raw() );
     }
 
@@ -275,9 +275,9 @@ public final class TestCActionCollectionMap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 123 );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "text" );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 123, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( "text", l_return.get( 1 ).raw() );
     }
 
 }

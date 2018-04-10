@@ -140,8 +140,8 @@ public final class TestCActionCollection extends IBaseTest
 
         Assert.assertArrayEquals(
             MessageFormat.format( "elements {0}", p_input.getLeft() ),
-            l_return.stream().map( ITerm::<Number>raw ).mapToInt( Number::intValue ).toArray(),
-            p_input.getRight()
+            p_input.getRight(),
+            l_return.stream().map( ITerm::<Number>raw ).mapToInt( Number::intValue ).toArray()
         );
     }
 
@@ -162,8 +162,8 @@ public final class TestCActionCollection extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 5 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Boolean>raw ).toArray(), Stream.of( true, true, true, false, false ).toArray() );
+        Assert.assertEquals( 5, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( true, true, true, false, false ).toArray(), l_return.stream().map( ITerm::<Boolean>raw ).toArray() );
     }
 
 
@@ -177,7 +177,6 @@ public final class TestCActionCollection extends IBaseTest
         final Set<Integer> l_set = IntStream.range( 10, 20 ).boxed().collect( Collectors.toSet() );
         final Map<Integer, Integer> l_map = StreamUtils.windowed( IntStream.range( 100, 120 ).boxed(), 2 )
                                                        .collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) );
-
         final Multimap<Integer, Integer> l_multimap = HashMultimap.create();
         IntStream.range( 0, 5 ).forEach( i -> IntStream.range( i, i + 5 ).forEach( j -> l_map.put( i, j ) ) );
 

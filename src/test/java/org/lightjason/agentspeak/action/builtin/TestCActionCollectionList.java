@@ -76,7 +76,7 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
         Assert.assertTrue( l_return.get( 0 ).<List<?>>raw().isEmpty() );
     }
@@ -96,10 +96,10 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
         Assert.assertTrue( l_return.get( 0 ).<List<?>>raw().isEmpty() );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 0 ).raw().getClass() );
     }
 
 
@@ -117,16 +117,16 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 4 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<List<?>>raw().size() );
 
         final List<?> l_list = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_list.get( 0 ), "a" );
-        Assert.assertEquals( l_list.get( 1 ), 1 );
-        Assert.assertEquals( l_list.get( 2 ), "b" );
-        Assert.assertEquals( l_list.get( 3 ), true );
+        Assert.assertEquals( "a", l_list.get( 0 ) );
+        Assert.assertEquals( 1, l_list.get( 1 ) );
+        Assert.assertEquals( "b", l_list.get( 2 ) );
+        Assert.assertEquals( true, l_list.get( 3 ) );
     }
 
 
@@ -147,10 +147,10 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_return.get( 0 ), List.class ) );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().get( 0 ), "b" );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().get( 1 ), 2 );
+        Assert.assertEquals( "b", l_return.get( 0 ).<List<?>>raw().get( 0 ) );
+        Assert.assertEquals( 2, l_return.get( 0 ).<List<?>>raw().get( 1 ) );
     }
 
 
@@ -169,10 +169,10 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1 );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "foobar" );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 56.78 );
+        Assert.assertEquals( 3, l_return.size() );
+        Assert.assertEquals( 1, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( "foobar", l_return.get( 1 ).raw() );
+        Assert.assertEquals( 56.78, l_return.get( 2 ).<Number>raw() );
     }
 
     /**
@@ -190,7 +190,7 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Lists.reverse( l_list ).toArray() );
+        Assert.assertArrayEquals( Lists.reverse( l_list ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -204,12 +204,9 @@ public final class TestCActionCollectionList extends IBaseTest
 
         final List<?> l_elements = IntStream.range( 0, l_random.nextInt( 100 ) + 1 ).map( i -> l_random.nextInt() ).boxed().collect( Collectors.toList() );
         final List<?> l_list = new ArrayList<>( l_elements );
-        final List<Integer> l_index = new ArrayList<>(
-                                        IntStream.range( 0, l_list.size() / 3 )
-                                                 .map( i ->  l_random.nextInt( l_list.size() ) )
-                                                 .boxed()
-                                                 .collect( Collectors.toSet() )
-                                      );
+        final List<Integer> l_index = IntStream.range( 0, l_list.size() / 3 )
+                                               .map( i -> l_random.nextInt( l_list.size() ) )
+                                               .boxed().distinct().collect( Collectors.toList() );
 
         final int l_startsize = l_list.size();
         final List<ITerm> l_return = new ArrayList<>();
@@ -223,7 +220,7 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_startsize, l_list.size() + l_index.size() );
+        Assert.assertEquals( l_list.size() + l_index.size(), l_startsize );
         Assert.assertTrue(
             l_index.parallelStream()
                    .map( l_elements::get )
@@ -247,11 +244,11 @@ public final class TestCActionCollectionList extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_list1.size(), 1 );
-        Assert.assertEquals( l_list1.get( 0 ), "xxx" );
+        Assert.assertEquals( 1, l_list1.size() );
+        Assert.assertEquals( "xxx", l_list1.get( 0 ) );
 
-        Assert.assertEquals( l_list2.size(), 3 );
-        Assert.assertEquals( l_list2.get( 0 ), "xxx" );
+        Assert.assertEquals( 3, l_list2.size() );
+        Assert.assertEquals( "xxx", l_list2.get( 0 ) );
     }
 
 
@@ -269,8 +266,8 @@ public final class TestCActionCollectionList extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_list.size(), 1 );
-        Assert.assertEquals( l_list.get( 0 ), "xyz" );
+        Assert.assertEquals( 1, l_list.size() );
+        Assert.assertEquals( "xyz", l_list.get( 0 ) );
     }
 
 
@@ -312,11 +309,11 @@ public final class TestCActionCollectionList extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 3 );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), IntStream.range( 0, 5 ).boxed().toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), IntStream.range( 7, 9 ).boxed().toArray() );
+        Assert.assertArrayEquals( IntStream.range( 0, 5 ).boxed().toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( IntStream.range( 7, 9 ).boxed().toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
 
-        Assert.assertArrayEquals( l_return.get( 2 ).<List<?>>raw().toArray(), IntStream.range( 1, 7 ).boxed().toArray() );
-        Assert.assertEquals( l_return.get( 2 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertArrayEquals( IntStream.range( 1, 7 ).boxed().toArray(), l_return.get( 2 ).<List<?>>raw().toArray() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 2 ).<List<?>>raw().getClass() );
     }
 
     /**
@@ -354,11 +351,11 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "ax", "bx" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "c", 1 ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 2 ).<List<?>>raw().toArray(), Stream.of( 9 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( "ax", "bx" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( "c", 1 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 9 ).toArray(), l_return.get( 2 ).<List<?>>raw().toArray() );
     }
 
 
@@ -381,8 +378,8 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), l_list.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_list.toArray() );
+        Assert.assertEquals( l_list.size(), l_return.size() );
+        Assert.assertArrayEquals( l_list.toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -440,17 +437,17 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 3 );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 3, l_return.get( 0 ).<List<?>>raw().size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getKey(), 0 );
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getValue(), 3 );
+        Assert.assertEquals( 0, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getKey() );
+        Assert.assertEquals( 3, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getValue() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getKey(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getValue(), 4 );
+        Assert.assertEquals( 1, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getKey() );
+        Assert.assertEquals( 4, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getValue() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getKey(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getValue(), 5 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getKey() );
+        Assert.assertEquals( 5, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getValue() );
 
 
 
@@ -460,8 +457,8 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 1 ).<List<?>>raw().getClass() );
 
     }
 
@@ -490,8 +487,8 @@ public final class TestCActionCollectionList extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 1 ).<List<?>>raw().getClass() );
     }
 
 }
