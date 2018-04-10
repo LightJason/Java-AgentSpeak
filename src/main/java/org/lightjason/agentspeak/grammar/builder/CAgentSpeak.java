@@ -471,22 +471,15 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_literal belief literal
-     * @param p_addbelief add-belief terminal
-     * @param p_deletebelief delete-belief terminal
+     * @param p_belieftrigger terminal
      * @return null or execution
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution executebelief( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_literal,
-                                            @Nullable final TerminalNode p_addbelief, @Nullable final TerminalNode p_deletebelief )
+                                            @Nonnull final TerminalNode p_belieftrigger )
     {
-        if ( Objects.nonNull( p_addbelief ) )
-            return new CBelief( CBelief.EAction.ADD, (ILiteral) p_visitor.visit( p_literal ) );
-
-        if ( Objects.nonNull( p_deletebelief ) )
-            return new CBelief( CBelief.EAction.DELETE, (ILiteral) p_visitor.visit( p_literal ) );
-
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbeliefaction" ) );
+        return new CBelief( CBelief.EAction.of( p_belieftrigger.getText() ), (ILiteral) p_visitor.visit( p_literal ) );
     }
 
     /**

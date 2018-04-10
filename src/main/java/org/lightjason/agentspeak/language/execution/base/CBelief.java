@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.base;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -33,6 +34,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -88,22 +90,22 @@ public final class CBelief extends IBaseExecution<ILiteral>
         /**
          * name
          */
-        private final String m_name;
+        private final String m_operator;
 
         /**
          * ctor
          *
-         * @param p_name string represenation
+         * @param p_operator string represenation
          */
-        EAction( @Nonnull final String p_name )
+        EAction( @Nonnull final String p_operator )
         {
-            m_name = p_name;
+            m_operator = p_operator;
         }
 
         @Override
         public final String toString()
         {
-            return m_name;
+            return m_operator;
         }
 
         @Override
@@ -120,8 +122,22 @@ public final class CBelief extends IBaseExecution<ILiteral>
                     break;
 
                 default:
-                    throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", this ) );
             }
+        }
+
+        /**
+         * builds a action by a string
+         *
+         * @param p_value string value
+         * @return action
+         */
+        @Nonnull
+        public static EAction of( @Nonnull final String p_value )
+        {
+            return Arrays.stream( EAction.values() )
+                         .filter( i -> i.m_operator.equals( p_value ) )
+                         .findFirst()
+                         .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EAction.class, "unknownoperator", p_value ) ) );
         }
     }
 }

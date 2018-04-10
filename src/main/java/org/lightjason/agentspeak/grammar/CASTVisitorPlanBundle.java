@@ -244,8 +244,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CAgentSpeak.executebelief(
             this,
             p_context.literal(),
-            p_context.PLUS(),
-            p_context.MINUS()
+            p_context.BELIEFTRIGGER()
         );
     }
 

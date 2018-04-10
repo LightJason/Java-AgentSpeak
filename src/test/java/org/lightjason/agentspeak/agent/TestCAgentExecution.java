@@ -110,7 +110,7 @@ public final class TestCAgentExecution extends IBaseTest
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
-            Assert.fail( "asl could not be read: {0}" );
+            Assert.fail( MessageFormat.format( "asl [{0}] could not be read", ASL ) );
         }
 
 

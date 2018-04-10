@@ -242,14 +242,20 @@ PLANTRIGGER :
     (PLUS | MINUS) EXCLAMATIONMARK?
     ;
 
+/**
+ * belief trigger
+ */
+BELIEFTRIGGER :
+    PLUS
+    | MINUS
+    ;
+
 
 
 // --- character structures ------------------------------------------------------------------------------------------------------------------------------------
 
 EXCLAMATIONMARK            : '!';
 COMMA                      : ',';
-PLUS                       : '+';
-MINUS                      : '-';
 DOUBLEEXCLAMATIONMARK      : '!!';
 QUESTIONMARK               : '?';
 DOLLAR                     : '$';
@@ -267,7 +273,6 @@ UNDERSCORE                 : '_';
 SLASH                      : '/';
 LEFTSHIFT                  : '<<';
 RIGHTSHIFT                 : '>>';
-DIVIDE                     : '//';
 
 LEFTROUNDBRACKET           : '(';
 RIGHTROUNDBRACKET          : ')';
@@ -275,6 +280,10 @@ LEFTANGULARBRACKET         : '[';
 RIGHTANGULARBRACKET        : ']';
 LEFTCURVEDBRACKET          : '{';
 RIGHTCURVEDBRACKET         : '}';
+
+fragment PLUS              : '+';
+fragment MINUS             : '-';
+fragment DIVIDE            : '//';
 
 fragment PI                : 'pi';
 fragment EULER             : 'euler';

@@ -139,7 +139,7 @@ body_formula :
  * @todo not working correctly
  */
 belief_action :
-    ( PLUS | MINUS ) literal
+    BELIEFTRIGGER literal
     ;
 
 /**
