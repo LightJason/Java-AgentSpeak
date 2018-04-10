@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -257,7 +258,7 @@ public final class CPath implements IPath
     @Override
     public final synchronized IPath lower()
     {
-        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toLowerCase() ) );
+        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toLowerCase( Locale.ROOT ) ) );
         return this;
     }
 
@@ -265,7 +266,7 @@ public final class CPath implements IPath
     @Override
     public final synchronized IPath upper()
     {
-        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toUpperCase() ) );
+        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toUpperCase( Locale.ROOT ) ) );
         return this;
     }
 

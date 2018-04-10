@@ -64,17 +64,6 @@ public class CMutexVariable<T> extends IBaseVariable<T>
      * ctor
      *
      * @param p_functor functor
-     * @param p_value value
-     */
-    public CMutexVariable( @Nonnull final String p_functor, @Nullable final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor functor
      */
     public CMutexVariable( @Nonnull final IPath p_functor )
     {
@@ -87,9 +76,22 @@ public class CMutexVariable<T> extends IBaseVariable<T>
      * @param p_functor functor
      * @param p_value value
      */
+    public CMutexVariable( @Nonnull final String p_functor, @Nullable final T p_value )
+    {
+        super( p_functor );
+        this.set( p_value );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor functor
+     * @param p_value value
+     */
     public CMutexVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
-        super( p_functor, p_value );
+        super( p_functor );
+        this.set( p_value );
     }
 
     @Override

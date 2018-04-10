@@ -70,6 +70,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
+     * @param p_lambdastreaming lambda streams
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )

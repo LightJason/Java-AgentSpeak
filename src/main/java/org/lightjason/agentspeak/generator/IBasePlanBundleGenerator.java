@@ -58,6 +58,7 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with actions
+     * @param p_lambdastreaming lambda streams
      * @throws Exception thrown on error
      */
     public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,

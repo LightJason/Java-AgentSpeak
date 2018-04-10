@@ -198,6 +198,8 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
+         * @param p_lambdastreaming lambda streaming
+         * @param p_variablebuilder variable builder
          * @throws Exception is thrown on any error
          */
         public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Set<IAction> p_action,
@@ -211,6 +213,8 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
+         * @param p_lambdastreaming lambda streaming
+         * @param p_variablebuilder variable builder
          * @throws Exception is thrown on any error
          */
         public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final Set<IAction> p_action,
@@ -224,6 +228,7 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
+         * @param p_lambdastreaming lambda streaming
          * @throws Exception is thrown on any error
          */
         public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final Set<IAction> p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )

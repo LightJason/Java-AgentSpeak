@@ -68,17 +68,6 @@ public abstract class IBaseExecution<T> implements IExecution
         return ( Objects.nonNull( m_value ) ) &&  p_class.isAssignableFrom( m_value.getClass() );
     }
 
-    /**
-     * returns the value of the action
-     *
-     * @return value
-     */
-    @Nullable
-    public final T getValue()
-    {
-        return m_value;
-    }
-
     @Nonnull
     @Override
     public Stream<IVariable<?>> variables()

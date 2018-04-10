@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.variable;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -74,32 +73,8 @@ public abstract class IBaseVariable<T> implements IVariable<T>
      */
     protected IBaseVariable( @Nonnull final IPath p_functor )
     {
-        m_any = p_functor.empty() || p_functor.equals( "_" );
+        m_any = p_functor.empty() || "_".equals( p_functor.toString() );
         m_functor = p_functor;
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    protected IBaseVariable( @Nonnull final String p_functor, @Nullable final T p_value )
-    {
-        this( CPath.of( p_functor ), p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    @SuppressFBWarnings( "EC_UNRELATED_CLASS_AND_INTERFACE" )
-    protected IBaseVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
-    {
-        this( p_functor );
-        this.setvalue( p_value );
     }
 
     /**

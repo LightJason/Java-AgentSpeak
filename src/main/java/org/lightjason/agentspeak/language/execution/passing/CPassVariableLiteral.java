@@ -67,6 +67,7 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
      * ctor
      *
      * @param p_value variable
+     * @param p_termlist optional term argument list
      */
     public CPassVariableLiteral( @Nonnull final IVariable<?> p_value, @Nonnull final Stream<ITerm> p_termlist )
     {

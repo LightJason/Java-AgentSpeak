@@ -83,9 +83,10 @@ public final class CSymmetricDifference extends IBuiltinAction
         CCommon.flatten( p_argument ).parallel().map( ITerm::raw ).forEach( l_count::add );
         final List<Object> l_result = l_count.entrySet()
                                              .parallelStream()
-                                             .filter( i -> i.getCount() % 2 == 1 )
-                                             .map( Multiset.Entry::getElement ).collect( Collectors.toList() );
-        l_result.sort( Comparator.comparing( Object::hashCode ) );
+                                             .filter( i -> !( i.getCount() % 2 == 0 ) )
+                                             .map( Multiset.Entry::getElement )
+                                             .sorted( Comparator.comparing( Object::hashCode ) )
+                                             .collect( Collectors.toList() );
 
         p_return.add(
             CRawTerm.of(

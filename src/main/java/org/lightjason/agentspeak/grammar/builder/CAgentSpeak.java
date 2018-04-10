@@ -113,7 +113,6 @@ public final class CAgentSpeak
      */
     private CAgentSpeak()
     {
-
     }
 
 
@@ -172,6 +171,7 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_literal literal
+     * @param p_body execution body
      * @return rule stream
      */
     @Nonnull
@@ -306,6 +306,7 @@ public final class CAgentSpeak
     /**
      * builds a repair chain
      *
+     * @param p_visitor visitor
      * @param p_chain input chain elements
      * @return null or repair
      */
@@ -422,6 +423,7 @@ public final class CAgentSpeak
     /**
      * build an unary expression
      *
+     * @param p_visitor visitor
      * @param p_operator operator
      * @param p_variable variable
      * @return null or execution
@@ -490,6 +492,7 @@ public final class CAgentSpeak
     /**
      * creates an action execution definition
      *
+     * @param p_visitor visitor
      * @param p_actionliteral action literal
      * @param p_actions map with actions
      * @return wrapped action
@@ -717,7 +720,9 @@ public final class CAgentSpeak
     /**
      * build single assignment
      *
+     * @param p_visitor visitor
      * @param p_lhs left-hand-side
+     * @param p_operator operator
      * @param p_ternary ternary
      * @param p_expression expression
      * @return assignment execution
@@ -748,6 +753,7 @@ public final class CAgentSpeak
     /**
      * build multi assignment
      *
+     * @param p_visitor visitor
      * @param p_variable variable
      * @param p_execution execution structure
      * @return assignment execution
@@ -829,8 +835,11 @@ public final class CAgentSpeak
     /**
      * build a lambda expression
      *
+     * @param p_visitor visitor
      * @param p_parallel parallel call
      * @param p_iterator base iterator
+     * @param p_return return element
+     * @param p_execution execution body
      * @return lambda expression
      */
     @Nonnull
@@ -902,6 +911,7 @@ public final class CAgentSpeak
     /**
      * build a lambda element
      *
+     * @param p_visitor visitor
      * @param p_number number
      * @param p_variable variable
      * @return execution

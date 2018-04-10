@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -111,7 +112,7 @@ public final class CSolve extends IBuiltinAction
                           return new MaxIter( i.raw() );
 
                       if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                          switch ( i.<String>raw().trim().toLowerCase() )
+                          switch ( i.<String>raw().trim().toLowerCase( Locale.ROOT ) )
                           {
                               case "non-negative":
                                   return new NonNegativeConstraint( true );

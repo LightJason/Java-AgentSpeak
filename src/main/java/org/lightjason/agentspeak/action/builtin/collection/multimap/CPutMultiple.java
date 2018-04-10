@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.builtin.collection.IMapApplyMultiple;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -48,7 +49,8 @@ public final class CPutMultiple extends IMapApplyMultiple<Multimap<Object, Objec
     @Override
     protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
-        p_instance.put( p_key, p_value );
+        if ( Objects.nonNull( p_value ) )
+            p_instance.put( p_key, p_value );
     }
 
 }

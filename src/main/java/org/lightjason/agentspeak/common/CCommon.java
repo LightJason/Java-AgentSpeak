@@ -120,7 +120,7 @@ public final class CCommon
     @Nonnull
     public static String[] languages()
     {
-        return Arrays.stream( PROPERTIES.getString( "translation" ).split( "," ) ).map( i -> i.trim().toLowerCase() ).toArray( String[]::new );
+        return Arrays.stream( PROPERTIES.getString( "translation" ).split( "," ) ).map( i -> i.trim().toLowerCase( Locale.ROOT ) ).toArray( String[]::new );
     }
 
     /**

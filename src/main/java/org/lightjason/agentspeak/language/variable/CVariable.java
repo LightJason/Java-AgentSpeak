@@ -62,17 +62,6 @@ public class CVariable<T> extends IBaseVariable<T>
      * ctor
      *
      * @param p_functor functor
-     * @param p_value value
-     */
-    public CVariable( @Nonnull final String p_functor, @Nullable final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor functor
      */
     public CVariable( @Nonnull final IPath p_functor )
     {
@@ -85,9 +74,22 @@ public class CVariable<T> extends IBaseVariable<T>
      * @param p_functor functor
      * @param p_value value
      */
+    public CVariable( @Nonnull final String p_functor, @Nullable final T p_value )
+    {
+        super( p_functor );
+        this.setvalue( p_value );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor functor
+     * @param p_value value
+     */
     public CVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
-        super( p_functor, p_value );
+        super( p_functor );
+        this.set( p_value );
     }
 
     @Override

@@ -61,6 +61,7 @@ public final class CTerm
     /**
      * build a literal
      *
+     * @param p_visitor visitor
      * @param p_at at terminal
      * @param p_strongnegation strongnegation terminal
      * @param p_atom atom terminal
@@ -86,6 +87,8 @@ public final class CTerm
     /**
      * build variable
      *
+     * @param p_at at terminal
+     * @param p_variable variable terminal
      * @return variable
      */
     @Nonnull

@@ -60,19 +60,21 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
      */
     public CRelocateVariable( final IVariable<?> p_variable )
     {
-        super( p_variable.functor(), p_variable.raw() );
+        super( p_variable.functor() );
+        this.setvalue( p_variable.raw() );
         m_relocate = p_variable;
     }
 
     /**
      * ctor
      *
-     *  @param p_functor variable name
+     * @param p_functor variable name
      * @param p_relocate variable which should be relocated
      */
     public CRelocateVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_relocate )
     {
-        super( p_functor, p_relocate.raw() );
+        super( p_functor );
+        this.setvalue( p_relocate.raw() );
         m_relocate = p_relocate;
     }
 
@@ -80,12 +82,14 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
      * private ctor for creating object-copy
      *
      * @param p_functor functor
-     * @param p_value value
      * @param p_variable referenced variable
+     * @param p_value value
      */
-    private CRelocateVariable( @Nonnull final IPath p_functor, @Nullable final T p_value, @Nonnull final IVariable<?> p_variable )
+    private CRelocateVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_variable, @Nullable final T p_value
+    )
     {
-        super( p_functor, p_value );
+        super( p_functor );
+        this.setvalue( p_value );
         m_relocate = p_variable;
     }
 
@@ -93,12 +97,14 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
      * private ctor for creating object-copy
      *
      * @param p_functor functor
-     * @param p_value value
      * @param p_variable referenced variable
+     * @param p_value value
      */
-    private CRelocateVariable( @Nonnull final String p_functor, @Nullable final T p_value, @Nonnull final IVariable<?> p_variable )
+    private CRelocateVariable( @Nonnull final String p_functor, @Nonnull final IVariable<?> p_variable, @Nullable final T p_value
+    )
     {
-        super( p_functor, p_value );
+        super( p_functor );
+        this.setvalue( p_value );
         m_relocate = p_variable;
     }
 
@@ -122,15 +128,15 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
     public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
-               ? new CRelocateVariable<>( m_functor, m_value, m_relocate )
-               : new CRelocateVariable<>( p_prefix[0].append( m_functor ), m_value, m_relocate );
+               ? new CRelocateVariable<>( m_functor, m_relocate, m_value )
+               : new CRelocateVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
     @Nonnull
     @Override
     public final IVariable<T> shallowcopysuffix()
     {
-        return new CRelocateVariable<>( m_functor.suffix(), m_value, m_relocate );
+        return new CRelocateVariable<>( m_functor.suffix(), m_relocate, m_value );
     }
 
     @Nonnull
@@ -141,7 +147,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
-            CCommon.deepclone( m_value ), m_relocate
+            m_relocate, CCommon.deepclone( m_value )
         );
     }
 
@@ -149,7 +155,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateVariable<>( m_functor.suffix(), CCommon.deepclone( m_value ), m_relocate );
+        return new CRelocateVariable<>( m_functor.suffix(), m_relocate, CCommon.deepclone( m_value ) );
     }
 
 

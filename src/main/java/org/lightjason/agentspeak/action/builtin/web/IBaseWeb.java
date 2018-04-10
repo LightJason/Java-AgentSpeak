@@ -40,6 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
@@ -202,7 +203,7 @@ public abstract class IBaseWeb extends IBuiltinAction
                     .stream()
                     .map( i ->
                               CLiteral.of(
-                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-_/]", "-" ),
+                                  i.getKey().toLowerCase( Locale.ROOT ).replaceAll( "[^([a-z][0-9]\\-_/]", "-" ),
                                   flatterm( i.getValue() )
                               )
                     );
