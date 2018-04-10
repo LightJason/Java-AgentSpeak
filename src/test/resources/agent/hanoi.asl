@@ -41,7 +41,7 @@
  **/
 nexttower(T, M) :-
     T--;
-    T = T < 0 ? M - 1 + T : T;
+    T = T < 0 ? M - 1 + T : T
 .
 
 
