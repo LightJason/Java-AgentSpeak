@@ -302,8 +302,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.8</version>
+                <version>3.9.0</version>
                 <configuration>
+                    <targetJdk>1.8</targetJdk>
                     <excludes>
                         <exclude>**/CASTVisitorAgent.java</exclude>
                         <exclude>**/CASTVisitorPlanBundle.java</exclude>
