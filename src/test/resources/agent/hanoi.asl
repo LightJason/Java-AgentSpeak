@@ -39,11 +39,8 @@
  * @param T current tower index
  **/
 nexttower(T) :-
-    .generic/print( "---> 1", T, TowerMaxIndex );
     T--;
-    .generic/print( "---> 2", T, TowerMaxIndex );
-    T = T < 0 ? TowerMaxIndex + 1 + T : T;
-    .generic/print( "---> 3", T, TowerMaxIndex )
+    T = T < 0 ? TowerMaxIndex + 1 + T : T
 .
 
 
@@ -95,7 +92,7 @@ nexttower(T) :-
 -!slice/take( T )
     <-
         .generic/print( "agent", MyID, "cannot take slice from tower", T );
-        $nexttower( T, TowerCount );
+        $nexttower( T );
         !slice/take( T )
 .
 

@@ -99,8 +99,6 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
 
-        l_variables.forEach( i -> System.out.println( i + "   " + i.getClass() ) );
-
         if ( p_rule.execute(
             false,
             p_rule.instantiate( p_context.agent(), l_variables.stream() ),

@@ -111,7 +111,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     public final void complexrule() throws Exception
     {
         final Random l_random = new Random();
-        final int l_nvalue = l_random.nextInt( 4 );
+        final int l_nvalue = l_random.nextInt( 3 );
         final int l_mvalue = l_random.nextInt( 4 );
 
         System.out.println( l_nvalue + "   " + l_mvalue + "   " + ackermann( l_nvalue, l_mvalue ) );
