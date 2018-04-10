@@ -114,8 +114,6 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         final int l_nvalue = l_random.nextInt( 3 );
         final int l_mvalue = l_random.nextInt( 4 );
 
-        System.out.println( l_nvalue + "   " + l_mvalue + "   " + ackermann( l_nvalue, l_mvalue ) );
-
         final CCollectValues l_values = new CCollectValues();
 
         final IAgent<?> l_agent = new CAgentGenerator(
