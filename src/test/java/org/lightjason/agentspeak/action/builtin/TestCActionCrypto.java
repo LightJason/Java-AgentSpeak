@@ -99,7 +99,7 @@ public final class TestCActionCrypto extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), p_crypt.getMiddle().intValue() );
+        Assert.assertEquals( p_crypt.getMiddle().intValue(), l_return.size() );
     }
 
 
@@ -121,7 +121,6 @@ public final class TestCActionCrypto extends IBaseTest
             ).value()
         );
 
-
         Assert.assertFalse(
             new CDecrypt().execute(
                 false, IContext.EMPTYPLAN,
@@ -142,13 +141,15 @@ public final class TestCActionCrypto extends IBaseTest
         final Pair<Key, Key> l_key = EAlgorithm.RSA.generateKey();
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CEncrypt().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CEncrypt().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertFalse(
             new CDecrypt().execute(
                 false, IContext.EMPTYPLAN,
@@ -169,13 +170,15 @@ public final class TestCActionCrypto extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CHash().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.of( p_hash.getLeft() ), CRawTerm.of( "test string" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CHash().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( CRawTerm.of( p_hash.getLeft() ), CRawTerm.of( "test string" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), p_hash.getRight() );
+        Assert.assertArrayEquals( p_hash.getRight(), l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ) );
     }
 
     /**
@@ -239,7 +242,7 @@ public final class TestCActionCrypto extends IBaseTest
             l_returnkey
         );
 
-        Assert.assertEquals( l_returnkey.size(), p_crypt.getMiddle().intValue() );
+        Assert.assertEquals( p_crypt.getMiddle().intValue(), l_returnkey.size() );
 
 
         final List<ITerm> l_returnencrypt = new ArrayList<>();
@@ -260,9 +263,9 @@ public final class TestCActionCrypto extends IBaseTest
         );
 
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), "test string" );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 12345 );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( "test string", l_return.get( 0 ).raw() );
+        Assert.assertEquals( 12345, l_return.get( 1 ).<Number>raw() );
     }
 
 }

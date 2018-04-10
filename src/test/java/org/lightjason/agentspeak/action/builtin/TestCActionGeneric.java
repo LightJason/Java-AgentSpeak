@@ -107,7 +107,7 @@ public final class TestCActionGeneric extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_output.toString( "utf-8" ), "foobar-1234-true\n" );
+        Assert.assertEquals( "foobar-1234-true\n", l_output.toString( "utf-8" ) );
     }
 
     /**
@@ -130,13 +130,15 @@ public final class TestCActionGeneric extends IBaseTest
         l_print.formatter().add( l_format1 );
         l_print.formatter().add( l_format2 );
 
-        l_print.execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            Collections.emptyList()
+        Assert.assertTrue(
+            l_print.execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_output.toString( "utf-8" ), "FOOBAR-1234-yes\n" );
+        Assert.assertEquals( "FOOBAR-1234-yes\n", l_output.toString( "utf-8" ) );
     }
 
     /**
@@ -153,8 +155,8 @@ public final class TestCActionGeneric extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), String.class );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( String.class, l_return.get( 0 ).raw().getClass() );
         Assert.assertTrue( !l_return.get( 0 ).<String>raw().isEmpty() );
     }
 

@@ -235,7 +235,7 @@ public final class TestCActionDateTime extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ZonedDateTime );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof ZonedDateTime );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof ZonedDateTime );
@@ -259,20 +259,20 @@ public final class TestCActionDateTime extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ZonedDateTime );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof ZonedDateTime );
 
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getYear(), l_return.get( 1 ).<ZonedDateTime>raw().getYear() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getMonthValue(), l_return.get( 1 ).<ZonedDateTime>raw().getMonthValue() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getDayOfMonth(), l_return.get( 1 ).<ZonedDateTime>raw().getDayOfMonth() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getYear(), l_return.get( 0 ).<ZonedDateTime>raw().getYear() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getMonthValue(), l_return.get( 0 ).<ZonedDateTime>raw().getMonthValue() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getDayOfMonth(), l_return.get( 0 ).<ZonedDateTime>raw().getDayOfMonth() );
 
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getHour(), l_return.get( 1 ).<ZonedDateTime>raw().getHour() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getMinute(), l_return.get( 1 ).<ZonedDateTime>raw().getMinute() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getSecond(), l_return.get( 1 ).<ZonedDateTime>raw().getSecond() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getNano(), l_return.get( 1 ).<ZonedDateTime>raw().getNano() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getHour(), l_return.get( 0 ).<ZonedDateTime>raw().getHour() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getMinute(), l_return.get( 0 ).<ZonedDateTime>raw().getMinute() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getSecond(), l_return.get( 0 ).<ZonedDateTime>raw().getSecond() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getNano(), l_return.get( 0 ).<ZonedDateTime>raw().getNano() );
 
-        Assert.assertNotEquals( l_return.get( 0 ).<ZonedDateTime>raw().getZone(), l_return.get( 1 ).<ZonedDateTime>raw().getZone() );
+        Assert.assertNotEquals( l_return.get( 1 ).<ZonedDateTime>raw().getZone(), l_return.get( 0 ).<ZonedDateTime>raw().getZone() );
     }
 
 
@@ -293,11 +293,11 @@ public final class TestCActionDateTime extends IBaseTest
             ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 10 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 15 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 30 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0 );
+        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertEquals( 10, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 15, l_return.get( 1 ).<Number>raw() );
+        Assert.assertEquals( 30, l_return.get( 2 ).<Number>raw() );
+        Assert.assertEquals( 0, l_return.get( 3 ).<Number>raw() );
     }
 
 
@@ -316,9 +316,9 @@ public final class TestCActionDateTime extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), "America/New_York" );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "Europe/London" );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( "America/New_York", l_return.get( 0 ).raw() );
+        Assert.assertEquals( "Europe/London", l_return.get( 1 ).raw() );
     }
 
 
@@ -339,8 +339,8 @@ public final class TestCActionDateTime extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), ZonedDateTime.parse( p_value.getRight() ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( ZonedDateTime.parse( p_value.getRight() ), l_return.get( 0 ).raw() );
     }
 
     /**
@@ -360,8 +360,8 @@ public final class TestCActionDateTime extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), ZonedDateTime.parse( p_value.getRight() ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( ZonedDateTime.parse( p_value.getRight() ), l_return.get( 0 ).raw() );
     }
 
     /**
@@ -382,8 +382,8 @@ public final class TestCActionDateTime extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::<Number>raw ).mapToLong( Number::longValue ).toArray(),
-            p_value.getRight().mapToLong( Number::longValue ).toArray()
+            p_value.getRight().mapToLong( Number::longValue ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).mapToLong( Number::longValue ).toArray()
         );
     }
 

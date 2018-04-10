@@ -61,12 +61,12 @@ public final class TestCActionCollectionTuple extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<AbstractMap.Entry<String, ?>>raw().getKey(), "abcd" );
-        Assert.assertEquals( l_return.get( 0 ).<AbstractMap.Entry<?, Number>>raw().getValue(), 123 );
+        Assert.assertEquals( "abcd", l_return.get( 0 ).<AbstractMap.Entry<String, ?>>raw().getKey() );
+        Assert.assertEquals( 123, l_return.get( 0 ).<AbstractMap.Entry<?, Number>>raw().getValue() );
 
-        Assert.assertEquals( l_return.get( 1 ).<AbstractMap.Entry<String, ?>>raw().getKey(), "foobar" );
+        Assert.assertEquals( "foobar", l_return.get( 1 ).<AbstractMap.Entry<String, ?>>raw().getKey() );
         Assert.assertTrue( l_return.get( 1 ).<AbstractMap.Entry<?, Boolean>>raw().getValue() );
     }
 
@@ -100,7 +100,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_data.getValue(), "blubblub" );
+        Assert.assertEquals( "blubblub", l_data.getValue() );
     }
 
 
@@ -118,13 +118,13 @@ public final class TestCActionCollectionTuple extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
 
-        Assert.assertEquals( l_return.get( 0 ).raw(), "foo" );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "bar" );
+        Assert.assertEquals( "foo", l_return.get( 0 ).raw() );
+        Assert.assertEquals( "bar", l_return.get( 1 ).raw() );
 
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 2 );
+        Assert.assertEquals( 1, l_return.get( 2 ).<Number>raw() );
+        Assert.assertEquals( 2, l_return.get( 3 ).<Number>raw() );
     }
 
 }

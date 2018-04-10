@@ -70,15 +70,15 @@ public final class TestCActionGenericType extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertEquals(
-            l_return.get( 0 ).<ILiteral>raw(),
             CLiteral.of(
                     "functor",
                     CRawTerm.of( "stringvalue" ),
                     CRawTerm.of( 1234 ),
                     CRawTerm.of( true )
-            )
+            ),
+            l_return.get( 0 ).<ILiteral>raw()
         );
     }
 
@@ -97,15 +97,15 @@ public final class TestCActionGenericType extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertEquals(
-            l_return.get( 0 ).<ILiteral>raw(),
             CLiteral.of(
                     "main/parsefunctor",
                     CRawTerm.of( "hello" ),
                     CRawTerm.of( 666D ),
                     CRawTerm.of( false )
-            )
+            ),
+            l_return.get( 0 ).<ILiteral>raw()
         );
     }
 
@@ -142,10 +142,10 @@ public final class TestCActionGenericType extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw().doubleValue(), 732.489, 0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw().doubleValue(), 64.091248, 0 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw().doubleValue(), -78129.01, 0 );
+        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertEquals( 732.489, l_return.get( 0 ).<Number>raw().doubleValue(), 0 );
+        Assert.assertEquals( 64.091248, l_return.get( 1 ).<Number>raw().doubleValue(), 0 );
+        Assert.assertEquals( -78129.01, l_return.get( 2 ).<Number>raw().doubleValue(), 0 );
         Assert.assertNull( l_return.get( 3 ).raw() );
     }
 
@@ -164,11 +164,11 @@ public final class TestCActionGenericType extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<String>raw(), "java.util.ArrayList" );
-        Assert.assertEquals( l_return.get( 1 ).<String>raw(), "java.lang.Long" );
-        Assert.assertEquals( l_return.get( 2 ).<String>raw(), "java.lang.String" );
-        Assert.assertEquals( l_return.get( 3 ).<String>raw(), "java.util.HashSet" );
+        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertEquals( "java.util.ArrayList", l_return.get( 0 ).<String>raw() );
+        Assert.assertEquals( "java.lang.Long", l_return.get( 1 ).<String>raw() );
+        Assert.assertEquals( "java.lang.String", l_return.get( 2 ).<String>raw() );
+        Assert.assertEquals( "java.util.HashSet", l_return.get( 3 ).<String>raw() );
     }
 
 
@@ -258,7 +258,6 @@ public final class TestCActionGenericType extends IBaseTest
             ).value()
         );
 
-
         Assert.assertTrue(
             new CIsString().execute(
                 false, IContext.EMPTYPLAN,
@@ -283,10 +282,10 @@ public final class TestCActionGenericType extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).<String>raw().isEmpty() );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "123" );
-        Assert.assertEquals( l_return.get( 2 ).raw(), "5.5" );
+        Assert.assertEquals( "123", l_return.get( 1 ).raw() );
+        Assert.assertEquals( "5.5", l_return.get( 2 ).raw() );
         Assert.assertTrue( l_return.get( 3 ).raw() instanceof String );
     }
 
@@ -305,7 +304,7 @@ public final class TestCActionGenericType extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Double );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof Double );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof Double );
