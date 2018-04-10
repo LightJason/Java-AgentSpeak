@@ -119,10 +119,12 @@ public final class TestCActionProlog extends IBaseTest
             ).value()
         );
 
+
         Assert.assertEquals( 4, l_return.size() );
         Assert.assertEquals( 5.0, l_return.get( 0 ).<Number>raw() );
         Assert.assertEquals( 5.0, l_return.get( 1 ).<Number>raw() );
-        Assert.assertEquals( "hello world", l_return.get( 2 ).<String>raw() );
+        Assert.assertEquals( "hello world", l_return.get( 2 ).raw() );
+        Assert.assertEquals( "[]", l_return.get( 3 ).raw() );
     }
 
     /**

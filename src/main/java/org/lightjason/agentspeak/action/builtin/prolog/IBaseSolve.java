@@ -49,6 +49,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -191,8 +192,8 @@ public abstract class IBaseSolve extends IBuiltinAction
         if ( ( p_term instanceof ILiteral ) && ( !p_term.<ILiteral>term().emptyValues() ) )
             return new Struct( p_term.functor(), p_term.<ILiteral>term().orderedvalues().map( CSolveAll::toprologterm ).toArray( Term[]::new ) );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Double.class ) ) )
-            return new alice.tuprolog.Double( p_term.raw() );
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Integer.class ) ) )
+            return new alice.tuprolog.Int( p_term.raw() );
 
         if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Float.class ) ) )
             return new alice.tuprolog.Float( p_term.raw() );
@@ -200,10 +201,10 @@ public abstract class IBaseSolve extends IBuiltinAction
         if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Long.class ) ) )
             return new alice.tuprolog.Long( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Integer.class ) ) )
-            return new alice.tuprolog.Int( p_term.raw() );
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Double.class ) ) )
+            return new alice.tuprolog.Double( p_term.raw() );
 
-        return new Struct( p_term.functor().trim() );
+        return new Struct( Objects.nonNull( p_term.raw() ) ? p_term.raw().toString() : "" );
     }
     //Checkstyle:ON:NPathComplexity
 
