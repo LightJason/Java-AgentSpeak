@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
@@ -70,6 +71,10 @@ import static org.junit.Assert.assertTrue;
  */
 public final class TestCHanoiTowers extends IBaseTest
 {
+    /**
+     * number of maximum cycles
+     */
+    private static final int MAXIMUMCYCLES = 1000;
     /**
      * agent map
      */
@@ -178,14 +183,18 @@ public final class TestCHanoiTowers extends IBaseTest
      */
     private void execute()
     {
-        while ( m_running.get() )
+        int l_cycles = MAXIMUMCYCLES;
+        while ( ( m_running.get() ) && ( l_cycles > 0 ) )
         {
+            l_cycles--;
             if ( PRINTENABLE )
                 System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
                     .forEach( IBaseTest::agentcycle );
         }
+
+        Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
     }
 
 
