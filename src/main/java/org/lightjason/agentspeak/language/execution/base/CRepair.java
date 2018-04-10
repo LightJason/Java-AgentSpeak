@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.base;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,7 +33,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -81,7 +81,7 @@ public class CRepair extends IBaseExecution<IExecution[]>
      */
     private static IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        final List<ITerm> l_return = CCommon.argumentlist();
         final IFuzzyValue<Boolean> l_result = p_execution.execute( false, p_context, Collections.emptyList(), l_return );
 
         return ( l_return.size() == 1 ) && ( l_return.get( 0 ).raw() instanceof Boolean )

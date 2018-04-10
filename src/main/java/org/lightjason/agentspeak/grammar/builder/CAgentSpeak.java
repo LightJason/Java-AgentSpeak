@@ -48,7 +48,7 @@ import org.lightjason.agentspeak.language.execution.achievementtest.CTestRule;
 import org.lightjason.agentspeak.language.execution.assignment.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.assignment.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.assignment.CSingleAssignment;
-import org.lightjason.agentspeak.language.execution.assignment.CTernaryOperation;
+import org.lightjason.agentspeak.language.execution.base.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.assignment.EAssignOperator;
 import org.lightjason.agentspeak.language.execution.base.CBelief;
 import org.lightjason.agentspeak.language.execution.base.CRepair;

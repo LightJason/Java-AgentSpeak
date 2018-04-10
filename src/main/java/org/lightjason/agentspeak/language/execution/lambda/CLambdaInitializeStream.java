@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -32,7 +33,6 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +70,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        final List<ITerm> l_return = CCommon.argumentlist();
         final IFuzzyValue<Boolean> l_result = Arrays.stream( m_value )
                                                     .map( i -> i.execute( p_parallel, p_context, p_argument, l_return ) )
                                                     .filter( i -> !i.value() )

@@ -35,7 +35,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -77,7 +76,8 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_return = new LinkedList<>();
+        final List<ITerm> l_return = CCommon.argumentlist();
+
         final IFuzzyValue<Boolean> l_rightreturn = m_rhs.execute( p_parallel, p_context, Collections.emptyList(), l_return );
         if ( ( !l_rightreturn.value() ) || ( l_return.size() != 1 ) )
             return CFuzzyValue.of( false );

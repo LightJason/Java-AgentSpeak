@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -91,7 +90,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                          @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_init = new ArrayList<>();
+        final List<ITerm> l_init = CCommon.argumentlist();
         if ( ( !m_init.execute( p_parallel, p_context, p_argument, l_init ).value() ) || ( l_init.size() != 1 ) )
             return CFuzzyValue.of( false );
 

@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
@@ -106,6 +107,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @todo check stack-overflow on different calls
      */
     @Test
+    @Ignore
     public final void complexrule() throws Exception
     {
         final Random l_random = new Random();

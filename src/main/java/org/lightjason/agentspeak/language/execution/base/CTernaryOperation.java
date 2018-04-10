@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.assignment;
+package org.lightjason.agentspeak.language.execution.base;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -78,14 +78,19 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_argument = new LinkedList<>();
+        final List<ITerm> l_argument = CCommon.argumentlist();
+
         if ( ( !m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.of( false );
 
-        return l_argument.get( 0 ).raw()
-               ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )
-               : m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
+        final IFuzzyValue<Boolean> l_reult = l_argument.get( 0 ).raw()
+                                           ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )
+                                           : m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
+
+        System.out.println( "---> " + m_true + "   " + l_argument + "     " + p_return );
+
+        return l_reult;
     }
 
     @Override

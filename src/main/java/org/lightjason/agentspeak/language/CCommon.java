@@ -57,9 +57,11 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -139,8 +141,18 @@ public final class CCommon
     public static Number modulo( @Nonnull final Number p_lhs, @Nonnull final Number p_rhs )
     {
         return p_lhs.longValue() < 0
-            ? Math.abs( ( p_rhs.longValue() + p_lhs.longValue() ) % p_rhs.longValue() )
-            : p_lhs.longValue() % p_rhs.longValue();
+               ? Math.abs( ( p_rhs.longValue() + p_lhs.longValue() ) % p_rhs.longValue() )
+               : p_lhs.longValue() % p_rhs.longValue();
+    }
+
+    /**
+     * returns argument list for any operations
+     *
+     * @return list
+     */
+    public static List<ITerm> argumentlist()
+    {
+        return Collections.synchronizedList( new ArrayList<>() );
     }
 
     //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------

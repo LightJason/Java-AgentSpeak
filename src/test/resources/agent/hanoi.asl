@@ -40,8 +40,11 @@
  * @param M number of towers
  **/
 nexttower(T, M) :-
+    .generic/print( "---> 1", T );
     T--;
-    T = T < 0 ? M - 1 + T : T
+    .generic/print( "---> 2", T );
+    T = T < 0 ? M - 1 + T : T;
+    .generic/print( "---> 3", T )
 .
 
 

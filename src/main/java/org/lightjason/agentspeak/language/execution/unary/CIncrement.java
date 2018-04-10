@@ -72,13 +72,11 @@ public final class CIncrement implements IUnary
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
-        if ( l_variable.valueassignableto( Number.class ) )
-        {
-            l_variable.set( l_variable.<Number>raw().doubleValue() + 1 );
-            return CFuzzyValue.of( true );
-        }
+        if ( !l_variable.valueassignableto( Number.class ) )
+            return CFuzzyValue.of( false );
 
-        return CFuzzyValue.of( false );
+        l_variable.set( l_variable.<Number>raw().doubleValue() + 1 );
+        return CFuzzyValue.of( true );
     }
 
     @Nonnull

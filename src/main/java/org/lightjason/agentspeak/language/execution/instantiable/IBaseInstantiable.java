@@ -38,7 +38,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -226,7 +225,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         return Arrays.stream( m_execution )
                      .map( i ->
                      {
-                         final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), new LinkedList<>() );
+                         final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), CCommon.argumentlist() );
                          l_result.add( l_return );
                          return p_context.agent().fuzzy().getValue().defuzzify( l_return );
                      } )
@@ -248,7 +247,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     private List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context )
     {
         return Arrays.stream( m_execution ).parallel()
-                     .map( i -> i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() ) )
+                     .map( i -> i.execute( false, p_context, Collections.emptyList(), CCommon.argumentlist() ) )
                      .collect( Collectors.toList() );
     }
 
