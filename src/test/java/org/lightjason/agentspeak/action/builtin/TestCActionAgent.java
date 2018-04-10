@@ -313,15 +313,7 @@ public final class TestCActionAgent extends IBaseTest
      */
     private IContext next()
     {
-        try
-        {
-            m_context.agent().call();
-        }
-        catch ( final Exception l_exception )
-        {
-            Assert.assertTrue( l_exception.getMessage(), false );
-        }
-
+        agentcycleassert( m_context.agent() );
         return m_context;
     }
 

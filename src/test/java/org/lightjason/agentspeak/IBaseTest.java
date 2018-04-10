@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
@@ -104,6 +105,41 @@ public abstract class IBaseTest
     protected static InputStream streamfromstring( @Nonnull final String p_input ) throws IOException
     {
         return IOUtils.toInputStream(  p_input,  "UTF-8" );
+    }
+
+    /**
+     * execute agent cycle
+     *
+     * @param p_agent agent
+     */
+    protected static void agentcycle( @Nonnull final IAgent<?> p_agent )
+    {
+        try
+        {
+            p_agent.call();
+        }
+        catch ( final Exception l_exception )
+        {
+            l_exception.printStackTrace();
+        }
+    }
+
+    /**
+     * execute agent cycle
+     *
+     * @param p_agent agent
+     */
+    protected static void agentcycleassert( @Nonnull final IAgent<?> p_agent )
+    {
+        try
+        {
+            p_agent.call();
+        }
+        catch ( final Exception l_exception )
+        {
+            l_exception.printStackTrace();
+            Assert.fail( l_exception.getMessage() );
+        }
     }
 
     /**

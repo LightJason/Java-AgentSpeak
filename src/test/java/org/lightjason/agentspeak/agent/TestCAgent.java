@@ -147,13 +147,13 @@ public final class TestCAgent extends IBaseTest
                          }
                          catch ( final Exception l_exception )
                          {
-                             Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
+                             Assert.fail( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ) );
                          }
                      } );
         }
         catch ( final Exception l_exception )
         {
-            Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
+            Assert.fail( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ) );
         }
 
         Assert.assertEquals( MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );

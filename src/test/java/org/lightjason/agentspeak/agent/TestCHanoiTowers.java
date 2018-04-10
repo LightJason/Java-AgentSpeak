@@ -184,17 +184,7 @@ public final class TestCHanoiTowers extends IBaseTest
                 System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
-                    .forEach( j ->
-                    {
-                        try
-                        {
-                            j.call();
-                        }
-                        catch ( final Exception l_exception )
-                        {
-                            l_exception.printStackTrace();
-                        }
-                    } );
+                    .forEach( IBaseTest::agentcycle );
         }
     }
 
