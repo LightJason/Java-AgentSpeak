@@ -225,7 +225,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         return Arrays.stream( m_execution )
                      .map( i ->
                      {
-                         final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), CCommon.argumentlist() );
+                         final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() );
                          l_result.add( l_return );
                          return p_context.agent().fuzzy().getValue().defuzzify( l_return );
                      } )
@@ -247,7 +247,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     private List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context )
     {
         return Arrays.stream( m_execution ).parallel()
-                     .map( i -> i.execute( false, p_context, Collections.emptyList(), CCommon.argumentlist() ) )
+                     .map( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
                      .collect( Collectors.toList() );
     }
 

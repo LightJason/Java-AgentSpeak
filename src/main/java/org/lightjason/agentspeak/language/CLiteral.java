@@ -347,6 +347,30 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
+    public final ILiteral allocate( @Nonnull final IContext p_context )
+    {
+        return new CLiteral(
+            m_at,
+            m_negated,
+            m_functor,
+            m_orderedvalues.stream()
+                           .map( i ->
+                           {
+                               if ( i instanceof IVariable<?> )
+                               {
+                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
+                                   return ( Objects.isNull( l_variable ) ) ? i : l_variable;
+                               }
+                               return i instanceof ILiteral
+                                      ? i.<ILiteral>term().allocate( p_context )
+                                      : i;
+                           } )
+                           .collect( Collectors.toList() )
+        );
+    }
+
+    @Nonnull
+    @Override
     public final String functor()
     {
         return m_functor.suffix();

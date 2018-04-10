@@ -84,13 +84,9 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.of( false );
 
-        final IFuzzyValue<Boolean> l_reult = l_argument.get( 0 ).raw()
-                                           ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )
-                                           : m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
-
-        System.out.println( "---> " + m_true + "   " + l_argument + "     " + p_return );
-
-        return l_reult;
+        return l_argument.get( 0 ).raw()
+               ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )
+               : m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
     }
 
     @Override

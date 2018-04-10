@@ -76,8 +76,8 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
         if ( Objects.isNull( l_rules ) )
             return CFuzzyValue.of( false );
 
-        // first step is the unification of the caller literal, so variables will be set of the current execution context
-        final ILiteral l_unified = p_value.unify( p_context );
+        // first step allocate all variables of the literal with the current context variables
+        final ILiteral l_unified = p_value.allocate( p_context );
 
         // second step execute backtracking rules sequential / parallel
         return l_rules.stream()
@@ -98,6 +98,8 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
     private static IFuzzyValue<Boolean> executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
+
+        l_variables.forEach( i -> System.out.println( i + "   " + i.getClass() ) );
 
         if ( p_rule.execute(
             false,

@@ -87,6 +87,13 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
             return this;
         }
 
+        @Nonnull
+        @Override
+        public final ILiteral allocate( @Nonnull final IContext p_context )
+        {
+            return this;
+        }
+
         @Override
         public final int compareTo( @Nonnull final ILiteral p_literal )
         {
@@ -225,5 +232,15 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      */
     @Nonnull
     ILiteral unify( @Nonnull final IContext p_context );
+
+    /**
+     * allocates all variables of the literal with
+     * the variables of the current context
+     *
+     * @param p_context cpmzexz
+     * @return literal with allocated variables
+     */
+    @Nonnull
+    ILiteral allocate( @Nonnull final IContext p_context  );
 
 }

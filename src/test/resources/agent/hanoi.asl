@@ -37,14 +37,13 @@
  * rule for calculating next tower index
  *
  * @param T current tower index
- * @param M number of towers
  **/
-nexttower(T, M) :-
-    .generic/print( "---> 1", T );
+nexttower(T) :-
+    .generic/print( "---> 1", T, TowerMaxIndex );
     T--;
-    .generic/print( "---> 2", T );
-    T = T < 0 ? M - 1 + T : T;
-    .generic/print( "---> 3", T )
+    .generic/print( "---> 2", T, TowerMaxIndex );
+    T = T < 0 ? TowerMaxIndex + 1 + T : T;
+    .generic/print( "---> 3", T, TowerMaxIndex )
 .
 
 
@@ -75,7 +74,8 @@ nexttower(T, M) :-
             .generic/print( "agent", MyID, "gets", S, "from tower", T );
 
             // move the slice clockwise and push it if possible
-            $nexttower( T, TowerMaxIndex );
+            $nexttower( T );
+            .generic/print( "---> 4", T, TowerMaxIndex );
             !slice/push( T, S )
 
 
@@ -114,7 +114,7 @@ nexttower(T, M) :-
         .generic/print( "agent", MyID, "pushs on tower", T, S, "successfully" );
 
         // pushing is successful, just go to the next tower clockwise
-        $nexttower( T, TowerMaxIndex );
+        $nexttower( T );
         !slice/take( T )
 .
 
@@ -130,6 +130,6 @@ nexttower(T, M) :-
         .generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
 
         // just try next tower counter
-        $nexttower( T, TowerMaxIndex );
+        $nexttower( T );
         !slice/push( T, S )
 .
