@@ -75,7 +75,7 @@ public final class CConstant<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> shallowcopy( final IPath... p_prefix )
+    public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CConstant<>( m_functor, m_value )
@@ -85,7 +85,7 @@ public final class CConstant<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> shallowcopysuffix()
+    public IVariable<T> shallowcopysuffix()
     {
         return new CConstant<>( m_functor.suffix(), m_value );
     }
@@ -110,21 +110,21 @@ public final class CConstant<T> extends IBaseVariable<T>
     }
 
     @Override
-    public final boolean mutex()
+    public boolean mutex()
     {
         return true;
     }
 
     @Nonnull
     @Override
-    protected final IVariable<T> setvalue( @Nullable final T p_value )
+    protected IVariable<T> setvalue( @Nullable final T p_value )
     {
         throw new CIllegalStateException( CCommon.languagestring( this, "set", m_functor ) );
     }
 
     @Nullable
     @Override
-    protected final T getvalue()
+    protected T getvalue()
     {
         return m_value;
     }

@@ -44,7 +44,7 @@ public final class CNotEqual extends CEqual
     private static final long serialVersionUID = -3226848482113693419L;
 
     @Override
-    protected final boolean apply( final boolean p_value )
+    protected boolean apply( final boolean p_value )
     {
         return !super.apply( p_value );
     }

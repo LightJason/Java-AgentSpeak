@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @tparam T data type
  */
-public class CMutexVariable<T> extends IBaseVariable<T>
+public final class CMutexVariable<T> extends IBaseVariable<T>
 {
     /**
      * serial id
@@ -95,7 +95,7 @@ public class CMutexVariable<T> extends IBaseVariable<T>
     }
 
     @Override
-    public final boolean mutex()
+    public boolean mutex()
     {
         return true;
     }
@@ -111,14 +111,14 @@ public class CMutexVariable<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> shallowcopysuffix()
+    public IVariable<T> shallowcopysuffix()
     {
         return new CMutexVariable<>( m_functor.suffix(), m_value.get() );
     }
 
     @Nonnull
     @Override
-    public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+    public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CMutexVariable<>(
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
@@ -130,14 +130,14 @@ public class CMutexVariable<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
-    public final ITerm deepcopysuffix()
+    public ITerm deepcopysuffix()
     {
         return new CMutexVariable<>( m_functor.suffix(), CCommon.deepclone( m_value.get() ) );
     }
 
     @Nonnull
     @Override
-    protected final IVariable<T> setvalue( @Nullable final T p_value )
+    protected IVariable<T> setvalue( @Nullable final T p_value )
     {
         m_value.set( p_value );
         return this;
@@ -145,7 +145,7 @@ public class CMutexVariable<T> extends IBaseVariable<T>
 
     @Nullable
     @Override
-    protected final T getvalue()
+    protected T getvalue()
     {
         return m_value.get();
     }

@@ -298,7 +298,6 @@
                 <version>2.0</version>
             </plugin>
 
-            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -313,7 +312,6 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
             </plugin>
-            -->
 
             <!-- @bug runs out of memory
             <plugin>

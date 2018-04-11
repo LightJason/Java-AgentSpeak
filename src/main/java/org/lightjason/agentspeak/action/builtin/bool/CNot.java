@@ -43,7 +43,7 @@ import java.util.List;
  * all elements, the action never fails
  *
  * {@code [R1|R2|R3|R4] = bool/not( Logical1, [Logical2, Logical3], Logical4 );}
- * @see https://en.wikipedia.org/wiki/Negation
+ * {@see https://en.wikipedia.org/wiki/Negation}
  */
 public final class CNot extends IBuiltinAction
 {
@@ -61,9 +61,8 @@ public final class CNot extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Boolean>raw )

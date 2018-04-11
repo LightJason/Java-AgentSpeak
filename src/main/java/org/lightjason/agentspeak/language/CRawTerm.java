@@ -91,7 +91,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_hashcode;
     }
@@ -99,7 +99,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     @SuppressWarnings( "unchecked" )
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( Objects.nonNull( p_object ) )
                && (
@@ -113,54 +113,54 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
     @Nonnull
     @Override
-    public final String functor()
+    public String functor()
     {
         return IPath.EMPTY.toString();
     }
 
     @Nonnull
     @Override
-    public final IPath functorpath()
+    public IPath functorpath()
     {
         return IPath.EMPTY;
     }
 
     @Nonnull
     @Override
-    public final IPath fqnfunctor()
+    public IPath fqnfunctor()
     {
         return IPath.EMPTY;
     }
 
     @Override
-    public final boolean hasVariable()
+    public boolean hasVariable()
     {
         return false;
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <N> N raw()
+    public <N> N raw()
     {
         return (N) m_value;
     }
 
     @Override
-    public final boolean allocated()
+    public boolean allocated()
     {
         return m_value != null;
     }
 
     @Nonnull
     @Override
-    public final IRawTerm<T> thrownotallocated() throws IllegalStateException
+    public IRawTerm<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "notallocated" ) );
@@ -169,14 +169,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Nonnull
     @Override
-    public final IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
@@ -186,20 +186,20 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public final ITerm deepcopy( final IPath... p_prefix )
+    public ITerm deepcopy( final IPath... p_prefix )
     {
         return CRawTerm.of( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
     }
 
     @Nonnull
     @Override
-    public final ITerm deepcopysuffix()
+    public ITerm deepcopysuffix()
     {
         return CRawTerm.of( m_value );
     }
 
     @Override
-    public final int structurehash()
+    public int structurehash()
     {
         return 0;
     }

@@ -109,7 +109,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
 
     @Nonnull
     @Override
-    public final IVariable<?> relocate()
+    public IVariable<?> relocate()
     {
         return m_relocate instanceof CConstant<?>
                ? m_relocate
@@ -117,7 +117,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
     }
 
     @Override
-    public final boolean mutex()
+    public boolean mutex()
     {
         return true;
     }
@@ -133,14 +133,14 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
 
     @Nonnull
     @Override
-    public final IVariable<T> shallowcopysuffix()
+    public IVariable<T> shallowcopysuffix()
     {
         return new CRelocateMutexVariable<>( m_functor.suffix(), m_relocate, m_value.get() );
     }
 
     @Nonnull
     @Override
-    public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+    public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CRelocateMutexVariable<>(
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
@@ -153,7 +153,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
 
     @Nonnull
     @Override
-    public final ITerm deepcopysuffix()
+    public ITerm deepcopysuffix()
     {
         return new CRelocateMutexVariable<>( m_functor.suffix(), m_relocate, CCommon.deepclone( m_value.get() ) );
     }
@@ -161,7 +161,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
 
     @Nonnull
     @Override
-    protected final IVariable<T> setvalue( @Nullable final T p_value )
+    protected IVariable<T> setvalue( @Nullable final T p_value )
     {
         m_value.set( p_value );
         return this;
@@ -169,13 +169,13 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
 
     @Nullable
     @Override
-    protected final T getvalue()
+    protected T getvalue()
     {
         return m_value.get();
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1})>{2}", m_functor, Objects.isNull( m_value ) ? "" : m_value, m_relocate );
     }

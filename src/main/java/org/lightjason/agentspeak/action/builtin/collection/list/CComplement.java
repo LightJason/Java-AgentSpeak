@@ -45,7 +45,7 @@ import java.util.List;
  * on empty lists
  *
  * {@code L = collection/list/complement( [1,2,3], [3,4,5] );}
- * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
+ * {@see https://en.wikipedia.org/wiki/Complement_(set_theory)}
  */
 public final class CComplement extends IBuiltinAction
 {
@@ -65,15 +65,15 @@ public final class CComplement extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( ( p_argument.get( 0 ).<List<?>>raw().isEmpty() ) && ( p_argument.get( 1 ).<List<?>>raw().isEmpty() ) )
             return CFuzzyValue.of( false );

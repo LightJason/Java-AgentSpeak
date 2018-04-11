@@ -37,13 +37,13 @@ public final class CLambdaStreaming implements ILambdaStreaming<List<?>>
 {
 
     @Override
-    public final Stream<?> apply( @Nonnull final List<?> p_objects )
+    public Stream<?> apply( @Nonnull final List<?> p_objects )
     {
         return p_objects.stream();
     }
 
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof List<?>;
     }

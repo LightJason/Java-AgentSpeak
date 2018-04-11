@@ -37,7 +37,7 @@ import java.util.Objects;
  *
  * @tparam T value type
  */
-public class CVariable<T> extends IBaseVariable<T>
+public final class CVariable<T> extends IBaseVariable<T>
 {
     /**
      * serial id
@@ -93,7 +93,7 @@ public class CVariable<T> extends IBaseVariable<T>
     }
 
     @Override
-    public final boolean mutex()
+    public boolean mutex()
     {
         return false;
     }
@@ -109,14 +109,14 @@ public class CVariable<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> shallowcopysuffix()
+    public IVariable<T> shallowcopysuffix()
     {
         return new CVariable<>( m_functor.suffix(), m_value );
     }
 
     @Nonnull
     @Override
-    public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+    public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CVariable<>(
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
@@ -128,21 +128,21 @@ public class CVariable<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
-    public final ITerm deepcopysuffix()
+    public ITerm deepcopysuffix()
     {
         return new CVariable<>( m_functor.suffix(), CCommon.deepclone( m_value ) );
     }
 
     @Nonnull
     @Override
-    protected final IVariable<T> setvalue( @Nullable final T p_value )
+    protected IVariable<T> setvalue( @Nullable final T p_value )
     {
         m_value = p_value;
         return this;
     }
 
     @Override
-    protected final T getvalue()
+    protected T getvalue()
     {
         return m_value;
     }

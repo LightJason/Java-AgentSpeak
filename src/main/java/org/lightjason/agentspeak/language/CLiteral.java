@@ -263,7 +263,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final Stream<ITerm> values( @Nullable final IPath... p_path )
+    public Stream<ITerm> values( @Nullable final IPath... p_path )
     {
         return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_values.values().stream()
@@ -276,7 +276,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
+    public Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
         return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_orderedvalues.stream().sequential()
@@ -292,38 +292,38 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final boolean emptyValues()
+    public boolean emptyValues()
     {
         return m_values.isEmpty();
     }
 
     @Override
-    public final int structurehash()
+    public int structurehash()
     {
         return m_structurehash;
     }
 
     @Override
-    public final boolean negated()
+    public boolean negated()
     {
         return m_negated;
     }
 
     @Override
-    public final boolean hasAt()
+    public boolean hasAt()
     {
         return m_at;
     }
 
     @Override
-    public final boolean hasVariable()
+    public boolean hasVariable()
     {
         return m_orderedvalues.parallelStream().anyMatch( ITerm::hasVariable );
     }
 
     @Nonnull
     @Override
-    public final ILiteral unify( @Nonnull final IContext p_context )
+    public ILiteral unify( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
@@ -347,7 +347,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final ILiteral allocate( @Nonnull final IContext p_context )
+    public ILiteral allocate( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
@@ -371,21 +371,21 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final String functor()
+    public String functor()
     {
         return m_functor.suffix();
     }
 
     @Nonnull
     @Override
-    public final IPath functorpath()
+    public IPath functorpath()
     {
         return m_functor.subpath( 0, m_functor.size() - 1 );
     }
 
     @Nonnull
     @Override
-    public final IPath fqnfunctor()
+    public IPath fqnfunctor()
     {
         return m_functor;
     }
@@ -393,26 +393,26 @@ public final class CLiteral implements ILiteral
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <T> T raw()
+    public <T> T raw()
     {
         return (T) this;
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_hash;
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Nonnull
     @Override
-    public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
+    public ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
@@ -429,7 +429,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final ILiteral shallowcopysuffix()
+    public ILiteral shallowcopysuffix()
     {
         return new CLiteral(
             m_at, m_negated, CPath.of( m_functor.suffix() ),
@@ -438,20 +438,20 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}{1}{2}{3}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues );
     }
 
     @Override
-    public final int compareTo( @Nonnull final ILiteral p_literal )
+    public int compareTo( @Nonnull final ILiteral p_literal )
     {
         return Integer.compare( this.hashCode(), p_literal.hashCode() );
     }
 
     @Nonnull
     @Override
-    public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
+    public synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
@@ -470,7 +470,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final synchronized ITerm deepcopysuffix()
+    public synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(
             m_at, m_negated, CPath.of( m_functor.suffix() ),
@@ -496,7 +496,7 @@ public final class CLiteral implements ILiteral
 
         @Nonnull
         @Override
-        public final IASTVisitorManual parse( @Nonnull final InputStream p_stream ) throws Exception
+        public IASTVisitorManual parse( @Nonnull final InputStream p_stream ) throws Exception
         {
             final IASTVisitorManual l_visitor = new CASTVisitorManual();
             l_visitor.visit( this.parser( p_stream ).root_literal() );
@@ -504,13 +504,13 @@ public final class CLiteral implements ILiteral
         }
 
         @Override
-        protected final Class<ManualLexer> lexerclass()
+        protected Class<ManualLexer> lexerclass()
         {
             return ManualLexer.class;
         }
 
         @Override
-        protected final Class<ManualParser> parserclass()
+        protected Class<ManualParser> parserclass()
         {
             return ManualParser.class;
         }

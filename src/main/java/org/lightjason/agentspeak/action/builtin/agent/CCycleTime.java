@@ -42,7 +42,7 @@ import java.util.List;
  *
  * {@code T = agent/cycletime();}
  */
-public class CCycleTime extends IBuiltinAction
+public final class CCycleTime extends IBuiltinAction
 {
     /**
      * serial id
@@ -51,9 +51,8 @@ public class CCycleTime extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(
