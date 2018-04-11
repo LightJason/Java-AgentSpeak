@@ -218,7 +218,7 @@ public final class CCommon
      */
     private static boolean actionusable( final IAction p_action )
     {
-        if ( ( p_action.name().empty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
+        if ( p_action.name().empty() || p_action.name().get( 0 ).trim().isEmpty() )
         {
             LOGGER.warning( CCommon.languagestring( CCommon.class, "actionnameempty" ) );
             return false;
@@ -287,11 +287,10 @@ public final class CCommon
 
         final IAgentAction l_annotation = p_class.getAnnotation( IAgentAction.class );
         return new ImmutablePair<>(
-                   ( l_annotation.classes().length == 0 )
-                   || ( Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
-                              .parallel()
-                              .anyMatch( p_class::equals )
-                   ),
+                   l_annotation.classes().length == 0
+                   || Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
+                            .parallel()
+                            .anyMatch( p_class::equals ),
                    l_annotation.access()
                );
     }
@@ -307,11 +306,10 @@ public final class CCommon
     {
         return p_method.isAnnotationPresent( IAgentActionFilter.class )
                && (
-                   ( p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0 )
-                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
-                              .parallel()
-                              .anyMatch( p_class::equals )
-                   )
+                   p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0
+                   || Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
+                            .parallel()
+                            .anyMatch( p_class::equals )
                );
     }
 
@@ -481,9 +479,8 @@ public final class CCommon
     private static final class CUTF8Control extends ResourceBundle.Control
     {
 
-        public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
-                                               final boolean p_reload
-        ) throws IllegalAccessException, InstantiationException, IOException
+        public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
+                                         final boolean p_reload ) throws IOException
         {
             final InputStream l_stream;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );

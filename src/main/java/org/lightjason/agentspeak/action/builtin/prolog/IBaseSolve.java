@@ -189,19 +189,19 @@ public abstract class IBaseSolve extends IBuiltinAction
         if ( p_term instanceof IVariable<?> )
             return new Var( p_term.functor() );
 
-        if ( ( p_term instanceof ILiteral ) && ( !p_term.<ILiteral>term().emptyValues() ) )
+        if ( p_term instanceof ILiteral && !p_term.<ILiteral>term().emptyValues() )
             return new Struct( p_term.functor(), p_term.<ILiteral>term().orderedvalues().map( CSolveAll::toprologterm ).toArray( Term[]::new ) );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Integer.class ) ) )
+        if ( p_term instanceof IRawTerm<?> && p_term.<IRawTerm<?>>term().valueassignableto( Integer.class ) )
             return new alice.tuprolog.Int( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Float.class ) ) )
+        if ( p_term instanceof IRawTerm<?> && p_term.<IRawTerm<?>>term().valueassignableto( Float.class ) )
             return new alice.tuprolog.Float( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Long.class ) ) )
+        if ( p_term instanceof IRawTerm<?> && p_term.<IRawTerm<?>>term().valueassignableto( Long.class ) )
             return new alice.tuprolog.Long( p_term.raw() );
 
-        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>term().valueassignableto( Double.class ) ) )
+        if ( p_term instanceof IRawTerm<?> && p_term.<IRawTerm<?>>term().valueassignableto( Double.class ) )
             return new alice.tuprolog.Double( p_term.raw() );
 
         return new Struct( Objects.nonNull( p_term.raw() ) ? p_term.raw().toString() : "" );

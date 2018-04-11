@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * The action creates for each argument an item within the theory
  * and returns the theory input. The action does not fail
  *
- * {@code T = prolog/createtheory( "dosomethin(X) :- X is 5" );}
+ * {@code T = .prolog/createtheory( "dosomethin(X) :- X is 5" );}
  */
 public final class CTheory extends IBuiltinAction
 {

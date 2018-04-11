@@ -38,8 +38,8 @@ import java.util.Arrays;
  * action succeed if all queries can be successful executed.
  *
  * {@code
-    [A|B] = prolog/solveany( Theory1, ["foo(X)", Theory2, "bar(Y)"] );
-    [C|D] = prolog/solveany( "foo(X)", "bar(Y)" );
+    [A|B] = .prolog/solveany( Theory1, ["foo(X)", Theory2, "bar(Y)"] );
+    [C|D] = .prolog/solveany( "foo(X)", "bar(Y)" );
  * }
  */
 public final class CSolveAny extends IBaseSolve
@@ -50,7 +50,7 @@ public final class CSolveAny extends IBaseSolve
     private static final long serialVersionUID = 7170142285182677094L;
 
     @Override
-    protected final boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )
+    protected boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )
     {
         return Arrays.stream( p_solveinfos ).anyMatch( SolveInfo::isSuccess );
     }

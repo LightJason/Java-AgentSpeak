@@ -39,8 +39,8 @@ import java.util.Arrays;
  * and only the bound variables will be returned
  *
  * {@code
-    [A|B] = prolog/solveall( Theory1, ["foo(X)", Theory2, "bar(Y)"] );
-    [C|D] = prolog/solveall( "foo(X)", "bar(Y)" );
+    [A|B] = .prolog/solveall( Theory1, ["foo(X)", Theory2, "bar(Y)"] );
+    [C|D] = .prolog/solveall( "foo(X)", "bar(Y)" );
  * }
  */
 public final class CSolveAll extends IBaseSolve
@@ -51,13 +51,13 @@ public final class CSolveAll extends IBaseSolve
     private static final long serialVersionUID = 902243292596197085L;
 
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Override
-    protected final boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )
+    protected boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )
     {
         return Arrays.stream( p_solveinfos ).allMatch( SolveInfo::isSuccess );
     }
