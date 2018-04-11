@@ -335,7 +335,7 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.of( l_variable ) : l_variable;
+                                   return Objects.isNull( l_variable ) || l_variable.allocated() ? CRawTerm.of( l_variable ) : l_variable;
                                }
                                return i instanceof ILiteral
                                       ? i.<ILiteral>term().unify( p_context )
@@ -359,7 +359,7 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return ( Objects.isNull( l_variable ) ) ? i : l_variable;
+                                   return Objects.isNull( l_variable ) ? i : l_variable;
                                }
                                return i instanceof ILiteral
                                       ? i.<ILiteral>term().allocate( p_context )
@@ -407,7 +407,7 @@ public final class CLiteral implements ILiteral
     @Override
     public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof ILiteral && this.hashCode() == p_object.hashCode();
     }
 
     @Nonnull

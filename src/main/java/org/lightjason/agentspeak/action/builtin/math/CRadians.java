@@ -41,7 +41,7 @@ import java.util.List;
  * Converts all degree arguments into radian values
  * \f$ \frac{x_i \cdot \pi}{180} \f$
  *
- * {@code A = math/radians( 180 );}
+ * {@code A = .math/radians( 180 );}
  * @see https://en.wikipedia.org/wiki/Radian
  */
 public final class CRadians extends IBuiltinAction
@@ -53,15 +53,15 @@ public final class CRadians extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

@@ -65,7 +65,7 @@ public abstract class IBaseExecution<T> implements IExecution
      */
     public final boolean isValueAssignableTo( final Class<?> p_class )
     {
-        return ( Objects.nonNull( m_value ) ) &&  p_class.isAssignableFrom( m_value.getClass() );
+        return Objects.nonNull( m_value ) &&  p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Nonnull
@@ -90,7 +90,7 @@ public abstract class IBaseExecution<T> implements IExecution
     @Override
     public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IExecution && this.hashCode() == p_object.hashCode();
     }
 
 }

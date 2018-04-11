@@ -45,7 +45,7 @@ import java.util.List;
  * of each tuple of the unflatten argument list, n is the first value of the tupel
  * and k is the second value of the tupel, the action fails never
  *
- * {@code [S1|S2] = math/stirling(2,3, [4,5]);}
+ * {@code [S1|S2] = .math/stirling(2,3, [4,5]);}
  * @see https://en.wikipedia.org/wiki/Stirling_number
  */
 public final class CStirling extends IBuiltinAction
@@ -57,15 +57,15 @@ public final class CStirling extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument )

@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates for all arguments \f$ cosh( x_i ) \f$
  * and fails never, the arguments must be in radians.
  *
- * {@code [A|B] = math/cosh( 3, 4 );}
+ * {@code [A|B] = .math/cosh( 3, 4 );}
  * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CCosh extends IBuiltinAction
@@ -53,15 +53,15 @@ public final class CCosh extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

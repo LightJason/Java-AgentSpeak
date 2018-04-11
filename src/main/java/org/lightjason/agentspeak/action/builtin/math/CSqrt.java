@@ -41,7 +41,7 @@ import java.util.List;
  * Calculates the square-root for each
  * unflatten argument \f$ \sqrt{ x_i } \f$
  *
- * {@code [S1|S2] = math/sqrt(2, 3);}
+ * {@code [S1|S2] = .math/sqrt(2, 3);}
  */
 public final class CSqrt extends IBuiltinAction
 {
@@ -52,15 +52,15 @@ public final class CSqrt extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

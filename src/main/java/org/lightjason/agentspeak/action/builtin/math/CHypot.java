@@ -42,7 +42,7 @@ import java.util.List;
  * Calculates for each pair of arguments \f$ \sqrt{ x_{i}^{2} + y_{i}^{2} } \f$ and
  * fail iif the number of arguments are odd, it unflats all list elements
  *
- * {@code [A|B|C] = math/hypot( 1, [2, [3]], [4, 5]);}
+ * {@code [A|B|C] = .math/hypot( 1, [2, [3]], [4, 5]);}
  */
 public final class CHypot extends IBuiltinAction
 {
@@ -53,15 +53,15 @@ public final class CHypot extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( p_argument.size() % 2 != 0 )
             return CFuzzyValue.of( false );

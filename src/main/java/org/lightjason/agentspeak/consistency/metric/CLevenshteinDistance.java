@@ -70,7 +70,7 @@ public final class CLevenshteinDistance implements IMetric
     {
         m_insertweight = p_insertweight;
         m_replaceweight = p_replaceweight;
-        m_deleteweight = p_replaceweight;
+        m_deleteweight = p_deleteweight;
     }
 
 

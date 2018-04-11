@@ -67,115 +67,115 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
         private static final long serialVersionUID = -3043602502559853983L;
 
         @Override
-        public final IAgent<?> call() throws Exception
+        public IAgent<?> call() throws Exception
         {
             return this;
         }
 
         @Override
-        public final void inspect( @Nonnull final IInspector... p_inspector )
+        public void inspect( @Nonnull final IInspector... p_inspector )
         {}
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
+        public IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
         {
             return CFuzzyValue.of( true );
         }
 
         @Nonnull
         @Override
-        public final IView beliefbase()
+        public IView beliefbase()
         {
             return IView.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Multimap<IPath, ILiteral> runningplans()
+        public Multimap<IPath, ILiteral> runningplans()
         {
             return ImmutableMultimap.of();
         }
 
         @Override
-        public final boolean sleeping()
+        public boolean sleeping()
         {
             return false;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> sleep( final long p_cycles, @Nullable final ITerm... p_term )
+        public IAgent<IAgent<?>> sleep( final long p_cycles, @Nullable final ITerm... p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term )
+        public IAgent<IAgent<?>> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> wakeup( @Nullable final ITerm... p_term )
+        public IAgent<IAgent<?>> wakeup( @Nullable final ITerm... p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> wakeup( @Nonnull final Stream<ITerm> p_term )
+        public IAgent<IAgent<?>> wakeup( @Nonnull final Stream<ITerm> p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final Map<String, Object> storage()
+        public Map<String, Object> storage()
         {
             return Collections.emptyMap();
         }
 
         @Nonnull
         @Override
-        public final IUnifier unifier()
+        public IUnifier unifier()
         {
             return IUnifier.EMPTY;
         }
 
         @Nonnegative
         @Override
-        public final long cycletime()
+        public long cycletime()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final Multimap<ITrigger, IPlanStatistic> plans()
+        public Multimap<ITrigger, IPlanStatistic> plans()
         {
             return ImmutableMultimap.of();
         }
 
         @Nonnull
         @Override
-        public final IFuzzyBundle<Boolean> fuzzy()
+        public IFuzzyBundle<Boolean> fuzzy()
         {
             return IAgentGenerator.DEFAULTFUZZYBUNDLE;
         }
 
         @Nonnull
         @Override
-        public final IVariableBuilder variablebuilder()
+        public IVariableBuilder variablebuilder()
         {
             return IVariableBuilder.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Multimap<IPath, IRule> rules()
+        public Multimap<IPath, IRule> rules()
         {
             return ImmutableMultimap.of();
         }
@@ -183,21 +183,21 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
         @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
-        public final <N extends IAgent<?>> N raw()
+        public <N extends IAgent<?>> N raw()
         {
             return (N) this;
         }
 
         @Override
-        public final int hashCode()
+        public int hashCode()
         {
             return 0;
         }
 
         @Override
-        public final boolean equals( final Object p_object )
+        public boolean equals( final Object p_object )
         {
-            return ( p_object instanceof IAgent<?> ) && ( this.hashCode() == p_object.hashCode() );
+            return p_object instanceof IAgent<?> && this.hashCode() == p_object.hashCode();
         }
     };
 

@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * For each argument the action returns a list
  * of prime factors and fails never.
  *
- * {@code [L1|L2] = math/primfactors( 8, [120] );}
+ * {@code [L1|L2] = .math/primfactors( 8, [120] );}
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */
@@ -56,15 +56,15 @@ public final class CPrimeFactors extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

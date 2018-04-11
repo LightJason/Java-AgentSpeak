@@ -81,7 +81,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = new ArrayList<>();
-        if ( ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() != 1 ) )
+        if ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 1 )
             return CFuzzyValue.of( false );
 
 

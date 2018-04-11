@@ -42,7 +42,7 @@ import java.util.List;
  * The action calculates \f$ \frac{1}{i} \sum_{i} x_i \f$ over all arguments, action
  * fails never, but can throw a runtime exception
  *
- * {@code A = math/average( 1, 3, 9, [10, [11, 12]] );}
+ * {@code A = .math/average( 1, 3, 9, [10, [11, 12]] );}
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CAverage extends IBuiltinAction
@@ -54,15 +54,15 @@ public final class CAverage extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()

@@ -42,7 +42,7 @@ import java.util.List;
  * input argument the rounded value and the action
  * fails never
  *
- * {@code [I1|I2|I3] = math/round( 5.5, [1.2, [2.7]] );}
+ * {@code [I1|I2|I3] = .math/round( 5.5, [1.2, [2.7]] );}
  * @see https://en.wikipedia.org/wiki/Rounding
  */
 public final class CRound extends IBuiltinAction
@@ -54,15 +54,15 @@ public final class CRound extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

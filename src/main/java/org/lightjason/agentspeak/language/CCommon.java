@@ -413,7 +413,7 @@ public final class CCommon
     @Nonnull
     public static Stream<ITerm> flattenrecursive( @Nonnull final Stream<ITerm> p_input )
     {
-        return p_input.flatMap( i -> i instanceof ILiteral ? flattenrecursive( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
+        return p_input.flatMap( i -> i instanceof ILiteral ? flattenrecursive( i.<ILiteral>term().orderedvalues() ) : Stream.of( i ) );
     }
 
     /*

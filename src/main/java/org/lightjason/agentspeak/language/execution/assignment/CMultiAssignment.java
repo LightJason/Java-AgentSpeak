@@ -75,8 +75,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     {
         final List<ITerm> l_result = CCommon.argumentlist();
 
-        if ( ( !m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ).value() )
-             || ( l_result.isEmpty() ) )
+        if ( !m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ).value() || l_result.isEmpty() )
             return CFuzzyValue.of( false );
 
 

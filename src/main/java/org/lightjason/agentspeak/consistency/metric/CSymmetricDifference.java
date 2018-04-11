@@ -49,7 +49,7 @@ public final class CSymmetricDifference implements IMetric
                               .sorted()
                               .distinct()
                               .parallel()
-                              .filter( i -> !( l_first.contains( i ) && ( l_second.contains( i ) ) ) )
+                              .filter( i -> !( l_first.contains( i ) && l_second.contains( i ) ) )
                               .count();
     }
 

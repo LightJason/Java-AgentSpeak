@@ -45,35 +45,35 @@ public interface IInspector
     IInspector EMPTY = new IInspector()
     {
         @Override
-        public final void inspectsleeping( @Nonnegative final long p_value )
+        public void inspectsleeping( @Nonnegative final long p_value )
         {}
 
         @Override
-        public final void inspectcycletime( @Nonnegative final long p_value )
+        public void inspectcycletime( @Nonnegative final long p_value )
         {}
 
         @Override
-        public final void inspectbelief( @Nonnull final Stream<ILiteral> p_value )
+        public void inspectbelief( @Nonnull final Stream<ILiteral> p_value )
         {}
 
         @Override
-        public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+        public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
         {}
 
         @Override
-        public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+        public void inspectrules( @Nonnull final Stream<IRule> p_value )
         {}
 
         @Override
-        public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+        public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
         {}
 
         @Override
-        public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+        public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
         {}
 
         @Override
-        public final void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+        public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
         {}
     };
 

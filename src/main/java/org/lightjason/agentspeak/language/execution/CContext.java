@@ -112,7 +112,7 @@ public final class CContext implements IContext
     @Override
     public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IContext ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IContext && this.hashCode() == p_object.hashCode();
     }
 
     @Override

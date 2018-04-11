@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates \f$ sin( x_i ) \f$ for
  * each argument in radians and returns the values
  *
- * {@code [A | B] = math/sin(3, 4);}
+ * {@code [A | B] = .math/sin(3, 4);}
  */
 public final class CSin extends IBuiltinAction
 {
@@ -52,15 +52,15 @@ public final class CSin extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

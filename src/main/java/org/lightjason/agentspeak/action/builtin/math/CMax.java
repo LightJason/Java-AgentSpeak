@@ -43,7 +43,7 @@ import java.util.OptionalDouble;
  * the maxmimum with \f$ max( x_0, x_1, \ldots, x_i ) \f$,
  * the action fails on wrong input
  *
- * {@code Max = math/max( 2, 5, 7, [3, 2] );}
+ * {@code Max = .math/max( 2, 5, 7, [3, 2] );}
  */
 public final class CMax extends IBuiltinAction
 {
@@ -54,15 +54,15 @@ public final class CMax extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final OptionalDouble l_value = CCommon.flatten( p_argument )
                                               .map( ITerm::<Number>raw )

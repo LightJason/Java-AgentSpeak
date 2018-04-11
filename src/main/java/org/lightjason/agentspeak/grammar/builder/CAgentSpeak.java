@@ -179,7 +179,7 @@ public final class CAgentSpeak
     public static Stream<IRule> rule( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                       @Nullable final RuleContext p_literal, @Nullable final List<? extends RuleContext> p_body )
     {
-        if ( ( Objects.isNull( p_literal ) ) || ( Objects.isNull( p_body ) ) || ( p_body.isEmpty() ) )
+        if ( Objects.isNull( p_literal ) || Objects.isNull( p_body ) || p_body.isEmpty() )
             return Stream.empty();
 
         final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
@@ -648,13 +648,13 @@ public final class CAgentSpeak
             throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpressionterm", l_term ) );
         }
 
-        if ( Objects.nonNull( p_unaryoperator ) && ( Objects.nonNull( p_expression ) ) )
+        if ( Objects.nonNull( p_unaryoperator ) && Objects.nonNull( p_expression ) )
             return new CUnaryExpression( EUnaryOperator.of( p_unaryoperator.getText() ), (IExecution) p_visitor.visit( p_expression ) );
 
         if ( Objects.nonNull( p_expression ) )
             return (IExecution) p_visitor.visit( p_expression );
 
-        if ( ( Objects.nonNull( p_binaryoperator ) ) && ( Objects.nonNull( p_lhs ) ) && ( Objects.nonNull( p_rhs ) ) )
+        if ( Objects.nonNull( p_binaryoperator ) && Objects.nonNull( p_lhs ) && Objects.nonNull( p_rhs ) )
             return new CBinaryExpression(
                 EBinaryOperator.of( p_binaryoperator.getText() ),
                 (IExecution) p_visitor.visit( p_lhs ),
@@ -682,7 +682,7 @@ public final class CAgentSpeak
     public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_variables,
                                           @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable )
     {
-        if ( ( Objects.nonNull( p_literal ) ) && ( Objects.nonNull( p_variable ) ) )
+        if ( Objects.nonNull( p_literal ) && Objects.nonNull( p_variable ) )
             throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknowndeconstruct" ) );
 
         return new CDeconstruct(

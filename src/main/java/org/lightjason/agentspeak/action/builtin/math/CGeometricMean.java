@@ -42,7 +42,7 @@ import java.util.stream.Stream;
  * The action calculates \f$ \sqrt[i]{\prod_{i} x_i} \f$
  * over all unflatten arguments, action fails never
  *
- * {@code G = math/geometricmean( 1, 3, 9, [10, [11, 12]] );}
+ * {@code G = .math/geometricmean( 1, 3, 9, [10, [11, 12]] );}
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CGeometricMean extends IBuiltinAction
@@ -54,15 +54,15 @@ public final class CGeometricMean extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

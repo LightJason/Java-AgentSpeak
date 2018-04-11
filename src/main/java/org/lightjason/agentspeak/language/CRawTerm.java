@@ -101,14 +101,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public boolean equals( final Object p_object )
     {
-        return ( Objects.nonNull( p_object ) )
+        return Objects.nonNull( p_object )
                && (
-                   (
-                        ( p_object instanceof IVariable<?> )
-                        && ( ( (IVariable<?>) p_object ).allocated() )
-                        && ( this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode() )
-                   )
-                   || ( ( p_object instanceof ITerm ) && ( this.hashCode() == p_object.hashCode() ) )
+                   p_object instanceof IVariable<?> && ( (IVariable<?>) p_object ).allocated() && this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode()
+                   || p_object instanceof ITerm && this.hashCode() == p_object.hashCode()
                );
     }
 
