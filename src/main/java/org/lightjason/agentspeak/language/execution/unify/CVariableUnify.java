@@ -97,7 +97,7 @@ public final class CVariableUnify extends CDefaultUnify
     {
         return Stream.concat(
             Stream.of( m_variable ),
-            CVariableUnify.super.variables()
+            super.variables()
         );
     }
 }
