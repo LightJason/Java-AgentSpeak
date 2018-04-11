@@ -40,7 +40,7 @@ public final class CHash implements IUnifier.IAlgorithm
 {
 
     @Override
-    public final <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
+    public <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
         return StreamUtils.zip(
             p_source,

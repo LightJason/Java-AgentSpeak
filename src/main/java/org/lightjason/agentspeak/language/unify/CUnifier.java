@@ -81,7 +81,7 @@ public final class CUnifier implements IUnifier
 
     @Nonnull
     @Override
-    public final Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
+    public Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
     {
         final Set<IVariable<?>> l_result = new HashSet<>();
 
@@ -105,8 +105,8 @@ public final class CUnifier implements IUnifier
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                             @Nonnull final IExpression p_expression, final boolean p_parallel )
+    public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                       @Nonnull final IExpression p_expression, final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
@@ -130,20 +130,20 @@ public final class CUnifier implements IUnifier
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_hashbased.hashCode() ^ m_recursive.hashCode();
     }
 
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof IUnifier ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "hash-based unification: {0} / recursive unification: {1}", m_hashbased, m_recursive );
     }

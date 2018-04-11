@@ -45,38 +45,38 @@ public final class CUnion implements IFuzzyOperator<Boolean>
 {
 
     @Override
-    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    public Supplier<IFuzzyValueMutable<Boolean>> supplier()
     {
         return CUnion::factory;
     }
 
     @Override
-    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    public BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
     {
         return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
     }
 
     @Override
-    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
+    public BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
         return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
     }
 
     @Override
-    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    public Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
     {
         return IFuzzyValueMutable::immutable;
     }
 
     @Override
-    public final Set<Characteristics> characteristics()
+    public Set<Characteristics> characteristics()
     {
         return Collections.emptySet();
     }
 
+    @SafeVarargs
     @Nonnull
     @Override
-    @SafeVarargs
     @SuppressWarnings( "varargs" )
     public final IFuzzyValue<Boolean> result( @Nonnull final IFuzzyValue<Boolean>... p_values )
     {

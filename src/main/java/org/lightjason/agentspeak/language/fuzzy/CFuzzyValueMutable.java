@@ -84,7 +84,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
 
     @Nonnull
     @Override
-    public final IFuzzyValueMutable<T> value( @Nullable final T p_value )
+    public IFuzzyValueMutable<T> value( @Nullable final T p_value )
     {
         m_value = p_value;
         return this;
@@ -92,7 +92,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
 
     @Nonnull
     @Override
-    public final IFuzzyValueMutable<T> fuzzy( final double p_value )
+    public IFuzzyValueMutable<T> fuzzy( final double p_value )
     {
         if ( !( ( p_value >= 0 ) && ( p_value <= 1 ) ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_value ) );
@@ -102,33 +102,33 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<T> immutable()
+    public IFuzzyValue<T> immutable()
     {
         return CFuzzyValue.<T>of( m_value, m_fuzzy );
     }
 
     @Nonnull
     @Override
-    public final T value()
+    public T value()
     {
         return m_value;
     }
 
     @Override
-    public final double fuzzy()
+    public double fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Nullable
     @Override
-    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );

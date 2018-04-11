@@ -46,7 +46,7 @@ public final class CRecursive implements IUnifier.IAlgorithm
 {
 
     @Override
-    public final <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
+    public <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
         final List<T> l_target = p_target.collect( Collectors.toList() );
         final List<T> l_source = p_source.collect( Collectors.toList() );

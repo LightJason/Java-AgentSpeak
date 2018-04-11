@@ -84,26 +84,26 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
 
     @Nonnull
     @Override
-    public final T value()
+    public T value()
     {
         return m_value;
     }
 
     @Override
-    public final double fuzzy()
+    public double fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Nullable
     @Override
-    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
@@ -112,7 +112,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }

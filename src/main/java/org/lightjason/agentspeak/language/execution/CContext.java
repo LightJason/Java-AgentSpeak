@@ -77,46 +77,46 @@ public final class CContext implements IContext
 
     @Nonnull
     @Override
-    public final IContext duplicate()
+    public IContext duplicate()
     {
         return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
     }
 
     @Nonnull
     @Override
-    public final IAgent<?> agent()
+    public IAgent<?> agent()
     {
         return m_agent;
     }
 
     @Nonnull
     @Override
-    public final IInstantiable instance()
+    public IInstantiable instance()
     {
         return m_instance;
     }
 
     @Nonnull
     @Override
-    public final Map<IPath, IVariable<?>> instancevariables()
+    public Map<IPath, IVariable<?>> instancevariables()
     {
         return m_variables;
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof IContext ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_variables.values(), m_instance, m_agent );
     }
