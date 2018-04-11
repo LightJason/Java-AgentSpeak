@@ -42,7 +42,7 @@ import java.util.List;
  * The actions returnf for each input vector the
  * number of true values, the action never fails
  *
- * {@code [A|B] = math/bit/vector/falsecount( BitVector1, BitVector2 );}
+ * {@code [A|B] = .math/bit/vector/falsecount( BitVector1, BitVector2 );}
  */
 public final class CFalseCount extends IBuiltinAction
 {
@@ -61,15 +61,15 @@ public final class CFalseCount extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitVector>raw )

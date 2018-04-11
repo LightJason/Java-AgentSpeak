@@ -42,7 +42,7 @@ import java.util.List;
  * the action apply the logical not operator, the action
  * never fails
  *
- * {@code math/bit/vector/not( Vector1, Vector2 );}
+ * {@code .math/bit/vector/not( Vector1, Vector2 );}
  */
 public final class CNot extends IBuiltinAction
 {
@@ -61,15 +61,15 @@ public final class CNot extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .parallel()

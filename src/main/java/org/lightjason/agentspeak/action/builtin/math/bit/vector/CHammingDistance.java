@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * the distance will be calculated between the first
  * and all other arguments, the action never fails
  *
- * {@code [A|B] = math/bit/vector/hammingdistance( Vector1, Vector2, Vector3 );}
+ * {@code [A|B] = .math/bit/vector/hammingdistance( Vector1, Vector2, Vector3 );}
  * @see https://en.wikipedia.org/wiki/Hamming_distance
  */
 public final class CHammingDistance extends IBuiltinAction
@@ -56,15 +56,15 @@ public final class CHammingDistance extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<BitVector> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<BitVector>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )

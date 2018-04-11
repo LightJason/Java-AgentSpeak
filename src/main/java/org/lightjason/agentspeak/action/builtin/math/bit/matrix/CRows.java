@@ -42,7 +42,7 @@ import java.util.List;
  * Reads the row number of each input matrix and returns
  * the value, the action never fails.
  *
- * {@code [C1|C2] = math/blas/matrix/rows(M1,M2);}
+ * {@code [C1|C2] = .math/blas/matrix/rows(M1,M2);}
  */
 public final class CRows extends IBuiltinAction
 {
@@ -61,15 +61,15 @@ public final class CRows extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * given index values (0 = false, 1 = true),
  * the action never fails
  *
- * {@code [B1|B2|B3] = math/bit/vector/numericvalue( BitVector, 1, [3, 5] );}
+ * {@code [B1|B2|B3] = .math/bit/vector/numericvalue( BitVector, 1, [3, 5] );}
  */
 public final class CNumericValue extends IBuiltinAction
 {
@@ -64,15 +64,15 @@ public final class CNumericValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

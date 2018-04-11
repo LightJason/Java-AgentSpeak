@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  * all other bit matrices, so \f$ m_i = m_i \text{ || } m_1 \f$
  * is performed, the action never fails
  *
- * {@code math/bit/matrix/or( Matrix, Matrix1, Matrix2 );}
+ * {@code .math/bit/matrix/or( Matrix, Matrix1, Matrix2 );}
  */
 public final class COr extends IOperator
 {
@@ -45,7 +45,7 @@ public final class COr extends IOperator
     private static final long serialVersionUID = 5187948216900030916L;
 
     @Override
-    protected final void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
+    protected void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
     {
         p_target.or( p_source );
     }

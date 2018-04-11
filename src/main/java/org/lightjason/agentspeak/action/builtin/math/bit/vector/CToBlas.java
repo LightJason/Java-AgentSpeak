@@ -49,7 +49,7 @@ import java.util.stream.IntStream;
  * other arguments are bit vectors and the actions
  * never fails
  *
- * {@code [A|B] = math/bit/vector/toblas( BitVector1, BitVector2, "dense | sparse" );}
+ * {@code [A|B] = .math/bit/vector/toblas( BitVector1, BitVector2, "dense | sparse" );}
  */
 public final class CToBlas extends IBuiltinAction
 {
@@ -68,15 +68,15 @@ public final class CToBlas extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final EType l_type = l_arguments.parallelStream()

@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  * all other bit vectors, so \f$ v_i = v_i \text{ && } v_1 \f$
  * is performed, the action never fails
  *
- * {@code math/bit/vector/and( Vector, Vector1, Vector2 );}
+ * {@code .math/bit/vector/and( Vector, Vector1, Vector2 );}
  */
 public final class CAnd extends IOperator
 {
@@ -45,7 +45,7 @@ public final class CAnd extends IOperator
     private static final long serialVersionUID = -1930882384385872200L;
 
     @Override
-    protected final void apply( @Nonnull final BitVector p_target, @Nonnull final BitVector p_source )
+    protected void apply( @Nonnull final BitVector p_target, @Nonnull final BitVector p_source )
     {
         p_target.and( p_source );
     }

@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
  * The action creates a list with 0 / 1 values of
  * the values of the bit vector, the action never fails
  *
- * {@code [L1|L2] = math/bit/vector/tolist( Vector1, Vector2 );}
+ * {@code [L1|L2] = .math/bit/vector/tolist( Vector1, Vector2 );}
  */
 public final class CToList extends IBuiltinAction
 {
@@ -64,15 +64,15 @@ public final class CToList extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitVector>raw )

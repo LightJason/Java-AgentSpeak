@@ -46,7 +46,7 @@ import java.util.stream.IntStream;
  * the bit within the vector are row-wise copied
  * of the matrix and the action never fails
  *
- * {@code [V1|V2] = math/bit/matrix/tovector( Matrix1, Matrix2 );}
+ * {@code [V1|V2] = .math/bit/matrix/tovector( Matrix1, Matrix2 );}
  */
 public final class CToVector extends IBuiltinAction
 {
@@ -57,15 +57,15 @@ public final class CToVector extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitMatrix>raw )

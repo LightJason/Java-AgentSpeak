@@ -43,7 +43,7 @@ import java.util.List;
  * for each input argument a bit vector will be created and
  * returned, the action never fails
  *
- * {@code [A|B|C|D] = math/bit/vector/create( 3, [2, [1, 12]] );}
+ * {@code [A|B|C|D] = .math/bit/vector/create( 3, [2, [1, 12]] );}
  */
 public final class CCreate extends IBuiltinAction
 {
@@ -62,15 +62,15 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

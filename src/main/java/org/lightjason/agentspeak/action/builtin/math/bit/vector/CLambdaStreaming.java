@@ -37,13 +37,13 @@ import java.util.stream.Stream;
 public final class CLambdaStreaming implements ILambdaStreaming<BitVector>
 {
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof BitVector;
     }
 
     @Override
-    public final Stream<?> apply( final BitVector p_vector )
+    public Stream<?> apply( final BitVector p_vector )
     {
         return IntStream.range( 0, p_vector.size() ).boxed().map( i -> p_vector.getQuick( i ) ? 1 : 0 );
     }

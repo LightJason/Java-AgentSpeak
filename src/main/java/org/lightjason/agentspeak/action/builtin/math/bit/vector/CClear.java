@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * in each bit vector the given bit positions are set
  * to false, the action never fails
  *
- * {@code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] );}
+ * {@code .math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] );}
  */
 public final class CClear extends IBuiltinAction
 {
@@ -63,15 +63,15 @@ public final class CClear extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int[] l_index = l_arguments.parallelStream()

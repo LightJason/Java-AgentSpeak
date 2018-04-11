@@ -38,13 +38,13 @@ import java.util.stream.Stream;
 public final class CLambdaStreaming implements ILambdaStreaming<BitMatrix>
 {
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof BitMatrix;
     }
 
     @Override
-    public final Stream<?> apply( @Nonnull final BitMatrix p_matrix )
+    public Stream<?> apply( @Nonnull final BitMatrix p_matrix )
     {
         final BitVector l_vector = p_matrix.toBitVector();
         return IntStream.range( 0, l_vector.size() )

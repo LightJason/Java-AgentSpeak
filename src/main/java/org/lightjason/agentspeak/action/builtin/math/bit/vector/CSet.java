@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * within the bit vector will be set to the given value,
  * the action never fails
  *
- * {@code math/bit/vector/set( BitVector, true, 1, [3, 7]);}
+ * {@code .math/bit/vector/set( BitVector, true, 1, [3, 7]);}
  */
 public final class CSet extends IBuiltinAction
 {
@@ -64,15 +64,15 @@ public final class CSet extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 3;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final boolean l_value = CCommon.rawvalueAssignableTo( l_arguments.get( 1 ), Number.class )
