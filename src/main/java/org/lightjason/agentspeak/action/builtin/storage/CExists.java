@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action checks if an element is within the action and
  * returns the boolean flag, the action never fails
  *
- * {@code [A|B] = storage/exist( "foo", "bar" );}
+ * {@code [A|B] = .storage/exist( "foo", "bar" );}
  */
 public final class CExists extends IStorage
 {
@@ -104,7 +104,7 @@ public final class CExists extends IStorage
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> ( !m_resolver.apply( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
+               .map( i -> !m_resolver.apply( i ) && p_context.agent().storage().containsKey( i ) )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 

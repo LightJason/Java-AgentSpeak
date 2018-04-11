@@ -43,7 +43,7 @@ import java.util.List;
  * The base64 encoded version is created of each string argument,
  * the action never fails
  *
- * {@code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" );}
+ * {@code [A|B] = .string/base64encode( "Hello", "AgentSpeak(L++)" );}
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Encode extends IBuiltinAction
@@ -55,15 +55,15 @@ public final class CBase64Encode extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )

@@ -36,13 +36,13 @@ import java.util.stream.Stream;
 public final class CLambdaStreaming implements ILambdaStreaming<String>
 {
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof String;
     }
 
     @Override
-    public final Stream<?> apply( @Nonnull final String p_value )
+    public Stream<?> apply( @Nonnull final String p_value )
     {
         return IntStream.range( 0, p_value.length() )
                         .boxed()

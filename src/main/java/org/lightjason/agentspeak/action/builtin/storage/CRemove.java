@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  * which is referenced by the key and returns the
  * value, the action never fails
  *
- * {@code [A|B] = storage/remove("foo", "bar");}
+ * {@code [A|B] = .storage/remove("foo", "bar");}
  */
 public final class CRemove extends IStorage
 {
@@ -121,7 +121,7 @@ public final class CRemove extends IStorage
      */
     private void remove( @Nonnull final IAgent<?> p_agent, @Nonnull final String p_key, @Nonnull final List<ITerm> p_return )
     {
-        if ( ( m_resolver.apply( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )
+        if ( m_resolver.apply( p_key ) || !p_agent.storage().containsKey( p_key ) )
             return;
 
         p_return.add(

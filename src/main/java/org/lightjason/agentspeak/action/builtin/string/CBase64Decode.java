@@ -44,7 +44,7 @@ import java.util.List;
  * The decoded string version is created of each string argument, which is
  * based64 encoded, the action fails on decoding error. Return null on encoding errors
  *
- * {@code [A|B] = string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" );}
+ * {@code [A|B] = .string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" );}
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Decode extends IBuiltinAction
@@ -56,15 +56,15 @@ public final class CBase64Decode extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument,  @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument,  @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.of(
             CCommon.flatten( p_argument )

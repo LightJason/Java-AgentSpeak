@@ -42,7 +42,7 @@ import java.util.List;
  * with each other arguments for the operation starts-with,
  * the action never fails
  *
- * {@code [L1|L2] = string/startswith("this is a long string", "long string", "string");}
+ * {@code [L1|L2] = .string/startswith("this is a long string", "long string", "string");}
  */
 public final class CStartsWith extends IBuiltinAction
 {
@@ -53,15 +53,15 @@ public final class CStartsWith extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final String l_string = p_argument.get( 0 ).raw();
 

@@ -41,7 +41,7 @@ import java.util.List;
  * The action reverse each argument string and returns
  * the reversed string, the action never fails
  *
- * {@code [A|B|C] = string/reverse("Foo Bar", ["ABBA", "Eevee"]);}
+ * {@code [A|B|C] = .string/reverse("Foo Bar", ["ABBA", "Eevee"]);}
  */
 public final class CReverse extends IBuiltinAction
 {
@@ -52,15 +52,15 @@ public final class CReverse extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )

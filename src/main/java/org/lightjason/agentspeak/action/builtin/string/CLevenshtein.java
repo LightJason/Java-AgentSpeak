@@ -47,7 +47,7 @@ import java.util.stream.IntStream;
  * for the inserting weight, second replace weight and third
  * for the delete weight, the action fails on wrong input
  *
- * {@code [A|B] = string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
+ * {@code [A|B] = .string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
  * @see https://en.wikipedia.org/wiki/Levenshtein_distance
  */
 public final class CLevenshtein extends IBuiltinAction
@@ -59,15 +59,15 @@ public final class CLevenshtein extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // extract string arguments
         final List<String> l_strings = CCommon.flatten( p_argument )
