@@ -136,16 +136,15 @@ public final class CPrint extends IBuiltinAction
      *
      * @return formatter set
      */
-    public final Set<IFormatter<?>> formatter()
+    public Set<IFormatter<?>> formatter()
     {
         return m_formatter;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         m_stream.println( MessageFormat.format( "{0}", this.format( p_argument ) ) );
         return CFuzzyValue.of( true );
