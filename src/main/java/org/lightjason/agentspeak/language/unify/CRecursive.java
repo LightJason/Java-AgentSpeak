@@ -51,7 +51,7 @@ public final class CRecursive implements IUnifier.IAlgorithm
         final List<T> l_target = p_target.collect( Collectors.toList() );
         final List<T> l_source = p_source.collect( Collectors.toList() );
 
-        if ( ( l_target.isEmpty() ) || ( l_source.isEmpty() ) )
+        if ( l_target.isEmpty() || l_source.isEmpty() )
             return true;
 
         if ( l_target.size() != l_source.size() )
@@ -64,7 +64,7 @@ public final class CRecursive implements IUnifier.IAlgorithm
             {
 
                 // if s and t are variable create a realocated variable for backtracking
-                if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )
+                if ( t instanceof IVariable<?> && s instanceof IVariable<?> )
                 {
                     p_variables.add(
                         ( (IVariable<?>) t ).mutex()
@@ -82,11 +82,11 @@ public final class CRecursive implements IUnifier.IAlgorithm
                 }
 
                 // if both raw values -> equality check
-                if ( ( s instanceof IRawTerm<?> ) || ( t instanceof IRawTerm<?> ) )
+                if ( s instanceof IRawTerm<?> || t instanceof IRawTerm<?> )
                     return s.equals( t );
 
                 // if a literal exists -> source and target literal must be equal with the functor -> recursive descent
-                if ( ( s instanceof ILiteral ) && ( t instanceof ILiteral ) )
+                if ( s instanceof ILiteral && t instanceof ILiteral )
                 {
                     final ILiteral l_sourceliteral = (ILiteral) s;
                     final ILiteral l_targetliteral = (ILiteral) t;

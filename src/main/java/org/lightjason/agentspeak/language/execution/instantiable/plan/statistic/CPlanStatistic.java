@@ -153,14 +153,19 @@ public final class CPlanStatistic implements IPlanStatistic
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public boolean equals( final Object p_object )
     {
-        return ( ( p_object instanceof IPlanStatistic ) || ( p_object instanceof IPlan ) )
-               && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IPlanStatistic || p_object instanceof IPlan ) && this.hashCode() == p_object.hashCode();
     }
 
     @Override
     public String toString()
     {
         return MessageFormat.format( "successful [{0}], fail [{1}]: {2}", m_successful.get(), m_fail.get(), m_plan );
+    }
+
+    @Override
+    public int compareTo( @Nonnull final IPlanStatistic p_other )
+    {
+        return Integer.compare( this.hashCode(), p_other.hashCode() );
     }
 
     /**
@@ -175,10 +180,4 @@ public final class CPlanStatistic implements IPlanStatistic
         return new CPlanStatistic( p_plan );
     }
 
-
-    @Override
-    public final int compareTo( @Nonnull final IPlanStatistic p_other )
-    {
-        return Integer.compare( this.hashCode(), p_other.hashCode() );
-    }
 }

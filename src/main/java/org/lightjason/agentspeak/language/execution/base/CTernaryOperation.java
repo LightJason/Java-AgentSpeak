@@ -80,8 +80,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     {
         final List<ITerm> l_argument = CCommon.argumentlist();
 
-        if ( ( !m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument ).value() )
-             || ( l_argument.size() != 1 ) )
+        if ( !m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument ).value() || l_argument.size() != 1 )
             return CFuzzyValue.of( false );
 
         return l_argument.get( 0 ).raw()

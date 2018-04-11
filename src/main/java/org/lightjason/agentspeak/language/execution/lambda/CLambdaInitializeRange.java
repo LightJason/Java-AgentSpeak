@@ -73,7 +73,7 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
         if ( !l_result.value() )
             return l_result;
 
-        if ( ( l_return.size() == 0 ) || ( l_return.size() > 3 ) )
+        if ( l_return.size() == 0 || l_return.size() > 3 )
             return CFuzzyValue.of( false );
 
         if ( l_return.size() == 1 )

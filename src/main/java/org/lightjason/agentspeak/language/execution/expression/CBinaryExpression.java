@@ -82,10 +82,10 @@ public final class CBinaryExpression implements IBinaryExpression
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( ( !m_lhs.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() != 1 ) )
+        if ( !m_lhs.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 1 )
             return CFuzzyValue.of( false );
 
-        if ( ( !m_rhs.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.size() != 2 ) )
+        if ( !m_rhs.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 2 )
             return CFuzzyValue.of( false );
 
         p_return.add(

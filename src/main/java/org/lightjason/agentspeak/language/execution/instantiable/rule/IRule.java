@@ -96,7 +96,7 @@ public interface IRule extends IInstantiable
 
         @Nonnull
         @Override
-        public final Stream<IVariable<?>> variables()
+        public Stream<IVariable<?>> variables()
         {
             return Stream.empty();
         }

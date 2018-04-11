@@ -139,7 +139,7 @@ public final class CUnifier implements IUnifier
     @Override
     public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IUnifier ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IUnifier && this.hashCode() == p_object.hashCode();
     }
 
     @Override
@@ -165,7 +165,7 @@ public final class CUnifier implements IUnifier
             l_return
         );
 
-        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
+        return l_return.size() == 1 && l_return.get( 0 ).<Boolean>raw();
     }
 
     /**

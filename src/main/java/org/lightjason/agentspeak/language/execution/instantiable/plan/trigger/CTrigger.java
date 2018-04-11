@@ -98,7 +98,7 @@ public final class CTrigger implements ITrigger
     @Override
     public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof ITrigger && this.hashCode() == p_object.hashCode();
     }
 
     @Override

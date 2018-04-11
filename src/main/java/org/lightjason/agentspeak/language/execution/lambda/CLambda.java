@@ -91,7 +91,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
                                          @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_init = CCommon.argumentlist();
-        if ( ( !m_init.execute( p_parallel, p_context, p_argument, l_init ).value() ) || ( l_init.size() != 1 ) )
+        if ( !m_init.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
             return CFuzzyValue.of( false );
 
 

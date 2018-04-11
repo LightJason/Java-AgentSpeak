@@ -48,7 +48,7 @@ public final class CHash implements IUnifier.IAlgorithm
             ( s, t ) ->
             {
                 // if s and t are variable create a realocated variable for backtracking
-                if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )
+                if ( t instanceof IVariable<?> && s instanceof IVariable<?> )
                 {
                     p_variables.add(
                         ( (IVariable<?>) t ).mutex()

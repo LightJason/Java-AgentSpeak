@@ -79,7 +79,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
         final List<ITerm> l_return = CCommon.argumentlist();
 
         final IFuzzyValue<Boolean> l_rightreturn = m_rhs.execute( p_parallel, p_context, Collections.emptyList(), l_return );
-        if ( ( !l_rightreturn.value() ) || ( l_return.size() != 1 ) )
+        if ( !l_rightreturn.value() || l_return.size() != 1 )
             return CFuzzyValue.of( false );
 
         final IVariable<Object> l_lhs = CCommon.replaceFromContext( p_context, m_value ).term();

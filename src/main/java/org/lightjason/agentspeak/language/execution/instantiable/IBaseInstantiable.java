@@ -174,7 +174,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IInstantiable ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IInstantiable && this.hashCode() == p_object.hashCode();
     }
 
     @Nonnull
