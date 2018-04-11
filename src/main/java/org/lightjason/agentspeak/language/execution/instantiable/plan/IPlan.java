@@ -54,57 +54,57 @@ public interface IPlan extends IInstantiable
 
         @Nonnull
         @Override
-        public final ITrigger trigger()
+        public ITrigger trigger()
         {
             return ITrigger.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> condition( final IContext p_context )
+        public IFuzzyValue<Boolean> condition( final IContext p_context )
         {
             return CFuzzyValue.of( true );
         }
 
         @Nonnull
         @Override
-        public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+        public IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
         {
             return IContext.EMPTYPLAN;
         }
 
         @Nonnull
         @Override
-        public final String description()
+        public String description()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final Stream<String> tags()
+        public Stream<String> tags()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<IVariable<?>> variabledescription()
+        public Stream<IVariable<?>> variabledescription()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             return CFuzzyValue.of( true );
         }
 
         @Nonnull
         @Override
-        public final Stream<IVariable<?>> variables()
+        public Stream<IVariable<?>> variables()
         {
             return Stream.empty();
         }

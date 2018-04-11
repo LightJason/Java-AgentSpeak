@@ -56,57 +56,57 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         private static final long serialVersionUID = -4216254162765675258L;
 
         @Override
-        public final int structurehash()
+        public int structurehash()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final ITrigger shallowcopy( @Nullable final IPath... p_prefix )
+        public ITrigger shallowcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ITrigger shallowcopysuffix()
+        public ITrigger shallowcopysuffix()
         {
             return this;
         }
 
         @Override
-        public final int compareTo( @Nonnull final ITrigger p_trigger )
+        public int compareTo( @Nonnull final ITrigger p_trigger )
         {
             return Integer.compare( p_trigger.hashCode(), this.hashCode() );
         }
 
         @Override
-        public final EType type()
+        public EType type()
         {
             return EType.EMPTY;
         }
 
         @Override
-        public final ILiteral literal()
+        public ILiteral literal()
         {
             return ILiteral.EMPTY;
         }
 
         @Override
-        public final int variablesize()
+        public int variablesize()
         {
             return 0;
         }
 
         @Override
-        public final int hashCode()
+        public int hashCode()
         {
             return 0;
         }
 
         @Override
-        public final boolean equals( final Object p_object )
+        public boolean equals( final Object p_object )
         {
             return ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
         }

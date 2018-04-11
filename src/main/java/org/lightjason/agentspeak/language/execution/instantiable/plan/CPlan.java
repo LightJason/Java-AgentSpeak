@@ -106,15 +106,15 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Nonnull
     @Override
-    public final ITrigger trigger()
+    public ITrigger trigger()
     {
         return m_triggerevent;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
 
@@ -127,7 +127,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> condition( final IContext p_context )
+    public IFuzzyValue<Boolean> condition( final IContext p_context )
     {
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.of(
@@ -139,7 +139,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         final String l_data = this.datatoString().trim();
         return MessageFormat.format(
@@ -155,7 +155,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return CCommon.streamconcatstrict(
             super.variables(),

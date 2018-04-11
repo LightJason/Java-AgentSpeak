@@ -53,28 +53,28 @@ public interface IContext extends Serializable
 
         @Nonnull
         @Override
-        public final IAgent<?> agent()
+        public IAgent<?> agent()
         {
             return IAgent.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IInstantiable instance()
+        public IInstantiable instance()
         {
             return IPlan.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Map<IPath, IVariable<?>> instancevariables()
+        public Map<IPath, IVariable<?>> instancevariables()
         {
             return Collections.emptyMap();
         }
 
         @Nonnull
         @Override
-        public final IContext duplicate()
+        public IContext duplicate()
         {
             return this;
         }
@@ -92,28 +92,28 @@ public interface IContext extends Serializable
 
         @Nonnull
         @Override
-        public final IAgent<?> agent()
+        public IAgent<?> agent()
         {
             return IAgent.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IInstantiable instance()
+        public IInstantiable instance()
         {
             return IRule.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Map<IPath, IVariable<?>> instancevariables()
+        public Map<IPath, IVariable<?>> instancevariables()
         {
             return Collections.emptyMap();
         }
 
         @Nonnull
         @Override
-        public final IContext duplicate()
+        public IContext duplicate()
         {
             return this;
         }

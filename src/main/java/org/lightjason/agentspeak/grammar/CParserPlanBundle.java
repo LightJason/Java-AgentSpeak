@@ -61,7 +61,7 @@ public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, 
 
     @Nonnull
     @Override
-    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
         final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
         l_visitor.visit( this.parser( p_stream ).planbundle() );
@@ -69,13 +69,13 @@ public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, 
     }
 
     @Override
-    protected final Class<PlanBundleLexer> lexerclass()
+    protected Class<PlanBundleLexer> lexerclass()
     {
         return PlanBundleLexer.class;
     }
 
     @Override
-    protected final Class<PlanBundleParser> parserclass()
+    protected Class<PlanBundleParser> parserclass()
     {
         return PlanBundleParser.class;
     }

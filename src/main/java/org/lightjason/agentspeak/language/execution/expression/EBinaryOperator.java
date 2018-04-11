@@ -76,13 +76,13 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return m_operator[0];
     }
 
     @Override
-    public final Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+    public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
     {
         switch ( this )
         {

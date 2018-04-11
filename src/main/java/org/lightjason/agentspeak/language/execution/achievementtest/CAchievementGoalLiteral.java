@@ -56,15 +56,15 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().trigger( ITrigger.EType.ADDGOAL.builddefault( m_value.unify( p_context ) ), m_immediately );
     }

@@ -75,8 +75,8 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = CCommon.argumentlist();
 
@@ -90,26 +90,26 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return super.hashCode() ^ m_true.hashCode() ^ m_false.hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return super.equals( p_object );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0} ? {1} : {2}", m_value, m_true, m_false );
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat( m_true.variables(), m_false.variables() );
     }

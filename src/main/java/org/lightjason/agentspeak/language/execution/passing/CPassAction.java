@@ -79,8 +79,8 @@ public final class CPassAction implements IExecution
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return )
     {
         return m_execution.execute(
             m_parallel,
@@ -92,7 +92,7 @@ public final class CPassAction implements IExecution
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return CCommon.streamconcatstrict(
             m_execution.variables(),
@@ -103,7 +103,7 @@ public final class CPassAction implements IExecution
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format(
             ".{0}{1}{2}",

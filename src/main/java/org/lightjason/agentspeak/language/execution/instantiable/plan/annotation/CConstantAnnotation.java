@@ -55,26 +55,26 @@ public final class CConstantAnnotation<T> extends IBaseAnnotation<T>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1}, {2})", m_type, m_name, m_value );
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_type.hashCode() ^ m_name.hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.of( new CConstant<>( m_name, m_value ) );
     }

@@ -65,22 +65,22 @@ public final class CExpressionUnify extends CDefaultUnify
 
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_expression );
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().unifier().unify( p_context, m_value, m_variablenumber, m_expression, m_parallel );
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             m_expression.variables(),

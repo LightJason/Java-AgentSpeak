@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.List;
 
 
@@ -51,6 +52,12 @@ public final class CTestRule extends ITest
     public CTestRule( @Nonnull final IPath p_value )
     {
         super( p_value );
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "?${0}", m_value );
     }
 
     @Nonnull

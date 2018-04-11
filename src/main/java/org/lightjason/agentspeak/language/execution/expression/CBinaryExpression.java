@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * binary expression
  */
-public class CBinaryExpression implements IBinaryExpression
+public final class CBinaryExpression implements IBinaryExpression
 {
     /**
      * serial id
@@ -77,7 +77,7 @@ public class CBinaryExpression implements IBinaryExpression
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                          @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
@@ -99,13 +99,13 @@ public class CBinaryExpression implements IBinaryExpression
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat( m_lhs.variables(), m_rhs.variables() );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "( {0} {1} {2} )", m_lhs, m_operator, m_rhs );
     }

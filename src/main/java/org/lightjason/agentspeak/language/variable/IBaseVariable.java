@@ -139,7 +139,7 @@ public abstract class IBaseVariable<T> implements IVariable<T>
     public final IVariable<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "notallocated", m_functor ) );
+            throw new CIllegalStateException( CCommon.languagestring( this, "notallocated", m_functor ) );
 
         return this;
     }

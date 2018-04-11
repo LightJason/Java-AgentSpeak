@@ -68,14 +68,14 @@ public final class CRule extends IBaseInstantiable implements IRule
 
     @Nonnull
     @Override
-    public final ILiteral identifier()
+    public ILiteral identifier()
     {
         return m_id;
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return CCommon.streamconcatstrict(
             super.variables(),
@@ -84,7 +84,7 @@ public final class CRule extends IBaseInstantiable implements IRule
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format(
             "{0} ({1} ==>> {2}.)",

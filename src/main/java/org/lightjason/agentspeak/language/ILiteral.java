@@ -50,20 +50,20 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
 
         @Nonnull
         @Override
-        public final Stream<ITerm> values( @Nullable final IPath... p_path )
+        public Stream<ITerm> values( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
+        public Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Override
-        public final boolean emptyValues()
+        public boolean emptyValues()
         {
             return true;
         }
@@ -75,34 +75,34 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         }
 
         @Override
-        public final boolean hasAt()
+        public boolean hasAt()
         {
             return false;
         }
 
         @Nonnull
         @Override
-        public final ILiteral unify( @Nonnull final IContext p_context )
+        public ILiteral unify( @Nonnull final IContext p_context )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral allocate( @Nonnull final IContext p_context )
+        public ILiteral allocate( @Nonnull final IContext p_context )
         {
             return this;
         }
 
         @Override
-        public final int compareTo( @Nonnull final ILiteral p_literal )
+        public int compareTo( @Nonnull final ILiteral p_literal )
         {
             return Integer.compare( p_literal.hashCode(), this.hashCode() );
         }
 
         @Nonnull
         @Override
-        public final String functor()
+        public String functor()
         {
             return "";
         }
@@ -130,53 +130,53 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
-        public final <T> T raw()
+        public <T> T raw()
         {
             return (T) this;
         }
 
         @Nonnull
         @Override
-        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        public ITerm deepcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ITerm deepcopysuffix()
+        public ITerm deepcopysuffix()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
+        public ILiteral shallowcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral shallowcopysuffix()
+        public ILiteral shallowcopysuffix()
         {
             return this;
         }
 
         @Override
-        public final int structurehash()
+        public int structurehash()
         {
             return 0;
         }
 
         @Override
-        public final int hashCode()
+        public int hashCode()
         {
             return 0;
         }
 
         @Override
-        public final boolean equals( final Object p_object )
+        public boolean equals( final Object p_object )
         {
             return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
         }

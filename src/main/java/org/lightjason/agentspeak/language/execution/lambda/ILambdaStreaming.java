@@ -41,13 +41,13 @@ public interface ILambdaStreaming<T> extends Function<T, Stream<?>>
     ILambdaStreaming<?> EMPTY = new ILambdaStreaming<>()
     {
         @Override
-        public final boolean instaceof( @Nonnull final Object p_object )
+        public boolean instaceof( @Nonnull final Object p_object )
         {
             return false;
         }
 
         @Override
-        public final Stream<?> apply( final Object p_value )
+        public Stream<?> apply( final Object p_value )
         {
             return Stream.of( p_value );
         }

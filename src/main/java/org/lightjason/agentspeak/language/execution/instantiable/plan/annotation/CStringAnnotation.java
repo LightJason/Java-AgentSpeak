@@ -48,26 +48,26 @@ public final class CStringAnnotation extends IBaseAnnotation<String>
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_type.hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1})", m_type, m_value );
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.empty();
     }

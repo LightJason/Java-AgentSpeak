@@ -47,52 +47,52 @@ public interface IAnnotation<T> extends IAssignable<T>
     {
         @Nonnull
         @Override
-        public final EType id()
+        public EType id()
         {
             return EType.EMPTY;
         }
 
         @Nullable
         @Override
-        public final <N> N value()
+        public <N> N value()
         {
             return null;
         }
 
         @Nonnull
         @Override
-        public final Stream<IVariable<?>> variables()
+        public Stream<IVariable<?>> variables()
         {
             return Stream.empty();
         }
 
         @Override
-        public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+        public boolean valueassignableto( @Nonnull final Class<?>... p_class )
         {
             return true;
         }
 
         @Nullable
         @Override
-        public final Object throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+        public Object throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
         {
             return null;
         }
 
         @Override
-        public final String toString()
+        public String toString()
         {
             return this.id().toString();
         }
 
         @Override
-        public final int hashCode()
+        public int hashCode()
         {
             return this.id().hashCode();
         }
 
         @Override
-        public final boolean equals( final Object p_object )
+        public boolean equals( final Object p_object )
         {
             return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
         }
@@ -152,7 +152,7 @@ public interface IAnnotation<T> extends IAssignable<T>
         }
 
         @Override
-        public final String toString()
+        public String toString()
         {
             return m_name;
         }

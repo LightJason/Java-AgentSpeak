@@ -56,13 +56,13 @@ public enum EUnaryOperator implements Function<ITerm, Object>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return m_operator[0];
     }
 
     @Override
-    public final Object apply( @Nonnull final ITerm p_term )
+    public Object apply( @Nonnull final ITerm p_term )
     {
         switch ( this )
         {

@@ -66,15 +66,15 @@ public final class CBelief extends IBaseExecution<ILiteral>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}{1}", m_action, m_value );
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         m_action.accept( p_context, m_value );
         return CFuzzyValue.of( true );
@@ -103,13 +103,13 @@ public final class CBelief extends IBaseExecution<ILiteral>
         }
 
         @Override
-        public final String toString()
+        public String toString()
         {
             return m_operator;
         }
 
         @Override
-        public final void accept( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal )
+        public void accept( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal )
         {
             switch ( this )
             {

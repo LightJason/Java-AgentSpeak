@@ -67,15 +67,15 @@ public final class CVariableUnify extends CDefaultUnify
 
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_variable );
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
@@ -93,7 +93,7 @@ public final class CVariableUnify extends CDefaultUnify
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_variable ),

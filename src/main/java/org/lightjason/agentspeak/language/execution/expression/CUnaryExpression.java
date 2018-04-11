@@ -70,8 +70,8 @@ public final class CUnaryExpression implements IUnaryExpression
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
@@ -89,13 +89,13 @@ public final class CUnaryExpression implements IUnaryExpression
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return m_element.variables();
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1})", m_operator, m_element );
     }

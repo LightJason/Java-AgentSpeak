@@ -67,28 +67,28 @@ public final class CPlanStatistic implements IPlanStatistic
 
     @Nonnull
     @Override
-    public final IPlan plan()
+    public IPlan plan()
     {
         return m_plan;
     }
 
     @Override
     @Nonnegative
-    public final long count()
+    public long count()
     {
         return m_fail.get() + m_successful.get();
     }
 
     @Override
     @Nonnegative
-    public final long successful()
+    public long successful()
     {
         return m_successful.get();
     }
 
     @Override
     @Nonnegative
-    public final double successfulratio()
+    public double successfulratio()
     {
         final double l_sum = m_successful.get() + m_fail.get();
         return l_sum == 0
@@ -98,13 +98,13 @@ public final class CPlanStatistic implements IPlanStatistic
 
     @Override
     @Nonnegative
-    public final long fail()
+    public long fail()
     {
         return m_fail.get();
     }
 
     @Override
-    public final double failratio()
+    public double failratio()
     {
         final double l_sum = m_successful.get() + m_fail.get();
         return l_sum == 0
@@ -114,7 +114,7 @@ public final class CPlanStatistic implements IPlanStatistic
 
     @Nonnull
     @Override
-    public final IPlanStatistic incrementsuccessful()
+    public IPlanStatistic incrementsuccessful()
     {
         m_successful.incrementAndGet();
         return this;
@@ -122,7 +122,7 @@ public final class CPlanStatistic implements IPlanStatistic
 
     @Nonnull
     @Override
-    public final IPlanStatistic incrementfail()
+    public IPlanStatistic incrementfail()
     {
         m_fail.incrementAndGet();
         return this;
@@ -130,7 +130,7 @@ public final class CPlanStatistic implements IPlanStatistic
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.of(
             new CConstant<>( "PlanSuccessful", m_successful.get() ),
@@ -144,21 +144,21 @@ public final class CPlanStatistic implements IPlanStatistic
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_plan.hashCode();
     }
 
     @Override
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( ( p_object instanceof IPlanStatistic ) || ( p_object instanceof IPlan ) )
                && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "successful [{0}], fail [{1}]: {2}", m_successful.get(), m_fail.get(), m_plan );
     }

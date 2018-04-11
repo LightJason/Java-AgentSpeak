@@ -61,7 +61,7 @@ public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer
 
     @Nonnull
     @Override
-    public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
+    public IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
     {
         final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, m_lambdastreaming );
         l_visitor.visit( this.parser( p_stream ).agent() );
@@ -69,13 +69,13 @@ public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer
     }
 
     @Override
-    protected final Class<AgentLexer> lexerclass()
+    protected Class<AgentLexer> lexerclass()
     {
         return AgentLexer.class;
     }
 
     @Override
-    protected final Class<AgentParser> parserclass()
+    protected Class<AgentParser> parserclass()
     {
         return AgentParser.class;
     }

@@ -80,7 +80,7 @@ public final class CAchievementRuleVariable extends IAchievementRule<IExecution>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "${0}", m_value );
     }

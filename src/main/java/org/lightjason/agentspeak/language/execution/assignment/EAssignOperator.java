@@ -65,7 +65,7 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
     }
 
     @Override
-    public final Object apply( final ITerm p_lhs, final ITerm p_rhs )
+    public Object apply( final ITerm p_lhs, final ITerm p_rhs )
     {
         switch ( this )
         {
@@ -96,7 +96,7 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return m_operator;
     }

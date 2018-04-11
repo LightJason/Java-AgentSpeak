@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 /**
  * defines an execution element with a repair call
  */
-public class CRepair extends IBaseExecution<IExecution[]>
+public final class CRepair extends IBaseExecution<IExecution[]>
 {
     /**
      * serial id
@@ -62,14 +62,29 @@ public class CRepair extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return Arrays.stream( m_value )
                      .map( i -> execute( p_context, i ) )
                      .filter( i -> p_context.agent().fuzzy().getValue().defuzzify( i ) )
                      .findFirst()
                      .orElseGet( () -> CFuzzyValue.of( false ) );
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IVariable<?>> variables()
+    {
+        return Arrays.stream( m_value ).flatMap( IExecution::variables );
+    }
+
+    @Override
+    public String toString()
+    {
+        return Arrays.stream( m_value )
+                     .map( Object::toString )
+                     .collect( Collectors.joining( " << " ) );
     }
 
     /**
@@ -89,18 +104,4 @@ public class CRepair extends IBaseExecution<IExecution[]>
                : l_result;
     }
 
-    @Nonnull
-    @Override
-    public final Stream<IVariable<?>> variables()
-    {
-        return Arrays.stream( m_value ).flatMap( IExecution::variables );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return Arrays.stream( m_value )
-                     .map( Object::toString )
-                     .collect( Collectors.joining( " << " ) );
-    }
 }

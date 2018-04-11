@@ -90,63 +90,63 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_hashcode;
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}{1}", m_event, m_literal );
     }
 
     @Override
-    public final EType type()
+    public EType type()
     {
         return m_event;
     }
 
     @Override
-    public final ILiteral literal()
+    public ILiteral literal()
     {
         return m_literal;
     }
 
     @Override
-    public final int variablesize()
+    public int variablesize()
     {
         return m_variables;
     }
 
     @Override
-    public final int structurehash()
+    public int structurehash()
     {
         return m_structurehash;
     }
 
     @Nonnull
     @Override
-    public final ITrigger shallowcopy( final IPath... p_prefix )
+    public ITrigger shallowcopy( final IPath... p_prefix )
     {
         return new CTrigger( m_event, m_literal.shallowcopy( p_prefix ) );
     }
 
     @Nonnull
     @Override
-    public final ITrigger shallowcopysuffix()
+    public ITrigger shallowcopysuffix()
     {
         return new CTrigger( m_event, m_literal.shallowcopysuffix() );
     }
 
     @Override
-    public final int compareTo( @Nonnull final ITrigger p_other )
+    public int compareTo( @Nonnull final ITrigger p_other )
     {
         return p_other.toString().compareTo( this.toString() );
     }

@@ -52,54 +52,54 @@ public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
 
         @Nonnull
         @Override
-        public final String functor()
+        public String functor()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final IPath functorpath()
+        public IPath functorpath()
         {
             return IPath.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IPath fqnfunctor()
+        public IPath fqnfunctor()
         {
             return IPath.EMPTY;
         }
 
         @Override
-        public final boolean hasVariable()
+        public boolean hasVariable()
         {
             return false;
         }
 
         @Nullable
         @Override
-        public final <T> T raw()
+        public <T> T raw()
         {
             return null;
         }
 
         @Nonnull
         @Override
-        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        public ITerm deepcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ITerm deepcopysuffix()
+        public ITerm deepcopysuffix()
         {
             return this;
         }
 
         @Override
-        public final int structurehash()
+        public int structurehash()
         {
             return 0;
         }

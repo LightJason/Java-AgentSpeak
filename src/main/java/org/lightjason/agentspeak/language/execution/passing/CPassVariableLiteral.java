@@ -77,8 +77,8 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return )
     {
         final IVariable<?> l_variable = CCommon.replaceFromContext( p_context, m_value ).<IVariable<?>>term().thrownotallocated();
 
@@ -99,7 +99,7 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_value ),

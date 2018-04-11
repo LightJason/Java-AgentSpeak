@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * pass variable data into the return structure
  */
-public class CPassVariable extends IBaseExecution<IVariable<?>[]>
+public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
 {
     /**
      * serial id
@@ -75,13 +75,13 @@ public class CPassVariable extends IBaseExecution<IVariable<?>[]>
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Arrays.stream( m_value );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return Arrays.stream( m_value ).map( Object::toString ).collect( Collectors.joining( " " ) );
     }

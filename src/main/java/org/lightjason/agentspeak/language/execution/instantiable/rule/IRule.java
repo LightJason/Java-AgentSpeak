@@ -53,42 +53,42 @@ public interface IRule extends IInstantiable
 
         @Nonnull
         @Override
-        public final ILiteral identifier()
+        public ILiteral identifier()
         {
             return CLiteral.of( "empty" );
         }
 
         @Nonnull
         @Override
-        public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+        public IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
         {
             return IContext.EMPTYRULE;
         }
 
         @Nonnull
         @Override
-        public final String description()
+        public String description()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final Stream<String> tags()
+        public Stream<String> tags()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<IVariable<?>> variabledescription()
+        public Stream<IVariable<?>> variabledescription()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             return CFuzzyValue.of( true );

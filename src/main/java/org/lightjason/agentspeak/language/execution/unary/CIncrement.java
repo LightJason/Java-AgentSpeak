@@ -61,15 +61,15 @@ public final class CIncrement implements IUnary
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return m_variable.toString() + "++";
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( !l_variable.valueassignableto( Number.class ) )
@@ -81,7 +81,7 @@ public final class CIncrement implements IUnary
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.of( m_variable );
     }

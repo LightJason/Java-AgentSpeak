@@ -73,8 +73,8 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
@@ -89,26 +89,26 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return super.hashCode() ^ m_rhs.hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return super.equals( p_object );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0} = {1}", m_value, m_rhs );
     }
 
     @Override
     @Nonnull
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_value ),

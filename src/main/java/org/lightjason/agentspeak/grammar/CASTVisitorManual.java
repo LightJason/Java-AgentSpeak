@@ -59,7 +59,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Object visitTerm( final ManualParser.TermContext p_context )
+    public Object visitTerm( final ManualParser.TermContext p_context )
     {
         return CTerm.term(
             this,
@@ -77,7 +77,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
-    public final Object visitTermvalue( final ManualParser.TermvalueContext p_context )
+    public Object visitTermvalue( final ManualParser.TermvalueContext p_context )
     {
         return CTerm.termvalue(
             this,
@@ -89,31 +89,31 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
-    public final Object visitTermvaluelist( final ManualParser.TermvaluelistContext p_context )
+    public Object visitTermvaluelist( final ManualParser.TermvaluelistContext p_context )
     {
         return CTerm.termvaluelist( this, p_context.termvalue() );
     }
 
     @Override
-    public final Object visitLiteral( final ManualParser.LiteralContext p_context )
+    public Object visitLiteral( final ManualParser.LiteralContext p_context )
     {
         return CTerm.literal( this, p_context.AT(), p_context.STRONGNEGATION(), p_context.ATOM(), p_context.termlist() );
     }
 
     @Override
-    public final Object visitTermlist( final ManualParser.TermlistContext p_context )
+    public Object visitTermlist( final ManualParser.TermlistContext p_context )
     {
         return CTerm.termlist( this, p_context.term() );
     }
 
     @Override
-    public final Object visitVariable( final ManualParser.VariableContext p_context )
+    public Object visitVariable( final ManualParser.VariableContext p_context )
     {
         return CTerm.variable( p_context.AT(), p_context.VARIABLEATOM() );
     }
 
     @Override
-    public final Object visitVariablelist( final ManualParser.VariablelistContext p_context )
+    public Object visitVariablelist( final ManualParser.VariablelistContext p_context )
     {
         return CAgentSpeak.variablelist( this, p_context.variable() );
     }
@@ -123,19 +123,19 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
 
 
     @Override
-    public final Object visitExecute_action( final ManualParser.Execute_actionContext p_context )
+    public Object visitExecute_action( final ManualParser.Execute_actionContext p_context )
     {
         return CAgentSpeak.executeaction( this, p_context.literal(), Collections.emptyMap() );
     }
 
     @Override
-    public final Object visitExecute_rule( final ManualParser.Execute_ruleContext p_context )
+    public Object visitExecute_rule( final ManualParser.Execute_ruleContext p_context )
     {
         return CAgentSpeak.executerule( this, p_context.literal(), p_context.execute_variable() );
     }
 
     @Override
-    public final Object visitExecute_variable( final ManualParser.Execute_variableContext p_context )
+    public Object visitExecute_variable( final ManualParser.Execute_variableContext p_context )
     {
         return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
@@ -147,7 +147,7 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
 
     @Nonnull
     @Override
-    public final ILiteral literal()
+    public ILiteral literal()
     {
         return m_literal;
     }

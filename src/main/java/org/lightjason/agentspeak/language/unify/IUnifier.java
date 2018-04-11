@@ -49,15 +49,15 @@ public interface IUnifier
     {
         @Nonnull
         @Override
-        public final Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
+        public Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
         {
             return Collections.emptySet();
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                                 @Nonnull final IExpression p_expression, final boolean p_parallel )
+        public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                           @Nonnull final IExpression p_expression, final boolean p_parallel )
         {
             return CFuzzyValue.of( false );
         }

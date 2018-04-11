@@ -55,15 +55,15 @@ public final class CTestGoal extends ITest
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "?{0}", m_value );
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.of( p_context.agent().runningplans().keySet().contains( m_value ) );
     }

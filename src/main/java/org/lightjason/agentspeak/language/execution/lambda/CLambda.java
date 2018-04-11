@@ -130,7 +130,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             m_init.variables(),

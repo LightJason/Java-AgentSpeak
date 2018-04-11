@@ -47,26 +47,26 @@ public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return m_type.toString();
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_type.hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.empty();
     }
