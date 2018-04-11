@@ -104,7 +104,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     @Override
     public boolean equals( final Object p_object )
     {
-        return super.equals( p_object );
+        return p_object instanceof IExecution && this.hashCode() == p_object.hashCode();
     }
 
     @Override

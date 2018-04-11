@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -85,7 +86,7 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
     @Override
     public boolean equals( final Object p_object )
     {
-        return super.equals( p_object );
+        return p_object instanceof IExecution && this.hashCode() == p_object.hashCode();
     }
 
     @Override
