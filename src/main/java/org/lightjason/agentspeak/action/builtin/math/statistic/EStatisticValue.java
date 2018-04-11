@@ -69,7 +69,7 @@ public enum EStatisticValue
      * @param p_statistic statistic object
      * @return statistic value
      */
-    public final double value( @Nonnull final SummaryStatistics p_statistic )
+    public double value( @Nonnull final SummaryStatistics p_statistic )
     {
         switch ( this )
         {
@@ -123,7 +123,7 @@ public enum EStatisticValue
      * @param p_statistic statistic object
      * @return statistic value
      */
-    public final double value( @Nonnull final DescriptiveStatistics p_statistic )
+    public double value( @Nonnull final DescriptiveStatistics p_statistic )
     {
         switch ( this )
         {

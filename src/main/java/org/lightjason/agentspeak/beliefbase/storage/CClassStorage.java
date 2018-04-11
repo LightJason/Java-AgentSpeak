@@ -84,14 +84,14 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
                    .filter( i -> !Modifier.isTransient( i.getModifiers() ) )
                    .filter( i -> !Modifier.isStatic( i.getModifiers() ) )
                    .map( i -> new ImmutablePair<>( i, p_fieldnameformater.apply( i ) ) )
-                   .filter( i -> ( Objects.nonNull( i.right ) ) && ( !i.right.isEmpty() ) )
+                   .filter( i -> Objects.nonNull( i.right ) && !i.right.isEmpty() )
                    .collect( Collectors.toMap( i -> i.right, i -> i.left, ( i, j ) -> i ) )
         );
     }
 
     @Nonnull
     @Override
-    public final Stream<ILiteral> streamMultiElements()
+    public Stream<ILiteral> streamMultiElements()
     {
         return m_fields.entrySet().stream()
                        .map( i -> this.literal( i.getKey(), i.getValue() ) )
@@ -100,28 +100,28 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
 
     @Nonnull
     @Override
-    public final Stream<M> streamSingleElements()
+    public Stream<M> streamSingleElements()
     {
         return Stream.empty();
     }
 
     @Override
-    public final  boolean containsMultiElement( @Nonnull final String p_key )
+    public  boolean containsMultiElement( @Nonnull final String p_key )
     {
         return m_fields.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsSingleElement( @Nonnull final String p_key )
+    public boolean containsSingleElement( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public final boolean putMultiElement( @Nonnull final String p_key, final ILiteral p_value )
+    public boolean putMultiElement( @Nonnull final String p_key, final ILiteral p_value )
     {
         final Field l_field = m_fields.get( p_key );
-        if ( ( Objects.isNull( l_field ) ) || ( p_value.emptyValues() ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
+        if ( Objects.isNull( l_field ) || p_value.emptyValues() || Modifier.isFinal( l_field.getModifiers() ) )
             return false;
 
         try
@@ -136,37 +136,37 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     }
 
     @Override
-    public final boolean putSingleElement( @Nonnull final String p_key, final M p_value )
+    public boolean putSingleElement( @Nonnull final String p_key, final M p_value )
     {
         return false;
     }
 
     @Override
-    public final boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
+    public boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
     {
         return false;
     }
 
     @Override
-    public final boolean removeMultiElement( @Nonnull final String p_key, final ILiteral p_value )
+    public boolean removeMultiElement( @Nonnull final String p_key, final ILiteral p_value )
     {
         return false;
     }
 
     @Override
-    public final boolean removeSingleElement( @Nonnull final String p_key )
+    public boolean removeSingleElement( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public final M getSingleElement( @Nonnull final String p_key )
+    public M getSingleElement( @Nonnull final String p_key )
     {
         return null;
     }
 
     @Override
-    public final M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
+    public M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
     {
         return p_default;
     }
@@ -180,18 +180,18 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     }
 
     @Override
-    public final void clear()
+    public void clear()
     {
     }
 
     @Override
-    public final boolean empty()
+    public boolean empty()
     {
         return m_fields.isEmpty();
     }
 
     @Override
-    public final int size()
+    public int size()
     {
         return m_fields.size();
     }

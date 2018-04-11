@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * as tuples with x- / y-position and will be checked
  * to the rectangle, the action fail on wrong input
  *
- * {@code [In1|In2] = math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
+ * {@code [In1|In2] = .math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
  */
 public final class CInRectangle extends IBuiltinAction
 {
@@ -65,14 +65,14 @@ public final class CInRectangle extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )

@@ -39,7 +39,7 @@ public final class CFormat1D extends IFormat<DoubleMatrix1D>
     private static final long serialVersionUID = -5588984423759143305L;
 
     @Override
-    protected final Class<?> getType()
+    protected Class<?> getType()
     {
         return DoubleMatrix1D.class;
     }

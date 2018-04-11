@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
  * other arguments which must be a matrix
  *
  * {@code
-    math/blas/matrix/assign(2, Matrix1, [Matrix2, Matrix3] );
-    math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
+    .math/blas/matrix/assign(2, Matrix1, [Matrix2, Matrix3] );
+    .math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
  * }
  *
  */
@@ -65,16 +65,15 @@ public final class CAssign extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

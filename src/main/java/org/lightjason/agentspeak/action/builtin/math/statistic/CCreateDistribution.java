@@ -121,7 +121,7 @@ import java.util.stream.IntStream;
  * + well44497b
  * + synchronizedwell44497b
  *
- * {@code [D1|D2] = math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] );}
+ * {@code [D1|D2] = .math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] );}
  * @see https://en.wikipedia.org/wiki/Beta_distribution
  * @see https://en.wikipedia.org/wiki/Cauchy_distribution
  * @see https://en.wikipedia.org/wiki/Chi-squared_distribution
@@ -157,15 +157,15 @@ public final class CCreateDistribution extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -181,7 +181,7 @@ public final class CCreateDistribution extends IBuiltinAction
                      final int l_skip;
                      final EGenerator l_generator;
 
-                     if ( ( i.getKey() < l_arguments.size() - 1 ) && ( CCommon.rawvalueAssignableTo( l_arguments.get( i.getKey() + 1 ), String.class ) ) )
+                     if ( i.getKey() < l_arguments.size() - 1 && CCommon.rawvalueAssignableTo( l_arguments.get( i.getKey() + 1 ), String.class ) )
                      {
                          l_skip = 1;
                          l_generator = EGenerator.of( l_arguments.get( i.getKey() + 1 ).<String>raw() );
@@ -301,7 +301,7 @@ public final class CCreateDistribution extends IBuiltinAction
          * @return real distribution
          */
         @Nonnull
-        public final AbstractRealDistribution get( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+        public AbstractRealDistribution get( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
         {
             switch ( this )
             {
@@ -410,7 +410,7 @@ public final class CCreateDistribution extends IBuiltinAction
          * @return generator
          */
         @Nonnull
-        public final RandomGenerator get()
+        public RandomGenerator get()
         {
             switch ( this )
             {

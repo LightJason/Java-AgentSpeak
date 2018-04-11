@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  * argument is the \f$ d \f$ value (constant) of the objective function, the action
  * is never failing
  *
- * {@code LP = math/linearprogram/create(1,2, [3, [4,5]], 10);}
+ * {@code LP = .math/linearprogram/create(1,2, [3, [4,5]], 10);}
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -70,15 +70,15 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( i -> i.<Number>raw().doubleValue() )

@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * geometricmean, max, min, count, populationvariance, quadraticmean, secondmoment,
  * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis
  *
- * {@code [SStd|SVar|SMean]  = math/statistic/multiplestatisticvalue(Statistic, "standarddeviation", "variance", "mean" );}
+ * {@code [SStd|SVar|SMean]  = .math/statistic/multiplestatisticvalue(Statistic, "standarddeviation", "variance", "mean" );}
  */
 public final class CMultipleStatisticValue extends IBuiltinAction
 {
@@ -66,15 +66,15 @@ public final class CMultipleStatisticValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

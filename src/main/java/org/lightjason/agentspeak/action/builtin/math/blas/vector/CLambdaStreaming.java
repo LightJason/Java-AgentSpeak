@@ -37,13 +37,13 @@ import java.util.stream.Stream;
 public final class CLambdaStreaming implements ILambdaStreaming<DoubleMatrix1D>
 {
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof DoubleMatrix1D;
     }
 
     @Override
-    public final Stream<?> apply( final DoubleMatrix1D p_vector )
+    public Stream<?> apply( final DoubleMatrix1D p_vector )
     {
         return Arrays.stream( p_vector.toArray() ).boxed();
     }

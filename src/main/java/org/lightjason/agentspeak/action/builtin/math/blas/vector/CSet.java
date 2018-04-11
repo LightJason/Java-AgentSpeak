@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * all other arguments are vector objects,
  * the action never fails
  *
- * {@code math/blas/vector/assign( 3, 5.3, Vector1, [Vector2, [Vector3]] );}
+ * {@code .math/blas/vector/assign( 3, 5.3, Vector1, [Vector2, [Vector3]] );}
  */
 public final class CSet extends IBuiltinAction
 {
@@ -63,15 +63,15 @@ public final class CSet extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 3;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

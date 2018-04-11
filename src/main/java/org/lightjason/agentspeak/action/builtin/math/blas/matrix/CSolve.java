@@ -48,7 +48,7 @@ import java.util.List;
  * matrix or vector, for each tuple the action returns \f$ X \f$,
  * the action never fails
  *
- * {@code [R1|R2] = math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
+ * {@code [R1|R2] = .math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
  */
 public final class CSolve extends IAlgebra
 {
@@ -59,16 +59,15 @@ public final class CSolve extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument ),

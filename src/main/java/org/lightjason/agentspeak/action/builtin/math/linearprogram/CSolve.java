@@ -66,7 +66,7 @@ import java.util.Objects;
  * the number of all referenced \f$ x_i \f$ points and after
  * that all arguments the values of \f$ x_i \f$
  *
- * {@code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" );}
+ * {@code [Value|CountXi|Xi] = .math/linearprogram/solve( LP, "maximize", "non-negative" );}
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -87,15 +87,15 @@ public final class CSolve extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // first argument is the LP pair object, second argument is the goal-type (maximize / minimize),
         // third & fourth argument can be the number of iterations or string with "non-negative" variables

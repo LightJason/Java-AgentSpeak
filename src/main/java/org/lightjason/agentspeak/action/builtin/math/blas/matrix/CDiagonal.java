@@ -49,8 +49,8 @@ import java.util.List;
  * the action fails never
  *
  * {@code
-      [D1|D2] = math/blas/matrix/diagonal( Vector1, Vector2 );
-      [D3|D4] = math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
+      [D1|D2] = .math/blas/matrix/diagonal( Vector1, Vector2 );
+      [D3|D4] = .math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
  * }
  */
 public final class CDiagonal extends IAlgebra
@@ -62,15 +62,15 @@ public final class CDiagonal extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()

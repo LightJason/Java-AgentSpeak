@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * to defining a sparse / dense vector, the action never fails.
  * Seperator is comma, semicolon or space
  *
- * {@code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" );}
+ * {@code [V1|V2] = .math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|sparse" );}
  */
 public final class CParse extends IBuiltinAction
 {
@@ -67,21 +67,21 @@ public final class CParse extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int l_limit;
         final EType l_type;
-        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
-             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        if ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class )
+             && EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) )
         {
             l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;

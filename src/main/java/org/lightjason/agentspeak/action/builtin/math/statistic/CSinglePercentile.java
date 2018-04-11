@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * The actions reutnrs for any statistic value the
  * given percentile value and the action fails on wrong input
  *
- * {@code [V1|V2|V3] = math/statistic/multiplepercentile( 2, Statistic1, [Statistic2, Statistic3] );}
+ * {@code [V1|V2|V3] = .math/statistic/multiplepercentile( 2, Statistic1, [Statistic2, Statistic3] );}
  */
 public final class CSinglePercentile extends IBuiltinAction
 {
@@ -60,15 +60,15 @@ public final class CSinglePercentile extends IBuiltinAction
     }
 
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return
     )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );

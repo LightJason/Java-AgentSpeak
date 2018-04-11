@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * the first argument is the index of the column, all
  * other a matrix objects, the action never fails
  *
- * {@code [V1|V2] = math/blas/matrix/column(3, Matrix1, [Matrix2]);}
+ * {@code [V1|V2] = .math/blas/matrix/column(3, Matrix1, [Matrix2]);}
  */
 public final class CColumn extends IBuiltinAction
 {
@@ -63,16 +63,15 @@ public final class CColumn extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

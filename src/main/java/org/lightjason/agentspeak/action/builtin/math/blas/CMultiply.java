@@ -45,7 +45,7 @@ import java.util.function.BiFunction;
  * the action fails iif the multiply cannot executed e.g. on wrong
  * input
  *
- * {@code [M1|M2|M3] = math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] );}
+ * {@code [M1|M2|M3] = .math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] );}
  */
 public final class CMultiply extends IAlgebra
 {
@@ -64,15 +64,15 @@ public final class CMultiply extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.of(
             StreamUtils.windowed(
@@ -82,37 +82,17 @@ public final class CMultiply extends IAlgebra
             ).parallel().allMatch( i ->
             {
 
-                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
-                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
-                    return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply(
-                        i.get( 0 ), i.get( 1 ),
-                        ( u, v ) -> DENSEALGEBRA.multOuter( u, v, null ),
-                        p_return
-                    );
+                if ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) )
+                    return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply( i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.multOuter( u, v, null ), p_return );
 
-                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
-                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
-                    return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply(
-                        i.get( 0 ), i.get( 1 ),
-                        DENSEALGEBRA::mult,
-                        p_return
-                    );
+                if ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) )
+                    return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply( i.get( 0 ), i.get( 1 ), DENSEALGEBRA::mult, p_return );
 
-                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
-                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
-                    return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply(
-                        i.get( 0 ), i.get( 1 ),
-                        DENSEALGEBRA::mult,
-                        p_return
-                    );
+                if ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) )
+                    return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply( i.get( 0 ), i.get( 1 ), DENSEALGEBRA::mult, p_return );
 
-                return ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
-                         && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
-                       && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply(
-                    i.get( 0 ), i.get( 1 ),
-                    ( u, v ) -> DENSEALGEBRA.mult( v, u ),
-                    p_return
-                );
+                return ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) )
+                       && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply( i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.mult( v, u ), p_return );
 
             } )
         );
@@ -131,7 +111,7 @@ public final class CMultiply extends IAlgebra
      */
     private static <U, V> boolean apply( final ITerm p_left, final ITerm p_right, final BiFunction<U, V, ?> p_function, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.of( p_function.apply( p_left.<U>raw(), p_right.<V>raw() ) ) );
+        p_return.add( CRawTerm.of( p_function.apply( p_left.raw(), p_right.raw() ) ) );
         return true;
     }
 

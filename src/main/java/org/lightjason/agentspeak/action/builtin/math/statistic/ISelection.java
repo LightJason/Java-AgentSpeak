@@ -78,19 +78,19 @@ public abstract class ISelection extends IBuiltinAction
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
         final List<Object> l_items = p_argument.get( 0 ).<List<Object>>raw().stream()
-                                                                  .map( i -> i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).raw() : i  )
+                                                                  .map( i -> i instanceof ITerm ? CCommon.replaceFromContext( p_context, (ITerm) i ).raw() : i  )
                                                                   .collect( Collectors.toList() );
         final List<Double> l_weight = this.weight(
             l_items,
             p_argument.get( 1 ).<List<?>>raw().stream()
                                               // list can be contains default Java objects or term objects
-                                              .map( i -> i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).<Number>raw() : (Number) i )
+                                              .map( i -> i instanceof ITerm ? CCommon.replaceFromContext( p_context, (ITerm) i ).<Number>raw() : (Number) i )
                                               .map( Number::doubleValue )
                                               .map( Math::abs ),
             p_argument.subList( 2, p_argument.size() )
         );
 
-        if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
+        if ( l_items.isEmpty() || l_items.size() != l_weight.size() )
             return CFuzzyValue.of( false );
 
         // select a random value and scale with the sum

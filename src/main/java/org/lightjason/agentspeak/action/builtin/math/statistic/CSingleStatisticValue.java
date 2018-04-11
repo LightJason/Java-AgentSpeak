@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis)
  * all other arguments are statistic objects
  *
- * {@code [V1|V2|V3] = math/statistic/getstatisticvalue( "mean|min|max|...", Statistic1, [Statistic2, Statistic3] );}
+ * {@code [V1|V2|V3] = .math/statistic/getstatisticvalue( "mean|min|max|...", Statistic1, [Statistic2, Statistic3] );}
  */
 public final class CSingleStatisticValue extends IBuiltinAction
 {
@@ -66,7 +66,7 @@ public final class CSingleStatisticValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
@@ -74,8 +74,8 @@ public final class CSingleStatisticValue extends IBuiltinAction
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final EStatisticValue l_value = EStatisticValue.of( l_arguments.get( 0 ).<String>raw() );

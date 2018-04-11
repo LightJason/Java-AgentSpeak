@@ -42,7 +42,7 @@ import java.util.List;
  * Inverts each input matrix and returns
  * it, the action never fails
  *
- * {@code [I1|I2] = math/blas/matrix/invert(M1,M2);}
+ * {@code [I1|I2] = .math/blas/matrix/invert(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Invertible_matrix
  */
 public final class CInvert extends IAlgebra
@@ -62,15 +62,15 @@ public final class CInvert extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )

@@ -65,101 +65,101 @@ public final class CSingleStorage<N, M> extends IBaseStorage<N, M>
 
     @Nonnull
     @Override
-    public final Stream<N> streamMultiElements()
+    public Stream<N> streamMultiElements()
     {
         return m_multielements.values().stream();
     }
 
     @Nonnull
     @Override
-    public final Stream<M> streamSingleElements()
+    public Stream<M> streamSingleElements()
     {
         return m_singleelements.values().stream();
     }
 
     @Override
-    public final boolean containsMultiElement( @Nonnull final String p_key )
+    public boolean containsMultiElement( @Nonnull final String p_key )
     {
         return m_multielements.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsSingleElement( @Nonnull final String p_key )
+    public boolean containsSingleElement( @Nonnull final String p_key )
     {
         return m_singleelements.containsKey( p_key );
     }
 
     @Override
-    public final boolean putMultiElement( @Nonnull final String p_key, final N p_value )
+    public boolean putMultiElement( @Nonnull final String p_key, final N p_value )
     {
         return !p_value.equals( m_multielements.put( p_key, p_value ) );
     }
 
     @Override
-    public final boolean putSingleElement( @Nonnull final String p_key, final M p_value )
+    public boolean putSingleElement( @Nonnull final String p_key, final M p_value )
     {
         return !p_value.equals( m_singleelements.put( p_key, p_value ) );
     }
 
     @Override
-    public final boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
+    public boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
     {
         return !p_value.equals( m_singleelements.putIfAbsent( p_key, p_value ) );
     }
 
     @Override
-    public final boolean removeMultiElement( @Nonnull final String p_key, final N p_value )
+    public boolean removeMultiElement( @Nonnull final String p_key, final N p_value )
     {
         return p_value.equals( m_multielements.remove( p_key ) );
     }
 
     @Override
-    public final boolean removeSingleElement( @Nonnull final String p_key )
+    public boolean removeSingleElement( @Nonnull final String p_key )
     {
         return m_singleelements.remove( p_key ) != null;
     }
 
     @Override
-    public final M getSingleElement( @Nonnull final String p_key )
+    public M getSingleElement( @Nonnull final String p_key )
     {
         return m_singleelements.get( p_key );
     }
 
     @Override
-    public final M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
+    public M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
     {
         return m_singleelements.getOrDefault( p_key, p_default );
     }
 
     @Nonnull
     @Override
-    public final Collection<N> getMultiElement( @Nonnull final String p_key )
+    public Collection<N> getMultiElement( @Nonnull final String p_key )
     {
         return Stream.of( m_multielements.get( p_key ) ).collect( Collectors.toSet() );
     }
 
     @Override
-    public final void clear()
+    public void clear()
     {
         m_multielements.clear();
         m_singleelements.clear();
     }
 
     @Override
-    public final boolean empty()
+    public boolean empty()
     {
         return m_multielements.isEmpty() && m_singleelements.isEmpty();
     }
 
     @Override
-    public final int size()
+    public int size()
     {
         return m_multielements.size();
     }
 
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "[multi elements: {0}, single elements: {1}]", m_multielements, m_singleelements );
     }

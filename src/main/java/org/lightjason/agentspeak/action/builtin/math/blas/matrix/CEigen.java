@@ -44,7 +44,7 @@ import java.util.List;
  * is executed and two elements eigenvalues (as vector) and
  * eigenvectors (as matrix) are returned, the action never fails.
  *
- * {@code [Values1|Vectors1|Values2|Vectors2] = math/blas/matrix/eigen( Matrix1, Matrix2 );}
+ * {@code [Values1|Vectors1|Values2|Vectors2] = .math/blas/matrix/eigen( Matrix1, Matrix2 );}
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
  */
 public final class CEigen extends IBuiltinAction
@@ -64,15 +64,15 @@ public final class CEigen extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )

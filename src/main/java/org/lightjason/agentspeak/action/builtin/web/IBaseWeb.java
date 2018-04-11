@@ -178,7 +178,7 @@ public abstract class IBaseWeb extends IBuiltinAction
     @SuppressWarnings( "unchecked" )
     protected static Stream<ITerm> flatterm( @Nullable final Object p_object )
     {
-        if ( ( Objects.isNull( p_object ) ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
+        if ( Objects.isNull( p_object ) || p_object instanceof Map && ( (Map<String, ?>) p_object ).isEmpty() )
             return Stream.empty();
 
         return p_object instanceof Map

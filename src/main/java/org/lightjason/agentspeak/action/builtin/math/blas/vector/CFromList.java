@@ -47,7 +47,7 @@ import java.util.List;
  * with "dense | sparse" to create dense or sparse structures,
  * the action never fails
  *
- * {@code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
+ * {@code [V1|V2] = .math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
  */
 public final class CFromList extends IBuiltinAction
 {
@@ -66,20 +66,20 @@ public final class CFromList extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final int l_limit;
         final EType l_type;
-        if ( ( CCommon.rawvalueAssignableTo( p_argument.get( p_argument.size() - 1 ), String.class ) )
-             && ( EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) ) )
+        if ( CCommon.rawvalueAssignableTo( p_argument.get( p_argument.size() - 1 ), String.class )
+             && EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) )
         {
             l_type = EType.of( p_argument.get( p_argument.size() - 1 ).<String>raw() );
             l_limit = p_argument.size() - 1;

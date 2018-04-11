@@ -48,8 +48,8 @@ import java.util.List;
  * action never fails
  *
  * {@code
-     [E1|E2] = math/blas/matrix/identity( 2, 3 );
-     [E3|E4] = math/blas/matrix/identity( 2, 3, "dense" );
+     [E1|E2] = .math/blas/matrix/identity( 2, 3 );
+     [E3|E4] = .math/blas/matrix/identity( 2, 3, "dense" );
  * }
  */
 public final class CIdentity extends IAlgebra
@@ -61,15 +61,15 @@ public final class CIdentity extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()

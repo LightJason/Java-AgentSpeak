@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * and the last value is the \f$ v \f$ value and the action
  * never fails
  *
- * {@code math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 );}
+ * {@code .math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 );}
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -67,15 +67,15 @@ public final class CValueConstraint extends IConstraint
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 4;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

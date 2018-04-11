@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * first argument is the vector and all other values
  * are the index values, the action never fails
  *
- * {@code [X|Y|Z] = math/blas/vector/get( Vector, 1, [4, 5] );}
+ * {@code [X|Y|Z] = .math/blas/vector/get( Vector, 1, [4, 5] );}
  */
 public final class CGet extends IBuiltinAction
 {
@@ -63,15 +63,15 @@ public final class CGet extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

@@ -49,8 +49,8 @@ import java.util.stream.IntStream;
  * the action never fails
  *
  * {@code
-    [S1|S2] = math/blas/matrix/columnsum( Matrix1, Matrix2 );
-    [S1|S2] = math/blas/matrix/columnsum( Matrix1, Matrix2, "sparse" );
+    [S1|S2] = .math/blas/matrix/columnsum( Matrix1, Matrix2 );
+    [S1|S2] = .math/blas/matrix/columnsum( Matrix1, Matrix2, "sparse" );
  * }
  */
 public final class CColumnSum extends IAlgebra
@@ -62,15 +62,15 @@ public final class CColumnSum extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()

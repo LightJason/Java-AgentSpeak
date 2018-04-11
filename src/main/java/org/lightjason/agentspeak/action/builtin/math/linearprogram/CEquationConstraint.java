@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
  * of the arguments the relation symbol (\f$ = \f$, \f$ \geq \f$ or \f$ \leq \f$) must be set as string, after that all \f$ r_i \f$
  * elements must be set and the last argument is the \f$ r_{const} \f$, the action fails on wrong input
  *
- * {@code math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 );}
+ * {@code .math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 );}
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -66,15 +66,15 @@ public final class CEquationConstraint extends IConstraint
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 6;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -88,7 +88,7 @@ public final class CEquationConstraint extends IConstraint
                                              .collect( Collectors.toList() );
 
         // test content
-        if ( ( l_lhs.size() < 2 ) || ( l_rhs.size() < 3 ) || ( !CCommon.rawvalueAssignableTo( l_rhs.get( 0 ), String.class ) ) )
+        if ( l_lhs.size() < 2 || l_rhs.size() < 3 || !CCommon.rawvalueAssignableTo( l_rhs.get( 0 ), String.class ) )
             return CFuzzyValue.of( false );
 
         // create constraint

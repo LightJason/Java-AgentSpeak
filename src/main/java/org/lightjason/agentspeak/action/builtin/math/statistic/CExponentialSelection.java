@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * distribution, the first and second argument must be a list, the first list contains elements, the second
  * list contains numeric values for defining the weights, the third argument is the demand / rational factor
  *
- * {@code S = math/statistic/exponentialselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3], RationalFactor );}
+ * {@code S = .math/statistic/exponentialselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3], RationalFactor );}
  * @see https://en.wikipedia.org/wiki/Boltzmann_distribution
  * @see https://en.wikipedia.org/wiki/Log-linear_model
  */
@@ -50,14 +50,14 @@ public final class CExponentialSelection extends ISelection
 
     @Nonnull
     @Override
-    protected final List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument )
+    protected List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument )
     {
         final double l_demand = p_argument.get( 0 ).<Number>raw().doubleValue();
         return p_values.map( i -> Math.exp( i / l_demand ) ).collect( Collectors.toList() );
     }
 
     @Override
-    protected final int additionalArgumentNumber()
+    protected int additionalArgumentNumber()
     {
         return 1;
     }

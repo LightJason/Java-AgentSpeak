@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * (x- / y-position) which defines the point, the action fails
  * on wrong input
  *
- * {@code [In1|In2] = math/shape/incircle( 1,1,1,  2,2.5, [3,4] );}
+ * {@code [In1|In2] = .math/shape/incircle( 1,1,1,  2,2.5, [3,4] );}
  */
 public final class CInCircle extends IBuiltinAction
 {
@@ -65,14 +65,14 @@ public final class CInCircle extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )

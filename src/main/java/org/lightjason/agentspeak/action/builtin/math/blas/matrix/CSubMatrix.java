@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * submatrix ( of/to row, of/to column ) and each matrix
  * object that starts at the fiveth position will
  *
- * {@code [M1|M2] = math/blas/matrix/submatrix( FromRow, ToRow, FromColumn, ToColumn, Matrix1, [ Matrix2 ] );}
+ * {@code [M1|M2] = .math/blas/matrix/submatrix( FromRow, ToRow, FromColumn, ToColumn, Matrix1, [ Matrix2 ] );}
  */
 public final class CSubMatrix extends IAlgebra
 {
@@ -63,15 +63,15 @@ public final class CSubMatrix extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 5;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

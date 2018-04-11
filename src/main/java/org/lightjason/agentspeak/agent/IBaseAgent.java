@@ -326,7 +326,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
-        if ( ( Objects.nonNull( p_immediately ) ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
+        if ( Objects.nonNull( p_immediately ) && p_immediately.length > 0 && p_immediately[0] )
             return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
 
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
@@ -453,7 +453,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // if the sleeping time ends or the agent will wakedup by a hard call,
         // create the trigger and reset the time value
-        if ( ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) ) || p_immediatly )
+        if ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) || p_immediatly )
         {
             (
                 m_sleepingterm.isEmpty()
@@ -469,7 +469,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         }
 
         // if the sleeping time is not infinity decrese the counter
-        if ( ( m_sleepingcycles.get() > 0 ) && ( m_sleepingcycles.get() != Long.MAX_VALUE ) )
+        if ( m_sleepingcycles.get() > 0 && m_sleepingcycles.get() != Long.MAX_VALUE )
             m_sleepingcycles.decrementAndGet();
 
         return m_sleepingcycles.get() <= 0;

@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * list contains elements, the second list contains numeric values for defining
  * the weights
  *
- * {@code S = math/statistic/linearselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3] );}
+ * {@code S = .math/statistic/linearselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3] );}
  * @see https://en.wikipedia.org/wiki/Fitness_proportionate_selection
  */
 public final class CLinearSelection extends ISelection
@@ -50,7 +50,7 @@ public final class CLinearSelection extends ISelection
 
     @Nonnull
     @Override
-    protected final List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument )
+    protected List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument )
     {
         return p_values.collect( Collectors.toList() );
     }

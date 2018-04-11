@@ -97,7 +97,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final Stream<ITrigger> trigger()
+    public Stream<ITrigger> trigger()
     {
         // remove the root element (position 0), because the root element
         // is not used on the agent (asl) side
@@ -107,7 +107,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         return m_beliefbase.update( p_agent );
     }
@@ -120,7 +120,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final IView add( @Nonnull final Stream<ILiteral> p_literal )
+    public IView add( @Nonnull final Stream<ILiteral> p_literal )
     {
         p_literal.parallel()
                  .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );
@@ -129,7 +129,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final IView add( @Nonnull final ILiteral... p_literal )
+    public IView add( @Nonnull final ILiteral... p_literal )
     {
         return this.add( Arrays.stream( p_literal ) );
     }
@@ -137,7 +137,7 @@ public final class CView implements IView
     @Nonnull
     @Override
     @SuppressWarnings( "varargs" )
-    public final IView add( @Nonnull final IView... p_view )
+    public IView add( @Nonnull final IView... p_view )
     {
         Arrays.stream( p_view )
               .parallel()
@@ -158,7 +158,7 @@ public final class CView implements IView
     @Nonnull
     @Override
     @SuppressWarnings( "varargs" )
-    public final IView remove( @Nonnull final IView... p_view )
+    public IView remove( @Nonnull final IView... p_view )
     {
         Arrays.stream( p_view ).forEach( m_beliefbase::remove );
         return this;
@@ -166,7 +166,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final IView remove( @Nonnull final Stream<ILiteral> p_literal )
+    public IView remove( @Nonnull final Stream<ILiteral> p_literal )
     {
         p_literal.parallel()
             .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().remove( i.shallowcopysuffix() ) );
@@ -175,16 +175,16 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final IView remove( @Nonnull final ILiteral... p_literal )
+    public IView remove( @Nonnull final ILiteral... p_literal )
     {
         return this.remove( Arrays.stream( p_literal ) );
     }
 
     @Nonnull
     @Override
-    public final IView clear( @Nullable final IPath... p_path )
+    public IView clear( @Nullable final IPath... p_path )
     {
-        if ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 ) )
+        if ( Objects.isNull( p_path )  || p_path.length == 0 )
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
@@ -194,7 +194,7 @@ public final class CView implements IView
     }
 
     @Override
-    public final boolean containsView( @Nonnull final IPath p_path )
+    public boolean containsView( @Nonnull final IPath p_path )
     {
         return !p_path.empty()
                && ( p_path.size() == 1
@@ -205,7 +205,7 @@ public final class CView implements IView
     }
 
     @Override
-    public final boolean containsLiteral( @Nonnull final IPath p_path )
+    public boolean containsLiteral( @Nonnull final IPath p_path )
     {
         return !p_path.empty()
                || ( p_path.size() == 1
@@ -224,7 +224,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
+    public Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
         // build path relative to this view
         final IPath l_path = this.path();
@@ -237,7 +237,7 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
+    public Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
     {
         // build path relative to this view
         final IPath l_path = this.path();
@@ -254,14 +254,14 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final Stream<IView> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
+    public Stream<IView> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
         return this.walkdown( p_path, p_generator );
     }
 
     @Nonnull
     @Override
-    public final IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
+    public IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
     {
         Arrays.stream( p_paths )
             .parallel()
@@ -329,26 +329,26 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final IBeliefbase beliefbase()
+    public IBeliefbase beliefbase()
     {
         return m_beliefbase;
     }
 
     @Override
-    public final boolean empty()
+    public boolean empty()
     {
         return m_beliefbase.empty();
     }
 
     @Override
-    public final int size()
+    public int size()
     {
         return m_beliefbase.size();
     }
 
     @Nonnull
     @Override
-    public final Stream<IView> root()
+    public Stream<IView> root()
     {
         return this.hasParent()
                ? Stream.concat( Stream.of( this ), Stream.of( this.parent() ).flatMap( IView::root ) )
@@ -357,45 +357,45 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    public final String name()
+    public String name()
     {
         return m_name;
     }
 
     @Nonnull
     @Override
-    public final IPath path()
+    public IPath path()
     {
         return this.root().map( IView::name ).collect( CPath.collect() ).reverse();
     }
 
     @Nullable
     @Override
-    public final IView parent()
+    public IView parent()
     {
         return m_parent;
     }
 
     @Override
-    public final boolean hasParent()
+    public boolean hasParent()
     {
         return m_parent != null;
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_name.hashCode() ^ m_beliefbase.hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IView ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IView && this.hashCode() == p_object.hashCode();
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0} ({1}): [{2}]", this.name(), super.toString(), m_beliefbase );
     }

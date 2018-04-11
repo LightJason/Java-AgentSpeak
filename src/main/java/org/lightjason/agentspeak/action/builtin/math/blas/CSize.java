@@ -41,7 +41,7 @@ import java.util.List;
  * returns the elements within the BLAS structure.
  * The action returns the size of each BLAS structure
  *
- * {@code [S1|S2|S3] = math/blas/size( M1, [M2, M3] );}
+ * {@code [S1|S2|S3] = .math/blas/size( M1, [M2, M3] );}
  */
 public final class CSize extends IBuiltinAction
 {
@@ -60,15 +60,15 @@ public final class CSize extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<AbstractMatrix>raw )

@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * value is returned, is the number greater than 1 a list
  * of values is returned
  *
- * {@code [V1|L1|V2|L2] = math/statistic/randomsimple( 1, 5, 1, 10 );}
+ * {@code [V1|L1|V2|L2] = .math/statistic/randomsimple( 1, 5, 1, 10 );}
  */
 public final class CRandomSimple extends IBuiltinAction
 {
@@ -66,8 +66,8 @@ public final class CRandomSimple extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         (
             p_argument.size() == 0
