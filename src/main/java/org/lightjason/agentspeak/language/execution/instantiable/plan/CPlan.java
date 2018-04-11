@@ -127,7 +127,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> condition( final IContext p_context )
+    public IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context )
     {
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.of(

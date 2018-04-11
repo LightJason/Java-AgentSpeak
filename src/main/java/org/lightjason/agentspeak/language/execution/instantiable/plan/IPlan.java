@@ -61,7 +61,7 @@ public interface IPlan extends IInstantiable
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> condition( final IContext p_context )
+        public IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context )
         {
             return CFuzzyValue.of( true );
         }
@@ -125,6 +125,6 @@ public interface IPlan extends IInstantiable
      * @return execution result
      */
     @Nonnull
-    IFuzzyValue<Boolean> condition( final IContext p_context );
+    IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context );
 
 }
