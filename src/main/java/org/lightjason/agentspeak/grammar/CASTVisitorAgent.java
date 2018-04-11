@@ -257,7 +257,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return CAgentSpeak.executebelief(
             this,
             p_context.literal(),
-            p_context.BELIEFTRIGGER()
+            p_context.ARITHMETICOPERATOR3()
         );
     }
 

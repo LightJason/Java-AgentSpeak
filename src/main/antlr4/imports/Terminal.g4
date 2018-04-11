@@ -144,6 +144,7 @@ ARITHMETICOPERATOR2 :
 
 /**
  * arithmetic operator with precendece 3
+ * @warning is also used for the belieftrigger
  */
 ARITHMETICOPERATOR3 :
     PLUS
@@ -242,13 +243,6 @@ PLANTRIGGER :
     (PLUS | MINUS) EXCLAMATIONMARK?
     ;
 
-/**
- * belief trigger
- */
-BELIEFTRIGGER :
-    PLUS
-    | MINUS
-    ;
 
 
 
