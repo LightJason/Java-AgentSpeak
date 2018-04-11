@@ -153,10 +153,7 @@ test_action :
  */
 achievement_goal_action :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK )
-    (
-        literal
-        | variable ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
-    )
+    ( literal | ( variable termlist? ) )
     ;
 
 // ---------------------------------------------------------------------------------------

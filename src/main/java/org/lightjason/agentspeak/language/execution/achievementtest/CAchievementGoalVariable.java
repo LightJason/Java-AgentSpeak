@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.achievementtest;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -80,7 +81,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        final List<ITerm> l_return = CCommon.argumentlist();
         if ( !m_value.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 1 )
             return CFuzzyValue.of( false );
 

@@ -44,6 +44,11 @@ ackermann(N, M, R)
     :- TM = M - 1; $ackermann(N, TM, RI); TN = N - 1; $ackermann(TN, RI, R)
 .
 
+factorial(N,R)
+    :- N == 1; R = 1
+    :- N--; $factorial(N,O); R = R * O
+.
+
 myfunction(X) :- .generic/print("my logical rule", X).
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,8 +61,8 @@ myfunction(X) :- .generic/print("my logical rule", X).
 +!test <-
     !testdirectcall;
     !testruledirect;
-    !testrulevariable;
-    !testrulemultiplearguments
+    !testrulevariable
+    //!testrulemultiplearguments
 .
 
 
@@ -77,7 +82,6 @@ myfunction(X) :- .generic/print("my logical rule", X).
     $fibonacci(8, FIB);
     R = FIB == 21.0;
     .test/result( R, "rule direct call has been failed" );
-
     .generic/print("rule execution (fibonacci)", FIB )
 .
 
@@ -87,10 +91,9 @@ myfunction(X) :- .generic/print("my logical rule", X).
  */
 +!testrulevariable <-
     RULE = "fibonacci";
-    $RULE(8,FIB);
+    $.RULE(8,FIB);
     R = FIB == 21.0;
     .test/result( R, "rule variable call has been failed" );
-
     .generic/print("rule execution (fibonacci)", FIB )
 .
 
@@ -102,6 +105,5 @@ myfunction(X) :- .generic/print("my logical rule", X).
     $ackermann(3, 3, ACK);
     R = ACK == 61;
     .test/result( R, "rule multiple arguments has been failed" );
-
     .generic/print("rule execution (ackermann)", ACK)
 .
