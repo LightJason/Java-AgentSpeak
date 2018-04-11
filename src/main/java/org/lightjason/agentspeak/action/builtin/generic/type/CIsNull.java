@@ -42,7 +42,7 @@ import java.util.Objects;
  * values, the action fails if one of the
  * arguments is not null
  *
- * {@code generic/type(X,Y);}
+ * {@code .generic/type(X,Y);}
  */
 public final class CIsNull extends IBuiltinAction
 {
@@ -61,16 +61,15 @@ public final class CIsNull extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.of(
             CCommon.flatten( p_argument )

@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  * On number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  *
- * {@code [E1|E2] = bool/equal( "this is equal", "this is equal", [123, "test"] );}
+ * {@code [E1|E2] = .bool/equal( "this is equal", "this is equal", [123, "test"] );}
  */
 public class CEqual extends IBuiltinAction
 {
@@ -78,8 +78,8 @@ public class CEqual extends IBuiltinAction
                 p_argument.stream()
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
-                                     || ( CCommon.rawvalueAssignableTo( i, Collection.class )
-                                     && equalcollection(  p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() ) )
+                                     || CCommon.rawvalueAssignableTo( i, Collection.class )
+                                     && equalcollection(  p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() )
                           )
             );
 
@@ -89,8 +89,8 @@ public class CEqual extends IBuiltinAction
                 p_argument.stream()
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
-                                     || ( CCommon.rawvalueAssignableTo( i, Map.class )
-                                     && equalmap(  p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() ) )
+                                     || CCommon.rawvalueAssignableTo( i, Map.class )
+                                     && equalmap(  p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
                           )
             );
 
@@ -100,8 +100,8 @@ public class CEqual extends IBuiltinAction
                 p_argument.stream()
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
-                                     || ( CCommon.rawvalueAssignableTo( i, Multimap.class )
-                                     && equalmultimap(  p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() ) )
+                                     || CCommon.rawvalueAssignableTo( i, Multimap.class )
+                                     && equalmultimap(  p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
                           )
             );
 

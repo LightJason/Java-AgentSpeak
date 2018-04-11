@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * the a string (trigger definition) and the
  * plan literal, the action never fails
  *
- * {@code L = agent/planlist();}
+ * {@code L = .agent/planlist();}
  */
 public final class CPlanList extends IBuiltinAction
 {

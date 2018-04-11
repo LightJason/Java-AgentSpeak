@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the first vertex argument that the second vertex
  * argument is predecessor within the given graph instances, the action never fails
  *
- * {@code [B1|B2|B3] = graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
+ * {@code [B1|B2|B3] = .graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
 public final class CIsPredecessorSingle extends IApplySingle
 {
@@ -46,14 +46,14 @@ public final class CIsPredecessorSingle extends IApplySingle
     private static final long serialVersionUID = -5276055721435173037L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

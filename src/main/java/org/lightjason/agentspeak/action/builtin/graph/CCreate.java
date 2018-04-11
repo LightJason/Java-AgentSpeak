@@ -57,11 +57,11 @@ import java.util.stream.Collectors;
  * UNDIRECTEDSPARSEMULTI ) on a wrong name,
  * a sparse graph is created, the action never fails
  *
- * {@code [G1|G2] = graph/create( "sparse", "directedsparse" );}
+ * {@code [G1|G2] = .graph/create( "sparse", "directedsparse" );}
  *
  * @see https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
  */
-public class CCreate extends IBuiltinAction
+public final class CCreate extends IBuiltinAction
 {
     /**
      * serial id
@@ -70,16 +70,15 @@ public class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )

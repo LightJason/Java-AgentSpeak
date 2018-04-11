@@ -39,7 +39,7 @@ import java.util.List;
  * of vertices, for each tuple a list of all edges between the vertices is
  * returned, the action never fails
  *
- * {@code [L1|L2] = graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] );}
+ * {@code [L1|L2] = .graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] );}
  */
 public final class CEdgeListMultiple extends IApplyMultiple
 {
@@ -49,14 +49,14 @@ public final class CEdgeListMultiple extends IApplyMultiple
     private static final long serialVersionUID = -175626399205967595L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ) .raw() ) );
 

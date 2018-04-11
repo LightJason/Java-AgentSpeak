@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * a list with the symmetric difference \f$ (\mathbb{X} \setminus \mathbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) \f$,
  * the action fails never
  *
- * {@code D = collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
+ * {@code D = .collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
 public final class CSymmetricDifference extends IBuiltinAction

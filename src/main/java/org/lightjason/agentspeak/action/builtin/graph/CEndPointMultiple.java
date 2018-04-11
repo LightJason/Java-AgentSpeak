@@ -37,7 +37,7 @@ import java.util.List;
  * of a single graph instance,
  * the action never fails
  *
- * {@code [V1|V2|V3|V4] = graph/endpointmultiple( Graph, Edge1, Edge2 );}
+ * {@code [V1|V2|V3|V4] = .graph/endpointmultiple( Graph, Edge1, Edge2 );}
  */
 public final class CEndPointMultiple extends IApplyMultiple
 {
@@ -47,14 +47,14 @@ public final class CEndPointMultiple extends IApplyMultiple
     private static final long serialVersionUID = 8037926558399331691L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.getEndpoints( p_window.get( 0 ).raw() )
                .stream()

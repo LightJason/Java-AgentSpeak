@@ -38,7 +38,7 @@ import java.util.List;
  * The action returns for a single graph instance incident vertices of each
  * edge argument, the action never fails
  *
- * {@code [L1|L2] = graph/incidentvertices( Graph, Edge1, Edge2 );}
+ * {@code [L1|L2] = .graph/incidentvertices( Graph, Edge1, Edge2 );}
  */
 public final class CIncidentVerticesMultiple extends IApplyMultiple
 {
@@ -48,14 +48,14 @@ public final class CIncidentVerticesMultiple extends IApplyMultiple
     private static final long serialVersionUID = -5237880583521289516L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
 

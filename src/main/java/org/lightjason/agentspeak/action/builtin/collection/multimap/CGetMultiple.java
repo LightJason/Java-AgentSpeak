@@ -40,7 +40,7 @@ import java.util.List;
  * other arguments are key values, the action
  * returns the value of each key and never fails
  *
- * {@code [V1|V2] = collection/multimap/getmultiple( MultiMap, "key1", "key2" );}
+ * {@code [V1|V2] = .collection/multimap/getmultiple( MultiMap, "key1", "key2" );}
  */
 public final class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>>
 {

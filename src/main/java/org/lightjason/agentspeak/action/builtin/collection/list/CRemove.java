@@ -46,7 +46,7 @@ import java.util.stream.IntStream;
  * list object, all other element indices which should removed, the
  * action returns the removed arguments and never fails
  *
- * {@code [A|B|C] = collection/list/remove( L, 3, [4, [5]] );}
+ * {@code [A|B|C] = .collection/list/remove( L, 3, [4, [5]] );}
  */
 public final class CRemove extends IBuiltinAction
 {

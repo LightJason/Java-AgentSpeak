@@ -37,13 +37,13 @@ public final class CLambdaStreaming implements ILambdaStreaming<Set<?>>
 {
 
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof Set<?>;
     }
 
     @Override
-    public final Stream<?> apply( final Set<?> p_objects )
+    public Stream<?> apply( final Set<?> p_objects )
     {
         return p_objects.stream();
     }

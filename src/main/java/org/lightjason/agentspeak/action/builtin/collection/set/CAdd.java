@@ -41,7 +41,7 @@ import java.util.Set;
  * The action adds all arguments to the set (overwrites existing),
  * the action never fails
  *
- * {@code collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]);}
+ * {@code .collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]);}
  */
 public final class CAdd extends IBuiltinAction
 {
@@ -60,16 +60,15 @@ public final class CAdd extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 

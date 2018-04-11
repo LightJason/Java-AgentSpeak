@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * will be returned iif the first date-time item is after the second
  * date-time item
  *
- * {@code [M1|M2] = datetime/monthsbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
+ * {@code [M1|M2] = .datetime/monthsbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
  */
 public final class CMonthsBetween extends IBetween
 {
@@ -52,7 +52,7 @@ public final class CMonthsBetween extends IBetween
 
     @Nonnull
     @Override
-    protected final Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
+    protected Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
     {
         return p_datetime
             .map( i -> Months.monthsBetween( i.get( 0 ), i.get( 1 ) ) )

@@ -42,8 +42,8 @@ import java.util.List;
  * inverts all logical boolean arguments and returns
  * all elements, the action never fails
  *
- * {@code [R1|R2|R3|R4] = bool/not( Logical1, [Logical2, Logical3], Logical4 );}
- * {@see https://en.wikipedia.org/wiki/Negation}
+ * {@code [R1|R2|R3|R4] = .bool/not( Logical1, [Logical2, Logical3], Logical4 );}
+ * @see https://en.wikipedia.org/wiki/Negation
  */
 public final class CNot extends IBuiltinAction
 {
@@ -54,7 +54,7 @@ public final class CNot extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }

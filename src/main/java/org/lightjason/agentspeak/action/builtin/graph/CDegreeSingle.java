@@ -37,7 +37,7 @@ import java.util.List;
  * argument the degree on each graph argument,
  * the action never fails
  *
- * {@code [D1|D2] = graph/degree( Vertex, Graph1, Graph2 );}
+ * {@code [D1|D2] = .graph/degree( Vertex, Graph1, Graph2 );}
  */
 public final class CDegreeSingle extends IApplySingle
 {
@@ -47,14 +47,14 @@ public final class CDegreeSingle extends IApplySingle
     private static final long serialVersionUID = 8573746793581623682L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

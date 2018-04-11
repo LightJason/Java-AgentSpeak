@@ -43,7 +43,7 @@ import java.util.Set;
  * and returns boolean values of the object could be removed, the
  * action never fails
  *
- * {@code [V1|V2] = collection/set/remove( Set, [1, "foo"]);}
+ * {@code [V1|V2] = .collection/set/remove( Set, [1, "foo"]);}
  */
 public final class CRemove extends IBuiltinAction
 {
@@ -62,16 +62,15 @@ public final class CRemove extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 

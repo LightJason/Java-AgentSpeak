@@ -39,7 +39,7 @@ import java.util.List;
  * a single graph argument, the first argument is the graph,
  * all other vertices, the action never fails
  *
- * {@code [N1|N2] = graph/neighborsmultiple( Graph, Vertex1, Vertex2 );}
+ * {@code [N1|N2] = .graph/neighborsmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CNeighborsMultiple extends IApplyMultiple
 {
@@ -49,14 +49,14 @@ public final class CNeighborsMultiple extends IApplyMultiple
     private static final long serialVersionUID = -8428326199496471618L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getNeighbors( p_window.get( 0 ).raw() ) );
 

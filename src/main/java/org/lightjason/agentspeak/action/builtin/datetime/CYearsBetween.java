@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * negative value will be returned iif the first date-time
  * item is after the second date-time item
  *
- * {@code [Y1|Y2] = datetime/yearsbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
+ * {@code [Y1|Y2] = .datetime/yearsbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
  */
 public final class CYearsBetween extends IBetween
 {
@@ -52,7 +52,7 @@ public final class CYearsBetween extends IBetween
 
     @Nonnull
     @Override
-    protected final Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
+    protected Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
     {
         return p_datetime
             .map( i -> Years.yearsBetween( i.get( 0 ), i.get( 1 ) ) )

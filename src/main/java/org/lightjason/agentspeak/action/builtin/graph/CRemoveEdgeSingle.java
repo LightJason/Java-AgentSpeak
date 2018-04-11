@@ -35,7 +35,7 @@ import java.util.List;
  * The action removes an edge aas first argument of
  * all graph arguments, the action never fails
  *
- * {@code graph/removeedgesingle( Edge, Graph1, Graph2 );}
+ * {@code .graph/removeedgesingle( Edge, Graph1, Graph2 );}
  */
 public final class CRemoveEdgeSingle extends IApplySingle
 {
@@ -45,14 +45,14 @@ public final class CRemoveEdgeSingle extends IApplySingle
     private static final long serialVersionUID = 2587720096102368605L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.removeEdge( p_window.get( 0 ).raw() );
     }

@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * The action creates tuples of all unflatten input arguments
  * and fail sif the number if less than two unflatten arguments
  *
- * {@code [A|B] = collection/tuple/create("A", "1", ["B", "2"]);}
+ * {@code [A|B] = .collection/tuple/create("A", "1", ["B", "2"]);}
  */
 public final class CCreate extends IBuiltinAction
 {

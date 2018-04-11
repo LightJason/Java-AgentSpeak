@@ -36,7 +36,7 @@ import java.util.Map;
  * are key-value pairs, all pars are added to the map,
  * the action fails on wrong input number
  *
- * {@code collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
+ * {@code .collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
  */
 public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
 {

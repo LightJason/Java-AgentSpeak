@@ -43,7 +43,7 @@ import java.util.List;
  * all other arguments will be used for the literal
  * values
  *
- * {@code L = generic/type/createliteral( "literal/functor/with/path", 123, "value" );}
+ * {@code L = .generic/type/createliteral( "literal/functor/with/path", 123, "value" );}
  */
 public final class CCreateLiteral extends IBuiltinAction
 {
@@ -62,16 +62,15 @@ public final class CCreateLiteral extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CLiteral.of(

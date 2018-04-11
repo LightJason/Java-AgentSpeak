@@ -37,7 +37,7 @@ import java.util.List;
  * egde argument if both are incident on each graph instance, the
  * action never fails
  *
- * {@code [B1|B2] = graph/isincidentsingle( Vertex, Edge, Graph1, Graph2 );}
+ * {@code [B1|B2] = .graph/isincidentsingle( Vertex, Edge, Graph1, Graph2 );}
  */
 public final class CIsIncidentSingle extends IApplySingle
 {
@@ -47,14 +47,14 @@ public final class CIsIncidentSingle extends IApplySingle
     private static final long serialVersionUID = -7378806564319708278L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

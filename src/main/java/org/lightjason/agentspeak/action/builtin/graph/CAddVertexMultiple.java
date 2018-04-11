@@ -36,7 +36,7 @@ import java.util.List;
  * all other arguments are vertices, the action never
  * fails
  *
- * {@code graph/addvertexmultiple( Graph, Vertex1, Vertex2, [ Vertex3, Vertex4 ] );}
+ * {@code .graph/addvertexmultiple( Graph, Vertex1, Vertex2, [ Vertex3, Vertex4 ] );}
  */
 public final class CAddVertexMultiple extends IApplyMultiple
 {
@@ -46,14 +46,14 @@ public final class CAddVertexMultiple extends IApplyMultiple
     private static final long serialVersionUID = -5025878705856964222L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.addVertex( p_window.get( 0 ).raw() );
     }

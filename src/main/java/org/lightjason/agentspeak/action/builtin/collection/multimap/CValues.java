@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Returns a list with all values of the argument
  * multimaps and fails never
  *
- * {@code L = collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
+ * {@code L = .collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
  */
 public final class CValues extends IBuiltinAction
 {

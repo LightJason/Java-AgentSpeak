@@ -35,7 +35,7 @@ import java.util.List;
  * The action converts any argument into the string
  * represenation, the action never fails
  *
- * {@code [A|B] = generic/type/tostring( 1, "foo" );}
+ * {@code [A|B] = .generic/type/tostring( 1, "foo" );}
  */
 public final class CToString extends ICast
 {
@@ -51,7 +51,7 @@ public final class CToString extends ICast
      * @param p_return return arguments
      * @return successful boolean
      */
-    protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
+    protected boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of( p_value.raw().toString() ) );
         return true;

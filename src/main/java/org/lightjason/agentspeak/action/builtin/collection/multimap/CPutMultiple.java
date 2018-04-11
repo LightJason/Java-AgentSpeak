@@ -37,7 +37,7 @@ import java.util.Objects;
  * are key-value pairs, the action fails on wrong
  * input number
  *
- * {@code collection/multimap/putmultiple( MultiMap, Key1, Value1, [Key2, Value2] );}
+ * {@code .collection/multimap/putmultiple( MultiMap, Key1, Value1, [Key2, Value2] );}
  */
 public final class CPutMultiple extends IMapApplyMultiple<Multimap<Object, Object>>
 {

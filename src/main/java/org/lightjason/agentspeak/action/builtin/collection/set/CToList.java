@@ -43,7 +43,7 @@ import java.util.Set;
  * The action converts each set argument to a list,
  * the action never fails
  *
- * {@code [L1|L2] = collection/set/tolist( Set1, Set2 );}
+ * {@code [L1|L2] = .collection/set/tolist( Set1, Set2 );}
  */
 public final class CToList extends IBuiltinAction
 {
@@ -62,16 +62,15 @@ public final class CToList extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_argument.stream()
                   .map( ITerm::<Set<?>>raw )

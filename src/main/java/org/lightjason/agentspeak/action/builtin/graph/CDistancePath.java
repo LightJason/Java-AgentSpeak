@@ -44,11 +44,11 @@ import java.util.List;
  * have got on default zero weight
  *
  * {@code
-    [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
-    [D3|D4] = graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+    [D1|D2] = .graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
+    [D3|D4] = .graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
  * }
  */
-public class CDistancePath extends IApplyPathAlgorithm
+public final class CDistancePath extends IApplyPathAlgorithm
 {
     /**
      * serial id
@@ -56,8 +56,8 @@ public class CDistancePath extends IApplyPathAlgorithm
     private static final long serialVersionUID = 2146213818742863048L;
 
     @Override
-    protected final Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,
-                                  @Nonnull final Function<Object, Number> p_weightfunction )
+    protected Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,
+                            @Nonnull final Function<Object, Number> p_weightfunction )
     {
         return new DijkstraShortestPath<>( p_graph, p_weightfunction )
                                    .getDistance( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() )

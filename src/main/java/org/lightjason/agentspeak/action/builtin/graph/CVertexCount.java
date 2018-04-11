@@ -43,7 +43,7 @@ import java.util.List;
  * The action returns the number of vertices
  * within a graph and never fails
  *
- * {@code [V1|V2] = graph/vertexcount( Graph1, Graph2 );}
+ * {@code [V1|V2] = .graph/vertexcount( Graph1, Graph2 );}
  */
 public final class CVertexCount extends IBuiltinAction
 {
@@ -54,16 +54,15 @@ public final class CVertexCount extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Graph<?, ?>>raw )

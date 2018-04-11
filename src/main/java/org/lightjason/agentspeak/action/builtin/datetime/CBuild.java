@@ -46,7 +46,7 @@ import java.util.List;
  * the tuple is the time-zone, which can be set to empty
  * or "current", so the system-default zone is used
  *
- * {@code O1 = datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, "current" );}
+ * {@code O1 = .datetime/build( Year, Month, Day, Hour, Minutes, Second, NanoSeconds, "current" );}
  */
 public final class CBuild extends IBuiltinAction
 {
@@ -57,14 +57,14 @@ public final class CBuild extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(

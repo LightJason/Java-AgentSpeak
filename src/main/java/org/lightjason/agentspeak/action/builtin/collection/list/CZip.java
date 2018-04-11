@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * and result \f$ \langle x_i, y_i \rangle \f$, the action fails
  * on an odd number of arguments
  *
- * {@code T = collection/list/zip( [1,3,5,7], [2,4,6,8] );}
+ * {@code T = .collection/list/zip( [1,3,5,7], [2,4,6,8] );}
  */
 public final class CZip extends IBuiltinAction
 {

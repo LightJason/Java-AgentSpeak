@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * are tuples of ranges \f$ [ \text{lower-bound}, \text{upper-bound} ) \f$,
  * the action fails on an wrong number of arguments
  *
- * {@code [L1|L2] = collection/list/get( L, 2, 5, [4, 6] );}
+ * {@code [L1|L2] = .collection/list/get( L, 2, 5, [4, 6] );}
  */
 public final class CSubList extends IBuiltinAction
 {
@@ -79,7 +79,7 @@ public final class CSubList extends IBuiltinAction
         final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatten( p_argument.stream().skip( 1 ) ) )
                                               .collect( Collectors.toList() );
 
-        if ( ( l_arguments.size() % 2 == 0 ) || ( l_arguments.size() < 3 ) )
+        if ( l_arguments.size() % 2 == 0 || l_arguments.size() < 3 )
             return CFuzzyValue.of( false );
 
         StreamUtils.windowed(

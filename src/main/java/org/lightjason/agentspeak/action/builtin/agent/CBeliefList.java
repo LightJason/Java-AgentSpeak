@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * belief functor, if no arguments are give,
  * the full belieflist is returned
  *
- * {@code L = agent/belieflist( true, "path/subpath/literalfunctor" );}
+ * {@code L = .agent/belieflist( true, "path/subpath/literalfunctor" );}
  *
  */
 public final class CBeliefList extends IBuiltinAction

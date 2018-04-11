@@ -40,7 +40,7 @@ import java.util.List;
  * the last cycle and the current time
  * in nanoseconds and fails never
  *
- * {@code T = agent/cycletime();}
+ * {@code T = .agent/cycletime();}
  */
 public final class CCycleTime extends IBuiltinAction
 {

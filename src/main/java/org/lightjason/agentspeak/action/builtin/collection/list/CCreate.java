@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
  * is the argument empty an empty-list object will be returned, the action fails never
  *
  * {@code
-    L1 = collection/list/create("a", 1, ["b", 2]);
-    L2 = collection/list/create();
+    L1 = .collection/list/create("a", 1, ["b", 2]);
+    L2 = .collection/list/create();
  * }
  */
 public final class CCreate extends IBuiltinAction

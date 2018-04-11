@@ -37,7 +37,7 @@ import java.util.Map;
  * and returns the value, the action fails on
  * parsing errors
  *
- * {@code [X|Y|Z] = generic/type/parsenumber( "1.45", ["8.88", "9"] );}
+ * {@code [X|Y|Z] = .generic/type/parsenumber( "1.45", ["8.88", "9"] );}
  */
 public final class CParseNumber extends IParse
 {
@@ -53,7 +53,7 @@ public final class CParseNumber extends IParse
      * @return tuple with boolean (for parsing error) and term
      */
     @Nonnull
-    protected final Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
+    protected Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
     {
         try
         {

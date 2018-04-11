@@ -39,7 +39,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * {@code ZoneID = datetime/zoneid( "now" );}
+ * {@code ZoneID = .datetime/zoneid( "now" );}
  */
 public final class CZoneid extends IDateTime
 {
@@ -49,7 +49,7 @@ public final class CZoneid extends IDateTime
     private static final long serialVersionUID = 8130639081454617186L;
 
     @Override
-    protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
+    protected boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of( p_datetime.getZone().getId() ) );
         return true;

@@ -37,7 +37,7 @@ import java.util.List;
  * each graph argument, the first argument is the vertex, all
  * other graphs, the action never fails
  *
- * {@code [C1|C2] = graph/neighborscountsingle( Vertex, Graph1, Graph2 );}
+ * {@code [C1|C2] = .graph/neighborscountsingle( Vertex, Graph1, Graph2 );}
  */
 public final class CNeighborsCountSingle extends IApplySingle
 {
@@ -47,14 +47,14 @@ public final class CNeighborsCountSingle extends IApplySingle
     private static final long serialVersionUID = 6624208105722736095L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

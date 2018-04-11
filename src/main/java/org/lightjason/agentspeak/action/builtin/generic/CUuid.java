@@ -40,7 +40,7 @@ import java.util.UUID;
  * create an uuid.
  * The action creates a random uuid value and never fails
  *
- * {@code U1 = generic/uuid(); }
+ * {@code U1 = .generic/uuid(); }
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  */
 public final class CUuid extends IBuiltinAction

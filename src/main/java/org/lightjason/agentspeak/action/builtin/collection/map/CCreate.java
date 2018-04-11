@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * optional arguments must be even and it will create a key-value structure, the
  * action fails on an odd number of arguments except zero only
  *
- * {@code M = collection/map/create();}
+ * {@code M = .collection/map/create();}
  */
 public final class CCreate extends IBuiltinAction
 {
@@ -69,7 +69,7 @@ public final class CCreate extends IBuiltinAction
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
+        if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )
             return CFuzzyValue.of( false );
 
         final Map<Object, Object> l_map = p_parallel ? new ConcurrentHashMap<>() : new HashMap<>();

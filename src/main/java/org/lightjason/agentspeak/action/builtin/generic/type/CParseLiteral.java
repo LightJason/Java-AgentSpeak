@@ -38,7 +38,7 @@ import java.util.Map;
  * and returns the value, the action fails on
  * parsing errors
  *
- * {@code [X|Y|Z] = generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] );}
+ * {@code [X|Y|Z] = .generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] );}
  */
 public final class CParseLiteral extends IParse
 {
@@ -54,7 +54,7 @@ public final class CParseLiteral extends IParse
      * @return tuple with boolean (for parsing error) and term
      */
     @Nonnull
-    protected final Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
+    protected Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
     {
         try
         {

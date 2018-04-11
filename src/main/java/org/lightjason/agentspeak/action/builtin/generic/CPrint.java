@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
  * Prints a set of messages to the commandline / output-stream, the command
  * can be used with a variable set of arguments and fails never
  *
- * {@code generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y);}
+ * {@code .generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y);}
  */
 public final class CPrint extends IBuiltinAction
 {
@@ -226,7 +226,7 @@ public final class CPrint extends IBuiltinAction
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( p_object instanceof IFormatter<?> ) && ( this.hashCode() == p_object.hashCode() );
+            return p_object instanceof IFormatter<?> && this.hashCode() == p_object.hashCode();
         }
 
         /**

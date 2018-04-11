@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  *
- * {@code AnyEqual = bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] );}
+ * {@code AnyEqual = .bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] );}
  */
 public final class CAnyMatch extends IBuiltinAction
 {

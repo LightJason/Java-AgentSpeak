@@ -45,7 +45,7 @@ import java.util.Map;
  * the size of each collection, the action never fails.
  * On non-collection type the action returns a zero value
  *
- * {@code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel );}
+ * {@code [A|B|C|D] = .collection/size( Collection, Map, MultiMap, Tupel );}
  */
 public final class CSize extends IBuiltinAction
 {

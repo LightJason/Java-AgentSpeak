@@ -39,7 +39,7 @@ import java.util.List;
  * a single graph instance, the first argument is the graph instance, all
  * other arguments are vertices, the action never fails
  *
- * {@code [OE1|OE2] = graph/inedgesmultiple( Graph, Vertex1, Vertex2 );}
+ * {@code [OE1|OE2] = .graph/inedgesmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CInEdgesMultiple extends IApplyMultiple
 {
@@ -49,14 +49,14 @@ public final class CInEdgesMultiple extends IApplyMultiple
     private static final long serialVersionUID = -7662728152009053757L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getInEdges( p_window.get( 0 ).raw() ) );
 

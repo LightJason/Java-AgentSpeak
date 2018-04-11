@@ -41,7 +41,7 @@ import java.util.List;
  * are graphs and return values are lists,
  * the action never fails
  *
- * {@code [L1|L2] = graph/edgelist( Vertex1, Vertex2, Graph1, Graph2 );}
+ * {@code [L1|L2] = .graph/edgelist( Vertex1, Vertex2, Graph1, Graph2 );}
  */
 public final class CEdgeListSingle extends IApplySingle
 {
@@ -51,14 +51,14 @@ public final class CEdgeListSingle extends IApplySingle
     private static final long serialVersionUID = 6501468310507608790L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() ) );
 

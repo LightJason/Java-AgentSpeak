@@ -38,7 +38,7 @@ import java.util.Map;
  * arguments are map references, the key will be
  * returned of each map, the action fails never,
  *
- * {@code [A|B|C] = collection/map/getsingle( "key", Map1, Map2, Map3 );}
+ * {@code [A|B|C] = .collection/map/getsingle( "key", Map1, Map2, Map3 );}
  */
 public final class CGetSingle extends IMapGetSingle<Map<Object, Object>>
 {

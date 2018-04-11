@@ -51,7 +51,7 @@ import java.util.Locale;
  * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512),
  * for all other unflatten arguments a hash value is calculated and the action returns the hash values back and never fails
  *
- * {@code [Hash1 | Hash2 | Hash3] = crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 );}
+ * {@code [Hash1 | Hash2 | Hash3] = .crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 );}
  * @see https://en.wikipedia.org/wiki/Secure_Hash_Algorithm
  * @see https://en.wikipedia.org/wiki/MD2_(cryptography)
  * @see https://en.wikipedia.org/wiki/MD5

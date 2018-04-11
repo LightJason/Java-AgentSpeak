@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for a vertex as first argument the
  * out-degree on each graph instance, the action never fails
  *
- * {@code [D1|D2] = graph/outdegreesingle( Vertex, Graph1, Graph2 );}
+ * {@code [D1|D2] = .graph/outdegreesingle( Vertex, Graph1, Graph2 );}
  */
 public final class COutDegreeSingle extends IApplySingle
 {
@@ -46,14 +46,14 @@ public final class COutDegreeSingle extends IApplySingle
     private static final long serialVersionUID = -7273451458993989015L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

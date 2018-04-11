@@ -44,7 +44,7 @@ import java.util.List;
  * The action returns a list of all vertices
  * for each graph argument, the action never fails
  *
- * {@code [V1|V2] = graph/vertices( Graph1, Graph2 );}
+ * {@code [V1|V2] = .graph/vertices( Graph1, Graph2 );}
  */
 public final class CVertices extends IBuiltinAction
 {
@@ -55,16 +55,15 @@ public final class CVertices extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Graph<?, ?>>raw )

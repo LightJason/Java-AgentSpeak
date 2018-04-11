@@ -43,7 +43,7 @@ import java.util.Map;
  * The action removes all elements of each collection arguments,
  * the action fails on a non-collection argument
  *
- * {@code collection/clear( Map, MultiMap, Set, List );}
+ * {@code .collection/clear( Map, MultiMap, Set, List );}
  */
 public final class CClear extends IBuiltinAction
 {

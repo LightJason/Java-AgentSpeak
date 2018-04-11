@@ -43,8 +43,8 @@ import java.util.List;
  * action never fails
  *
  * {@code
-    X = collection/multimap/asmap( MultiMap );
-    [A|B] = collection/multimap/asmap( MultiMap1, MultiMap2 );
+    X = .collection/multimap/asmap( MultiMap );
+    [A|B] = .collection/multimap/asmap( MultiMap1, MultiMap2 );
  * }
  */
 public final class CAsMap extends IBuiltinAction

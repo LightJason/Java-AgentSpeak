@@ -132,14 +132,14 @@ public final class CMethodAction extends IBaseAction
 
     @Nonnull
     @Override
-    public final IPath name()
+    public IPath name()
     {
         return m_name;
     }
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return m_arguments;
     }
@@ -187,7 +187,7 @@ public final class CMethodAction extends IBaseAction
     private static IFuzzyValue<Boolean> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
     {
         // void result of the execution
-        if ( ( Objects.isNull( p_result ) ) || ( void.class.equals( p_result.getClass() ) ) )
+        if ( Objects.isNull( p_result ) || void.class.equals( p_result.getClass() ) )
             return CFuzzyValue.of( true );
 
         // otherwise object is returned

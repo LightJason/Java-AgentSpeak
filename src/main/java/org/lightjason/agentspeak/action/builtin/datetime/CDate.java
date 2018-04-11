@@ -39,7 +39,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * {@code [Year|Month|Day|DayOfWeek|DayOfYear] = datetime/date( "now" );}
+ * {@code [Year|Month|Day|DayOfWeek|DayOfYear] = .datetime/date( "now" );}
  */
 public final class CDate extends IDateTime
 {
@@ -49,7 +49,7 @@ public final class CDate extends IDateTime
     private static final long serialVersionUID = 4490065527882057197L;
 
     @Override
-    protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
+    protected boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of( p_datetime.getYear() ) );
         p_return.add( CRawTerm.of( p_datetime.getMonthValue() ) );

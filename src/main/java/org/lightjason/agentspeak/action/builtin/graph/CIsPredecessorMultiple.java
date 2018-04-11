@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the first graph argument if the first part of all vertex tuples
  * a predecessor of the second part, the action never fails
  *
- * {@code [B1|B2|B3] = graph/ispredecessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
+ * {@code [B1|B2|B3] = .graph/ispredecessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */
 public final class CIsPredecessorMultiple extends IApplyMultiple
 {
@@ -46,14 +46,14 @@ public final class CIsPredecessorMultiple extends IApplyMultiple
     private static final long serialVersionUID = -4684357908598619316L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

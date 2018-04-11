@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * if one of the arguments are not an instance of this
  * class or the class does not exist
  *
- * {@code generic/type( "java.lang.String", X, Y, Z );}
+ * {@code .generic/type( "java.lang.String", X, Y, Z );}
  */
 public final class CIs extends IBuiltinAction
 {
@@ -63,16 +63,15 @@ public final class CIs extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final Class<?> l_class;

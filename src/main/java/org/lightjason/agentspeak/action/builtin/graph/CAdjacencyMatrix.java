@@ -68,10 +68,10 @@ import java.util.stream.Stream;
  * non-existing edges have got on default zero costs with 1
  *
  * {@code
-    [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
-    [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
-    [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, 1, Graph2 );
-    [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2 );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, 1, Graph2 );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
  * }
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
@@ -84,16 +84,15 @@ public final class CAdjacencyMatrix extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // --- filter parameters ---
         final EType l_type = CCommon.flatten( p_argument )

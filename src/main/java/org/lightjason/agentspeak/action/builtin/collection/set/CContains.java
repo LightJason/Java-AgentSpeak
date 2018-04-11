@@ -44,7 +44,7 @@ import java.util.Set;
  * that all other arguments are contained, the action never
  * fails
  *
- * {@code [E1|E2|E3] = collection/set/contains( Set, "1", [1, 2] );}
+ * {@code [E1|E2|E3] = .collection/set/contains( Set, "1", [1, 2] );}
  */
 public final class CContains extends IBuiltinAction
 {
@@ -63,16 +63,15 @@ public final class CContains extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * Creates the union of all arguemnts with removing nested
  * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$, the action fails never
  *
- * {@code U = collection/list/union( L, [1,2], [3,4,[5,6]];}
+ * {@code U = .collection/list/union( L, [1,2], [3,4,[5,6]];}
  */
 public final class CUnion extends IBuiltinAction
 {

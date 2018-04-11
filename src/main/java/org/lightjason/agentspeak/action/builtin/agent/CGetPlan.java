@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
  * for each tuple the plan object will returned within a list, the
  * action fails on non-existing plan
  *
- * {@code [L1|L2] = agent/getplan( "+!", "myplan(X)", "-!", Literal );}
+ * {@code [L1|L2] = .agent/getplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CGetPlan extends IBuiltinAction

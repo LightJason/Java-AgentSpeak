@@ -51,8 +51,8 @@ import java.util.Map;
  * (the default value is zero), the action never fails
  *
  * {@code
-    [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
-    [SP3|SP4] = graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
+    [SP1|SP2] = .graph/spanningtree( Graph1, Graph2 );
+    [SP3|SP4] = .graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
  * }
  */
 public final class CSpanningTree extends IBuiltinAction
@@ -64,15 +64,15 @@ public final class CSpanningTree extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final double l_defaultcost = CCommon.flatten( p_argument )
                                             .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )

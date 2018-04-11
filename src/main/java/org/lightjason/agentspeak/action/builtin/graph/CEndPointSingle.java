@@ -38,7 +38,7 @@ import java.util.List;
  * the connected vertices of each graph instance,
  * the action never fails
  *
- * {@code [V1|V2|V3|V4] = graph/endpointsingle( Edge, Graph1, Graph2 );}
+ * {@code [V1|V2|V3|V4] = .graph/endpointsingle( Edge, Graph1, Graph2 );}
  */
 public final class CEndPointSingle extends IApplySingle
 {
@@ -48,14 +48,14 @@ public final class CEndPointSingle extends IApplySingle
     private static final long serialVersionUID = -8744180441364559959L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.getEndpoints( p_window.get( 0 ).raw() )
                .stream()

@@ -41,7 +41,7 @@ import java.util.List;
  * the first argument is a boolean value on true the exception is thrown, second argument
  * can be a string with a message. The exception must be catched outside the agent call method
  *
- * {@code generic/throw( true, "a message" );}
+ * {@code .generic/throw( true, "a message" );}
  */
 public final class CThrow extends IBuiltinAction
 {

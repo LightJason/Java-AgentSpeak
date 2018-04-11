@@ -37,7 +37,7 @@ import java.util.Objects;
  * other values are multimap references, the key-value pair
  * is added to all multimaps and the action never fails
  *
- * {@code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
+ * {@code .collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
  */
 public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {

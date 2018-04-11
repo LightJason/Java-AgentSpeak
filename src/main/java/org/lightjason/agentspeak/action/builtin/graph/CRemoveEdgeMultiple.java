@@ -37,7 +37,7 @@ import java.util.List;
  * graph all other arguments are edges, the
  * action never fails
  *
- * {@code graph/removeedgemultiple( Graph, Edge1, Edge2 );}
+ * {@code .graph/removeedgemultiple( Graph, Edge1, Edge2 );}
  */
 public final class CRemoveEdgeMultiple extends IApplyMultiple
 {
@@ -47,14 +47,14 @@ public final class CRemoveEdgeMultiple extends IApplyMultiple
     private static final long serialVersionUID = 5448974084390539735L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.removeEdge( p_window.get( 0 ).raw() );
     }

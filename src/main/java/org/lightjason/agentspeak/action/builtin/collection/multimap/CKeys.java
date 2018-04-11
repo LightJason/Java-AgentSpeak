@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * Returns a unique list with all key values of the argument
  * maps and fails never, all arguments must be multimaps
  *
- * {@code L = collection/multimap/keys( MultiMap1, MultiMap2, MultiMap3 );}
+ * {@code L = .collection/multimap/keys( MultiMap1, MultiMap2, MultiMap3 );}
  */
 public final class CKeys extends IBuiltinAction
 {
