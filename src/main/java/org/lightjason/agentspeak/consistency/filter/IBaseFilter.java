@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * default metric with an optional set of path values
  */
-abstract class IBaseFilter implements IFilter
+public abstract class IBaseFilter implements IFilter
 {
     /**
      * set with paths

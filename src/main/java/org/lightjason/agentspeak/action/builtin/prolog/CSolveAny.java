@@ -42,7 +42,7 @@ import java.util.Arrays;
     [C|D] = prolog/solveany( "foo(X)", "bar(Y)" );
  * }
  */
-public class CSolveAny extends IBaseSolve
+public final class CSolveAny extends IBaseSolve
 {
     /**
      * serial id

@@ -61,7 +61,7 @@ public final class CQueryLiteral extends IBaseGraphQL
     }
 
     @Override
-    protected final String argumentquery( @Nonnull final ITerm p_argument )
+    protected String argumentquery( @Nonnull final ITerm p_argument )
     {
         return MessageFormat.format( "'{'{0}'}'", root( p_argument.raw() ) );
     }

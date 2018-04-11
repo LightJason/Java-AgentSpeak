@@ -61,7 +61,7 @@ public final class CNCD implements IMetric
     }
 
     @Override
-    public final Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
+    public Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
         return CCommon.ncd(
             m_compression,

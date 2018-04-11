@@ -45,7 +45,7 @@ import java.util.Map;
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/XML
  */
-public class CXMLObject extends IBaseRest
+public final class CXMLObject extends IBaseRest
 {
     /**
      * serial id
@@ -62,9 +62,8 @@ public class CXMLObject extends IBaseRest
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         try
         {

@@ -78,7 +78,7 @@ public enum EAlgorithm
      * @throws NoSuchAlgorithmException on algorithm error
      */
     @Nonnull
-    public final Pair<Key, Key> generateKey() throws NoSuchAlgorithmException
+    public Pair<Key, Key> generateKey() throws NoSuchAlgorithmException
     {
         switch ( this )
         {
@@ -106,7 +106,7 @@ public enum EAlgorithm
      * @throws InvalidKeyException on key invalid
      */
     @Nonnull
-    public final Cipher getEncryptCipher( @Nonnull final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+    public Cipher getEncryptCipher( @Nonnull final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
     {
         final Cipher l_cipher = Cipher.getInstance( m_cipher );
         l_cipher.init( Cipher.ENCRYPT_MODE, p_key );
@@ -124,7 +124,7 @@ public enum EAlgorithm
      * @throws InvalidKeyException on key invalid
      */
     @Nonnull
-    public final Cipher getDecryptCipher( @Nonnull final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+    public Cipher getDecryptCipher( @Nonnull final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
     {
         final Cipher l_cipher = Cipher.getInstance( m_cipher );
         l_cipher.init( Cipher.DECRYPT_MODE, p_key );

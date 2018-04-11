@@ -48,8 +48,8 @@ public final class CGetSingle extends IMapGetSingle<Map<Object, Object>>
     private static final long serialVersionUID = 5486345873377172889L;
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
-                                @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

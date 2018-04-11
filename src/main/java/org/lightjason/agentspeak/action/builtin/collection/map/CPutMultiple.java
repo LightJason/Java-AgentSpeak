@@ -46,7 +46,7 @@ public final class CPutMultiple extends IMapApplyMultiple<Map<Object, Object>>
     private static final long serialVersionUID = -743395540550077344L;
 
     @Override
-    protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.put( p_key, p_value );
     }

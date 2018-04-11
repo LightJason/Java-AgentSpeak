@@ -42,7 +42,7 @@ import java.util.List;
  *
  * {@code [V1|V2] = collection/multimap/getmultiple( MultiMap, "key1", "key2" );}
  */
-public class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>>
+public final class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>>
 {
     /**
      * serial id
@@ -50,8 +50,8 @@ public class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>>
     private static final long serialVersionUID = -2745391712791242535L;
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
-                                @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(

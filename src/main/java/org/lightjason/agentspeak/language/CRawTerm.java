@@ -163,7 +163,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     public IRawTerm<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "notallocated" ) );
+            throw new CIllegalStateException( CCommon.languagestring( this, "notallocated" ) );
 
         return this;
     }

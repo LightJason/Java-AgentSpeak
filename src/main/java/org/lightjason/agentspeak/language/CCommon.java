@@ -547,8 +547,8 @@ public final class CCommon
         final DataOutputStream l_counting = new DataOutputStream( new NullOutputStream() );
 
         try (
-            final InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
-            final OutputStream l_compress = p_compression.get( l_counting )
+            InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
+            OutputStream l_compress = p_compression.get( l_counting )
         )
         {
             IOUtils.copy( l_input, l_compress );

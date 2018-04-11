@@ -37,13 +37,13 @@ public final class CLambdaStreaming implements ILambdaStreaming<Multimap<?, ?>>
 {
 
     @Override
-    public final Stream<?> apply( @Nonnull final Multimap<?, ?> p_multimap )
+    public Stream<?> apply( @Nonnull final Multimap<?, ?> p_multimap )
     {
         return p_multimap.asMap().entrySet().stream();
     }
 
     @Override
-    public final boolean instaceof( @Nonnull final Object p_object )
+    public boolean instaceof( @Nonnull final Object p_object )
     {
         return p_object instanceof Multimap<?, ?>;
     }

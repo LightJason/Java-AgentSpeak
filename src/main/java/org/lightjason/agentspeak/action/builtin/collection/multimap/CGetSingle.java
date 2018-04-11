@@ -50,8 +50,8 @@ public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
     private static final long serialVersionUID = 2277559384526092314L;
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
-                                @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(
