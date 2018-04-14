@@ -143,6 +143,167 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    // --- non used rules --------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Object visitBelief( final ManualParser.BeliefContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitPlan( final ManualParser.PlanContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitPlandefinition( final ManualParser.PlandefinitionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLogicrule( final ManualParser.LogicruleContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitBody( final ManualParser.BodyContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitBlock_formula( final ManualParser.Block_formulaContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitExpression( final ManualParser.ExpressionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitRepair_formula( final ManualParser.Repair_formulaContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitBody_formula( final ManualParser.Body_formulaContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitBelief_action( final ManualParser.Belief_actionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTest_action( final ManualParser.Test_actionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitAchievement_goal_action( final ManualParser.Achievement_goal_actionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitDeconstruct_expression( final ManualParser.Deconstruct_expressionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitAssignment_expression( final ManualParser.Assignment_expressionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitAssignment_expression_singlevariable( final ManualParser.Assignment_expression_singlevariableContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitAssignment_expression_multivariable( final ManualParser.Assignment_expression_multivariableContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitUnary_expression( final ManualParser.Unary_expressionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation( final ManualParser.Ternary_operationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation_true( final ManualParser.Ternary_operation_trueContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation_false( final ManualParser.Ternary_operation_falseContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitUnification( final ManualParser.UnificationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitUnification_constraint( final ManualParser.Unification_constraintContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLambda( final ManualParser.LambdaContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLambda_initialization( final ManualParser.Lambda_initializationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLambda_element( final ManualParser.Lambda_elementContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLambda_return( final ManualParser.Lambda_returnContext p_context )
+    {
+        return null;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Nonnull

@@ -309,6 +309,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CAgentSpeak.expression(
             this,
             p_context.term(),
+            p_context.unification(),
             p_context.STRONGNEGATION(),
             p_context.single,
             p_context.binaryoperator,

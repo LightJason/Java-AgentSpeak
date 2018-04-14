@@ -615,6 +615,7 @@ public final class CAgentSpeak
      * build an expression
      *
      * @param p_visitor visitor
+     * @param p_unification unification term
      * @param p_term single term
      * @param p_unaryoperator unary operator
      * @param p_expression expression
@@ -626,27 +627,13 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution expression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext p_term,
-                                         @Nullable final TerminalNode p_unaryoperator, @Nullable final RuleContext p_expression,
-                                         @Nullable final Token p_binaryoperator, @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
+                                         @Nullable final RuleContext p_unification, @Nullable final TerminalNode p_unaryoperator,
+                                         @Nullable final RuleContext p_expression, @Nullable final Token p_binaryoperator,
+                                         @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
     {
-        if ( Objects.nonNull( p_term ) )
-        {
-            final Object l_term = p_visitor.visit( p_term );
-
-            if ( l_term instanceof IExecution )
-                return (IExecution) l_term;
-
-            if ( l_term instanceof IRawTerm<?> )
-                return new CPassRaw<>( ( (IRawTerm<?>) l_term ).raw() );
-
-            if ( l_term instanceof IVariable<?> )
-                return new CPassVariable( (IVariable<?>) l_term );
-
-            if ( Objects.nonNull( l_term ) )
-                return new CPassRaw<>( l_term );
-
-            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpressionterm", l_term ) );
-        }
+        final IExecution l_term = termexecution( p_visitor, p_unification, p_term );
+        if ( Objects.nonNull( l_term ) )
+            return l_term;
 
         if ( Objects.nonNull( p_unaryoperator ) && Objects.nonNull( p_expression ) )
             return new CUnaryExpression( EUnaryOperator.of( p_unaryoperator.getText() ), (IExecution) p_visitor.visit( p_expression ) );
@@ -664,6 +651,37 @@ public final class CAgentSpeak
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
     }
 
+    /**
+     * build an execution term
+     *
+     * @param p_visitor visitor
+     * @param p_term term values
+     * @return execution or null
+     */
+    @Nullable
+    private static IExecution termexecution( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext... p_term )
+    {
+        final Object l_term = Arrays.stream( p_term )
+                                    .filter( Objects::nonNull )
+                                    .map( p_visitor::visit )
+                                    .filter( Objects::nonNull )
+                                    .findFirst()
+                                    .orElse( null );
+
+        if ( l_term instanceof IExecution )
+            return (IExecution) l_term;
+
+        if ( l_term instanceof IRawTerm<?> )
+            return new CPassRaw<>( ( (IRawTerm<?>) l_term ).raw() );
+
+        if ( l_term instanceof IVariable<?> )
+            return new CPassVariable( (IVariable<?>) l_term );
+
+        if ( Objects.nonNull( l_term ) )
+            return new CPassRaw<>( l_term );
+
+        return null;
+    }
 
 
     // --- assignment ------------------------------------------------------------------------------------------------------------------------------------------

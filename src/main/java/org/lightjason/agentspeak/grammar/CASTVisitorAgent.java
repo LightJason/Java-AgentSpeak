@@ -325,6 +325,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return CAgentSpeak.expression(
             this,
             p_context.term(),
+            p_context.unification(),
             p_context.STRONGNEGATION(),
             p_context.single,
             p_context.binaryoperator,

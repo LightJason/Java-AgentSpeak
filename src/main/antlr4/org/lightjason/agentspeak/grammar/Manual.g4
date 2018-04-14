@@ -22,7 +22,7 @@
  */
 
  grammar Manual;
- import Logic;
+ import AgentSpeak;
 
 
 /**

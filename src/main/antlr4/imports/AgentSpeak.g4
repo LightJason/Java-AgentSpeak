@@ -26,7 +26,7 @@
  * the rules are restricted to the AgentSpeak elements e.g. beliefs, plan, ...
  */
 grammar AgentSpeak;
-import Logic;
+import Terminal;
 
 
 // --- agent-behaviour structure ---------------------------------------------------------
@@ -98,6 +98,7 @@ expression :
     | lhs=expression binaryoperator=LOGICALOPERATOR1 rhs=expression
     | lhs=expression binaryoperator=LOGICALOPERATOR2 rhs=expression
     | lhs=expression binaryoperator=LOGICALOPERATOR3 rhs=expression
+    | unification
     | term
     ;
 
@@ -300,6 +301,103 @@ lambda_element :
  */
 lambda_return :
     VLINE variable
+    ;
+
+// ---------------------------------------------------------------------------------------
+
+
+
+// --- logic base elements ---------------------------------------------------------------
+
+/**
+ * terms are non-predictable structures
+ */
+term :
+    termvalue
+    | termvaluelist
+    | variable
+    | literal
+
+    | execute_action
+    | execute_rule
+    | execute_variable
+    ;
+
+/**
+ * value
+ */
+termvalue :
+    LOGICALVALUE
+    | NUMBER
+    | STRING
+    ;
+
+/**
+ * value list
+ */
+termvaluelist :
+    LEFTANGULARBRACKET
+    termvalue ( COMMA termvalue )*
+    RIGHTANGULARBRACKET
+    ;
+
+/**
+ * rule for an action
+ */
+execute_action :
+    DOT
+    literal;
+
+/**
+ * rule for execute a logical-rule
+ */
+execute_rule :
+    DOLLAR ( literal | execute_variable )
+    ;
+
+/**
+ * variable-evaluation will be used for an executable call
+ * like X(1,2,Y), it is possible for passing variables and parameters
+ */
+execute_variable :
+    DOT
+    variable
+    termlist
+    ;
+
+/**
+ * clause represent a literal structure existing
+ * atom, optional argument
+ */
+literal :
+    ( AT | STRONGNEGATION )?
+    ATOM
+    termlist?
+    ;
+
+/**
+ * generic list equal to collcations with empty clause
+ */
+termlist :
+    LEFTROUNDBRACKET term ( COMMA term )* RIGHTROUNDBRACKET
+    ;
+
+/**
+ * list with head-tail-notation definition
+ */
+variablelist :
+    LEFTANGULARBRACKET
+    variable ( VLINE variable )*
+    RIGHTANGULARBRACKET
+    ;
+
+/**
+ * variables are defined like Prolog variables,
+ * @-prefix creates a thread-safe variable
+ */
+variable :
+    AT?
+    VARIABLEATOM
     ;
 
 // ---------------------------------------------------------------------------------------
