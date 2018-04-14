@@ -210,7 +210,7 @@ foo(blub(1),hello("test")).
     (BL) -> Y : .generic/print( "lambda belief items", Y);
 
 
-    PL = .agent/planlist();
+    PL = .agent/planlist;
     (PL) -> Y : .generic/print( "lambda plan items", Y);
 
     .test/result( success )
