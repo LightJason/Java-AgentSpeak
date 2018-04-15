@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.variable;
 
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.IRawStructure;
 import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,6 +39,124 @@ import javax.annotation.Nullable;
  */
 public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShallowCopy<IVariable<T>>
 {
+    /**
+     * empty variable
+     */
+    IVariable<?> EMPTY = new IVariable<>()
+    {
+        @Nonnull
+        @Override
+        public IVariable<Object> set( @Nullable final Object p_value )
+        {
+            return this;
+        }
+
+        @Override
+        public boolean any()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean mutex()
+        {
+            return false;
+        }
+
+        @Override
+        public boolean allocated()
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public IVariable<Object> thrownotallocated() throws IllegalStateException
+        {
+            return this;
+        }
+
+        @Override
+        public boolean valueassignableto( @Nonnull final Class<?>... p_class )
+        {
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public IVariable<Object> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public IVariable<Object> shallowcopy( @Nullable final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public IVariable<Object> shallowcopysuffix()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public String functor()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public IPath functorpath()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public IPath fqnfunctor()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Override
+        public boolean hasVariable()
+        {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public <T> T raw()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public ITerm deepcopy( @Nullable final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public ITerm deepcopysuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public int structurehash()
+        {
+            return 0;
+        }
+    };
 
     /**
      * sets the value

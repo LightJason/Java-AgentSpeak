@@ -59,9 +59,9 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
      * @param p_value data
      * @param p_streaming lambda streaming
      */
-    public CLambdaInitializeStream( @Nonnull final IExecution[] p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
+    public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
     {
-        super( p_value );
+        super( p_value.toArray( IExecution[]::new ) );
         m_streaming = p_streaming;
     }
 

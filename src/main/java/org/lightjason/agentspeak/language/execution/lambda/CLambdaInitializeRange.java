@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -53,9 +54,9 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
      *
      * @param p_value data
      */
-    public CLambdaInitializeRange( @Nonnull final IExecution[] p_value )
+    public CLambdaInitializeRange( @Nonnull final Stream<IExecution> p_value )
     {
-        super( p_value );
+        super( p_value.toArray( IExecution[]::new ) );
     }
 
     @Nonnull

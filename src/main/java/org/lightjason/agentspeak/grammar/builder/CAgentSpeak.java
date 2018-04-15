@@ -865,8 +865,10 @@ public final class CAgentSpeak
             p_parallel,
             (IExecution) p_visitor.visit( p_stream ),
             (IVariable<?>) p_visitor.visit( p_iterationvariable ),
-            (IExecution[]) p_visitor.visit( p_body ),
-            (IVariable<?>) p_visitor.visit( p_return )
+            (Stream<IExecution>) p_visitor.visit( p_body ),
+            Objects.nonNull( p_return )
+            ? (IVariable<?>) p_visitor.visit( p_return )
+            : IVariable.EMPTY
         );
     }
 
@@ -890,7 +892,7 @@ public final class CAgentSpeak
         return Objects.nonNull( p_hash )
 
             ? new CLambdaInitializeRange(
-                org.lightjason.agentspeak.language.CCommon.streamconcat(
+                org.lightjason.agentspeak.language.CCommon.streamconcatstrict(
 
                     Objects.nonNull( p_number )
                     ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
@@ -904,11 +906,11 @@ public final class CAgentSpeak
                     ? p_additional.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) )
                     : Stream.empty()
 
-                ).toArray( IExecution[]::new )
+                ).filter( Objects::nonNull )
             )
 
             : new CLambdaInitializeStream(
-                org.lightjason.agentspeak.language.CCommon.streamconcat(
+                org.lightjason.agentspeak.language.CCommon.streamconcatstrict(
 
                     Objects.nonNull( p_number )
                     ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
@@ -922,7 +924,7 @@ public final class CAgentSpeak
                     ? p_additional.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) )
                     : Stream.empty()
 
-                ).toArray( IExecution[]::new ),
+                ).filter( Objects::nonNull ),
 
                 p_lambdastreaming
             );

@@ -75,13 +75,13 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_return return variable
      */
     public CLambda( final boolean p_parallel, @Nonnull final IExecution p_stream, @Nonnull final IVariable<?> p_iterator,
-                    @Nonnull final IExecution[] p_body, @Nonnull final IVariable<?> p_return )
+                    @Nonnull final Stream<IExecution> p_body, @Nonnull final IVariable<?> p_return )
     {
-        super( p_body );
-        m_stream = p_stream;
+        super( p_body.toArray( IExecution[]::new ) );
         m_return = p_return;
-        m_parallel = p_parallel;
+        m_stream = p_stream;
         m_iterator = p_iterator;
+        m_parallel = p_parallel;
     }
 
     @Nonnull
@@ -121,7 +121,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         return CCommon.streamconcatstrict(
             Arrays.stream( m_value ).flatMap( IExecution::variables ),
             Stream.of( m_iterator ),
-            m_return.equals( IVariable.EMPTY )
+            m_return.equals( IVariable.EMPTYTERM )
             ? Stream.of( m_return )
             : Stream.empty()
         );
@@ -133,7 +133,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     {
         return Stream.concat(
             m_stream.variables(),
-            m_return.equals( IVariable.EMPTY )
+            m_return.equals( IVariable.EMPTYTERM )
             ? Stream.of( m_return )
             : Stream.empty()
         );

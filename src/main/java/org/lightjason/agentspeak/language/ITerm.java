@@ -43,7 +43,7 @@ public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
     /**
      * empty term
      */
-    ITerm EMPTY = new ITerm()
+    ITerm EMPTYTERM = new ITerm()
     {
         /**
          * serial id
