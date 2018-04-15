@@ -63,7 +63,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public final void belief() throws Exception
     {
         final IASTVisitorAgent l_parser = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                                            .parse( streamfromstring(  "foo(123). bar('test')." ) );
+            .parse( streamfromstring( "foo(123). bar('test')." ) );
 
         final List<ILiteral> l_beliefs = new ArrayList<>( l_parser.initialbeliefs() );
 
@@ -83,7 +83,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertEquals(
             ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "main" ) ),
             new CParserAgent( Collections.emptySet(), Collections.emptySet() )
-                .parse( streamfromstring(  "!main." ) ).initialgoal()
+                .parse( streamfromstring( "!main." ) ).initialgoal()
         );
     }
 
@@ -139,8 +139,8 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IAgent<?> l_agent = new CAgentGenerator(
             "fibonacci(X, R)"
-                + " :- X <= 2;  R = 1 "
-                + " :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
+            + " :- X <= 2;  R = 1 "
+            + " :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
             + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
             Stream.of( l_values ).collect( Collectors.toSet() ),
             Collections.emptySet()
@@ -151,7 +151,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
                 ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( l_fibonacci ) ) ),
                 true
             )
-            .value()
+                   .value()
         );
 
         Assert.assertEquals( 2, l_values.value().size() );
@@ -404,16 +404,16 @@ public final class TestCAgentParser extends IBaseGrammarTest
             ).value()
         );
 
-        Assert.assertTrue( l_plan.toString(),  l_andtrue.raw() );
+        Assert.assertTrue( l_plan.toString(), l_andtrue.raw() );
         Assert.assertFalse( l_plan.toString(), l_andfalse.raw() );
 
-        Assert.assertTrue( l_plan.toString(),  l_ortrue.raw() );
+        Assert.assertTrue( l_plan.toString(), l_ortrue.raw() );
         Assert.assertFalse( l_plan.toString(), l_orfalse.raw() );
 
-        Assert.assertTrue( l_plan.toString(),  l_xortrue.raw() );
+        Assert.assertTrue( l_plan.toString(), l_xortrue.raw() );
         Assert.assertFalse( l_plan.toString(), l_xorfalse.raw() );
 
-        Assert.assertTrue( l_plan.toString(),  l_nottrue.raw() );
+        Assert.assertTrue( l_plan.toString(), l_nottrue.raw() );
         Assert.assertFalse( l_plan.toString(), l_notfalse.raw() );
     }
 
@@ -438,7 +438,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         );
 
         //Checkstyle:OFF:SimplifyBooleanExpression
-        Assert.assertEquals( false || false && !( true && false ) ^  ( 2 < 3 ), l_result.raw() );
+        Assert.assertEquals( false || false && !( true && false ) ^ ( 2 < 3 ), l_result.raw() );
         //Checkstyle:ON:SimplifyBooleanExpression
     }
 
@@ -615,7 +615,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
             "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @tag('foo')"
-                    + "@variable(X,'x value description') @tag('bar') @description('description text') +!annotation(X) <- success."
+            + "@variable(X,'x value description') @tag('bar') @description('description text') +!annotation(X) <- success."
         );
 
         Assert.assertEquals( "description text", property( "m_description", l_plan ) );
@@ -671,4 +671,38 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertEquals( 1.0, l_var.<List<?>>raw().get( 1 ) );
         Assert.assertEquals( true, l_var.<List<?>>raw().get( 2 ) );
     }
+
+    /**
+     * test lambda expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public final void lambda() throws Exception
+    {
+        final CCollectValues l_values = new CCollectValues();
+
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent(
+                Stream.of( l_values ).collect( Collectors.toSet() ),
+                org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() )
+            ),
+            "+!lambda <- (L) -> I : .push/value(I)."
+        );
+
+        final IVariable<?> l_var = new CVariable<>( "L" ).set( Stream.of( 1, 2, 3, 4 ).collect( Collectors.toList() ) );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_var ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        System.out.println( l_values.value() );
+    }
+
 }

@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -49,37 +48,37 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      */
     private static final long serialVersionUID = -7221932027365007256L;
     /**
-     * initialize
-     */
-    private final IExecution m_init;
-    /**
      * parallel execution
      */
     private final boolean m_parallel;
     /**
-     * return variable
+     * data stream
      */
-    private final IVariable<?> m_return;
+    private final IExecution m_stream;
     /**
      * iterator variable
      */
     private final IVariable<?> m_iterator;
+    /**
+     * return variable
+     */
+    private final IVariable<?> m_return;
 
 
     /**
      * ctor
      *
      * @param p_parallel parallel execution
-     * @param p_init initialize
+     * @param p_stream stream
      * @param p_iterator p_iterator
-     * @param p_value execution list
+     * @param p_body body definition
      * @param p_return return variable
      */
-    public CLambda( final boolean p_parallel, @Nonnull final IExpression p_init, @Nonnull final IVariable<?> p_iterator,
-                    @Nonnull final IExecution[] p_value, @Nonnull final IVariable<?> p_return )
+    public CLambda( final boolean p_parallel, @Nonnull final IExecution p_stream, @Nonnull final IVariable<?> p_iterator,
+                    @Nonnull final IExecution[] p_body, @Nonnull final IVariable<?> p_return )
     {
-        super( p_value );
-        m_init = p_init;
+        super( p_body );
+        m_stream = p_stream;
         m_return = p_return;
         m_parallel = p_parallel;
         m_iterator = p_iterator;
@@ -91,7 +90,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
                                          @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_init = CCommon.argumentlist();
-        if ( !m_init.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
+        if ( !m_stream.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
             return CFuzzyValue.of( false );
 
 
@@ -133,7 +132,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
-            m_init.variables(),
+            m_stream.variables(),
             m_return.equals( IVariable.EMPTY )
             ? Stream.of( m_return )
             : Stream.empty()

@@ -73,15 +73,15 @@ logicrule :
  * block body
  */
 body :
-    repair_formula
-    ( SEMICOLON repair_formula )*
+    repairformula
+    ( SEMICOLON repairformula )*
     ;
 
 /**
  * block-formula of subsection
  */
-block_formula :
-    body_formula
+blockformula :
+    bodyformula
     | ( LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET )
     ;
 
@@ -111,24 +111,24 @@ expression :
 /**
  * repairable formula
  */
-repair_formula :
-    body_formula
-    ( LEFTSHIFT body_formula )*
+repairformula :
+    bodyformula
+    ( LEFTSHIFT bodyformula )*
     ;
 
 /**
  * basic executable formula
  */
-body_formula :
-    ternary_operation
-    | belief_action
+bodyformula :
+    ternaryoperation
+    | beliefaction
 
     | expression
-    | deconstruct_expression
-    | assignment_expression
-    | unary_expression
-    | test_action
-    | achievement_goal_action
+    | deconstructexpression
+    | assignmentexpression
+    | unaryexpression
+    | testaction
+    | achievementgoal
 
     | unification
     | lambda
@@ -138,21 +138,21 @@ body_formula :
 /**
  * belief-action operator
  */
-belief_action :
+beliefaction :
     ARITHMETICOPERATOR3 literal
     ;
 
 /**
  * test-goal / -rule action
  */
-test_action :
+testaction :
     QUESTIONMARK DOLLAR? ATOM
     ;
 
 /**
  * achivement-goal action
  */
-achievement_goal_action :
+achievementgoal :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK )
     ( literal | ( variable termlist? ) )
     ;
@@ -166,7 +166,7 @@ achievement_goal_action :
 /**
  * deconstruct expression (splitting clauses)
  */
-deconstruct_expression :
+deconstructexpression :
     variablelist
     DECONSTRUCT
     ( literal | variable )
@@ -175,33 +175,33 @@ deconstruct_expression :
 /**
  * assignment expression (for assignin a variable)
  */
-assignment_expression :
-    assignment_expression_singlevariable
-    | assignment_expression_multivariable
+assignmentexpression :
+    assignmentexpressionsinglevariable
+    | assignmentexpressionmultivariable
     ;
 
 /**
  * assignment of a single variable
  */
-assignment_expression_singlevariable :
+assignmentexpressionsinglevariable :
     variable
     ASSIGNOPERATOR
-    ( ternary_operation | expression )
+    ( ternaryoperation | expression )
     ;
 
 /**
  * assignment of a variable list
  */
-assignment_expression_multivariable :
+assignmentexpressionmultivariable :
     variablelist
     ASSIGNOPERATOR
-    ( ternary_operation | expression )
+    ( ternaryoperation | expression )
     ;
 
 /**
  * unary expression
  */
-unary_expression :
+unaryexpression :
     variable
     UNARYOPERATOR
     ;
@@ -215,16 +215,16 @@ unary_expression :
 /**
  * ternary operation
  */
-ternary_operation :
+ternaryoperation :
     expression
-    ternary_operation_true
-    ternary_operation_false
+    ternaryoperationtrue
+    ternaryoperationfalse
     ;
 
 /**
  * ternary operation true-rule
  */
-ternary_operation_true :
+ternaryoperationtrue :
     QUESTIONMARK
     expression
     ;
@@ -232,7 +232,7 @@ ternary_operation_true :
 /**
  * ternary operation false-rule
  */
-ternary_operation_false :
+ternaryoperationfalse :
     COLON
     expression
     ;
@@ -249,14 +249,14 @@ unification :
     AT? RIGHTSHIFT
     (
         literal
-        | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
+        | LEFTROUNDBRACKET literal COMMA unificationconstraint RIGHTROUNDBRACKET
     )
     ;
 
 /**
  * unification constraint
  */
-unification_constraint :
+unificationconstraint :
     variable
     | expression
     ;
@@ -268,30 +268,30 @@ unification_constraint :
 // --- lambda expression -----------------------------------------------------------------
 
 /**
- * lambda expression for iteration
+ * lambda expression
  */
 lambda :
-    AT? lambda_initialization
+    AT? lambdastream
     RIGHTARROW variable
-    lambda_return?
-    COLON block_formula
+    lambdareturn?
+    COLON blockformula
     ;
 
 /**
- * initialization of lambda expression
+ * lambda stream operator
  */
-lambda_initialization :
+lambdastream :
     LEFTROUNDBRACKET
     HASH?
     ( variable | NUMBER )
-    lambda_element*
+    lambdaelement*
     RIGHTROUNDBRACKET
     ;
 
 /**
- * defines additional lambda initialize parameter
+ * lambda elements
  */
-lambda_element :
+lambdaelement :
     COMMA
     ( variable | NUMBER )
     ;
@@ -299,7 +299,7 @@ lambda_element :
 /**
  * return argument lambda expression
  */
-lambda_return :
+lambdareturn :
     VLINE variable
     ;
 
@@ -318,9 +318,9 @@ term :
     | variable
     | literal
 
-    | execute_action
-    | execute_rule
-    | execute_variable
+    | executeaction
+    | executerule
+    | executevariable
     ;
 
 /**
@@ -344,22 +344,22 @@ termvaluelist :
 /**
  * rule for an action
  */
-execute_action :
+executeaction :
     DOT
     literal;
 
 /**
  * rule for execute a logical-rule
  */
-execute_rule :
-    DOLLAR ( literal | execute_variable )
+executerule :
+    DOLLAR ( literal | executevariable )
     ;
 
 /**
  * variable-evaluation will be used for an executable call
  * like X(1,2,Y), it is possible for passing variables and parameters
  */
-execute_variable :
+executevariable :
     DOT
     variable
     termlist

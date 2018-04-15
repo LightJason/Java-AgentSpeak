@@ -161,34 +161,34 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
-        return CAgentSpeak.repair( this, p_context.repair_formula() );
+        return CAgentSpeak.repair( this, p_context.repairformula() );
     }
 
     @Override
-    public Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
+    public Object visitRepairformula( final PlanBundleParser.RepairformulaContext p_context )
     {
-        return CAgentSpeak.repairformula( this, p_context.body_formula() );
+        return CAgentSpeak.repairformula( this, p_context.bodyformula() );
     }
 
     @Override
-    public Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
+    public Object visitBlockformula( final PlanBundleParser.BlockformulaContext p_context )
     {
-        return CAgentSpeak.blockformular( this, p_context.body(), p_context.body_formula() );
+        return CAgentSpeak.blockformular( this, p_context.body(), p_context.bodyformula() );
     }
 
     @Override
-    public Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
+    public Object visitBodyformula( final PlanBundleParser.BodyformulaContext p_context )
     {
         return CAgentSpeak.bodyformular(
             this,
-            p_context.ternary_operation(),
-            p_context.belief_action(),
+            p_context.ternaryoperation(),
+            p_context.beliefaction(),
             p_context.expression(),
-            p_context.deconstruct_expression(),
-            p_context.assignment_expression(),
-            p_context.unary_expression(),
-            p_context.test_action(),
-            p_context.achievement_goal_action(),
+            p_context.deconstructexpression(),
+            p_context.assignmentexpression(),
+            p_context.unaryexpression(),
+            p_context.testaction(),
+            p_context.achievementgoal(),
             p_context.unification(),
             p_context.lambda()
         );
@@ -204,12 +204,12 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             this,
             p_context.AT(),
             p_context.literal(),
-            p_context.unification_constraint()
+            p_context.unificationconstraint()
         );
     }
 
     @Override
-    public Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
+    public Object visitUnificationconstraint( final PlanBundleParser.UnificationconstraintContext p_context )
     {
         return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
     }
@@ -218,7 +218,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
     @Override
-    public Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
+    public Object visitAchievementgoal( final PlanBundleParser.AchievementgoalContext p_context )
     {
         return CAgentSpeak.executeachievementgoal(
             this,
@@ -230,7 +230,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
+    public Object visitTestaction( final PlanBundleParser.TestactionContext p_context )
     {
         return CAgentSpeak.executetestgoal(
             p_context.DOLLAR(),
@@ -239,7 +239,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
+    public Object visitBeliefaction( final PlanBundleParser.BeliefactionContext p_context )
     {
         return CAgentSpeak.executebelief(
             this,
@@ -249,7 +249,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
+    public Object visitDeconstructexpression( final PlanBundleParser.DeconstructexpressionContext p_context )
     {
         return CAgentSpeak.deconstruct(
             this,
@@ -268,27 +268,27 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CAgentSpeak.lambda(
             this,
             Objects.nonNull( p_context.AT() ),
-            p_context.lambda_initialization(),
-            p_context.lambda_return(),
-            p_context.block_formula()
+            p_context.lambdastream(),
+            p_context.variable(),
+            p_context.blockformula(), p_context.lambdareturn()
         );
     }
 
     @Override
-    public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
+    public Object visitLambdastream( final PlanBundleParser.LambdastreamContext p_context )
     {
-        return CAgentSpeak.lambdainitialization(
+        return CAgentSpeak.lambdastream(
             this,
             m_lambdastream,
             p_context.HASH(),
             p_context.NUMBER(),
             p_context.variable(),
-            p_context.lambda_element()
+            p_context.lambdaelement()
         );
     }
 
     @Override
-    public Object visitLambda_element( final PlanBundleParser.Lambda_elementContext p_context )
+    public Object visitLambdaelement( final PlanBundleParser.LambdaelementContext p_context )
     {
         return CAgentSpeak.lambdaelement(
             this,
@@ -298,7 +298,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
+    public Object visitLambdareturn( final PlanBundleParser.LambdareturnContext p_context )
     {
         return this.visit( p_context.variable() );
     }
@@ -319,35 +319,35 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     }
 
     @Override
-    public Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
+    public Object visitAssignmentexpression( final PlanBundleParser.AssignmentexpressionContext p_context )
     {
         return CAgentSpeak.assignmentexpression(
             this,
-            p_context.assignment_expression_singlevariable(),
-            p_context.assignment_expression_multivariable()
+            p_context.assignmentexpressionsinglevariable(),
+            p_context.assignmentexpressionmultivariable()
         );
     }
 
     @Override
-    public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
+    public Object visitAssignmentexpressionsinglevariable( final PlanBundleParser.AssignmentexpressionsinglevariableContext p_context )
     {
         return CAgentSpeak.singleassignment(
             this,
             p_context.variable(),
             p_context.ASSIGNOPERATOR(),
-            p_context.ternary_operation(),
+            p_context.ternaryoperation(),
             p_context.expression()
         );
     }
 
     @Override
-    public Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
+    public Object visitAssignmentexpressionmultivariable( final PlanBundleParser.AssignmentexpressionmultivariableContext p_context )
     {
         return CAgentSpeak.multiassignment( this, p_context.variablelist(), p_context.expression() );
     }
 
     @Override
-    public Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
+    public Object visitUnaryexpression( final PlanBundleParser.UnaryexpressionContext p_context )
     {
         return CAgentSpeak.executeunary( this, p_context.UNARYOPERATOR(), p_context.variable() );
     }
@@ -356,24 +356,24 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
     @Override
-    public Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
+    public Object visitTernaryoperation( final PlanBundleParser.TernaryoperationContext p_context )
     {
         return CAgentSpeak.executeternary(
             this,
             p_context.expression(),
-            p_context.ternary_operation_true(),
-            p_context.ternary_operation_false()
+            p_context.ternaryoperationtrue(),
+            p_context.ternaryoperationfalse()
         );
     }
 
     @Override
-    public Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
+    public Object visitTernaryoperationtrue( final PlanBundleParser.TernaryoperationtrueContext p_context )
     {
         return this.visit( p_context.expression() );
     }
 
     @Override
-    public Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
+    public Object visitTernaryoperationfalse( final PlanBundleParser.TernaryoperationfalseContext p_context )
     {
         return this.visit( p_context.expression() );
     }
@@ -382,19 +382,19 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
     @Override
-    public Object visitExecute_action( final PlanBundleParser.Execute_actionContext p_context )
+    public Object visitExecuteaction( final PlanBundleParser.ExecuteactionContext p_context )
     {
         return CAgentSpeak.executeaction( this, p_context.literal(), m_actions );
     }
 
     @Override
-    public Object visitExecute_rule( final PlanBundleParser.Execute_ruleContext p_context )
+    public Object visitExecuterule( final PlanBundleParser.ExecuteruleContext p_context )
     {
-        return CAgentSpeak.executerule( this, p_context.literal(), p_context.execute_variable() );
+        return CAgentSpeak.executerule( this, p_context.literal(), p_context.executevariable() );
     }
 
     @Override
-    public Object visitExecute_variable( final PlanBundleParser.Execute_variableContext p_context )
+    public Object visitExecutevariable( final PlanBundleParser.ExecutevariableContext p_context )
     {
         return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
@@ -414,9 +414,9 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             p_context.variable(),
             p_context.literal(),
 
-            p_context.execute_action(),
-            p_context.execute_rule(),
-            p_context.execute_variable()
+            p_context.executeaction(),
+            p_context.executerule(),
+            p_context.executevariable()
         );
     }
 

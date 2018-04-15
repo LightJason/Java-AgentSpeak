@@ -67,6 +67,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CT
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.CRule;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.lambda.CLambda;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
@@ -342,11 +343,13 @@ public final class CAgentSpeak
      */
     @Nonnull
     public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                        @Nonnull final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
+                                        @Nullable final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
     {
         return Objects.nonNull( p_bodyformula )
                ? Stream.concat( Stream.of( p_visitor.visitChildren( p_body ) ), (Stream<?>) p_visitor.visitChildren( p_bodyformula ) )
-               : Stream.of( p_visitor.visitChildren( p_body ) );
+               : Objects.nonNull( p_body )
+                 ? Stream.of( p_visitor.visitChildren( p_body ) )
+                 : Stream.empty();
     }
 
 
@@ -848,21 +851,29 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_parallel parallel call
-     * @param p_iterator base iterator
+     * @param p_stream stream data
+     * @param p_body execution body
      * @param p_return return element
-     * @param p_execution execution body
      * @return lambda expression
      */
     @Nonnull
-    public static IExpression lambda( @Nonnull final ParseTreeVisitor<?> p_visitor, boolean p_parallel,
-                                      @Nonnull final RuleContext p_iterator, @Nullable final RuleContext p_return, @Nonnull final RuleContext p_execution )
+    @SuppressWarnings( "unchecked" )
+    public static IExecution lambda( @Nonnull final ParseTreeVisitor<?> p_visitor, boolean p_parallel,
+                                     @Nonnull final RuleContext p_stream, @Nonnull final RuleContext p_iterationvariable,
+                                     @Nonnull final RuleContext p_body,
+                                     @Nullable final RuleContext p_return )
     {
-        // @todo incomplete
-        return null;
+        return new CLambda(
+            p_parallel,
+            (IExecution) p_visitor.visit( p_stream ),
+            (IVariable<?>) p_visitor.visit( p_iterationvariable ),
+            (IExecution[]) p_visitor.visit( p_body ),
+            (IVariable<?>) p_visitor.visit( p_return )
+        );
     }
 
     /**
-     * build a lambda initialization
+     * build a lambda stream
      *
      * @param p_visitor visitor
      * @param p_lambdastreaming lambda streaming
@@ -874,9 +885,9 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IExecution lambdainitialization( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming,
-                                                   @Nullable final TerminalNode p_hash, @Nullable final TerminalNode p_number,
-                                                   @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional )
+    public static IExecution lambdastream( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming,
+                                           @Nullable final TerminalNode p_hash, @Nullable final TerminalNode p_number,
+                                           @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional )
     {
         return Objects.nonNull( p_hash )
 
