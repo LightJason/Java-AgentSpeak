@@ -186,7 +186,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public Object visitBlockformula( final AgentParser.BlockformulaContext p_context )
     {
-        return CAgentSpeak.blockformular( this, p_context.body(), p_context.bodyformula() );
+        return CAgentSpeak.blockformular( this, p_context.repairformula(), p_context.body() );
     }
 
     @Override
@@ -283,7 +283,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             Objects.nonNull( p_context.AT() ),
             p_context.lambdastream(),
             p_context.variable(),
-            p_context.blockformula(), p_context.lambdareturn()
+            p_context.blockformula(),
+            p_context.lambdareturn()
         );
     }
 

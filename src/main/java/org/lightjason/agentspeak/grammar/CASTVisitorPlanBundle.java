@@ -173,7 +173,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public Object visitBlockformula( final PlanBundleParser.BlockformulaContext p_context )
     {
-        return CAgentSpeak.blockformular( this, p_context.body(), p_context.bodyformula() );
+        return CAgentSpeak.blockformular( this, p_context.repairformula(), p_context.body() );
     }
 
     @Override
@@ -270,7 +270,8 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             Objects.nonNull( p_context.AT() ),
             p_context.lambdastream(),
             p_context.variable(),
-            p_context.blockformula(), p_context.lambdareturn()
+            p_context.blockformula(),
+            p_context.lambdareturn()
         );
     }
 

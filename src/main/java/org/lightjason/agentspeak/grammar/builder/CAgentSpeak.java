@@ -337,19 +337,17 @@ public final class CAgentSpeak
      * define block formula
      *
      * @param p_visitor visitor
-     * @param p_body body
-     * @param p_bodyformula other elements
+     * @param p_repairformula single repair formular
+     * @param p_block block of elements
      * @return stream of execution elements
      */
     @Nonnull
     public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                        @Nullable final RuleContext p_body, @Nullable final RuleContext p_bodyformula )
+                                        @Nullable final RuleContext p_repairformula, @Nullable final RuleContext p_block )
     {
-        return Objects.nonNull( p_bodyformula )
-               ? Stream.concat( Stream.of( p_visitor.visitChildren( p_body ) ), (Stream<?>) p_visitor.visitChildren( p_bodyformula ) )
-               : Objects.nonNull( p_body )
-                 ? Stream.of( p_visitor.visitChildren( p_body ) )
-                 : Stream.empty();
+        return Objects.nonNull( p_repairformula )
+            ? Stream.of( p_visitor.visit( p_repairformula ) )
+            : (Stream<?>) p_visitor.visitChildren( p_block );
     }
 
 

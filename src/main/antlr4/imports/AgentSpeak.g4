@@ -81,25 +81,8 @@ body :
  * block-formula of subsection
  */
 blockformula :
-    bodyformula
+    repairformula
     | ( LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET )
-    ;
-
-/**
- * expression rule
- */
-expression :
-    STRONGNEGATION single=expression
-    | LEFTROUNDBRACKET single=expression RIGHTROUNDBRACKET
-    | lhs=expression binaryoperator=ARITHMETICOPERATOR1 rhs=expression
-    | lhs=expression binaryoperator=ARITHMETICOPERATOR2 rhs=expression
-    | lhs=expression binaryoperator=ARITHMETICOPERATOR3 rhs=expression
-    | lhs=expression binaryoperator=RELATIONALOPERATOR rhs=expression
-    | lhs=expression binaryoperator=LOGICALOPERATOR1 rhs=expression
-    | lhs=expression binaryoperator=LOGICALOPERATOR2 rhs=expression
-    | lhs=expression binaryoperator=LOGICALOPERATOR3 rhs=expression
-    | unification
-    | term
     ;
 
 // ---------------------------------------------------------------------------------------
@@ -134,6 +117,22 @@ bodyformula :
     | lambda
     ;
 
+/**
+ * expression rule
+ */
+expression :
+    STRONGNEGATION single=expression
+    | LEFTROUNDBRACKET single=expression RIGHTROUNDBRACKET
+    | lhs=expression binaryoperator=ARITHMETICOPERATOR1 rhs=expression
+    | lhs=expression binaryoperator=ARITHMETICOPERATOR2 rhs=expression
+    | lhs=expression binaryoperator=ARITHMETICOPERATOR3 rhs=expression
+    | lhs=expression binaryoperator=RELATIONALOPERATOR rhs=expression
+    | lhs=expression binaryoperator=LOGICALOPERATOR1 rhs=expression
+    | lhs=expression binaryoperator=LOGICALOPERATOR2 rhs=expression
+    | lhs=expression binaryoperator=LOGICALOPERATOR3 rhs=expression
+    | unification
+    | term
+    ;
 
 /**
  * belief-action operator
