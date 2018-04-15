@@ -889,45 +889,23 @@ public final class CAgentSpeak
                                            @Nullable final TerminalNode p_hash, @Nullable final TerminalNode p_number,
                                            @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional )
     {
+        final Stream<IExecution> l_stream = org.lightjason.agentspeak.language.CCommon.streamconcatstrict(
+            Objects.nonNull( p_number )
+            ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
+            : Stream.empty(),
+
+            Objects.nonNull( p_variable )
+            ? Stream.of( passvariable( (IVariable<?>) p_visitor.visit( p_variable ) ) )
+            : Stream.empty(),
+
+            Objects.nonNull( p_additional )
+            ? p_additional.stream().map( i -> (IExecution) p_visitor.visit( i ) )
+            : Stream.empty()
+        );
+
         return Objects.nonNull( p_hash )
-
-            ? new CLambdaInitializeRange(
-                org.lightjason.agentspeak.language.CCommon.streamconcatstrict(
-
-                    Objects.nonNull( p_number )
-                    ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
-                    : Stream.empty(),
-
-                    Objects.nonNull( p_variable )
-                    ? Stream.of( (IExecution) p_visitor.visitChildren( p_variable ) )
-                    : Stream.empty(),
-
-                    Objects.nonNull( p_additional )
-                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) )
-                    : Stream.empty()
-
-                ).filter( Objects::nonNull )
-            )
-
-            : new CLambdaInitializeStream(
-                org.lightjason.agentspeak.language.CCommon.streamconcatstrict(
-
-                    Objects.nonNull( p_number )
-                    ? Stream.of( passdata( CRaw.numbervalue( p_number ) ) )
-                    : Stream.empty(),
-
-                    Objects.nonNull( p_variable )
-                    ? Stream.of( (IExecution) p_visitor.visitChildren( p_variable ) )
-                    : Stream.empty(),
-
-                    Objects.nonNull( p_additional )
-                    ? p_additional.stream().map( i -> (IExecution) p_visitor.visitChildren( i ) )
-                    : Stream.empty()
-
-                ).filter( Objects::nonNull ),
-
-                p_lambdastreaming
-            );
+            ? new CLambdaInitializeRange( l_stream )
+            : new CLambdaInitializeStream( l_stream, p_lambdastreaming );
     }
 
     /**
