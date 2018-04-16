@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -239,7 +240,7 @@ public abstract class IBaseTest
 
         @Nullable
         @Override
-        public final IAgent<?> generatesingle( @Nullable final Object... p_data )
+        public IAgent<?> generatesingle( @Nullable final Object... p_data )
         {
             return new CAgent( m_configuration );
         }
@@ -299,22 +300,22 @@ public abstract class IBaseTest
         }
 
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "push/value" );
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             CCommon.flatten( p_argument )
                    .map( i -> CCommon.replaceFromContext( p_context, i ) )
@@ -329,7 +330,7 @@ public abstract class IBaseTest
          * @return value list
          */
         @Nonnull
-        public final List<ITerm> value()
+        public List<ITerm> value()
         {
             return m_value;
         }
@@ -378,34 +379,60 @@ public abstract class IBaseTest
                                   .collect( Collectors.toMap( ITerm::fqnfunctor, i -> i ) );
         }
 
+        /**
+         * ctor
+         *
+         * @param p_agent agent
+         * @param p_variables variable map
+         */
+        private CLocalContext( @Nonnull final IAgent<?> p_agent, @Nonnull final Map<IPath, IVariable<?>> p_variables )
+        {
+            m_agent = p_agent;
+            m_variables = p_variables;
+        }
 
 
         @Nonnull
         @Override
-        public final IAgent<?> agent()
+        public IAgent<?> agent()
         {
             return m_agent;
         }
 
         @Nonnull
         @Override
-        public final IInstantiable instance()
+        public IInstantiable instance()
         {
             return IPlan.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Map<IPath, IVariable<?>> instancevariables()
+        public Map<IPath, IVariable<?>> instancevariables()
         {
             return m_variables;
         }
 
         @Nonnull
         @Override
-        public final IContext duplicate()
+        public IContext duplicate( @Nullable final IVariable<?>... p_variables )
         {
-            return this;
+            return this.duplicate( Objects.nonNull( p_variables ) ? Arrays.stream( p_variables ) : Stream.empty() );
+        }
+
+        @Nonnull
+        @Override
+        public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
+        {
+            return new CLocalContext(
+                m_agent,
+                Collections.unmodifiableMap(
+                    Stream.concat(
+                        p_variables,
+                        m_variables.values().stream().map( i -> i.shallowcopy() )
+                    ).collect( Collectors.toMap( ITerm::fqnfunctor, i -> i, ( i, j ) -> i ) )
+                )
+            );
         }
     }
 }

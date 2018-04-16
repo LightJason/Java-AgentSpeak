@@ -25,15 +25,20 @@ package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -75,11 +80,41 @@ public final class CContext implements IContext
         m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i ) ) );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_agent agent
+     * @param p_instance instance object
+     * @param p_variables variable map
+     */
+    private CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Map<IPath, IVariable<?>> p_variables )
+    {
+        m_agent = p_agent;
+        m_instance = p_instance;
+        m_variables = p_variables;
+    }
+
     @Nonnull
     @Override
-    public IContext duplicate()
+    public IContext duplicate( @Nullable final IVariable<?>... p_variables )
     {
-        return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
+        return this.duplicate( Objects.nonNull( p_variables ) ? Arrays.stream( p_variables ) : Stream.empty() );
+    }
+
+    @Nonnull
+    @Override
+    public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
+    {
+        return new CContext(
+            m_agent,
+            m_instance,
+            Collections.unmodifiableMap(
+                Stream.concat(
+                    p_variables,
+                    m_variables.values().stream().map( i -> i.shallowcopy() )
+                ).collect( Collectors.toMap( ITerm::fqnfunctor, i -> i, ( i, j ) -> i ) )
+            )
+        );
     }
 
     @Nonnull

@@ -41,9 +41,11 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -241,6 +243,54 @@ public final class CCommon
                 Stream.concat( p_variables.stream(), p_planstatistic.variables() )
             )
         );
+    }
+
+    // --- execution structure ---------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * sequential execute
+     *
+     * @param p_context execution context
+     * @param p_execution execution stream
+     * @return list with execution results
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    @Nonnull
+    public static List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    )
+    {
+        final List<IFuzzyValue<Boolean>> l_result = new ArrayList<>();
+        return p_execution
+            .map( i ->
+            {
+                final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() );
+                l_result.add( l_return );
+                return p_context.agent().fuzzy().getValue().defuzzify( l_return );
+            } )
+            .filter( i -> !i )
+            .findFirst()
+            .map( i -> l_result )
+            .orElseGet( () -> l_result );
+    }
+
+    /**
+     * parallel execute
+     *
+     * @param p_context execution context
+     * @param p_execution execution stream
+     * @return list with execution results
+     *
+     * @note each element is executed
+     */
+    @Nonnull
+    public static List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    )
+    {
+        return p_execution
+            .parallel()
+            .map( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
+            .collect( Collectors.toList() );
     }
 
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------

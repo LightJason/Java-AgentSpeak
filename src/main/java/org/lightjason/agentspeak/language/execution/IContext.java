@@ -31,9 +31,11 @@ import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
@@ -74,7 +76,14 @@ public interface IContext extends Serializable
 
         @Nonnull
         @Override
-        public IContext duplicate()
+        public IContext duplicate( @Nullable final IVariable<?>... p_variables )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
         {
             return this;
         }
@@ -113,7 +122,14 @@ public interface IContext extends Serializable
 
         @Nonnull
         @Override
-        public IContext duplicate()
+        public IContext duplicate( @Nullable final IVariable<?>... p_variables )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
         {
             return this;
         }
@@ -147,9 +163,19 @@ public interface IContext extends Serializable
     /**
      * duplicates the context with a shallow-copy
      *
+     * @param p_variables replacing variables
      * @return shallow-copy of the context
      */
     @Nonnull
-    IContext duplicate();
+    IContext duplicate( @Nullable final IVariable<?>... p_variables );
+
+    /**
+     * duplicates the context with a shallow-copy
+     *
+     * @param p_variables stream with replacing variables
+     * @return shallow-copy of the context
+     */
+    @Nonnull
+    IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables );
 
 }

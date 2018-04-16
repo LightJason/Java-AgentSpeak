@@ -35,9 +35,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -202,7 +200,9 @@ public abstract class IBaseInstantiable implements IInstantiable
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        final List<IFuzzyValue<Boolean>> l_result = m_parallel ? this.executeparallel( p_context ) : this.executesequential( p_context );
+        final List<IFuzzyValue<Boolean>> l_result = m_parallel
+                                                    ? CCommon.executeparallel( p_context, Arrays.stream( m_execution ) )
+                                                    : CCommon.executesequential( p_context, Arrays.stream( m_execution ) );
 
         // if atomic flag if exists use this for return value
         return m_atomic
@@ -210,46 +210,6 @@ public abstract class IBaseInstantiable implements IInstantiable
                : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
     }
 
-    /**
-     * execute plan sequential
-     *
-     * @param p_context execution context
-     * @return list with execution results
-     *
-     * @note stream is stopped iif an execution is failed
-     */
-    @Nonnull
-    private List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context )
-    {
-        final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new ArrayList<>() );
-        return Arrays.stream( m_execution )
-                     .map( i ->
-                     {
-                         final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() );
-                         l_result.add( l_return );
-                         return p_context.agent().fuzzy().getValue().defuzzify( l_return );
-                     } )
-                     .filter( i -> !i )
-                     .findFirst()
-                     .map( i -> l_result )
-                     .orElseGet( () -> l_result );
-    }
-
-    /**
-     * execute plan parallel
-     *
-     * @param p_context execution context
-     * @return list with execution results
-     *
-     * @note each element is executed
-     */
-    @Nonnull
-    private List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context )
-    {
-        return Arrays.stream( m_execution ).parallel()
-                     .map( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
-                     .collect( Collectors.toList() );
-    }
 
     /**
      * returns all data as a string
