@@ -412,7 +412,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_variable ) )
             return new CAchievementGoalVariable(
                 new CPassVariableLiteral(
-                    (IVariable<?>) p_visitor.visitChildren( p_variable ),
+                    (IVariable<?>) p_visitor.visit( p_variable ),
                     Stream.empty()
                 ),
                 Objects.nonNull( p_doubleexclamationmark )

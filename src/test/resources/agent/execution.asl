@@ -27,8 +27,8 @@
 // -----
 
 
- // initial-goal
- !test.
+// initial-goal
+!test.
 
 
 /**
@@ -50,6 +50,7 @@
     !L
 .
 
+
 /**
  * double plan call but single execution
  */
@@ -70,7 +71,7 @@
  */
 +!single <-
     .log("single");
-    stop
+    .stop
 .
 
 /**
