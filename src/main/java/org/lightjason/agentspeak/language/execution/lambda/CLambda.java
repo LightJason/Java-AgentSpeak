@@ -34,8 +34,11 @@ import org.lightjason.agentspeak.language.variable.CMutexVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -59,11 +62,15 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     /**
      * iterator variable
      */
-    private final IVariable<?> m_iterator;
+    private final IVariable<Object> m_iterator;
     /**
      * return variable
      */
     private final IVariable<?> m_return;
+    /**
+     * execution method
+     */
+    private final BiFunction<IContext, Stream<?>, IFuzzyValue<Boolean>> m_execution;
 
 
     /**
@@ -81,8 +88,10 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         super( p_body.toArray( IExecution[]::new ) );
         m_return = p_return;
         m_stream = p_stream;
-        m_iterator = p_iterator;
+        m_iterator = p_iterator.term();
         m_parallel = p_parallel;
+
+        m_execution = m_parallel ? this::parallel : this::sequential;
     }
 
     @Nonnull
@@ -94,7 +103,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         if ( !m_stream.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
             return CFuzzyValue.of( false );
 
-        return m_parallel ? this.parallel( p_context, l_init.get( 0 ).raw() ) : this.sequential( p_context, l_init.get( 0 ).raw() );
+        return m_execution.apply( p_context, l_init.get( 0 ).raw() );
     }
 
     /**
@@ -107,7 +116,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     private IFuzzyValue<Boolean> sequential( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
     {
         // build iterator variable
-        final IVariable<Object> l_iterator = m_iterator.shallowcopy().term();
+        final IVariable<Object> l_iterator = m_iterator.shallowcopy();
 
         // duplicate context, but don't use new variable instances, so use first existing variables
         final IContext l_context =  p_context.duplicate(
@@ -129,12 +138,22 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * execute parallel
      *
      * @param p_context execution context
-     * @param p_elements data stream
+     * @param p_iterator iterator stream
      * @return execution result
      */
-    private IFuzzyValue<Boolean> parallel( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_elements )
+    private IFuzzyValue<Boolean> parallel( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
     {
-        return CFuzzyValue.of( true );
+        return p_iterator.parallel()
+                  .map( i -> m_iterator.shallowcopy().set( i ) )
+                  .map( i -> p_context.duplicate(
+                      CCommon.streamconcatstrict(
+                          Stream.of( i ),
+                          p_context.instancevariables().values().stream(),
+                          Arrays.stream( m_value ).flatMap( IExecution::variables )
+                      )
+                  ) )
+                  .flatMap( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ).stream() )
+                  .collect( p_context.agent().fuzzy().getKey() );
     }
 
 
@@ -150,6 +169,24 @@ public final class CLambda extends IBaseExecution<IExecution[]>
                 m_parallel
                 ? new CMutexVariable<>( m_return.fqnfunctor() )
                 : m_return.shallowcopy()
+            )
+        );
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format(
+            "{0}({1}) -> {2}{3} : {4}",
+            m_parallel ? "@" : "",
+            m_stream,
+            m_iterator,
+            m_return.equals( IVariable.EMPTY ) ? "" : " | " + m_return,
+            MessageFormat.format(
+                "{0}{2}{1}",
+                m_value.length > 1 ? "{ " : "",
+                m_value.length > 1 ? " }" : "",
+                Arrays.stream( m_value ).map( Object::toString ).collect( Collectors.joining( "; " ) )
             )
         );
     }

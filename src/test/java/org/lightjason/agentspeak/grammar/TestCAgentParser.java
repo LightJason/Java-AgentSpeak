@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
@@ -702,7 +703,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
             ).value()
         );
 
-        System.out.println( l_values.value() );
+
+        System.out.println( l_plan );
+        Assert.assertArrayEquals( Stream.of( 1, 2, 3, 4 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
     }
 
 }

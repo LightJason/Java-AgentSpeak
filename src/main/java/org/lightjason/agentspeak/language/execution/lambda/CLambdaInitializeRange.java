@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -103,5 +104,11 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
 
 
         return l_result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "# " + Arrays.stream( m_value ).map( Object::toString ).collect( Collectors.joining( ", " ) );
     }
 }

@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -110,4 +111,9 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
 
     }
 
+    @Override
+    public String toString()
+    {
+        return Arrays.stream( m_value ).map( Object::toString ).collect( Collectors.joining( ", " ) );
+    }
 }
