@@ -65,6 +65,10 @@ import static org.junit.Assert.assertTrue;
 public final class TestCAgentExecution extends IBaseTest
 {
     /**
+     * number of maximum cycles
+     */
+    private static final int MAXIMUMCYCLES = 1000;
+    /**
      * asl source
      */
     private static final String ASL = "src/test/resources/agent/execution.asl";
@@ -136,10 +140,14 @@ public final class TestCAgentExecution extends IBaseTest
         Assume.assumeNotNull( m_agent );
         Assume.assumeNotNull( m_running );
 
-
-        while ( m_running.get() )
+        int l_cycles = MAXIMUMCYCLES;
+        while ( ( m_running.get() ) && ( l_cycles > 0 ) )
+        {
+            l_cycles--;
             m_agent.call();
+        }
 
+        Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
 
         // check execution results
         assertTrue(
