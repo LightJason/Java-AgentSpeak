@@ -52,7 +52,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test json list error
      */
     @Test
-    public final void jsonlisterror()
+    public void jsonlisterror()
     {
         Assert.assertFalse(
             new CJsonList().execute(
@@ -69,7 +69,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test json list with single argument
      */
     @Test
-    public final void jsonlistsingle()
+    public void jsonlistsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -91,7 +91,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test json list with multiple argument
      */
     @Test
-    public final void jsonlistmultiple()
+    public void jsonlistmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test json object error
      */
     @Test
-    public final void jsonobjecterror()
+    public void jsonobjecterror()
     {
         Assert.assertFalse(
             new CJsonObject().execute(
@@ -132,7 +132,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test json object with single argument
      */
     @Test
-    public final void jsonobjectsingle()
+    public void jsonobjectsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -154,7 +154,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test json object with multiple arguments
      */
     @Test
-    public final void jsonobjectmultiple()
+    public void jsonobjectmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -181,7 +181,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test xml object error
      */
     @Test
-    public final void xmlobjecterror()
+    public void xmlobjecterror()
     {
         Assert.assertFalse(
             new CXMLObject().execute(
@@ -199,7 +199,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test xml object with single argument
      */
     @Test
-    public final void xmlobjectsingle()
+    public void xmlobjectsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -221,7 +221,7 @@ public final class TestCActionWebRest extends IBaseTest
      * test xml object with single argument
      */
     @Test
-    public final void xmlobjectmultiple()
+    public void xmlobjectmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

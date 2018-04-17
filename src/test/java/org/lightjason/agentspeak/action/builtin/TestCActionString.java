@@ -84,7 +84,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void base64( final List<String> p_input )
+    public void base64( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
         final List<ITerm> l_result = new ArrayList<>();
@@ -119,7 +119,7 @@ public final class TestCActionString extends IBaseTest
      * @throws UnsupportedEncodingException is thrown on test data encoding
      */
     @Test
-    public final void base64decodeerror() throws UnsupportedEncodingException
+    public void base64decodeerror() throws UnsupportedEncodingException
     {
         Assert.assertFalse(
             new CBase64Decode().execute(
@@ -140,7 +140,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void concat( final List<String> p_input )
+    public void concat( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void contains( final List<String> p_input )
+    public void contains( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -195,7 +195,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void lower( final List<String> p_input )
+    public void lower( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -222,7 +222,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void reverse( final List<String> p_input )
+    public void reverse( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -249,7 +249,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void size( final List<String> p_input )
+    public void size( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -276,7 +276,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void random( final List<String> p_input )
+    public void random( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -306,7 +306,7 @@ public final class TestCActionString extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void upper( final List<String> p_input )
+    public void upper( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -330,7 +330,7 @@ public final class TestCActionString extends IBaseTest
      * test starts-with
      */
     @Test
-    public final void startswith()
+    public void startswith()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -353,7 +353,7 @@ public final class TestCActionString extends IBaseTest
      * test ends-with
      */
     @Test
-    public final void endswidth()
+    public void endswidth()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -376,7 +376,7 @@ public final class TestCActionString extends IBaseTest
      * tets for levenshtein distance error
      */
     @Test
-    public final void levenshteinerror()
+    public void levenshteinerror()
     {
         Assert.assertFalse(
             new CLevenshtein().execute(
@@ -392,7 +392,7 @@ public final class TestCActionString extends IBaseTest
      * test levenshtein distance
      */
     @Test
-    public final void levenshtein()
+    public void levenshtein()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -414,7 +414,7 @@ public final class TestCActionString extends IBaseTest
      * test normalized compression distance
      */
     @Test
-    public final void ncd()
+    public void ncd()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -450,7 +450,7 @@ public final class TestCActionString extends IBaseTest
      * test normalized compression distance error
      */
     @Test
-    public final void ncderror()
+    public void ncderror()
     {
         Assert.assertFalse(
             new CNCD().execute(

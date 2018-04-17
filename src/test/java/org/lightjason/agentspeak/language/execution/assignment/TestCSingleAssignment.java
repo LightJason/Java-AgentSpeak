@@ -99,7 +99,7 @@ public final class TestCSingleAssignment extends IBaseTest
     @Test
     @SuppressWarnings( "unchecked" )
     @UseDataProvider( "operator" )
-    public final void assignvariable( @Nonnull final Object[] p_data )
+    public void assignvariable( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 4 );
 
@@ -129,7 +129,7 @@ public final class TestCSingleAssignment extends IBaseTest
     @Test
     @SuppressWarnings( "unchecked" )
     @UseDataProvider( "operator" )
-    public final void assignraw( @Nonnull final Object[] p_data )
+    public void assignraw( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 4 );
 

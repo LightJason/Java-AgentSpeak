@@ -46,7 +46,7 @@ public final class TestCManualParser extends IBaseTest
      * @throws Exception parsing exception
      */
     @Test
-    public final void literal() throws Exception
+    public void literal() throws Exception
     {
         final ILiteral l_literal =  CLiteral.parse( "foo(X, 123, 'test')" );
 

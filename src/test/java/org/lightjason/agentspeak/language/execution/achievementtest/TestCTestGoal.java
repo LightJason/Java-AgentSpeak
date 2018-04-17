@@ -70,7 +70,7 @@ public final class TestCTestGoal extends IBaseTest
      * test goal-literal
      */
     @Test
-    public final void goalliteral()
+    public void goalliteral()
     {
         Assume.assumeNotNull( m_agent );
 
@@ -84,35 +84,35 @@ public final class TestCTestGoal extends IBaseTest
         m_agent.inspect( new IInspector()
         {
             @Override
-            public final void inspectsleeping( final long p_value )
+            public void inspectsleeping( final long p_value )
             {}
 
             @Override
-            public final void inspectcycletime( final long p_value )
+            public void inspectcycletime( final long p_value )
             {}
 
             @Override
-            public final void inspectbelief( final Stream<ILiteral> p_value )
+            public void inspectbelief( final Stream<ILiteral> p_value )
             {}
 
             @Override
-            public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+            public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
             {}
 
             @Override
-            public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+            public void inspectrules( @Nonnull final Stream<IRule> p_value )
             {}
 
             @Override
-            public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
             {}
 
             @Override
-            public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
             {}
 
             @Override
-            public final void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
             {
                 Assert.assertEquals( "foo", p_value.findFirst().get().literal().functor() );
             }
@@ -123,7 +123,7 @@ public final class TestCTestGoal extends IBaseTest
      * test goal-variable
      */
     @Test
-    public final void goalvariable()
+    public void goalvariable()
     {
         Assume.assumeNotNull( m_agent );
 
@@ -139,35 +139,35 @@ public final class TestCTestGoal extends IBaseTest
         m_agent.inspect( new IInspector()
         {
             @Override
-            public final void inspectsleeping( final long p_value )
+            public void inspectsleeping( final long p_value )
             {}
 
             @Override
-            public final void inspectcycletime( final long p_value )
+            public void inspectcycletime( final long p_value )
             {}
 
             @Override
-            public final void inspectbelief( final Stream<ILiteral> p_value )
+            public void inspectbelief( final Stream<ILiteral> p_value )
             {}
 
             @Override
-            public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+            public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
             {}
 
             @Override
-            public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+            public void inspectrules( @Nonnull final Stream<IRule> p_value )
             {}
 
             @Override
-            public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
             {}
 
             @Override
-            public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
             {}
 
             @Override
-            public final void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
             {
                 Assert.assertEquals( "bar", p_value.findFirst().get().literal().functor() );
             }

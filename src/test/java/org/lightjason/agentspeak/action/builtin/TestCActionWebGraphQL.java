@@ -50,7 +50,7 @@ public final class TestCActionWebGraphQL extends IBaseTest
      * run graphql query test with literal
      */
     @Test
-    public final void queryliteral()
+    public void queryliteral()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -82,7 +82,7 @@ public final class TestCActionWebGraphQL extends IBaseTest
      * run graphql query test with native query
      */
     @Test
-    public final void querymanual()
+    public void querymanual()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

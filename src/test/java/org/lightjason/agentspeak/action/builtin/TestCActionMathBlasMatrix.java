@@ -187,7 +187,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -209,7 +209,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -231,7 +231,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test column
      */
     @Test
-    public final void column()
+    public void column()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -253,7 +253,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test row
      */
     @Test
-    public final void row()
+    public void row()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -275,7 +275,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test power
      */
     @Test
-    public final void power()
+    public void power()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -300,7 +300,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test set
      */
     @Test
-    public final void set()
+    public void set()
     {
         new CSet().execute(
             false, IContext.EMPTYPLAN,
@@ -315,7 +315,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test toList
      */
     @Test
-    public final void tolist()
+    public void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -338,7 +338,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test transpose
      */
     @Test
-    public final void transpose()
+    public void transpose()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -361,7 +361,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test submatrix
      */
     @Test
-    public final void submatrix()
+    public void submatrix()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -384,7 +384,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test solve
      */
     @Test
-    public final void solve()
+    public void solve()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -407,7 +407,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test assign scalar
      */
     @Test
-    public final void assignscalar()
+    public void assignscalar()
     {
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
@@ -424,7 +424,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test assign matrix
      */
     @Test
-    public final void assignmatrix()
+    public void assignmatrix()
     {
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
@@ -441,7 +441,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test get
      */
     @Test
-    public final void get()
+    public void get()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -460,7 +460,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test parse
      */
     @Test
-    public final void parse()
+    public void parse()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -482,7 +482,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test invert
      */
     @Test
-    public final void invert()
+    public void invert()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -504,7 +504,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test eigen
      */
     @Test
-    public final void eigen()
+    public void eigen()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -529,7 +529,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test singularvalue
      */
     @Test
-    public final void singularvalue()
+    public void singularvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -561,7 +561,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test copy
      */
     @Test
-    public final void copy()
+    public void copy()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -580,7 +580,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test graph-laplacian
      */
     @Test
-    public final void graphlaplacian()
+    public void graphlaplacian()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -620,7 +620,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test normalized graph-laplacian
      */
     @Test
-    public final void normalizedgraphlaplacian()
+    public void normalizedgraphlaplacian()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -654,7 +654,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test row sum
      */
     @Test
-    public final void rowsum()
+    public void rowsum()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -685,7 +685,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test column sum
      */
     @Test
-    public final void columsum()
+    public void columsum()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -716,7 +716,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test identity
      */
     @Test
-    public final void identity()
+    public void identity()
     {
         final int l_size = Math.abs( new Random().nextInt( 98 ) + 2 );
         final List<ITerm> l_return = new ArrayList<>();
@@ -746,7 +746,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
      * test diagonal
      */
     @Test
-    public final void diagonal()
+    public void diagonal()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final double[] l_data = new double[]{1, 3, 5, 11};

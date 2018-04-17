@@ -63,7 +63,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_linearprogram = new ImmutablePair<>( new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
     }
@@ -74,7 +74,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test value constraint
      */
     @Test
-    public final void valueconstraint()
+    public void valueconstraint()
     {
         new CValueConstraint().execute(
             false, IContext.EMPTYPLAN,
@@ -110,7 +110,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test equation constraint
      */
     @Test
-    public final void equationconstraint()
+    public void equationconstraint()
     {
         final LinearConstraint l_result = new LinearConstraint( new double[]{2, 7, 12}, 19.0, Relationship.EQ, new double[]{1, 2, 3}, 5.0 );
 
@@ -141,7 +141,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test solve maximum
      */
     @Test
-    public final void solvemaximize()
+    public void solvemaximize()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammax = new ImmutablePair<>(
@@ -171,7 +171,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test solve minimize
      */
     @Test
-    public final void solveminimize()
+    public void solveminimize()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammin = new ImmutablePair<>(

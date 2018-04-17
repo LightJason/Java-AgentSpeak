@@ -61,7 +61,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void belief() throws Exception
+    public void belief() throws Exception
     {
         final IASTVisitorAgent l_parser = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
             .parse( streamfromstring( "foo(123). bar('test')." ) );
@@ -79,7 +79,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void initialgoal() throws Exception
+    public void initialgoal() throws Exception
     {
         Assert.assertEquals(
             ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "main" ) ),
@@ -94,7 +94,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void simplerule() throws Exception
+    public void simplerule() throws Exception
     {
         final IRule l_rule = parsesinglerule(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -133,7 +133,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void complexrule() throws Exception
+    public void complexrule() throws Exception
     {
         final int l_fibonacci = new Random().nextInt( 25 );
         final CCollectValues l_values = new CCollectValues();
@@ -166,7 +166,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void action() throws Exception
+    public void action() throws Exception
     {
         final CCollectValues l_values = new CCollectValues();
 
@@ -203,7 +203,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void successfailplan() throws Exception
+    public void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -233,7 +233,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void repair() throws Exception
+    public void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -263,7 +263,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void deconstructsimple() throws Exception
+    public void deconstructsimple() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -289,7 +289,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void numberexpression() throws Exception
+    public void numberexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -312,7 +312,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void numbervariableexpression() throws Exception
+    public void numbervariableexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -351,7 +351,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void constantexpression() throws Exception
+    public void constantexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -378,7 +378,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void booleanoperators() throws Exception
+    public void booleanoperators() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -424,7 +424,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void booleanexpression() throws Exception
+    public void booleanexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -449,7 +449,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void ternarytrue() throws Exception
+    public void ternarytrue() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -472,7 +472,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void ternarycalculation() throws Exception
+    public void ternarycalculation() throws Exception
     {
         final Random l_random = new Random();
 
@@ -505,7 +505,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void ternaryfalse() throws Exception
+    public void ternaryfalse() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -529,7 +529,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void multipleplanitems() throws Exception
+    public void multipleplanitems() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -556,7 +556,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void plandescription() throws Exception
+    public void plandescription() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -572,7 +572,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void multipleplanexecution() throws Exception
+    public void multipleplanexecution() throws Exception
     {
         final IPlan[] l_plans = parsemultipleplans(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -611,7 +611,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void annotation() throws Exception
+    public void annotation() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -647,7 +647,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void termlist() throws Exception
+    public void termlist() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
@@ -679,7 +679,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void lambda() throws Exception
+    public void lambda() throws Exception
     {
         final CCollectValues l_values = new CCollectValues();
 

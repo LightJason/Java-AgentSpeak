@@ -273,7 +273,7 @@ public final class TestCHanoiTowers extends IBaseTest
                 new IVariableBuilder()
                 {
                     @Override
-                    public final Stream<IVariable<?>> apply( final IAgent<?> p_agent, final IInstantiable p_instantiable
+                    public Stream<IVariable<?>> apply( final IAgent<?> p_agent, final IInstantiable p_instantiable
                     )
                     {
                         return Stream.of(
@@ -289,7 +289,7 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Override
         @SuppressWarnings( "unchecked" )
-        public final CAgent generatesingle( final Object... p_data )
+        public CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration, (int) p_data[0] );
         }
@@ -307,21 +307,21 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "generic/print" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             return CFuzzyValue.of( true );
@@ -340,21 +340,21 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "stop" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
@@ -376,21 +376,21 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "tower/size" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
@@ -429,21 +429,21 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "tower/push" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 2;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
@@ -474,21 +474,21 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "tower/pop" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
@@ -556,7 +556,7 @@ public final class TestCHanoiTowers extends IBaseTest
         private static final transient long serialVersionUID = 1361367629042813689L;
 
         @Override
-        public final synchronized CSlice push( final CSlice p_item )
+        public synchronized CSlice push( final CSlice p_item )
         {
             if ( ( this.size() > 0 ) && ( this.peek().size() < p_item.size() ) )
                 throw new IllegalStateException();
@@ -565,7 +565,7 @@ public final class TestCHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final synchronized CSlice pop()
+        public synchronized CSlice pop()
         {
             if ( this.isEmpty() )
                 throw new IllegalStateException();
@@ -574,19 +574,19 @@ public final class TestCHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final synchronized CSlice peek()
+        public synchronized CSlice peek()
         {
             return super.peek();
         }
 
         @Override
-        public final synchronized boolean empty()
+        public synchronized boolean empty()
         {
             return super.empty();
         }
 
         @Override
-        public final synchronized int search( final Object p_object )
+        public synchronized int search( final Object p_object )
         {
             return super.search( p_object );
         }

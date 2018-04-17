@@ -146,7 +146,7 @@ public final class TestCBinaryExpression extends IBaseTest
     @Test
     @SuppressWarnings( "unchecked" )
     @UseDataProvider( "operator" )
-    public final void variable( @Nonnull final Object[] p_data )
+    public void variable( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 4 );
 
@@ -181,7 +181,7 @@ public final class TestCBinaryExpression extends IBaseTest
     @Test
     @SuppressWarnings( "unchecked" )
     @UseDataProvider( "operator" )
-    public final void raw( @Nonnull final Object[] p_data )
+    public void raw( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 4 );
 
@@ -225,7 +225,7 @@ public final class TestCBinaryExpression extends IBaseTest
         }
 
         @Override
-        public final int compareTo( @Nonnull final CCompare p_object )
+        public int compareTo( @Nonnull final CCompare p_object )
         {
             return this.m_data.compareTo( p_object.m_data );
         }

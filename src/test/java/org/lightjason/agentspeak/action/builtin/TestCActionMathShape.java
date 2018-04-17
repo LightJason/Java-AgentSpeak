@@ -48,7 +48,7 @@ public final class TestCActionMathShape extends IBaseTest
      * test in circle
      */
     @Test
-    public final void incircle()
+    public void incircle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -67,7 +67,7 @@ public final class TestCActionMathShape extends IBaseTest
      * test in rechtangle
      */
     @Test
-    public final void inrechtangle()
+    public void inrechtangle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public final class TestCActionMathShape extends IBaseTest
      * test in triangle
      */
     @Test
-    public final void intriangle()
+    public void intriangle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

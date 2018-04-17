@@ -53,7 +53,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception on parsing exception
      */
     @Test
-    public final void literalvaluetraversing() throws Exception
+    public void literalvaluetraversing() throws Exception
     {
         final Set<ILiteral> l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
@@ -77,7 +77,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exeception
      */
     @Test
-    public final void literalvaluesequentialtraversing() throws Exception
+    public void literalvaluesequentialtraversing() throws Exception
     {
         final ILiteral[] l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
@@ -106,7 +106,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void structurehash() throws Exception
+    public void structurehash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "foo(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );

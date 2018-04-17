@@ -62,7 +62,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test map create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test map keys
      */
     @Test
-    public final void keysvalues()
+    public void keysvalues()
     {
         final Map<?, ?> l_map = StreamUtils.zip(
             Stream.of( "foo", "bar", "yyy", "xxx" ),
@@ -142,7 +142,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test map putsingle
      */
     @Test
-    public final void putsingle()
+    public void putsingle()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
@@ -177,7 +177,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test multiple put
      */
     @Test
-    public final void putmultiple()
+    public void putmultiple()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
@@ -208,7 +208,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test remove
      */
     @Test
-    public final void remove()
+    public void remove()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -233,7 +233,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test get-multiple
      */
     @Test
-    public final void getmultiple()
+    public void getmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -259,7 +259,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test get-single
      */
     @Test
-    public final void getsingle()
+    public void getsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

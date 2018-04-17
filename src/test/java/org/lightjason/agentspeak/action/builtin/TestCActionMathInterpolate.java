@@ -56,7 +56,7 @@ public final class TestCActionMathInterpolate extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -102,7 +102,7 @@ public final class TestCActionMathInterpolate extends IBaseTest
      * test single interpolate
      */
     @Test
-    public final void singleinterpolate()
+    public void singleinterpolate()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -122,7 +122,7 @@ public final class TestCActionMathInterpolate extends IBaseTest
      * test multiple interpolate
      */
     @Test
-    public final void multipleinterpolate()
+    public void multipleinterpolate()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

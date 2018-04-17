@@ -91,7 +91,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_summarystatistic = new SummaryStatistics();
         m_descriptivestatistic = new DescriptiveStatistics();
@@ -108,7 +108,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test create statistics
      */
     @Test
-    public final void createstatistics()
+    public void createstatistics()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -134,7 +134,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test percentile
      */
     @Test
-    public final void percentile()
+    public void percentile()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final DescriptiveStatistics l_statistic1 = new DescriptiveStatistics();
@@ -167,7 +167,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test clear
      */
     @Test
-    public final void clear()
+    public void clear()
     {
         new CClearStatistic().execute(
             false, IContext.EMPTYPLAN,
@@ -183,7 +183,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test create distribution
      */
     @Test
-    public final void createdistribution()
+    public void createdistribution()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -237,7 +237,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test add statistics value
      */
     @Test
-    public final void addstatisticvalue()
+    public void addstatisticvalue()
     {
         new CAddStatisticValue().execute(
             false, IContext.EMPTYPLAN,
@@ -253,7 +253,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test multiple statistics value of summary
      */
     @Test
-    public final void summarymultiplestatisticvalue()
+    public void summarymultiplestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -288,7 +288,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test multiple statistics value of descriptive
      */
     @Test
-    public final void descriptivemultiplestatisticvalue()
+    public void descriptivemultiplestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -323,7 +323,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test add random sample
      */
     @Test
-    public final void randomsample()
+    public void randomsample()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -342,7 +342,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test random simple
      */
     @Test
-    public final void randomsimple()
+    public void randomsimple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -361,7 +361,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test single statistics value
      */
     @Test
-    public final void singlestatisticvalue()
+    public void singlestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -380,7 +380,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test exponential selection with strict parameter
      */
     @Test
-    public final void exponentialselectionstrict()
+    public void exponentialselectionstrict()
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
@@ -413,7 +413,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test exponential selection with lazy parameter
      */
     @Test
-    public final void exponentialselectionlazy()
+    public void exponentialselectionlazy()
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
@@ -445,7 +445,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test linear selection
      */
     @Test
-    public final void linearselection()
+    public void linearselection()
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 

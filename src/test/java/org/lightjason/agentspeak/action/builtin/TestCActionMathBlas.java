@@ -69,7 +69,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_matrix1 = new DenseDoubleMatrix2D( new double[][]{{2, 6}, {3, 8}} );
         m_matrix2 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
@@ -80,7 +80,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test size
      */
     @Test
-    public final void size()
+    public void size()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test multiply
      */
     @Test
-    public final void multiply()
+    public void multiply()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -119,7 +119,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test elementwise for matrix
      */
     @Test
-    public final void elementwisematrix()
+    public void elementwisematrix()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -156,7 +156,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test elementwise for vector
      */
     @Test
-    public final void elementwisevector()
+    public void elementwisevector()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

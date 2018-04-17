@@ -92,7 +92,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric weight metric equality
      */
     @Test
-    public final void symmetricweightequality()
+    public void symmetricweightequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -110,7 +110,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric weight metric inequality
      */
     @Test
-    public final void symmetricweightinequality()
+    public void symmetricweightinequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -128,7 +128,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric metric equality
      */
     @Test
-    public final void weightequality()
+    public void weightequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -147,7 +147,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric metric equality
      */
     @Test
-    public final void weightinequality()
+    public void weightinequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -207,7 +207,7 @@ public final class TestCMetric extends IBaseTest
     private static final class CGenerator implements IViewGenerator
     {
         @Override
-        public final IView apply( final String p_name, final IView p_parent )
+        public IView apply( final String p_name, final IView p_parent )
         {
             return new CBeliefbase( new CMultiStorage<>() ).create( p_name, p_parent );
         }

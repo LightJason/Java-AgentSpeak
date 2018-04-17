@@ -257,7 +257,7 @@ public final class TestCActionMath extends IBaseTest
      */
     @Test
     @UseDataProvider( "aggregationvaluegenerate" )
-    public final void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
+    public void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -285,7 +285,7 @@ public final class TestCActionMath extends IBaseTest
      */
     @Test
     @UseDataProvider( "singlevaluegenerate" )
-    public final void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
+    public void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -308,7 +308,7 @@ public final class TestCActionMath extends IBaseTest
      * test binomial
      */
     @Test
-    public final void binomial()
+    public void binomial()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -327,7 +327,7 @@ public final class TestCActionMath extends IBaseTest
      * test factorial
      */
     @Test
-    public final void factorial()
+    public void factorial()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -349,7 +349,7 @@ public final class TestCActionMath extends IBaseTest
      * test primefactors
      */
     @Test
-    public final void primefactors()
+    public void primefactors()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -368,7 +368,7 @@ public final class TestCActionMath extends IBaseTest
      * test sigmoid
      */
     @Test
-    public final void sigmoid()
+    public void sigmoid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -388,7 +388,7 @@ public final class TestCActionMath extends IBaseTest
      * test stirling
      */
     @Test
-    public final void stirling()
+    public void stirling()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -406,7 +406,7 @@ public final class TestCActionMath extends IBaseTest
      * test power
      */
     @Test
-    public final void pow()
+    public void pow()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -427,7 +427,7 @@ public final class TestCActionMath extends IBaseTest
      * test geometricmean
      */
     @Test
-    public final void geometricmean( )
+    public void geometricmean( )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -446,7 +446,7 @@ public final class TestCActionMath extends IBaseTest
      * test harmonicmean
      */
     @Test
-    public final void harmonicmean()
+    public void harmonicmean()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -464,7 +464,7 @@ public final class TestCActionMath extends IBaseTest
      * test hypot
      */
     @Test
-    public final void hypot()
+    public void hypot()
     {
         final Random l_random = new Random();
         final List<Double> l_input = IntStream.range( 0, 100 ).mapToDouble( i -> l_random.nextGaussian() ).boxed().collect( Collectors.toList() );
@@ -491,7 +491,7 @@ public final class TestCActionMath extends IBaseTest
      * test max index
      */
     @Test
-    public final void maxIndex()
+    public void maxIndex()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -509,7 +509,7 @@ public final class TestCActionMath extends IBaseTest
      * test min index
      */
     @Test
-    public final void minIndex()
+    public void minIndex()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

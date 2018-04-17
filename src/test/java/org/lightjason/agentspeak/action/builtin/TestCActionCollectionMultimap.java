@@ -64,7 +64,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test synchronized create
      */
     @Test
-    public final void createsynchronized()
+    public void createsynchronized()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -102,7 +102,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test key and values
      */
     @Test
-    public final void keysvalues()
+    public void keysvalues()
     {
         final Multimap<Object, Object> l_map = HashMultimap.create();
         l_map.put( "a", 1 );
@@ -136,7 +136,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test as-map
      */
     @Test
-    public final void asmap()
+    public void asmap()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
         final List<ITerm> l_return = new ArrayList<>();
@@ -166,7 +166,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test put-single
      */
     @Test
-    public final void putsingle()
+    public void putsingle()
     {
         final Multimap<Integer, String> l_map1 = HashMultimap.create();
         final Multimap<Integer, String> l_map2 = HashMultimap.create();
@@ -189,7 +189,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test put-multiple
      */
     @Test
-    public final void putmultiple()
+    public void putmultiple()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
 
@@ -209,7 +209,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test get-multiple
      */
     @Test
-    public final void getmultiple()
+    public void getmultiple()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
         final List<ITerm> l_return = new ArrayList<>();
@@ -235,7 +235,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test get-single
      */
     @Test
-    public final void getsingle()
+    public void getsingle()
     {
         final Multimap<Integer, String> l_map1 = HashMultimap.create();
         final Multimap<Integer, String> l_map2 = HashMultimap.create();

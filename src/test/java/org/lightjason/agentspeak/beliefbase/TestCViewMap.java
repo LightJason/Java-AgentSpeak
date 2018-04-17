@@ -101,7 +101,7 @@ public final class TestCViewMap extends IBaseTest
      */
     @Before
     @SuppressWarnings( "unchecked" )
-    public final void initialize() throws IOException
+    public void initialize() throws IOException
     {
         m_testlog = Collections.synchronizedList( new ArrayList<>() );
         m_data = new ObjectMapper().readValue(
@@ -114,7 +114,7 @@ public final class TestCViewMap extends IBaseTest
      * test stream
      */
     @Test
-    public final void stream()
+    public void stream()
     {
         Assume.assumeNotNull( m_data );
 
@@ -137,7 +137,7 @@ public final class TestCViewMap extends IBaseTest
      * test contains literal
      */
     @Test
-    public final void containsliteral()
+    public void containsliteral()
     {
         Assume.assumeNotNull( m_data );
         final IView l_view = new CViewMap( "main", m_data );
@@ -151,7 +151,7 @@ public final class TestCViewMap extends IBaseTest
      * test contains view
      */
     @Test
-    public final void containsview()
+    public void containsview()
     {
         Assume.assumeNotNull( m_data );
         final IView l_view = new CViewMap( "main", m_data );
@@ -166,7 +166,7 @@ public final class TestCViewMap extends IBaseTest
      * @throws Exception is thrown on execution error
      */
     @Test
-    public final void inagent() throws Exception
+    public void inagent() throws Exception
     {
         Assume.assumeNotNull( m_data );
 
@@ -199,21 +199,21 @@ public final class TestCViewMap extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "generic/print" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
@@ -233,14 +233,14 @@ public final class TestCViewMap extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "test/result" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }

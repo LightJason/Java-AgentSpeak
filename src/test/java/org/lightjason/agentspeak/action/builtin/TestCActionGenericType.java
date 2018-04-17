@@ -60,7 +60,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test create literal action
      */
     @Test
-    public final void createliteral()
+    public void createliteral()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -87,7 +87,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test parse literal action
      */
     @Test
-    public final void parseliteral()
+    public void parseliteral()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test parse literal action with error
      */
     @Test
-    public final void parseliteralerror()
+    public void parseliteralerror()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -132,7 +132,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test parse-float action
      */
     @Test
-    public final void parsefloat()
+    public void parsefloat()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -154,7 +154,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test type action
      */
     @Test
-    public final void type()
+    public void type()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -176,7 +176,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "is" action
      */
     @Test
-    public final void is()
+    public void is()
     {
         Assert.assertFalse(
             new CIs().execute(
@@ -200,7 +200,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "isnull"action
      */
     @Test
-    public final void isnull()
+    public void isnull()
     {
         Assert.assertFalse(
             new CIsNull().execute(
@@ -224,7 +224,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "isnumeric" action
      */
     @Test
-    public final void isnumeric()
+    public void isnumeric()
     {
         Assert.assertFalse(
             new CIsNumeric().execute(
@@ -248,7 +248,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "isstring" action
      */
     @Test
-    public final void isstring()
+    public void isstring()
     {
         Assert.assertFalse(
             new CIsString().execute(
@@ -272,7 +272,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "tostring"
      */
     @Test
-    public final void tostring()
+    public void tostring()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -294,7 +294,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "tofloat"
      */
     @Test
-    public final void tofloat()
+    public void tofloat()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -315,7 +315,7 @@ public final class TestCActionGenericType extends IBaseTest
      * test "tofloat" error
      */
     @Test
-    public final void tofloaterror()
+    public void tofloaterror()
     {
         Assert.assertFalse(
             new CToNumber().execute(

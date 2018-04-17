@@ -61,7 +61,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void belief() throws Exception
+    public void belief() throws Exception
     {
         final IASTVisitorPlanBundle l_parser = new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() )
                                                     .parse( streamfromstring( "bar(1234). foo('tests')." ) );
@@ -79,7 +79,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void simplerule() throws Exception
+    public void simplerule() throws Exception
     {
         final IRule l_rule = parsesinglerule(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -108,7 +108,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      */
     @Test
     @Ignore
-    public final void complexrule() throws Exception
+    public void complexrule() throws Exception
     {
         final Random l_random = new Random();
         final int l_nvalue = l_random.nextInt( 3 );
@@ -146,7 +146,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void successfailplan() throws Exception
+    public void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -176,7 +176,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void repair() throws Exception
+    public void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -206,7 +206,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void deconstructsimple() throws Exception
+    public void deconstructsimple() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -232,7 +232,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void numberexpression() throws Exception
+    public void numberexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -255,7 +255,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void numbervariableexpression() throws Exception
+    public void numbervariableexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -294,7 +294,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void constantexpression() throws Exception
+    public void constantexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -322,7 +322,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void booleanoperators() throws Exception
+    public void booleanoperators() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -369,7 +369,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void booleanexpression() throws Exception
+    public void booleanexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -394,7 +394,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void ternarytrue() throws Exception
+    public void ternarytrue() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -417,7 +417,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void ternaryfalse() throws Exception
+    public void ternaryfalse() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -440,7 +440,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void multipleplanitems() throws Exception
+    public void multipleplanitems() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -467,7 +467,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void plandescription() throws Exception
+    public void plandescription() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -483,7 +483,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void multipleplanexecution() throws Exception
+    public void multipleplanexecution() throws Exception
     {
         final IPlan[] l_plans = parsemultipleplans(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -522,7 +522,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void annotation() throws Exception
+    public void annotation() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
@@ -558,7 +558,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
      * @throws Exception thrown on stream and parser error
      */
     @Test
-    public final void termlist() throws Exception
+    public void termlist() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
             new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),

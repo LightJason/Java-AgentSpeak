@@ -48,7 +48,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test literal structure
      */
     @Test
-    public final void literal()
+    public void literal()
     {
         final ILiteral l_emptyliteral = CLiteral.of( "foo/bar" );
 
@@ -80,7 +80,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test raw-term structure
      */
     @Test
-    public final void rawterm()
+    public void rawterm()
     {
         final ITerm l_stringterm = CRawTerm.of( "hello" );
 
@@ -101,7 +101,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test constant access structure
      */
     @Test( expected = RuntimeException.class )
-    public final void constantaccess()
+    public void constantaccess()
     {
         new CConstant<>( "CA", 5 ).set( 10 );
     }
@@ -111,7 +111,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test constant structure
      */
     @Test
-    public final void constant()
+    public void constant()
     {
         final double l_value = Math.random();
         final ITerm l_constant = new CConstant<>( "C", l_value );
@@ -127,7 +127,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test constant copy
      */
     @Test
-    public final void constantcopy()
+    public void constantcopy()
     {
         Assert.assertEquals(
             new CConstant<>( "const/value", "test" ).shallowcopysuffix().functor(),
@@ -144,7 +144,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * check any variable
      */
     @Test( expected = IllegalStateException.class )
-    public final void variableany()
+    public void variableany()
     {
         final IVariable<?> l_variable = new CVariable<Object>( "_" );
 
@@ -159,7 +159,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test exception on value asiable
      */
     @Test( expected = IllegalArgumentException.class )
-    public final void variablevalueassignable()
+    public void variablevalueassignable()
     {
         new CVariable<Object>( "num", 123 ).throwvaluenotassignableto( String.class );
     }
@@ -168,7 +168,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * variable equals
      */
     @Test
-    public final void variableequals()
+    public void variableequals()
     {
         Assert.assertEquals(
             new CVariable<Object>( "foo", "str" ),
@@ -185,7 +185,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test tostring
      */
     @Test
-    public final void variabletostring()
+    public void variabletostring()
     {
         Assert.assertEquals( new CVariable<>( "data" ).toString(), "data()" );
         Assert.assertEquals( new CVariable<>( "data", "value" ).toString(), "data(value)" );
@@ -196,7 +196,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * checks the variable structure
      */
     @Test
-    public final void variable()
+    public void variable()
     {
         Assert.assertTrue( new CVariable<>( "_" ).any() );
 
@@ -227,7 +227,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test variable functor
      */
     @Test
-    public final void variablefunctor()
+    public void variablefunctor()
     {
         Assert.assertEquals(
             new CVariable<>( "prefix/name" ).functorpath(),
@@ -239,7 +239,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * check the mutex variable
      */
     @Test
-    public final void variablemutex()
+    public void variablemutex()
     {
         double l_value = Math.random();
         final IVariable<Number> l_variable = new CMutexVariable<>( "V", l_value );
@@ -267,7 +267,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test variable shallow-copy
      */
     @Test
-    public final void variablecopy()
+    public void variablecopy()
     {
         final IVariable<?> l_variable = new CVariable<>( "prefix/copy", new Object()  );
 
@@ -289,7 +289,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test realocated variable
      */
     @Test
-    public final void relocatevariablerelocate()
+    public void relocatevariablerelocate()
     {
         final IVariable<String> l_variable = new CVariable<>( "RA" );
         final CRelocateVariable<String> l_relocate = new CRelocateVariable<>( l_variable );
@@ -321,7 +321,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test realocated variable
      */
     @Test
-    public final void relocatevariablemutex()
+    public void relocatevariablemutex()
     {
         final IVariable<String> l_variable = new CVariable<>( "RAM" );
         final CRelocateMutexVariable<String> l_relocate = new CRelocateMutexVariable<>( l_variable );

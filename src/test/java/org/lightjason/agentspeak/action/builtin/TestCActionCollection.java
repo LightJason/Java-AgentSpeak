@@ -128,7 +128,7 @@ public final class TestCActionCollection extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void size( final Pair<List<ITerm>, int[]> p_input )
+    public void size( final Pair<List<ITerm>, int[]> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -150,7 +150,7 @@ public final class TestCActionCollection extends IBaseTest
      * test empty
      */
     @Test
-    public final void empty()
+    public void empty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -171,7 +171,7 @@ public final class TestCActionCollection extends IBaseTest
      * test clear
      */
     @Test
-    public final void clear()
+    public void clear()
     {
         final List<Integer> l_list = IntStream.range( 0, 10 ).boxed().collect( Collectors.toList() );
         final Set<Integer> l_set = IntStream.range( 10, 20 ).boxed().collect( Collectors.toSet() );

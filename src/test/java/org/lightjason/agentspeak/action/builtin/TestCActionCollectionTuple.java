@@ -51,7 +51,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple creating
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple creating error
      */
     @Test
-    public final void createerror()
+    public void createerror()
     {
         Assert.assertFalse(
             new CCreate().execute(
@@ -90,7 +90,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple set
      */
     @Test
-    public final void set()
+    public void set()
     {
         final AbstractMap.Entry<String, String> l_data = new AbstractMap.SimpleEntry<>( "foo", "bar" );
 
@@ -108,7 +108,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple flat
      */
     @Test
-    public final void flat()
+    public void flat()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

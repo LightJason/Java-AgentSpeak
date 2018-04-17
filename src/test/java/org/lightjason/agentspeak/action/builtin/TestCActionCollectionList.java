@@ -67,7 +67,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test create empty list
      */
     @Test
-    public final void createempty()
+    public void createempty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -89,7 +89,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test create empty synchronized list
      */
     @Test
-    public final void createemptysynchronize()
+    public void createemptysynchronize()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test create non-empty list
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -141,7 +141,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test complement action
      */
     @Test
-    public final void complement()
+    public void complement()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -167,7 +167,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test get action
      */
     @Test
-    public final void get()
+    public void get()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final List<?> l_list = Stream.of( "a", 1, "b", true, "foobar", 56.78 ).collect( Collectors.toList() );
@@ -190,7 +190,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test reverse action
      */
     @Test
-    public final void reverse()
+    public void reverse()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final List<?> l_list = IntStream.range( 0, 10 ).mapToObj( i -> Math.random() ).collect( Collectors.toList() );
@@ -211,7 +211,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test remove action
      */
     @Test
-    public final void remove()
+    public void remove()
     {
         final Random l_random = new Random();
 
@@ -248,7 +248,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test set action
      */
     @Test
-    public final void set()
+    public void set()
     {
         final List<?> l_list1 = Stream.of( "" ).collect( Collectors.toList() );
         final List<?> l_list2 = Stream.of( "abc", 123, true ).collect( Collectors.toList() );
@@ -273,7 +273,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test add action
      */
     @Test
-    public final void add()
+    public void add()
     {
         final List<?> l_list = new ArrayList<>();
 
@@ -294,7 +294,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test range error
      */
     @Test
-    public final void rangeerror()
+    public void rangeerror()
     {
         Assert.assertFalse(
             new CRange().execute(
@@ -310,7 +310,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test range
      */
     @Test
-    public final void range()
+    public void range()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -343,7 +343,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test sublist error
      */
     @Test
-    public final void sublisterror()
+    public void sublisterror()
     {
         Assert.assertFalse(
             new CSubList().execute(
@@ -358,7 +358,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test sublist
      */
     @Test
-    public final void sublist()
+    public void sublist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -390,7 +390,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test flat action
      */
     @Test
-    public final void flat()
+    public void flat()
     {
         final Random l_random = new Random();
 
@@ -416,7 +416,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test flatconcat action
      */
     @Test
-    public final void flatconcat()
+    public void flatconcat()
     {
         final Random l_random = new Random();
 
@@ -442,7 +442,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test zip action error
      */
     @Test
-    public final void ziperror()
+    public void ziperror()
     {
         Assert.assertFalse(
             new CZip().execute(
@@ -458,7 +458,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test zip action
      */
     @Test
-    public final void zip()
+    public void zip()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -500,7 +500,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test unique action
      */
     @Test
-    public final void unique()
+    public void unique()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -530,7 +530,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test symmetric difference
      */
     @Test
-    public final void symmetricdifference()
+    public void symmetricdifference()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

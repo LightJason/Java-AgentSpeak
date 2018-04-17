@@ -91,7 +91,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         VECTOR1.put( 0, true );
         VECTOR1.put( 1, false );
@@ -172,7 +172,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -194,7 +194,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -213,7 +213,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test boolean value
      */
     @Test
-    public final void boolValue()
+    public void boolValue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -230,7 +230,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test set
      */
     @Test
-    public final void set()
+    public void set()
     {
         new CSet().execute(
             false, IContext.EMPTYPLAN,
@@ -246,7 +246,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test clear
      */
     @Test
-    public final void clear()
+    public void clear()
     {
         new CClear().execute(
             false, IContext.EMPTYPLAN,
@@ -261,7 +261,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test range
      */
     @Test
-    public final void range()
+    public void range()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -279,7 +279,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test numericvalue
      */
     @Test
-    public final void numericvalue()
+    public void numericvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -296,7 +296,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test toList
      */
     @Test
-    public final void tolist()
+    public void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -315,7 +315,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test toblas
      */
     @Test
-    public final void toblas()
+    public void toblas()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

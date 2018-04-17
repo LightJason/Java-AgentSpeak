@@ -89,7 +89,7 @@ public final class TestCActionCrypto extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatecrypt" )
-    public final void createkey( final Triple<String, Integer, Integer> p_crypt )
+    public void createkey( final Triple<String, Integer, Integer> p_crypt )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public final class TestCActionCrypto extends IBaseTest
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
     @Test
-    public final void wrongalgorithm() throws NoSuchAlgorithmException
+    public void wrongalgorithm() throws NoSuchAlgorithmException
     {
         final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
 
@@ -136,7 +136,7 @@ public final class TestCActionCrypto extends IBaseTest
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
     @Test
-    public final void decryptexecutionerror() throws NoSuchAlgorithmException
+    public void decryptexecutionerror() throws NoSuchAlgorithmException
     {
         final Pair<Key, Key> l_key = EAlgorithm.RSA.generateKey();
         final List<ITerm> l_return = new ArrayList<>();
@@ -166,7 +166,7 @@ public final class TestCActionCrypto extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatehash" )
-    public final void hash( final Pair<String, String[]> p_hash )
+    public void hash( final Pair<String, String[]> p_hash )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -185,7 +185,7 @@ public final class TestCActionCrypto extends IBaseTest
      * test hash exception
      */
     @Test( expected = CRuntimeException.class )
-    public final void hashexception()
+    public void hashexception()
     {
         new CHash().execute(
             false, IContext.EMPTYPLAN,
@@ -213,7 +213,7 @@ public final class TestCActionCrypto extends IBaseTest
      * test key generation on error call
      */
     @Test
-    public final void createkeyError()
+    public void createkeyError()
     {
         Assert.assertFalse(
 
@@ -232,7 +232,7 @@ public final class TestCActionCrypto extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatecrypt" )
-    public final void encryptdecreypt( final Triple<String, Integer, Integer> p_crypt  )
+    public void encryptdecreypt( final Triple<String, Integer, Integer> p_crypt  )
     {
         final List<ITerm> l_returnkey = new ArrayList<>();
 

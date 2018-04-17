@@ -42,7 +42,7 @@ public final class TestCUnary extends IBaseTest
      * decrement
      */
     @Test
-    public final void decrement()
+    public void decrement()
     {
         final IVariable<Object> l_value = new CVariable<>( "Value" );
         l_value.set( 5 );
@@ -63,7 +63,7 @@ public final class TestCUnary extends IBaseTest
      * decrement
      */
     @Test
-    public final void increment()
+    public void increment()
     {
         final IVariable<Object> l_value = new CVariable<>( "Value" );
         l_value.set( 7 );

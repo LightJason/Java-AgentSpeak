@@ -69,7 +69,7 @@ public final class TestCActionProlog extends IBaseTest
      * @throws Exception is thrown on problems
      */
     @Before
-    public final void initialize() throws Exception
+    public void initialize() throws Exception
     {
         m_agent = new CAgentGenerator().generatesingle();
         m_context = new CContext( Objects.requireNonNull( m_agent ), IPlan.EMPTY, Collections.emptyList() );
@@ -80,7 +80,7 @@ public final class TestCActionProlog extends IBaseTest
      * solve on an empty structure
      */
     @Test
-    public final void solveempty()
+    public void solveempty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public final class TestCActionProlog extends IBaseTest
      * solve all without theory
      */
     @Test
-    public final void solveallwithouttheory()
+    public void solveallwithouttheory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 
@@ -131,7 +131,7 @@ public final class TestCActionProlog extends IBaseTest
      * solve all with theory
      */
     @Test
-    public final void solveallwiththeory()
+    public void solveallwiththeory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 
@@ -167,7 +167,7 @@ public final class TestCActionProlog extends IBaseTest
      * solve any without theory
      */
     @Test
-    public final void solveanywithouttheory()
+    public void solveanywithouttheory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 

@@ -138,7 +138,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -160,7 +160,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -185,7 +185,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test set
      */
     @Test
-    public final void set()
+    public void set()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
@@ -202,7 +202,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test toList
      */
     @Test
-    public final void tolist()
+    public void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -223,7 +223,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test assign scalar
      */
     @Test
-    public final void assignscalar()
+    public void assignscalar()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
@@ -240,7 +240,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test assign vector
      */
     @Test
-    public final void assignvector()
+    public void assignvector()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
@@ -258,7 +258,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test get
      */
     @Test
-    public final void get()
+    public void get()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -277,7 +277,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test copy
      */
     @Test
-    public final void copy()
+    public void copy()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -295,7 +295,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test parse
      */
     @Test
-    public final void parse()
+    public void parse()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -320,7 +320,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test fromlist
      */
     @Test
-    public final void fromlist()
+    public void fromlist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

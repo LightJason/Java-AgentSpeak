@@ -171,7 +171,7 @@ public final class TestCActionBool extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -192,7 +192,7 @@ public final class TestCActionBool extends IBaseTest
      * test equal
      */
     @Test
-    public final void equal()
+    public void equal()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -239,7 +239,7 @@ public final class TestCActionBool extends IBaseTest
      * test not-equal
      */
     @Test
-    public final void notequal()
+    public void notequal()
     {
         final Object l_object = new Object();
         final List<ITerm> l_return = new ArrayList<>();

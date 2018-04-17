@@ -46,7 +46,7 @@ public final class TestCDeconstruct extends IBaseTest
      * test deconstruct static argument
      */
     @Test
-    public final void staticargument()
+    public void staticargument()
     {
         final IVariable<?> l_outer = new CVariable<>( "Outer" );
         final IVariable<?> l_inner = new CVariable<>( "Inner" );
@@ -71,7 +71,7 @@ public final class TestCDeconstruct extends IBaseTest
      * test deconstruct variable argument
      */
     @Test
-    public final void variableargument()
+    public void variableargument()
     {
         final IVariable<?> l_outer = new CVariable<>( "Outer" );
         final IVariable<?> l_inner = new CVariable<>( "Inner" );

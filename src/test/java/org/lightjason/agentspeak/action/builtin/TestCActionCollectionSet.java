@@ -54,7 +54,7 @@ public final class TestCActionCollectionSet extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public final class TestCActionCollectionSet extends IBaseTest
      * test create synchronized
      */
     @Test
-    public final void createsynchronized()
+    public void createsynchronized()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public final class TestCActionCollectionSet extends IBaseTest
      * test add
      */
     @Test
-    public final void add()
+    public void add()
     {
         final Set<Object> l_set = new HashSet<>();
 
@@ -110,7 +110,7 @@ public final class TestCActionCollectionSet extends IBaseTest
      * test contains
      */
     @Test
-    public final void contains()
+    public void contains()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Set<Object> l_set = Stream.of( "foo", 1, 2 ).collect( Collectors.toSet() );
@@ -128,7 +128,7 @@ public final class TestCActionCollectionSet extends IBaseTest
      * test remove
      */
     @Test
-    public final void remove()
+    public void remove()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Set<Object> l_set = Stream.of( "foo", 1, 2 ).collect( Collectors.toSet() );
@@ -147,7 +147,7 @@ public final class TestCActionCollectionSet extends IBaseTest
      * test to-list
      */
     @Test
-    public final void tolist()
+    public void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Set<Object> l_set = Stream.of( "foobar", "x", "y" ).collect( Collectors.toSet() );

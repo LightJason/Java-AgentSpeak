@@ -131,7 +131,7 @@ public final class TestCAgentExecution extends IBaseTest
      * @throws Exception is thrown on agent execution error
      */
     @Test
-    public final void executionorder() throws Exception
+    public void executionorder() throws Exception
     {
         Assume.assumeNotNull( m_agent );
         Assume.assumeNotNull( m_running );
@@ -188,7 +188,7 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final CAgent generatesingle( final Object... p_data )
+        public CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration );
         }
@@ -220,7 +220,7 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final CAgent call() throws Exception
+        public CAgent call() throws Exception
         {
             super.call();
             m_cycle.incrementAndGet();
@@ -251,21 +251,21 @@ public final class TestCAgentExecution extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "stop" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
@@ -285,21 +285,21 @@ public final class TestCAgentExecution extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "log" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );

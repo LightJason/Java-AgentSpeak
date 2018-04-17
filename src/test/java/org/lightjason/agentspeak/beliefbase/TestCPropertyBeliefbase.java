@@ -51,7 +51,7 @@ public final class TestCPropertyBeliefbase extends IBaseTest
      * @throws Exception is thrown on intialization error
      */
     @Test
-    public final void belieflist() throws Exception
+    public void belieflist() throws Exception
     {
         final IAgent<?> l_agent = new CAgent.CAgentGenerator( "" ).generatesingle();
 

@@ -46,7 +46,7 @@ public final class TestCView extends IBaseTest
      * random test tree structure
      */
     @Test
-    public final void testTree()
+    public void testTree()
     {
         final int l_max = 1000;
         final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
@@ -65,7 +65,7 @@ public final class TestCView extends IBaseTest
      * manual test of tree structure
      */
     @Test
-    public final void testManual()
+    public void testManual()
     {
         final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator l_gen = new CGenerator();
@@ -94,7 +94,7 @@ public final class TestCView extends IBaseTest
     {
 
         @Override
-        public final IView apply( final String p_name, final IView p_parent )
+        public IView apply( final String p_name, final IView p_parent )
         {
             return new CBeliefbase( new CMultiStorage<>() ).create( p_name, p_parent );
         }

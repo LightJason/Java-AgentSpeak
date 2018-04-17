@@ -53,7 +53,7 @@ public final class TestCActionGeneric extends IBaseTest
      * test throw action
      */
     @Test( expected = CRuntimeException.class )
-    public final void throwparameter()
+    public void throwparameter()
     {
         new CThrow().execute(
             false, IContext.EMPTYPLAN,
@@ -67,7 +67,7 @@ public final class TestCActionGeneric extends IBaseTest
      * test throw action
      */
     @Test( expected = CRuntimeException.class )
-    public final void throwwithoutparameter()
+    public void throwwithoutparameter()
     {
         new CThrow().execute(
             false, IContext.EMPTYPLAN,
@@ -81,7 +81,7 @@ public final class TestCActionGeneric extends IBaseTest
      * test throw without throwing
      */
     @Test
-    public final void thrownot()
+    public void thrownot()
     {
         new CThrow().execute(
             false, IContext.EMPTYPLAN,
@@ -97,7 +97,7 @@ public final class TestCActionGeneric extends IBaseTest
      * @throws Exception is thrown on encoding errors
      */
     @Test
-    public final void print() throws Exception
+    public void print() throws Exception
     {
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
@@ -116,7 +116,7 @@ public final class TestCActionGeneric extends IBaseTest
      * @throws Exception is thrown on encoding errors
      */
     @Test
-    public final void printformatter() throws Exception
+    public void printformatter() throws Exception
     {
         final CPrint.IFormatter<?> l_format1 = new CStringFormatter();
         final CPrint.IFormatter<?> l_format2 = new CBooleanFormatter();
@@ -145,7 +145,7 @@ public final class TestCActionGeneric extends IBaseTest
      * test single uuid
      */
     @Test
-    public final void uuid()
+    public void uuid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 

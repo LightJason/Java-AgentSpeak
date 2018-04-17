@@ -78,7 +78,7 @@ public final class TestCActionStorage extends IBaseTest
      * @throws Exception is thrown on any error
      */
     @Before
-    public final void initialize() throws Exception
+    public void initialize() throws Exception
     {
         m_context = new CContext(
             new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
@@ -91,7 +91,7 @@ public final class TestCActionStorage extends IBaseTest
      * test add action without forbidden keys
      */
     @Test
-    public final void addwithoutkeys()
+    public void addwithoutkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -110,7 +110,7 @@ public final class TestCActionStorage extends IBaseTest
      * test add action with forbidden keys
      */
     @Test
-    public final void addwithkeys()
+    public void addwithkeys()
     {
         new CAdd( "bar" ).execute(
             false, m_context,
@@ -127,7 +127,7 @@ public final class TestCActionStorage extends IBaseTest
      * test add action with forbidden key strean
      */
     @Test
-    public final void addwithkeystrean()
+    public void addwithkeystrean()
     {
         new CAdd( Stream.of( "abc" ) ).execute(
             false, m_context,
@@ -144,7 +144,7 @@ public final class TestCActionStorage extends IBaseTest
      * test remove action without keys
      */
     @Test
-    public final void removewithoutkeys()
+    public void removewithoutkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -168,7 +168,7 @@ public final class TestCActionStorage extends IBaseTest
      * test clear action without keys
      */
     @Test
-    public final void clearwithoutkeys()
+    public void clearwithoutkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -192,7 +192,7 @@ public final class TestCActionStorage extends IBaseTest
      * test remove action without keys
      */
     @Test
-    public final void removewithkeys()
+    public void removewithkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -217,7 +217,7 @@ public final class TestCActionStorage extends IBaseTest
      * test remove action without key stream
      */
     @Test
-    public final void removewithkeystream()
+    public void removewithkeystream()
     {
         Assume.assumeNotNull( m_context );
 
@@ -242,7 +242,7 @@ public final class TestCActionStorage extends IBaseTest
      * test clear action with keys
      */
     @Test
-    public final void clearwithkeys()
+    public void clearwithkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -267,7 +267,7 @@ public final class TestCActionStorage extends IBaseTest
      * test clear action with key stream
      */
     @Test
-    public final void clearwithkeystream()
+    public void clearwithkeystream()
     {
         Assume.assumeNotNull( m_context );
 
@@ -292,7 +292,7 @@ public final class TestCActionStorage extends IBaseTest
      * test exists action without keys
      */
     @Test
-    public final void existswithoutkeys()
+    public void existswithoutkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -318,7 +318,7 @@ public final class TestCActionStorage extends IBaseTest
      * test exists action with keys
      */
     @Test
-    public final void existswithkeys()
+    public void existswithkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -343,7 +343,7 @@ public final class TestCActionStorage extends IBaseTest
      * test exists action with key stream
      */
     @Test
-    public final void existswithkeystream()
+    public void existswithkeystream()
     {
         Assume.assumeNotNull( m_context );
 
@@ -370,7 +370,7 @@ public final class TestCActionStorage extends IBaseTest
      * test for checking minimal arguments
      */
     @Test
-    public final void arguments()
+    public void arguments()
     {
         Assert.assertArrayEquals(
 
@@ -392,7 +392,7 @@ public final class TestCActionStorage extends IBaseTest
      * test resolver access
      */
     @Test
-    public final void resolver()
+    public void resolver()
     {
         final Set<String> l_keys = Stream.of( "a", "x", "y" ).collect( Collectors.toSet() );
 

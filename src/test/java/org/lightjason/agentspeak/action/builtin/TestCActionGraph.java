@@ -116,7 +116,7 @@ public final class TestCActionGraph extends IBaseTest
      * test graph creating
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public final class TestCActionGraph extends IBaseTest
      * test add-vertex single
      */
     @Test
-    public final void addvertexsingle()
+    public void addvertexsingle()
     {
         final Graph<?, ?> l_graph1 = new SparseGraph<>();
         final Graph<?, ?> l_graph2 = new SparseGraph<>();
@@ -160,7 +160,7 @@ public final class TestCActionGraph extends IBaseTest
      * test add-vertex multiple
      */
     @Test
-    public final void addvertexmultiple()
+    public void addvertexmultiple()
     {
         final Graph<?, ?> l_graph = new SparseGraph<>();
 
@@ -179,7 +179,7 @@ public final class TestCActionGraph extends IBaseTest
      * test add-edge single
      */
     @Test
-    public final void addedgesingle()
+    public void addedgesingle()
     {
         final Graph<Integer, String> l_graph = new SparseGraph<>();
 
@@ -207,7 +207,7 @@ public final class TestCActionGraph extends IBaseTest
      * test add-edge multiple
      */
     @Test
-    public final void addedgemultiple()
+    public void addedgemultiple()
     {
         final Graph<Integer, String> l_graph = new SparseGraph<>();
 
@@ -226,7 +226,7 @@ public final class TestCActionGraph extends IBaseTest
      * test vertex-count
      */
     @Test
-    public final void vertexcount()
+    public void vertexcount()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -250,7 +250,7 @@ public final class TestCActionGraph extends IBaseTest
      * test edge-count
      */
     @Test
-    public final void edgecount()
+    public void edgecount()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -276,7 +276,7 @@ public final class TestCActionGraph extends IBaseTest
      * test vertices
      */
     @Test
-    public final void vertices()
+    public void vertices()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -300,7 +300,7 @@ public final class TestCActionGraph extends IBaseTest
      * test edges
      */
     @Test
-    public final void edges()
+    public void edges()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -325,7 +325,7 @@ public final class TestCActionGraph extends IBaseTest
      * test adjacency matrix
      */
     @Test
-    public final void adjacencymatrix()
+    public void adjacencymatrix()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -363,7 +363,7 @@ public final class TestCActionGraph extends IBaseTest
      * test contains-edge
      */
     @Test
-    public final void containsedge()
+    public void containsedge()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new SparseGraph<>();
@@ -393,7 +393,7 @@ public final class TestCActionGraph extends IBaseTest
      * test contains-vertex
      */
     @Test
-    public final void containsvertex()
+    public void containsvertex()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new SparseGraph<>();
@@ -423,7 +423,7 @@ public final class TestCActionGraph extends IBaseTest
      * test degree multiple
      */
     @Test
-    public final void degreemultiple()
+    public void degreemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -458,7 +458,7 @@ public final class TestCActionGraph extends IBaseTest
      * test degree single
      */
     @Test
-    public final void degreesingle()
+    public void degreesingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new UndirectedSparseGraph<>();
@@ -486,7 +486,7 @@ public final class TestCActionGraph extends IBaseTest
      * test distance-path
      */
     @Test
-    public final void distancepath()
+    public void distancepath()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -510,7 +510,7 @@ public final class TestCActionGraph extends IBaseTest
      * test shortest-path
      */
     @Test
-    public final void shortestpath()
+    public void shortestpath()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -534,7 +534,7 @@ public final class TestCActionGraph extends IBaseTest
      * test spanning-tree action
      */
     @Test
-    public final void spanningtree()
+    public void spanningtree()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -627,7 +627,7 @@ public final class TestCActionGraph extends IBaseTest
      * test find-edge single
      */
     @Test
-    public final void findedgesingle()
+    public void findedgesingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new UndirectedSparseGraph<>();
@@ -651,7 +651,7 @@ public final class TestCActionGraph extends IBaseTest
      * test find-edge multiple
      */
     @Test
-    public final void findedgemultiple()
+    public void findedgemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -676,7 +676,7 @@ public final class TestCActionGraph extends IBaseTest
      * test edgelist single
      */
     @Test
-    public final void edgelistsingle()
+    public void edgelistsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new SparseMultigraph<>();
@@ -719,7 +719,7 @@ public final class TestCActionGraph extends IBaseTest
      * test edgelist multiple
      */
     @Test
-    public final void edgelistmultiple()
+    public void edgelistmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseMultigraph<>();
@@ -761,7 +761,7 @@ public final class TestCActionGraph extends IBaseTest
      * test endpoint single
      */
     @Test
-    public final void endpointsingle()
+    public void endpointsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new UndirectedSparseGraph<>();
@@ -785,7 +785,7 @@ public final class TestCActionGraph extends IBaseTest
      * test endpoint multiple
      */
     @Test
-    public final void endpointmultiple()
+    public void endpointmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -809,7 +809,7 @@ public final class TestCActionGraph extends IBaseTest
      * test in-degree single
      */
     @Test
-    public final void indegreesingle()
+    public void indegreesingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new SparseGraph<>();
@@ -836,7 +836,7 @@ public final class TestCActionGraph extends IBaseTest
      * test in-degree multiple
      */
     @Test
-    public final void indegreemultiple()
+    public void indegreemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -859,7 +859,7 @@ public final class TestCActionGraph extends IBaseTest
      * test in-edge
      */
     @Test
-    public final void inedgessingle()
+    public void inedgessingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new SparseGraph<>();
@@ -900,7 +900,7 @@ public final class TestCActionGraph extends IBaseTest
      * test in-edge
      */
     @Test
-    public final void inedgesmultiple()
+    public void inedgesmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -940,7 +940,7 @@ public final class TestCActionGraph extends IBaseTest
      * test out-degree single
      */
     @Test
-    public final void outdegreesingle()
+    public void outdegreesingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
@@ -965,7 +965,7 @@ public final class TestCActionGraph extends IBaseTest
      * test out-degree single
      */
     @Test
-    public final void outdegreemultiple()
+    public void outdegreemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
@@ -989,7 +989,7 @@ public final class TestCActionGraph extends IBaseTest
      * test incident-count single
      */
     @Test
-    public final void incidentcountsingle()
+    public void incidentcountsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new SparseGraph<>();
@@ -1013,7 +1013,7 @@ public final class TestCActionGraph extends IBaseTest
      * test incident-count single
      */
     @Test
-    public final void incidentcountmultiple()
+    public void incidentcountmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new SparseGraph<>();
@@ -1036,7 +1036,7 @@ public final class TestCActionGraph extends IBaseTest
      * test incident-vertices single
      */
     @Test
-    public final void incidentverticessingle()
+    public void incidentverticessingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
@@ -1076,7 +1076,7 @@ public final class TestCActionGraph extends IBaseTest
      * test incident-vertices multiple
      */
     @Test
-    public final void incidentverticesmultiple()
+    public void incidentverticesmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1117,7 +1117,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-successor single
      */
     @Test
-    public final void issuccessorsingle()
+    public void issuccessorsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1142,7 +1142,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-successor multiple
      */
     @Test
-    public final void issuccesormultiple()
+    public void issuccesormultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1167,7 +1167,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-predecessor single
      */
     @Test
-    public final void ispredecessorsingle()
+    public void ispredecessorsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1192,7 +1192,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-predecessor multiple
      */
     @Test
-    public final void ispredecessormultiple()
+    public void ispredecessormultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1217,7 +1217,7 @@ public final class TestCActionGraph extends IBaseTest
      * test neighborscount single
      */
     @Test
-    public final void neighborscountsingle()
+    public void neighborscountsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1246,7 +1246,7 @@ public final class TestCActionGraph extends IBaseTest
      * test neighborscount single
      */
     @Test
-    public final void neighborscountmultiple()
+    public void neighborscountmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1273,7 +1273,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-neighbor single
      */
     @Test
-    public final void isneighborsingle()
+    public void isneighborsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1302,7 +1302,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-neighbor multiple
      */
     @Test
-    public final void isneighbormultiple()
+    public void isneighbormultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1330,7 +1330,7 @@ public final class TestCActionGraph extends IBaseTest
      * test neigbors single
      */
     @Test
-    public final void neigborssingle()
+    public void neigborssingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1373,7 +1373,7 @@ public final class TestCActionGraph extends IBaseTest
      * test neigbors multiple
      */
     @Test
-    public final void neigborsmultiple()
+    public void neigborsmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1415,7 +1415,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-incident single
      */
     @Test
-    public final void isincidentsingle()
+    public void isincidentsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1444,7 +1444,7 @@ public final class TestCActionGraph extends IBaseTest
      * test is-incident multiple
      */
     @Test
-    public final void isincidentmultiple()
+    public void isincidentmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1471,7 +1471,7 @@ public final class TestCActionGraph extends IBaseTest
      * test opposite single
      */
     @Test
-    public final void oppositesingle()
+    public void oppositesingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1495,7 +1495,7 @@ public final class TestCActionGraph extends IBaseTest
      * test opposite multiple
      */
     @Test
-    public final void oppositemultiple()
+    public void oppositemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1518,7 +1518,7 @@ public final class TestCActionGraph extends IBaseTest
      * test outedges single
      */
     @Test
-    public final void outedgessingle()
+    public void outedgessingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1560,7 +1560,7 @@ public final class TestCActionGraph extends IBaseTest
      * test outedges multiple
      */
     @Test
-    public final void outedgemultiple()
+    public void outedgemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1601,7 +1601,7 @@ public final class TestCActionGraph extends IBaseTest
      * test predecessor count single
      */
     @Test
-    public final void predecessorcountsingle()
+    public void predecessorcountsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
@@ -1627,7 +1627,7 @@ public final class TestCActionGraph extends IBaseTest
      * test predecessor count multiple
      */
     @Test
-    public final void predecessorcountmultiple()
+    public void predecessorcountmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
@@ -1652,7 +1652,7 @@ public final class TestCActionGraph extends IBaseTest
      * test remove vertex multiple
      */
     @Test
-    public final void vertexremovemultiple()
+    public void vertexremovemultiple()
     {
         final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
 
@@ -1676,7 +1676,7 @@ public final class TestCActionGraph extends IBaseTest
      * test remove vertex single
      */
     @Test
-    public final void vertextremovesingle()
+    public void vertextremovesingle()
     {
         final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
         final Graph<Integer, String> l_graph2 = new DirectedSparseGraph<>();
@@ -1706,7 +1706,7 @@ public final class TestCActionGraph extends IBaseTest
      * test successor count single
      */
     @Test
-    public final void successorcountsingle()
+    public void successorcountsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -1734,7 +1734,7 @@ public final class TestCActionGraph extends IBaseTest
      * test successor count multiple
      */
     @Test
-    public final void successorcountmultiple()
+    public void successorcountmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
@@ -1758,7 +1758,7 @@ public final class TestCActionGraph extends IBaseTest
      * test remove edge single
      */
     @Test
-    public final void removeedgesingle()
+    public void removeedgesingle()
     {
         final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
         final Graph<Integer, String> l_graph2 = new DirectedSparseGraph<>();
@@ -1785,7 +1785,7 @@ public final class TestCActionGraph extends IBaseTest
      * test remove edge multiple
      */
     @Test
-    public final void removeedgemultiple()
+    public void removeedgemultiple()
     {
         final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
 

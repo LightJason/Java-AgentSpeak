@@ -100,7 +100,7 @@ public final class TestCAgent extends IBaseTest
      * return list initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_testlog = Collections.synchronizedList( new ArrayList<>() );
     }
@@ -113,7 +113,7 @@ public final class TestCAgent extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void testASLDefault( final Triple<String, Number, Number> p_asl ) throws Exception
+    public void testASLDefault( final Triple<String, Number, Number> p_asl ) throws Exception
     {
         try
         (
@@ -181,21 +181,21 @@ public final class TestCAgent extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "generic/print" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
@@ -215,14 +215,14 @@ public final class TestCAgent extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
             return CPath.of( "test/result" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }

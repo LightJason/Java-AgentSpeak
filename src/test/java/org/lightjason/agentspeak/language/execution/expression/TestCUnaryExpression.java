@@ -86,7 +86,7 @@ public final class TestCUnaryExpression extends IBaseTest
     @Test
     @UseDataProvider( "operator" )
     @SuppressWarnings( "unchecked" )
-    public final void variable( @Nonnull final Object[] p_data )
+    public void variable( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 3 );
 
@@ -118,7 +118,7 @@ public final class TestCUnaryExpression extends IBaseTest
     @Test
     @UseDataProvider( "operator" )
     @SuppressWarnings( "unchecked" )
-    public final void raw( @Nonnull final Object[] p_data )
+    public void raw( @Nonnull final Object[] p_data )
     {
         Assume.assumeTrue( p_data.length == 3 );
 

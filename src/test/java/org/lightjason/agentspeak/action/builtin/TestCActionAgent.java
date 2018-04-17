@@ -103,7 +103,7 @@ public final class TestCActionAgent extends IBaseTest
      * test plan list
      */
     @Test
-    public final void planlist()
+    public void planlist()
     {
         final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testplanlist" ) );
         final IPlan l_plan = new CEmptyPlan( l_trigger );
@@ -141,7 +141,7 @@ public final class TestCActionAgent extends IBaseTest
      * test add plan
      */
     @Test
-    public final void addplan()
+    public void addplan()
     {
         final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testaddplan" ) ) );
 
@@ -163,7 +163,7 @@ public final class TestCActionAgent extends IBaseTest
      * test cycle-time
      */
     @Test
-    public final void cycletime()
+    public void cycletime()
     {
         this.next();
 
@@ -183,7 +183,7 @@ public final class TestCActionAgent extends IBaseTest
      * test get plan
      */
     @Test
-    public final void getplan()
+    public void getplan()
     {
         final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testgetplan" ) ) );
         final List<ITerm> l_return = new ArrayList<>();
@@ -217,7 +217,7 @@ public final class TestCActionAgent extends IBaseTest
      * test remove plan
      */
     @Test
-    public final void removeplan()
+    public void removeplan()
     {
         final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testremoveplan" ) ) );
         m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
@@ -236,7 +236,7 @@ public final class TestCActionAgent extends IBaseTest
      * test remove plan error
      */
     @Test
-    public final void removeplanerror()
+    public void removeplanerror()
     {
         Assert.assertFalse(
             new CRemovePlan().execute(
@@ -252,7 +252,7 @@ public final class TestCActionAgent extends IBaseTest
      * test clear-beliefbase
      */
     @Test
-    public final void clearbeliefbase()
+    public void clearbeliefbase()
     {
         IntStream.range( 0, 100 )
                  .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
@@ -276,7 +276,7 @@ public final class TestCActionAgent extends IBaseTest
      * test belieflist
      */
     @Test
-    public final void belieflist()
+    public void belieflist()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Set<String> l_list = IntStream.range( 0, 100 )
@@ -346,14 +346,14 @@ public final class TestCActionAgent extends IBaseTest
 
         @Nonnull
         @Override
-        public final ITrigger trigger()
+        public ITrigger trigger()
         {
             return m_trigger;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> condition( final IContext p_context )
+        public IFuzzyValue<Boolean> condition( final IContext p_context )
         {
             return CFuzzyValue.of( true );
         }

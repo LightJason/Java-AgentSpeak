@@ -45,7 +45,7 @@ public final class TestCPassing extends IBaseTest
      * test boolean passing
      */
     @Test
-    public final void passboolean()
+    public void passboolean()
     {
         Assert.assertTrue(
             new CPassBoolean( true ).execute(
@@ -61,7 +61,7 @@ public final class TestCPassing extends IBaseTest
      * test raw data
      */
     @Test
-    public final void passraw()
+    public void passraw()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public final class TestCPassing extends IBaseTest
      * test variable
      */
     @Test
-    public final void passvariable()
+    public void passvariable()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final IVariable<?> l_string = new CVariable<>( "foo" ).set( "hello" );
