@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -63,8 +62,7 @@ public final class TestCDeconstruct extends IBaseTest
         Assert.assertEquals( "foobar", l_outer.raw() );
         Assert.assertTrue( l_inner.raw() instanceof List<?> );
         Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
-        Assert.assertEquals( 5, l_inner.<List<ITerm>>raw().get( 0 ).<Number>raw() );
-        Assert.assertEquals( "test", l_inner.<List<ITerm>>raw().get( 1 ).raw() );
+        Assert.assertArrayEquals( Stream.of( 5, "test" ).toArray(), l_inner.<List<?>>raw().toArray() );
     }
 
     /**
@@ -91,8 +89,7 @@ public final class TestCDeconstruct extends IBaseTest
         Assert.assertEquals( "foo", l_outer.raw() );
         Assert.assertTrue( l_inner.raw() instanceof List<?> );
         Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
-        Assert.assertEquals( "bar", l_inner.<List<ITerm>>raw().get( 0 ).raw() );
-        Assert.assertEquals( 7, l_inner.<List<ITerm>>raw().get( 1 ).<Number>raw() );
+        Assert.assertArrayEquals( Stream.of( "bar", 7 ).toArray(), l_inner.<List<?>>raw().toArray() );
     }
 
 

@@ -173,9 +173,9 @@ public final class TestCViewMap extends IBaseTest
         final IAgent<?> l_agent = new CAgent.CAgentGenerator(
             "!main. +!main <- "
             + ">>map/str(X); "
-            + "generic/print('string-value:', X); "
-            + "test/result( bool/equal(X, 'text value'), 'unified value incorrect' ). "
-            + "-!main <- test/result( fail, 'unification wrong').",
+            + ".generic/print('string-value:', X); "
+            + ".test/result( .bool/equal(X, 'text value'), 'unified value incorrect' ). "
+            + "-!main <- .test/result( fail, 'unification wrong').",
             m_data,
             m_actions
         ).generatesingle().call().call();
@@ -248,8 +248,7 @@ public final class TestCViewMap extends IBaseTest
         @Nonnull
         @Override
         public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_testlog.add(
                 new ImmutablePair<>(

@@ -800,7 +800,9 @@ public final class CAgentSpeak
                                           @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
     {
         final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
-        final Object l_constraint = p_visitor.visit( p_constraint );
+        final Object l_constraint = Objects.nonNull( p_constraint )
+                                    ? p_visitor.visit( p_constraint )
+                                    : null;
 
         if ( p_constraint instanceof IExpression )
             return new CExpressionUnify(
