@@ -100,7 +100,7 @@ public final class CGetPlan extends IBuiltinAction
         try
         {
 
-            l_literal = CCommon.rawvalueAssignableTo( p_literal, ILiteral.class )
+            l_literal = CCommon.isssignableto( p_literal, ILiteral.class )
                         ? p_literal.<ILiteral>raw()
                         : CLiteral.parse( p_literal.<String>raw() );
 

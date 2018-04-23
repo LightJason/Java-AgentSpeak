@@ -170,7 +170,7 @@ public final class CCreateDistribution extends IBuiltinAction
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         IntStream.range( 0, l_arguments.size() )
-                 .filter( i -> CCommon.rawvalueAssignableTo( l_arguments.get( i ), String.class ) )
+                 .filter( i -> CCommon.isssignableto( l_arguments.get( i ), String.class ) )
                  .mapToObj( i -> new AbstractMap.SimpleImmutableEntry<>( i, l_arguments.get( i ).<String>raw() ) )
                  .filter( i -> EDistribution.exist( i.getValue() ) )
                  .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), EDistribution.of( i.getValue() ) ) )
@@ -181,7 +181,7 @@ public final class CCreateDistribution extends IBuiltinAction
                      final int l_skip;
                      final EGenerator l_generator;
 
-                     if ( i.getKey() < l_arguments.size() - 1 && CCommon.rawvalueAssignableTo( l_arguments.get( i.getKey() + 1 ), String.class ) )
+                     if ( i.getKey() < l_arguments.size() - 1 && CCommon.isssignableto( l_arguments.get( i.getKey() + 1 ), String.class ) )
                      {
                          l_skip = 1;
                          l_generator = EGenerator.of( l_arguments.get( i.getKey() + 1 ).<String>raw() );

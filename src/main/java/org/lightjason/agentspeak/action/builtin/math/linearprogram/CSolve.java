@@ -108,10 +108,10 @@ public final class CSolve extends IBuiltinAction
         p_argument.subList( 1, p_argument.size() ).stream()
                   .map( i ->
                   {
-                      if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
+                      if ( CCommon.isssignableto( i, Number.class ) )
                           return new MaxIter( i.raw() );
 
-                      if ( CCommon.rawvalueAssignableTo( i, String.class ) )
+                      if ( CCommon.isssignableto( i, String.class ) )
                           switch ( i.<String>raw().trim().toLowerCase( Locale.ROOT ) )
                           {
                               case "non-negative":

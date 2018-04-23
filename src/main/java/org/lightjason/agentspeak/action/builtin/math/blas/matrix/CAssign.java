@@ -84,13 +84,13 @@ public final class CAssign extends IBuiltinAction
                        .allMatch( i ->
                        {
 
-                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Number.class ) )
+                           if ( CCommon.isssignableto( l_arguments.get( 0 ), Number.class ) )
                            {
                                i.<DoubleMatrix2D>raw().assign( l_arguments.get( 0 ).<Number>raw().doubleValue() );
                                return true;
                            }
 
-                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), DoubleMatrix2D.class ) )
+                           if ( CCommon.isssignableto( l_arguments.get( 0 ), DoubleMatrix2D.class ) )
                            {
                                i.<DoubleMatrix2D>raw().assign( l_arguments.get( 0 ).<DoubleMatrix2D>raw() );
                                return true;

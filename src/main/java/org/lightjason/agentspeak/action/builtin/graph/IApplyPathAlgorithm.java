@@ -75,15 +75,15 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
             return CFuzzyValue.of( false );
 
         final Map<Object, Number> l_weights = l_arguments.parallelStream()
-                                                         .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                         .filter( i -> CCommon.isssignableto( i, Map.class ) )
                                                          .findFirst()
                                                          .map( ITerm::<Map<Object, Number>>raw )
                                                          .orElseGet( Collections::emptyMap );
 
         final Number l_defaultvalue = StreamUtils.windowed( l_arguments.stream(), 2 )
-                                                 .filter( i -> CCommon.rawvalueAssignableTo( i.get( 0 ), String.class )
+                                                 .filter( i -> CCommon.isssignableto( i.get( 0 ), String.class )
                                                                && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
-                                                               && CCommon.rawvalueAssignableTo( i.get( 1 ), Number.class )
+                                                               && CCommon.isssignableto( i.get( 1 ), Number.class )
                                                  )
                                                  .findFirst()
                                                  .map( i -> i.get( 1 ).<Number>raw() )
@@ -92,11 +92,11 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
         final Function<Object, Number> l_weightfunction = e -> l_weights.getOrDefault( e, l_defaultvalue );
 
         final List<ITerm> l_vertices = StreamUtils.windowed( l_arguments.stream(), 2 )
-                                                   .filter( i -> !( CCommon.rawvalueAssignableTo( i.get( 0 ), String.class )
+                                                   .filter( i -> !( CCommon.isssignableto( i.get( 0 ), String.class )
                                                                  && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
-                                                                 && CCommon.rawvalueAssignableTo( i.get( 1 ), Number.class ) )
-                                                                 && !( CCommon.rawvalueAssignableTo( i.get( 0 ), Graph.class )
-                                                                 || CCommon.rawvalueAssignableTo( i.get( 1 ), Graph.class ) )
+                                                                 && CCommon.isssignableto( i.get( 1 ), Number.class ) )
+                                                                 && !( CCommon.isssignableto( i.get( 0 ), Graph.class )
+                                                                 || CCommon.isssignableto( i.get( 1 ), Graph.class ) )
                                                    )
                                                    .findFirst()
                                                    .orElseGet( Collections::emptyList );
@@ -106,7 +106,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
 
 
         l_arguments.stream()
-                   .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+                   .filter( i -> CCommon.isssignableto( i, Graph.class ) )
                    .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> this.apply( l_vertices, i, l_weightfunction ) )
                    .map( CRawTerm::of )

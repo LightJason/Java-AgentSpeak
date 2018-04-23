@@ -130,18 +130,18 @@ public final class CElementWise extends IBuiltinAction
                                   final List<ITerm> p_return )
     {
         // operation for matrix
-        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix2D.class ) )
+        if ( CCommon.isssignableto( p_left, DoubleMatrix2D.class ) )
         {
             final DoubleMatrix2D l_assign = p_left.<DoubleMatrix2D>raw().copy();
 
-            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix2D.class ) )
+            if ( CCommon.isssignableto( p_right, DoubleMatrix2D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix2D>raw(), p_matrixfunction );
                 p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
 
-            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
+            if ( CCommon.isssignableto( p_right, Number.class ) )
             {
                 l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
                 p_return.add( CRawTerm.of( l_assign ) );
@@ -150,18 +150,18 @@ public final class CElementWise extends IBuiltinAction
         }
 
         // operation for vector
-        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix1D.class ) )
+        if ( CCommon.isssignableto( p_left, DoubleMatrix1D.class ) )
         {
             final DoubleMatrix1D l_assign = p_left.<DoubleMatrix1D>raw().copy();
 
-            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix1D.class ) )
+            if ( CCommon.isssignableto( p_right, DoubleMatrix1D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix1D>raw(), p_matrixfunction );
                 p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
 
-            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
+            if ( CCommon.isssignableto( p_right, Number.class ) )
             {
                 l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
                 p_return.add( CRawTerm.of( l_assign ) );

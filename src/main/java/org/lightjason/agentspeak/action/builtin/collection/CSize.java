@@ -85,16 +85,16 @@ public final class CSize extends IBuiltinAction
      */
     private static long size( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        if ( CCommon.isssignableto( p_term, Collection.class ) )
             return p_term.<Collection<?>>raw().size();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        if ( CCommon.isssignableto( p_term, Map.class ) )
             return p_term.<Map<?, ?>>raw().size();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Multimap.class ) )
+        if ( CCommon.isssignableto( p_term, Multimap.class ) )
             return p_term.<Multimap<?, ?>>raw().size();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.Entry.class ) )
+        if ( CCommon.isssignableto( p_term, Map.Entry.class ) )
             return 2;
 
         return 0;

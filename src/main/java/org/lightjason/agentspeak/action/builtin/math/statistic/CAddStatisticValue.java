@@ -79,23 +79,23 @@ public final class CAddStatisticValue extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final double[] l_values = l_arguments.parallelStream()
-                                           .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                           .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                            .map( ITerm::<Number>raw )
                                            .mapToDouble( Number::doubleValue ).toArray();
 
         return CFuzzyValue.of(
             l_arguments.parallelStream()
-                   .filter( i -> CCommon.rawvalueAssignableTo( i, StatisticalSummary.class ) )
+                   .filter( i -> CCommon.isssignableto( i, StatisticalSummary.class ) )
                    .allMatch( i ->
                    {
 
-                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
                        {
                            Arrays.stream( l_values ).forEach( j -> i.<SummaryStatistics>raw().addValue( j ) );
                            return true;
                        }
 
-                       if ( CCommon.rawvalueAssignableTo( i, DescriptiveStatistics.class ) )
+                       if ( CCommon.isssignableto( i, DescriptiveStatistics.class ) )
                        {
                            Arrays.stream( l_values ).forEach( j -> i.<DescriptiveStatistics>raw().addValue( j ) );
                            return true;

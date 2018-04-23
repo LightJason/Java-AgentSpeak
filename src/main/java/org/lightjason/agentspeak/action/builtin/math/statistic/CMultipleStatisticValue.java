@@ -78,7 +78,7 @@ public final class CMultipleStatisticValue extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), SummaryStatistics.class ) )
+        if ( CCommon.isssignableto( l_arguments.get( 0 ), SummaryStatistics.class ) )
             l_arguments.stream()
                        .skip( 1 )
                        .map( ITerm::<String>raw )

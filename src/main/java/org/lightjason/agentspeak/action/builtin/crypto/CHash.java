@@ -104,7 +104,7 @@ public final class CHash extends IBuiltinAction
     {
         try
         {
-            return CCommon.rawvalueAssignableTo( p_object, String.class )
+            return CCommon.isssignableto( p_object, String.class )
                    ? p_object.<String>raw().getBytes( "UTF-8" )
                    : SerializationUtils.serialize( p_object.<Serializable>raw() );
         }

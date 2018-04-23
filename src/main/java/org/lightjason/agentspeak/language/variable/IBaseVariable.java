@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -145,17 +144,17 @@ public abstract class IBaseVariable<T> implements IVariable<T>
     }
 
     @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public final boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Objects.isNull( this.getvalue() ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( this.getvalue().getClass() ) );
+        return Objects.isNull( this.getvalue() ) || p_class.isAssignableFrom( this.getvalue().getClass() );
     }
 
     @Nonnull
     @Override
-    public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", m_functor, Arrays.asList( p_class ) ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", m_functor, p_class ) );
 
         return this;
     }

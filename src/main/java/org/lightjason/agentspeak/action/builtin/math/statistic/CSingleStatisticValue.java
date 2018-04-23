@@ -85,7 +85,7 @@ public final class CSingleStatisticValue extends IBuiltinAction
                    .mapToDouble( i ->
                    {
 
-                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
                            return l_value.value( i.<SummaryStatistics>raw() );
 
                        return l_value.value( i.<DescriptiveStatistics>raw() );

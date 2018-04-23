@@ -84,15 +84,15 @@ public final class TestCTermVariablesConstant extends IBaseTest
     {
         final ITerm l_stringterm = CRawTerm.of( "hello" );
 
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_stringterm, String.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_stringterm, String.class ) );
         Assert.assertEquals( l_stringterm.raw(), "hello" );
 
 
         final double l_value = Math.random();
         final ITerm l_numberterm = CRawTerm.of( l_value );
 
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_numberterm, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_numberterm, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_numberterm, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_numberterm, Double.class ) );
         Assert.assertEquals( "number value", l_numberterm.raw(), l_value, 0 );
     }
 
@@ -118,8 +118,8 @@ public final class TestCTermVariablesConstant extends IBaseTest
 
         Assert.assertEquals( l_constant.functor(), "C" );
         Assert.assertTrue( l_constant.hasVariable() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_constant, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_constant, Double.class ) );
         Assert.assertEquals( "constant number value", l_constant.raw(), l_value, 0 );
     }
 
@@ -208,8 +208,8 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertTrue( l_variable.allocated() );
         Assert.assertFalse( l_variable.mutex() );
         Assert.assertTrue( l_variable.hasVariable() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Double.class ) );
 
 
         Assert.assertEquals( "get variable number value", l_variable.raw(), l_value, 0 );
@@ -248,8 +248,8 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertTrue( l_variable.allocated() );
         Assert.assertTrue( l_variable.mutex() );
         Assert.assertTrue( l_variable.hasVariable() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Double.class ) );
 
 
         Assert.assertEquals( "get mutex variable number value", l_variable.raw(), l_value, 0 );

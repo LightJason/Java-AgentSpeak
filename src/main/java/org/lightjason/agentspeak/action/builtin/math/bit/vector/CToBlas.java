@@ -80,7 +80,7 @@ public final class CToBlas extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final EType l_type = l_arguments.parallelStream()
-                                        .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                        .filter( i -> CCommon.isssignableto( i, String.class ) )
                                         .findFirst().map( i -> EType.of( i.<String>raw() ) )
                                         .orElse( EType.SPARSE );
 
@@ -88,7 +88,7 @@ public final class CToBlas extends IBuiltinAction
         {
             case DENSE:
                 l_arguments.stream()
-                           .filter( i -> CCommon.rawvalueAssignableTo( i, BitVector.class ) )
+                           .filter( i -> CCommon.isssignableto( i, BitVector.class ) )
                            .map( ITerm::<BitVector>raw )
                            .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
                            .map( DenseDoubleMatrix1D::new )
@@ -100,7 +100,7 @@ public final class CToBlas extends IBuiltinAction
 
             case SPARSE:
                 l_arguments.stream()
-                           .filter( i -> CCommon.rawvalueAssignableTo( i, BitVector.class ) )
+                           .filter( i -> CCommon.isssignableto( i, BitVector.class ) )
                            .map( ITerm::<BitVector>raw )
                            .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
                            .map( SparseDoubleMatrix1D::new )

@@ -30,8 +30,8 @@ import org.lightjason.agentspeak.error.CIllegalStateException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,17 +78,17 @@ public final class CRawList implements IRawTerm<List<?>>
     }
 
     @Override
-    public boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.raw().getClass() ) );
+        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.raw().getClass() );
     }
 
     @Nullable
     @Override
-    public IRawTerm<List<?>> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public IRawTerm<List<?>> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
 
         return m_value;
     }

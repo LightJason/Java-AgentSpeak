@@ -79,7 +79,7 @@ public final class CEquationConstraint extends IConstraint
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         // create left-hand-side and right-hand-side with operator lists
-        final List<Number> l_lhs = StreamUtils.takeWhile( l_arguments.stream().skip( 1 ), i -> !CCommon.rawvalueAssignableTo( i, String.class ) )
+        final List<Number> l_lhs = StreamUtils.takeWhile( l_arguments.stream().skip( 1 ), i -> !CCommon.isssignableto( i, String.class ) )
                                               .map( ITerm::<Number>raw )
                                               .collect( Collectors.toList() );
 
@@ -88,7 +88,7 @@ public final class CEquationConstraint extends IConstraint
                                              .collect( Collectors.toList() );
 
         // test content
-        if ( l_lhs.size() < 2 || l_rhs.size() < 3 || !CCommon.rawvalueAssignableTo( l_rhs.get( 0 ), String.class ) )
+        if ( l_lhs.size() < 2 || l_rhs.size() < 3 || !CCommon.isssignableto( l_rhs.get( 0 ), String.class ) )
             return CFuzzyValue.of( false );
 
         // create constraint

@@ -77,10 +77,10 @@ public final class CClearStatistic extends IBuiltinAction
                    .allMatch( i ->
                    {
 
-                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
                             return CClearStatistic.apply( i.<SummaryStatistics>raw() );
 
-                       return CCommon.rawvalueAssignableTo( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
+                       return CCommon.isssignableto( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
                             i.<DescriptiveStatistics>raw() );
 
                    } )

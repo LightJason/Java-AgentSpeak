@@ -78,7 +78,7 @@ public final class CCreate extends IBuiltinAction
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int l_limit;
         final EType l_type;
-        if ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class )
+        if ( CCommon.isssignableto( l_arguments.get( l_arguments.size() - 1 ), String.class )
              && EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) )
         {
             l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );

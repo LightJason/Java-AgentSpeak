@@ -74,14 +74,14 @@ public final class CDiagonal extends IAlgebra
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
-                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .filter( i -> CCommon.isssignableto( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
                                     .map( EType::of )
                                     .orElse( EType.SPARSE );
 
         CCommon.flatten( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix1D.class ) )
+               .filter( i -> CCommon.isssignableto( i, DoubleMatrix1D.class ) )
                .map( ITerm::<DoubleMatrix1D>raw )
                .map( i  -> generate( i, l_type ) )
                .map( CRawTerm::of )

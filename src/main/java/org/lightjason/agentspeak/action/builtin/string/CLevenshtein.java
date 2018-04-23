@@ -71,7 +71,7 @@ public final class CLevenshtein extends IBuiltinAction
     {
         // extract string arguments
         final List<String> l_strings = CCommon.flatten( p_argument )
-                                             .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                             .filter( i -> CCommon.isssignableto( i, String.class ) )
                                              .map( ITerm::<String>raw )
                                              .collect( Collectors.toList() );
 
@@ -81,7 +81,7 @@ public final class CLevenshtein extends IBuiltinAction
 
         // create weight
         final List<Double> l_weights = CCommon.flatten( p_argument )
-                                                  .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                                  .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                                   .map( ITerm::<Number>raw )
                                                   .mapToDouble( Number::doubleValue )
                                                   .boxed()

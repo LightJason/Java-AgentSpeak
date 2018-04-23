@@ -75,14 +75,14 @@ public final class CSpanningTree extends IBuiltinAction
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final double l_defaultcost = CCommon.flatten( p_argument )
-                                            .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                            .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
                                             .orElse( 0D );
 
         final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
-                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                .filter( i -> CCommon.isssignableto( i, Map.class ) )
                                                 .findFirst()
                                                 .map( ITerm::<Map<?, Number>>raw )
                                                 .orElseGet( Collections::emptyMap );
@@ -92,7 +92,7 @@ public final class CSpanningTree extends IBuiltinAction
 
         // --- filter graphs ---
         CCommon.flatten( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+               .filter( i -> CCommon.isssignableto( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( l_treefactory )
                .map( CRawTerm::of )

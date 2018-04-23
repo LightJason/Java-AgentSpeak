@@ -170,7 +170,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
      */
     private static int compare( @Nonnull final ITerm p_left, @Nonnull final ITerm p_right )
     {
-        return CCommon.rawvalueAssignableTo( p_left.raw(), Number.class ) && CCommon.rawvalueAssignableTo( p_right.raw(), Number.class )
+        return CCommon.isssignableto( p_left.raw(), Number.class ) && CCommon.isssignableto( p_right.raw(), Number.class )
                ? comparenumber( map( p_left.raw() ), map( p_right.raw() ) )
                : compareobject( map( p_left.raw() ), map( p_right.raw() ) );
     }

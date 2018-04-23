@@ -157,7 +157,7 @@ public final class TestCActionCollectionList extends IBaseTest
         );
 
         Assert.assertEquals( 1, l_return.size() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_return.get( 0 ), List.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_return.get( 0 ), List.class ) );
         Assert.assertEquals( "b", l_return.get( 0 ).<List<?>>raw().get( 0 ) );
         Assert.assertEquals( 2, l_return.get( 0 ).<List<?>>raw().get( 1 ) );
     }

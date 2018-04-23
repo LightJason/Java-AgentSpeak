@@ -96,21 +96,21 @@ public final class CAdjacencyMatrix extends IBuiltinAction
     {
         // --- filter parameters ---
         final EType l_type = CCommon.flatten( p_argument )
-                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .filter( i -> CCommon.isssignableto( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
                                     .map( EType::of )
                                     .orElse( EType.SPARSE );
 
         final double l_defaultcost = CCommon.flatten( p_argument )
-                                            .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                            .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
                                             .orElse( 1D );
 
         final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
-                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                .filter( i -> CCommon.isssignableto( i, Map.class ) )
                                                 .findFirst()
                                                 .map( ITerm::<Map<?, Number>>raw )
                                                 .orElseGet( Collections::emptyMap );
@@ -118,7 +118,7 @@ public final class CAdjacencyMatrix extends IBuiltinAction
 
         // --- filter graphs ---
         CCommon.flatten( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+               .filter( i -> CCommon.isssignableto( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( i -> CAdjacencyMatrix.apply( i, l_costmap, l_defaultcost, l_type ) )
                .forEach( i ->

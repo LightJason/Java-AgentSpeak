@@ -83,13 +83,13 @@ public final class CIsEmpty extends IBuiltinAction
      */
     private static boolean empty( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        if ( CCommon.isssignableto( p_term, Collection.class ) )
             return p_term.<Collection<?>>raw().isEmpty();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        if ( CCommon.isssignableto( p_term, Map.class ) )
             return p_term.<Map<?, ?>>raw().isEmpty();
 
-        return CCommon.rawvalueAssignableTo( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
+        return CCommon.isssignableto( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
 
     }
 

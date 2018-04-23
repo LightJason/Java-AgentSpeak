@@ -82,16 +82,16 @@ public final class CMultiply extends IAlgebra
             ).parallel().allMatch( i ->
             {
 
-                if ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) )
+                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix1D.class ) )
                     return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply( i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.multOuter( u, v, null ), p_return );
 
-                if ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) )
+                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix2D.class ) )
                     return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply( i.get( 0 ), i.get( 1 ), DENSEALGEBRA::mult, p_return );
 
-                if ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) )
+                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix1D.class ) )
                     return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply( i.get( 0 ), i.get( 1 ), DENSEALGEBRA::mult, p_return );
 
-                return CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class )
+                return CCommon.isssignableto( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix2D.class )
                        && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply( i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.mult( v, u ), p_return );
 
             } )

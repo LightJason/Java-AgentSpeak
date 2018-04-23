@@ -378,17 +378,17 @@ public final class CCommon
      *
      * @param p_value any value type
      * @param p_class assignable class
-     * @return term value or raw value
+     * @return boolean for assinable
      */
     @SuppressWarnings( "unchecked" )
-    public static <T> boolean rawvalueAssignableTo( @Nonnull final T p_value, @Nonnull final Class<?>... p_class )
+    public static <T> boolean isssignableto( @Nullable final T p_value, @Nonnull final Class<?> p_class )
     {
-        if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).valueassignableto( p_class );
-        if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).valueassignableto( p_class );
+        if ( Objects.isNull( p_value ) )
+            return true;
+        if ( p_value instanceof IAssignable<?> )
+            return ( (IAssignable<?>) p_value ).valueassignableto( p_class );
 
-        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( p_value.getClass() ) );
+        return p_class.isAssignableFrom( p_value.getClass() );
     }
 
     /**

@@ -78,19 +78,19 @@ public final class CClear extends IBuiltinAction
      */
     private static boolean clear( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        if ( CCommon.isssignableto( p_term, Collection.class ) )
         {
             p_term.<Collection<?>>raw().clear();
             return true;
         }
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        if ( CCommon.isssignableto( p_term, Map.class ) )
         {
             p_term.<Map<?, ?>>raw().clear();
             return true;
         }
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Multimap.class ) )
+        if ( CCommon.isssignableto( p_term, Multimap.class ) )
         {
             p_term.<Multimap<?, ?>>raw().clear();
             return true;

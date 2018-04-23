@@ -75,7 +75,7 @@ public final class CSet extends IBuiltinAction
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        final boolean l_value = CCommon.rawvalueAssignableTo( l_arguments.get( 1 ), Number.class )
+        final boolean l_value = CCommon.isssignableto( l_arguments.get( 1 ), Number.class )
                                 ? l_arguments.get( 1 ).<Number>raw().intValue() != 0
                                 : l_arguments.get( 1 ).<Boolean>raw();
 

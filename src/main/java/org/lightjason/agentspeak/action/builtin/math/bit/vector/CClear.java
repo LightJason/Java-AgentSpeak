@@ -75,13 +75,13 @@ public final class CClear extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int[] l_index = l_arguments.parallelStream()
-                                         .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                         .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                          .map( ITerm::<Number>raw )
                                          .mapToInt( Number::intValue )
                                          .toArray();
 
         l_arguments.parallelStream()
-                   .filter( i -> CCommon.rawvalueAssignableTo( i, BitVector.class ) )
+                   .filter( i -> CCommon.isssignableto( i, BitVector.class ) )
                    .map( ITerm::<BitVector>raw )
                    .forEach( i -> Arrays.stream( l_index ).forEach( i::clear ) );
 

@@ -90,7 +90,7 @@ public abstract class IDateTime extends IBuiltinAction
      */
     private boolean getdatetime( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
     {
-        if ( CCommon.rawvalueAssignableTo( p_value, ZonedDateTime.class ) )
+        if ( CCommon.isssignableto( p_value, ZonedDateTime.class ) )
             return this.elements( p_value.<ZonedDateTime>raw(), p_return );
 
         try

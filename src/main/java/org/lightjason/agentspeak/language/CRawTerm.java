@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -165,17 +164,17 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Nonnull
     @Override
-    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
 
         return this;
     }

@@ -67,14 +67,14 @@ public interface IAnnotation<T> extends IAssignable<T>
         }
 
         @Override
-        public boolean valueassignableto( @Nonnull final Class<?>... p_class )
+        public boolean valueassignableto( @Nonnull final Class<?> p_class )
         {
             return true;
         }
 
         @Nullable
         @Override
-        public Object throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+        public Object throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
         {
             return null;
         }
