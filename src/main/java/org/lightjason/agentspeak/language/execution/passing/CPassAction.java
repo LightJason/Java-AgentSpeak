@@ -25,9 +25,11 @@ package org.lightjason.agentspeak.language.execution.passing;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -36,7 +38,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -82,12 +84,49 @@ public final class CPassAction implements IExecution
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                          @Nonnull final List<ITerm> p_return )
     {
+        final List<ITerm> l_arguments = CCommon.argumentlist();
+
+        if ( !CCommon.replaceFromContext( p_context, Arrays.stream( m_arguments ) )
+               .flatMap( i -> innerexecution( i, p_parallel, p_context, p_argument, l_arguments ) )
+               .collect( p_context.agent().fuzzy().getKey() ).value() )
+            return CFuzzyValue.of( false );
+
         return m_execution.execute(
             m_parallel,
             p_context,
-            Collections.unmodifiableList( CCommon.replaceFromContext( p_context, Arrays.stream( m_arguments ) ).collect( Collectors.toList() ) ),
+            Collections.unmodifiableList( l_arguments ),
             p_return
         );
+    }
+
+    /**
+     * execute if neccessary inner execution objects
+     *
+     * @param p_term term value
+     * @param p_parallel parallel execution
+     * @param p_context execution context
+     * @param p_argument argument list
+     * @param p_return return list
+     * @return execution result
+     */
+    @Nonnull
+    private static Stream<IFuzzyValue<Boolean>> innerexecution( final ITerm p_term, final boolean p_parallel, @Nonnull final IContext p_context,
+                                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        if ( !CCommon.isssignableto( p_term, IExecution.class ) )
+        {
+            p_return.add( p_term );
+            return Stream.of( CFuzzyValue.of( true ) );
+        }
+
+        final List<ITerm> l_result = CCommon.argumentlist();
+        final IFuzzyValue<Boolean> l_return = p_term.<IExecution>raw().execute( p_parallel, p_context, p_argument, l_result );
+
+        if ( l_result.size() == 0 )
+            return Stream.of( l_return );
+
+        p_return.add( l_result.size() == 1 ? l_result.get( 0 ) : CRawTerm.of( l_result ) );
+        return Stream.of( l_return );
     }
 
     @Nonnull
@@ -98,7 +137,12 @@ public final class CPassAction implements IExecution
             m_execution.variables(),
             CCommon.flattenrecursive( Arrays.stream( m_arguments ) )
                    .filter( i -> i instanceof IVariable<?> )
-                   .map( ITerm::term )
+                   .map( ITerm::term ),
+            CCommon.flattenrecursive( Arrays.stream( m_arguments ) )
+                   .filter( i -> CCommon.isssignableto( i, IExecution.class ) )
+                   .map( ITerm::<IExecution>raw )
+                   .filter( Objects::nonNull )
+                   .flatMap( i -> i.variables() )
         );
     }
 

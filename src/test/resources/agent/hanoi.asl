@@ -72,7 +72,6 @@ nexttower(T) :-
 
             // move the slice clockwise and push it if possible
             $nexttower( T );
-            .generic/print( "---> 4", T, TowerMaxIndex );
             !slice/push( T, S )
 
 

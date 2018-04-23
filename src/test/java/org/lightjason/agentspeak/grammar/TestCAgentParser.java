@@ -703,9 +703,34 @@ public final class TestCAgentParser extends IBaseGrammarTest
             ).value()
         );
 
-
-        System.out.println( l_plan );
         Assert.assertArrayEquals( Stream.of( 1, 2, 3, 4 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
     }
 
+    /**
+     * test of inner action execution
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public void inneraction() throws Exception
+    {
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent( org.lightjason.agentspeak.common.CCommon.actionsFromPackage().collect( Collectors.toSet() ), Collections.emptySet() ),
+            "+!inner <- L = .math/max( .math/min( 3, 4, 1 ), -8, -6 ) ."
+        );
+
+        final IVariable<?> l_var = new CVariable<>( "L" );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            l_plan.execute(
+                false,
+                new CLocalContext( l_var ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+        Assert.assertEquals( 1.0, l_var.<Number>raw() );
+    }
 }
