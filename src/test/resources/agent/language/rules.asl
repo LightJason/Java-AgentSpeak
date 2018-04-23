@@ -62,7 +62,6 @@ myfunction(X) :- .generic/print("my logical rule", X).
     !testdirectcall;
     !testruledirect;
     !testrulevariable
-    //!testrulemultiplearguments
 .
 
 
@@ -95,15 +94,4 @@ myfunction(X) :- .generic/print("my logical rule", X).
     R = FIB == 21.0;
     .test/result( R, "rule variable call has been failed" );
     .generic/print("rule execution (fibonacci)", FIB )
-.
-
-
-/**
- * test multiple rule arguments
- */
-+!testrulemultiplearguments <-
-    $ackermann(3, 3, ACK);
-    R = ACK == 61;
-    .test/result( R, "rule multiple arguments has been failed" );
-    .generic/print("rule execution (ackermann)", ACK)
 .
