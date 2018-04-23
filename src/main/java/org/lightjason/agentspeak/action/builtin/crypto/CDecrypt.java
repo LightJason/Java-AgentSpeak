@@ -72,10 +72,10 @@ public final class CDecrypt extends IBuiltinAction
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Key l_key = p_argument.get( 0 ).raw();
-        final EAlgorithm l_algorithm;
+        final ECryptAlgorithm l_algorithm;
         try
         {
-            l_algorithm = EAlgorithm.of( l_key.getAlgorithm() );
+            l_algorithm = ECryptAlgorithm.of( l_key.getAlgorithm() );
         }
         catch ( final IllegalArgumentException l_exception )
         {
@@ -98,7 +98,7 @@ public final class CDecrypt extends IBuiltinAction
      * @param p_return return argument
      * @return successful execution
      */
-    private static boolean decrypt( @Nonnull final EAlgorithm p_algorithm, @Nonnull final Key p_key,
+    private static boolean decrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
                                     @Nonnull final String p_dataset, @Nonnull final List<ITerm> p_return )
     {
         try

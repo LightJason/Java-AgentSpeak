@@ -63,7 +63,7 @@
     .test/result( .bool/equal( HashCrc, "1727aad1" ), "CRC hash has been failed" );
 
 
-    HashSHA = .crypto/hash( "sha-256", "string test1", "second data", 4, 5, 6);
+    HashSHA = .crypto/hash( "sha-256", "string test1" );
     .generic/print( "SHA Hash", HashSHA );
     .test/result( .bool/equal( HashSHA, "4234378fcbc448966ea91ed85de19dc9fc176719ed09fe82d1b1ee671c176ad3" ), "SHA-256 hash has been failed" )
 .

@@ -48,7 +48,7 @@ import java.util.Locale;
 /**
  * hash algorithm.
  * The actions creates a hash values of datasets, the first argument is the name of the hasing algorithm
- * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512),
+ * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-256, SHA-384, SHA-512),
  * for all other unflatten arguments a hash value is calculated and the action returns the hash values back and never fails
  *
  * {@code [Hash1 | Hash2 | Hash3] = .crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 );}
@@ -83,7 +83,7 @@ public final class CHash extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .skip( 1 )
-               .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), serialize( p_context, i ) ) )
+               .map( i -> hash( p_context, p_argument.get( 0 ).raw(), serialize( p_context, i ) ) )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
@@ -140,6 +140,15 @@ public final class CHash extends IBuiltinAction
 
             case "murmur3-128":
                 return Hashing.murmur3_128().newHasher().putBytes( p_data ).hash().toString();
+
+            case "sha-384" :
+                return Hashing.sha384().newHasher().putBytes( p_data ).hash().toString();
+
+            case "sha-256":
+                return Hashing.sha256().newHasher().putBytes( p_data ).hash().toString();
+
+            case "sha-512":
+                return Hashing.sha512().newHasher().putBytes( p_data ).hash().toString();
 
             case "siphash-2-4":
                 return Hashing.sipHash24().newHasher().putBytes( p_data ).hash().toString();

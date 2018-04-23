@@ -39,7 +39,7 @@ import org.lightjason.agentspeak.action.builtin.crypto.CCreateKey;
 import org.lightjason.agentspeak.action.builtin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CHash;
-import org.lightjason.agentspeak.action.builtin.crypto.EAlgorithm;
+import org.lightjason.agentspeak.action.builtin.crypto.ECryptAlgorithm;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -138,7 +138,7 @@ public final class TestCActionCrypto extends IBaseTest
     @Test
     public void decryptexecutionerror() throws NoSuchAlgorithmException
     {
-        final Pair<Key, Key> l_key = EAlgorithm.RSA.generateKey();
+        final Pair<Key, Key> l_key = ECryptAlgorithm.RSA.generateKey();
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(

@@ -43,7 +43,7 @@ import java.util.Locale;
 /**
  * enum with encrypting types
  */
-public enum EAlgorithm
+public enum ECryptAlgorithm
 {
     AES( "AES/ECB/PKCS5Padding", "AES" ),
     DES( "DES/ECB/PKCS5Padding", "DES" ),
@@ -64,7 +64,7 @@ public enum EAlgorithm
      * @param p_cipher chipher name
      * @param p_key name of the key
      */
-    EAlgorithm( @Nonnull final String p_cipher, @Nonnull final String p_key )
+    ECryptAlgorithm( @Nonnull final String p_cipher, @Nonnull final String p_key )
     {
         m_cipher = p_cipher;
         m_key = p_key;
@@ -138,9 +138,9 @@ public enum EAlgorithm
      * @return enum
      */
     @Nonnull
-    public static EAlgorithm of( @Nonnull final String p_value )
+    public static ECryptAlgorithm of( @Nonnull final String p_value )
     {
-        return EAlgorithm.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
+        return ECryptAlgorithm.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }
 
 }
