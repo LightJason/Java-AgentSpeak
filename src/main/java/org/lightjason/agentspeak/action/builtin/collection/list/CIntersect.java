@@ -81,13 +81,7 @@ public final class CIntersect extends IBuiltinAction
                                         .map( ITerm::raw )
                                         .distinct()
                                         .filter(
-                                            i -> p_argument.parallelStream()
-                                                           .allMatch( j -> j.<Collection<ITerm>>raw()
-                                                               .parallelStream()
-                                                               .map( ITerm::raw )
-                                                               .collect( Collectors.toList() )
-                                                               .contains( i )
-                                                           )
+                                            i -> p_argument.parallelStream().allMatch( j -> j.<Collection<?>>raw().contains( i ) )
                                         ).collect( Collectors.toList() );
         l_result.sort( Comparator.comparing( Object::hashCode ) );
 

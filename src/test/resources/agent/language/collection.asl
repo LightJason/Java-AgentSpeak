@@ -32,7 +32,7 @@
  * base test
  */
 +!test <-
-    //!testindex
+    !testindex;
     !testlist
 .
 
