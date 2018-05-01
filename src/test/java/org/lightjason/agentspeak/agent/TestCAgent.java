@@ -115,12 +115,13 @@ public final class TestCAgent extends IBaseTest
     @UseDataProvider( "generate" )
     public void testASLDefault( final Triple<String, Number, Number> p_asl ) throws Exception
     {
+        final IAgent<?> l_agent;
         try
         (
             final InputStream l_stream = new FileInputStream( p_asl.getLeft() )
         )
         {
-            final IAgent<?> l_agent = new CAgentGenerator(
+            l_agent = new CAgentGenerator(
                 l_stream,
 
                 Stream.concat(
@@ -137,24 +138,18 @@ public final class TestCAgent extends IBaseTest
                     new CConstant<>( "MyConstString", "here is a test string" )
                 )
             ).generatesingle();
-
-            IntStream.range( 0, p_asl.getMiddle().intValue() )
-                     .forEach( i ->
-                     {
-                         try
-                         {
-                             l_agent.call();
-                         }
-                         catch ( final Exception l_exception )
-                         {
-                             Assert.fail( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ) );
-                         }
-                     } );
         }
         catch ( final Exception l_exception )
         {
             Assert.fail( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ) );
+            return;
         }
+
+        IntStream.range( 0, p_asl.getMiddle().intValue() )
+                 .forEach( i -> Assert.assertTrue(
+                     MessageFormat.format( "{0}", p_asl.getLeft() ),
+                     agentcycle( l_agent )
+                 ) );
 
         Assert.assertEquals(
             MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ),

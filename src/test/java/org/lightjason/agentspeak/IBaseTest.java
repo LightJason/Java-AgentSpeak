@@ -112,16 +112,19 @@ public abstract class IBaseTest
      * execute agent cycle
      *
      * @param p_agent agent
+     * @return execution successful flag
      */
-    protected static void agentcycle( @Nonnull final IAgent<?> p_agent )
+    protected static boolean agentcycle( @Nonnull final IAgent<?> p_agent )
     {
         try
         {
             p_agent.call();
+            return true;
         }
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
+            return false;
         }
     }
 

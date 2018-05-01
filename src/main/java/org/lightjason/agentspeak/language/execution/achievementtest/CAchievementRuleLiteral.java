@@ -67,7 +67,6 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()
     {
         return Objects.isNull( m_value )

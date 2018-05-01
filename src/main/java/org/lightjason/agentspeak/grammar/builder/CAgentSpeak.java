@@ -401,6 +401,7 @@ public final class CAgentSpeak
      * @return achievment goal
      */
     @Nonnull
+    @SuppressWarnings( "unchecked" )
     public static IExecution executeachievementgoal( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                                      @Nullable final TerminalNode p_doubleexclamationmark,
                                                      @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable,
@@ -413,7 +414,9 @@ public final class CAgentSpeak
             return new CAchievementGoalVariable(
                 new CPassVariableLiteral(
                     (IVariable<?>) p_visitor.visit( p_variable ),
-                    Stream.empty()
+                    Objects.isNull( p_arguments )
+                    ? Stream.empty()
+                    : (Stream<ITerm>) p_visitor.visit( p_arguments )
                 ),
                 Objects.nonNull( p_doubleexclamationmark )
             );

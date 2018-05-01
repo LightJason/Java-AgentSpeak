@@ -55,7 +55,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IExecution>
      */
     public CAchievementGoalVariable( @Nonnull final IExecution p_value )
     {
-        this( p_value, false );
+        super( p_value, false );
     }
 
     /**

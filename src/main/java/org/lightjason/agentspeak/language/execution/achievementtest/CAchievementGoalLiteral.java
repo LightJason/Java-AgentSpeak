@@ -48,6 +48,16 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
      * ctor
      *
      * @param p_type value of the achievment-goal
+     */
+    public CAchievementGoalLiteral( @Nonnull final ILiteral p_type )
+    {
+        super( p_type, false );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
     public CAchievementGoalLiteral( @Nonnull final ILiteral p_type, final boolean p_immediately )
@@ -66,7 +76,7 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return p_context.agent().trigger( ITrigger.EType.ADDGOAL.builddefault( m_value.unify( p_context ) ), m_immediately );
+        return p_context.agent().trigger( ITrigger.EType.ADDGOAL.builddefault( m_value.allocate( p_context ) ), m_immediately );
     }
 
 }
