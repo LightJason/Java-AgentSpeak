@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 
@@ -348,4 +349,29 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertEquals( l_variable.raw(), "relocated mutex foo" );
     }
 
+    /**
+     * test raw-term unpack
+     */
+    @Test
+    public void rawtermunpack()
+    {
+        Assert.assertEquals(  "rawterm", CRawTerm.of( CRawTerm.of( "rawterm" ) ).raw() );
+    }
+
+    /**
+     * test raw-term-list unpack
+     */
+    @Test
+    public void rawlistunpack()
+    {
+        Assert.assertArrayEquals(
+            Stream.of( "rawlist", 1, 2L, 3D ).toArray(),
+            CRawTermList.of(
+                CRawTerm.of( "rawlist" ),
+                CRawTerm.of( 1 ),
+                CRawTerm.of( 2L ),
+                CRawTerm.of( 3D )
+            ).<Collection<?>>raw().toArray()
+        );
+    }
 }

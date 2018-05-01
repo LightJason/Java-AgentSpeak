@@ -50,11 +50,6 @@ public final class CRawTerm<T> implements IRawTerm<T>
      * value data
      */
     private final T m_value;
-    /**
-     * hash code cache
-     */
-    private final int m_hashcode;
-
 
 
     /**
@@ -69,8 +64,6 @@ public final class CRawTerm<T> implements IRawTerm<T>
         m_value = p_value instanceof ITerm
                   ? ( (ITerm) p_value ).raw()
                   : (T) p_value;
-
-        m_hashcode = Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
 
@@ -92,7 +85,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public int hashCode()
     {
-        return m_hashcode;
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
     @Override
@@ -100,11 +93,8 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public boolean equals( final Object p_object )
     {
-        return Objects.nonNull( p_object )
-               && (
-                   p_object instanceof IVariable<?> && ( (IVariable<?>) p_object ).allocated() && this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode()
-                   || p_object instanceof ITerm && this.hashCode() == p_object.hashCode()
-               );
+        return p_object instanceof IVariable<?> && ( (IVariable<?>) p_object ).allocated() && this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode()
+               || p_object instanceof ITerm && this.hashCode() == p_object.hashCode();
     }
 
     @Override
@@ -150,7 +140,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public boolean allocated()
     {
-        return m_value != null;
+        return Objects.nonNull( m_value );
     }
 
     @Nonnull

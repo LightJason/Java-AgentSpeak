@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -94,7 +95,7 @@ public final class CSingleOnlyStorage<N, M> extends IBaseStorage<N, M>
     @Override
     public boolean removeSingleElement( @Nonnull final String p_key )
     {
-        return m_elements.remove( p_key ) != null;
+        return Objects.nonNull( m_elements.remove( p_key ) );
     }
 
     @Override

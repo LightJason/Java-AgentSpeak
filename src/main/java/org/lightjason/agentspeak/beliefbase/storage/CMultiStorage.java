@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -108,7 +109,7 @@ public final class CMultiStorage<N, M> extends IBaseStorage<N, M>
     @Override
     public boolean removeSingleElement( @Nonnull final String p_key )
     {
-        return m_singleelements.remove( p_key ) != null;
+        return Objects.nonNull( m_singleelements.remove( p_key ) );
     }
 
     @Override

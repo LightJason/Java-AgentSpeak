@@ -30,7 +30,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.CRawList;
+import org.lightjason.agentspeak.language.CRawTermList;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -169,7 +169,7 @@ public final class CTerm
     @SuppressWarnings( "unchecked" )
     public static ITerm termvaluelist( @Nonnull final ParseTreeVisitor<?> p_visitor, final @Nonnull List<? extends RuleContext> p_termvalue )
     {
-        return new CRawList( p_termvalue.stream().map( i -> (ITerm) p_visitor.visit( i ) ) );
+        return CRawTermList.of( p_termvalue.stream().map( i -> (ITerm) p_visitor.visit( i ) ) );
     }
 
     /**

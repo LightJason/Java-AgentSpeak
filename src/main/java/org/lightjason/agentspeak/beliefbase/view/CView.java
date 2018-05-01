@@ -379,7 +379,7 @@ public final class CView implements IView
     @Override
     public boolean hasParent()
     {
-        return m_parent != null;
+        return Objects.nonNull( m_parent );
     }
 
     @Override

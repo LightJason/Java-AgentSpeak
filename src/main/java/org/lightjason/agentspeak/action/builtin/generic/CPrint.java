@@ -115,7 +115,7 @@ public final class CPrint extends IBuiltinAction
         m_streamsupplier = p_streamsupplier;
         m_stream = m_streamsupplier.get();
         m_seperator = p_seperator;
-        m_formatter = p_formatter != null ? new HashSet<>( Arrays.asList( p_formatter ) ) : Collections.emptySet();
+        m_formatter = Objects.nonNull( p_formatter ) ? new HashSet<>( Arrays.asList( p_formatter ) ) : Collections.emptySet();
     }
 
     /**

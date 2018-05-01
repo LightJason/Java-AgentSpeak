@@ -239,7 +239,7 @@ public final class CViewMap implements IView
     @Override
     public boolean hasParent()
     {
-        return m_parent != null;
+        return Objects.nonNull( m_parent );
     }
 
     @Nonnull

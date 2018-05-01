@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.error.CIllegalStateException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * list of raw values
  */
-public final class CRawList implements IRawTerm<List<?>>
+public final class CRawTermList implements IRawTerm<List<?>>
 {
     /**
      * serial id
@@ -48,7 +49,7 @@ public final class CRawList implements IRawTerm<List<?>>
     /**
      * values
      */
-    private final IRawTerm<List<?>> m_value;
+    private final List<?> m_value;
 
 
     /**
@@ -56,9 +57,45 @@ public final class CRawList implements IRawTerm<List<?>>
      *
      * @param p_value values
      */
-    public CRawList( @Nonnull final Stream<ITerm> p_value )
+    public CRawTermList( @Nonnull final ITerm... p_value )
     {
-        m_value = CRawTerm.of( p_value.map( ITerm::raw ).collect( Collectors.toList() ) );
+        m_value = Arrays.stream( p_value ).map( ITerm::raw ).collect( Collectors.toList() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value values
+     */
+    public CRawTermList( @Nonnull final Stream<ITerm> p_value )
+    {
+        m_value = p_value.map( ITerm::raw ).collect( Collectors.toList() );
+    }
+
+    /**
+     * factory for a raw term
+     *
+     * @param p_value any value
+     * @return raw term
+     *
+     * @tparam N type
+     */
+    public static CRawTermList of( @Nonnull final Stream<ITerm> p_value )
+    {
+        return new CRawTermList( p_value );
+    }
+
+    /**
+     * factory for a raw term
+     *
+     * @param p_value any value
+     * @return raw term
+     *
+     * @tparam N type
+     */
+    public static CRawTermList of( @Nonnull final ITerm... p_value )
+    {
+        return new CRawTermList( p_value );
     }
 
     @Override
@@ -80,7 +117,7 @@ public final class CRawList implements IRawTerm<List<?>>
     @Override
     public boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.raw().getClass() );
+        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Nullable
@@ -90,7 +127,7 @@ public final class CRawList implements IRawTerm<List<?>>
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
 
-        return m_value;
+        return CRawTerm.of( m_value );
     }
 
     @Nonnull
