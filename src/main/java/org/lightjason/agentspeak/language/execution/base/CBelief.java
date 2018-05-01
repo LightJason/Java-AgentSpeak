@@ -114,11 +114,11 @@ public final class CBelief extends IBaseExecution<ILiteral>
             switch ( this )
             {
                 case ADD:
-                    p_context.agent().beliefbase().add( p_literal.unify( p_context ) );
+                    p_context.agent().beliefbase().add( p_literal.allocate( p_context ) );
                     break;
 
                 case DELETE:
-                    p_context.agent().beliefbase().remove( p_literal.unify( p_context ) );
+                    p_context.agent().beliefbase().remove( p_literal.allocate( p_context ) );
                     break;
 
                 default:

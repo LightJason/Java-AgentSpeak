@@ -82,13 +82,6 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
 
         @Nonnull
         @Override
-        public ILiteral unify( @Nonnull final IContext p_context )
-        {
-            return this;
-        }
-
-        @Nonnull
-        @Override
         public ILiteral allocate( @Nonnull final IContext p_context )
         {
             return this;
@@ -221,17 +214,6 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * @return prefix is set
      */
     boolean hasAt();
-
-    /**
-     * unifies variables if exists
-     *
-     * @param p_context current execution context
-     * @return new literal instance with unified variables
-     *
-     * @note un-unifyable variables passwd into the result literal
-     */
-    @Nonnull
-    ILiteral unify( @Nonnull final IContext p_context );
 
     /**
      * allocates all variables of the literal with

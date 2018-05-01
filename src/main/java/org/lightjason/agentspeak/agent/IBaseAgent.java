@@ -423,7 +423,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
             i.getLeft().plan().trigger().literal().fqnfunctor(),
-            i.getLeft().plan().trigger().literal().unify( i.getRight() )
+            i.getLeft().plan().trigger().literal().allocate( i.getRight() )
         ) );
 
         // execute plan and return values and return execution result

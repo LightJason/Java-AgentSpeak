@@ -120,7 +120,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         // create delete-goal trigger
         if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
-            p_context.agent().trigger( ITrigger.EType.DELETEGOAL.builddefault( m_triggerevent.literal().unify( p_context ) ) );
+            p_context.agent().trigger( ITrigger.EType.DELETEGOAL.builddefault( m_triggerevent.literal().allocate( p_context ) ) );
 
         return l_result;
     }
