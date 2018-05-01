@@ -51,6 +51,13 @@ public final class CRawTerm<T> implements IRawTerm<T>
      */
     private final T m_value;
 
+    /**
+     * ctor
+     */
+    public CRawTerm()
+    {
+        this( null );
+    }
 
     /**
      * ctor
@@ -67,6 +74,17 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
 
+    /**
+     * factory for a raw term
+     *
+     * @return raw term
+     *
+     * @tparam N type
+     */
+    public static <N> CRawTerm<N> of()
+    {
+        return new CRawTerm<>();
+    }
 
     /**
      * factory for a raw term
