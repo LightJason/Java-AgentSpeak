@@ -320,7 +320,7 @@ public abstract class IBaseTest
         public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                              @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            CCommon.flatten( p_argument )
+            p_argument.stream()
                    .map( i -> CCommon.replacebycontext( p_context, i ) )
                    .forEach( m_value::add );
 

@@ -191,6 +191,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         Assert.assertEquals( 6, l_values.value().size() );
 
         Assert.assertEquals( 5.0, l_values.value().get( 0 ).<Number>raw() );
+        Assert.assertArrayEquals( Stream.of( 1.0, 2.0, 3.0 ).toArray(), l_values.value().get( 1 ).<List<?>>raw().toArray() );
         Assert.assertEquals( "test data", l_values.value().get( 2 ).raw() );
         Assert.assertEquals( CLiteral.of( "inner", CRawTerm.of( "foobar" ) ), l_values.value().get( 3 ).raw() );
         Assert.assertEquals( 555.0, l_values.value().get( 4 ).<Number>raw() );
