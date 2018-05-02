@@ -43,7 +43,6 @@ import java.util.stream.Stream;
 
 /**
  * REST-API test
- * @todo fix assert
  */
 public final class TestCActionWebRest extends IBaseTest
 {
@@ -103,9 +102,9 @@ public final class TestCActionWebRest extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonlist" );
+        Assert.assertEquals( "testjsonlist", l_return.get( 0 ).<ILiteral>raw().functor() );
         Assert.assertFalse( l_return.get( 0 ).<ILiteral>raw().values().map( ITerm::functor ).noneMatch( i -> i.equals( "item" ) ) );
     }
 
@@ -144,9 +143,9 @@ public final class TestCActionWebRest extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonobject" );
+        Assert.assertEquals( "testjsonobject", l_return.get( 0 ).<ILiteral>raw().functor() );
     }
 
 
@@ -166,13 +165,13 @@ public final class TestCActionWebRest extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonobject" );
+        Assert.assertEquals( "testjsonobject", l_return.get( 0 ).<ILiteral>raw().functor() );
         Assert.assertTrue( l_return.get( 0 ).<ILiteral>raw().values().findFirst().isPresent() );
         Assert.assertEquals(
-            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
-            "loc"
+            "loc",
+            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new )
         );
     }
 
@@ -211,9 +210,9 @@ public final class TestCActionWebRest extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testxml" );
+        Assert.assertEquals( "testxml", l_return.get( 0 ).<ILiteral>raw().functor() );
     }
 
 
@@ -233,13 +232,13 @@ public final class TestCActionWebRest extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testxml" );
+        Assert.assertEquals( "testxml", l_return.get( 0 ).<ILiteral>raw().functor() );
         Assert.assertTrue( l_return.get( 0 ).<ILiteral>raw().values().findFirst().isPresent() );
         Assert.assertEquals(
-            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
-            "ncd"
+            "ncd",
+            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new )
         );
     }
 
