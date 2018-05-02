@@ -33,18 +33,12 @@ import org.lightjason.agentspeak.action.builtin.storage.CAdd;
 import org.lightjason.agentspeak.action.builtin.storage.CClear;
 import org.lightjason.agentspeak.action.builtin.storage.CExists;
 import org.lightjason.agentspeak.action.builtin.storage.CRemove;
-import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +52,6 @@ import java.util.stream.Stream;
 
 /**
  * test action storage
- * @todo fix assert
  */
 public final class TestCActionStorage extends IBaseTest
 {
@@ -81,8 +74,8 @@ public final class TestCActionStorage extends IBaseTest
     public void initialize() throws Exception
     {
         m_context = new CContext(
-            new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
-            new CPlan( new IAnnotation<?>[0], ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "nothing" ) ), new IExecution[0] ),
+            new CAgentGenerator().generatesingle(),
+            IPlan.EMPTY,
             Collections.emptyList()
         );
     }
@@ -101,9 +94,9 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 2 );
-        Assert.assertEquals( m_context.agent().storage().get( "testnumber" ), 123 );
-        Assert.assertEquals( m_context.agent().storage().get( "teststring" ), "foobar" );
+        Assert.assertEquals( 2, m_context.agent().storage().size() );
+        Assert.assertEquals( 123, m_context.agent().storage().get( "testnumber" ) );
+        Assert.assertEquals( "foobar", m_context.agent().storage().get( "teststring" ) );
     }
 
     /**
@@ -118,7 +111,7 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 0 );
+        Assert.assertEquals( 0, m_context.agent().storage().size() );
         Assert.assertNull( m_context.agent().storage().get( "bar" ) );
     }
 
@@ -135,7 +128,7 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 0 );
+        Assert.assertEquals( 0, m_context.agent().storage().size() );
         Assert.assertNull( m_context.agent().storage().get( "abc" ) );
     }
 
@@ -159,8 +152,8 @@ public final class TestCActionStorage extends IBaseTest
 
         Assert.assertTrue( m_context.agent().storage().isEmpty() );
         Assert.assertNull( m_context.agent().storage().get( "xxx" ) );
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 123 ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( Integer.valueOf( 123 ), l_return.get( 0 ).<Integer>raw() );
     }
 
 
@@ -176,7 +169,7 @@ public final class TestCActionStorage extends IBaseTest
                  .mapToObj( i -> RandomStringUtils.random( 25 ) )
                  .forEach( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 100 );
+        Assert.assertEquals( 100, m_context.agent().storage().size() );
 
         new CClear().execute(
             false, m_context,
@@ -206,10 +199,10 @@ public final class TestCActionStorage extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 1 );
+        Assert.assertEquals( 1, m_context.agent().storage().size() );
         Assert.assertNotNull( m_context.agent().storage().get( "foo" ) );
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 456 ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( Integer.valueOf( 456 ), l_return.get( 0 ).<Integer>raw() );
     }
 
 
@@ -231,10 +224,10 @@ public final class TestCActionStorage extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 1 );
+        Assert.assertEquals( 1, m_context.agent().storage().size() );
         Assert.assertNotNull( m_context.agent().storage().get( "xx" ) );
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 267 ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( Integer.valueOf( 267 ), l_return.get( 0 ).<Integer>raw() );
     }
 
 
@@ -257,9 +250,9 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 3 );
-        Assert.assertArrayEquals( m_context.agent().storage().keySet().toArray(), Stream.of( "value 73", "value 5", "value 1" ).toArray() );
-        Assert.assertArrayEquals( m_context.agent().storage().values().toArray(), Stream.of(  73, 5, 1 ).toArray() );
+        Assert.assertEquals( 3, m_context.agent().storage().size() );
+        Assert.assertArrayEquals( Stream.of( "value 73", "value 5", "value 1" ).toArray(), m_context.agent().storage().keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of(  73, 5, 1 ).toArray(), m_context.agent().storage().values().toArray() );
     }
 
 
@@ -274,7 +267,7 @@ public final class TestCActionStorage extends IBaseTest
         IntStream.range( 0, 100 )
                  .forEach( i -> m_context.agent().storage().put( MessageFormat.format( "value {0}", i ), i ) );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 100 );
+        Assert.assertEquals( 100, m_context.agent().storage().size() );
 
         new CClear( Stream.of( "value 7", "value 23", "value 91" ) ).execute(
             false, m_context,
@@ -282,9 +275,9 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 3 );
-        Assert.assertArrayEquals( m_context.agent().storage().keySet().toArray(), Stream.of( "value 7", "value 23", "value 91" ).toArray() );
-        Assert.assertArrayEquals( m_context.agent().storage().values().toArray(), Stream.of(  7, 23, 91 ).toArray() );
+        Assert.assertEquals( 3, m_context.agent().storage().size() );
+        Assert.assertArrayEquals( Stream.of( "value 7", "value 23", "value 91" ).toArray(), m_context.agent().storage().keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of(  7, 23, 91 ).toArray(), m_context.agent().storage().values().toArray() );
     }
 
 
@@ -309,7 +302,7 @@ public final class TestCActionStorage extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 100 );
+        Assert.assertEquals( 100, l_return.size() );
         Assert.assertTrue( l_return.stream().allMatch( ITerm::<Boolean>raw ) );
     }
 
@@ -333,8 +326,8 @@ public final class TestCActionStorage extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::raw ).toArray(),
-            Stream.of( false, true, false, false, false, false ).toArray()
+            Stream.of( false, true, false, false, false, false ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -359,8 +352,8 @@ public final class TestCActionStorage extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::raw ).toArray(),
-            Stream.of( false, true, true, false ).toArray()
+            Stream.of( false, true, true, false ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -374,14 +367,14 @@ public final class TestCActionStorage extends IBaseTest
     {
         Assert.assertArrayEquals(
 
+            Stream.of( 1, 0, 1, 1 ).toArray(),
+
             Stream.of(
                 new CAdd().minimalArgumentNumber(),
                 new CClear().minimalArgumentNumber(),
                 new CExists().minimalArgumentNumber(),
                 new CRemove().minimalArgumentNumber()
-            ).toArray(),
-
-            Stream.of( 1, 0, 1, 1 ).toArray()
+            ).toArray()
 
         );
     }
@@ -397,23 +390,23 @@ public final class TestCActionStorage extends IBaseTest
         final Set<String> l_keys = Stream.of( "a", "x", "y" ).collect( Collectors.toSet() );
 
         Assert.assertArrayEquals(
-            new CAdd( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray(),
-            Stream.of( true, false ).toArray()
+            Stream.of( true, false ).toArray(),
+            new CAdd( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray()
         );
 
         Assert.assertArrayEquals(
-            new CRemove( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray(),
-            Stream.of( true, false ).toArray()
+            Stream.of( true, false ).toArray(),
+            new CRemove( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray()
         );
 
         Assert.assertArrayEquals(
-            new CClear( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray(),
-            Stream.of( true, false ).toArray()
+            Stream.of( true, false ).toArray(),
+            new CClear( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray()
         );
 
         Assert.assertArrayEquals(
-            new CExists( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray(),
-            Stream.of( true, false ).toArray()
+            Stream.of( true, false ).toArray(),
+            new CExists( l_keys::contains ).forbiddenkeys( "x", "z" ).toArray()
         );
     }
 
