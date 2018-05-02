@@ -171,8 +171,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_beliefbase;
     }
 
+    @Nonnull
     @Override
-    public final void inspect( @Nonnull final IInspector... p_inspector )
+    public final IAgent<T> inspect( @Nonnull final IInspector... p_inspector )
     {
         Arrays.stream( p_inspector )
               .parallel()
@@ -184,6 +185,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
               .peek( i -> i.inspectstorage( m_storage.entrySet().stream() ) )
               .peek( i -> i.inspectrules( m_rules.values().stream() ) )
               .forEach( i -> i.inspectpendingtrigger( m_trigger.values().stream() ) );
+
+        return this;
     }
 
     @Nonnull
@@ -394,7 +397,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     private Collection<Pair<IPlanStatistic, IContext>> generateexecution( @Nonnull final Stream<ITrigger> p_trigger )
     {
         return p_trigger
-            .filter( Objects::nonNull )
             // get all possible plans
             .flatMap( i -> m_plans.get( i ).stream().map( j -> new ImmutablePair<>( i, j ) ) )
             .parallel()

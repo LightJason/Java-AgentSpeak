@@ -59,7 +59,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
     /**
      * empty agent
      */
-    IAgent<?> EMPTY = new IAgent<IAgent<?>>()
+    IAgent<?> EMPTY = new IAgent<>()
     {
         /**
          * serial id
@@ -72,9 +72,12 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
             return this;
         }
 
+        @Nonnull
         @Override
-        public void inspect( @Nonnull final IInspector... p_inspector )
-        {}
+        public IAgent<IAgent<?>> inspect( @Nonnull final IInspector... p_inspector )
+        {
+            return this;
+        }
 
         @Nonnull
         @Override
@@ -206,8 +209,10 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * inspector method
      *
      * @param p_inspector inspector object
+     * @return self-reference
      */
-    void inspect( @Nonnull final IInspector... p_inspector );
+    @Nonnull
+    IAgent<T> inspect( @Nonnull final IInspector... p_inspector );
 
     /**
      * trigger an event

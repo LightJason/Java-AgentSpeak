@@ -62,8 +62,13 @@
 /**
  * test plan with hash collision
  **/
-+!hashcollision/Ea <- .test/result( success ).
-+!hashcollision/FB <- .test/result( success ).
++!hashcollision/Ea <-
+    .test/result( success )
+.
+
++!hashcollision/FB <-
+    .test/result( success )
+.
 
 /**
  * add belief trigger
@@ -77,58 +82,93 @@
 /**
  * add belief trigger
  **/
-+delbelief(X) <- .test/result( bool/equal( X, "test" ) ); -delbelief(X).
++delbelief(X) <-
+    .test/result( bool/equal( X, "test" ) );
+    -delbelief(X)
+.
 
 /**
  * delete belief
  **/
--delbelief(X) <- .test/result( bool/equal( X, "test" ) ).
+-delbelief(X) <-
+    .test/result( bool/equal( X, "test" ) )
+.
 
 
 /**
  * goal trigger
  **/
-+!goaltrigger <- .test/result( success ).
++!goaltrigger <-
+    .test/result( success )
+.
 
 /**
  * error trigger
  **/
-+!errortrigger <- .test/result( success ); fail.
++!errortrigger <-
+    .test/result( success );
+    fail
+.
 
 /**
  * error trigger
  **/
--!errortrigger <- .test/result( success ).
+-!errortrigger <-
+    .test/result( success )
+.
 
 
 /**
  * goal with one parameter
  **/
-+!goaloneparameter(X) <- .test/result( .bool/equal(X, 1) ).
++!goaloneparameter(X) <-
+    .test/result( .bool/equal(X, 1) )
+.
 
 /**
  * goal with two parameter
  **/
-+!goaltwoparameter(X, Y) <- .test/result( .bool/equal(X, 1) ); .test/result( .bool/equal(Y, 2) ).
++!goaltwoparameter(X, Y) <-
+    .test/result( .bool/equal(X, 1) );
+    .test/result( .bool/equal(Y, 2) )
+.
 
 /**
  * goal with two parameter and fail plan
  **/
-+!goaltwoparametererror(X, Y) <- fail.
--!goaltwoparametererror(X, Y) <- .test/result( .bool/equal(X, 2) ); .test/result( .bool/equal(Y, 3) ).
++!goaltwoparametererror(X, Y) <-
+    fail
+.
+
+-!goaltwoparametererror(X, Y) <-
+    .test/result( .bool/equal(X, 2) );
+    .test/result( .bool/equal(Y, 3) )
+.
 
 /**
  * goal with condition
  **/
-+!goalconditionone(X) : X < 10 <- .test/result( .bool/equal(X, 5) ).
++!goalconditionone(X)
+    : X < 10 <- .test/result( .bool/equal(X, 5) )
+.
 
 /**
  * goal with condition and two parameter
  **/
-+!goalconditiontwo(X, Y) : X < Y <- .test/result( .bool/equal(X, 8) ); .test/result( .bool/equal(Y, 9) ).
++!goalconditiontwo(X, Y)
+    : X < Y <-
+        .test/result( .bool/equal(X, 8) );
+        .test/result( .bool/equal(Y, 9) )
+.
 
 /**
  * goal with euqal name
  **/
-+!equalname( X ) <- .test/result( .bool/equal(X, "foobar") ).
-+!equalname( X, Y ) <- .test/result( .bool/equal(X, "foo") ); .test/result( .bool/equal(X, "bar") ).
++!equalname( X ) <-
+    .test/result( .bool/equal(X, "foobar") )
+.
+
++!equalname( X, Y ) <-
+    .test/result( .bool/equal(X, "foo") );
+    .test/result( .bool/equal(X, "bar") )
+.
