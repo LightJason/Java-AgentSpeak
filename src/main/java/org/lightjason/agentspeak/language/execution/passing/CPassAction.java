@@ -86,7 +86,7 @@ public final class CPassAction implements IExecution
     {
         final List<ITerm> l_arguments = CCommon.argumentlist();
 
-        if ( !CCommon.replaceFromContext( p_context, Arrays.stream( m_arguments ) )
+        if ( !CCommon.replacebycontext( p_context, Arrays.stream( m_arguments ) )
                .flatMap( i -> innerexecution( i, p_parallel, p_context, p_argument, l_arguments ) )
                .collect( p_context.agent().fuzzy().getKey() ).value() )
             return CFuzzyValue.of( false );

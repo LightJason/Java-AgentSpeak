@@ -73,7 +73,7 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        set( CCommon.replaceFromContext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
+        set( CCommon.replacebycontext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replacebycontext( p_context, m_righthand ).raw() );
         return CFuzzyValue.of( true );
     }
 

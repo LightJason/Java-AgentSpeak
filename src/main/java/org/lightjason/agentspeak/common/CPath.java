@@ -304,7 +304,7 @@ public final class CPath implements IPath
     @Override
     public int hashCode()
     {
-        final Hasher l_hasher = org.lightjason.agentspeak.language.CCommon.getTermHashing();
+        final Hasher l_hasher = org.lightjason.agentspeak.language.CCommon.termhashing();
         m_path.forEach( i -> l_hasher.putString( i, Charsets.UTF_8 ) );
         return l_hasher.hash().hashCode();
     }

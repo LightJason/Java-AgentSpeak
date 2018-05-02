@@ -71,7 +71,7 @@ public final class CDecrement implements IUnary
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
+        final IVariable<Number> l_variable = CCommon.replacebycontext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( !l_variable.valueassignableto( Number.class ) )
             return CFuzzyValue.of( false );
 

@@ -38,7 +38,6 @@ import org.lightjason.agentspeak.grammar.IBaseParser;
 import org.lightjason.agentspeak.grammar.ManualLexer;
 import org.lightjason.agentspeak.grammar.ManualParser;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,7 +135,7 @@ public final class CLiteral implements ILiteral
         }
 
         // calculates object hash value
-        final Hasher l_hasher = CCommon.getTermHashing();
+        final Hasher l_hasher = CCommon.termhashing();
         l_hasher.putInt( m_functor.hashCode() );
         l_hasher.putBoolean( m_negated );
         l_hasher.putBoolean( m_at );
@@ -144,7 +143,7 @@ public final class CLiteral implements ILiteral
         m_hash = l_hasher.hash().asInt();
 
         // calculates the structure hash value of the value definition (need to start with value definition)
-        final Hasher l_valuehasher = CCommon.getTermHashing();
+        final Hasher l_valuehasher = CCommon.termhashing();
         m_orderedvalues.forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
         l_valuehasher.putBoolean( m_negated );
         l_valuehasher.putString( p_functor.path(), Charsets.UTF_8 );
@@ -323,6 +322,20 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
+    public ILiteral bind( @Nonnull final IContext p_context )
+    {
+        return new CLiteral(
+            m_at,
+            m_negated,
+            m_functor,
+            m_orderedvalues.stream()
+                           .map( i -> i instanceof ILiteral ? i.<ILiteral>term().bind( p_context ) : CCommon.bindbycontext( i, p_context ) )
+                           .collect( Collectors.toList() )
+        );
+    }
+
+    @Nonnull
+    @Override
     public ILiteral allocate( @Nonnull final IContext p_context )
     {
         return new CLiteral(
@@ -330,17 +343,7 @@ public final class CLiteral implements ILiteral
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i ->
-                           {
-                               if ( i instanceof IVariable<?> )
-                               {
-                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return Objects.isNull( l_variable ) ? CRawTerm.of() : CRawTerm.of( l_variable );
-                               }
-                               return i instanceof ILiteral
-                                      ? i.<ILiteral>term().allocate( p_context )
-                                      : i;
-                           } )
+                           .map( i -> i instanceof ILiteral ? i.<ILiteral>term().allocate( p_context ) : CRawTerm.of( CCommon.bindbycontext( i, p_context ) ) )
                            .collect( Collectors.toList() )
         );
     }

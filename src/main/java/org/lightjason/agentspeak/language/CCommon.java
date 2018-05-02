@@ -169,7 +169,10 @@ public final class CCommon
     @Nonnull
     public static IContext updatecontext( @Nonnull final IContext p_context, @Nonnull final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.parallel().forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
+        p_unifiedvariables.parallel()
+                          .map( i -> new ImmutablePair<>( i, p_context.instancevariables().get( i.fqnfunctor() ) ) )
+                          .filter( i -> Objects.nonNull( i.right ) )
+                          .forEach( i -> i.right.set( i.left.raw() ) );
         return p_context;
     }
 
@@ -392,6 +395,25 @@ public final class CCommon
     }
 
     /**
+     * bind term value on the current context
+     *
+     * @param p_term term / variable
+     * @param p_context current context
+     * @return bind term element
+     */
+    @Nonnull
+    public static ITerm bindbycontext( @Nonnull final ITerm p_term, @Nonnull final IContext p_context )
+    {
+        if ( p_term instanceof IVariable<?> )
+        {
+            final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
+            return Objects.isNull( l_variable ) ? IRawTerm.EMPTY : l_variable;
+        }
+
+        return p_term;
+    }
+
+    /**
      * replace variables with context variables
      *
      * @param p_context execution context
@@ -399,9 +421,9 @@ public final class CCommon
      * @return result term list
      */
     @Nonnull
-    public static Stream<ITerm> replaceFromContext( @Nonnull final IContext p_context, @Nonnull final Stream<? extends ITerm> p_terms )
+    public static Stream<ITerm> replacebycontext( @Nonnull final IContext p_context, @Nonnull final Stream<? extends ITerm> p_terms )
     {
-        return p_terms.map( i -> replaceFromContext( p_context, i ) );
+        return p_terms.map( i -> replacebycontext( p_context, i ) );
     }
 
     /**
@@ -413,7 +435,7 @@ public final class CCommon
      * @return replaces variable object
      */
     @Nonnull
-    public static ITerm replaceFromContext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
+    public static ITerm replacebycontext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
     {
         if ( !( p_term instanceof IVariable<?> ) )
             return p_term;
@@ -491,7 +513,7 @@ public final class CCommon
      * @return hasher
      */
     @Nonnull
-    public static Hasher getTermHashing()
+    public static Hasher termhashing()
     {
         return Hashing.sipHash24().newHasher();
     }

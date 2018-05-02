@@ -80,8 +80,8 @@ public final class CVariableUnify extends CDefaultUnify
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
                                                        .unify(
-                                                           CCommon.replaceFromContext( p_context, m_variable ).raw(),
-                                                           CCommon.replaceFromContext( p_context, m_value ).raw()
+                                                           CCommon.replacebycontext( p_context, m_variable ).raw(),
+                                                           CCommon.replacebycontext( p_context, m_value ).raw()
                                                        );
 
         if ( l_variables.size() != m_variablenumber )

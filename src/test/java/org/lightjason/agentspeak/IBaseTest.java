@@ -321,7 +321,7 @@ public abstract class IBaseTest
                                              @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             CCommon.flatten( p_argument )
-                   .map( i -> CCommon.replaceFromContext( p_context, i ) )
+                   .map( i -> CCommon.replacebycontext( p_context, i ) )
                    .forEach( m_value::add );
 
             return CFuzzyValue.of( true );

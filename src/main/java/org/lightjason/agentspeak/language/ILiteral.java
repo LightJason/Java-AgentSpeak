@@ -82,6 +82,13 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
 
         @Nonnull
         @Override
+        public ILiteral bind( @Nonnull final IContext p_context )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
         public ILiteral allocate( @Nonnull final IContext p_context )
         {
             return this;
@@ -216,11 +223,19 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     boolean hasAt();
 
     /**
-     * allocates all variables of the literal with
-     * the variables of the current context
+     * binds all variables to the context variables
      *
-     * @param p_context cpmzexz
-     * @return literal with allocated variables
+     * @param p_context context
+     * @return literal with bounded variables
+     */
+    @Nonnull
+    ILiteral bind( @Nonnull final IContext p_context  );
+
+    /**
+     * bind the variable values to the literal
+     *
+     * @param p_context context
+     * @return literal with values
      */
     @Nonnull
     ILiteral allocate( @Nonnull final IContext p_context  );

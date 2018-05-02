@@ -73,19 +73,6 @@ public final class CRawTerm<T> implements IRawTerm<T>
                   : (T) p_value;
     }
 
-
-    /**
-     * factory for a raw term
-     *
-     * @return raw term
-     *
-     * @tparam N type
-     */
-    public static <N> CRawTerm<N> of()
-    {
-        return new CRawTerm<>();
-    }
-
     /**
      * factory for a raw term
      *

@@ -31,6 +31,6 @@ public interface IRawTerm<T> extends ITerm, IRawStructure<IRawTerm<T>>
     /**
      * empty raw term
      */
-    IRawTerm<?> EMPTY = new CRawTerm<>( null );
+    IRawTerm<?> EMPTY = new CRawTerm<>();
 
 }

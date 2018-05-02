@@ -77,7 +77,7 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
             return CFuzzyValue.of( false );
 
         // first step allocate all variables of the literal with the current context variables
-        final ILiteral l_allocate = p_value.allocate( p_context );
+        final ILiteral l_allocate = p_value.bind( p_context );
 
         // second step execute backtracking rules sequential
         return l_rules.stream()

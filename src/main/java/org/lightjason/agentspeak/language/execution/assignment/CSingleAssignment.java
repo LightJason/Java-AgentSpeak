@@ -82,7 +82,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
         if ( !l_rightreturn.value() || l_return.size() != 1 )
             return CFuzzyValue.of( false );
 
-        final IVariable<Object> l_lhs = CCommon.replaceFromContext( p_context, m_value ).term();
+        final IVariable<Object> l_lhs = CCommon.replacebycontext( p_context, m_value ).term();
         l_lhs.set( m_operator.apply( l_lhs, l_return.get( 0 ) ) );
 
         return CFuzzyValue.of( true );
