@@ -678,6 +678,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * test lambda expression
      *
      * @throws Exception thrown on stream and parser error
+     * @todo add lambda block-command test
      */
     @Test
     public void lambda() throws Exception
