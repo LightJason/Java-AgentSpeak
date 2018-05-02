@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
@@ -321,9 +322,8 @@ public abstract class IBaseTest
                                              @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             p_argument.stream()
-                   .map( i -> CCommon.replacebycontext( p_context, i ) )
-                   .forEach( m_value::add );
-
+                      .map( CRawTerm::of )
+                      .forEach( m_value::add );
             return CFuzzyValue.of( true );
         }
 

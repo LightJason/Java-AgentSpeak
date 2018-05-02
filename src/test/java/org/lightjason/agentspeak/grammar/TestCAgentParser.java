@@ -704,6 +704,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
             ).value()
         );
 
+        System.out.println( l_values.value() );
         Assert.assertArrayEquals( Stream.of( 1, 2, 3, 4 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
     }
 

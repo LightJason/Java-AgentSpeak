@@ -437,16 +437,18 @@ public final class CCommon
     @Nonnull
     public static ITerm replacebycontext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
     {
-        if ( !( p_term instanceof IVariable<?> ) )
-            return p_term;
+        if ( p_term instanceof IVariable<?> )
+        {
+            final ITerm l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
+            if ( Objects.isNull( l_variable ) )
+                throw new CIllegalArgumentException(
+                    org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
+                );
 
-        final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
-        if ( Objects.nonNull( l_variable ) )
             return l_variable;
+        }
 
-        throw new CIllegalArgumentException(
-            org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
-        );
+        return p_term;
     }
 
 
