@@ -68,10 +68,11 @@
 
 /**
  * test graphql service with literals
+ * @see http://apis.guru/graphql-apis/
  **/
 +!testgraphqlliteral <-
-    L = allUsers(id, firstName, lastName);
-    GQ = .web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql" );
+    L = stationWithEvaId( evaId( 8000105 ), name );
+    GQ = .web/graphql/queryliteral( "https://developer.deutschebahn.com/free1bahnql/graphql", L, "graphql" );
     +graphql-fake-literal(GQ)
 .
 
@@ -79,7 +80,7 @@
  * test graphql service with native string query
  **/
 +!testgraphqlnative <-
-    GQ = .web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql" );
+    GQ = .web/graphql/querynative( "https://developer.deutschebahn.com/free1bahnql/graphql", "{ stationWithEvaId(evaId: 8000105) { name location { latitude longitude } picture { url } } }", "graphql" );
     +graphql-fake-native(GQ)
 .
 
