@@ -45,12 +45,27 @@ belief :
  * trigger name [ plancontent ]* .
  */
 plan :
-    ANNOTATION*
-    PLANTRIGGER
+    plantrigger
     literal
     plandefinition+
     DOT
     ;
+
+/**
+ * plan trigger
+ */
+plantrigger :
+    ARITHMETICOPERATOR3 EXCLAMATIONMARK?
+    ;
+
+/**
+ * plan annotation rule
+ */
+annotations :
+    ANNOTATION+
+    ;
+
+
 
 /**
  * plan definition

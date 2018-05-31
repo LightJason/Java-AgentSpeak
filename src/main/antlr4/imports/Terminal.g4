@@ -27,6 +27,7 @@ lexer grammar Terminal;
 
 // --- keyword rules must be first rules -----------------------------------------------------------------------------------------------------------------------
 
+
 /**
  * boolean values
  */
@@ -235,15 +236,6 @@ INITIALGOAL :
     ATOM
     DOT
     ;
-
-/**
- * plan trigger
- */
-PLANTRIGGER :
-    (PLUS | MINUS) EXCLAMATIONMARK?
-    ;
-
-
 
 
 // --- character structures ------------------------------------------------------------------------------------------------------------------------------------
