@@ -133,11 +133,11 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static Stream<IPlan> plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                      @Nullable final List<TerminalNode> p_annotation, @Nonnull final TerminalNode p_trigger,
+                                      @Nullable final List<TerminalNode> p_annotation, @Nonnull final RuleContext p_trigger,
                                       @Nonnull final RuleContext p_literal, @Nonnull final List<? extends RuleContext> p_body )
     {
         final ITrigger l_trigger = CTrigger.of(
-            ITrigger.EType.of( p_trigger.getText() ),
+            ITrigger.EType.of( p_visitor.visit( p_trigger ).toString() ),
             (ILiteral) p_visitor.visit( p_literal )
         );
 
@@ -145,6 +145,17 @@ public final class CAgentSpeak
         return p_body.stream()
                      .map( i -> (Pair<IExpression, IExecution[]>) p_visitor.visit( i ) )
                      .map( i -> new CPlan( l_annotation, l_trigger, i.getLeft(), i.getRight() ) );
+    }
+
+    /**
+     * returns the plantrigger as string
+     *
+     * @param p_trigger plantrigger rule
+     * @return string
+     */
+    public static String plantrigger( @Nonnull final RuleContext p_trigger )
+    {
+        return p_trigger.getText();
     }
 
     /**

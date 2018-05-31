@@ -146,10 +146,16 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         return CAgentSpeak.plan(
             this,
             p_context.ANNOTATION(),
-            p_context.PLANTRIGGER(),
+            p_context.plantrigger(),
             p_context.literal(),
             p_context.plandefinition()
         );
+    }
+
+    @Override
+    public Object visitPlantrigger( final PlanBundleParser.PlantriggerContext p_context )
+    {
+        return CAgentSpeak.plantrigger( p_context );
     }
 
     @Override

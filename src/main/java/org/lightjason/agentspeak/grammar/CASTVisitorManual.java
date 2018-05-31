@@ -158,6 +158,12 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
     }
 
     @Override
+    public Object visitPlantrigger( final ManualParser.PlantriggerContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitPlandefinition( final ManualParser.PlandefinitionContext p_context )
     {
         return null;

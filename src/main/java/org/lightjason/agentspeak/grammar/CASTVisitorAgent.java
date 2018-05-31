@@ -144,7 +144,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitLogicrule( final AgentParser.LogicruleContext p_context )
+    public Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
         return CAgentSpeak.rule(
             this,
@@ -159,10 +159,16 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return CAgentSpeak.plan(
             this,
             p_context.ANNOTATION(),
-            p_context.PLANTRIGGER(),
+            p_context.plantrigger(),
             p_context.literal(),
             p_context.plandefinition()
         );
+    }
+
+    @Override
+    public Object visitPlantrigger( final AgentParser.PlantriggerContext p_context )
+    {
+        return CAgentSpeak.plantrigger( p_context );
     }
 
     @Override
