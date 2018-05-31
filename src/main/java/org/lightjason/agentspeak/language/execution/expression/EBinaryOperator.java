@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 
@@ -157,7 +158,8 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     {
         return ( p_value1.raw() instanceof Number ) && ( p_value2.raw() instanceof Number )
                ? Double.valueOf( p_value1.<Number>raw().doubleValue() ).equals( p_value2.<Number>raw().doubleValue() )
-               : p_value1.raw().equals( p_value2.raw() );
+               : Objects.isNull( p_value1.raw() ) && Objects.isNull( p_value2.raw() )
+                 || Objects.nonNull( p_value1.raw() ) && p_value1.raw().equals( p_value2.raw() );
     }
 
 
