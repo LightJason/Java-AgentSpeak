@@ -56,6 +56,7 @@
 
     !goaltrigger;
     !errortrigger
+
 .
 
 
@@ -83,7 +84,7 @@
  * add belief trigger
  **/
 +delbelief(X) <-
-    .test/result( bool/equal( X, "test" ) );
+    .test/result( .bool/equal( X, "test" ) );
     -delbelief(X)
 .
 
@@ -91,7 +92,7 @@
  * delete belief
  **/
 -delbelief(X) <-
-    .test/result( bool/equal( X, "test" ) )
+    .test/result( .bool/equal( X, "test" ) )
 .
 
 
