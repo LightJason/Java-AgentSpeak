@@ -87,19 +87,19 @@ foo(blub(1),hello("test")).
  */
 +!teststring <-
     SBase64 = .string/base64encode( "Base64 encoded string" );
-    .test/result( bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
+    .test/result( .bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
 
     SReverse = .string/reverse( "abcdefg" );
-    .test/result( bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
+    .test/result( .bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
 
     SUpper = .string/upper("AbCdefg");
-    .test/result( bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
+    .test/result( .bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
 
     SLower = .string/lower("AbCdefg");
-    .test/result( bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
+    .test/result( .bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
 
     SReplace = .string/replace( "1", "-", "a1b1defg1xyz1ui" );
-    .test/result( bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
+    .test/result( .bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
 
     SRand = .string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
     .generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand )
@@ -161,7 +161,7 @@ foo(blub(1),hello("test")).
 
 /**
  * test for unification and non-existing
- */
+ *
 +!unifyany
     : >>hello(X) <-
         .generic/print( "first unifyany:", X );
@@ -170,8 +170,7 @@ foo(blub(1),hello("test")).
         .generic/print( "second unifyany" );
         .test/result( success )
 .
-
-
+*/
 
 /**
  * test the deconstruct operator
