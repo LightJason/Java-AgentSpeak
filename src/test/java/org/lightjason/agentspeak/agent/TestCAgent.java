@@ -141,7 +141,8 @@ public final class TestCAgent extends IBaseTest
         }
         catch ( final Exception l_exception )
         {
-            Assert.fail( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ) );
+            l_exception.printStackTrace();
+            Assert.fail( p_asl.getLeft() );
             return;
         }
 

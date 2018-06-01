@@ -161,7 +161,7 @@ foo(blub(1),hello("test")).
 
 /**
  * test for unification and non-existing
- *
+ */
 +!unifyany
     : >>hello(X) <-
         .generic/print( "first unifyany:", X );
@@ -170,7 +170,7 @@ foo(blub(1),hello("test")).
         .generic/print( "second unifyany" );
         .test/result( success )
 .
-*/
+
 
 /**
  * test the deconstruct operator

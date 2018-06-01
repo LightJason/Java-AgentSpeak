@@ -143,7 +143,7 @@ public final class CAgentSpeak
 
         final IAnnotation<?>[] l_annotation = annotation( p_annotation );
         return p_body.stream()
-                     .map( i -> (Pair<IExpression, IExecution[]>) p_visitor.visit( i ) )
+                     .map( i -> (Pair<IExecution, IExecution[]>) p_visitor.visit( i ) )
                      .map( i -> new CPlan( l_annotation, l_trigger, i.getLeft(), i.getRight() ) );
     }
 
@@ -167,12 +167,12 @@ public final class CAgentSpeak
      * @return pair of expression and body
      */
     @SuppressWarnings( "unchecked" )
-    public static Pair<IExpression, IExecution[]> plandefinition( @Nonnull final ParseTreeVisitor<?> p_visitor,
+    public static Pair<IExecution, IExecution[]> plandefinition( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                                                   @Nullable final RuleContext p_expression, @Nonnull final RuleContext p_body )
     {
         return new ImmutablePair<>(
             Objects.nonNull( p_expression )
-            ? (IExpression) p_visitor.visit( p_expression )
+            ? (IExecution) p_visitor.visit( p_expression )
             : IExpression.EMPTY,
             ( (Stream<IExecution>) p_visitor.visit( p_body ) ).toArray( IExecution[]::new )
         );

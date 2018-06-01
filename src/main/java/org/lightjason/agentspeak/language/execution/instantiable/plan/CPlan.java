@@ -62,7 +62,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     /**
      * execution condition / expression
      */
-    private final IExpression m_condition;
+    private final IExecution m_condition;
 
 
     /**
@@ -87,7 +87,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      */
     public CPlan( @Nonnull final IAnnotation<?>[] p_annotation, @Nonnull final ITrigger p_event,
-                  @Nonnull final IExpression p_condition, @Nonnull final IExecution[] p_body )
+                  @Nonnull final IExecution p_condition, @Nonnull final IExecution[] p_body )
     {
         super(
             p_annotation, p_body,
