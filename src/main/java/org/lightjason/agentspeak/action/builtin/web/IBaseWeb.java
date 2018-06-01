@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -40,7 +41,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
@@ -203,7 +203,7 @@ public abstract class IBaseWeb extends IBuiltinAction
                     .stream()
                     .map( i ->
                               CLiteral.of(
-                                  i.getKey().toLowerCase( Locale.ROOT ).replaceAll( "[^([a-z][0-9]\\-_/]", "-" ),
+                                  StringUtils.uncapitalize( i.getKey() ).replaceAll( "[^([a-zA-Z][0-9]\\-_/]", "-" ),
                                   flatterm( i.getValue() )
                               )
                     );

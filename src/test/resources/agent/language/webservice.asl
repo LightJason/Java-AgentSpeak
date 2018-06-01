@@ -71,8 +71,7 @@
  * @see http://apis.guru/graphql-apis/
  **/
 +!testgraphqlliteral <-
-    L = stationWithEvaId( evaId( 8000105 ), name );
-    GQ = .web/graphql/queryliteral( "https://developer.deutschebahn.com/free1bahnql/graphql", L, "graphql" );
+    GQ = .web/graphql/queryliteral( "https://developer.deutschebahn.com/free1bahnql/graphql", stationWithEvaId( evaId( 8000105 ), name ), "graphql" );
     +graphql-fake-literal(GQ)
 .
 
