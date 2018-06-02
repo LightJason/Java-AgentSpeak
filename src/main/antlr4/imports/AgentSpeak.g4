@@ -197,6 +197,7 @@ assignmentexpressionsinglevariable :
     ;
 
 /**
+
  * assignment of a variable list
  */
 assignmentexpressionmultivariable :
@@ -265,6 +266,7 @@ unification :
  */
 unificationconstraint :
     variable
+    | literal
     | expression
     ;
 

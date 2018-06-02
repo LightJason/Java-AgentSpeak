@@ -80,6 +80,7 @@ import org.lightjason.agentspeak.language.execution.unary.CDecrement;
 import org.lightjason.agentspeak.language.execution.unary.CIncrement;
 import org.lightjason.agentspeak.language.execution.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.unify.CExpressionUnify;
+import org.lightjason.agentspeak.language.execution.unify.CLiteralUnify;
 import org.lightjason.agentspeak.language.execution.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -818,18 +819,25 @@ public final class CAgentSpeak
                                     ? p_visitor.visit( p_constraint )
                                     : null;
 
-        if ( p_constraint instanceof IExpression )
-            return new CExpressionUnify(
-                Objects.nonNull( p_parallel ),
-                l_literal,
-                (IExpression) l_constraint
-            );
-
-        if ( p_constraint instanceof IVariable<?> )
+        if ( l_constraint instanceof IVariable<?> )
             return new CVariableUnify(
                 Objects.nonNull( p_parallel ),
                 l_literal,
                 (IVariable<?>) l_constraint
+            );
+
+        if ( l_constraint instanceof ILiteral )
+            return new CLiteralUnify(
+                Objects.nonNull( p_parallel ),
+                l_literal,
+                (ILiteral) l_constraint
+            );
+
+        if ( l_constraint instanceof IExpression )
+            return new CExpressionUnify(
+                Objects.nonNull( p_parallel ),
+                l_literal,
+                (IExpression) l_constraint
             );
 
         return new CDefaultUnify( Objects.nonNull( p_parallel ), l_literal );
@@ -840,18 +848,24 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_variable variable
+     * @param p_literal literal
      * @param p_expression expression
      * @return unification constraint as variable or expression
      */
     @Nonnull
     public static Object unificationconstraint( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                                @Nullable final RuleContext p_variable, @Nullable final RuleContext p_expression )
+                                                @Nullable final RuleContext p_variable,
+                                                @Nullable final RuleContext p_literal,
+                                                @Nullable final RuleContext p_expression )
     {
-        if ( Objects.nonNull( p_expression ) )
-            return p_visitor.visit( p_expression );
-
         if ( Objects.nonNull( p_variable ) )
             return p_visitor.visit( p_variable );
+
+        if ( Objects.nonNull( p_literal ) )
+            return p_visitor.visit( p_literal );
+
+        if ( Objects.nonNull( p_expression ) )
+            return p_visitor.visit( p_expression );
 
         throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }

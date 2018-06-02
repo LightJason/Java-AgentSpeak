@@ -230,7 +230,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public Object visitUnificationconstraint( final AgentParser.UnificationconstraintContext p_context )
     {
-        return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
+        return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.literal(), p_context.expression() );
     }
 
 

@@ -51,6 +51,7 @@ foo(blub(1),hello("test")).
     !testbool;
     !teststring;
     !testunification;
+    !testunifyany;
     !testdeconstruct;
     !testlambda
 .
@@ -65,7 +66,8 @@ foo(blub(1),hello("test")).
     Zone = .datetime/zoneid;
     .generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear, "--", Zone);
 
-    .test/result( success )
+    .test/result( success );
+    .generic/print("datetime executed completly")
 .
 
 
@@ -78,7 +80,9 @@ foo(blub(1),hello("test")).
     .test/result( BAnd, "bool-and has been failed" );
 
     .test/result( .bool/or( true, false, false ), "bool-or has been failed" );
-    .test/result( .bool/xor( true, false, true, false ), "bool-xor has been failed" )
+    .test/result( .bool/xor( true, false, true, false ), "bool-xor has been failed" );
+
+    .generic/print("bool executed completly")
 .
 
 
@@ -102,7 +106,9 @@ foo(blub(1),hello("test")).
     .test/result( .bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
 
     SRand = .string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
-    .generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand )
+    .generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand );
+
+    .generic/print("string executed completly")
 .
 
 
@@ -138,7 +144,6 @@ foo(blub(1),hello("test")).
         .test/result( .bool/equal( .generic/type/tostring(UN5a), "blub[1.0]" ), "fifth unification first part has been failed" );
         .test/result( .bool/equal( .generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
 
-
         // unify with expression
         >>( hello( UN6 ), .generic/type/isstring(UN6) );
         .generic/print( "sixth unification", UN6 );
@@ -155,20 +160,23 @@ foo(blub(1),hello("test")).
         .generic/print( "eighth unification successful" );
         .test/result( success, "eighth unification has been failed" );
 
-        !unifyany
+        .generic/print("unification executed completly")
 .
 
 
 /**
  * test for unification and non-existing
  */
-+!unifyany
++!testunifyany
     : >>hello(X) <-
         .generic/print( "first unifyany:", X );
         .test/result( .bool/equal( X, 123 ), "first unifyany failed" )
+        .generic/print("unify any first executed completly")
+
     : ~>>foobar( _ ) <-
         .generic/print( "second unifyany" );
-        .test/result( success )
+        .test/result( success );
+        .generic/print("unify any second executed completly")
 .
 
 
@@ -212,5 +220,6 @@ foo(blub(1),hello("test")).
     PL = .agent/planlist;
     (PL) -> Y : .generic/print( "lambda plan items", Y);
 
-    .test/result( success )
+    .test/result( success );
+    .generic/print("lambda executed completly")
 .

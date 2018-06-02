@@ -39,48 +39,46 @@ import java.util.stream.Stream;
 
 
 /**
- * unify a literal within a variable
+ * unify a static literal
  */
-public final class CVariableUnify extends CDefaultUnify
+public final class CLiteralUnify extends CDefaultUnify
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -8392150596878840771L;
+    private static final long serialVersionUID = 3657631715981402911L;
     /**
-     * unification variable with literal
+     * literal for unification
      */
-    private final IVariable<?> m_variable;
+    private final ILiteral m_unifyliteral;
 
     /**
      * ctor
      *
      * @param p_parallel parallel execution
-     * @param p_literal variable with literal
-     * @param p_variable expression
+     * @param p_literal literal
      */
-    public CVariableUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IVariable<?> p_variable )
+    public CLiteralUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final ILiteral p_unifyliteral )
     {
         super( p_parallel, p_literal );
-        m_variable = p_variable;
+        m_unifyliteral = p_unifyliteral;
     }
-
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_variable );
+        return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_unifyliteral );
     }
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return )
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
                                                        .unify(
-                                                           CCommon.replacebycontext( p_context, m_variable ).raw(),
+                                                           CCommon.replacebycontext( p_context, m_unifyliteral ).raw(),
                                                            CCommon.replacebycontext( p_context, m_value ).raw()
                                                        );
 
@@ -96,8 +94,22 @@ public final class CVariableUnify extends CDefaultUnify
     public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
-            Stream.of( m_variable ),
+            literalvariable( m_unifyliteral ),
             super.variables()
         );
+    }
+
+    /**
+     * get a stream of all variables within the literal
+     *
+     * @param p_literal literal
+     * @return variable stream
+     */
+    private static Stream<IVariable<?>> literalvariable( @Nonnull final ILiteral p_literal )
+    {
+        return p_literal.values()
+                        .flatMap( i -> i instanceof ILiteral ? literalvariable( i.term() ) : Stream.of( i ) )
+                        .filter( i -> i instanceof IVariable<?> )
+                        .map( ITerm::term );
     }
 }

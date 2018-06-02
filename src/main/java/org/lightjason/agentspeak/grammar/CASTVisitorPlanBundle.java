@@ -217,7 +217,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public Object visitUnificationconstraint( final PlanBundleParser.UnificationconstraintContext p_context )
     {
-        return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.expression() );
+        return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.literal(), p_context.expression() );
     }
 
 
