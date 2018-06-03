@@ -71,7 +71,7 @@
  * @see http://apis.guru/graphql-apis/
  **/
 +!testgraphqlliteral <-
-    GQ = .web/graphql/queryliteral( "https://developer.deutschebahn.com/free1bahnql/graphql", stationWithEvaId( evaId( 8000105 ), name ), "graphql" );
+    GQ = .web/graphql/queryliteral( "https://developer.deutschebahn.com/free1bahnql/graphql", search( searchTerm( "Frankfurt Flughafen" ), operationLocations( name, id ) ), "graphql" );
     +graphql-fake-literal(GQ)
 .
 
@@ -91,7 +91,7 @@
     D = .collection/list/get(D, 0);
     [N] =.. D;
 
-    .test/result( .bool/or( .bool/equal( N, "elements" ), .bool/equal( N, "schemalocation" ), .bool/equal( N, "location" ) ) )
+    .test/result( .bool/or( .bool/equal( N, "elements" ), .bool/equal( N, "schemaLocation" ), .bool/equal( N, "location" ) ) )
 .
 
 /**
@@ -104,7 +104,7 @@
     M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
-    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "allusers" ) ) )
+    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "search" ) ) )
 .
 
 /**
@@ -118,5 +118,5 @@
     M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
-    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "product" ) ) )
+    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "stationWithEvaId" ) ) )
 .

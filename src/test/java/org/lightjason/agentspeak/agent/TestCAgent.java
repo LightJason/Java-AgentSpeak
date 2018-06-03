@@ -29,6 +29,7 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -48,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -61,10 +63,21 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
 {
+    private AtomicInteger m_count;
+
     static
     {
         // disable logger
         LogManager.getLogManager().reset();
+    }
+
+    /**
+     * initialize
+     */
+    @Before
+    public void initialize()
+    {
+        m_count = new AtomicInteger();
     }
 
     /**
@@ -123,12 +136,20 @@ public final class TestCAgent extends IBaseTest
         }
         catch ( final Exception l_exception )
         {
+            l_exception.printStackTrace();
             Assert.fail( p_asl.getLeft() );
             return;
         }
 
         IntStream.range( 0, p_asl.getMiddle().intValue() )
                  .forEach( i -> agentcycle( l_agent ) );
+
+        Assert.assertEquals(
+            MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ),
+            p_asl.getRight().longValue(),
+            m_count.get()
+        );
+
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -205,6 +226,7 @@ public final class TestCAgent extends IBaseTest
                 ),
                 p_argument.get( 0 ).<Boolean>raw()
             );
+            m_count.incrementAndGet();
             return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
         }
     }
