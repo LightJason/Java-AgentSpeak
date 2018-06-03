@@ -171,5 +171,5 @@
 
 +!equalname( X, Y ) <-
     .test/result( .bool/equal(X, "foo") );
-    .test/result( .bool/equal(X, "bar") )
+    .test/result( .bool/equal(Y, "bar") )
 .
