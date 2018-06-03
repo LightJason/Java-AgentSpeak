@@ -37,7 +37,6 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -158,7 +157,7 @@ public final class CUnifier implements IUnifier
      */
     private static boolean evaluateexpression( final IContext p_context, final IExpression p_expression, final Set<IVariable<?>> p_variables )
     {
-        final List<ITerm> l_return = new LinkedList<>();
+        final List<ITerm> l_return = CCommon.argumentlist();
         p_expression.execute(
             false, CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
             Collections.emptyList(),

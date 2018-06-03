@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.instantiable.plan;
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
@@ -64,6 +65,12 @@ public interface IPlan extends IInstantiable
         public IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context )
         {
             return CFuzzyValue.of( true );
+        }
+
+        @Override
+        public ILiteral literal()
+        {
+            return ILiteral.EMPTY;
         }
 
         @Nonnull

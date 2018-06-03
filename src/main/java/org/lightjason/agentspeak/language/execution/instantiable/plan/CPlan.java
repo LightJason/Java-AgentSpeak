@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.execution.instantiable.plan;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -163,4 +164,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         );
     }
 
+    @Override
+    public ILiteral literal()
+    {
+        return m_triggerevent.literal();
+    }
 }

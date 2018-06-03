@@ -322,7 +322,7 @@ public final class TestCActionAgent extends IBaseTest
     /**
      * empty plan
      */
-    private static class CEmptyPlan extends IBaseInstantiable implements IPlan
+    private static final class CEmptyPlan extends IBaseInstantiable implements IPlan
     {
         /**
          * serial id
@@ -356,6 +356,12 @@ public final class TestCActionAgent extends IBaseTest
         public IFuzzyValue<Boolean> condition( final IContext p_context )
         {
             return CFuzzyValue.of( true );
+        }
+
+        @Override
+        public ILiteral literal()
+        {
+            return m_trigger.literal();
         }
     }
 

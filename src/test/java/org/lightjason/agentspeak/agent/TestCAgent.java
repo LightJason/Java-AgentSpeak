@@ -26,12 +26,9 @@ package org.lightjason.agentspeak.agent;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -50,8 +47,6 @@ import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
@@ -66,11 +61,6 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
 {
-    /**
-     * list with successful plans
-     */
-    private List<Pair<Boolean, String>> m_testlog;
-
     static
     {
         // disable logger
@@ -96,14 +86,6 @@ public final class TestCAgent extends IBaseTest
         ).toArray();
     }
 
-    /**
-     * return list initialize
-     */
-    @Before
-    public void initialize()
-    {
-        m_testlog = Collections.synchronizedList( new ArrayList<>() );
-    }
 
     /**
      * test for default generators and configuration
@@ -141,26 +123,12 @@ public final class TestCAgent extends IBaseTest
         }
         catch ( final Exception l_exception )
         {
-            l_exception.printStackTrace();
             Assert.fail( p_asl.getLeft() );
             return;
         }
 
         IntStream.range( 0, p_asl.getMiddle().intValue() )
-                 .forEach( i -> Assert.assertTrue(
-                     MessageFormat.format( "{0}", p_asl.getLeft() ),
-                     agentcycle( l_agent )
-                 ) );
-
-        Assert.assertEquals(
-            MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ),
-            p_asl.getRight().longValue(),
-            m_testlog.size()
-        );
-        Assert.assertTrue(
-            MessageFormat.format( "{0}", m_testlog.stream().filter( i -> !i.getLeft() ).map( Pair::getRight ).collect( Collectors.toList() ) ),
-            m_testlog.stream().anyMatch( Pair::getLeft )
-        );
+                 .forEach( i -> agentcycle( l_agent ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -226,18 +194,17 @@ public final class TestCAgent extends IBaseTest
         @Nonnull
         @Override
         public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            m_testlog.add(
-                new ImmutablePair<>(
-                    p_argument.get( 0 ).<Boolean>raw(),
-                    p_argument.size() > 1
-                    ? p_argument.get( 1 ).<String>raw()
-                    : ""
-                )
+            Assert.assertTrue(
+                MessageFormat.format(
+                    "{0}{1}{2}",
+                    p_context.instance().literal(),
+                    p_argument.size() > 1 ? ": " : "",
+                    p_argument.size() > 1 ? p_argument.get( 1 ).raw() : ""
+                ),
+                p_argument.get( 0 ).<Boolean>raw()
             );
-
             return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
         }
     }

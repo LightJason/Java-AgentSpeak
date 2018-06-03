@@ -94,4 +94,9 @@ public final class CRule extends IBaseInstantiable implements IRule
         );
     }
 
+    @Override
+    public ILiteral literal()
+    {
+        return m_id;
+    }
 }

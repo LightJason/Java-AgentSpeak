@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.instantiable;
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -37,6 +38,13 @@ import java.util.stream.Stream;
  */
 public interface IInstantiable extends IExecution
 {
+
+    /**
+     * returns the literal which define the structure
+     *
+     * @return literal
+     */
+    ILiteral literal();
 
     /**
      * creates an individual execution context

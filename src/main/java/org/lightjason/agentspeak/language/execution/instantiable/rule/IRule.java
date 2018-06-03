@@ -58,6 +58,12 @@ public interface IRule extends IInstantiable
             return CLiteral.of( "empty" );
         }
 
+        @Override
+        public ILiteral literal()
+        {
+            return ILiteral.EMPTY;
+        }
+
         @Nonnull
         @Override
         public IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
