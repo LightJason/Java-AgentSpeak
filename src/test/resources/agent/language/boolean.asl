@@ -22,77 +22,22 @@
  */
 
 // -----
-// agent for testing rules
+// agent for testing boolean calls
 // -----
 
 // initial-goal
 !test.
 
-
-// --- logical rules -------------------------------------------------------------------------------------------------------------------------------------------
-
-fibonacci(X, R)
-    // order of the rules are indeterministic, so for avoid indeterministic behaviour
-    // add the condition, when the rule can be executed first
-    :- X <= 2;  R = 1
-    :- X > 2;   TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B
-.
-
-ackermann(N, M, R)
-    :- N == 0; R = M+1
-    :- M == 0; TN = N - 1; $ackermann(TN, 1, R)
-    :- TM = M - 1; $ackermann(N, TM, RI); TN = N - 1; $ackermann(TN, RI, R)
-.
-
-factorial(N,R)
-    :- N == 1; R = 1
-    :- N--; $factorial(N,O); R = R * O
-.
-
-myfunction(X) :- .generic/print("my logical rule", X).
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
 /**
- * base test
+ * test boolean operator
  */
 +!test <-
-    !testdirectcall;
-    !testruledirect;
-    !testrulevariable
-.
+    BAnd = .bool/and( true, false, true );
+    BAnd = ~BAnd;
+    .test/result( BAnd, "bool-and has been failed" );
 
+    .test/result( .bool/or( true, false, false ), "bool-or has been failed" );
+    .test/result( .bool/xor( true, false, true, false ), "bool-xor has been failed" );
 
-/**
- * test direct rule call
- */
-+!testdirectcall <-
-    $myfunction("fooooooo");
-    .test/result( success )
-.
-
-
-/**
- * test rule call with variable argument
- */
-+!testruledirect <-
-    $fibonacci(8, FIB);
-    R = FIB == 21.0;
-    .test/result( R, "rule direct call has been failed" );
-    .generic/print("rule execution (fibonacci)", FIB )
-.
-
-
-/**
- * test rule variable call
- */
-+!testrulevariable <-
-    RULE = "fibonacci";
-    $.RULE(8,FIB);
-    R = FIB == 21.0;
-    .generic/print("-->", R, FIB);
-    .test/result( R, "rule variable call has been failed" );
-    .generic/print("rule execution (fibonacci)", FIB )
+    .generic/print("bool executed completly")
 .

@@ -22,77 +22,33 @@
  */
 
 // -----
-// agent for testing rules
+// agent for testing string calls
 // -----
 
 // initial-goal
 !test.
 
-
-// --- logical rules -------------------------------------------------------------------------------------------------------------------------------------------
-
-fibonacci(X, R)
-    // order of the rules are indeterministic, so for avoid indeterministic behaviour
-    // add the condition, when the rule can be executed first
-    :- X <= 2;  R = 1
-    :- X > 2;   TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B
-.
-
-ackermann(N, M, R)
-    :- N == 0; R = M+1
-    :- M == 0; TN = N - 1; $ackermann(TN, 1, R)
-    :- TM = M - 1; $ackermann(N, TM, RI); TN = N - 1; $ackermann(TN, RI, R)
-.
-
-factorial(N,R)
-    :- N == 1; R = 1
-    :- N--; $factorial(N,O); R = R * O
-.
-
-myfunction(X) :- .generic/print("my logical rule", X).
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
 /**
- * base test
+ * test string
  */
 +!test <-
-    !testdirectcall;
-    !testruledirect;
-    !testrulevariable
-.
+    SBase64 = .string/base64encode( "Base64 encoded string" );
+    .test/result( .bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
 
+    SReverse = .string/reverse( "abcdefg" );
+    .test/result( .bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
 
-/**
- * test direct rule call
- */
-+!testdirectcall <-
-    $myfunction("fooooooo");
-    .test/result( success )
-.
+    SUpper = .string/upper("AbCdefg");
+    .test/result( .bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
 
+    SLower = .string/lower("AbCdefg");
+    .test/result( .bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
 
-/**
- * test rule call with variable argument
- */
-+!testruledirect <-
-    $fibonacci(8, FIB);
-    R = FIB == 21.0;
-    .test/result( R, "rule direct call has been failed" );
-    .generic/print("rule execution (fibonacci)", FIB )
-.
+    SReplace = .string/replace( "1", "-", "a1b1defg1xyz1ui" );
+    .test/result( .bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
 
+    SRand = .string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
+    .generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand );
 
-/**
- * test rule variable call
- */
-+!testrulevariable <-
-    RULE = "fibonacci";
-    $.RULE(8,FIB);
-    R = FIB == 21.0;
-    .generic/print("-->", R, FIB);
-    .test/result( R, "rule variable call has been failed" );
-    .generic/print("rule execution (fibonacci)", FIB )
+    .generic/print("string executed completly")
 .

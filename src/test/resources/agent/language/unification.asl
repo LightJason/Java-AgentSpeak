@@ -47,68 +47,8 @@ foo(blub(1),hello("test")).
  * base test
  */
 +!test <-
-    !testdatetime;
-    !testbool;
-    !teststring;
     !testunification;
-    !testunifyany;
-    !testdeconstruct;
-    !testlambda
-.
-
-
-/**
- * test date / time
- */
-+!testdatetime <-
-    [Hour | Minute | Second | Nano ] = .datetime/time;
-    [Year | Month | Day | DayOfWeek | DayOfYear] = .datetime/date;
-    Zone = .datetime/zoneid;
-    .generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear, "--", Zone);
-
-    .test/result( success );
-    .generic/print("datetime executed completly")
-.
-
-
-/**
- * test boolean operator
- */
-+!testbool <-
-    BAnd = .bool/and( true, false, true );
-    BAnd = ~BAnd;
-    .test/result( BAnd, "bool-and has been failed" );
-
-    .test/result( .bool/or( true, false, false ), "bool-or has been failed" );
-    .test/result( .bool/xor( true, false, true, false ), "bool-xor has been failed" );
-
-    .generic/print("bool executed completly")
-.
-
-
-/**
- * test string
- */
-+!teststring <-
-    SBase64 = .string/base64encode( "Base64 encoded string" );
-    .test/result( .bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
-
-    SReverse = .string/reverse( "abcdefg" );
-    .test/result( .bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
-
-    SUpper = .string/upper("AbCdefg");
-    .test/result( .bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
-
-    SLower = .string/lower("AbCdefg");
-    .test/result( .bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
-
-    SReplace = .string/replace( "1", "-", "a1b1defg1xyz1ui" );
-    .test/result( .bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
-
-    SRand = .string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
-    .generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand );
-
-    .generic/print("string executed completly")
+    !testunifyany
 .
 
 
@@ -177,49 +117,4 @@ foo(blub(1),hello("test")).
         .generic/print( "second unifyany" );
         .test/result( success );
         .generic/print("unify any second executed completly")
-.
-
-
-/**
- * test the deconstruct operator
- */
-+!testdeconstruct <-
-        [O|P] =.. foo( blub(1), blah(3) );
-        .generic/print("first deconstruct", O, P);
-        .test/result( .bool/equal( O, "foo" ), "first deconstruct has been failed" );
-
-        [H|I] = P;
-        [A|C] =.. H;
-        [B|D] =.. I;
-
-        .generic/print("second deconstruct", H, I, A, C, B, D);
-
-        .test/result( .bool/equal( A, "blub" ), "second deconstruct has been failed" );
-        .test/result( .bool/equal( B, "blah" ), "third deconstruct has been failed" );
-
-        .test/result( .bool/equal( .collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
-        .test/result( .bool/equal( .collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
-
-        .generic/print("deconstruct executed completly")
-.
-
-/**
- * test lambda expression
- */
-+!testlambda <-
-    L = .collection/list/range(1, 20);
-    (L) -> Y : .generic/print( "lambda value", Y);
-
-    @(L) -> Y | R : R = Y+1;
-    .generic/print("lambda return", R);
-
-    BL = .agent/belieflist( "hallo" );
-    (BL) -> Y : .generic/print( "lambda belief items", Y);
-
-
-    PL = .agent/planlist;
-    (PL) -> Y : .generic/print( "lambda plan items", Y);
-
-    .test/result( success );
-    .generic/print("lambda executed completly")
 .
