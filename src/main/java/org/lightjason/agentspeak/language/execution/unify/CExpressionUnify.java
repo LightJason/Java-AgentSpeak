@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.language.execution.unify;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -48,7 +48,7 @@ public final class CExpressionUnify extends CDefaultUnify
     /**
      * unification expression
      */
-    private final IExpression m_expression;
+    private final IExecution m_expression;
 
     /**
      * ctor
@@ -57,7 +57,7 @@ public final class CExpressionUnify extends CDefaultUnify
      * @param p_literal literal
      * @param p_expression expression
      */
-    public CExpressionUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IExpression p_expression )
+    public CExpressionUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IExecution p_expression )
     {
         super( p_parallel, p_literal );
         m_expression = p_expression;

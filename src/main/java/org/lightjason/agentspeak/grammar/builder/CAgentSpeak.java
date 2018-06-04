@@ -815,9 +815,7 @@ public final class CAgentSpeak
                                           @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
     {
         final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
-        final Object l_constraint = Objects.nonNull( p_constraint )
-                                    ? p_visitor.visit( p_constraint )
-                                    : null;
+        final Object l_constraint = Objects.nonNull( p_constraint ) ? p_visitor.visit( p_constraint ) : null;
 
         if ( l_constraint instanceof IVariable<?> )
             return new CVariableUnify(
@@ -833,11 +831,11 @@ public final class CAgentSpeak
                 (ILiteral) l_constraint
             );
 
-        if ( l_constraint instanceof IExpression )
+        if ( l_constraint instanceof IExecution )
             return new CExpressionUnify(
                 Objects.nonNull( p_parallel ),
                 l_literal,
-                (IExpression) l_constraint
+                (IExecution) l_constraint
             );
 
         return new CDefaultUnify( Objects.nonNull( p_parallel ), l_literal );

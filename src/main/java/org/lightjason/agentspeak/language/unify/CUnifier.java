@@ -26,9 +26,8 @@ package org.lightjason.agentspeak.language.unify;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -105,7 +104,7 @@ public final class CUnifier implements IUnifier
     @Nonnull
     @Override
     public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                       @Nonnull final IExpression p_expression, final boolean p_parallel )
+                                       @Nonnull final IExecution p_expression, final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
@@ -155,16 +154,22 @@ public final class CUnifier implements IUnifier
      * @param p_variables current variables
      * @return boolean for correct evaluation
      */
-    private static boolean evaluateexpression( final IContext p_context, final IExpression p_expression, final Set<IVariable<?>> p_variables )
+    private static boolean evaluateexpression( final IContext p_context, final IExecution p_expression, final Set<IVariable<?>> p_variables )
     {
-        final List<ITerm> l_return = CCommon.argumentlist();
-        p_expression.execute(
-            false, CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
-            Collections.emptyList(),
-            l_return
-        );
-
-        return l_return.size() == 1 && l_return.get( 0 ).<Boolean>raw();
+        return p_context.agent()
+                        .fuzzy()
+                        .getValue()
+                        .defuzzify(
+                            p_expression.execute(
+                                false,
+                                CCommon.updatecontext(
+                                    p_context.duplicate(),
+                                    p_variables.stream()
+                                ),
+                                Collections.emptyList(),
+                                CCommon.argumentlist()
+                            )
+                        );
     }
 
     /**

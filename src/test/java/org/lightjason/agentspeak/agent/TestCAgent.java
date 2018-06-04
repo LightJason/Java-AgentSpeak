@@ -96,7 +96,7 @@ public final class TestCAgent extends IBaseTest
             new ImmutableTriple<>( "src/test/resources/agent/language/datetime.asl", 2, 1 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/boolean.asl", 2, 3 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/string.asl", 2, 5 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/unification.asl", 2, 12 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/unification.asl", 2, 11 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 3 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/trigger.asl", 3, 21 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/execution.asl", 3, 4 ),

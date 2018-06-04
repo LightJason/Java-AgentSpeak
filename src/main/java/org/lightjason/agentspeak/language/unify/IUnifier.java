@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.language.unify;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -57,7 +57,7 @@ public interface IUnifier
         @Nonnull
         @Override
         public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                           @Nonnull final IExpression p_expression, final boolean p_parallel )
+                                           @Nonnull final IExecution p_expression, final boolean p_parallel )
         {
             return CFuzzyValue.of( false );
         }
@@ -88,7 +88,7 @@ public interface IUnifier
      */
     @Nonnull
     IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                @Nonnull final IExpression p_expression, final boolean p_parallel );
+                                @Nonnull final IExecution p_expression, final boolean p_parallel );
 
 
     /**
