@@ -82,11 +82,15 @@ public final class CBinaryExpression implements IBinaryExpression
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( !m_lhs.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 1 )
+        if ( !execute( m_lhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 1 )
             return CFuzzyValue.of( false );
 
-        if ( !m_rhs.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 2 )
+        System.out.println( m_lhs + "    " + l_return );
+
+        if ( !execute( m_rhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 2 )
             return CFuzzyValue.of( false );
+
+        System.out.println( p_context.instancevariables() + "     " + m_rhs + "    " + l_return );
 
         p_return.add(
             CRawTerm.of(
@@ -95,6 +99,30 @@ public final class CBinaryExpression implements IBinaryExpression
         );
 
         return CFuzzyValue.of( true );
+    }
+
+    /**
+     * execute expression and add return execution result if needed
+     *
+     * @param p_execution execution
+     * @param p_parallel parallel execution
+     * @param p_context execution context
+     * @param p_argument argument list
+     * @param p_return return list
+     * @return execution result
+     */
+    private static boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        final int l_arguments = p_return.size();
+        final boolean l_result = p_context.agent().fuzzy().getValue().defuzzify(
+            p_execution.execute( p_parallel, p_context, p_argument, p_return )
+        );
+
+        if ( p_return.size() == l_arguments )
+            p_return.add( CRawTerm.of( l_result ) );
+
+        return l_result;
     }
 
     @Nonnull
