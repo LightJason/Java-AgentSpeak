@@ -94,13 +94,15 @@ public final class CBinaryExpression implements IBinaryExpression
 
         System.out.println( "rhs --> " + m_rhs + "    " + l_return );
         System.out.println( "var --> " + p_context.instancevariables() );
-        System.out.println("----------");
 
         p_return.add(
             CRawTerm.of(
                 m_operator.apply( l_return.get( 0 ), l_return.get( 1 ) )
             )
         );
+
+        System.out.println( "res --> " + p_return  );
+        System.out.println("----------");
 
         return CFuzzyValue.of( true );
     }
@@ -123,6 +125,7 @@ public final class CBinaryExpression implements IBinaryExpression
             p_execution.execute( p_parallel, p_context, p_argument, p_return )
         );
 
+        // if no result value exists from execution, just use defuzzificated execution result
         if ( p_return.size() == l_arguments )
             p_return.add( CRawTerm.of( l_result ) );
 
