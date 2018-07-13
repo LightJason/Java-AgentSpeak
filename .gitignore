@@ -1,6 +1,7 @@
 *.*
 
 !.gitignore
+!CNAME
 !.dockerignore
 !Dockerfile
 !circle.yml
