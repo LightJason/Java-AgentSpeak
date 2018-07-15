@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.lambda;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -33,7 +34,7 @@ import java.util.stream.Stream;
  *
  * @tparam T any input type
  */
-public interface ILambdaStreaming<T> extends Function<T, Stream<?>>
+public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>>
 {
     /**
      * empty streaming

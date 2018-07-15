@@ -35,6 +35,10 @@ import java.util.stream.Stream;
  */
 public final class CLambdaStreaming implements ILambdaStreaming<List<?>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7453430804177199062L;
 
     @Override
     public Stream<?> apply( @Nonnull final List<?> p_objects )

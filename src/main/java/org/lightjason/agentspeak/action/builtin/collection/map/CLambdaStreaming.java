@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.collection.map;
 
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -33,8 +33,13 @@ import java.util.stream.Stream;
 /**
  * streaming of a map
  */
-public final class CLambdaStreaming implements ILambdaStreaming<Map<?, ?>>
+public final class CLambdaStreaming extends IBaseLambdaStreaming<Map<?, ?>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8776927369080417712L;
+
     @Override
     public Stream<?> apply( @Nonnull final Map<?, ?> p_map )
     {

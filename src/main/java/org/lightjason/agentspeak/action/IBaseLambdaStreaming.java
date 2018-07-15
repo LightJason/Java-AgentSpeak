@@ -21,35 +21,40 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
+package org.lightjason.agentspeak.action;
 
-import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.logging.Logger;
 
 
 /**
- * streaming a blas matrix
+ * abstract class for any lambda streaming operator
+ *
+ * @tparam T stream object type
  */
-public final class CLambdaStreaming extends IBaseLambdaStreaming<DoubleMatrix2D>
+public abstract class IBaseLambdaStreaming<T> implements ILambdaStreaming<T>
 {
+    /**
+     * logger
+     */
+    protected static final Logger LOGGER = CCommon.logger( IBaseLambdaStreaming.class );
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 4021047814924138636L;
+    private static final long serialVersionUID = 8873602790694877697L;
 
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
+    public final int hashCode()
     {
-        return p_object instanceof DoubleMatrix2D;
+        return this.getClass().getCanonicalName().hashCode();
     }
 
     @Override
-    public Stream<?> apply( final DoubleMatrix2D p_matrix )
+    public final boolean equals( final Object p_object )
     {
-        return Arrays.stream( p_matrix.vectorize().toArray() ).boxed();
+        return p_object instanceof ILambdaStreaming<?> && p_object.hashCode() == this.hashCode();
     }
 }

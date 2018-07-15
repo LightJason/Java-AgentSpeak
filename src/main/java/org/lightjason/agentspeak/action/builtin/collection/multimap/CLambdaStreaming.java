@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.collection.multimap;
 
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
@@ -33,8 +33,12 @@ import java.util.stream.Stream;
 /**
  * streaming of a multimap
  */
-public final class CLambdaStreaming implements ILambdaStreaming<Multimap<?, ?>>
+public final class CLambdaStreaming extends IBaseLambdaStreaming<Multimap<?, ?>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -9088776927360487769L;
 
     @Override
     public Stream<?> apply( @Nonnull final Multimap<?, ?> p_multimap )

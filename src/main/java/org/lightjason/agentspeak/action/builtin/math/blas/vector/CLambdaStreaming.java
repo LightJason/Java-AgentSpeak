@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -34,8 +34,13 @@ import java.util.stream.Stream;
 /**
  * streaming a vector
  */
-public final class CLambdaStreaming implements ILambdaStreaming<DoubleMatrix1D>
+public final class CLambdaStreaming extends IBaseLambdaStreaming<DoubleMatrix1D>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4092413210478148636L;
+
     @Override
     public boolean instaceof( @Nonnull final Object p_object )
     {

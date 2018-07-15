@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyComplement;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**
@@ -56,7 +55,7 @@ public final class CCrisp<T> implements IDefuzzification<T>
     }
 
 
-    @Nullable
+    @Nonnull
     @Override
     public T defuzzify( @Nonnull final IFuzzyValue<T> p_value )
     {

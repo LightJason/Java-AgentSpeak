@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
@@ -33,8 +33,13 @@ import java.util.stream.Stream;
 /**
  * stream of string
  */
-public final class CLambdaStreaming implements ILambdaStreaming<String>
+public final class CLambdaStreaming extends IBaseLambdaStreaming<String>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7098550858640627710L;
+
     @Override
     public boolean instaceof( @Nonnull final Object p_object )
     {

@@ -37,7 +37,6 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,10 +66,6 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * return variable
      */
     private final IVariable<?> m_return;
-    /**
-     * execution method
-     */
-    private final BiFunction<IContext, Stream<?>, IFuzzyValue<Boolean>> m_execution;
 
 
     /**
@@ -90,8 +85,6 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         m_stream = p_stream;
         m_iterator = p_iterator.term();
         m_parallel = p_parallel;
-
-        m_execution = m_parallel ? this::parallel : this::sequential;
     }
 
     @Nonnull
@@ -103,7 +96,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         if ( !m_stream.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
             return CFuzzyValue.of( false );
 
-        return m_execution.apply( p_context, l_init.get( 0 ).raw() );
+        return m_parallel ? this.parallel( p_context, l_init.get( 0 ).raw() ) : this.sequential( p_context, l_init.get( 0 ).raw() );
     }
 
     /**
@@ -190,4 +183,5 @@ public final class CLambda extends IBaseExecution<IExecution[]>
             )
         );
     }
+
 }

@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
 import cern.colt.matrix.tbit.BitVector;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
@@ -35,8 +35,13 @@ import java.util.stream.Stream;
 /**
  * streaming a bit matrix
  */
-public final class CLambdaStreaming implements ILambdaStreaming<BitMatrix>
+public final class CLambdaStreaming extends IBaseLambdaStreaming<BitMatrix>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7869879782838191012L;
+
     @Override
     public boolean instaceof( @Nonnull final Object p_object )
     {
