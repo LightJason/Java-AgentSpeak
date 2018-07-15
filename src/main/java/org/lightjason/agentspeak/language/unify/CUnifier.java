@@ -37,6 +37,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -185,7 +186,7 @@ public final class CUnifier implements IUnifier
         return p_agent.beliefbase()
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )
                       .filter( i -> i.emptyValues() == p_literal.emptyValues() )
-                      .map( i -> this.unify( i, p_literal.deepcopy().<ILiteral>raw() ) )
+                      .map( i -> this.unify( i, Objects.requireNonNull( p_literal.deepcopy().<ILiteral>raw() ) ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }

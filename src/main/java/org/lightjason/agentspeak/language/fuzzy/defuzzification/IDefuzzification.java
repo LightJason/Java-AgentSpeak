@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**
@@ -46,7 +45,7 @@ public interface IDefuzzification<T>
      * @param p_value fuzzy value
      * @return native value
      */
-    @Nullable
+    @Nonnull
     T defuzzify( @Nonnull final IFuzzyValue<T> p_value );
 
     /**
