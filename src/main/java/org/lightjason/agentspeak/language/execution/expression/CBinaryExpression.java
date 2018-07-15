@@ -82,7 +82,7 @@ public final class CBinaryExpression implements IBinaryExpression
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        System.out.println("----------");
+        System.out.println( "----------" );
         System.out.println( "complete --> " + m_lhs + "   " + m_operator + "   " + m_rhs );
         if ( !execute( m_lhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 1 )
             return CFuzzyValue.of( false );
@@ -102,7 +102,7 @@ public final class CBinaryExpression implements IBinaryExpression
         );
 
         System.out.println( "res --> " + p_return  );
-        System.out.println("----------");
+        System.out.println( "----------" );
 
         return CFuzzyValue.of( true );
     }
