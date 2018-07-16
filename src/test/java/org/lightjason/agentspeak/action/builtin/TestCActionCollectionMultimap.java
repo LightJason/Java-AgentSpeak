@@ -27,7 +27,7 @@ package org.lightjason.agentspeak.action.builtin;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
