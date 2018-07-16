@@ -1,0 +1,3 @@
+[submodule "src/main/antlr4"]
+	path = src/main/antlr4
+	url = git@github.com:LightJason/AgentSpeak.git
