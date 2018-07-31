@@ -229,7 +229,7 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>3.1.5</version>
+            <version>3.1.6</version>
             <scope>provided</scope>
         </dependency>
 
@@ -284,7 +284,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>3.1.5</version>
+                <version>3.1.6</version>
                 <configuration>
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
