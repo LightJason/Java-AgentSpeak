@@ -107,7 +107,7 @@ foo(blub(1),hello("test")).
 
 /**
  * test for unification and non-existing
- */
+ *
 +!testunifyany
     : >>hello(X) <-
         .generic/print( "first unifyany:", X );
@@ -119,3 +119,4 @@ foo(blub(1),hello("test")).
         .test/result( success );
         .generic/print("unify any second executed completly")
 .
+*/
