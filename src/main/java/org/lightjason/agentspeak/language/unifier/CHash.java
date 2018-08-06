@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.unify;
+package org.lightjason.agentspeak.language.unifier;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.language.ITerm;
@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 
 
 /**
- * unify on at hash-based quality
+ * unifier on at hash-based quality
  */
 public final class CHash implements IUnifier.IAlgorithm
 {

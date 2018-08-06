@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.unify;
+package org.lightjason.agentspeak.language.unifier;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
@@ -48,11 +48,11 @@ import java.util.stream.Collectors;
 public final class CUnifier implements IUnifier
 {
     /**
-     * hash-based unify algorithm
+     * hash-based unifier algorithm
      */
     private final IAlgorithm m_hashbased;
     /**
-     * recursive unify algorithm
+     * recursive unifier algorithm
      */
     private final IAlgorithm m_recursive;
 
@@ -84,7 +84,7 @@ public final class CUnifier implements IUnifier
     {
         final Set<IVariable<?>> l_result = new HashSet<>();
 
-        // try to unify exact or if not possible by recursive on the value set
+        // try to unifier exact or if not possible by recursive on the value set
         if ( !(
             p_target.structurehash() == p_source.structurehash()
             ? m_hashbased.unify(

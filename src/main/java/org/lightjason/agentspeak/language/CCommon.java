@@ -46,7 +46,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -218,7 +218,7 @@ public final class CCommon
         if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 
-        // unify variables, source trigger literal must be copied
+        // unifier variables, source trigger literal must be copied
         final Set<IVariable<?>> l_variables = p_unifier.unify( p_source.literal(), p_target.literal().deepcopy().<ILiteral>raw() );
 
         // check for completely unification (of all variables)

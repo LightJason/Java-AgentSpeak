@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 
 
 /**
- * unify action
+ * unifier action
  *
  * @note parallel is ignored
  */

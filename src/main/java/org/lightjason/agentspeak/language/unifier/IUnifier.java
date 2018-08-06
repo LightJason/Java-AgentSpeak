@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.unify;
+package org.lightjason.agentspeak.language.unifier;
 
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -84,7 +84,7 @@ public interface IUnifier
      * @param p_variables number of unified variables
      * @param p_expression expression
      * @param p_parallel parallel executon
-     * @return boolean if a unify can be done
+     * @return boolean if a unifier can be done
      */
     @Nonnull
     IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
@@ -92,18 +92,18 @@ public interface IUnifier
 
 
     /**
-     * unify algorithm
+     * unifier algorithm
      */
     interface IAlgorithm
     {
 
         /**
-         * unify algorithm
+         * unifier algorithm
          *
          * @param p_variables unified variables
          * @param p_source source stream of terms
          * @param p_target target stream of terms with variables (must be a deep-copy)
-         * @return boolean of unify success
+         * @return boolean of unifier success
          *
          * @tparam T term type
          */

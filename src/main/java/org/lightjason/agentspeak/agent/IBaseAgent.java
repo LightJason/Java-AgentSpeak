@@ -51,7 +51,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -400,7 +400,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // get all possible plans
             .flatMap( i -> m_plans.get( i ).stream().map( j -> new ImmutablePair<>( i, j ) ) )
             .parallel()
-            // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
+            // tries to unifier trigger literal and filter of valid unification (returns set of unified variables)
             .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, i.getLeft(), i.getRight().plan().trigger() ) ) )
             // check if unification was possible
             .filter( i -> i.getRight().getLeft() )

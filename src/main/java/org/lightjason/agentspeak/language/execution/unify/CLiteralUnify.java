@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 
 
 /**
- * unify a static literal
+ * unifier a static literal
  */
 public final class CLiteralUnify extends CDefaultUnify
 {

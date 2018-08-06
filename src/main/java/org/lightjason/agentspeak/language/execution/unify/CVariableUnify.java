@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 
 
 /**
- * unify a literal within a variable
+ * unifier a literal within a variable
  */
 public final class CVariableUnify extends CDefaultUnify
 {

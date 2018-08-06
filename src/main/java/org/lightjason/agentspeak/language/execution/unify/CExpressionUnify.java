@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 
 /**
- * unify expression
+ * unifier expression
  */
 public final class CExpressionUnify extends CDefaultUnify
 {

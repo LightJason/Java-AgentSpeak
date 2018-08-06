@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.unify;
+package org.lightjason.agentspeak.language.unifier;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 
 
 /**
- * recursive unify
+ * recursive unifier
  *
  * @todo reduce npath complexity
  */
