@@ -91,12 +91,18 @@ public final class CPassAction implements IExecution
                .collect( p_context.agent().fuzzy().getKey() ).value() )
             return CFuzzyValue.of( false );
 
-        return m_execution.execute(
+        final int l_returnsize = p_return.size();
+        final IFuzzyValue<Boolean> l_result = m_execution.execute(
             m_parallel,
             p_context,
             Collections.unmodifiableList( l_arguments ),
             p_return
         );
+
+        if ( p_return.size() == l_returnsize )
+            p_return.add( CRawTerm.of( p_context.agent().fuzzy().getValue().defuzzify( l_result ) ) );
+
+        return l_result;
     }
 
     /**

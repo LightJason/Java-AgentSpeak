@@ -56,7 +56,6 @@ foo(blub(1),hello("test")).
  * test unification
  */
 +!testunification <-
-/*
         // unify default
         >>hello( UN1 );
         .generic/print( "first unification", UN1 );
@@ -89,25 +88,26 @@ foo(blub(1),hello("test")).
         >>( hello( UN6 ), .generic/type/isstring(UN6) );
         .generic/print( "sixth unification", UN6 );
         .test/result( .bool/equal( UN6, "foo" ), "sixth unification has been failed" );
-*/
+
         // parallel unfiy with expression
         @>>( hello( UN7 ), .generic/type/isnumeric(UN7) && UN7 > 1000 );
         .generic/print( "seventh unification", UN7 );
         .test/result( .bool/equal( UN7, 1111 ), "seventh unification has been failed" );
-/*
+
         // failing unify
+        /*
         >>notexist( UN8 ) << true;
         .generic/type/isnull( UN8 );
         .generic/print( "eighth unification successful" );
         .test/result( success, "eighth unification has been failed" );
-*/
+        */
         .generic/print("unification executed completly")
 .
 
 
 /**
  * test for unification and non-existing
- *
+ */
 +!testunifyany
     : >>hello(X) <-
         .generic/print( "first unifyany:", X );
@@ -119,4 +119,3 @@ foo(blub(1),hello("test")).
         .test/result( success );
         .generic/print("unify any second executed completly")
 .
-*/

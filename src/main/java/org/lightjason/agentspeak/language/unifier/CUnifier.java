@@ -108,12 +108,8 @@ public final class CUnifier implements IUnifier
     public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
                                        @Nonnull final IExecution p_expression, final boolean p_parallel )
     {
-        System.out.println( p_literal + "    " + p_expression + "    " + p_parallel );
-
-
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
-        System.out.println( l_variables + "    " + l_variables.size() );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.of( false );
 
@@ -162,23 +158,25 @@ public final class CUnifier implements IUnifier
      */
     private static boolean evaluateexpression( final IContext p_context, final IExecution p_expression, final Set<IVariable<?>> p_variables )
     {
+        // evalute expression result first, after that evaluate return arguments
         final List<ITerm> l_return = CCommon.argumentlist();
-        final IFuzzyValue<Boolean> l_result = p_expression.execute(
-            false,
-            CCommon.updatecontext(
-                p_context.duplicate(),
-                p_variables.stream()
-            ),
-            Collections.emptyList(),
-            l_return
-        );
-
-        System.out.println( p_variables + "    " + l_result + "      " + l_return );
+        final IFuzzyValue<Boolean> l_result =
+                            p_expression.execute(
+                                false,
+                                CCommon.updatecontext(
+                                    p_context.duplicate(),
+                                    p_variables.stream()
+                                ),
+                                Collections.emptyList(),
+                                l_return
+                            );
 
         return p_context.agent()
                         .fuzzy()
                         .getValue()
-                        .defuzzify( l_result );
+                        .defuzzify( l_result )
+                        && l_return.size() == 1
+                        && l_return.get( 0 ).<Boolean>raw();
     }
 
     /**
