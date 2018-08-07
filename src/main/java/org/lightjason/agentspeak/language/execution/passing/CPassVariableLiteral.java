@@ -118,7 +118,7 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
      */
     private ILiteral bystring( @Nonnull final IContext p_context, @Nonnull final String p_value )
     {
-        return CLiteral.of( p_value, Arrays.stream( m_termlist ) ).allocate( p_context );
+        return CLiteral.of( p_value, Arrays.stream( m_termlist ) ).bind( p_context );
     }
 
     /**
@@ -137,6 +137,6 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
                    p_literal.negated(),
                    p_literal.fqnfunctor(),
                    m_termlist
-               ).allocate( p_context );
+               ).bind( p_context );
     }
 }
