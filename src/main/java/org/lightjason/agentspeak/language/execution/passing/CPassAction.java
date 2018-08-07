@@ -129,10 +129,9 @@ public final class CPassAction implements IExecution
         final List<ITerm> l_result = CCommon.argumentlist();
         final IFuzzyValue<Boolean> l_return = p_term.<IExecution>raw().execute( p_parallel, p_context, p_argument, l_result );
 
-        if ( l_result.size() == 0 )
-            return Stream.of( l_return );
+        if ( l_result.size() > 0 )
+            p_return.add( l_result.size() == 1 ? l_result.get( 0 ) : CRawTerm.of( l_result ) );
 
-        p_return.add( l_result.size() == 1 ? l_result.get( 0 ) : CRawTerm.of( l_result ) );
         return Stream.of( l_return );
     }
 
