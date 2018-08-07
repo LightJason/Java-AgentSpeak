@@ -74,6 +74,10 @@ public final class TestCHanoiTowers extends IBaseTest
      */
     private static final int MAXIMUMCYCLES = 1000;
     /**
+     * action fail probability
+     */
+    private static final double FAILPROBABILITY = 0.1;
+    /**
      * agent map
      */
     private Map<Integer, CAgent> m_agents;
@@ -257,7 +261,7 @@ public final class TestCHanoiTowers extends IBaseTest
                 Stream.concat(
                     Stream.concat(
                         Stream.of(
-                            new CTowerPush( 0.33 ),
+                            new CTowerPush( FAILPROBABILITY ),
                             new CTowerPop(),
                             new CTowerSize(),
                             new CStop()

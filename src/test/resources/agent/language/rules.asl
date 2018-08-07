@@ -92,7 +92,6 @@ myfunction(X) :- .generic/print("my logical rule", X).
     RULE = "fibonacci";
     $.RULE(8,FIB);
     R = FIB == 21.0;
-    .generic/print("-->", R, FIB);
     .test/result( R, "rule variable call has been failed" );
     .generic/print("rule execution (fibonacci)", FIB )
 .
