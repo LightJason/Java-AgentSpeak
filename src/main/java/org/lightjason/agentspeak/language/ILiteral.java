@@ -130,9 +130,9 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
-        public <T> T raw()
+        public <V> V raw()
         {
-            return (T) this;
+            return (V) this;
         }
 
         @Nonnull

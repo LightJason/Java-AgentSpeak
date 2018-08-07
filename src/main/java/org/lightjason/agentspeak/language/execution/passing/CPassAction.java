@@ -119,7 +119,8 @@ public final class CPassAction implements IExecution
     private static Stream<IFuzzyValue<Boolean>> innerexecution( final ITerm p_term, final boolean p_parallel, @Nonnull final IContext p_context,
                                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        if ( !CCommon.isssignableto( p_term, IExecution.class ) )
+        // explicit check to null values because of unsetted / unbind variables
+        if ( Objects.isNull( p_term.raw() ) || !CCommon.isssignableto( p_term, IExecution.class ) )
         {
             p_return.add( p_term );
             return Stream.of( CFuzzyValue.of( true ) );

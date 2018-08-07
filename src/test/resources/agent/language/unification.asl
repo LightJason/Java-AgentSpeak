@@ -95,12 +95,10 @@ foo(blub(1),hello("test")).
         .test/result( .bool/equal( UN7, 1111 ), "seventh unification has been failed" );
 
         // failing unify
-        /*
         >>notexist( UN8 ) << true;
         .generic/type/isnull( UN8 );
         .generic/print( "eighth unification successful" );
         .test/result( success, "eighth unification has been failed" );
-        */
         .generic/print("unification executed completly")
 .
 

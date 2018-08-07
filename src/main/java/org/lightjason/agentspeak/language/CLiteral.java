@@ -372,9 +372,9 @@ public final class CLiteral implements ILiteral
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public <T> T raw()
+    public <V> V raw()
     {
-        return (T) this;
+        return (V) this;
     }
 
     @Override

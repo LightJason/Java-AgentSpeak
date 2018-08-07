@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.unifier;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -176,6 +177,7 @@ public final class CUnifier implements IUnifier
                         .getValue()
                         .defuzzify( l_result )
                         && l_return.size() == 1
+                        && l_return.get( 0 ).<IRawTerm<?>>term().valueassignableto( Boolean.class )
                         && l_return.get( 0 ).<Boolean>raw();
     }
 

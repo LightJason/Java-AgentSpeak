@@ -137,9 +137,9 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <N> N raw()
+    public <V> V raw()
     {
-        return (N) m_value;
+        return (V) m_value;
     }
 
     @Override

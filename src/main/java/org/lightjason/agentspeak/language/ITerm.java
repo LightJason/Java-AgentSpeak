@@ -144,7 +144,7 @@ public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
      * @return any type
      */
     @Nullable
-    <T> T raw();
+    <V> V raw();
 
     /**
      * casts the object to a term-type

@@ -160,9 +160,9 @@ public final class CRawTermList implements IRawTerm<List<?>>
     @Nullable
     @Override
     @SuppressWarnings( "unchecked" )
-    public <T> T raw()
+    public <V> V raw()
     {
-        return (T) m_value;
+        return (V) m_value;
     }
 
     @Nonnull
