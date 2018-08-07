@@ -42,7 +42,7 @@ import java.util.List;
  * The action calculates the next prime number relative to
  * the given argument value, the action never fails
  *
- * {@code [A|B|C] = math/nextprime( [12, [144, 1096]] );}
+ * {@code [A|B|C] = .math/nextprime( [12, [144, 1096]] );}
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */
@@ -55,24 +55,24 @@ public final class CNextPrime extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToDouble( i -> Primes.nextPrime( i.intValue() ) )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

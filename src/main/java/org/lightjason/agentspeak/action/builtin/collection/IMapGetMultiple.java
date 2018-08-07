@@ -66,14 +66,13 @@ public abstract class IMapGetMultiple<T> extends IBuiltinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .skip( 1 )
                .forEach( i ->  this.apply( p_parallel, p_argument.get( 0 ).<T>raw(), i.raw(), p_return ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

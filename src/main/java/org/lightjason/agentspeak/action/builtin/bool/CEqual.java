@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  * On number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  *
- * {@code [E1|E2] = bool/equal( "this is equal", "this is equal", [123, "test"] );}
+ * {@code [E1|E2] = .bool/equal( "this is equal", "this is equal", [123, "test"] );}
  */
 public class CEqual extends IBuiltinAction
 {
@@ -72,36 +72,36 @@ public class CEqual extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        if ( CCommon.rawvalueAssignableTo( p_argument.get( 0 ), Collection.class ) )
+        if ( CCommon.isssignableto( p_argument.get( 0 ), Collection.class ) )
             return this.pack(
                 p_return,
                 p_argument.stream()
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
-                                     || ( CCommon.rawvalueAssignableTo( i, Collection.class )
-                                     && equalcollection(  p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() ) )
+                                     || CCommon.isssignableto( i, Collection.class )
+                                     && equalcollection(  p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() )
                           )
             );
 
-        if ( CCommon.rawvalueAssignableTo( p_argument.get( 0 ), Map.class ) )
+        if ( CCommon.isssignableto( p_argument.get( 0 ), Map.class ) )
             return this.pack(
                 p_return,
                 p_argument.stream()
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
-                                     || ( CCommon.rawvalueAssignableTo( i, Map.class )
-                                     && equalmap(  p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() ) )
+                                     || CCommon.isssignableto( i, Map.class )
+                                     && equalmap(  p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
                           )
             );
 
-        if ( CCommon.rawvalueAssignableTo( p_argument.get( 0 ), Multimap.class ) )
+        if ( CCommon.isssignableto( p_argument.get( 0 ), Multimap.class ) )
             return this.pack(
                 p_return,
                 p_argument.stream()
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
-                                     || ( CCommon.rawvalueAssignableTo( i, Multimap.class )
-                                     && equalmultimap(  p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() ) )
+                                     || CCommon.isssignableto( i, Multimap.class )
+                                     && equalmultimap(  p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
                           )
             );
 
@@ -137,10 +137,10 @@ public class CEqual extends IBuiltinAction
     private IFuzzyValue<Boolean> pack( @Nonnull final List<ITerm> p_return, @Nonnull final Stream<Boolean> p_stream )
     {
         p_stream.map( this::apply )
-                .map( CRawTerm::from )
+                .map( CRawTerm::of )
                 .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

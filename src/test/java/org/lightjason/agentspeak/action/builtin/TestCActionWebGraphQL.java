@@ -24,6 +24,8 @@
 package org.lightjason.agentspeak.action.builtin;
 
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.web.graphql.CQueryLiteral;
@@ -45,36 +47,57 @@ import java.util.stream.Stream;
  */
 public final class TestCActionWebGraphQL extends IBaseTest
 {
+    /**
+     * result query literal
+     */
+    private ILiteral m_result;
+
+    /**
+     * initialize
+     */
+    @Before
+    public void initialize()
+    {
+        try
+        {
+            m_result = CLiteral.parse( "graphql( data( stationWithEvaId( name( 'Frankfurt (Main) Hbf' ), location( latitude( 50.107145 ), longitude( 8.663789 ) ) ) ) ) )" );
+        }
+        catch ( final Exception l_exception )
+        {
+            Assert.fail( l_exception.getMessage() );
+        }
+    }
 
     /**
      * run graphql query test with literal
      */
     @Test
-    public final void queryliteral()
+    public void queryliteral()
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        Assume.assumeNotNull( m_result );
 
+        final List<ITerm> l_return = new ArrayList<>();
         Assert.assertTrue(
             new CQueryLiteral().execute(
                 false,
                 IContext.EMPTYPLAN,
                 Stream.of(
-                    CRawTerm.from( "https://fakerql.com/graphql" ),
-                    CLiteral.from(
-                        "allUsers",
-                        CLiteral.from( "id" ),
-                        CLiteral.from( "firstName" ),
-                        CLiteral.from( "lastName" )
+                    CRawTerm.of( "https://developer.deutschebahn.com/free1bahnql/graphql" ),
+                    CLiteral.of(
+                        "stationWithEvaId",
+                        CLiteral.of( "evaId", CRawTerm.of( 8000105 ) ),
+                        CLiteral.of( "name" ),
+                        CLiteral.of( "location", CLiteral.of( "latitude" ), CLiteral.of( "longitude" ) )
                     ),
-                    CRawTerm.from( "graphql" )
+                    CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ) instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
+        Assert.assertEquals( m_result.hashCode(), l_return.get( 0 ).<ILiteral>raw().hashCode() );
     }
 
 
@@ -82,46 +105,27 @@ public final class TestCActionWebGraphQL extends IBaseTest
      * run graphql query test with native query
      */
     @Test
-    public final void querymanual()
+    public void querymanual()
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        Assume.assumeNotNull( m_result );
 
+        final List<ITerm> l_return = new ArrayList<>();
         Assert.assertTrue(
             new CQueryNative().execute(
                 false,
                 IContext.EMPTYPLAN,
                 Stream.of(
-                    CRawTerm.from( "https://fakerql.com/graphql" ),
-                    CRawTerm.from( "{Product(id: \"cjdn6szou00dw25107gcuy114\") {id price name}}" ),
-                    CRawTerm.from( "graphql" )
+                    CRawTerm.of( "https://developer.deutschebahn.com/free1bahnql/graphql" ),
+                    CRawTerm.of( "{ stationWithEvaId(evaId: 8000105) { name location { latitude longitude } } }" ),
+                    CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ) instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
-
-        // test-case returns random datasets back
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().structurehash(), CLiteral.from(
-            "graphql", CLiteral.from(
-                "data", CLiteral.from(
-                    "product", CLiteral.from(
-                        "id",
-                        CRawTerm.from( "cjdn6szou00dw25107gcuy114" )
-                    ),
-                    CLiteral.from(
-                        "price",
-                        CRawTerm.from( 126D )
-                    ),
-                    CLiteral.from(
-                        "name",
-                        CRawTerm.from( "Handmade Granite Cheese" )
-                    )
-                )
-            )
-        ).structurehash() );
+        Assert.assertEquals( m_result.hashCode(), l_return.get( 0 ).<ILiteral>raw().hashCode() );
     }
 
 }

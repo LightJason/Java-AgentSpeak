@@ -48,7 +48,7 @@ import java.util.function.BiFunction;
  * operations (plus, plus-absolute, minus, multiply, divide),
  * all arguments are triples of matrix-operator-matrix|scalar,
  * the action fails on assigning problems
- * {@code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]);}
+ * {@code [M1|M2|M3] = .math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]);}
  *
  */
 public final class CElementWise extends IBuiltinAction
@@ -68,17 +68,17 @@ public final class CElementWise extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 3;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
                 StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
             3,
@@ -130,41 +130,41 @@ public final class CElementWise extends IBuiltinAction
                                   final List<ITerm> p_return )
     {
         // operation for matrix
-        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix2D.class ) )
+        if ( CCommon.isssignableto( p_left, DoubleMatrix2D.class ) )
         {
             final DoubleMatrix2D l_assign = p_left.<DoubleMatrix2D>raw().copy();
 
-            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix2D.class ) )
+            if ( CCommon.isssignableto( p_right, DoubleMatrix2D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix2D>raw(), p_matrixfunction );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
 
-            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
+            if ( CCommon.isssignableto( p_right, Number.class ) )
             {
                 l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
         }
 
         // operation for vector
-        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix1D.class ) )
+        if ( CCommon.isssignableto( p_left, DoubleMatrix1D.class ) )
         {
             final DoubleMatrix1D l_assign = p_left.<DoubleMatrix1D>raw().copy();
 
-            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix1D.class ) )
+            if ( CCommon.isssignableto( p_right, DoubleMatrix1D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix1D>raw(), p_matrixfunction );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
 
-            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
+            if ( CCommon.isssignableto( p_right, Number.class ) )
             {
                 l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
-                p_return.add( CRawTerm.from( l_assign ) );
+                p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
         }

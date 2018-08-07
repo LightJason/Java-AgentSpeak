@@ -100,13 +100,13 @@ public abstract class IBaseGraphQL extends IBaseWeb
     {
         final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_argument.size() < 3 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         try
         {
             p_return.add(
                 p_argument.size() == 3
-                ? CLiteral.from( l_argument.get( l_argument.size() - 1 ).<String>raw(), sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) ) )
+                ? CLiteral.of( l_argument.get( l_argument.size() - 1 ).<String>raw(), sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) ) )
                 : IBaseRest.baseliteral(
                     l_argument.stream().skip( 2 ).map( ITerm::<String>raw ),
                     sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) )
@@ -118,7 +118,7 @@ public abstract class IBaseGraphQL extends IBaseWeb
             throw new UncheckedIOException( l_exception );
         }
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * Returns a unique list with all key values of the argument
  * maps and fails never, all arguments must be maps
  *
- * {@code L = collection/map/keys( Map1, Map2, Map3 );}
+ * {@code L = .collection/map/keys( Map1, Map2, Map3 );}
  */
 public final class CKeys extends IBuiltinAction
 {
@@ -62,15 +62,15 @@ public final class CKeys extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are map references
         final List<?> l_result = p_argument.stream()
@@ -80,11 +80,11 @@ public final class CKeys extends IBuiltinAction
                                            .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

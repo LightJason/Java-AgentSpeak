@@ -33,6 +33,10 @@ import java.util.List;
 
 /**
  * returns the number of successors of each vertex of a single graph instance.
+ * The action returns for the graph argument the number
+ * of successors of the given vertices, the action never fails
+ *
+ * {@code [C1|C2] = .graph/successorcountmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CSuccessorCountMultiple extends IApplyMultiple
 {
@@ -42,17 +46,17 @@ public final class CSuccessorCountMultiple extends IApplyMultiple
     private static final long serialVersionUID = -3354752194496824469L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) p_graph.getSuccessorCount( p_window.get( 0 ).raw() )
             )
         );

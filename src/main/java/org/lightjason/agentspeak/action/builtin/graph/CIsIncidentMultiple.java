@@ -36,7 +36,7 @@ import java.util.List;
  * The first argument is a graph instance and each tuple of vertex and edge
  * will be checked for incident, the action never fails
  *
- * {@code [B1|B2] = graph/isincidentmultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
+ * {@code [B1|B2] = .graph/isincidentmultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */
 public final class CIsIncidentMultiple extends IApplyMultiple
 {
@@ -46,17 +46,17 @@ public final class CIsIncidentMultiple extends IApplyMultiple
     private static final long serialVersionUID = 7860095606203026972L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.isIncident( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

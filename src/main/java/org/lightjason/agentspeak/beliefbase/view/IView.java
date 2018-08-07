@@ -28,7 +28,7 @@ import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.beliefbase.IStructure;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,92 +50,91 @@ public interface IView extends IStructure
     {
         @Nonnull
         @Override
-        @SafeVarargs
         @SuppressWarnings( "varargs" )
-        public final Stream<IView> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
+        public Stream<IView> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
+        public IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final Stream<IView> root()
+        public Stream<IView> root()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IBeliefbase beliefbase()
+        public IBeliefbase beliefbase()
         {
             return IBeliefbase.EMPY;
         }
 
         @Nonnull
         @Override
-        public final IPath path()
+        public IPath path()
         {
             return IPath.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final String name()
+        public String name()
         {
             return "";
         }
 
         @Nullable
         @Override
-        public final IView parent()
+        public IView parent()
         {
             return null;
         }
 
         @Override
-        public final boolean hasParent()
+        public boolean hasParent()
         {
             return false;
         }
 
         @Nonnull
         @Override
-        public final Stream<ITrigger> trigger()
+        public Stream<ITrigger> trigger()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
+        public Stream<ILiteral> stream( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
+        public Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IView clear( @Nullable final IPath... p_path )
+        public IView clear( @Nullable final IPath... p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IView add( @Nonnull final Stream<ILiteral> p_literal )
+        public IView add( @Nonnull final Stream<ILiteral> p_literal )
         {
             return this;
         }
@@ -143,66 +142,66 @@ public interface IView extends IStructure
         @Nonnull
         @Override
         @SuppressWarnings( "varargs" )
-        public final IView add( @Nonnull final IView... p_view )
+        public IView add( @Nonnull final IView... p_view )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IView add( @Nonnull final ILiteral... p_literal )
+        public IView add( @Nonnull final ILiteral... p_literal )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IView remove( @Nonnull final Stream<ILiteral> p_literal )
+        public IView remove( @Nonnull final Stream<ILiteral> p_literal )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IView remove( @Nonnull final ILiteral... p_literal )
+        public IView remove( @Nonnull final ILiteral... p_literal )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IView remove( @Nonnull final IView... p_view )
+        public IView remove( @Nonnull final IView... p_view )
         {
             return this;
         }
 
         @Override
-        public final boolean containsLiteral( @Nonnull final IPath p_path )
+        public boolean containsLiteral( @Nonnull final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public final boolean containsView( @Nonnull final IPath p_path )
+        public boolean containsView( @Nonnull final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public final boolean empty()
+        public boolean empty()
         {
             return false;
         }
 
         @Override
-        public final int size()
+        public int size()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
         {
             return p_agent;
         }

@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * All arguments are collections and the action removes nested
  * structures and returns a list with unique elements, the action fails never
  *
- * {@code U = collection/list/unique( L );}
+ * {@code U = .collection/list/unique( L );}
  */
 public final class CUnique extends IBuiltinAction
 {
@@ -63,23 +63,23 @@ public final class CUnique extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -41,7 +41,7 @@ import java.util.List;
  * For each argument the string length will be returned
  * and the action never fails
  *
- * {@code [A|B|C] = string/size("A", ["CC", "XYZ"]);}
+ * {@code [A|B|C] = .string/size("A", ["CC", "XYZ"]);}
  */
 public final class CSize extends IBuiltinAction
 {
@@ -52,23 +52,23 @@ public final class CSize extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( String::length )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

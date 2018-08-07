@@ -27,7 +27,7 @@ package org.lightjason.agentspeak.action.builtin;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
@@ -64,7 +64,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Multimap<?, ?> );
         Assert.assertTrue( l_return.get( 0 ).<Multimap<?, ?>>raw().isEmpty() );
     }
@@ -83,7 +83,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test synchronized create
      */
     @Test
-    public final void createsynchronized()
+    public void createsynchronized()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -93,8 +93,8 @@ public final class TestCActionCollectionMultimap extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Multimaps.synchronizedSetMultimap( HashMultimap.create() ).getClass() );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( Multimaps.synchronizedSetMultimap( HashMultimap.create() ).getClass(), l_return.get( 0 ).raw().getClass() );
     }
 
 
@@ -102,7 +102,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test key and values
      */
     @Test
-    public final void keysvalues()
+    public void keysvalues()
     {
         final Multimap<Object, Object> l_map = HashMultimap.create();
         l_map.put( "a", 1 );
@@ -116,27 +116,27 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CKeys().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CValues().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "a", "b", "c" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1, 2, 3, 1, 10 ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( "a", "b", "c" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1, 2, 3, 1, 10 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
     /**
      * test as-map
      */
     @Test
-    public final void asmap()
+    public void asmap()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
         final List<ITerm> l_return = new ArrayList<>();
@@ -147,17 +147,17 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CAsMap().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Map<?, ?> );
-        Assert.assertArrayEquals( l_return.get( 0 ).<Map<?, ?>>raw().keySet().toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), l_return.get( 0 ).<Map<?, ?>>raw().keySet().toArray() );
 
         Assert.assertArrayEquals(
-            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::from ) ).map( ITerm::raw ).toArray(),
-            l_map.values().toArray()
+            l_map.values().toArray(),
+            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::of ) ).map( ITerm::raw ).toArray()
         );
     }
 
@@ -166,22 +166,22 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test put-single
      */
     @Test
-    public final void putsingle()
+    public void putsingle()
     {
         final Multimap<Integer, String> l_map1 = HashMultimap.create();
         final Multimap<Integer, String> l_map2 = HashMultimap.create();
 
         new CPutSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, "foo", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, "foo", l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_map1.keys().toArray(), Stream.of( 1 ).toArray() );
-        Assert.assertArrayEquals( l_map2.keys().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map1.keys().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map2.keys().toArray() );
 
-        Assert.assertArrayEquals( l_map1.values().toArray(), Stream.of( "foo" ).toArray() );
-        Assert.assertArrayEquals( l_map1.values().toArray(), Stream.of( "foo" ).toArray() );
+        Assert.assertArrayEquals( Stream.of( "foo" ).toArray(), l_map1.values().toArray() );
+        Assert.assertArrayEquals( Stream.of( "foo" ).toArray(), l_map1.values().toArray() );
     }
 
 
@@ -189,19 +189,19 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test put-multiple
      */
     @Test
-    public final void putmultiple()
+    public void putmultiple()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
 
         new CPutMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, 1, "xxx", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, 1, "xxx", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 4 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( 1, 2, 3 ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( "xxx", "blub", "yyy", "xxx" ).toArray() );
+        Assert.assertEquals( 4, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( 1, 2, 3 ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( "xxx", "blub", "yyy", "xxx" ).toArray(), l_map.values().toArray() );
     }
 
 
@@ -209,7 +209,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test get-multiple
      */
     @Test
-    public final void getmultiple()
+    public void getmultiple()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
         final List<ITerm> l_return = new ArrayList<>();
@@ -221,13 +221,13 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CGetMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), l_map.asMap().get( 1 ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), l_map.asMap().get( 2 ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( l_map.asMap().get( 1 ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( l_map.asMap().get( 2 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 
@@ -235,7 +235,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
      * test get-single
      */
     @Test
-    public final void getsingle()
+    public void getsingle()
     {
         final Multimap<Integer, String> l_map1 = HashMultimap.create();
         final Multimap<Integer, String> l_map2 = HashMultimap.create();
@@ -247,13 +247,13 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
         new CGetSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "foo" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "foobar" ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( "foo" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( "foobar" ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 }

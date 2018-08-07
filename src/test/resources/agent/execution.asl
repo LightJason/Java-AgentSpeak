@@ -27,15 +27,15 @@
 // -----
 
 
- // initial-goal
- !test.
+// initial-goal
+!test.
 
 
 /**
  * base test for staring executions
  */
 +!test <-
-    log( "main" );
+    .log( "main" );
 
     !doublecall;
     !doublecall;
@@ -46,36 +46,51 @@
     !twovaluesequaltype( 1, 2 );
     !twovaluesdiffenttype( 5, "test" );
 
-    L = generic/type/parseliteral( "twovaluesliteral(5, foo(3))" );
+    L = twovaluesliteral( 5, foo(3) );
     !L
 .
 
+
 /**
  * double plan call but single execution
- **/
-+!doublecall <- log("single run").
+ */
++!doublecall <-
+    .log("single run")
+.
 
 /**
  * called mutiple times
  */
-+!multiple(X) <- log(X); !single.
++!multiple(X) <-
+    .log(X);
+    !single
+.
 
 /*
  * called single times
  */
-+!single <- log("single"); stop.
++!single <-
+    .log("single");
+    .stop
+.
 
 /**
  * test plan
  */
-+!twovaluesequaltype(X,Y) <- log("twovalues equal type").
++!twovaluesequaltype(X,Y) <-
+    .log("twovalues equal type")
+.
 
 /**
  * test plan
  */
-+!twovaluesdiffenttype(N,M) <- log("twovalues different type").
++!twovaluesdiffenttype(N,M) <-
+    .log("twovalues different type")
+.
 
 /**
  * test plan
  */
-+!twovaluesliteral(X, foo(Y)) <- log("twovalues with literal").
++!twovaluesliteral(X, foo(Y)) <-
+    .log("twovalues with literal")
+.

@@ -47,7 +47,7 @@ import java.util.stream.IntStream;
  * for the inserting weight, second replace weight and third
  * for the delete weight, the action fails on wrong input
  *
- * {@code [A|B] = string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
+ * {@code [A|B] = .string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
  * @see https://en.wikipedia.org/wiki/Levenshtein_distance
  */
 public final class CLevenshtein extends IBuiltinAction
@@ -59,29 +59,29 @@ public final class CLevenshtein extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // extract string arguments
         final List<String> l_strings = CCommon.flatten( p_argument )
-                                             .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                             .filter( i -> CCommon.isssignableto( i, String.class ) )
                                              .map( ITerm::<String>raw )
                                              .collect( Collectors.toList() );
 
         if ( l_strings.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         // create weight
         final List<Double> l_weights = CCommon.flatten( p_argument )
-                                                  .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                                  .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                                   .map( ITerm::<Number>raw )
                                                   .mapToDouble( Number::doubleValue )
                                                   .boxed()
@@ -95,9 +95,9 @@ public final class CLevenshtein extends IBuiltinAction
                  .skip( 1 )
                  .mapToDouble( i -> CCommon.levenshtein( l_strings.get( 0 ), i, l_weights.get( 1 ), l_weights.get( 1 ), l_weights.get( 2 ) ) )
                  .boxed()
-                 .map( CRawTerm::from )
+                 .map( CRawTerm::of )
                  .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

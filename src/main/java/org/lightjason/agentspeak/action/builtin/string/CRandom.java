@@ -44,7 +44,7 @@ import java.util.List;
  * all other arguments are numbers to present the length of the returning string
  * and the action never fails
  *
- * {@code [A|B|C] = string/random( "abdefgXYZUI", 5, 3, 6 );}
+ * {@code [A|B|C] = .string/random( "abdefgXYZUI", 5, 3, 6 );}
  */
 public final class CRandom extends IBuiltinAction
 {
@@ -55,25 +55,25 @@ public final class CRandom extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final CharacterPredicate l_characters = p_char -> p_argument.get( 0 ).<String>raw().contains( new String( Character.toChars( p_char ) ) );
 
         CCommon.flatten( p_argument )
                .skip( 1 )
                .map( i -> new RandomStringGenerator.Builder().filteredBy( l_characters  ).build().generate( i.<Number>raw().intValue() ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

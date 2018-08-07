@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 
@@ -48,21 +49,21 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test literal structure
      */
     @Test
-    public final void literal()
+    public void literal()
     {
-        final ILiteral l_emptyliteral = CLiteral.from( "foo/bar" );
+        final ILiteral l_emptyliteral = CLiteral.of( "foo/bar" );
 
         Assert.assertEquals( l_emptyliteral.functor(), "bar" );
-        Assert.assertEquals( l_emptyliteral.fqnfunctor(), CPath.from( "foo/bar" ) );
+        Assert.assertEquals( l_emptyliteral.fqnfunctor(), CPath.of( "foo/bar" ) );
         Assert.assertFalse( l_emptyliteral.hasAt() );
         Assert.assertTrue( l_emptyliteral.emptyValues() );
 
 
 
-        final ILiteral l_valueliteral = CLiteral.from( "foo/value", CRawTerm.from( 5 ), CRawTerm.from( "hello" ) );
+        final ILiteral l_valueliteral = CLiteral.of( "foo/value", CRawTerm.of( 5 ), CRawTerm.of( "hello" ) );
 
         Assert.assertEquals( l_valueliteral.functor(), "value" );
-        Assert.assertEquals( l_valueliteral.fqnfunctor(), CPath.from( "foo/value" ) );
+        Assert.assertEquals( l_valueliteral.fqnfunctor(), CPath.of( "foo/value" ) );
         Assert.assertFalse( l_valueliteral.hasAt() );
         Assert.assertFalse( l_valueliteral.emptyValues() );
 
@@ -80,19 +81,19 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test raw-term structure
      */
     @Test
-    public final void rawterm()
+    public void rawterm()
     {
-        final ITerm l_stringterm = CRawTerm.from( "hello" );
+        final ITerm l_stringterm = CRawTerm.of( "hello" );
 
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_stringterm, String.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_stringterm, String.class ) );
         Assert.assertEquals( l_stringterm.raw(), "hello" );
 
 
         final double l_value = Math.random();
-        final ITerm l_numberterm = CRawTerm.from( l_value );
+        final ITerm l_numberterm = CRawTerm.of( l_value );
 
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_numberterm, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_numberterm, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_numberterm, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_numberterm, Double.class ) );
         Assert.assertEquals( "number value", l_numberterm.raw(), l_value, 0 );
     }
 
@@ -101,7 +102,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test constant access structure
      */
     @Test( expected = RuntimeException.class )
-    public final void constantaccess()
+    public void constantaccess()
     {
         new CConstant<>( "CA", 5 ).set( 10 );
     }
@@ -111,15 +112,15 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test constant structure
      */
     @Test
-    public final void constant()
+    public void constant()
     {
         final double l_value = Math.random();
         final ITerm l_constant = new CConstant<>( "C", l_value );
 
         Assert.assertEquals( l_constant.functor(), "C" );
         Assert.assertTrue( l_constant.hasVariable() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_constant, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_constant, Double.class ) );
         Assert.assertEquals( "constant number value", l_constant.raw(), l_value, 0 );
     }
 
@@ -127,7 +128,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test constant copy
      */
     @Test
-    public final void constantcopy()
+    public void constantcopy()
     {
         Assert.assertEquals(
             new CConstant<>( "const/value", "test" ).shallowcopysuffix().functor(),
@@ -135,7 +136,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
         );
 
         Assert.assertEquals(
-            new CConstant<>( "const/value", "test" ).shallowcopy( CPath.from( "xxx" ) ).fqnfunctor().toString(),
+            new CConstant<>( "const/value", "test" ).shallowcopy( CPath.of( "xxx" ) ).fqnfunctor().toString(),
             "xxx/const/value"
         );
     }
@@ -144,7 +145,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * check any variable
      */
     @Test( expected = IllegalStateException.class )
-    public final void variableany()
+    public void variableany()
     {
         final IVariable<?> l_variable = new CVariable<Object>( "_" );
 
@@ -159,7 +160,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test exception on value asiable
      */
     @Test( expected = IllegalArgumentException.class )
-    public final void variablevalueassignable()
+    public void variablevalueassignable()
     {
         new CVariable<Object>( "num", 123 ).throwvaluenotassignableto( String.class );
     }
@@ -168,7 +169,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * variable equals
      */
     @Test
-    public final void variableequals()
+    public void variableequals()
     {
         Assert.assertEquals(
             new CVariable<Object>( "foo", "str" ),
@@ -185,7 +186,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test tostring
      */
     @Test
-    public final void variabletostring()
+    public void variabletostring()
     {
         Assert.assertEquals( new CVariable<>( "data" ).toString(), "data()" );
         Assert.assertEquals( new CVariable<>( "data", "value" ).toString(), "data(value)" );
@@ -196,7 +197,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * checks the variable structure
      */
     @Test
-    public final void variable()
+    public void variable()
     {
         Assert.assertTrue( new CVariable<>( "_" ).any() );
 
@@ -208,8 +209,8 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertTrue( l_variable.allocated() );
         Assert.assertFalse( l_variable.mutex() );
         Assert.assertTrue( l_variable.hasVariable() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Double.class ) );
 
 
         Assert.assertEquals( "get variable number value", l_variable.raw(), l_value, 0 );
@@ -227,11 +228,11 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test variable functor
      */
     @Test
-    public final void variablefunctor()
+    public void variablefunctor()
     {
         Assert.assertEquals(
             new CVariable<>( "prefix/name" ).functorpath(),
-            CPath.from( "prefix" )
+            CPath.of( "prefix" )
         );
     }
 
@@ -239,7 +240,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * check the mutex variable
      */
     @Test
-    public final void variablemutex()
+    public void variablemutex()
     {
         double l_value = Math.random();
         final IVariable<Number> l_variable = new CMutexVariable<>( "V", l_value );
@@ -248,8 +249,8 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertTrue( l_variable.allocated() );
         Assert.assertTrue( l_variable.mutex() );
         Assert.assertTrue( l_variable.hasVariable() );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Number.class ) );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Number.class ) );
+        Assert.assertTrue( CCommon.isssignableto( l_variable, Double.class ) );
 
 
         Assert.assertEquals( "get mutex variable number value", l_variable.raw(), l_value, 0 );
@@ -267,20 +268,20 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test variable shallow-copy
      */
     @Test
-    public final void variablecopy()
+    public void variablecopy()
     {
         final IVariable<?> l_variable = new CVariable<>( "prefix/copy", new Object()  );
 
-        Assert.assertEquals( l_variable.shallowcopysuffix().fqnfunctor(), CPath.from( "copy" ) );
-        Assert.assertEquals( l_variable.shallowcopy( CPath.from( "xxx" ) ).fqnfunctor(), CPath.from( "xxx/prefix/copy" ) );
+        Assert.assertEquals( l_variable.shallowcopysuffix().fqnfunctor(), CPath.of( "copy" ) );
+        Assert.assertEquals( l_variable.shallowcopy( CPath.of( "xxx" ) ).fqnfunctor(), CPath.of( "xxx/prefix/copy" ) );
         Assert.assertEquals( l_variable.shallowcopysuffix().<Object>raw(), l_variable.<Object>raw() );
 
-        final ITerm l_deep = l_variable.deepcopy( CPath.from( "foo" ) );
-        Assert.assertEquals( l_deep.fqnfunctor(), CPath.from( "prefix/copy/foo" ) );
+        final ITerm l_deep = l_variable.deepcopy( CPath.of( "foo" ) );
+        Assert.assertEquals( l_deep.fqnfunctor(), CPath.of( "prefix/copy/foo" ) );
         Assert.assertNotEquals( l_deep.<Object>raw(), l_variable.<Object>raw() );
 
         final ITerm l_deepsuffix = l_variable.deepcopysuffix();
-        Assert.assertEquals( l_deepsuffix.fqnfunctor(), CPath.from( "copy" ) );
+        Assert.assertEquals( l_deepsuffix.fqnfunctor(), CPath.of( "copy" ) );
         Assert.assertNotEquals( l_deepsuffix.<Object>raw(), l_variable.<Object>raw() );
     }
 
@@ -289,7 +290,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test realocated variable
      */
     @Test
-    public final void relocatevariablerelocate()
+    public void relocatevariablerelocate()
     {
         final IVariable<String> l_variable = new CVariable<>( "RA" );
         final CRelocateVariable<String> l_relocate = new CRelocateVariable<>( l_variable );
@@ -321,7 +322,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
      * test realocated variable
      */
     @Test
-    public final void relocatevariablemutex()
+    public void relocatevariablemutex()
     {
         final IVariable<String> l_variable = new CVariable<>( "RAM" );
         final CRelocateMutexVariable<String> l_relocate = new CRelocateMutexVariable<>( l_variable );
@@ -348,4 +349,29 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertEquals( l_variable.raw(), "relocated mutex foo" );
     }
 
+    /**
+     * test raw-term unpack
+     */
+    @Test
+    public void rawtermunpack()
+    {
+        Assert.assertEquals(  "rawterm", CRawTerm.of( CRawTerm.of( "rawterm" ) ).raw() );
+    }
+
+    /**
+     * test raw-term-list unpack
+     */
+    @Test
+    public void rawlistunpack()
+    {
+        Assert.assertArrayEquals(
+            Stream.of( "rawlist", 1, 2L, 3D ).toArray(),
+            CRawTermList.of(
+                CRawTerm.of( "rawlist" ),
+                CRawTerm.of( 1 ),
+                CRawTerm.of( 2L ),
+                CRawTerm.of( 3D )
+            ).<Collection<?>>raw().toArray()
+        );
+    }
 }

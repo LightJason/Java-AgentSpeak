@@ -28,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.builtin.agent.CAddPlan;
 import org.lightjason.agentspeak.action.builtin.agent.CBeliefList;
 import org.lightjason.agentspeak.action.builtin.agent.CClearBeliefbase;
@@ -36,26 +35,24 @@ import org.lightjason.agentspeak.action.builtin.agent.CCycleTime;
 import org.lightjason.agentspeak.action.builtin.agent.CGetPlan;
 import org.lightjason.agentspeak.action.builtin.agent.CPlanList;
 import org.lightjason.agentspeak.action.builtin.agent.CRemovePlan;
-import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.configuration.IAgentConfiguration;
-import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -95,8 +92,8 @@ public final class TestCActionAgent extends IBaseTest
     public void initialize() throws Exception
     {
         m_context = new CContext(
-            new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
-            new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "contextplan" ) ) ),
+            new CAgentGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ) ).generatesingle(),
+            new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "contextplan" ) ) ),
             Collections.emptyList()
         );
     }
@@ -106,9 +103,9 @@ public final class TestCActionAgent extends IBaseTest
      * test plan list
      */
     @Test
-    public final void planlist()
+    public void planlist()
     {
-        final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testplanlist" ) );
+        final ITrigger l_trigger = ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testplanlist" ) );
         final IPlan l_plan = new CEmptyPlan( l_trigger );
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -123,7 +120,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 0 );
 
 
-        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         new CPlanList().execute(
             false, m_context,
@@ -144,13 +141,13 @@ public final class TestCActionAgent extends IBaseTest
      * test add plan
      */
     @Test
-    public final void addplan()
+    public void addplan()
     {
-        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testaddplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testaddplan" ) ) );
 
         new CAddPlan().execute(
             false, m_context,
-            Stream.of( l_plan ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_plan ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -166,7 +163,7 @@ public final class TestCActionAgent extends IBaseTest
      * test cycle-time
      */
     @Test
-    public final void cycletime()
+    public void cycletime()
     {
         this.next();
 
@@ -186,9 +183,9 @@ public final class TestCActionAgent extends IBaseTest
      * test get plan
      */
     @Test
-    public final void getplan()
+    public void getplan()
     {
-        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testgetplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testgetplan" ) ) );
         final List<ITerm> l_return = new ArrayList<>();
 
 
@@ -201,11 +198,11 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertTrue( l_return.isEmpty() );
 
 
-        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         new CGetPlan().execute(
             false, m_context,
-            Stream.of( "+!", "testgetplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "+!", "testgetplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -220,15 +217,15 @@ public final class TestCActionAgent extends IBaseTest
      * test remove plan
      */
     @Test
-    public final void removeplan()
+    public void removeplan()
     {
-        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "testremoveplan" ) ) );
-        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
+        final IPlan l_plan = new CEmptyPlan( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "testremoveplan" ) ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         Assert.assertTrue(
             new CRemovePlan().execute(
                 false, m_context,
-                Stream.of( "+!", "testremoveplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "+!", "testremoveplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -239,12 +236,12 @@ public final class TestCActionAgent extends IBaseTest
      * test remove plan error
      */
     @Test
-    public final void removeplanerror()
+    public void removeplanerror()
     {
         Assert.assertFalse(
             new CRemovePlan().execute(
                 false, m_context,
-                Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -255,11 +252,11 @@ public final class TestCActionAgent extends IBaseTest
      * test clear-beliefbase
      */
     @Test
-    public final void clearbeliefbase()
+    public void clearbeliefbase()
     {
         IntStream.range( 0, 100 )
                  .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
-                 .map( i -> CLiteral.from( i ) )
+                 .map( i -> CLiteral.of( i ) )
                  .forEach( i -> m_context.agent().beliefbase().add( i ) );
 
         Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
@@ -279,12 +276,12 @@ public final class TestCActionAgent extends IBaseTest
      * test belieflist
      */
     @Test
-    public final void belieflist()
+    public void belieflist()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Set<String> l_list = IntStream.range( 0, 100 )
                                             .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
-                                            .peek( i -> m_context.agent().beliefbase().add( CLiteral.from( i ) ) )
+                                            .peek( i -> m_context.agent().beliefbase().add( CLiteral.of( i ) ) )
                                             .collect( Collectors.toSet() );
 
         Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
@@ -316,66 +313,16 @@ public final class TestCActionAgent extends IBaseTest
      */
     private IContext next()
     {
-        try
-        {
-            m_context.agent().call();
-        }
-        catch ( final Exception l_exception )
-        {
-            Assert.assertTrue( l_exception.getMessage(), false );
-        }
-
+        agentcycleassert( m_context.agent() );
         return m_context;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * agent class
-     */
-    private static final class CAgent extends IBaseAgent<CAgent>
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 8036930915838541805L;
-
-        /**
-         * ctor
-         *
-         * @param p_configuration agent configuration
-         */
-        private CAgent( final IAgentConfiguration<CAgent> p_configuration )
-        {
-            super( p_configuration );
-        }
-
-
-
-        /**
-         * agent generator
-         */
-        private static final class CGenerator extends IBaseAgentGenerator<CAgent>
-        {
-
-            CGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
-            {
-                super( p_stream, p_actions );
-            }
-
-            @Override
-            public final CAgent generatesingle( final Object... p_data )
-            {
-                return new CAgent( m_configuration );
-            }
-        }
-
-    }
-
-    /**
      * empty plan
      */
-    private static class CEmptyPlan extends IBaseInstantiable implements IPlan
+    private static final class CEmptyPlan extends IBaseInstantiable implements IPlan
     {
         /**
          * serial id
@@ -393,22 +340,28 @@ public final class TestCActionAgent extends IBaseTest
          */
         CEmptyPlan( final ITrigger p_trigger )
         {
-            super( Collections.emptyList(), Collections.emptySet(), 0 );
+            super( new IAnnotation<?>[0], new IExecution[0], 0 );
             m_trigger = p_trigger;
         }
 
         @Nonnull
         @Override
-        public final ITrigger trigger()
+        public ITrigger trigger()
         {
             return m_trigger;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> condition( final IContext p_context )
+        public IFuzzyValue<Boolean> condition( final IContext p_context )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
+        }
+
+        @Override
+        public ILiteral literal()
+        {
+            return m_trigger.literal();
         }
     }
 

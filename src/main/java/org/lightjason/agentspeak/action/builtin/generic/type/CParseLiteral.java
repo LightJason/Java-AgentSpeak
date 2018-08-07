@@ -33,12 +33,12 @@ import java.util.Map;
 
 
 /**
- * action for parsing a integer from string.
+ * action for parsing a integer of string.
  * Parses each argument to a integer point value
  * and returns the value, the action fails on
  * parsing errors
  *
- * {@code [X|Y|Z] = generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] );}
+ * {@code [X|Y|Z] = .generic/type/parseliteral( "foo(5)", [ "bar(foo('abcd')", "xxx()[source(3)]" ] );}
  */
 public final class CParseLiteral extends IParse
 {
@@ -54,15 +54,15 @@ public final class CParseLiteral extends IParse
      * @return tuple with boolean (for parsing error) and term
      */
     @Nonnull
-    protected final Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
+    protected Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
     {
         try
         {
-            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.from( CLiteral.parse( p_value ) ) );
+            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.of( CLiteral.parse( p_value ) ) );
         }
         catch ( final Exception l_exception )
         {
-            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.from( null ) );
+            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.of( null ) );
         }
     }
 

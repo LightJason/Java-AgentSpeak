@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * first item as an vertex, the action fails on
  * wrong input
  *
- * {@code [B1|B2] = graph/containsvertex( Element, Graph1, Graph2 );}
+ * {@code [B1|B2] = .graph/containsvertex( Element, Graph1, Graph2 );}
  */
 public final class CContainsVertex extends IBuiltinAction
 {
@@ -56,28 +56,27 @@ public final class CContainsVertex extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         l_arguments.stream()
                    .skip( 1 )
                    .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> i.containsVertex( l_arguments.get( 0 ).raw() ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

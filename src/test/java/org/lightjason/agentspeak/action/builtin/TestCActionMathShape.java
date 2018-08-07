@@ -48,17 +48,17 @@ public final class TestCActionMathShape extends IBaseTest
      * test in circle
      */
     @Test
-    public final void incircle()
+    public void incircle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInCircle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }
@@ -67,17 +67,17 @@ public final class TestCActionMathShape extends IBaseTest
      * test in rechtangle
      */
     @Test
-    public final void inrechtangle()
+    public void inrechtangle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInRectangle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
     }
@@ -86,17 +86,17 @@ public final class TestCActionMathShape extends IBaseTest
      * test in triangle
      */
     @Test
-    public final void intriangle()
+    public void intriangle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInTriangle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
     }

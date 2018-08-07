@@ -49,6 +49,7 @@ import java.util.stream.Stream;
 
 /**
  * test math linear program functions
+ * @todo fix assert
  */
 public final class TestCActionMathLinearprogram extends IBaseTest
 {
@@ -62,7 +63,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_linearprogram = new ImmutablePair<>( new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
     }
@@ -73,13 +74,13 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, 3, 4, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 3, 4, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -92,11 +93,11 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test value constraint
      */
     @Test
-    public final void valueconstraint()
+    public void valueconstraint()
     {
         new CValueConstraint().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -109,13 +110,13 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test equation constraint
      */
     @Test
-    public final void equationconstraint()
+    public void equationconstraint()
     {
         final LinearConstraint l_result = new LinearConstraint( new double[]{2, 7, 12}, 19.0, Relationship.EQ, new double[]{1, 2, 3}, 5.0 );
 
         new CEquationConstraint().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_linearprogram, 2, 7, 12, 19.0, "=", 1, 2, 3, 5.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_linearprogram, 2, 7, 12, 19.0, "=", 1, 2, 3, 5.0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -140,7 +141,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test solve maximum
      */
     @Test
-    public final void solvemaximize()
+    public void solvemaximize()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammax = new ImmutablePair<>(
@@ -156,7 +157,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
         new CSolve().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -170,7 +171,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
      * test solve minimize
      */
     @Test
-    public final void solveminimize()
+    public void solveminimize()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammin = new ImmutablePair<>(
@@ -185,7 +186,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
         new CSolve().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

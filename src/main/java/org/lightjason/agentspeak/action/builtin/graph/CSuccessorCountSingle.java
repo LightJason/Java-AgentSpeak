@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for the first vertex argument the number
  * of successors of all graph instances, the action never fails
  *
- * {@code [C1|C2] = graph/successorcountsingle( Vertex, Graph1, Graph2 );}
+ * {@code [C1|C2] = .graph/successorcountsingle( Vertex, Graph1, Graph2 );}
  */
 public final class CSuccessorCountSingle extends IApplySingle
 {
@@ -46,17 +46,17 @@ public final class CSuccessorCountSingle extends IApplySingle
     private static final long serialVersionUID = 5373464888262713547L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) p_graph.getSuccessorCount( p_window.get( 0 ).raw() )
             )
         );

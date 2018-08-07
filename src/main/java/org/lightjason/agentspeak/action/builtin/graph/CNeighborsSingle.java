@@ -39,7 +39,7 @@ import java.util.List;
  * each graph argument, the first argument is the vertex,
  * all other graphs, the action never fails
  *
- * {@code [N1|N2] = graph/neighborssingle( Vertex, Graph1, Graph2 );}
+ * {@code [N1|N2] = .graph/neighborssingle( Vertex, Graph1, Graph2 );}
  */
 public final class CNeighborsSingle extends IApplySingle
 {
@@ -49,7 +49,7 @@ public final class CNeighborsSingle extends IApplySingle
     private static final long serialVersionUID = -5698214543592798527L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
@@ -61,7 +61,7 @@ public final class CNeighborsSingle extends IApplySingle
         final List<?> l_return = new ArrayList<>( p_graph.getNeighbors( p_window.get( 0 ).raw() ) );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_return )
                 : l_return

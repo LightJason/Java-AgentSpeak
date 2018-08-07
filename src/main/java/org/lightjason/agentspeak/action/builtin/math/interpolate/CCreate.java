@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * the first \f$ \frac{n}{2} \f$ are x-values the other \f$ \frac{n}{2} \f$
  * values are the y-values
  *
- * {@code PI = math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]);}
+ * {@code PI = .math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]);}
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  * @see https://en.wikipedia.org/wiki/Divided_differences
  * @see https://en.wikipedia.org/wiki/Linear_interpolation
@@ -78,24 +78,24 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final int l_datasize = ( l_arguments.size() - 1 ) / 2;
         p_return.add(
-            CRawTerm.from(
-                EType.from( l_arguments.get( 0 ).<String>raw() )
+            CRawTerm.of(
+                EType.of( l_arguments.get( 0 ).<String>raw() )
                      .get(
 
                          l_arguments.stream()
@@ -114,7 +114,7 @@ public final class CCreate extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -136,7 +136,7 @@ public final class CCreate extends IBuiltinAction
          * @param p_value string
          * @return enum
          */
-        public static EType from( final String p_value )
+        public static EType of( final String p_value )
         {
             return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }

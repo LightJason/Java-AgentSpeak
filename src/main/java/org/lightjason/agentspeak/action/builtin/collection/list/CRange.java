@@ -48,7 +48,7 @@ import java.util.stream.IntStream;
  * tuple a ranged list will be returned, the action fails on
  * a wrong number of arguments
  *
- * {@code [L1|L2] = collection/list/create(0, 10, [2, 9]);}
+ * {@code [L1|L2] = .collection/list/create(0, 10, [2, 9]);}
  */
 public final class CRange extends IBuiltinAction
 {
@@ -68,23 +68,23 @@ public final class CRange extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Integer> l_arguments = CCommon.flatten( p_argument )
                                                  .map( ITerm::<Number>raw )
                                                  .mapToInt( Number::intValue )
                                                  .boxed()
                                                  .collect( Collectors.toList() );
-        if ( ( l_arguments.isEmpty() ) || ( l_arguments.size() % 2 == 1 ) )
-            return CFuzzyValue.from( false );
+        if ( l_arguments.isEmpty() || l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed(
             l_arguments.stream(),
@@ -93,10 +93,10 @@ public final class CRange extends IBuiltinAction
         )
             .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
             .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

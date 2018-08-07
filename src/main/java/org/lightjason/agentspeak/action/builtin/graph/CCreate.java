@@ -57,11 +57,11 @@ import java.util.stream.Collectors;
  * UNDIRECTEDSPARSEMULTI ) on a wrong name,
  * a sparse graph is created, the action never fails
  *
- * {@code [G1|G2] = graph/create( "sparse", "directedsparse" );}
+ * {@code [G1|G2] = .graph/create( "sparse", "directedsparse" );}
  *
  * @see https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
  */
-public class CCreate extends IBuiltinAction
+public final class CCreate extends IBuiltinAction
 {
     /**
      * serial id
@@ -70,25 +70,24 @@ public class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> EGraphTypes.exist( i ) ? EGraphTypes.from( i ) : EGraphTypes.SPARSE )
+               .map( i -> EGraphTypes.exist( i ) ? EGraphTypes.of( i ) : EGraphTypes.SPARSE )
                .map( EGraphTypes::get )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -164,7 +163,7 @@ public class CCreate extends IBuiltinAction
          * @return graph type
          */
         @Nonnull
-        public static EGraphTypes from( @Nonnull final String p_value )
+        public static EGraphTypes of( @Nonnull final String p_value )
         {
             return EGraphTypes.valueOf( p_value.toUpperCase( Locale.ROOT ) );
         }

@@ -45,6 +45,7 @@ import java.util.stream.Stream;
 
 /**
  * test math blas functions
+ * @todo fix assert
  */
 public final class TestCActionMathBlas extends IBaseTest
 {
@@ -68,7 +69,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_matrix1 = new DenseDoubleMatrix2D( new double[][]{{2, 6}, {3, 8}} );
         m_matrix2 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
@@ -79,13 +80,13 @@ public final class TestCActionMathBlas extends IBaseTest
      * test size
      */
     @Test
-    public final void size()
+    public void size()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_matrix1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -97,13 +98,13 @@ public final class TestCActionMathBlas extends IBaseTest
      * test multiply
      */
     @Test
-    public final void multiply()
+    public void multiply()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultiply().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -118,7 +119,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test elementwise for matrix
      */
     @Test
-    public final void elementwisematrix()
+    public void elementwisematrix()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -134,7 +135,7 @@ public final class TestCActionMathBlas extends IBaseTest
                     m_matrix1, "-", m_matrix2,
                     m_matrix1, "*", m_matrix2,
                     m_matrix1, "|+|", -9
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -155,7 +156,7 @@ public final class TestCActionMathBlas extends IBaseTest
      * test elementwise for vector
      */
     @Test
-    public final void elementwisevector()
+    public void elementwisevector()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -170,7 +171,7 @@ public final class TestCActionMathBlas extends IBaseTest
                     m_vector, "-", m_vector,
                     m_vector, "*", m_vector,
                     m_vector, "|+|", -5
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

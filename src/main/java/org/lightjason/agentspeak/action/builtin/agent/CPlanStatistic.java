@@ -31,9 +31,9 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -47,7 +47,7 @@ import java.util.List;
  * for each plan argument, succesfull, fail and sum rate is returned,
  * the action fails if the plan does not exist within the plan-base
  *
- * {@code [Successful1|Fail1|Sum1|Successful2|Fail2|Sum2] = agent/planstatistic( Plan1, Plan2 );}
+ * {@code [Successful1|Fail1|Sum1|Successful2|Fail2|Sum2] = .agent/planstatistic( Plan1, Plan2 );}
  */
 public final class CPlanStatistic extends IBuiltinAction
 {
@@ -59,18 +59,17 @@ public final class CPlanStatistic extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             CCommon.flatten( p_argument )
                    .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().trigger(), p_context.agent(), p_return ) )
         );
@@ -93,9 +92,9 @@ public final class CPlanStatistic extends IBuiltinAction
         final double l_success = l_plans.parallelStream().mapToDouble( IPlanStatistic::successful ).sum();
         final double l_fail = l_plans.parallelStream().mapToDouble( IPlanStatistic::fail ).sum();
 
-        p_return.add( CRawTerm.from( l_success ) );
-        p_return.add( CRawTerm.from( l_fail ) );
-        p_return.add( CRawTerm.from( l_success + l_fail ) );
+        p_return.add( CRawTerm.of( l_success ) );
+        p_return.add( CRawTerm.of( l_fail ) );
+        p_return.add( CRawTerm.of( l_success + l_fail ) );
 
         return true;
     }

@@ -40,7 +40,7 @@ import java.util.List;
  * argument is the vertex, all other graphs,
  * the action never fails
  *
- * {@code [OE1|OE2] = graph/outedgessingle( Vertex, Graph1, Graph2 );}
+ * {@code [OE1|OE2] = .graph/outedgessingle( Vertex, Graph1, Graph2 );}
  */
 public final class COutEdgesSingle extends IApplySingle
 {
@@ -50,19 +50,19 @@ public final class COutEdgesSingle extends IApplySingle
     private static final long serialVersionUID = -540059834584856674L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getOutEdges( p_window.get( 0 ).raw() ) );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_return )
                 : l_return

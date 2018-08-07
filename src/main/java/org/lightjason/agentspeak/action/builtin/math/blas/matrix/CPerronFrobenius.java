@@ -52,7 +52,7 @@ import java.util.stream.IntStream;
  * are squared matrices, the returning arguments are the eigenvector for each matrix, the
  * action never fails
  *
- * {@code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);}
+ * {@code [E1|E2|E3] = .math/blas/matrix/perronfrobenius(5, M1, M2, M3);}
  * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
  */
 public final class CPerronFrobenius extends IAlgebra
@@ -72,15 +72,15 @@ public final class CPerronFrobenius extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Random l_random = ThreadLocalRandom.current();
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
@@ -108,9 +108,9 @@ public final class CPerronFrobenius extends IAlgebra
                      } ) );
 
         l_eigenvector.stream()
-                     .map( CRawTerm::from )
+                     .map( CRawTerm::of )
                      .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

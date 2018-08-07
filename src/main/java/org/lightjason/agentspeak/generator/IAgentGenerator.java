@@ -29,8 +29,8 @@ import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CComplement;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CIntersection;
-import org.lightjason.agentspeak.language.unify.CUnifier;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.unifier.CUnifier;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 
 /**

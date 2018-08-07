@@ -45,7 +45,7 @@ import java.util.Map;
  * a boolean flag for empty is returned, on all non-collection
  * types empty is always false, the action never fails
  *
- * {@code [A|B|C] = collection/list/isempty(List, Map, MultiMap);}
+ * {@code [A|B|C] = .collection/list/isempty(List, Map, MultiMap);}
  */
 public final class CIsEmpty extends IBuiltinAction
 {
@@ -56,23 +56,22 @@ public final class CIsEmpty extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_argument.stream()
                .map( CIsEmpty::empty )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -84,13 +83,13 @@ public final class CIsEmpty extends IBuiltinAction
      */
     private static boolean empty( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        if ( CCommon.isssignableto( p_term, Collection.class ) )
             return p_term.<Collection<?>>raw().isEmpty();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        if ( CCommon.isssignableto( p_term, Map.class ) )
             return p_term.<Map<?, ?>>raw().isEmpty();
 
-        return CCommon.rawvalueAssignableTo( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
+        return CCommon.isssignableto( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
 
     }
 

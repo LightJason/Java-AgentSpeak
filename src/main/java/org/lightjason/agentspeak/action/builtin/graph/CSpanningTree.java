@@ -44,15 +44,15 @@ import java.util.Map;
 
 /**
  * creates a minimal spanning tree of any graph instance.
- * The action creates from each graph argument a spanning
+ * The action creates of each graph argument a spanning
  * tree, the first map instance will be used as weight-map,
  * a tuple of the string "defaultweight" and a numeric value
  * defines the default weight value of the weight-map
  * (the default value is zero), the action never fails
  *
  * {@code
-    [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
-    [SP3|SP4] = graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
+    [SP1|SP2] = .graph/spanningtree( Graph1, Graph2 );
+    [SP3|SP4] = .graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
  * }
  */
 public final class CSpanningTree extends IBuiltinAction
@@ -64,25 +64,25 @@ public final class CSpanningTree extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final double l_defaultcost = CCommon.flatten( p_argument )
-                                            .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                            .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
                                             .orElse( 0D );
 
         final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
-                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                .filter( i -> CCommon.isssignableto( i, Map.class ) )
                                                 .findFirst()
                                                 .map( ITerm::<Map<?, Number>>raw )
                                                 .orElseGet( Collections::emptyMap );
@@ -92,12 +92,12 @@ public final class CSpanningTree extends IBuiltinAction
 
         // --- filter graphs ---
         CCommon.flatten( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+               .filter( i -> CCommon.isssignableto( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( l_treefactory )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

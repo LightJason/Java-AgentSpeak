@@ -43,7 +43,7 @@ import java.util.List;
  * all replaced strings, the action never fails. The first argument
  * of the action be defined as a regular expression
  *
- * {@code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" );}
+ * {@code [A|B] = .string/replace( "search", "replace with", "this is a search string", "this is another string" );}
  * @see https://en.wikipedia.org/wiki/Regular_expression
  */
 public final class CReplace extends IBuiltinAction
@@ -55,15 +55,15 @@ public final class CReplace extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 3;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final String l_search = p_argument.get( 0 ).<String>raw();
         final String l_replace = p_argument.get( 1 ).<String>raw();
@@ -71,10 +71,10 @@ public final class CReplace extends IBuiltinAction
         CCommon.flatten( p_argument )
                .skip( 2 )
                .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

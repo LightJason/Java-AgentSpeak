@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * belief functor, if no arguments are give,
  * the full belieflist is returned
  *
- * {@code L = agent/belieflist( true, "path/subpath/literalfunctor" );}
+ * {@code L = .agent/belieflist( true, "path/subpath/literalfunctor" );}
  *
  */
 public final class CBeliefList extends IBuiltinAction
@@ -59,7 +59,7 @@ public final class CBeliefList extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
@@ -67,18 +67,18 @@ public final class CBeliefList extends IBuiltinAction
             p_argument.isEmpty()
             ? p_context.agent().beliefbase().stream()
             : p_argument.size() == 1
-              ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
-              : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
+              ? p_context.agent().beliefbase().stream( CPath.of( p_argument.get( 0 ).<String>raw() ) )
+              : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.of( p_argument.get( 0 ).<String>raw() ) )
         ).collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from( p_parallel
+            CRawTerm.of( p_parallel
                            ? Collections.synchronizedList( l_literal )
                            : l_literal
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -37,7 +37,7 @@ import java.util.Map;
 
 /**
  * action to call a restful webservice with XML data.
- * Creates a literal from an XML REST-webservice, first argument
+ * Creates a literal of an XML REST-webservice, first argument
  * is the URL of the webservice and second argument the functor of the literal
  *
  * {@code W = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );}
@@ -45,7 +45,7 @@ import java.util.Map;
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/XML
  */
-public class CXMLObject extends IBaseRest
+public final class CXMLObject extends IBaseRest
 {
     /**
      * serial id
@@ -62,27 +62,26 @@ public class CXMLObject extends IBaseRest
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         try
         {
             final Map<String, ?> l_data = IBaseRest.xml( p_argument.get( 0 ).<String>raw() );
             p_return.add(
                 p_argument.size() == 2
-                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
+                ? CLiteral.of( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
                 : IBaseRest.baseliteral(
                     p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
                     flatterm( l_data )
                 )
             );
 
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
         catch ( final IOException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     }
 }

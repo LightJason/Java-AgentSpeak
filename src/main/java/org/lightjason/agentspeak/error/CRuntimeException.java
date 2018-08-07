@@ -123,7 +123,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
 
     @Nonnull
     @Override
-    public final IContext context()
+    public IContext context()
     {
         return m_context;
     }

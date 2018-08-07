@@ -25,15 +25,20 @@ package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -75,48 +80,78 @@ public final class CContext implements IContext
         m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i ) ) );
     }
 
-    @Nonnull
-    @Override
-    public final IContext duplicate()
+    /**
+     * ctor
+     *
+     * @param p_agent agent
+     * @param p_instance instance object
+     * @param p_variables variable map
+     */
+    private CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Map<IPath, IVariable<?>> p_variables )
     {
-        return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
+        m_agent = p_agent;
+        m_instance = p_instance;
+        m_variables = p_variables;
     }
 
     @Nonnull
     @Override
-    public final IAgent<?> agent()
+    public IContext duplicate( @Nullable final IVariable<?>... p_variables )
+    {
+        return this.duplicate( Objects.nonNull( p_variables ) ? Arrays.stream( p_variables ) : Stream.empty() );
+    }
+
+    @Nonnull
+    @Override
+    public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
+    {
+        return new CContext(
+            m_agent,
+            m_instance,
+            Collections.unmodifiableMap(
+                Stream.concat(
+                    p_variables,
+                    m_variables.values().stream().map( i -> i.shallowcopy() )
+                ).collect( Collectors.toMap( ITerm::fqnfunctor, i -> i, ( i, j ) -> i ) )
+            )
+        );
+    }
+
+    @Nonnull
+    @Override
+    public IAgent<?> agent()
     {
         return m_agent;
     }
 
     @Nonnull
     @Override
-    public final IInstantiable instance()
+    public IInstantiable instance()
     {
         return m_instance;
     }
 
     @Nonnull
     @Override
-    public final Map<IPath, IVariable<?>> instancevariables()
+    public Map<IPath, IVariable<?>> instancevariables()
     {
         return m_variables;
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IContext ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IContext && this.hashCode() == p_object.hashCode();
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_variables.values(), m_instance, m_agent );
     }

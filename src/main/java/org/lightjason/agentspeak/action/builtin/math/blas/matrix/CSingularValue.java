@@ -45,7 +45,7 @@ import java.util.List;
  * called and the values, and the two matrixes (left / right)
  * are returned, the action never fails
  *
- * {@code [Values1|U1|V1|Values2|U2|V2] = blas/matrix/singularvalue(Matrix1, Matrix2);}
+ * {@code [Values1|U1|V1|Values2|U2|V2] = .blas/matrix/singularvalue(Matrix1, Matrix2);}
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
  */
 public final class CSingularValue extends IBuiltinAction
@@ -65,26 +65,26 @@ public final class CSingularValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                        @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( i -> new DenseDoubleSingularValueDecomposition( i, true, false ) )
                .forEach( i ->
                {
-                   p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( i.getSingularValues() ) ) );
-                   p_return.add( CRawTerm.from( i.getU() ) );
-                   p_return.add( CRawTerm.from( i.getV() ) );
+                   p_return.add( CRawTerm.of( new DenseDoubleMatrix1D( i.getSingularValues() ) ) );
+                   p_return.add( CRawTerm.of( i.getU() ) );
+                   p_return.add( CRawTerm.of( i.getV() ) );
                } );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

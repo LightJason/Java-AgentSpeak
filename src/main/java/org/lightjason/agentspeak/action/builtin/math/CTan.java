@@ -42,7 +42,7 @@ import java.util.List;
  * value in radians the \f$ tan( x_i ) \f$ value,
  * the action never fails
  *
- * {@code [X|Y|Z] = math/tan( pi, 1.3*pi, 0.43*pi );}
+ * {@code [X|Y|Z] = .math/tan( pi, 1.3*pi, 0.43*pi );}
  * @see https://en.wikipedia.org/wiki/Trigonometric_functions
  */
 public final class CTan extends IBuiltinAction
@@ -54,25 +54,25 @@ public final class CTan extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::tan )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

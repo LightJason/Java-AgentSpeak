@@ -42,7 +42,7 @@ import java.util.List;
  * inverts all logical boolean arguments and returns
  * all elements, the action never fails
  *
- * {@code [R1|R2|R3|R4] = bool/not( Logical1, [Logical2, Logical3], Logical4 );}
+ * {@code [R1|R2|R3|R4] = .bool/not( Logical1, [Logical2, Logical3], Logical4 );}
  * @see https://en.wikipedia.org/wiki/Negation
  */
 public final class CNot extends IBuiltinAction
@@ -54,24 +54,23 @@ public final class CNot extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Boolean>raw )
                .map( i -> !i )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

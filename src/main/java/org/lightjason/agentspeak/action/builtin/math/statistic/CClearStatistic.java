@@ -42,7 +42,7 @@ import java.util.List;
  * The actions clears statistic objects, so
  * all arguments must be statistic objects
  *
- * {@code math/statistic/clearstatistic( Statistic1, [Statistic2, [Statistic3]] );}
+ * {@code .math/statistic/clearstatistic( Statistic1, [Statistic2, [Statistic3]] );}
  */
 public final class CClearStatistic extends IBuiltinAction
 {
@@ -61,26 +61,26 @@ public final class CClearStatistic extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             CCommon.flatten( p_argument )
                    .parallel()
                    .allMatch( i ->
                    {
 
-                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
                             return CClearStatistic.apply( i.<SummaryStatistics>raw() );
 
-                       return CCommon.rawvalueAssignableTo( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
+                       return CCommon.isssignableto( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
                             i.<DescriptiveStatistics>raw() );
 
                    } )

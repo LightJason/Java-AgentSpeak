@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * returns the modified date-time objects, the action
  * never fails
  *
- * {@code [O1|O2] = datetime/applyseconds( "minus|plus" 6, DateTime1, DateTime2 );}
+ * {@code [O1|O2] = .datetime/applyseconds( "minus|plus" 6, DateTime1, DateTime2 );}
  */
 public final class CApplySeconds extends IPlusMinus
 {
@@ -50,14 +50,14 @@ public final class CApplySeconds extends IPlusMinus
 
     @Nonnull
     @Override
-    protected final Stream<?> applyminus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected Stream<?> applyminus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.minusSeconds( p_value ) );
     }
 
     @Nonnull
     @Override
-    protected final Stream<?> applyplus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected Stream<?> applyplus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.plusSeconds( p_value ) );
     }

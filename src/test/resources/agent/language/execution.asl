@@ -42,36 +42,49 @@
 /**
  * execute by variable without parameter
  */
-+!stringvariableempty <- X = "vartest"; !X.
++!stringvariableempty <-
+    X = "vartest";
+    !X
+.
 
 /**
  * execution by variable with single parameter
  **/
-+!stringvariablesingle <- X = "vartest"; !X(5).
++!stringvariablesingle <-
+    X = "vartest";
+    !X(5)
+.
 
 /**
  * execution by variable with single parameter
  **/
-+!stringvariablemultiple <- X = "vartest"; !X(7,3).
++!stringvariablemultiple <-
+    X = "vartest";
+    !X(7,3)
+.
 
 
 
 /**
  * variable test
- **/
-+!vartest <- test/result(success, "variable execution fails").
+ */
++!vartest <-
+    .test/result(success, "variable execution fails")
+.
 
 /**
  * variable test
- **/
-+!vartest(X) <- test/result( bool/equal(X, 5), "variable execution test with 5 fails" ).
+ */
++!vartest(X) <-
+    .test/result( .bool/equal(X, 5), "variable execution test with 5 fails" )
+.
 
 /**
  * variable test
- **/
+ */
 +!vartest(X, Y) <-
-    test/result( bool/equal(X, 7), "variable execution test with 7 fails" );
-    test/result( bool/equal(Y, 3), "variable execution test with 3 fails" )
+    .test/result( .bool/equal(X, 7), "variable execution test with 7 fails" );
+    .test/result( .bool/equal(Y, 3), "variable execution test with 3 fails" )
 .
 
 

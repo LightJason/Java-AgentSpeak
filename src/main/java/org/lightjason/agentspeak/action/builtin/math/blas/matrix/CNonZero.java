@@ -42,7 +42,7 @@ import java.util.List;
  * Gets the number of non-zero cells on each matrix
  * input and returns the value, the action never fails
  *
- * {@code [NZ1|NZ2] = math/blas/matrix/nonzero(M1,M2);}
+ * {@code [NZ1|NZ2] = .math/blas/matrix/nonzero(M1,M2);}
  */
 public final class CNonZero extends IBuiltinAction
 {
@@ -61,24 +61,24 @@ public final class CNonZero extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .mapToDouble( DoubleMatrix2D::cardinality )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

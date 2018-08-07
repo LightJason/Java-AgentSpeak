@@ -41,7 +41,7 @@ import java.util.List;
  * Calculates for each unflatten argument
  * \f$ tanh( x_i ) \f$ and fails never
  *
- * {@code [A|B|C] = math/tanh( [1,2], 3 );}
+ * {@code [A|B|C] = .math/tanh( [1,2], 3 );}
  * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CTanh extends IBuiltinAction
@@ -53,25 +53,25 @@ public final class CTanh extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::tanh )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

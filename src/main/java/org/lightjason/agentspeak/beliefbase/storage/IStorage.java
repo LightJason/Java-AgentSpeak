@@ -101,7 +101,7 @@ public interface IStorage<N, M>
     boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value );
 
     /**
-     * removes a multi-element from the storage
+     * removes a multi-element of the storage
      *
      * @param p_key key
      * @param p_value multi-element
@@ -110,7 +110,7 @@ public interface IStorage<N, M>
     boolean removeMultiElement( @Nonnull final String p_key, final N p_value );
 
     /**
-     * removes a single-element from the storage
+     * removes a single-element of the storage
      *
      * @param p_key key
      * @return boolean if the element can be removed

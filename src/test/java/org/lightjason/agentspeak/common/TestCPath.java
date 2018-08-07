@@ -40,7 +40,7 @@ public final class TestCPath extends IBaseTest
      * test stream collector
      */
     @Test
-    public final void collector()
+    public void collector()
     {
         Assert.assertEquals( Stream.of( "a", "b", "c" ).collect( CPath.collect() ).toString(), "a/b/c" );
     }
@@ -49,11 +49,11 @@ public final class TestCPath extends IBaseTest
      * test hash collision
      */
     @Test
-    public final void collision()
+    public void collision()
     {
         Assert.assertNotEquals(
-            CPath.from( "hashcollision/Ea" ),
-            CPath.from( "hashcollision/FB" )
+            CPath.of( "hashcollision/Ea" ),
+            CPath.of( "hashcollision/FB" )
         );
     }
 
@@ -61,10 +61,10 @@ public final class TestCPath extends IBaseTest
      * compare string and path
      */
     @Test
-    public final void comparing()
+    public void comparing()
     {
-        Assert.assertEquals( CPath.from( "foo/bar" ), "foo/bar" );
-        Assert.assertNotEquals( CPath.from( "foo/bar" ), CPath.from( "bar/foo" ) );
+        Assert.assertEquals( CPath.of( "foo/bar" ), "foo/bar" );
+        Assert.assertNotEquals( CPath.of( "foo/bar" ), CPath.of( "bar/foo" ) );
     }
 
 }

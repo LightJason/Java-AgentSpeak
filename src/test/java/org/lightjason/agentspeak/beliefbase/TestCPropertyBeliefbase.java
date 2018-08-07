@@ -34,8 +34,11 @@ import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 
 import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -51,19 +54,41 @@ public final class TestCPropertyBeliefbase extends IBaseTest
      * @throws Exception is thrown on intialization error
      */
     @Test
-    public final void belieflist() throws Exception
+    public void belieflist() throws Exception
     {
         final IAgent<?> l_agent = new CAgent.CAgentGenerator( "" ).generatesingle();
 
         if ( PRINTENABLE )
             l_agent.beliefbase().stream().forEach( System.out::println );
 
+
         Assert.assertArrayEquals(
             Stream.of(
-                CLiteral.from( "self/m_stringvalue", CRawTerm.EMPTY ),
-                CLiteral.from( "self/m_integervalue", CRawTerm.from( 42 ) )
+                "self/m_fuzzy",
+                "self/m_trigger",
+                "self/m_cycletime",
+                "self/m_rules",
+                "self/m_stringvalue",
+                "self/m_storage",
+                "self/m_sleepingterm",
+                "self/m_runningplans",
+                "self/m_sleepingcycles",
+                "self/m_beliefbase",
+                "self/m_unifier",
+                "self/m_variablebuilder",
+                "self/m_plans",
+                "self/m_integervalue"
             ).toArray(),
-            l_agent.beliefbase().stream().toArray()
+            l_agent.beliefbase().stream().map( i -> i.fqnfunctor().path() ).toArray()
+        );
+
+        final Set<ILiteral> l_beliefs = l_agent.beliefbase().stream().collect( Collectors.toSet() );
+        Assert.assertTrue(
+            "beliefs not found",
+            Stream.of(
+                CLiteral.of( "self/m_stringvalue" ),
+                CLiteral.of( "self/m_integervalue", CRawTerm.of( 42 ) )
+            ).allMatch( l_beliefs::contains )
         );
     }
 
@@ -118,7 +143,7 @@ public final class TestCPropertyBeliefbase extends IBaseTest
              */
             CAgentGenerator( final String p_asl ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet() );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet(), Collections.emptySet() );
             }
 
             @Override

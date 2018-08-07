@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * will be extract into two variables, the
  * action never fails
  *
- * {@code [A|B|C|D] = collection/tupel/flat( Tupel1, Tupel2 );}
+ * {@code [A|B|C|D] = .collection/tupel/flat( Tupel1, Tupel2 );}
  */
 public final class CFlat extends IBuiltinAction
 {
@@ -62,24 +62,23 @@ public final class CFlat extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_argument.stream()
                   .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
                   .flatMap( i -> Stream.of( i.getKey(), i.getValue() ) )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

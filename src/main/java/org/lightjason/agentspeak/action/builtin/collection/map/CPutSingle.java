@@ -36,7 +36,7 @@ import java.util.Map;
  * other values are map references, the key-value pair
  * is added to all maps and the action never fails
  *
- * {@code collection/map/putsingle( "key", "value", Map1, Map2 );}
+ * {@code .collection/map/putsingle( "key", "value", Map1, Map2 );}
  */
 public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
 {
@@ -46,7 +46,7 @@ public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
     private static final long serialVersionUID = 2571810828014437518L;
 
     @Override
-    protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.put( p_key, p_value );
     }

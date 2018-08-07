@@ -62,6 +62,7 @@ import java.util.stream.Stream;
 
 /**
  * test math blas vector functions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBlasVector extends IBaseTest
@@ -116,7 +117,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
                 p_classes,
@@ -137,7 +138,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -159,19 +160,19 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, "dense" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 4, "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 4, "sparse" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -184,13 +185,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test set
      */
     @Test
-    public final void set()
+    public void set()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 0, 6.0, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 0, 6.0, l_vector ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -201,13 +202,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test toList
      */
     @Test
-    public final void tolist()
+    public void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -222,13 +223,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test assign scalar
      */
     @Test
-    public final void assignscalar()
+    public void assignscalar()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
         new CAssign().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, l_vector ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -239,13 +240,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test assign vector
      */
     @Test
-    public final void assignvector()
+    public void assignvector()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
         new CAssign().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, l_vector ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -257,13 +258,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test get
      */
     @Test
-    public final void get()
+    public void get()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -276,13 +277,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test copy
      */
     @Test
-    public final void copy()
+    public void copy()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCopy().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1, VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1, VECTOR2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -294,19 +295,19 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test parse
      */
     @Test
-    public final void parse()
+    public void parse()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParse().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "1,2,3", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "1,2,3", "dense" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CParse().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "4,3,4", "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "4,3,4", "sparse" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -319,19 +320,19 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * test fromlist
      */
     @Test
-    public final void fromlist()
+    public void fromlist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFromList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( Stream.of( 1, 2, 3 ).collect( Collectors.toList() ), "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( Stream.of( 1, 2, 3 ).collect( Collectors.toList() ), "dense" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CFromList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( Stream.of( 4, 3, 4 ).collect( Collectors.toList() ), "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( Stream.of( 4, 3, 4 ).collect( Collectors.toList() ), "sparse" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

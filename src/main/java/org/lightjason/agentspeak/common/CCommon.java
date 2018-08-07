@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;
@@ -119,7 +120,7 @@ public final class CCommon
     @Nonnull
     public static String[] languages()
     {
-        return Arrays.stream( PROPERTIES.getString( "translation" ).split( "," ) ).map( i -> i.trim().toLowerCase() ).toArray( String[]::new );
+        return Arrays.stream( PROPERTIES.getString( "translation" ).split( "," ) ).map( i -> i.trim().toLowerCase( Locale.ROOT ) ).toArray( String[]::new );
     }
 
     /**
@@ -144,6 +145,21 @@ public final class CCommon
         return PROPERTIES;
     }
 
+
+    // --- access to lambda-streaming instantiation ------------------------------------------------------------------------------------------------------------
+
+    /**
+     * read lambda-streaming class of package
+     *
+     * @param p_package full-qualified package name or empty for default package
+     * @return lambda-streaming stream
+     */
+    public static Stream<ILambdaStreaming<?>> lambdastreamingFromPackage( @Nullable final String... p_package )
+    {
+        return CCommon.classfrompackage( ILambdaStreaming.class, p_package );
+    }
+
+
     // --- access to action instantiation ----------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -153,35 +169,9 @@ public final class CCommon
      * @return action stream
      */
     @Nonnull
-    @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
-        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
-                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
-                 : Arrays.stream( p_package ) )
-            .flatMap( j -> new Reflections( j ).getSubTypesOf( IAction.class )
-                                               .parallelStream()
-                                               .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
-                                               .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
-                                               .filter( i -> Modifier.isPublic( i.getModifiers() ) )
-                                               .map( i ->
-                                               {
-                                                   try
-                                                   {
-                                                       return (IAction) i.getConstructor().newInstance();
-                                                   }
-                                                   catch ( final NoSuchMethodException | InvocationTargetException
-                                                       | IllegalAccessException | InstantiationException l_exception )
-                                                   {
-                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
-                                                       return null;
-                                                   }
-                                               } )
-                                               // action can be instantiate
-                                               .filter( Objects::nonNull )
-                                               // check usable action name
-                                               .filter( CCommon::actionusable )
-            );
+        return CCommon.<IAction>classfrompackage( IAction.class, p_package ).filter( CCommon::actionusable );
     }
 
 
@@ -228,7 +218,7 @@ public final class CCommon
      */
     private static boolean actionusable( final IAction p_action )
     {
-        if ( ( p_action.name().empty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
+        if ( p_action.name().empty() || p_action.name().get( 0 ).trim().isEmpty() )
         {
             LOGGER.warning( CCommon.languagestring( CCommon.class, "actionnameempty" ) );
             return false;
@@ -297,11 +287,10 @@ public final class CCommon
 
         final IAgentAction l_annotation = p_class.getAnnotation( IAgentAction.class );
         return new ImmutablePair<>(
-                   ( l_annotation.classes().length == 0 )
-                   || ( Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
-                              .parallel()
-                              .anyMatch( p_class::equals )
-                   ),
+                   l_annotation.classes().length == 0
+                   || Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
+                            .parallel()
+                            .anyMatch( p_class::equals ),
                    l_annotation.access()
                );
     }
@@ -317,17 +306,52 @@ public final class CCommon
     {
         return p_method.isAnnotationPresent( IAgentActionFilter.class )
                && (
-                   ( p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0 )
-                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
-                              .parallel()
-                              .anyMatch( p_class::equals )
-                   )
+                   p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0
+                   || Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
+                            .parallel()
+                            .anyMatch( p_class::equals )
                );
     }
 
 
 
     // --- resource access -------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * read classes of package
+     *
+     * @param p_class class
+     * @param p_package full-qualified package name or empty for default package
+     * @tparam T class type
+     * @return object stream
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nullable final String... p_package )
+    {
+        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
+                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
+                 : Arrays.stream( p_package ) )
+            .flatMap( j -> new Reflections( j ).getSubTypesOf( p_class )
+                                               .parallelStream()
+                                               .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
+                                               .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
+                                               .filter( i -> Modifier.isPublic( i.getModifiers() ) )
+                                               .map( i ->
+                                               {
+                                                   try
+                                                   {
+                                                       return (T) i.getConstructor().newInstance();
+                                                   }
+                                                   catch ( final NoSuchMethodException | InvocationTargetException
+                                                       | IllegalAccessException | InstantiationException l_exception )
+                                                   {
+                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "classinstantiateerror", i, l_exception ) );
+                                                       return null;
+                                                   }
+                                               } )
+                                               .filter( Objects::nonNull )
+            );
+    }
 
     /**
      * concats an URL with a path
@@ -357,7 +381,7 @@ public final class CCommon
     }
 
     /**
-     * returns a file from a resource e.g. Jar file
+     * returns a file of a resource e.g. Jar file
      *
      * @param p_file file
      * @return URL of file or null
@@ -372,7 +396,7 @@ public final class CCommon
     }
 
     /**
-     * returns a file from a resource e.g. Jar file
+     * returns a file of a resource e.g. Jar file
      *
      * @param p_file file relative to the CMain
      * @return URL of file or null
@@ -455,9 +479,8 @@ public final class CCommon
     private static final class CUTF8Control extends ResourceBundle.Control
     {
 
-        public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
-                                               final boolean p_reload
-        ) throws IllegalAccessException, InstantiationException, IOException
+        public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
+                                         final boolean p_reload ) throws IOException
         {
             final InputStream l_stream;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );

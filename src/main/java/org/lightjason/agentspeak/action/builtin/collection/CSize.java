@@ -45,7 +45,7 @@ import java.util.Map;
  * the size of each collection, the action never fails.
  * On non-collection type the action returns a zero value
  *
- * {@code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel );}
+ * {@code [A|B|C|D] = .collection/size( Collection, Map, MultiMap, Tupel );}
  */
 public final class CSize extends IBuiltinAction
 {
@@ -57,24 +57,23 @@ public final class CSize extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // any term type
         p_argument.stream()
                .map( CSize::size )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**
@@ -86,16 +85,16 @@ public final class CSize extends IBuiltinAction
      */
     private static long size( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        if ( CCommon.isssignableto( p_term, Collection.class ) )
             return p_term.<Collection<?>>raw().size();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        if ( CCommon.isssignableto( p_term, Map.class ) )
             return p_term.<Map<?, ?>>raw().size();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Multimap.class ) )
+        if ( CCommon.isssignableto( p_term, Multimap.class ) )
             return p_term.<Multimap<?, ?>>raw().size();
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.Entry.class ) )
+        if ( CCommon.isssignableto( p_term, Map.Entry.class ) )
             return 2;
 
         return 0;

@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * nested structures and reverse all elements in a single list,
  * the action fails never
  *
- * {@code R = collection/list/reverse( L, [1,2], [3,4,[7,8]] );}
+ * {@code R = .collection/list/reverse( L, [1,2], [3,4,[7,8]] );}
  */
 public final class CReverse extends IBuiltinAction
 {
@@ -62,19 +62,19 @@ public final class CReverse extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments are list references
         p_return.addAll( Lists.reverse( CCommon.flatten( p_argument ).collect( Collectors.toList() ) ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

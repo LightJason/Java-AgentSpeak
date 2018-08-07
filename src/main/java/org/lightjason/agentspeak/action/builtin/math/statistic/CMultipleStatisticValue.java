@@ -41,13 +41,13 @@ import java.util.stream.Collectors;
 
 /**
  * gets multiple statistic values of a single statistic object.
- * The action returns different statistic values from a
+ * The action returns different statistic values of a
  * single statistic object, the first argument is the statistic
  * object, all other values are string with statistic value names:
  * geometricmean, max, min, count, populationvariance, quadraticmean, secondmoment,
  * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis
  *
- * {@code [SStd|SVar|SMean]  = math/statistic/multiplestatisticvalue(Statistic, "standarddeviation", "variance", "mean" );}
+ * {@code [SStd|SVar|SMean]  = .math/statistic/multiplestatisticvalue(Statistic, "standarddeviation", "variance", "mean" );}
  */
 public final class CMultipleStatisticValue extends IBuiltinAction
 {
@@ -66,37 +66,37 @@ public final class CMultipleStatisticValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), SummaryStatistics.class ) )
+        if ( CCommon.isssignableto( l_arguments.get( 0 ), SummaryStatistics.class ) )
             l_arguments.stream()
                        .skip( 1 )
                        .map( ITerm::<String>raw )
-                       .map( EStatisticValue::from )
+                       .map( EStatisticValue::of )
                        .mapToDouble( i -> i.value( l_arguments.get( 0 ).<SummaryStatistics>raw() ) )
                        .boxed()
-                       .map( CRawTerm::from )
+                       .map( CRawTerm::of )
                        .forEach( p_return::add );
         else
             l_arguments.stream()
                        .skip( 1 )
                        .map( ITerm::<String>raw )
-                       .map( EStatisticValue::from )
+                       .map( EStatisticValue::of )
                        .mapToDouble( i -> i.value( l_arguments.get( 0 ).<DescriptiveStatistics>raw() ) )
                        .boxed()
-                       .map( CRawTerm::from )
+                       .map( CRawTerm::of )
                        .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

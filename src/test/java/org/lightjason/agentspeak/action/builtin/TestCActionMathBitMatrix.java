@@ -73,9 +73,10 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test math bit matrix functions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionMathBitMatrix extends IBaseTest
+public final class TestCActionMathBitMatrix extends IBaseTest
 {
     /**
      * testing matrix
@@ -93,7 +94,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         MATRIX1.put( 0, 1, false );
         MATRIX1.put( 1, 0, false );
@@ -162,7 +163,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
                 p_classes,
@@ -183,7 +184,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -206,13 +207,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -227,13 +228,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test toBitVector
      */
     @Test
-    public final void tobitvector()
+    public void tobitvector()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToVector().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -253,13 +254,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test column
      */
     @Test
-    public final void column()
+    public void column()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumn().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -277,13 +278,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test row
      */
     @Test
-    public final void row()
+    public void row()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -301,13 +302,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test numericvalue
      */
     @Test
-    public final void numericvalue()
+    public void numericvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNumericValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -318,13 +319,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test boolean value
      */
     @Test
-    public final void boolValue()
+    public void boolValue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBoolValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -335,14 +336,14 @@ public class TestCActionMathBitMatrix extends IBaseTest
      * test toblas
      */
     @Test
-    public final void toblas()
+    public void toblas()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Double[][] l_result = {{0.0, 1.0}, {1.0, 1.0}};
 
         new CToBlas().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

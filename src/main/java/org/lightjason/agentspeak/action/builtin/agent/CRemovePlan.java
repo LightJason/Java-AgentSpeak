@@ -34,7 +34,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -47,7 +47,7 @@ import java.util.List;
  * input trigger arguments, the action fails
  * on wrong input
  *
- * {@code agent/removeplan( "+!", "myplan(X)", "-!", Literal );}
+ * {@code .agent/removeplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CRemovePlan extends IBuiltinAction
@@ -60,23 +60,22 @@ public final class CRemovePlan extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
                 2
-            ).allMatch( i -> CRemovePlan.remove( ITrigger.EType.from( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
+            ).allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
         );
     }
 
@@ -94,7 +93,7 @@ public final class CRemovePlan extends IBuiltinAction
         try
         {
 
-            l_literal = CCommon.rawvalueAssignableTo( p_literal, ILiteral.class )
+            l_literal = CCommon.isssignableto( p_literal, ILiteral.class )
                         ? p_literal.<ILiteral>raw()
                         : CLiteral.parse( p_literal.<String>raw() );
 

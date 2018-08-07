@@ -38,7 +38,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +69,7 @@ public final class TestCActionProlog extends IBaseTest
      * @throws Exception is thrown on problems
      */
     @Before
-    public final void initialize() throws Exception
+    public void initialize() throws Exception
     {
         m_agent = new CAgentGenerator().generatesingle();
         m_context = new CContext( Objects.requireNonNull( m_agent ), IPlan.EMPTY, Collections.emptyList() );
@@ -80,7 +80,7 @@ public final class TestCActionProlog extends IBaseTest
      * solve on an empty structure
      */
     @Test
-    public final void solveempty()
+    public void solveempty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public final class TestCActionProlog extends IBaseTest
             new CSolveAll().execute(
                     false,
                     IContext.EMPTYPLAN,
-                    Stream.of( "q(X)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    Stream.of( "q(X)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
                     l_return
             ).value()
         );
@@ -98,52 +98,54 @@ public final class TestCActionProlog extends IBaseTest
      * solve all without theory
      */
     @Test
-    public final void solveallwithouttheory()
+    public void solveallwithouttheory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 
         final List<ITerm> l_return = new ArrayList<>();
 
         m_agent.beliefbase().add(
-            CLiteral.from( "q", CRawTerm.from( 5 ) ),
-            CLiteral.from( "s", CRawTerm.from( "hello world" ) ),
-            CLiteral.from( "l", CRawTerm.from( new HashSet<>() ) )
+            CLiteral.of( "q", CRawTerm.of( 5 ) ),
+            CLiteral.of( "s", CRawTerm.of( "hello world" ) ),
+            CLiteral.of( "l", CRawTerm.of( new HashSet<>() ) )
         );
 
         Assert.assertTrue(
             new CSolveAll().execute(
                     false,
                     m_context,
-                    Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                    Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
                     l_return
             ).value()
         );
 
+
         Assert.assertEquals( 4, l_return.size() );
         Assert.assertEquals( 5.0, l_return.get( 0 ).<Number>raw() );
         Assert.assertEquals( 5.0, l_return.get( 1 ).<Number>raw() );
-        Assert.assertEquals( "hello world", l_return.get( 2 ).<String>raw() );
+        Assert.assertEquals( "hello world", l_return.get( 2 ).raw() );
+        Assert.assertEquals( "[]", l_return.get( 3 ).raw() );
     }
 
     /**
      * solve all with theory
      */
     @Test
-    public final void solveallwiththeory()
+    public void solveallwiththeory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 
         final List<ITerm> l_return = new ArrayList<>();
 
         m_agent.beliefbase().add(
-            CLiteral.from( "data", CRawTerm.from( 5 ) ),
-            CLiteral.from( "data", CRawTerm.from( 10 ) )
+            CLiteral.of( "data", CRawTerm.of( 5 ) ),
+            CLiteral.of( "data", CRawTerm.of( 10 ) )
         );
 
         new CTheory().execute(
             false,
             IContext.EMPTYPLAN,
-            Stream.of( "query(X) :- data(X), X > 6." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "query(X) :- data(X), X > 6." ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -151,7 +153,7 @@ public final class TestCActionProlog extends IBaseTest
             new CSolveAll().execute(
                 false,
                 m_context,
-                Stream.of( "query(X).", l_return.get( 0 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "query(X).", l_return.get( 0 ) ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
@@ -165,21 +167,21 @@ public final class TestCActionProlog extends IBaseTest
      * solve any without theory
      */
     @Test
-    public final void solveanywithouttheory()
+    public void solveanywithouttheory()
     {
         Assume.assumeNotNull( m_agent, m_context );
 
         final List<ITerm> l_return = new ArrayList<>();
 
         m_agent.beliefbase().add(
-            CLiteral.from( "a", CRawTerm.from( 8 ) )
+            CLiteral.of( "a", CRawTerm.of( 8 ) )
         );
 
         Assert.assertTrue(
             new CSolveAny().execute(
                 false,
                 m_context,
-                Stream.of( "a(X).", "foo(_).", "bar(5)." ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "a(X).", "foo(_).", "bar(5)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );

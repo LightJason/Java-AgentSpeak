@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action adds all tuples into the storage, the arguments
  * are tuples of a name and any value, the action never fails
  *
- * {@code storage/add( "foo", X, "bar", Y );}
+ * {@code .storage/add( "foo", X, "bar", Y );}
  */
 public final class CAdd extends IStorage
 {
@@ -92,16 +92,15 @@ public final class CAdd extends IStorage
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             p_argument.stream(),
@@ -109,7 +108,7 @@ public final class CAdd extends IStorage
             2
         ).forEach( i -> this.add( p_context.agent(), i.get( 0 ).<String>raw(), i.get( 1 ) ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

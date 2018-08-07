@@ -201,7 +201,7 @@ public final class TestCActionDateTime extends IBaseTest
      */
     private static Object testcasebetween( final IAction p_action, final Stream<String> p_datetime, final Stream<Number> p_results )
     {
-        return new ImmutableTriple<>( p_action, p_datetime.map( ZonedDateTime::parse ).map( CRawTerm::from ), p_results );
+        return new ImmutableTriple<>( p_action, p_datetime.map( ZonedDateTime::parse ).map( CRawTerm::of ), p_results );
     }
 
 
@@ -210,12 +210,12 @@ public final class TestCActionDateTime extends IBaseTest
      * test create error
      */
     @Test
-    public final void createerror()
+    public void createerror()
     {
         Assert.assertFalse(
             new CCreate().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( "error" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -225,17 +225,17 @@ public final class TestCActionDateTime extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "", "2007-12-03T10:15:30+01:00[Europe/Paris]", "now" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "", "2007-12-03T10:15:30+01:00[Europe/Paris]", "now" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ZonedDateTime );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof ZonedDateTime );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof ZonedDateTime );
@@ -248,31 +248,31 @@ public final class TestCActionDateTime extends IBaseTest
      * test build
      */
     @Test
-    public final void build()
+    public void build()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBuild().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2013, 3, 13, 12, 11, 10, 9, "current", 2013, 3, 13, 12, 11, 10, 9, "Europe/Moscow" ).map( CRawTerm::from )
+            Stream.of( 2013, 3, 13, 12, 11, 10, 9, "current", 2013, 3, 13, 12, 11, 10, 9, "Europe/Moscow" ).map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ZonedDateTime );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof ZonedDateTime );
 
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getYear(), l_return.get( 1 ).<ZonedDateTime>raw().getYear() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getMonthValue(), l_return.get( 1 ).<ZonedDateTime>raw().getMonthValue() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getDayOfMonth(), l_return.get( 1 ).<ZonedDateTime>raw().getDayOfMonth() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getYear(), l_return.get( 0 ).<ZonedDateTime>raw().getYear() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getMonthValue(), l_return.get( 0 ).<ZonedDateTime>raw().getMonthValue() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getDayOfMonth(), l_return.get( 0 ).<ZonedDateTime>raw().getDayOfMonth() );
 
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getHour(), l_return.get( 1 ).<ZonedDateTime>raw().getHour() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getMinute(), l_return.get( 1 ).<ZonedDateTime>raw().getMinute() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getSecond(), l_return.get( 1 ).<ZonedDateTime>raw().getSecond() );
-        Assert.assertEquals( l_return.get( 0 ).<ZonedDateTime>raw().getNano(), l_return.get( 1 ).<ZonedDateTime>raw().getNano() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getHour(), l_return.get( 0 ).<ZonedDateTime>raw().getHour() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getMinute(), l_return.get( 0 ).<ZonedDateTime>raw().getMinute() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getSecond(), l_return.get( 0 ).<ZonedDateTime>raw().getSecond() );
+        Assert.assertEquals( l_return.get( 1 ).<ZonedDateTime>raw().getNano(), l_return.get( 0 ).<ZonedDateTime>raw().getNano() );
 
-        Assert.assertNotEquals( l_return.get( 0 ).<ZonedDateTime>raw().getZone(), l_return.get( 1 ).<ZonedDateTime>raw().getZone() );
+        Assert.assertNotEquals( l_return.get( 1 ).<ZonedDateTime>raw().getZone(), l_return.get( 0 ).<ZonedDateTime>raw().getZone() );
     }
 
 
@@ -280,7 +280,7 @@ public final class TestCActionDateTime extends IBaseTest
      * test time
      */
     @Test
-    public final void time()
+    public void time()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -288,16 +288,16 @@ public final class TestCActionDateTime extends IBaseTest
             "action execution error",
             new CTime().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 10 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 15 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 30 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0 );
+        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertEquals( 10, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 15, l_return.get( 1 ).<Number>raw() );
+        Assert.assertEquals( 30, l_return.get( 2 ).<Number>raw() );
+        Assert.assertEquals( 0, l_return.get( 3 ).<Number>raw() );
     }
 
 
@@ -305,20 +305,20 @@ public final class TestCActionDateTime extends IBaseTest
      * test zone-id
      */
     @Test
-    public final void zoneid()
+    public void zoneid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CZoneid().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "2006-10-04T10:17:13-05:00[America/New_York]", "2006-10-04T10:17:13+00:00[Europe/London]" ).map( CRawTerm::from )
+            Stream.of( "2006-10-04T10:17:13-05:00[America/New_York]", "2006-10-04T10:17:13+00:00[Europe/London]" ).map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), "America/New_York" );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "Europe/London" );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( "America/New_York", l_return.get( 0 ).raw() );
+        Assert.assertEquals( "Europe/London", l_return.get( 1 ).raw() );
     }
 
 
@@ -329,18 +329,18 @@ public final class TestCActionDateTime extends IBaseTest
      */
     @Test
     @UseDataProvider( "generateapplyminus" )
-    public final void applysminus( final Triple<IAction, Pair<ZonedDateTime, Integer>, String> p_value )
+    public void applysminus( final Triple<IAction, Pair<ZonedDateTime, Integer>, String> p_value )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         p_value.getLeft().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "minus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "minus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), ZonedDateTime.parse( p_value.getRight() ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( ZonedDateTime.parse( p_value.getRight() ), l_return.get( 0 ).raw() );
     }
 
     /**
@@ -350,18 +350,18 @@ public final class TestCActionDateTime extends IBaseTest
      */
     @Test
     @UseDataProvider( "generateapplyplus" )
-    public final void applyplus( final Triple<IAction, Pair<ZonedDateTime, Integer>, String> p_value )
+    public void applyplus( final Triple<IAction, Pair<ZonedDateTime, Integer>, String> p_value )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         p_value.getLeft().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "plus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "plus", p_value.getMiddle().getRight(), p_value.getMiddle().getLeft() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), ZonedDateTime.parse( p_value.getRight() ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( ZonedDateTime.parse( p_value.getRight() ), l_return.get( 0 ).raw() );
     }
 
     /**
@@ -371,7 +371,7 @@ public final class TestCActionDateTime extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatebetween" )
-    public final void between( final Triple<IAction, Stream<ITerm>, Stream<Number>> p_value )
+    public void between( final Triple<IAction, Stream<ITerm>, Stream<Number>> p_value )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -382,8 +382,8 @@ public final class TestCActionDateTime extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::<Number>raw ).mapToLong( Number::longValue ).toArray(),
-            p_value.getRight().mapToLong( Number::longValue ).toArray()
+            p_value.getRight().mapToLong( Number::longValue ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).mapToLong( Number::longValue ).toArray()
         );
     }
 

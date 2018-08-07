@@ -151,7 +151,7 @@ public final class TestCActionBool extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
             p_classes,
@@ -171,7 +171,7 @@ public final class TestCActionBool extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -192,17 +192,17 @@ public final class TestCActionBool extends IBaseTest
      * test equal
      */
     @Test
-    public final void equal()
+    public void equal()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_return, l_return, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_return, l_return, new Object() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
 
@@ -212,11 +212,11 @@ public final class TestCActionBool extends IBaseTest
 
         new CEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_list1, l_list2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_list1, l_list2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
         Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
 
 
@@ -227,11 +227,11 @@ public final class TestCActionBool extends IBaseTest
 
         new CEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
         Assert.assertFalse( l_return.get( 3 ).<Boolean>raw() );
     }
 
@@ -239,18 +239,18 @@ public final class TestCActionBool extends IBaseTest
      * test not-equal
      */
     @Test
-    public final void notequal()
+    public void notequal()
     {
         final Object l_object = new Object();
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNotEqual().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_object, l_object, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_object, l_object, new Object() ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
         Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }

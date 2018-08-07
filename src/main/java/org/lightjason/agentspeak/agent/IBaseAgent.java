@@ -47,11 +47,11 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -158,9 +158,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         m_fuzzy = p_configuration.fuzzy();
 
         // initial plans and rules
-        p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );
+        p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.of( i ) ) );
         p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-        if ( Objects.nonNull( p_configuration.initialgoal() ) )
+        if ( !ITrigger.EMPTY.equals( p_configuration.initialgoal() ) )
             m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
     }
 
@@ -173,22 +173,20 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    @SafeVarargs
-    @SuppressWarnings( "varargs" )
-    public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
+    public final IAgent<T> inspect( @Nonnull final IInspector... p_inspector )
     {
-        return Arrays.stream( p_inspector )
-                     .parallel()
-                     .peek( i ->
-                     {
-                         i.inspectcycletime( m_cycletime.get() );
-                         i.inspectsleeping( m_sleepingcycles.get() );
-                         i.inspectbelief( m_beliefbase.stream() );
-                         i.inspectplans( m_plans.values().stream() );
-                         i.inspectrunningplans( m_runningplans.values().stream() );
-                         i.inspectstorage( m_storage.entrySet().stream() );
-                         i.inspectrules( m_rules.values().stream() );
-                     } );
+        Arrays.stream( p_inspector )
+              .parallel()
+              .peek( i -> i.inspectcycletime( m_cycletime.get() ) )
+              .peek( i -> i.inspectsleeping( m_sleepingcycles.get() ) )
+              .peek( i -> i.inspectbelief( m_beliefbase.stream() ) )
+              .peek( i -> i.inspectplans( m_plans.values().stream() ) )
+              .peek( i -> i.inspectrunningplans( m_runningplans.values().stream() ) )
+              .peek( i -> i.inspectstorage( m_storage.entrySet().stream() ) )
+              .peek( i -> i.inspectrules( m_rules.values().stream() ) )
+              .forEach( i -> i.inspectpendingtrigger( m_trigger.values().stream() ) );
+
+        return this;
     }
 
     @Nonnull
@@ -324,14 +322,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
     {
         if ( m_sleepingcycles.get() > 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         // check if literal does not store any variables
         if ( p_trigger.literal().hasVariable() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
-        if ( ( Objects.nonNull( p_immediately ) ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
+        if ( Objects.nonNull( p_immediately ) && p_immediately.length > 0 && p_immediately[0] )
             return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
 
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
@@ -340,7 +338,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             m_trigger.putIfAbsent( p_trigger.hashCode(), p_trigger );
         }
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     @Override
@@ -399,11 +397,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     private Collection<Pair<IPlanStatistic, IContext>> generateexecution( @Nonnull final Stream<ITrigger> p_trigger )
     {
         return p_trigger
-            .filter( Objects::nonNull )
             // get all possible plans
             .flatMap( i -> m_plans.get( i ).stream().map( j -> new ImmutablePair<>( i, j ) ) )
             .parallel()
-            // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
+            // tries to unifier trigger literal and filter of valid unification (returns set of unified variables)
             .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, i.getLeft(), i.getRight().plan().trigger() ) ) )
             // check if unification was possible
             .filter( i -> i.getRight().getLeft() )
@@ -428,7 +425,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
             i.getLeft().plan().trigger().literal().fqnfunctor(),
-            i.getLeft().plan().trigger().literal().unify( i.getRight() )
+            i.getLeft().plan().trigger().literal().allocate( i.getRight() )
         ) );
 
         // execute plan and return values and return execution result
@@ -458,15 +455,15 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // if the sleeping time ends or the agent will wakedup by a hard call,
         // create the trigger and reset the time value
-        if ( ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) ) || p_immediatly )
+        if ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) || p_immediatly )
         {
             (
                 m_sleepingterm.isEmpty()
 
-                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup" ) ) )
+                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup" ) ) )
 
                 : m_sleepingterm.parallelStream()
-                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.from( "wakeup", i ) ) )
+                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup", i ) ) )
 
             ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
 
@@ -474,7 +471,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         }
 
         // if the sleeping time is not infinity decrese the counter
-        if ( ( m_sleepingcycles.get() > 0 ) && ( m_sleepingcycles.get() != Long.MAX_VALUE ) )
+        if ( m_sleepingcycles.get() > 0 && m_sleepingcycles.get() != Long.MAX_VALUE )
             m_sleepingcycles.decrementAndGet();
 
         return m_sleepingcycles.get() <= 0;

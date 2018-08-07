@@ -35,8 +35,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
  * for each tuple the plan object will returned within a list, the
  * action fails on non-existing plan
  *
- * {@code [L1|L2] = agent/getplan( "+!", "myplan(X)", "-!", Literal );}
+ * {@code [L1|L2] = .agent/getplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CGetPlan extends IBuiltinAction
@@ -65,28 +65,27 @@ public final class CGetPlan extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
                 2
-            ).allMatch( i -> CGetPlan.query( ITrigger.EType.from( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
+            ).allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
         );
     }
 
     /**
-     * query tha plan from an agent
+     * query tha plan of an agent
      *
      * @param p_trigger trigger type
      * @param p_literal literal as string or literal object
@@ -101,7 +100,7 @@ public final class CGetPlan extends IBuiltinAction
         try
         {
 
-            l_literal = CCommon.rawvalueAssignableTo( p_literal, ILiteral.class )
+            l_literal = CCommon.isssignableto( p_literal, ILiteral.class )
                         ? p_literal.<ILiteral>raw()
                         : CLiteral.parse( p_literal.<String>raw() );
 
@@ -116,7 +115,7 @@ public final class CGetPlan extends IBuiltinAction
             return false;
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 l_plans.stream().map( IPlanStatistic::plan ).collect( Collectors.toList() )
             )
         );

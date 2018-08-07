@@ -89,6 +89,7 @@ import java.util.stream.Stream;
 
 /**
  * test math functions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMath extends IBaseTest
@@ -211,7 +212,7 @@ public final class TestCActionMath extends IBaseTest
     private static Stream<Object> singlevaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
                                                        final Function<Number, ?>... p_result )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
             p_class,
@@ -234,7 +235,7 @@ public final class TestCActionMath extends IBaseTest
     private static Stream<Object> aggregationvaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
                                                             final Function<Stream<Number>, ?>... p_result )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
             p_class,
@@ -256,7 +257,7 @@ public final class TestCActionMath extends IBaseTest
      */
     @Test
     @UseDataProvider( "aggregationvaluegenerate" )
-    public final void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
+    public void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -284,7 +285,7 @@ public final class TestCActionMath extends IBaseTest
      */
     @Test
     @UseDataProvider( "singlevaluegenerate" )
-    public final void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
+    public void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -307,13 +308,13 @@ public final class TestCActionMath extends IBaseTest
      * test binomial
      */
     @Test
-    public final void binomial()
+    public void binomial()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBinomial().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 49, 30, 6, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 49, 30, 6, 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -326,13 +327,13 @@ public final class TestCActionMath extends IBaseTest
      * test factorial
      */
     @Test
-    public final void factorial()
+    public void factorial()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFactorial().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -348,13 +349,13 @@ public final class TestCActionMath extends IBaseTest
      * test primefactors
      */
     @Test
-    public final void primefactors()
+    public void primefactors()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPrimeFactors().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 8, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 8, 120 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -367,13 +368,13 @@ public final class TestCActionMath extends IBaseTest
      * test sigmoid
      */
     @Test
-    public final void sigmoid()
+    public void sigmoid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSigmoid().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -387,13 +388,13 @@ public final class TestCActionMath extends IBaseTest
      * test stirling
      */
     @Test
-    public final void stirling()
+    public void stirling()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStirling().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3, 2, 8, 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -405,13 +406,13 @@ public final class TestCActionMath extends IBaseTest
      * test power
      */
     @Test
-    public final void pow()
+    public void pow()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -426,13 +427,13 @@ public final class TestCActionMath extends IBaseTest
      * test geometricmean
      */
     @Test
-    public final void geometricmean( )
+    public void geometricmean( )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGeometricMean().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -445,13 +446,13 @@ public final class TestCActionMath extends IBaseTest
      * test harmonicmean
      */
     @Test
-    public final void harmonicmean()
+    public void harmonicmean()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHarmonicMean().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 150, 50 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 150, 50 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -463,7 +464,7 @@ public final class TestCActionMath extends IBaseTest
      * test hypot
      */
     @Test
-    public final void hypot()
+    public void hypot()
     {
         final Random l_random = new Random();
         final List<Double> l_input = IntStream.range( 0, 100 ).mapToDouble( i -> l_random.nextGaussian() ).boxed().collect( Collectors.toList() );
@@ -472,7 +473,7 @@ public final class TestCActionMath extends IBaseTest
 
         new CHypot().execute(
             false, IContext.EMPTYPLAN,
-            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -490,13 +491,13 @@ public final class TestCActionMath extends IBaseTest
      * test max index
      */
     @Test
-    public final void maxIndex()
+    public void maxIndex()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMaxIndex().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -508,13 +509,13 @@ public final class TestCActionMath extends IBaseTest
      * test min index
      */
     @Test
-    public final void minIndex()
+    public void minIndex()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMinIndex().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

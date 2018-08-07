@@ -24,8 +24,9 @@
 package org.lightjason.agentspeak.agent;
 
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -44,31 +45,35 @@ public interface IInspector
     IInspector EMPTY = new IInspector()
     {
         @Override
-        public final void inspectsleeping( @Nonnegative final long p_value )
+        public void inspectsleeping( @Nonnegative final long p_value )
         {}
 
         @Override
-        public final void inspectcycletime( @Nonnegative final long p_value )
+        public void inspectcycletime( @Nonnegative final long p_value )
         {}
 
         @Override
-        public final void inspectbelief( @Nonnull final Stream<ILiteral> p_value )
+        public void inspectbelief( @Nonnull final Stream<ILiteral> p_value )
         {}
 
         @Override
-        public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+        public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
         {}
 
         @Override
-        public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+        public void inspectrules( @Nonnull final Stream<IRule> p_value )
         {}
 
         @Override
-        public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+        public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
         {}
 
         @Override
-        public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+        public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+        {}
+
+        @Override
+        public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
         {}
     };
 
@@ -121,5 +126,12 @@ public interface IInspector
      * @param p_value storage values
      */
     void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value );
+
+    /**
+     * inspect pending trigger
+     *
+     * @param p_value trigger stream
+     */
+    void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value );
 
 }

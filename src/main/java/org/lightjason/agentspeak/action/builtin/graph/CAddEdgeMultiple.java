@@ -38,7 +38,7 @@ import java.util.List;
  * edge identifier, the second the start vertex, and the third
  * the end vertex, the action never fails
  *
- * {@code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 );}
+ * {@code .graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 );}
  */
 public final class CAddEdgeMultiple extends IApplyMultiple
 {
@@ -48,14 +48,14 @@ public final class CAddEdgeMultiple extends IApplyMultiple
     private static final long serialVersionUID = -4562621710701411252L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 3;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw(), p_graph.getDefaultEdgeType() );
     }

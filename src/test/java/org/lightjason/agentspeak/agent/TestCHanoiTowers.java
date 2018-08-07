@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
@@ -37,9 +38,9 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -61,8 +62,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
-
 
 /**
  * abstract test for playing <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">towers of hanoi</a>
@@ -70,6 +69,14 @@ import static org.junit.Assert.assertTrue;
  */
 public final class TestCHanoiTowers extends IBaseTest
 {
+    /**
+     * number of maximum cycles
+     */
+    private static final int MAXIMUMCYCLES = 1000;
+    /**
+     * action fail probability
+     */
+    private static final double FAILPROBABILITY = 0.1;
     /**
      * agent map
      */
@@ -166,7 +173,7 @@ public final class TestCHanoiTowers extends IBaseTest
         catch ( final IOException l_exception )
         {
             l_exception.printStackTrace();
-            assertTrue( "asl could not be read", true );
+            Assert.fail( "asl could not be read" );
         }
         m_agents = Collections.unmodifiableMap( l_agentmap );
     }
@@ -178,24 +185,18 @@ public final class TestCHanoiTowers extends IBaseTest
      */
     private void execute()
     {
-        while ( m_running.get() )
+        int l_cycles = MAXIMUMCYCLES;
+        while ( ( m_running.get() ) && ( l_cycles > 0 ) )
         {
+            l_cycles--;
             if ( PRINTENABLE )
                 System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
-                    .forEach( j ->
-                    {
-                        try
-                        {
-                            j.call();
-                        }
-                        catch ( final Exception l_exception )
-                        {
-                            l_exception.printStackTrace();
-                        }
-                    } );
+                    .forEach( IBaseTest::agentcycle );
         }
+
+        Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
     }
 
 
@@ -260,7 +261,7 @@ public final class TestCHanoiTowers extends IBaseTest
                 Stream.concat(
                     Stream.concat(
                         Stream.of(
-                            new CTowerPush( 0.33 ),
+                            new CTowerPush( FAILPROBABILITY ),
                             new CTowerPop(),
                             new CTowerSize(),
                             new CStop()
@@ -276,7 +277,7 @@ public final class TestCHanoiTowers extends IBaseTest
                 new IVariableBuilder()
                 {
                     @Override
-                    public final Stream<IVariable<?>> apply( final IAgent<?> p_agent, final IInstantiable p_instantiable
+                    public Stream<IVariable<?>> apply( final IAgent<?> p_agent, final IInstantiable p_instantiable
                     )
                     {
                         return Stream.of(
@@ -292,7 +293,7 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Override
         @SuppressWarnings( "unchecked" )
-        public final CAgent generatesingle( final Object... p_data )
+        public CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration, (int) p_data[0] );
         }
@@ -310,24 +311,24 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "generic/print" );
+            return CPath.of( "generic/print" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -343,26 +344,26 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "stop" );
+            return CPath.of( "stop" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             m_running.set( false );
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -379,29 +380,29 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "tower/size" );
+            return CPath.of( "tower/size" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
-            p_return.add( CRawTerm.from( l_tower.size() ) );
-            return CFuzzyValue.from( true );
+            p_return.add( CRawTerm.of( l_tower.size() ) );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -432,41 +433,41 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "tower/push" );
+            return CPath.of( "tower/push" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 2;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
             try
             {
                 l_tower.push( p_argument.get( 1 ).<CSlice>raw() );
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
             }
             catch ( final IllegalStateException l_exception )
             {
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
             }
         }
     }
 
     /**
-     * pops an elements from a tower
+     * pops an elements of a tower
      */
     private final class CTowerPop extends IBaseAction
     {
@@ -477,35 +478,35 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "tower/pop" );
+            return CPath.of( "tower/pop" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
 
             try
             {
-                p_return.add( CRawTerm.from( l_tower.pop() ) );
-                return CFuzzyValue.from( true );
+                p_return.add( CRawTerm.of( l_tower.pop() ) );
+                return CFuzzyValue.of( true );
             }
             catch ( final IllegalStateException l_exception )
             {
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
             }
         }
     }
@@ -559,7 +560,7 @@ public final class TestCHanoiTowers extends IBaseTest
         private static final transient long serialVersionUID = 1361367629042813689L;
 
         @Override
-        public final synchronized CSlice push( final CSlice p_item )
+        public synchronized CSlice push( final CSlice p_item )
         {
             if ( ( this.size() > 0 ) && ( this.peek().size() < p_item.size() ) )
                 throw new IllegalStateException();
@@ -568,7 +569,7 @@ public final class TestCHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final synchronized CSlice pop()
+        public synchronized CSlice pop()
         {
             if ( this.isEmpty() )
                 throw new IllegalStateException();
@@ -577,19 +578,19 @@ public final class TestCHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final synchronized CSlice peek()
+        public synchronized CSlice peek()
         {
             return super.peek();
         }
 
         @Override
-        public final synchronized boolean empty()
+        public synchronized boolean empty()
         {
             return super.empty();
         }
 
         @Override
-        public final synchronized int search( final Object p_object )
+        public synchronized int search( final Object p_object )
         {
             return super.search( p_object );
         }

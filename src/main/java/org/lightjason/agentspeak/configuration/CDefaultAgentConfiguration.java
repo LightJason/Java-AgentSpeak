@@ -32,13 +32,12 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -103,7 +102,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                        @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
-                                       @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier
+                                       @Nonnull final ITrigger p_initialgoal, @Nonnull final IUnifier p_unifier
     )
     {
         this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, IVariableBuilder.EMPTY );
@@ -122,7 +121,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initialbeliefs,
                                        @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                       @Nonnull final ITrigger p_initialgoal, @Nonnull final IUnifier p_unifier,
                                        @Nonnull final IVariableBuilder p_variablebuilder
     )
     {
@@ -130,10 +129,10 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         m_unifier = p_unifier;
         m_variablebuilder = p_variablebuilder;
 
+        m_initialgoal = p_initialgoal;
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
         m_initialbeliefs = Collections.unmodifiableCollection( p_initialbeliefs );
-        m_initialgoal = p_initialgoal != null ? ITrigger.EType.ADDGOAL.builddefault( p_initialgoal ) : null;
 
         LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
     }
@@ -151,7 +150,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         return l_beliefbase;
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public final ITrigger initialgoal()
     {

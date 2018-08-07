@@ -34,7 +34,7 @@ import java.util.Map;
 
 
 /**
- * base class to read data from the restful service
+ * base class to read data of the restful service
  *
  * @note all action which inherits this class uses the system property "http.agent" for defining
  * the http user-agent
@@ -71,7 +71,7 @@ public abstract class IBaseRest extends IBaseWeb
     }
 
     /**
-     * reads a json structure from an url
+     * reads a json structure of an url
      *
      * @param p_url url
      * @param p_class convert class type
@@ -86,7 +86,7 @@ public abstract class IBaseRest extends IBaseWeb
     }
 
     /**
-     * reads a xml structure from an url
+     * reads a xml structure of an url
      *
      * @param p_url url
      * @return map with xml data

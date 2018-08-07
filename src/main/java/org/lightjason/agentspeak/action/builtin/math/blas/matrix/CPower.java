@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * input matrix vlaues and the returns the power value for each
  * input matrix
  *
- * {@code [M1|M2|M3] = blas/matrix/power(3, M1, [M2, [M3]]);}
+ * {@code [M1|M2|M3] = .blas/matrix/power(3, M1, [M2, [M3]]);}
  * @see https://en.wikipedia.org/wiki/Matrix_exponential
  */
 public final class CPower extends IAlgebra
@@ -65,15 +65,15 @@ public final class CPower extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -81,9 +81,9 @@ public final class CPower extends IAlgebra
                   .skip( 1 )
                   .map( ITerm::<DoubleMatrix2D>raw )
                   .map( i -> DENSEALGEBRA.pow( i, l_argument.get( 0 ).<Number>raw().intValue() ) )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

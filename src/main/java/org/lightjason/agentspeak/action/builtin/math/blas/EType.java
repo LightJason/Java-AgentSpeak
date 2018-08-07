@@ -41,6 +41,7 @@ public enum EType
 
     /**
      * set with names
+     * @warning name method cannot replaced by a static call
      */
     private static final Set<String> NAMES = Collections.unmodifiableSet( Arrays.stream( EType.values() ).map( i -> i.name() ).collect( Collectors.toSet() ) );
 
@@ -50,7 +51,7 @@ public enum EType
      * @param p_name name as string
      * @return enum
      */
-    public static EType from( final String p_name )
+    public static EType of( final String p_name )
     {
         return EType.valueOf( p_name.trim().toUpperCase( Locale.ROOT ) );
     }

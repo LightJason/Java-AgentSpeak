@@ -56,7 +56,7 @@ public final class CQueryNative extends IBaseGraphQL
     }
 
     @Override
-    protected final String argumentquery( @Nonnull final ITerm p_argument )
+    protected String argumentquery( @Nonnull final ITerm p_argument )
     {
         return p_argument.raw();
     }

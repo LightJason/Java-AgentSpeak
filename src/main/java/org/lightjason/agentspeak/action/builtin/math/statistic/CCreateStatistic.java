@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
@@ -50,7 +51,7 @@ import java.util.stream.Stream;
  * for a summary or descriptive statistic object, on no arguments
  * a summary statistic object is created, the action never fails
  *
- * {@code [S1|S2] = math/statistic/createstaistic("summary", ["descriptive"]);}
+ * {@code [S1|S2] = .math/statistic/createstaistic("summary", ["descriptive"]);}
  * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public final class CCreateStatistic extends IBuiltinAction
@@ -70,25 +71,25 @@ public final class CCreateStatistic extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
 
         (
             p_argument.size() == 0
             ? Stream.of( EType.SUMMARY )
-            : CCommon.flatten( p_argument ).map( ITerm::<String>raw ).map( EType::from )
-        ).map( i -> i.generate( p_parallel ) )
-         .map( CRawTerm::from ).forEach( p_return::add );
+            : CCommon.flatten( p_argument ).map( ITerm::<String>raw ).map( EType::of )
+        ).map( i -> i.apply( p_parallel ) )
+         .map( CRawTerm::of ).forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
     /**
      * enume statistic type
      */
-    private enum EType
+    private enum EType implements Function<Boolean, StatisticalSummary>
     {
         SUMMARY,
         DESCRIPTIVE;
@@ -100,19 +101,13 @@ public final class CCreateStatistic extends IBuiltinAction
          * @return enum
          */
         @Nonnull
-        public static EType from( @Nonnull final String p_value )
+        public static EType of( @Nonnull final String p_value )
         {
             return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
 
-        /**
-         * returns the statistic object
-         *
-         * @param p_parallel parallel-safe
-         * @return statistic object
-         */
-        @Nonnull
-        public final StatisticalSummary generate( @Nonnull final Boolean p_parallel )
+        @Override
+        public StatisticalSummary apply( final Boolean p_parallel )
         {
             switch ( this )
             {

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * other interpolating functions, the action never fails
  * interpolation
  *
- * {@code [A|B|C] = math/interpolate/multipleinterpolate( 5, InterpolatingFunction1, [InterpolatingFunction2, [InterpolatingFunction3]] );}
+ * {@code [A|B|C] = .math/interpolate/multipleinterpolate( 5, InterpolatingFunction1, [InterpolatingFunction2, [InterpolatingFunction3]] );}
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
 public final class CMultipleInterpolate extends IBuiltinAction
@@ -65,15 +65,15 @@ public final class CMultipleInterpolate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -82,10 +82,10 @@ public final class CMultipleInterpolate extends IBuiltinAction
                    .map( ITerm::<UnivariateFunction>raw )
                    .mapToDouble( i -> i.value( l_arguments.get( 0 ).<Number>raw().doubleValue() ) )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

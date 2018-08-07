@@ -48,7 +48,7 @@ import java.util.List;
  * matrix or vector, for each tuple the action returns \f$ X \f$,
  * the action never fails
  *
- * {@code [R1|R2] = math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
+ * {@code [R1|R2] = .math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
  */
 public final class CSolve extends IAlgebra
 {
@@ -59,30 +59,29 @@ public final class CSolve extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument ),
             2
         )
             .map( i -> DENSEALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**
-     * creates a matrix from the input term
+     * creates a matrix of the input term
      *
      * @param p_term term with vector or matrix
      * @return matrix
@@ -90,7 +89,7 @@ public final class CSolve extends IAlgebra
     @Nonnull
     private static DoubleMatrix2D result( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, DoubleMatrix2D.class ) )
+        if ( CCommon.isssignableto( p_term, DoubleMatrix2D.class ) )
             return p_term.<DoubleMatrix2D>raw();
 
         final DoubleMatrix2D l_result = new DenseDoubleMatrix2D( Long.valueOf( p_term.<DoubleMatrix1D>raw().size() ).intValue(), 1 );

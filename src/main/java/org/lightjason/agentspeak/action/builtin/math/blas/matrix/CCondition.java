@@ -42,7 +42,7 @@ import java.util.List;
  * Calculates for each input matrix the condition number
  * and returns the value, the action never fails
  *
- * {@code [C1|C2] = math/blas/matrix/condition(M1,M2);}
+ * {@code [C1|C2] = .math/blas/matrix/condition(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Condition_number
  */
 public final class CCondition extends IAlgebra
@@ -62,24 +62,24 @@ public final class CCondition extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // first argument must be a term with a matrix object
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( DENSEALGEBRA::cond )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

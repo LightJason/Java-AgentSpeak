@@ -41,15 +41,15 @@
  * test max/min index
  */
 +!testindex <-
-    Distribution = math/statistic/createdistribution( "normal", 20, 100 );
-    RV = math/statistic/randomsample( Distribution, 8 );
+    Distribution = .math/statistic/createdistribution( "normal", 20, 100 );
+    RV = .math/statistic/randomsample( Distribution, 8 );
 
-    MinIdx = math/minindex(RV);
-    MaxIdx = math/maxindex(RV);
+    MinIdx = .math/minindex(RV);
+    MaxIdx = .math/maxindex(RV);
 
-    generic/print("min & max index", MinIdx, MaxIdx, RV);
+    .generic/print("min & max index", MinIdx, MaxIdx, RV);
 
-    test/result( success )
+    .test/result( success )
 .
 
 
@@ -57,27 +57,27 @@
  * test list operation
  */
 +!testlist <-
-    Intersect = collection/list/intersect( [1,2,3,4,5], [3,4,5,6,7], [3,8,9,5] );
+    Intersect = .collection/list/intersect( [1,2,3,4,5], [3,4,5,6,7], [3,8,9,5] );
     [I1|I2]  = Intersect;
-    generic/print("intersect", Intersect, I1, I2);
+    .generic/print("intersect", Intersect, I1, I2);
     RI = I1 == 3 && I2 == 5;
-    test/result( RI, "intersection has been failed" );
+    .test/result( RI, "intersection has been failed" );
 
-    Union = collection/list/union( [1,2], [3,4], [4,5] );
+    Union = .collection/list/union( [1,2], [3,4], [4,5] );
     [U1|U2|U3|U4|U5] = Union;
-    generic/print("union", Union, U1, U2, U3, U4, U5);
+    .generic/print("union", Union, U1, U2, U3, U4, U5);
     RU = U1 == 1 && U2 == 2 && U3 == 3 && U4 == 4 && U5 == 5;
-    test/result( RU, "union has been failed" );
+    .test/result( RU, "union has been failed" );
 
-    SD = collection/list/symmetricdifference( [1,2,3], [3,4] );
+    SD = .collection/list/symmetricdifference( [1,2,3], [3,4] );
     [SD1|SD2|SD3] = SD;
-    generic/print( "symmetric difference", SD, SD1, SD2, SD3);
+    .generic/print( "symmetric difference", SD, SD1, SD2, SD3);
     RSD = SD1 == 1 && SD2 == 2 && SD3 == 4;
-    test/result( RSD, "symmetric difference has been failed" );
+    .test/result( RSD, "symmetric difference has been failed" );
 
-    CP = collection/list/complement( [1,2,3,4,5], [1,2] );
+    CP = .collection/list/complement( [1,2,3,4,5], [1,2] );
     [CP1|CP2|CP3] = CP;
-    generic/print("complement", CP, CP1, CP2, CP3);
+    .generic/print("complement", CP, CP1, CP2, CP3);
     RCP = CP1 == 3 && CP2 == 4 && CP3 == 5;
-    test/result( RCP, "complement has been failed" )
+    .test/result( RCP, "complement has been failed" )
 .

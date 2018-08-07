@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * statistic object and the action fails on a wrong input, only
  * number and statistic objects are allowed
  *
- * {@code math/statistic/addstatisticvalue( StatisticObject1, [1,2,3, StatisticObject2], 1,5,8, StatisticObject3 );}
+ * {@code .math/statistic/addstatisticvalue( StatisticObject1, [1,2,3, StatisticObject2], 1,5,8, StatisticObject3 );}
  */
 public final class CAddStatisticValue extends IBuiltinAction
 {
@@ -67,35 +67,35 @@ public final class CAddStatisticValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final double[] l_values = l_arguments.parallelStream()
-                                           .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                           .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                            .map( ITerm::<Number>raw )
                                            .mapToDouble( Number::doubleValue ).toArray();
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             l_arguments.parallelStream()
-                   .filter( i -> CCommon.rawvalueAssignableTo( i, StatisticalSummary.class ) )
+                   .filter( i -> CCommon.isssignableto( i, StatisticalSummary.class ) )
                    .allMatch( i ->
                    {
 
-                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
                        {
                            Arrays.stream( l_values ).forEach( j -> i.<SummaryStatistics>raw().addValue( j ) );
                            return true;
                        }
 
-                       if ( CCommon.rawvalueAssignableTo( i, DescriptiveStatistics.class ) )
+                       if ( CCommon.isssignableto( i, DescriptiveStatistics.class ) )
                        {
                            Arrays.stream( l_values ).forEach( j -> i.<DescriptiveStatistics>raw().addValue( j ) );
                            return true;

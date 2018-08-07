@@ -37,7 +37,7 @@ import java.util.List;
  * graph, the first argument is the graph, all other arguments are vertices,
  * the action never fails
  *
- * {@code [C1|C2] = graph/neighborscountmultiple( Graph, Vertex1, Vertex2 );}
+ * {@code [C1|C2] = .graph/neighborscountmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CNeighborsCountMultiple extends IApplyMultiple
 {
@@ -47,17 +47,17 @@ public final class CNeighborsCountMultiple extends IApplyMultiple
     private static final long serialVersionUID = -6982807420722184024L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) p_graph.getNeighborCount( p_window.get( 0 ).raw() )
             )
         );

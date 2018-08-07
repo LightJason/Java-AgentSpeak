@@ -40,7 +40,7 @@ import java.util.List;
  * The actions returns for each argument the data type
  * as a string name, the action never fails
  *
- * {@code [T1|T2] = generic/type/type( A, B );}
+ * {@code [T1|T2] = .generic/type/type( A, B );}
  */
 public final class CType extends IBuiltinAction
 {
@@ -59,18 +59,17 @@ public final class CType extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::from ).forEach(  p_return::add );
-        return CFuzzyValue.from( true );
+        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::of ).forEach( p_return::add );
+        return CFuzzyValue.of( true );
     }
 }

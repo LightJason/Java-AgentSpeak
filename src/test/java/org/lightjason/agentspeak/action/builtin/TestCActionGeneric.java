@@ -53,11 +53,11 @@ public final class TestCActionGeneric extends IBaseTest
      * test throw action
      */
     @Test( expected = CRuntimeException.class )
-    public final void throwparameter()
+    public void throwparameter()
     {
         new CThrow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( true, "test message" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( true, "test message" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
     }
@@ -67,11 +67,11 @@ public final class TestCActionGeneric extends IBaseTest
      * test throw action
      */
     @Test( expected = CRuntimeException.class )
-    public final void throwwithoutparameter()
+    public void throwwithoutparameter()
     {
         new CThrow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( true ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
     }
@@ -81,11 +81,11 @@ public final class TestCActionGeneric extends IBaseTest
      * test throw without throwing
      */
     @Test
-    public final void thrownot()
+    public void thrownot()
     {
         new CThrow().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( false, "this should not be thrown" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( false, "this should not be thrown" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
     }
@@ -97,17 +97,17 @@ public final class TestCActionGeneric extends IBaseTest
      * @throws Exception is thrown on encoding errors
      */
     @Test
-    public final void print() throws Exception
+    public void print() throws Exception
     {
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
         new CPrint( () -> new PrintStream( l_output, false, "utf-8" ), "-" ).execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_output.toString( "utf-8" ), "foobar-1234-true\n" );
+        Assert.assertEquals( "foobar-1234-true\n", l_output.toString( "utf-8" ) );
     }
 
     /**
@@ -116,7 +116,7 @@ public final class TestCActionGeneric extends IBaseTest
      * @throws Exception is thrown on encoding errors
      */
     @Test
-    public final void printformatter() throws Exception
+    public void printformatter() throws Exception
     {
         final CPrint.IFormatter<?> l_format1 = new CStringFormatter();
         final CPrint.IFormatter<?> l_format2 = new CBooleanFormatter();
@@ -130,20 +130,22 @@ public final class TestCActionGeneric extends IBaseTest
         l_print.formatter().add( l_format1 );
         l_print.formatter().add( l_format2 );
 
-        l_print.execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList()
+        Assert.assertTrue(
+            l_print.execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_output.toString( "utf-8" ), "FOOBAR-1234-yes\n" );
+        Assert.assertEquals( "FOOBAR-1234-yes\n", l_output.toString( "utf-8" ) );
     }
 
     /**
      * test single uuid
      */
     @Test
-    public final void uuid()
+    public void uuid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -153,8 +155,8 @@ public final class TestCActionGeneric extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), String.class );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( String.class, l_return.get( 0 ).raw().getClass() );
         Assert.assertTrue( !l_return.get( 0 ).<String>raw().isEmpty() );
     }
 

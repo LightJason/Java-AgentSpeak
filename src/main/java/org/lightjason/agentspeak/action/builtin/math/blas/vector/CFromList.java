@@ -40,14 +40,14 @@ import java.util.List;
 
 
 /**
- * creates a dense- or sparse-vector from a list.
+ * creates a dense- or sparse-vector of a list.
  * All input arguments will be converted to a
  * dense or sparse vector, so the arguments must be
  * lists of numbers, the last optional argument can be a string
  * with "dense | sparse" to create dense or sparse structures,
  * the action never fails
  *
- * {@code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
+ * {@code [V1|V2] = .math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
  */
 public final class CFromList extends IBuiltinAction
 {
@@ -66,22 +66,22 @@ public final class CFromList extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final int l_limit;
         final EType l_type;
-        if ( ( CCommon.rawvalueAssignableTo( p_argument.get( p_argument.size() - 1 ), String.class ) )
-             && ( EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) ) )
+        if ( CCommon.isssignableto( p_argument.get( p_argument.size() - 1 ), String.class )
+             && EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) )
         {
-            l_type = EType.from( p_argument.get( p_argument.size() - 1 ).<String>raw() );
+            l_type = EType.of( p_argument.get( p_argument.size() - 1 ).<String>raw() );
             l_limit = p_argument.size() - 1;
         }
         else
@@ -91,7 +91,7 @@ public final class CFromList extends IBuiltinAction
         }
 
 
-        // create vectors from lists
+        // create vectors of lists
         p_argument.stream()
                   .limit( l_limit )
                   .map( ITerm::<List<Number>>raw )
@@ -106,10 +106,10 @@ public final class CFromList extends IBuiltinAction
                               return new DenseDoubleMatrix1D( i );
                       }
                   } )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

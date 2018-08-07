@@ -29,8 +29,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -43,7 +43,7 @@ import java.util.List;
  * are plans to the plan-base of the current
  * agent, the action never fails
  *
- * {@code agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] );}
+ * {@code .agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] );}
  */
 public final class CAddPlan extends IBuiltinAction
 {
@@ -68,9 +68,9 @@ public final class CAddPlan extends IBuiltinAction
         CCommon.flatten( p_argument )
                .parallel()
                .map( ITerm::<IPlan>raw )
-               .map( CPlanStatistic::from )
+               .map( CPlanStatistic::of )
                .forEach( i -> p_context.agent().plans().put( i.plan().trigger(), i ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

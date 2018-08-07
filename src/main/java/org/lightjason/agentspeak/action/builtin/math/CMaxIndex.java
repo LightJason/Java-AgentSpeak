@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
  * returns the index within the unflatten argument list, the
  * action never fails
  *
- * {@code MaxIndex = math/maxindex( 5, 6, [7,8, [1,2,3]] );}
+ * {@code MaxIndex = .math/maxindex( 5, 6, [7,8, [1,2,3]] );}
  */
 public final class CMaxIndex extends IBuiltinAction
 {
@@ -56,15 +56,15 @@ public final class CMaxIndex extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_list = CCommon.flatten( p_argument )
                                            .map( ITerm::<Number>raw )
@@ -73,7 +73,7 @@ public final class CMaxIndex extends IBuiltinAction
                                            .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) IntStream.range( 0, l_list.size() )
                                 .parallel()
                                 .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? j : i )
@@ -81,6 +81,6 @@ public final class CMaxIndex extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

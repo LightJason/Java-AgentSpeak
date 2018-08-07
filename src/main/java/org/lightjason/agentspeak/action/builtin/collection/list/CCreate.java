@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
  * is the argument empty an empty-list object will be returned, the action fails never
  *
  * {@code
-    L1 = collection/list/create("a", 1, ["b", 2]);
-    L2 = collection/list/create();
+    L1 = .collection/list/create("a", 1, ["b", 2]);
+    L2 = .collection/list/create();
  * }
  */
 public final class CCreate extends IBuiltinAction
@@ -66,20 +66,20 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_list = p_argument.isEmpty()
                                ? new ArrayList<>()
                                : CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             p_parallel
             ? Collections.synchronizedList( l_list )
             : l_list
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

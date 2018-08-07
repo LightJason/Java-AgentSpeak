@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
  * other arguments which must be a matrix
  *
  * {@code
-    math/blas/matrix/assign(2, Matrix1, [Matrix2, Matrix3] );
-    math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
+    .math/blas/matrix/assign(2, Matrix1, [Matrix2, Matrix3] );
+    .math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
  * }
  *
  */
@@ -65,33 +65,32 @@ public final class CAssign extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             l_arguments.stream()
                        .skip( 1 )
                        .parallel()
                        .allMatch( i ->
                        {
 
-                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Number.class ) )
+                           if ( CCommon.isssignableto( l_arguments.get( 0 ), Number.class ) )
                            {
                                i.<DoubleMatrix2D>raw().assign( l_arguments.get( 0 ).<Number>raw().doubleValue() );
                                return true;
                            }
 
-                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), DoubleMatrix2D.class ) )
+                           if ( CCommon.isssignableto( l_arguments.get( 0 ), DoubleMatrix2D.class ) )
                            {
                                i.<DoubleMatrix2D>raw().assign( l_arguments.get( 0 ).<DoubleMatrix2D>raw() );
                                return true;

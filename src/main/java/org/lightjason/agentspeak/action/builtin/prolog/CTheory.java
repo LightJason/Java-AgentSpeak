@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * The action creates for each argument an item within the theory
  * and returns the theory input. The action does not fail
  *
- * {@code T = prolog/createtheory( "dosomethin(X) :- X is 5" );}
+ * {@code T = .prolog/createtheory( "dosomethin(X) :- X is 5" );}
  */
 public final class CTheory extends IBuiltinAction
 {
@@ -56,11 +56,11 @@ public final class CTheory extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 theory(
                     CCommon.flatten( p_argument )
                            .filter( i -> Objects.nonNull( i.raw() ) )
@@ -71,7 +71,7 @@ public final class CTheory extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

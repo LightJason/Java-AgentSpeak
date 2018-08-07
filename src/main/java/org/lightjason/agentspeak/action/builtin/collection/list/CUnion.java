@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * Creates the union of all arguemnts with removing nested
  * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$, the action fails never
  *
- * {@code U = collection/list/union( L, [1,2], [3,4,[5,6]];}
+ * {@code U = .collection/list/union( L, [1,2], [3,4,[5,6]];}
  */
 public final class CUnion extends IBuiltinAction
 {
@@ -64,27 +64,27 @@ public final class CUnion extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments must be lists
         final List<Object> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
         l_result.sort( Comparator.comparing( Object::hashCode ) );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

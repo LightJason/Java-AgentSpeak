@@ -41,7 +41,7 @@ import java.util.List;
  * Calculate the exponential function \f$ e^{x_i} \f$
  * for each argument, the action never fails
  *
- * {@code [X|Y] = math/exp(1,8);}
+ * {@code [X|Y] = .math/exp(1,8);}
  * @see https://en.wikipedia.org/wiki/Exponential_function
  */
 public final class CExp extends IBuiltinAction
@@ -53,25 +53,25 @@ public final class CExp extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::exp )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

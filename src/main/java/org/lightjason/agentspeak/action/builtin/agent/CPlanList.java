@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * the a string (trigger definition) and the
  * plan literal, the action never fails
  *
- * {@code L = agent/planlist();}
+ * {@code L = .agent/planlist();}
  */
 public final class CPlanList extends IBuiltinAction
 {
@@ -54,9 +54,8 @@ public final class CPlanList extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_list = p_context.agent()
                  .plans()
@@ -69,13 +68,13 @@ public final class CPlanList extends IBuiltinAction
                  .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_list )
                 : l_list
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

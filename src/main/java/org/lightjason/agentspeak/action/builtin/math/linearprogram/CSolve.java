@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -65,7 +66,7 @@ import java.util.Objects;
  * the number of all referenced \f$ x_i \f$ points and after
  * that all arguments the values of \f$ x_i \f$
  *
- * {@code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" );}
+ * {@code [Value|CountXi|Xi] = .math/linearprogram/solve( LP, "maximize", "non-negative" );}
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -86,15 +87,15 @@ public final class CSolve extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // first argument is the LP pair object, second argument is the goal-type (maximize / minimize),
         // third & fourth argument can be the number of iterations or string with "non-negative" variables
@@ -107,11 +108,11 @@ public final class CSolve extends IBuiltinAction
         p_argument.subList( 1, p_argument.size() ).stream()
                   .map( i ->
                   {
-                      if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
+                      if ( CCommon.isssignableto( i, Number.class ) )
                           return new MaxIter( i.raw() );
 
-                      if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                          switch ( i.<String>raw().trim().toLowerCase() )
+                      if ( CCommon.isssignableto( i, String.class ) )
+                          switch ( i.<String>raw().trim().toLowerCase( Locale.ROOT ) )
                           {
                               case "non-negative":
                                   return new NonNegativeConstraint( true );
@@ -133,11 +134,11 @@ public final class CSolve extends IBuiltinAction
         final SimplexSolver l_lp = new SimplexSolver();
         final PointValuePair l_result = l_lp.optimize( l_settings.toArray( new OptimizationData[l_settings.size()] ) );
 
-        p_return.add( CRawTerm.from( l_result.getValue() ) );
-        p_return.add( CRawTerm.from( l_result.getPoint().length ) );
-        Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::from ).forEach( p_return::add );
+        p_return.add( CRawTerm.of( l_result.getValue() ) );
+        p_return.add( CRawTerm.of( l_result.getPoint().length ) );
+        Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::of ).forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

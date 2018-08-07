@@ -53,25 +53,24 @@ public interface IExpression extends IExecution
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            p_return.add( CRawTerm.from( true ) );
-            return CFuzzyValue.from( true );
+            p_return.add( CRawTerm.of( true ) );
+            return CFuzzyValue.of( true );
         }
 
         @Nonnull
         @Override
-        public final Stream<IVariable<?>> variables()
+        public Stream<IVariable<?>> variables()
         {
             return Stream.empty();
         }
 
         @Override
-        public final String toString()
+        public String toString()
         {
-            return "true";
+            return "";
         }
     };
 

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * All arguments are lists and the action returns the
  * intersection \f$ \cap M_i \forall i \in \mathbb{N} \f$, the action fails never
  *
- * {@code I = collection/list/intersect( [1,2,[3,4]], [3,4,[8,9]], [1,2,3,5] );}
+ * {@code I = .collection/list/intersect( [1,2,[3,4]], [3,4,[8,9]], [1,2,3,5] );}
  */
 public final class CIntersect extends IBuiltinAction
 {
@@ -65,15 +65,15 @@ public final class CIntersect extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
         final List<Object> l_result = CCommon.flatten( p_argument )
@@ -81,21 +81,15 @@ public final class CIntersect extends IBuiltinAction
                                         .map( ITerm::raw )
                                         .distinct()
                                         .filter(
-                                            i -> p_argument.parallelStream()
-                                                           .allMatch( j -> j.<Collection<ITerm>>raw()
-                                                               .parallelStream()
-                                                               .map( ITerm::raw )
-                                                               .collect( Collectors.toList() )
-                                                               .contains( i )
-                                                           )
+                                            i -> p_argument.parallelStream().allMatch( j -> j.<Collection<?>>raw().contains( i ) )
                                         ).collect( Collectors.toList() );
         l_result.sort( Comparator.comparing( Object::hashCode ) );
 
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

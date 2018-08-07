@@ -51,22 +51,22 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple creating
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<AbstractMap.Entry<String, ?>>raw().getKey(), "abcd" );
-        Assert.assertEquals( l_return.get( 0 ).<AbstractMap.Entry<?, Number>>raw().getValue(), 123 );
+        Assert.assertEquals( "abcd", l_return.get( 0 ).<AbstractMap.Entry<String, ?>>raw().getKey() );
+        Assert.assertEquals( 123, l_return.get( 0 ).<AbstractMap.Entry<?, Number>>raw().getValue() );
 
-        Assert.assertEquals( l_return.get( 1 ).<AbstractMap.Entry<String, ?>>raw().getKey(), "foobar" );
+        Assert.assertEquals( "foobar", l_return.get( 1 ).<AbstractMap.Entry<String, ?>>raw().getKey() );
         Assert.assertTrue( l_return.get( 1 ).<AbstractMap.Entry<?, Boolean>>raw().getValue() );
     }
 
@@ -74,7 +74,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple creating error
      */
     @Test
-    public final void createerror()
+    public void createerror()
     {
         Assert.assertFalse(
             new CCreate().execute(
@@ -90,17 +90,17 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple set
      */
     @Test
-    public final void set()
+    public void set()
     {
         final AbstractMap.Entry<String, String> l_data = new AbstractMap.SimpleEntry<>( "foo", "bar" );
 
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "blubblub", l_data ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "blubblub", l_data ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_data.getValue(), "blubblub" );
+        Assert.assertEquals( "blubblub", l_data.getValue() );
     }
 
 
@@ -108,23 +108,23 @@ public final class TestCActionCollectionTuple extends IBaseTest
      * test tuple flat
      */
     @Test
-    public final void flat()
+    public void flat()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFlat().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
 
-        Assert.assertEquals( l_return.get( 0 ).raw(), "foo" );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "bar" );
+        Assert.assertEquals( "foo", l_return.get( 0 ).raw() );
+        Assert.assertEquals( "bar", l_return.get( 1 ).raw() );
 
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 2 );
+        Assert.assertEquals( 1, l_return.get( 2 ).<Number>raw() );
+        Assert.assertEquals( 2, l_return.get( 3 ).<Number>raw() );
     }
 
 }

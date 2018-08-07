@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 
 
 /**
- * creates from a graph the adjacency matrix.
+ * creates of a graph the adjacency matrix.
  * The action converts graphs into a matrix,
  * if a string is put on the argument list
  * it must be "dense|sparse" to define the resulting
@@ -68,10 +68,10 @@ import java.util.stream.Stream;
  * non-existing edges have got on default zero costs with 1
  *
  * {@code
-    [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
-    [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
-    [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, 1, Graph2 );
-    [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2 );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, 1, Graph2 );
+    [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
  * }
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
@@ -84,34 +84,33 @@ public final class CAdjacencyMatrix extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // --- filter parameters ---
         final EType l_type = CCommon.flatten( p_argument )
-                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .filter( i -> CCommon.isssignableto( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
-                                    .map( EType::from )
+                                    .map( EType::of )
                                     .orElse( EType.SPARSE );
 
         final double l_defaultcost = CCommon.flatten( p_argument )
-                                            .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                            .filter( i -> CCommon.isssignableto( i, Number.class ) )
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
                                             .orElse( 1D );
 
         final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
-                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                .filter( i -> CCommon.isssignableto( i, Map.class ) )
                                                 .findFirst()
                                                 .map( ITerm::<Map<?, Number>>raw )
                                                 .orElseGet( Collections::emptyMap );
@@ -119,16 +118,16 @@ public final class CAdjacencyMatrix extends IBuiltinAction
 
         // --- filter graphs ---
         CCommon.flatten( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+               .filter( i -> CCommon.isssignableto( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( i -> CAdjacencyMatrix.apply( i, l_costmap, l_defaultcost, l_type ) )
                .forEach( i ->
                {
-                   p_return.add( CRawTerm.from( i.getLeft() ) );
-                   p_return.add( CRawTerm.from( i.getRight() ) );
+                   p_return.add( CRawTerm.of( i.getLeft() ) );
+                   p_return.add( CRawTerm.of( i.getRight() ) );
                } );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**
@@ -146,7 +145,7 @@ public final class CAdjacencyMatrix extends IBuiltinAction
         // index map for matching vertex to index position within matrix
         final Map<Object, Integer> l_index = new HashMap<>();
 
-        // extract vertices from edges
+        // extract vertices of edges
         p_graph.getEdges()
             .stream()
             .map( p_graph::getEndpoints )

@@ -42,7 +42,7 @@ import java.util.List;
  * arguments are index values, so the action returns
  * the elements, the action fails never
  *
- * {@code [V1|V2] = collection/list/get( L, 2, 7 );}
+ * {@code [V1|V2] = .collection/list/get( L, 2, 7 );}
  */
 public final class CGet extends IBuiltinAction
 {
@@ -62,25 +62,25 @@ public final class CGet extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_list = p_argument.get( 0 ).<List<?>>raw();
 
         CCommon.flatten( p_argument.subList( 1, p_argument.size() ) )
                    .map( i -> i.<Number>raw().intValue() )
                    .map( l_list::get )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

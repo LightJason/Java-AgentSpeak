@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for each tuple of vertices the edge of a single
  * graph instance, the action never fails
  *
- * {@code [E1|E2|E3] = graph/findedgesingle( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
+ * {@code [E1|E2|E3] = .graph/findedgesingle( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */
 public final class CFindEdgeMultiple extends IApplyMultiple
 {
@@ -46,18 +46,18 @@ public final class CFindEdgeMultiple extends IApplyMultiple
     private static final long serialVersionUID = -40723204307254306L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
     )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.findEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

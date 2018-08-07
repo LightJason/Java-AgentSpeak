@@ -42,7 +42,7 @@ import java.util.List;
  * Calculates for each input matrix the sum and returns
  * the value, the action never fails
  *
- * {@code [S1|S2] = math/blas/matrix/sum(M1,M2);}
+ * {@code [S1|S2] = .math/blas/matrix/sum(M1,M2);}
  */
 public final class CSum extends IBuiltinAction
 {
@@ -61,23 +61,23 @@ public final class CSum extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( DoubleMatrix2D::zSum )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * The action sets the value within the first argument
  * in each tuple argument, the action never fails
  *
- * {@code collection/tuple/set( "value", T1, T2, T3 );}
+ * {@code .collection/tuple/set( "value", T1, T2, T3 );}
  */
 public final class CSet extends IBuiltinAction
 {
@@ -60,9 +60,8 @@ public final class CSet extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -71,6 +70,6 @@ public final class CSet extends IBuiltinAction
                .map( ITerm::<AbstractMap.Entry<Object, Object>>raw )
                .forEach( i -> i.setValue( l_arguments.get( 0 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

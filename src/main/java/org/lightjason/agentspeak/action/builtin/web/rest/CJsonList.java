@@ -64,9 +64,8 @@ public final class CJsonList extends IBaseRest
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         try
         {
@@ -77,22 +76,22 @@ public final class CJsonList extends IBaseRest
 
             if ( p_argument.size() == 2 )
                 l_data.stream()
-                      .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
+                      .map( i -> CLiteral.of( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
                       .forEach( p_return::add );
             else
                 p_return.add(
                     IBaseRest.baseliteral(
                         p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
                         l_data.stream()
-                              .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
+                              .map( i -> CLiteral.of( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
                     )
                 );
 
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
         catch ( final IOException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     }
 

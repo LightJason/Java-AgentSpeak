@@ -67,15 +67,15 @@ public final class CRandomSample extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -90,7 +90,7 @@ public final class CRandomSample extends IBuiltinAction
             .mapToObj( i -> CRandomSample.samples( l_arguments.get( 0 ).<AbstractRealDistribution>raw(), i, p_parallel ) )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**
@@ -105,10 +105,10 @@ public final class CRandomSample extends IBuiltinAction
     private static ITerm samples( @Nonnull final AbstractRealDistribution p_distribution, final int p_size, final boolean p_parallel )
     {
         if ( p_size < 2 )
-            return CRawTerm.from( p_distribution.sample() );
+            return CRawTerm.of( p_distribution.sample() );
 
         final List<Double> l_list = Arrays.stream( p_distribution.sample( p_size ) ).boxed().collect( Collectors.toList() );
-        return CRawTerm.from( p_parallel ? Collections.synchronizedList( l_list ) : l_list );
+        return CRawTerm.of( p_parallel ? Collections.synchronizedList( l_list ) : l_list );
 
     }
 

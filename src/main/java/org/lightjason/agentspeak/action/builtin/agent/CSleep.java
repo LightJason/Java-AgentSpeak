@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * optional argument can be a sleeping
  * time (in agent cycles)
  *
- * {@code agent/sleep(3);}
+ * {@code .agent/sleep(3);}
  */
 public final class CSleep extends IBuiltinAction
 {
@@ -52,11 +52,10 @@ public final class CSleep extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             p_context.agent().sleep(
 
                 p_argument.size() > 0

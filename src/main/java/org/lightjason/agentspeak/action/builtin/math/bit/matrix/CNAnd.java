@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  * all other bit matrices, so \f$ m_i = m_i \text{ && not } m_1 \f$
  * is performed, the action never fails
  *
- * {@code math/bit/matrix/nand( Matrix, Matrix1, Matrix2 );}
+ * {@code .math/bit/matrix/nand( Matrix, Matrix1, Matrix2 );}
  */
 public final class CNAnd extends IOperator
 {
@@ -45,7 +45,7 @@ public final class CNAnd extends IOperator
     private static final long serialVersionUID = -7249602421941027908L;
 
     @Override
-    protected final void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
+    protected void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
     {
         p_target.andNot( p_source );
     }

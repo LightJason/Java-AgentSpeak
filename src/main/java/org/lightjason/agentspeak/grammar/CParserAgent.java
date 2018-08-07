@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
@@ -39,36 +40,42 @@ public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer
      * set with actions
      */
     private final Set<IAction> m_actions;
+    /**
+     * lambda streaming
+     */
+    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
 
     /**
      * ctor
      *
      * @param p_actions agent actions
+     * @param p_lambdastreaming lambda streaming structure
      * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserAgent( @Nonnull final Set<IAction> p_actions ) throws NoSuchMethodException
+    public CParserAgent( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;
+        m_lambdastreaming = p_lambdastreaming;
     }
 
     @Nonnull
     @Override
-    public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
+    public IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions );
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, m_lambdastreaming );
         l_visitor.visit( this.parser( p_stream ).agent() );
         return l_visitor;
     }
 
     @Override
-    protected final Class<AgentLexer> lexerclass()
+    protected Class<AgentLexer> lexerclass()
     {
         return AgentLexer.class;
     }
 
     @Override
-    protected final Class<AgentParser> parserclass()
+    protected Class<AgentParser> parserclass()
     {
         return AgentParser.class;
     }

@@ -39,12 +39,17 @@ fibonacci(X, R)
 .
 
 ackermann(N, M, R)
-    :- N == 0; M > 0; R = M+1
-    :- M == 0; N > 0; TN = N-1; $ackermann(TN, 1, RA); R = RA
-    :- N > 0; M > 0; TN = N-1; TM = M-1; $ackermann(N, TM, RI); $ackermann(TN, RI, RO); R = RO
+    :- N == 0; R = M+1
+    :- M == 0; TN = N - 1; $ackermann(TN, 1, R)
+    :- TM = M - 1; $ackermann(N, TM, RI); TN = N - 1; $ackermann(TN, RI, R)
 .
 
-myfunction(X) :- generic/print("my logical rule", X).
+factorial(N,R)
+    :- N == 1; R = 1
+    :- N--; $factorial(N,O); R = R * O
+.
+
+myfunction(X) :- .generic/print("my logical rule", X).
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -56,8 +61,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 +!test <-
     !testdirectcall;
     !testruledirect;
-    !testrulevariable;
-    !testrulemultiplearguments
+    !testrulevariable
 .
 
 
@@ -66,7 +70,7 @@ myfunction(X) :- generic/print("my logical rule", X).
  */
 +!testdirectcall <-
     $myfunction("fooooooo");
-    test/result( success )
+    .test/result( success )
 .
 
 
@@ -76,9 +80,8 @@ myfunction(X) :- generic/print("my logical rule", X).
 +!testruledirect <-
     $fibonacci(8, FIB);
     R = FIB == 21.0;
-    test/result( R, "rule direct call has been failed" );
-
-    generic/print("rule execution (fibonacci)", FIB )
+    .test/result( R, "rule direct call has been failed" );
+    .generic/print("rule execution (fibonacci)", FIB )
 .
 
 
@@ -87,21 +90,8 @@ myfunction(X) :- generic/print("my logical rule", X).
  */
 +!testrulevariable <-
     RULE = "fibonacci";
-    $RULE(8,FIB);
+    $.RULE(8,FIB);
     R = FIB == 21.0;
-    test/result( R, "rule variable call has been failed" );
-
-    generic/print("rule execution (fibonacci)", FIB )
-.
-
-
-/**
- * test multiple rule arguments
- */
-+!testrulemultiplearguments <-
-    $ackermann(3, 3, ACK);
-    R = ACK == 61;
-    test/result( R, "rule multiple arguments has been failed" );
-
-    generic/print("rule execution (ackermann)", ACK)
+    .test/result( R, "rule variable call has been failed" );
+    .generic/print("rule execution (fibonacci)", FIB )
 .

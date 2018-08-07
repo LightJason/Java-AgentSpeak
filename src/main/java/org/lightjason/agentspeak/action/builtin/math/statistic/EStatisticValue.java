@@ -58,7 +58,7 @@ public enum EStatisticValue
      * @return enum
      */
     @Nonnull
-    public static EStatisticValue from( @Nonnull final String p_value )
+    public static EStatisticValue of( @Nonnull final String p_value )
     {
         return EStatisticValue.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }
@@ -69,7 +69,7 @@ public enum EStatisticValue
      * @param p_statistic statistic object
      * @return statistic value
      */
-    public final double value( @Nonnull final SummaryStatistics p_statistic )
+    public double value( @Nonnull final SummaryStatistics p_statistic )
     {
         switch ( this )
         {
@@ -123,7 +123,7 @@ public enum EStatisticValue
      * @param p_statistic statistic object
      * @return statistic value
      */
-    public final double value( @Nonnull final DescriptiveStatistics p_statistic )
+    public double value( @Nonnull final DescriptiveStatistics p_statistic )
     {
         switch ( this )
         {

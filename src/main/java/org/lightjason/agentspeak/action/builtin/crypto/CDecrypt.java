@@ -50,7 +50,7 @@ import java.util.List;
  * all other arguments are datasets for encrypting, the actions returns all
  * drcrypted datasets back and fails if a dataset cannot be decrypted
  *
- * {@code [DecyptData1 | DecyptData2 | DecyptData3] = crypto/decrypt( Key, Dataset1, Dataset2, Dataset3 );}
+ * {@code [DecyptData1 | DecyptData2 | DecyptData3] = .crypto/decrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
 public final class CDecrypt extends IBuiltinAction
 {
@@ -61,29 +61,28 @@ public final class CDecrypt extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Key l_key = p_argument.get( 0 ).raw();
-        final EAlgorithm l_algorithm;
+        final ECryptAlgorithm l_algorithm;
         try
         {
-            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+            l_algorithm = ECryptAlgorithm.of( l_key.getAlgorithm() );
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
                    CCommon.flatten( p_argument.stream().skip( 1 ) )
                           .map( ITerm::<String>raw )
                           .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
@@ -99,13 +98,13 @@ public final class CDecrypt extends IBuiltinAction
      * @param p_return return argument
      * @return successful execution
      */
-    private static boolean decrypt( @Nonnull final EAlgorithm p_algorithm, @Nonnull final Key p_key,
+    private static boolean decrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
                                     @Nonnull final String p_dataset, @Nonnull final List<ITerm> p_return )
     {
         try
         {
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     SerializationUtils.deserialize(
                         p_algorithm.getDecryptCipher( p_key ).doFinal(
                             Base64.getDecoder().decode( p_dataset )

@@ -28,11 +28,10 @@ import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 
@@ -55,9 +54,9 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
     /**
      * returns the initial goal
      *
-     * @return initial goal literal
+     * @return initial goal
      */
-    @Nullable
+    @Nonnull
     ITrigger initialgoal();
 
     /**

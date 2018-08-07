@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * The action creates lists of each input matrix,
  * the action never fails
  *
- * {@code [L1|L2|L3] = math/blas/matrix/tolist( Matrix1, [Matrix2, Matrix3] );}
+ * {@code [L1|L2|L3] = .math/blas/matrix/tolist( Matrix1, [Matrix2, Matrix3] );}
  */
 public final class CToList extends IBuiltinAction
 {
@@ -64,23 +64,23 @@ public final class CToList extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( i -> Arrays.stream( i.toArray() ).flatMap( j -> Arrays.stream( j ).boxed() ).collect( Collectors.toList() ) )
                .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

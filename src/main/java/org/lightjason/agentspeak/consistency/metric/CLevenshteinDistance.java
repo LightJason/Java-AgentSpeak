@@ -70,12 +70,12 @@ public final class CLevenshteinDistance implements IMetric
     {
         m_insertweight = p_insertweight;
         m_replaceweight = p_replaceweight;
-        m_deleteweight = p_replaceweight;
+        m_deleteweight = p_deleteweight;
     }
 
 
     @Override
-    public final Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
+    public Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
         return CCommon.levenshtein(
             p_first.map( Object::toString ).collect( Collectors.joining( "" ) ),

@@ -70,6 +70,7 @@ import java.util.stream.Stream;
 
 /**
  * test for bit vector actions
+ * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBitVector extends IBaseTest
@@ -90,7 +91,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         VECTOR1.put( 0, true );
         VECTOR1.put( 1, false );
@@ -150,7 +151,7 @@ public final class TestCActionMathBitVector extends IBaseTest
     @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
+        final List<ITerm> l_input = p_input.map( CRawTerm::of ).collect( Collectors.toList() );
 
         return StreamUtils.zip(
                 p_classes,
@@ -171,7 +172,7 @@ public final class TestCActionMathBitVector extends IBaseTest
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    public void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -193,13 +194,13 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -212,13 +213,13 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test boolean value
      */
     @Test
-    public final void boolValue()
+    public void boolValue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBoolValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -229,11 +230,11 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test set
      */
     @Test
-    public final void set()
+    public void set()
     {
         new CSet().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -245,11 +246,11 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test clear
      */
     @Test
-    public final void clear()
+    public void clear()
     {
         new CClear().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, 0 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -260,13 +261,13 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test range
      */
     @Test
-    public final void range()
+    public void range()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRange().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -278,13 +279,13 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test numericvalue
      */
     @Test
-    public final void numericvalue()
+    public void numericvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNumericValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -295,13 +296,13 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test toList
      */
     @Test
-    public final void tolist()
+    public void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -314,13 +315,13 @@ public final class TestCActionMathBitVector extends IBaseTest
      * test toblas
      */
     @Test
-    public final void toblas()
+    public void toblas()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToBlas().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 

@@ -120,21 +120,21 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final DescriptiveStatistics statistic()
+    public DescriptiveStatistics statistic()
     {
         return m_statistic;
     }
 
     @Nonnull
     @Override
-    public final IConsistency add( @Nonnull final IAgent<?> p_object )
+    public IConsistency add( @Nonnull final IAgent<?> p_object )
     {
         m_data.putIfAbsent( p_object, DEFAULTNONEXISTING );
         return this;
     }
 
     @Override
-    public final IConsistency call() throws Exception
+    public IConsistency call() throws Exception
     {
         if ( m_data.size() < 2 )
             return this;
@@ -193,7 +193,7 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final IConsistency remove( @Nonnull final IAgent<?> p_object )
+    public IConsistency remove( @Nonnull final IAgent<?> p_object )
     {
         m_data.remove( p_object );
         return this;
@@ -201,7 +201,7 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final IConsistency clear()
+    public IConsistency clear()
     {
         m_statistic.clear();
         m_data.clear();
@@ -210,48 +210,48 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final IMetric metric()
+    public IMetric metric()
     {
         return m_metric;
     }
 
     @Nonnull
     @Override
-    public final IFilter filter()
+    public IFilter filter()
     {
         return m_filter;
     }
 
     @Nonnull
     @Override
-    public final Stream<Map.Entry<IAgent<?>, Double>> consistency()
+    public Stream<Map.Entry<IAgent<?>, Double>> consistency()
     {
         return m_data.entrySet().stream().map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), i.getValue().getKey() ) );
     }
 
     @Nonnegative
     @Override
-    public final double consistency( @Nonnull final IAgent<?> p_object )
+    public double consistency( @Nonnull final IAgent<?> p_object )
     {
         return m_data.getOrDefault( p_object, DEFAULTNONEXISTING ).getKey();
     }
 
     @Nonnegative
     @Override
-    public final double inconsistency( @Nonnull final IAgent<?> p_object )
+    public double inconsistency( @Nonnull final IAgent<?> p_object )
     {
         return m_data.getOrDefault( p_object, DEFAULTNONEXISTING ).getValue();
     }
 
     @Nonnull
     @Override
-    public final Stream<Map.Entry<IAgent<?>, Double>> inconsistency()
+    public Stream<Map.Entry<IAgent<?>, Double>> inconsistency()
     {
         return m_data.entrySet().stream().map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), i.getValue().getValue() ) );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}{1}", super.toString(), m_data );
     }
@@ -350,7 +350,7 @@ public final class CConsistency implements IConsistency
          * @param p_matrix transition matrix
          * @return stationary distribution
          */
-        public final DoubleMatrix1D getStationaryDistribution( final int p_iteration, final DoubleMatrix2D p_matrix )
+        public DoubleMatrix1D getStationaryDistribution( final int p_iteration, final DoubleMatrix2D p_matrix )
         {
             final DoubleMatrix1D l_eigenvector;
             switch ( this )

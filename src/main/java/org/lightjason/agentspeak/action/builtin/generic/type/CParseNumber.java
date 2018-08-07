@@ -32,12 +32,12 @@ import java.util.Map;
 
 
 /**
- * action for parsing a number from string.
+ * action for parsing a number of string.
  * Parses each argument to a number value
  * and returns the value, the action fails on
  * parsing errors
  *
- * {@code [X|Y|Z] = generic/type/parsenumber( "1.45", ["8.88", "9"] );}
+ * {@code [X|Y|Z] = .generic/type/parsenumber( "1.45", ["8.88", "9"] );}
  */
 public final class CParseNumber extends IParse
 {
@@ -53,15 +53,15 @@ public final class CParseNumber extends IParse
      * @return tuple with boolean (for parsing error) and term
      */
     @Nonnull
-    protected final Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
+    protected Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
     {
         try
         {
-            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.from( Double.parseDouble( p_value ) ) );
+            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.of( Double.parseDouble( p_value ) ) );
         }
         catch ( final Exception l_exception )
         {
-            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.from( null ) );
+            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.of( null ) );
         }
     }
 

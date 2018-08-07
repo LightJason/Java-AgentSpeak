@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
@@ -33,8 +34,6 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 
 import java.util.stream.IntStream;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -47,7 +46,7 @@ public final class TestCView extends IBaseTest
      * random test tree structure
      */
     @Test
-    public final void testTree()
+    public void testTree()
     {
         final int l_max = 1000;
         final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
@@ -55,10 +54,10 @@ public final class TestCView extends IBaseTest
 
         IntStream.range( 0, l_max )
                  .boxed()
-                 .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
+                 .map( i -> CLiteral.of( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
                  .forEach( i -> l_beliefbase.generate( l_generator, i.functorpath() ).add( i ) );
 
-        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
+        Assert.assertEquals( "number of beliefs is incorrect", l_max, l_beliefbase.size() );
     }
 
 
@@ -66,25 +65,25 @@ public final class TestCView extends IBaseTest
      * manual test of tree structure
      */
     @Test
-    public final void testManual()
+    public void testManual()
     {
         final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator l_gen = new CGenerator();
 
-        l_beliefbase.add( CLiteral.from( "toplevel" ) )
+        l_beliefbase.add( CLiteral.of( "toplevel" ) )
 
-                    .generate( l_gen, CPath.from( "first" ) )
-                    .add( CLiteral.from( "first/sub1" ) )
-                    .add( CLiteral.from( "first/sub2" ) )
+                    .generate( l_gen, CPath.of( "first" ) )
+                    .add( CLiteral.of( "first/sub1" ) )
+                    .add( CLiteral.of( "first/sub2" ) )
 
-                    .generate( l_gen, CPath.from( "second/sub" ) )
-                    .add( CLiteral.from( "second/sub3" ) )
-                    .add( CLiteral.from( "second/sub4" ) )
+                    .generate( l_gen, CPath.of( "second/sub" ) )
+                    .add( CLiteral.of( "second/sub3" ) )
+                    .add( CLiteral.of( "second/sub4" ) )
 
-                    .add( CLiteral.from( "second/sub/sub5" ) );
+                    .add( CLiteral.of( "second/sub/sub5" ) );
 
 
-        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
+        Assert.assertEquals( "number of beliefs is incorrect", 6, l_beliefbase.size() );
     }
 
 
@@ -95,7 +94,7 @@ public final class TestCView extends IBaseTest
     {
 
         @Override
-        public final IView apply( final String p_name, final IView p_parent )
+        public IView apply( final String p_name, final IView p_parent )
         {
             return new CBeliefbase( new CMultiStorage<>() ).create( p_name, p_parent );
         }

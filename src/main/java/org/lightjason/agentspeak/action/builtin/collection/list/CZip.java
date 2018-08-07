@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * and result \f$ \langle x_i, y_i \rangle \f$, the action fails
  * on an odd number of arguments
  *
- * {@code T = collection/list/zip( [1,3,5,7], [2,4,6,8] );}
+ * {@code T = .collection/list/zip( [1,3,5,7], [2,4,6,8] );}
  */
 public final class CZip extends IBuiltinAction
 {
@@ -66,19 +66,19 @@ public final class CZip extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_arguments = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
             l_arguments.stream().limit( l_arguments.size() / 2 ),
@@ -87,12 +87,12 @@ public final class CZip extends IBuiltinAction
         ).collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

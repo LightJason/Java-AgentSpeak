@@ -44,7 +44,7 @@ import java.util.List;
  * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$, the action fails
  * on empty lists
  *
- * {@code L = collection/list/complement( [1,2,3], [3,4,5] );}
+ * {@code L = .collection/list/complement( [1,2,3], [3,4,5] );}
  * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
  */
 public final class CComplement extends IBuiltinAction
@@ -65,25 +65,25 @@ public final class CComplement extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        if ( ( p_argument.get( 0 ).<List<?>>raw().isEmpty() ) && ( p_argument.get( 1 ).<List<?>>raw().isEmpty() ) )
-            return CFuzzyValue.from( false );
+        if ( p_argument.get( 0 ).<List<?>>raw().isEmpty() && p_argument.get( 1 ).<List<?>>raw().isEmpty() )
+            return CFuzzyValue.of( false );
 
         // all arguments must be lists, first argument is the full list
         final Collection<Object> l_result = new LinkedList<>( p_argument.get( 0 ).<Collection<Object>>raw() );
         l_result.removeAll( p_argument.get( 1 ).<Collection<Object>>raw() );
-        p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
+        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

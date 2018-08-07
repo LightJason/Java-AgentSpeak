@@ -42,7 +42,7 @@ import java.util.List;
  * to combine all logical arguments in a single
  * result, the action never fails
  *
- * {@code R = bool/or( Logical1, [Logical2, Logical3], Logical4 );}
+ * {@code R = .bool/or( Logical1, [Logical2, Logical3], Logical4 );}
  * @see https://en.wikipedia.org/wiki/Logical_disjunction
  */
 public final class COr extends IBuiltinAction
@@ -54,24 +54,23 @@ public final class COr extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .anyMatch( ITerm::<Boolean>raw )
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

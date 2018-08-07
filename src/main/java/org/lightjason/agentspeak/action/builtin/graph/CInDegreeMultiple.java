@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for a graph as first argument the in-degree of each
  * vertex argument, the action fails on wrong input
  *
- * {@code [D1|D2] = graph/indegreemultiple( Graph, Vertex1, Vertex2 );}‚
+ * {@code [D1|D2] = .graph/indegreemultiple( Graph, Vertex1, Vertex2 );}‚
  */
 public final class CInDegreeMultiple extends IApplyMultiple
 {
@@ -46,17 +46,17 @@ public final class CInDegreeMultiple extends IApplyMultiple
     private static final long serialVersionUID = -4895281604015977730L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) p_graph.inDegree( p_window.get( 0 ).raw() )
             )
         );

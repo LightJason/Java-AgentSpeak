@@ -37,11 +37,11 @@ import java.util.stream.Stream;
 
 /**
  * removes all elements of the storage.
- * The action removes all elements from the storage
+ * The action removes all elements of the storage
  * except the elements wich are forbidden, the action
  * never fails
  *
- * {@code storage/clear();}
+ * {@code .storage/clear();}
  */
 public final class CClear extends IStorage
 {
@@ -90,15 +90,14 @@ public final class CClear extends IStorage
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_context.agent().storage().keySet().parallelStream()
                  .filter( i -> !m_resolver.apply( i ) )
                  .forEach( i -> p_context.agent().storage().remove( i ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

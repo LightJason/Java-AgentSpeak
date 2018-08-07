@@ -36,7 +36,7 @@ import java.util.Map;
  * are key-value pairs, all pars are added to the map,
  * the action fails on wrong input number
  *
- * {@code collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
+ * {@code .collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
  */
 public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
 {
@@ -46,7 +46,7 @@ public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Ob
     private static final long serialVersionUID = 6020101779012749616L;
 
     @Override
-    protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.putIfAbsent( p_key, p_value );
     }

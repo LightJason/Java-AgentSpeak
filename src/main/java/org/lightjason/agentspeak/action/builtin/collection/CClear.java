@@ -43,7 +43,7 @@ import java.util.Map;
  * The action removes all elements of each collection arguments,
  * the action fails on a non-collection argument
  *
- * {@code collection/clear( Map, MultiMap, Set, List );}
+ * {@code .collection/clear( Map, MultiMap, Set, List );}
  */
 public final class CClear extends IBuiltinAction
 {
@@ -54,18 +54,17 @@ public final class CClear extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
             p_argument.parallelStream()
                   .allMatch( CClear::clear )
         );
@@ -79,19 +78,19 @@ public final class CClear extends IBuiltinAction
      */
     private static boolean clear( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        if ( CCommon.isssignableto( p_term, Collection.class ) )
         {
             p_term.<Collection<?>>raw().clear();
             return true;
         }
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        if ( CCommon.isssignableto( p_term, Map.class ) )
         {
             p_term.<Map<?, ?>>raw().clear();
             return true;
         }
 
-        if ( CCommon.rawvalueAssignableTo( p_term, Multimap.class ) )
+        if ( CCommon.isssignableto( p_term, Multimap.class ) )
         {
             p_term.<Multimap<?, ?>>raw().clear();
             return true;

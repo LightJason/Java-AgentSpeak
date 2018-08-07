@@ -39,7 +39,7 @@ import org.lightjason.agentspeak.action.builtin.crypto.CCreateKey;
 import org.lightjason.agentspeak.action.builtin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CHash;
-import org.lightjason.agentspeak.action.builtin.crypto.EAlgorithm;
+import org.lightjason.agentspeak.action.builtin.crypto.ECryptAlgorithm;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -89,17 +89,17 @@ public final class TestCActionCrypto extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatecrypt" )
-    public final void createkey( final Triple<String, Integer, Integer> p_crypt )
+    public void createkey( final Triple<String, Integer, Integer> p_crypt )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreateKey().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), p_crypt.getMiddle().intValue() );
+        Assert.assertEquals( p_crypt.getMiddle().intValue(), l_return.size() );
     }
 
 
@@ -109,23 +109,22 @@ public final class TestCActionCrypto extends IBaseTest
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
     @Test
-    public final void wrongalgorithm() throws NoSuchAlgorithmException
+    public void wrongalgorithm() throws NoSuchAlgorithmException
     {
         final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
 
         Assert.assertFalse(
             new CEncrypt().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
 
-
         Assert.assertFalse(
             new CDecrypt().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -137,22 +136,24 @@ public final class TestCActionCrypto extends IBaseTest
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
     @Test
-    public final void decryptexecutionerror() throws NoSuchAlgorithmException
+    public void decryptexecutionerror() throws NoSuchAlgorithmException
     {
-        final Pair<Key, Key> l_key = EAlgorithm.RSA.generateKey();
+        final Pair<Key, Key> l_key = ECryptAlgorithm.RSA.generateKey();
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CEncrypt().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CEncrypt().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertFalse(
             new CDecrypt().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
@@ -165,28 +166,30 @@ public final class TestCActionCrypto extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatehash" )
-    public final void hash( final Pair<String, String[]> p_hash )
+    public void hash( final Pair<String, String[]> p_hash )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CHash().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( p_hash.getLeft() ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CHash().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( CRawTerm.of( p_hash.getLeft() ), CRawTerm.of( "test string" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), p_hash.getRight() );
+        Assert.assertArrayEquals( p_hash.getRight(), l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ) );
     }
 
     /**
      * test hash exception
      */
     @Test( expected = CRuntimeException.class )
-    public final void hashexception()
+    public void hashexception()
     {
         new CHash().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( "xxx" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( "xxx" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
     }
@@ -210,13 +213,13 @@ public final class TestCActionCrypto extends IBaseTest
      * test key generation on error call
      */
     @Test
-    public final void createkeyError()
+    public void createkeyError()
     {
         Assert.assertFalse(
 
             new CCreateKey().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( CRawTerm.from( "test" ) ).collect( Collectors.toList() ),
+                Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -229,24 +232,24 @@ public final class TestCActionCrypto extends IBaseTest
      */
     @Test
     @UseDataProvider( "generatecrypt" )
-    public final void encryptdecreypt( final Triple<String, Integer, Integer> p_crypt  )
+    public void encryptdecreypt( final Triple<String, Integer, Integer> p_crypt  )
     {
         final List<ITerm> l_returnkey = new ArrayList<>();
 
         new CCreateKey().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_returnkey
         );
 
-        Assert.assertEquals( l_returnkey.size(), p_crypt.getMiddle().intValue() );
+        Assert.assertEquals( p_crypt.getMiddle().intValue(), l_returnkey.size() );
 
 
         final List<ITerm> l_returnencrypt = new ArrayList<>();
 
         new CEncrypt().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_returnkey.get( 0 ), CRawTerm.from( "test string" ), CRawTerm.from( 12345 ) ).collect( Collectors.toList() ),
+            Stream.of( l_returnkey.get( 0 ), CRawTerm.of( "test string" ), CRawTerm.of( 12345 ) ).collect( Collectors.toList() ),
             l_returnencrypt
         );
 
@@ -260,9 +263,9 @@ public final class TestCActionCrypto extends IBaseTest
         );
 
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), "test string" );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 12345 );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( "test string", l_return.get( 0 ).raw() );
+        Assert.assertEquals( 12345, l_return.get( 1 ).<Number>raw() );
     }
 
 }

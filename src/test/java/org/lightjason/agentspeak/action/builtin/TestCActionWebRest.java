@@ -51,13 +51,13 @@ public final class TestCActionWebRest extends IBaseTest
      * test json list error
      */
     @Test
-    public final void jsonlisterror()
+    public void jsonlisterror()
     {
         Assert.assertFalse(
             new CJsonList().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "jsonlist", "testjsonlist" )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -68,14 +68,14 @@ public final class TestCActionWebRest extends IBaseTest
      * test json list with single argument
      */
     @Test
-    public final void jsonlistsingle()
+    public void jsonlistsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonList().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://api.github.com/repos/LightJason/Examples/commits", "testjsonlist" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
@@ -90,21 +90,21 @@ public final class TestCActionWebRest extends IBaseTest
      * test json list with multiple argument
      */
     @Test
-    public final void jsonlistmultiple()
+    public void jsonlistmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonList().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://api.github.com/repos/LightJason/Examples/commits", "testjsonlist", "item" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonlist" );
+        Assert.assertEquals( "testjsonlist", l_return.get( 0 ).<ILiteral>raw().functor() );
         Assert.assertFalse( l_return.get( 0 ).<ILiteral>raw().values().map( ITerm::functor ).noneMatch( i -> i.equals( "item" ) ) );
     }
 
@@ -113,13 +113,13 @@ public final class TestCActionWebRest extends IBaseTest
      * test json object error
      */
     @Test
-    public final void jsonobjecterror()
+    public void jsonobjecterror()
     {
         Assert.assertFalse(
             new CJsonObject().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "jsonobject", "testjsonobject" )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -131,21 +131,21 @@ public final class TestCActionWebRest extends IBaseTest
      * test json object with single argument
      */
     @Test
-    public final void jsonobjectsingle()
+    public void jsonobjectsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonobject" );
+        Assert.assertEquals( "testjsonobject", l_return.get( 0 ).<ILiteral>raw().functor() );
     }
 
 
@@ -153,25 +153,25 @@ public final class TestCActionWebRest extends IBaseTest
      * test json object with multiple arguments
      */
     @Test
-    public final void jsonobjectmultiple()
+    public void jsonobjectmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject", "loc" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonobject" );
+        Assert.assertEquals( "testjsonobject", l_return.get( 0 ).<ILiteral>raw().functor() );
         Assert.assertTrue( l_return.get( 0 ).<ILiteral>raw().values().findFirst().isPresent() );
         Assert.assertEquals(
-            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
-            "loc"
+            "loc",
+            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new )
         );
     }
 
@@ -180,13 +180,13 @@ public final class TestCActionWebRest extends IBaseTest
      * test xml object error
      */
     @Test
-    public final void xmlobjecterror()
+    public void xmlobjecterror()
     {
         Assert.assertFalse(
             new CXMLObject().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "xmlobject", "testxml" )
-                      .map( CRawTerm::from )
+                      .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -198,21 +198,21 @@ public final class TestCActionWebRest extends IBaseTest
      * test xml object with single argument
      */
     @Test
-    public final void xmlobjectsingle()
+    public void xmlobjectsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CXMLObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testxml" );
+        Assert.assertEquals( "testxml", l_return.get( 0 ).<ILiteral>raw().functor() );
     }
 
 
@@ -220,25 +220,25 @@ public final class TestCActionWebRest extends IBaseTest
      * test xml object with single argument
      */
     @Test
-    public final void xmlobjectmultiple()
+    public void xmlobjectmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CXMLObject().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml", "ncd" )
-                  .map( CRawTerm::from )
+                  .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
-        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testxml" );
+        Assert.assertEquals( "testxml", l_return.get( 0 ).<ILiteral>raw().functor() );
         Assert.assertTrue( l_return.get( 0 ).<ILiteral>raw().values().findFirst().isPresent() );
         Assert.assertEquals(
-            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
-            "ncd"
+            "ncd",
+            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new )
         );
     }
 

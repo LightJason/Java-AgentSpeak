@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * as tuples with x- / y-position and will be checked
  * to the rectangle, the action fail on wrong input
  *
- * {@code [In1|In2] = math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
+ * {@code [In1|In2] = .math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
  */
 public final class CInRectangle extends IBuiltinAction
 {
@@ -65,14 +65,14 @@ public final class CInRectangle extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
@@ -82,17 +82,17 @@ public final class CInRectangle extends IBuiltinAction
                                                 .collect( Collectors.toList() );
 
         if ( l_arguments.size() < 6 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed( l_arguments.stream().skip( 4 ), 2, 2 )
                    // check in order upper-left x-position <= x-value <= buttom-right x-position, upper-left y-position <= y-value <= buttom-right y-position
                    .map( i -> l_arguments.get( 0 ) <= i.get( 0 ) && i.get( 0 ) <= l_arguments.get( 2 )
                          && l_arguments.get( 1 ) <= i.get( 1 ) && i.get( 1 ) <= l_arguments.get( 3 )
                    )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -41,7 +41,7 @@ import java.util.List;
  * second is the value, all other are list objects,
  * the action fails never
  *
- * {@code collection/list/set( 2, "a string value", L1, L2, L3 );}
+ * {@code .collection/list/set( 2, "a string value", L1, L2, L3 );}
  */
 public final class CSet extends IBuiltinAction
 {
@@ -60,22 +60,22 @@ public final class CSet extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 3;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_argument.stream()
                   .skip( 2 )
                   .map( ITerm::<List<Object>>raw )
                   .forEach( i -> i.set( p_argument.get( 0 ).<Number>raw().intValue(), p_argument.get( 1 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

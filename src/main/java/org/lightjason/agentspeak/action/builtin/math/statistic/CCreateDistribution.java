@@ -121,7 +121,7 @@ import java.util.stream.IntStream;
  * + well44497b
  * + synchronizedwell44497b
  *
- * {@code [D1|D2] = math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] );}
+ * {@code [D1|D2] = .math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] );}
  * @see https://en.wikipedia.org/wiki/Beta_distribution
  * @see https://en.wikipedia.org/wiki/Cauchy_distribution
  * @see https://en.wikipedia.org/wiki/Chi-squared_distribution
@@ -157,23 +157,23 @@ public final class CCreateDistribution extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         IntStream.range( 0, l_arguments.size() )
-                 .filter( i -> CCommon.rawvalueAssignableTo( l_arguments.get( i ), String.class ) )
+                 .filter( i -> CCommon.isssignableto( l_arguments.get( i ), String.class ) )
                  .mapToObj( i -> new AbstractMap.SimpleImmutableEntry<>( i, l_arguments.get( i ).<String>raw() ) )
                  .filter( i -> EDistribution.exist( i.getValue() ) )
-                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), EDistribution.from( i.getValue() ) ) )
+                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), EDistribution.of( i.getValue() ) ) )
                  .map( i ->
                  {
 
@@ -181,10 +181,10 @@ public final class CCreateDistribution extends IBuiltinAction
                      final int l_skip;
                      final EGenerator l_generator;
 
-                     if ( ( i.getKey() < l_arguments.size() - 1 ) && ( CCommon.rawvalueAssignableTo( l_arguments.get( i.getKey() + 1 ), String.class ) ) )
+                     if ( i.getKey() < l_arguments.size() - 1 && CCommon.isssignableto( l_arguments.get( i.getKey() + 1 ), String.class ) )
                      {
                          l_skip = 1;
-                         l_generator = EGenerator.from( l_arguments.get( i.getKey() + 1 ).<String>raw() );
+                         l_generator = EGenerator.of( l_arguments.get( i.getKey() + 1 ).<String>raw() );
                      }
                      else
                      {
@@ -205,10 +205,10 @@ public final class CCreateDistribution extends IBuiltinAction
                              );
 
                  } )
-                 .map( CRawTerm::from )
+                 .map( CRawTerm::of )
                  .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
@@ -267,7 +267,7 @@ public final class CCreateDistribution extends IBuiltinAction
          * @return enum
          */
         @Nonnull
-        public static EDistribution from( @Nonnull final String p_value )
+        public static EDistribution of( @Nonnull final String p_value )
         {
             return EDistribution.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
@@ -301,7 +301,7 @@ public final class CCreateDistribution extends IBuiltinAction
          * @return real distribution
          */
         @Nonnull
-        public final AbstractRealDistribution get( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+        public AbstractRealDistribution get( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
         {
             switch ( this )
             {
@@ -399,7 +399,7 @@ public final class CCreateDistribution extends IBuiltinAction
          * @return enum
          */
         @Nonnull
-        public static EGenerator from( @Nonnull final String p_value )
+        public static EGenerator of( @Nonnull final String p_value )
         {
             return EGenerator.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
@@ -410,7 +410,7 @@ public final class CCreateDistribution extends IBuiltinAction
          * @return generator
          */
         @Nonnull
-        public final RandomGenerator get()
+        public RandomGenerator get()
         {
             switch ( this )
             {

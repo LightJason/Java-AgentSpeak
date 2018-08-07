@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * the distance will be calculated between the first
  * and all other arguments, the action never fails
  *
- * {@code [A|B] = math/bit/matrix/hammingdistance( Matrix1, Matrix2, Matrix3 );}
+ * {@code [A|B] = .math/bit/matrix/hammingdistance( Matrix1, Matrix2, Matrix3 );}
  * @see https://en.wikipedia.org/wiki/Hamming_distance
  */
 public final class CHammingDistance extends IBuiltinAction
@@ -56,19 +56,19 @@ public final class CHammingDistance extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<BitMatrix> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<BitMatrix>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         l_arguments.stream()
                    .skip( 1 )
@@ -76,9 +76,9 @@ public final class CHammingDistance extends IBuiltinAction
                    .peek( i -> i.xor( l_arguments.get( 0 ) ) )
                    .mapToDouble( BitMatrix::cardinality )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

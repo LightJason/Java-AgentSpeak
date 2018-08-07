@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * a list with the symmetric difference \f$ (\mathbb{X} \setminus \mathbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) \f$,
  * the action fails never
  *
- * {@code D = collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
+ * {@code D = .collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
 public final class CSymmetricDifference extends IBuiltinAction
@@ -68,34 +68,35 @@ public final class CSymmetricDifference extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // create a multiset and counts the occurence of element -> on an odd number the element will be returned
         final Multiset<Object> l_count = ConcurrentHashMultiset.create();
         CCommon.flatten( p_argument ).parallel().map( ITerm::raw ).forEach( l_count::add );
         final List<Object> l_result = l_count.entrySet()
                                              .parallelStream()
-                                             .filter( i -> i.getCount() % 2 == 1 )
-                                             .map( Multiset.Entry::getElement ).collect( Collectors.toList() );
-        l_result.sort( Comparator.comparing( Object::hashCode ) );
+                                             .filter( i -> !( i.getCount() % 2 == 0 ) )
+                                             .map( Multiset.Entry::getElement )
+                                             .sorted( Comparator.comparing( Object::hashCode ) )
+                                             .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel
                 ? Collections.synchronizedList( l_result )
                 : l_result
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns the number of verticies that are incident to a single edge
  * for each graph object, the action never fails
  *
- * {@code [C1|C2] = graph/incidentcountsingle( Edge, Graph1, Graph2 );}
+ * {@code [C1|C2] = .graph/incidentcountsingle( Edge, Graph1, Graph2 );}
  */
 public final class CIncidentCountSingle extends IApplySingle
 {
@@ -46,17 +46,17 @@ public final class CIncidentCountSingle extends IApplySingle
     private static final long serialVersionUID = 5148213895827891227L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 (double) p_graph.getIncidentCount( p_window.get( 0 ).raw() )
             )
         );

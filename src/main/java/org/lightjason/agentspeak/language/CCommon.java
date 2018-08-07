@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.rits.cloning.Cloner;
@@ -40,10 +41,12 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -53,7 +56,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,6 +79,48 @@ import java.util.stream.Stream;
 public final class CCommon
 {
     /**
+     * numeric constant values - infinity is defined manually
+     */
+    public static final Map<String, Double> NUMERICCONSTANT = Collections.unmodifiableMap(
+        StreamUtils.zip(
+            Stream.of(
+                "pi",
+                "euler",
+                "lightspeed",
+                "avogadro",
+                "boltzmann",
+                "gravity",
+                "electron",
+                "neutron",
+                "proton",
+                "positiveinfinity",
+                "negativeinfinity",
+                "maximumvalue",
+                "minimumvalue",
+                "nan"
+            ),
+
+            Stream.of(
+                Math.PI,
+                Math.E,
+                299792458.0,
+                6.0221412927e23,
+                8.617330350e-15,
+                6.67408e-11,
+                9.10938356e-31,
+                1674927471214e-27,
+                1.6726219e-27,
+                Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY,
+                Double.MAX_VALUE,
+                Double.MIN_VALUE,
+                Double.NaN
+            ),
+
+            AbstractMap.SimpleImmutableEntry::new
+        ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) ) );
+
+    /**
      * cloner
      */
     private static final Cloner CLONER = new Cloner();
@@ -82,6 +130,31 @@ public final class CCommon
      */
     private CCommon()
     {
+    }
+
+    /**
+     * modulo operator.
+     * used n assignment and binary operator
+     *
+     * @param p_lhs left-hand-side
+     * @param p_rhs right-hand-side
+     * @return result
+     */
+    public static Number modulo( @Nonnull final Number p_lhs, @Nonnull final Number p_rhs )
+    {
+        return p_lhs.longValue() < 0
+               ? Math.abs( ( p_rhs.longValue() + p_lhs.longValue() ) % p_rhs.longValue() )
+               : p_lhs.longValue() % p_rhs.longValue();
+    }
+
+    /**
+     * returns argument list for any operations
+     *
+     * @return list
+     */
+    public static List<ITerm> argumentlist()
+    {
+        return Collections.synchronizedList( new ArrayList<>() );
     }
 
     //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------
@@ -96,7 +169,10 @@ public final class CCommon
     @Nonnull
     public static IContext updatecontext( @Nonnull final IContext p_context, @Nonnull final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.parallel().forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
+        p_unifiedvariables.parallel()
+                          .map( i -> new ImmutablePair<>( i, p_context.instancevariables().get( i.fqnfunctor() ) ) )
+                          .filter( i -> Objects.nonNull( i.right ) )
+                          .forEach( i -> i.right.set( i.left.raw() ) );
         return p_context;
     }
 
@@ -111,15 +187,17 @@ public final class CCommon
     @Nonnull
     public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
-        final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
-        Stream.concat(
-            p_variable,
-            p_agent.variablebuilder().apply( p_agent, p_instance )
-        )
-               .peek( l_variables::remove )
-               .forEach( l_variables::add );
-
-        return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
+        return new CContext(
+            p_agent,
+            p_instance,
+            Collections.unmodifiableSet(
+                CCommon.streamconcat(
+                    p_variable,
+                    p_agent.variablebuilder().apply( p_agent, p_instance ),
+                    p_instance.variables().map( i -> i.shallowcopy() )
+                ).collect( Collectors.toSet() )
+            )
+        );
     }
 
 
@@ -140,7 +218,7 @@ public final class CCommon
         if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 
-        // unify variables, source trigger literal must be copied
+        // unifier variables, source trigger literal must be copied
         final Set<IVariable<?>> l_variables = p_unifier.unify( p_source.literal(), p_target.literal().deepcopy().<ILiteral>raw() );
 
         // check for completely unification (of all variables)
@@ -170,7 +248,73 @@ public final class CCommon
         );
     }
 
+    // --- execution structure ---------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * sequential execute
+     *
+     * @param p_context execution context
+     * @param p_execution execution stream
+     * @return list with execution results
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    @Nonnull
+    public static List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    )
+    {
+        final List<IFuzzyValue<Boolean>> l_result = new ArrayList<>();
+        return p_execution
+            .map( i ->
+            {
+                final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() );
+                l_result.add( l_return );
+                return p_context.agent().fuzzy().getValue().defuzzify( l_return );
+            } )
+            .filter( i -> !i )
+            .findFirst()
+            .map( i -> l_result )
+            .orElseGet( () -> l_result );
+    }
+
+    /**
+     * parallel execute
+     *
+     * @param p_context execution context
+     * @param p_execution execution stream
+     * @return list with execution results
+     *
+     * @note each element is executed
+     */
+    @Nonnull
+    public static List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    )
+    {
+        return p_execution
+            .parallel()
+            .map( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
+            .collect( Collectors.toList() );
+    }
+
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * stream of all class fields
+     *
+     * @param p_class class or null
+     * @return field stream
+     */
+    @Nonnull
+    public static Stream<Field> classfields( @Nullable final Class<?> p_class )
+    {
+        if ( Objects.isNull( p_class ) )
+            return Stream.empty();
+
+        return Stream.concat(
+            Arrays.stream( p_class.getDeclaredFields() ),
+            classfields( p_class.getSuperclass() )
+        );
+    }
 
     /**
      * concat multiple streams
@@ -182,9 +326,37 @@ public final class CCommon
     @Nonnull
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public static <T> Stream<T> streamconcat( @Nonnull final Stream<T>... p_streams )
+    public static <T> Stream<? extends T> streamconcat( @Nonnull final Stream<? extends T>... p_streams )
     {
         return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );
+    }
+
+    /**
+     * concat multiple streams
+     *
+     * @param p_streams streams
+     * @tparam T any value type
+     * @return concated stream
+     */
+    @Nonnull
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
+    public static <T> Stream<T> streamconcatstrict( @Nonnull final Stream<T>... p_streams )
+    {
+        return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );
+    }
+
+    /**
+     * execute stream in parallel
+     *
+     * @param p_stream stream
+     * @param p_parallel parallel
+     * @tparam T stream elements
+     * @return modified stream
+     */
+    public static <T> Stream<T> parallelstream( final Stream<T> p_stream, final boolean p_parallel )
+    {
+        return p_parallel ? p_stream.parallel() : p_stream;
     }
 
     /**
@@ -209,19 +381,37 @@ public final class CCommon
      *
      * @param p_value any value type
      * @param p_class assignable class
-     * @return term value or raw value
+     * @return boolean for assinable
      */
     @SuppressWarnings( "unchecked" )
-    public static <T> boolean rawvalueAssignableTo( @Nonnull final T p_value, @Nonnull final Class<?>... p_class )
+    public static <T> boolean isssignableto( @Nullable final T p_value, @Nonnull final Class<?> p_class )
     {
-        if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).valueassignableto( p_class );
-        if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).valueassignableto( p_class );
+        if ( Objects.isNull( p_value ) )
+            return true;
+        if ( p_value instanceof IAssignable<?> )
+            return ( (IAssignable<?>) p_value ).valueassignableto( p_class );
 
-        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( p_value.getClass() ) );
+        return p_class.isAssignableFrom( p_value.getClass() );
     }
 
+    /**
+     * bind term value on the current context
+     *
+     * @param p_term term / variable
+     * @param p_context current context
+     * @return bind term element
+     */
+    @Nonnull
+    public static ITerm bindbycontext( @Nonnull final ITerm p_term, @Nonnull final IContext p_context )
+    {
+        if ( p_term instanceof IVariable<?> )
+        {
+            final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
+            return Objects.isNull( l_variable ) ? IRawTerm.EMPTY : l_variable;
+        }
+
+        return p_term;
+    }
 
     /**
      * replace variables with context variables
@@ -231,9 +421,9 @@ public final class CCommon
      * @return result term list
      */
     @Nonnull
-    public static List<ITerm> replaceFromContext( @Nonnull final IContext p_context, @Nonnull final Collection<? extends ITerm> p_terms )
+    public static Stream<ITerm> replacebycontext( @Nonnull final IContext p_context, @Nonnull final Stream<? extends ITerm> p_terms )
     {
-        return p_terms.stream().map( i -> replaceFromContext( p_context, i ) ).collect( Collectors.toList() );
+        return p_terms.map( i -> replacebycontext( p_context, i ) );
     }
 
     /**
@@ -245,18 +435,20 @@ public final class CCommon
      * @return replaces variable object
      */
     @Nonnull
-    public static ITerm replaceFromContext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
+    public static ITerm replacebycontext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
     {
-        if ( !( p_term instanceof IVariable<?> ) )
-            return p_term;
+        if ( p_term instanceof IVariable<?> )
+        {
+            final ITerm l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
+            if ( Objects.isNull( l_variable ) )
+                throw new CIllegalArgumentException(
+                    org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
+                );
 
-        final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
-        if ( Objects.nonNull( l_variable ) )
             return l_variable;
+        }
 
-        throw new CIllegalArgumentException(
-            org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
-        );
+        return p_term;
     }
 
 
@@ -295,7 +487,7 @@ public final class CCommon
     @Nonnull
     public static Stream<ITerm> flattenrecursive( @Nonnull final Stream<ITerm> p_input )
     {
-        return p_input.flatMap( i -> i instanceof ILiteral ? flattenrecursive( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
+        return p_input.flatMap( i -> i instanceof ILiteral ? flattenrecursive( i.<ILiteral>term().orderedvalues() ) : Stream.of( i ) );
     }
 
     /*
@@ -313,7 +505,7 @@ public final class CCommon
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
                    ? flattenstream( ( (Collection<?>) l_value ).stream() )
-                   : Stream.of( CRawTerm.from( l_value ) );
+                   : Stream.of( CRawTerm.of( l_value ) );
         } );
     }
 
@@ -323,7 +515,7 @@ public final class CCommon
      * @return hasher
      */
     @Nonnull
-    public static Hasher getTermHashing()
+    public static Hasher termhashing()
     {
         return Hashing.sipHash24().newHasher();
     }
@@ -429,8 +621,8 @@ public final class CCommon
         final DataOutputStream l_counting = new DataOutputStream( new NullOutputStream() );
 
         try (
-            final InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
-            final OutputStream l_compress = p_compression.get( l_counting )
+            InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
+            OutputStream l_compress = p_compression.get( l_counting )
         )
         {
             IOUtils.copy( l_input, l_compress );
@@ -498,7 +690,7 @@ public final class CCommon
          * @return compression value
          */
         @Nonnull
-        public static ECompression from( @Nonnull final String p_value )
+        public static ECompression of( @Nonnull final String p_value )
         {
             return ECompression.valueOf( p_value.toUpperCase( Locale.ROOT ) );
         }

@@ -44,7 +44,7 @@ import java.util.List;
  * for each input tuple argument a bit matrix will be created and
  * returned, the action never fails
  *
- * {@code [A|B] = math/bit/matrix/create( 3,2, [1, 12] );}
+ * {@code [A|B] = .math/bit/matrix/create( 3,2, [1, 12] );}
  */
 public final class CCreate extends IBuiltinAction
 {
@@ -63,15 +63,15 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument )
@@ -81,10 +81,10 @@ public final class CCreate extends IBuiltinAction
             2
         )
                    .map( i -> new BitMatrix( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -40,9 +40,9 @@ import java.util.List;
  * the last cycle and the current time
  * in nanoseconds and fails never
  *
- * {@code T = agent/cycletime();}
+ * {@code T = .agent/cycletime();}
  */
-public class CCycleTime extends IBuiltinAction
+public final class CCycleTime extends IBuiltinAction
 {
     /**
      * serial id
@@ -51,16 +51,15 @@ public class CCycleTime extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 System.nanoTime() - p_context.agent().cycletime()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

@@ -62,7 +62,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test map create
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -78,7 +78,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CCreate().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of(  "a", 1, "b", 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of(  "a", 1, "b", 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -104,7 +104,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test map keys
      */
     @Test
-    public final void keysvalues()
+    public void keysvalues()
     {
         final Map<?, ?> l_map = StreamUtils.zip(
             Stream.of( "foo", "bar", "yyy", "xxx" ),
@@ -117,24 +117,24 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CKeys().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( l_map ) ).collect( Collectors.toList() ),
             l_return
         );
 
         new CValues().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
+            Stream.of( CRawTerm.of( l_map ) ).collect( Collectors.toList() ),
             l_return
         );
 
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 4 );
-        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().size(), 4 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<List<?>>raw().size() );
+        Assert.assertEquals( 4, l_return.get( 1 ).<List<?>>raw().size() );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "bar", "foo", "xxx", "yyy" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2, 1, 3, 4 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( "bar", "foo", "xxx", "yyy" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 2, 1, 3, 4 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 
@@ -142,34 +142,34 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test map putsingle
      */
     @Test
-    public final void putsingle()
+    public void putsingle()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
         new CPutSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "v", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "v", 1, l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
 
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertEquals( 1, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( "v" ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map.values().toArray() );
 
 
 
 
         new CPutSingleIfAbsent().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "v", 666, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "v", 666, l_map ).map( CRawTerm::of ).collect( Collectors.toList() ),
 
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertEquals( 1, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( "v" ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( 1 ).toArray(), l_map.values().toArray() );
     }
 
 
@@ -177,13 +177,13 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test multiple put
      */
     @Test
-    public final void putmultiple()
+    public void putmultiple()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
         new CPutMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -194,13 +194,13 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CPutMultipleIfAbsent().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 3 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "zz", "yyy" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 4, 3 ).toArray() );
+        Assert.assertEquals( 3, l_map.size() );
+        Assert.assertArrayEquals( Stream.of( "xx", "zz", "yyy" ).toArray(), l_map.keySet().toArray() );
+        Assert.assertArrayEquals( Stream.of( 2, 4, 3 ).toArray(), l_map.values().toArray() );
     }
 
 
@@ -208,7 +208,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test remove
      */
     @Test
-    public final void remove()
+    public void remove()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -219,13 +219,13 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CRemove().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "a", "z" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "a", "z" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1, 3 ).toArray() );
+        Assert.assertEquals( 1, l_map.size() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( 1, 3 ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -233,7 +233,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test get-multiple
      */
     @Test
-    public final void getmultiple()
+    public void getmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -244,13 +244,13 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CGetMultiple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 2 );
+        Assert.assertEquals( 3, l_return.size() );
+        Assert.assertEquals( 1, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 2, l_return.get( 1 ).<Number>raw() );
         Assert.assertNull( l_return.get( 2 ).<Number>raw() );
     }
 
@@ -259,7 +259,7 @@ public final class TestCActionCollectionMap extends IBaseTest
      * test get-single
      */
     @Test
-    public final void getsingle()
+    public void getsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -271,13 +271,13 @@ public final class TestCActionCollectionMap extends IBaseTest
 
         new CGetSingle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 123 );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "text" );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 123, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( "text", l_return.get( 1 ).raw() );
     }
 
 }

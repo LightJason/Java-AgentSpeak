@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * other arguments are matrix object, the action
  * never fails
  *
- * {@code [R1|R2] = math/blas/matrix/row(2, Matrix1, [Matrix2]);}
+ * {@code [R1|R2] = .math/blas/matrix/row(2, Matrix1, [Matrix2]);}
  */
 public final class CRow extends IBuiltinAction
 {
@@ -64,15 +64,15 @@ public final class CRow extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -80,9 +80,9 @@ public final class CRow extends IBuiltinAction
                    .skip( 1 )
                    .map( ITerm::<DoubleMatrix2D>raw )
                    .map( i -> i.viewRow( l_arguments.get( 0 ).<Number>raw().intValue() ) )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

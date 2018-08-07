@@ -40,12 +40,12 @@ import java.util.stream.Stream;
 
 
 /**
- * removes an element by name from the storage.
- * The actions removes any value from the storage
+ * removes an element by name of the storage.
+ * The actions removes any value of the storage
  * which is referenced by the key and returns the
  * value, the action never fails
  *
- * {@code [A|B] = storage/remove("foo", "bar");}
+ * {@code [A|B] = .storage/remove("foo", "bar");}
  */
 public final class CRemove extends IStorage
 {
@@ -94,26 +94,26 @@ public final class CRemove extends IStorage
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .forEach( i -> this.remove( p_context.agent(), i, p_return ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 
     /**
-     * removes a value from the storage
+     * removes a value of the storage
      *
      * @param p_agent agent
      * @param p_key key
@@ -121,11 +121,11 @@ public final class CRemove extends IStorage
      */
     private void remove( @Nonnull final IAgent<?> p_agent, @Nonnull final String p_key, @Nonnull final List<ITerm> p_return )
     {
-        if ( ( m_resolver.apply( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )
+        if ( m_resolver.apply( p_key ) || !p_agent.storage().containsKey( p_key ) )
             return;
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_agent.storage().remove( p_key )
             )
         );

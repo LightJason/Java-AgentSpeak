@@ -51,7 +51,7 @@ import java.util.List;
  * is the encrypting key and all other arguments are datasets, the action returns all encypted
  * datasets and fails if one encryption fails or on a wrong algorithm
  *
- * {@code [Encypt1 | Encrypt2 | Encypt3] = crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
+ * {@code [Encypt1 | Encrypt2 | Encypt3] = .crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
 public final class CEncrypt extends IBuiltinAction
 {
@@ -62,29 +62,28 @@ public final class CEncrypt extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Key l_key = p_argument.get( 0 ).raw();
-        final EAlgorithm l_algorithm;
+        final ECryptAlgorithm l_algorithm;
         try
         {
-            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+            l_algorithm = ECryptAlgorithm.of( l_key.getAlgorithm() );
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
 
-        return CFuzzyValue.from(
+        return CFuzzyValue.of(
                    CCommon.flatten( p_argument.stream().skip( 1 ) )
                           .map( ITerm::<Serializable>raw )
                           .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
@@ -101,13 +100,13 @@ public final class CEncrypt extends IBuiltinAction
      * @param p_return return argument
      * @return successful execution
      */
-    private static boolean encrypt( @Nonnull final EAlgorithm p_algorithm, @Nonnull final Key p_key,
+    private static boolean encrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
                                     @Nonnull final Serializable p_dataset, @Nonnull final List<ITerm> p_return )
     {
         try
         {
             p_return.add(
-                CRawTerm.from(
+                CRawTerm.of(
                     Base64.getEncoder().encodeToString(
                         p_algorithm.getEncryptCipher( p_key ).doFinal(
                             SerializationUtils.serialize( p_dataset )

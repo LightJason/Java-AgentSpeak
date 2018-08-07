@@ -38,7 +38,7 @@ import java.util.Map;
  * other arguments are key values, the action
  * returns the value of each key and never fails
  *
- * {@code [V1|V2] = collection/map/getmultiple( Map, "key1", "key2" );}
+ * {@code [V1|V2] = .collection/map/getmultiple( Map, "key1", "key2" );}
  */
 public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
 {
@@ -48,11 +48,11 @@ public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
     private static final long serialVersionUID = -4100425217888323445L;
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
-                                @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_instance.get( p_key )
             )
         );

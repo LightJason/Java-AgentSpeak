@@ -40,7 +40,7 @@ import java.util.List;
  * counts the number of true values.
  * This actioncounts the number of true values and fails never
  *
- * {@code C = generic/bool/counttrue( Logical1, [Logical2, Logical3], Logical4 );}
+ * {@code C = .bool/counttrue( Logical1, [Logical2, Logical3], Logical4 );}
  */
 public final class CCountTrue extends IBuiltinAction
 {
@@ -51,26 +51,25 @@ public final class CCountTrue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .map( ITerm::<Boolean>raw )
                        .filter( i -> i )
                        .count()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

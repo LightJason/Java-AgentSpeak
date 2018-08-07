@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * given index tuples (0 = false, 1 = true),
  * the action fails on wrong input
  *
- * {@code [B1|B2] = math/bit/matrix/numericvalue( BitMatrix, 1, 2, [Row, Column] );}
+ * {@code [B1|B2] = .math/bit/matrix/numericvalue( BitMatrix, 1, 2, [Row, Column] );}
  */
 public final class CNumericValue extends IBuiltinAction
 {
@@ -65,19 +65,19 @@ public final class CNumericValue extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed(
             l_arguments.stream()
@@ -88,9 +88,9 @@ public final class CNumericValue extends IBuiltinAction
                    2
         ).mapToDouble( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) ? 1 : 0 )
             .boxed()
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

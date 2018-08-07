@@ -45,7 +45,7 @@ public final class TestCActionBinding extends IBaseTest
      * test class binding
      */
     @Test
-    public final void classbinding()
+    public void classbinding()
     {
         Assert.assertArrayEquals(
 
@@ -64,7 +64,7 @@ public final class TestCActionBinding extends IBaseTest
      * test method default binding
      */
     @Test
-    public final void methoddefault()
+    public void methoddefault()
     {
         Assert.assertArrayEquals(
             CCommon.actionsFromAgentClass( CMethodBindingDefault.class ).map( i -> i.name().path() ).toArray(),
@@ -77,7 +77,7 @@ public final class TestCActionBinding extends IBaseTest
      * test method blacklist binding
      */
     @Test
-    public final void methodblacklist()
+    public void methodblacklist()
     {
         Assert.assertArrayEquals(
             CCommon.actionsFromAgentClass( CMethodBindingBlacklist.class ).map( i -> i.name().path() ).toArray(),
@@ -90,7 +90,7 @@ public final class TestCActionBinding extends IBaseTest
      * test method whitelist binding
      */
     @Test
-    public final void methodwhitelist()
+    public void methodwhitelist()
     {
         Assert.assertArrayEquals(
             CCommon.actionsFromAgentClass( CMethodBindingWhitelist.class ).map( i -> i.name().path() ).toArray(),

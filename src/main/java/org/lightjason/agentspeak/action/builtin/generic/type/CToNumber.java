@@ -35,7 +35,7 @@ import java.util.List;
  * Cast any argument into a number,
  * the action fails on casting errors
  *
- * {@code [N1|N2] = generic/type/tonumber( X, Y );}
+ * {@code [N1|N2] = .generic/type/tonumber( X, Y );}
  */
 public final class CToNumber extends ICast
 {
@@ -45,11 +45,11 @@ public final class CToNumber extends ICast
     private static final long serialVersionUID = -5468250343047542012L;
 
     @Override
-    protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
+    protected boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
     {
         try
         {
-            p_return.add( CRawTerm.from( p_value.<Number>raw().doubleValue() ) );
+            p_return.add( CRawTerm.of( p_value.<Number>raw().doubleValue() ) );
             return true;
         }
         catch ( final Exception l_exception )

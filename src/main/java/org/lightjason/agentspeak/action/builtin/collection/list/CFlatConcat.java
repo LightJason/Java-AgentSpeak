@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * The arguments of this action are nested lists and the action transfer all nested structures
  * to a straight list, the action fails never
  *
- * {@code L = collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] );}
+ * {@code L = .collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] );}
  */
 public final class CFlatConcat extends IBuiltinAction
 {
@@ -63,19 +63,19 @@ public final class CFlatConcat extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_list = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-        p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
+        return CFuzzyValue.of( true );
     }
 
 }

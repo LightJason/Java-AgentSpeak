@@ -39,7 +39,7 @@ public interface IAssignable<T>
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean valueassignableto( @Nonnull final Class<?>... p_class );
+    boolean valueassignableto( @Nonnull final Class<?> p_class );
 
     /**
      * throws an illegal argument exception
@@ -52,6 +52,6 @@ public interface IAssignable<T>
      * @throws IllegalArgumentException on assignable error
      */
     @Nullable
-    T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
+    T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException;
 
 }

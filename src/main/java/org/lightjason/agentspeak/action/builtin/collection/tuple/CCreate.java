@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * The action creates tuples of all unflatten input arguments
  * and fail sif the number if less than two unflatten arguments
  *
- * {@code [A|B] = collection/tuple/create("A", "1", ["B", "2"]);}
+ * {@code [A|B] = .collection/tuple/create("A", "1", ["B", "2"]);}
  */
 public final class CCreate extends IBuiltinAction
 {
@@ -63,29 +63,28 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         StreamUtils
             .windowed( l_arguments.stream().map( ITerm::raw ), 2, 2 )
             .map( i -> new AbstractMap.SimpleEntry<>( i.get( 0 ), i.get( 1 ) ) )
-            .map( CRawTerm::from )
+            .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

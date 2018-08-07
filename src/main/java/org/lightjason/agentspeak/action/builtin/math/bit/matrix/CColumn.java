@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
  * the first argument is the index of the column, all
  * other a matrix objects, the action never fails
  *
- * {@code [V1|V2] = math/bit/matrix/column(3, Matrix1, [Matrix2]);}
+ * {@code [V1|V2] = .math/bit/matrix/column(3, Matrix1, [Matrix2]);}
  */
 public final class CColumn extends IRowColumn
 {
@@ -47,7 +47,7 @@ public final class CColumn extends IRowColumn
 
     @Nonnull
     @Override
-    protected final BitVector extract( @Nonnull final BitMatrix p_matrix, final int p_index )
+    protected BitVector extract( @Nonnull final BitMatrix p_matrix, final int p_index )
     {
         final BitVector l_result = new BitVector( p_matrix.rows() );
         IntStream.range( 0, p_matrix.rows() )

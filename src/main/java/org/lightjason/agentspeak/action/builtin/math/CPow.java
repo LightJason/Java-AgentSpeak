@@ -43,7 +43,7 @@ import java.util.List;
  * t and all other arguments will be used for \f$ x_i \f$,
  * the action fails never
  *
- * {@code [A|B|C] = math/pow(2, -2, 2, 9);}
+ * {@code [A|B|C] = .math/pow(2, -2, 2, 9);}
  */
 public final class CPow extends IBuiltinAction
 {
@@ -54,15 +54,15 @@ public final class CPow extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final double l_exponent = p_argument.get( 0 ).<Number>raw().doubleValue();
 
@@ -71,10 +71,10 @@ public final class CPow extends IBuiltinAction
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( i -> Math.pow( i, l_exponent ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

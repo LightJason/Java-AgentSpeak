@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * last object is a string with dense or sparse, all other
  * arguments are tuples of row and column size.
  *
- * {@code [M1|M2] = math/blas/matrix/create(2,2, [3,2], "dense|sparse");}
+ * {@code [M1|M2] = .math/blas/matrix/create(2,2, [3,2], "dense|sparse");}
  */
 public final class CCreate extends IBuiltinAction
 {
@@ -66,23 +66,23 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int l_limit;
         final EType l_type;
-        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
-             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        if ( CCommon.isssignableto( l_arguments.get( l_arguments.size() - 1 ), String.class )
+             && EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) )
         {
-            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;
         }
         else
@@ -105,10 +105,10 @@ public final class CCreate extends IBuiltinAction
                     2
                 )
                            .map( i -> new DenseDoubleMatrix2D( i.get( 0 ), i.get( 1 ) ) )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             case SPARSE:
@@ -121,14 +121,14 @@ public final class CCreate extends IBuiltinAction
                     2
                 )
                            .map( i -> new SparseDoubleMatrix2D( i.get( 0 ), i.get( 1 ) ) )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
 
             default:
-                return CFuzzyValue.from( false );
+                return CFuzzyValue.of( false );
         }
     }
 

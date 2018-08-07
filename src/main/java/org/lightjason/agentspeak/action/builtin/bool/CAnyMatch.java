@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  *
- * {@code AnyEqual = bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] );}
+ * {@code AnyEqual = .bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] );}
  */
 public final class CAnyMatch extends IBuiltinAction
 {
@@ -55,28 +55,27 @@ public final class CAnyMatch extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_arguments = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 l_arguments.stream()
                            .skip( 1 )
                            .anyMatch( i -> l_arguments.get( 0 ).equals( i ) )
             )
         );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

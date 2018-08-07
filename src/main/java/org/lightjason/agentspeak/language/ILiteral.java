@@ -50,20 +50,20 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
 
         @Nonnull
         @Override
-        public final Stream<ITerm> values( @Nullable final IPath... p_path )
+        public Stream<ITerm> values( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
+        public Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Override
-        public final boolean emptyValues()
+        public boolean emptyValues()
         {
             return true;
         }
@@ -75,34 +75,34 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         }
 
         @Override
-        public final boolean hasAt()
+        public boolean hasAt()
         {
             return false;
         }
 
         @Nonnull
         @Override
-        public final ILiteral unify( @Nonnull final IContext p_context )
+        public ILiteral bind( @Nonnull final IContext p_context )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral allocate( @Nonnull final IContext p_context )
+        public ILiteral allocate( @Nonnull final IContext p_context )
         {
             return this;
         }
 
         @Override
-        public final int compareTo( @Nonnull final ILiteral p_literal )
+        public int compareTo( @Nonnull final ILiteral p_literal )
         {
             return Integer.compare( p_literal.hashCode(), this.hashCode() );
         }
 
         @Nonnull
         @Override
-        public final String functor()
+        public String functor()
         {
             return "";
         }
@@ -130,55 +130,55 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
-        public final <T> T raw()
+        public <V> V raw()
         {
-            return (T) this;
+            return (V) this;
         }
 
         @Nonnull
         @Override
-        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        public ITerm deepcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ITerm deepcopysuffix()
+        public ITerm deepcopysuffix()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
+        public ILiteral shallowcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral shallowcopysuffix()
+        public ILiteral shallowcopysuffix()
         {
             return this;
         }
 
         @Override
-        public final int structurehash()
+        public int structurehash()
         {
             return 0;
         }
 
         @Override
-        public final int hashCode()
+        public int hashCode()
         {
             return 0;
         }
 
         @Override
-        public final boolean equals( final Object p_object )
+        public boolean equals( final Object p_object )
         {
-            return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
+            return p_object instanceof ILiteral && this.hashCode() == p_object.hashCode();
         }
     };
 
@@ -223,23 +223,21 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     boolean hasAt();
 
     /**
-     * unifies variables if exists
+     * binds all variables to the context variables
      *
-     * @param p_context current execution context
-     * @return new literal instance with unified variables
-     *
-     * @note un-unifyable variables passwd into the result literal
+     * @param p_context context
+     * @return literal with bounded variables
      */
     @Nonnull
-    ILiteral unify( @Nonnull final IContext p_context );
+    ILiteral bind( @Nonnull final IContext p_context  );
 
     /**
-     * allocate all variables with the current context
+     * bind the variable values to the literal
      *
-     * @param p_context current execution context
-     * @return literal with replaced variable
+     * @param p_context context
+     * @return literal with values
      */
     @Nonnull
-    ILiteral allocate( @Nonnull final IContext p_context );
+    ILiteral allocate( @Nonnull final IContext p_context  );
 
 }

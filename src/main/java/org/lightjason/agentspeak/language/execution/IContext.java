@@ -25,15 +25,17 @@ package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
@@ -53,28 +55,35 @@ public interface IContext extends Serializable
 
         @Nonnull
         @Override
-        public final IAgent<?> agent()
+        public IAgent<?> agent()
         {
             return IAgent.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IInstantiable instance()
+        public IInstantiable instance()
         {
             return IPlan.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Map<IPath, IVariable<?>> instancevariables()
+        public Map<IPath, IVariable<?>> instancevariables()
         {
             return Collections.emptyMap();
         }
 
         @Nonnull
         @Override
-        public final IContext duplicate()
+        public IContext duplicate( @Nullable final IVariable<?>... p_variables )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
         {
             return this;
         }
@@ -92,28 +101,35 @@ public interface IContext extends Serializable
 
         @Nonnull
         @Override
-        public final IAgent<?> agent()
+        public IAgent<?> agent()
         {
             return IAgent.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IInstantiable instance()
+        public IInstantiable instance()
         {
             return IRule.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Map<IPath, IVariable<?>> instancevariables()
+        public Map<IPath, IVariable<?>> instancevariables()
         {
             return Collections.emptyMap();
         }
 
         @Nonnull
         @Override
-        public final IContext duplicate()
+        public IContext duplicate( @Nullable final IVariable<?>... p_variables )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables )
         {
             return this;
         }
@@ -147,9 +163,19 @@ public interface IContext extends Serializable
     /**
      * duplicates the context with a shallow-copy
      *
+     * @param p_variables replacing variables
      * @return shallow-copy of the context
      */
     @Nonnull
-    IContext duplicate();
+    IContext duplicate( @Nullable final IVariable<?>... p_variables );
+
+    /**
+     * duplicates the context with a shallow-copy
+     *
+     * @param p_variables stream with replacing variables
+     * @return shallow-copy of the context
+     */
+    @Nonnull
+    IContext duplicate( @Nonnull final Stream<IVariable<?>> p_variables );
 
 }

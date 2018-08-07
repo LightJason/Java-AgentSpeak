@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the first vertex argument that the second vertex
  * argument is a neighbor of all graph instances, the action never fails
  *
- * {@code [B1|B2|B3] = graph/isneighborsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
+ * {@code [B1|B2|B3] = .graph/isneighborsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
 public final class CIsNeighborSingle extends IApplySingle
 {
@@ -46,17 +46,17 @@ public final class CIsNeighborSingle extends IApplySingle
     private static final long serialVersionUID = 1358850067582349520L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.isNeighbor( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

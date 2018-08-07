@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * All string arguments will be join to a single
  * result, the action never fails
  *
- * {@code S = string/concat("A", "B", "C");}
+ * {@code S = .string/concat("A", "B", "C");}
  */
 public final class CConcat extends IBuiltinAction
 {
@@ -54,23 +54,23 @@ public final class CConcat extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from(
+        p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument )
                    .filter( i -> Objects.nonNull( i.raw() ) )
                    .map( i -> i.raw().toString() )
                    .collect( Collectors.joining() )
         ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

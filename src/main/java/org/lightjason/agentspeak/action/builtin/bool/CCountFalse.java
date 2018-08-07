@@ -41,7 +41,7 @@ import java.util.List;
  * This action counts the number of false
  * values, the action never fails
  *
- * {@code R = generic/bool/countfalse( Logical1, [Logical2, Logical3], Logical4 );}
+ * {@code R = .bool/countfalse( Logical1, [Logical2, Logical3], Logical4 );}
  */
 public final class CCountFalse extends IBuiltinAction
 {
@@ -52,26 +52,25 @@ public final class CCountFalse extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .map( ITerm::<Boolean>raw )
                        .filter( i -> !i )
                        .count()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

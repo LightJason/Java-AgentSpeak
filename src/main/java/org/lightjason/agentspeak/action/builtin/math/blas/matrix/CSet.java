@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * the column index, the third value, the new value,
  * all other arguments are matrix objects
  *
- * {@code math/blas/matrix/set(2,2, 0.33, Matrix1, [Matrix2, Matrix3] );}
+ * {@code .math/blas/matrix/set(2,2, 0.33, Matrix1, [Matrix2, Matrix3] );}
  */
 public final class CSet extends IBuiltinAction
 {
@@ -63,15 +63,15 @@ public final class CSet extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 4;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -85,6 +85,6 @@ public final class CSet extends IBuiltinAction
                        l_arguments.get( 2 ).<Number>raw().doubleValue()
                    ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

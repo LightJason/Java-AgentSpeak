@@ -46,7 +46,7 @@ import java.util.stream.IntStream;
  * list object, all other element indices which should removed, the
  * action returns the removed arguments and never fails
  *
- * {@code [A|B|C] = collection/list/remove( L, 3, [4, [5]] );}
+ * {@code [A|B|C] = .collection/list/remove( L, 3, [4, [5]] );}
  */
 public final class CRemove extends IBuiltinAction
 {
@@ -66,15 +66,15 @@ public final class CRemove extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Object> l_list = p_argument.get( 0 ).<List<Object>>raw();
         final Set<Integer> l_removed = new HashSet<>();
@@ -87,7 +87,7 @@ public final class CRemove extends IBuiltinAction
                    l_removed.add( i );
                    return l_list.get( i );
                } )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
         final List<Object> l_result = IntStream.range( 0, l_list.size() )
@@ -100,7 +100,7 @@ public final class CRemove extends IBuiltinAction
         l_list.clear();
         l_list.addAll( l_result );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

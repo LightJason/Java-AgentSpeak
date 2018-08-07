@@ -36,7 +36,7 @@ import java.util.Map;
  * other values are map references, the key-value pair
  * is added to all maps iif not exists and the action never fails
  *
- * {@code collection/map/putsingleifabsent( "key", "value", Map1, Map2 );}
+ * {@code .collection/map/putsingleifabsent( "key", "value", Map1, Map2 );}
  */
 public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object>>
 {
@@ -46,7 +46,7 @@ public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object
     private static final long serialVersionUID = 6130981531762056381L;
 
     @Override
-    protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.putIfAbsent( p_key, p_value );
     }

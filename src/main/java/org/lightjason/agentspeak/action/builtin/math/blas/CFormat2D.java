@@ -39,13 +39,13 @@ public final class CFormat2D extends IFormat<DoubleMatrix2D>
     private static final long serialVersionUID = 2504711213170928363L;
 
     @Override
-    protected final Class<?> getType()
+    protected Class<?> getType()
     {
         return DoubleMatrix2D.class;
     }
 
     @Override
-    protected final String format( final DoubleMatrix2D p_data )
+    protected String format( final DoubleMatrix2D p_data )
     {
         return MessageFormat.format( "[{0}x{1}]({2})", p_data.rows(), p_data.columns(), FORMATTER.toString( p_data ) );
     }

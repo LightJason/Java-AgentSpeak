@@ -43,7 +43,7 @@ import java.util.List;
  * the infinity-norm and returns the value, the
  * action never fails
  *
- * {@code [N1|N2] = math/blas/matrix/infinitynorm(M1,M2);}
+ * {@code [N1|N2] = .math/blas/matrix/infinitynorm(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Uniform_norm
  */
 public final class CInfinityNorm extends IAlgebra
@@ -63,23 +63,23 @@ public final class CInfinityNorm extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( DENSEALGEBRA::normInfinity )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

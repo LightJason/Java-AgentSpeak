@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -148,7 +149,7 @@ public abstract class IBaseWeb extends IBuiltinAction
     }
 
     /**
-     * creates a literal structure from a stream of string elements,
+     * creates a literal structure of a stream of string elements,
      * the string stream will be build in a tree structure
      *
      * @param p_functor stream with functor strings
@@ -160,9 +161,9 @@ public abstract class IBaseWeb extends IBuiltinAction
     {
         final Stack<String> l_tree = p_functor.collect( Collectors.toCollection( Stack::new ) );
 
-        ILiteral l_literal = CLiteral.from( l_tree.pop(), p_values );
+        ILiteral l_literal = CLiteral.of( l_tree.pop(), p_values );
         while ( !l_tree.isEmpty() )
-            l_literal = CLiteral.from( l_tree.pop(), l_literal );
+            l_literal = CLiteral.of( l_tree.pop(), l_literal );
 
         return l_literal;
     }
@@ -177,14 +178,14 @@ public abstract class IBaseWeb extends IBuiltinAction
     @SuppressWarnings( "unchecked" )
     protected static Stream<ITerm> flatterm( @Nullable final Object p_object )
     {
-        if ( ( Objects.isNull( p_object ) ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
+        if ( Objects.isNull( p_object ) || p_object instanceof Map && ( (Map<String, ?>) p_object ).isEmpty() )
             return Stream.empty();
 
         return p_object instanceof Map
                ? flatmap( (Map<String, ?>) p_object )
                : p_object instanceof Collection
                  ? flatcollection( (Collection) p_object )
-                 : Stream.of( CRawTerm.from( p_object ) );
+                 : Stream.of( CRawTerm.of( p_object ) );
     }
 
 
@@ -201,8 +202,8 @@ public abstract class IBaseWeb extends IBuiltinAction
         return p_map.entrySet()
                     .stream()
                     .map( i ->
-                              CLiteral.from(
-                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/]", "-" ),
+                              CLiteral.of(
+                                  StringUtils.uncapitalize( i.getKey() ).replaceAll( "[^([a-zA-Z][0-9]\\-_/]", "-" ),
                                   flatterm( i.getValue() )
                               )
                     );

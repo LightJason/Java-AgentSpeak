@@ -42,7 +42,7 @@ import java.util.List;
  * For each input matrix the rank is calculated and returned,
  * the action never fails
  *
- * {@code [R1|R2] = math/blas/matrix/rank(M1,M2);}
+ * {@code [R1|R2] = .math/blas/matrix/rank(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
  */
 public final class CRank extends IAlgebra
@@ -62,24 +62,24 @@ public final class CRank extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .mapToDouble( DENSEALGEBRA::rank )
                .boxed()
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

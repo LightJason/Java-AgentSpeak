@@ -39,7 +39,7 @@ import java.util.List;
  * The action adds the first argument to all
  * other list arguments, the action never fails
  *
- * {@code collection/list/add( Value, L1, L2, L3 );}
+ * {@code .collection/list/add( Value, L1, L2, L3 );}
  */
 public final class CAdd extends IBuiltinAction
 {
@@ -59,14 +59,14 @@ public final class CAdd extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_argument.stream()
@@ -74,6 +74,6 @@ public final class CAdd extends IBuiltinAction
                   .map( ITerm::<List<Object>>raw )
                   .forEach( i -> i.add( p_argument.get( 0 ).raw() ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

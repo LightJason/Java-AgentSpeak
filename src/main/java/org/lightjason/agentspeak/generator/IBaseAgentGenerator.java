@@ -33,10 +33,12 @@ import org.lightjason.agentspeak.grammar.CParserAgent;
 import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.unify.IUnifier;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -68,12 +70,14 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
+     * @param p_lambdastreaming lambda streams
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws Exception
     {
-        this( p_stream, p_actions, Collections.emptySet(), IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, p_lambdastreaming, Collections.emptySet(), IVariableBuilder.EMPTY );
     }
 
     /**
@@ -81,13 +85,14 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
+     * @param p_lambdastreaming lambda streaming
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions, @Nonnull final IVariableBuilder p_variablebuilder )
-        throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
-        this( p_stream, p_actions, Collections.emptySet(), p_variablebuilder );
+        this( p_stream, p_actions, p_lambdastreaming, Collections.emptySet(), p_variablebuilder );
     }
 
     /**
@@ -95,14 +100,16 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
+     * @param p_lambdastreaming lambda streaming
      * @param p_planbundle set with planbundles
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
-                                @Nonnull final Set<IPlanBundle> p_planbundle, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final Set<IPlanBundle> p_planbundle,
+                                @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
+        final IASTVisitorAgent l_visitor = new CParserAgent( p_actions, p_lambdastreaming ).parse( p_stream );
         m_configuration = this.configuration(
             DEFAULTFUZZYBUNDLE,
 
@@ -143,7 +150,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      */
     protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                                     @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
-                                                    @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                                    @Nonnull final ITrigger p_initialgoal, @Nonnull final IUnifier p_unifier,
                                                     @Nonnull final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(

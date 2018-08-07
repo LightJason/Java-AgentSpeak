@@ -42,7 +42,7 @@ import java.util.List;
  * Creates for each input matrix the transposed
  * matrix and returns it, the action never fails
  *
- * {@code [T1|T2] = math/blas/matrix/transpose(M1,M2);}
+ * {@code [T1|T2] = .math/blas/matrix/transpose(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Transpose
  */
 public final class CTranspose extends IAlgebra
@@ -62,23 +62,23 @@ public final class CTranspose extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( DENSEALGEBRA::transpose )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

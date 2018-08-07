@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 
 /**
@@ -54,21 +53,21 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception on parsing exception
      */
     @Test
-    public final void literalvaluetraversing() throws Exception
+    public void literalvaluetraversing() throws Exception
     {
         final Set<ILiteral> l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
             CLiteral.parse( "first('Foo')" )
         ).collect( Collectors.toSet() );
 
-        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
+        final ILiteral l_literal = CLiteral.of( "toplevel", Stream.concat( l_test.stream(), Stream.of(
             CLiteral.parse( "second/sub(1)" ),
             CLiteral.parse( "second/sub(2)" ),
             CLiteral.parse( "second/sub(3)" )
         ) ).collect( Collectors.toSet() ) );
 
-        final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
-        assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
+        final List<ITerm> l_result = l_literal.values( CPath.of( "first" ) ).collect( Collectors.toList() );
+        Assert.assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_test.size(), l_result.size() );
     }
 
 
@@ -78,14 +77,14 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exeception
      */
     @Test
-    public final void literalvaluesequentialtraversing() throws Exception
+    public void literalvaluesequentialtraversing() throws Exception
     {
         final ILiteral[] l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
             CLiteral.parse( "first('Foo')" )
         ).toArray( ILiteral[]::new );
 
-        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat(
+        final ILiteral l_literal = CLiteral.of( "toplevel", Stream.concat(
             Arrays.stream( l_test ),
             Stream.of(
                 CLiteral.parse( "second/sub(1)" ),
@@ -96,8 +95,8 @@ public final class TestCUnifier extends IBaseTest
 
         Assert.assertArrayEquals(
             MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
-            l_literal.orderedvalues( CPath.from( "first" ) ).toArray(),
-            l_test
+            l_test,
+            l_literal.orderedvalues( CPath.of( "first" ) ).toArray()
         );
     }
 
@@ -107,7 +106,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void structurehash() throws Exception
+    public void structurehash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "foo(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
@@ -120,12 +119,12 @@ public final class TestCUnifier extends IBaseTest
             l_second.structurehash()
         );
 
-        final ILiteral l_third = CLiteral.parse( "foo()" );
-        final ILiteral l_fourth = CLiteral.parse( "hallo()" );
-        assertNotEquals(
+        final ILiteral l_third = CLiteral.parse( "foo" );
+        final ILiteral l_fourth = CLiteral.parse( "hallo" );
+        Assert.assertNotEquals(
             MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.structurehash() ),
-            l_third.structurehash(),
-            l_fourth.structurehash()
+            l_fourth.structurehash(),
+            l_third.structurehash()
         );
     }
 

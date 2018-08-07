@@ -76,7 +76,7 @@ public abstract class IOperator extends IBuiltinAction
                    .parallel()
                    .forEach( i -> this.apply( i, l_arguments.get( 0 ) ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 

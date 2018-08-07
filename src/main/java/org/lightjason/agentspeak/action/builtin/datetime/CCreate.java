@@ -39,7 +39,7 @@ import java.util.List;
  * "now" the current date-time will returned, the
  * action never fails
  *
- * {@code [O1|O2] = datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" );}
+ * {@code [O1|O2] = .datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" );}
  */
 public final class CCreate extends IDateTime
 {
@@ -49,9 +49,9 @@ public final class CCreate extends IDateTime
     private static final long serialVersionUID = 9177183916043629955L;
 
     @Override
-    protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
+    protected boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime ) );
+        p_return.add( CRawTerm.of( p_datetime ) );
         return true;
     }
 

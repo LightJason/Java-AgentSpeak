@@ -34,7 +34,7 @@ package org.lightjason.agentspeak.action.builtin.bool;
  * the type (double / integral) must be equal, so keep
  * in mind, that you use the correct number type on the argument input
  *
- * {@code [NE1|NE2] = bool/notequal( "this is equal", "this is equal", [123, "test"] );}
+ * {@code [NE1|NE2] = .bool/notequal( "this is equal", "this is equal", [123, "test"] );}
  */
 public final class CNotEqual extends CEqual
 {
@@ -44,7 +44,7 @@ public final class CNotEqual extends CEqual
     private static final long serialVersionUID = -3226848482113693419L;
 
     @Override
-    protected final boolean apply( final boolean p_value )
+    protected boolean apply( final boolean p_value )
     {
         return !super.apply( p_value );
     }

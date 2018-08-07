@@ -39,7 +39,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * {@code [Hour|Minute|Second|Nano] = datetime/time( "now" );}
+ * {@code [Hour|Minute|Second|Nano] = .datetime/time( "now" );}
  */
 public final class CTime extends IDateTime
 {
@@ -49,12 +49,12 @@ public final class CTime extends IDateTime
     private static final long serialVersionUID = -5507360709996185053L;
 
     @Override
-    protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
+    protected boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getHour() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMinute() ) );
-        p_return.add( CRawTerm.from( p_datetime.getSecond() ) );
-        p_return.add( CRawTerm.from( p_datetime.getNano() ) );
+        p_return.add( CRawTerm.of( p_datetime.getHour() ) );
+        p_return.add( CRawTerm.of( p_datetime.getMinute() ) );
+        p_return.add( CRawTerm.of( p_datetime.getSecond() ) );
+        p_return.add( CRawTerm.of( p_datetime.getNano() ) );
         return true;
     }
 

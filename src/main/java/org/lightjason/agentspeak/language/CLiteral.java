@@ -31,14 +31,13 @@ import com.google.common.collect.Multimap;
 import com.google.common.hash.Hasher;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.grammar.CASTVisitorType;
+import org.lightjason.agentspeak.grammar.CASTVisitorManual;
 import org.lightjason.agentspeak.grammar.CErrorListener;
-import org.lightjason.agentspeak.grammar.IASTVisitorType;
+import org.lightjason.agentspeak.grammar.IASTVisitorManual;
 import org.lightjason.agentspeak.grammar.IBaseParser;
-import org.lightjason.agentspeak.grammar.TypeLexer;
-import org.lightjason.agentspeak.grammar.TypeParser;
+import org.lightjason.agentspeak.grammar.ManualLexer;
+import org.lightjason.agentspeak.grammar.ManualParser;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,7 +135,7 @@ public final class CLiteral implements ILiteral
         }
 
         // calculates object hash value
-        final Hasher l_hasher = CCommon.getTermHashing();
+        final Hasher l_hasher = CCommon.termhashing();
         l_hasher.putInt( m_functor.hashCode() );
         l_hasher.putBoolean( m_negated );
         l_hasher.putBoolean( m_at );
@@ -144,7 +143,7 @@ public final class CLiteral implements ILiteral
         m_hash = l_hasher.hash().asInt();
 
         // calculates the structure hash value of the value definition (need to start with value definition)
-        final Hasher l_valuehasher = CCommon.getTermHashing();
+        final Hasher l_valuehasher = CCommon.termhashing();
         m_orderedvalues.forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
         l_valuehasher.putBoolean( m_negated );
         l_valuehasher.putString( p_functor.path(), Charsets.UTF_8 );
@@ -158,9 +157,9 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
+    public static ILiteral of( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
     {
-        return from(
+        return of(
             p_functor,
             ( Objects.isNull( p_values ) ) || ( p_values.length == 0 )
             ? Collections.emptySet()
@@ -175,10 +174,10 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Collection<ITerm> p_values )
+    public static ILiteral of( @Nonnull final String p_functor, @Nonnull final Collection<ITerm> p_values )
     {
         return new CLiteral(
-            p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
+            p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.of( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
             p_values
         );
     }
@@ -190,9 +189,9 @@ public final class CLiteral implements ILiteral
      * @param p_values value stream
      * @return literal
      */
-    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Stream<ITerm> p_values )
+    public static ILiteral of( @Nonnull final String p_functor, @Nonnull final Stream<ITerm> p_values )
     {
-        return from( p_functor, p_values.collect( Collectors.toList() ) );
+        return of( p_functor, p_values.collect( Collectors.toList() ) );
     }
 
     /**
@@ -202,9 +201,9 @@ public final class CLiteral implements ILiteral
      * @param p_values values
      * @return literal
      */
-    public static ILiteral from( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    public static ILiteral of( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return from( false, false, p_functor, p_values );
+        return of( false, false, p_functor, p_values );
     }
 
     /**
@@ -214,9 +213,9 @@ public final class CLiteral implements ILiteral
      * @param p_values values
      * @return literal
      */
-    public static ILiteral from( @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    public static ILiteral of( @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
     {
-        return from( false, false, p_functor, p_values );
+        return of( false, false, p_functor, p_values );
     }
 
     /**
@@ -228,9 +227,9 @@ public final class CLiteral implements ILiteral
      * @param p_values vales
      * @return literal
      */
-    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    public static ILiteral of( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return from( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
+        return of( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
     }
 
     /**
@@ -242,7 +241,7 @@ public final class CLiteral implements ILiteral
      * @param p_values vales
      * @return literal
      */
-    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    public static ILiteral of( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
     {
         return new CLiteral( p_at, p_negated, p_functor, p_values.collect( Collectors.toList() ) );
     }
@@ -263,7 +262,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final Stream<ITerm> values( @Nullable final IPath... p_path )
+    public Stream<ITerm> values( @Nullable final IPath... p_path )
     {
         return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_values.values().stream()
@@ -276,7 +275,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
+    public Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
         return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_orderedvalues.stream().sequential()
@@ -292,102 +291,80 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final boolean emptyValues()
+    public boolean emptyValues()
     {
         return m_values.isEmpty();
     }
 
     @Override
-    public final int structurehash()
+    public int structurehash()
     {
         return m_structurehash;
     }
 
     @Override
-    public final boolean negated()
+    public boolean negated()
     {
         return m_negated;
     }
 
     @Override
-    public final boolean hasAt()
+    public boolean hasAt()
     {
         return m_at;
     }
 
     @Override
-    public final boolean hasVariable()
+    public boolean hasVariable()
     {
         return m_orderedvalues.parallelStream().anyMatch( ITerm::hasVariable );
     }
 
     @Nonnull
     @Override
-    public final ILiteral unify( @Nonnull final IContext p_context )
+    public ILiteral bind( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i ->
-                           {
-                               if ( i instanceof IVariable<?> )
-                               {
-                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.from( l_variable ) : l_variable;
-                               }
-                               if ( i instanceof ILiteral )
-                                   return ( (ILiteral) i ).unify( p_context );
-                               return i;
-                           } )
+                           .map( i -> i instanceof ILiteral ? i.<ILiteral>term().bind( p_context ) : CCommon.bindbycontext( i, p_context ) )
                            .collect( Collectors.toList() )
         );
     }
 
     @Nonnull
     @Override
-    public final ILiteral allocate( @Nonnull final IContext p_context )
+    public ILiteral allocate( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i ->
-                           {
-                               if ( i instanceof IVariable<?> )
-                               {
-                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return Objects.isNull( l_variable )
-                                          ? CRawTerm.EMPTY
-                                          : l_variable;
-                               }
-                               if ( i instanceof ILiteral )
-                                   return ( (ILiteral) i ).unify( p_context );
-                               return i;
-                           } )
+                           .map( i -> i instanceof ILiteral ? i.<ILiteral>term().allocate( p_context ) : CRawTerm.of( CCommon.bindbycontext( i, p_context ) ) )
                            .collect( Collectors.toList() )
         );
     }
 
     @Nonnull
     @Override
-    public final String functor()
+    public String functor()
     {
         return m_functor.suffix();
     }
 
     @Nonnull
     @Override
-    public final IPath functorpath()
+    public IPath functorpath()
     {
         return m_functor.subpath( 0, m_functor.size() - 1 );
     }
 
     @Nonnull
     @Override
-    public final IPath fqnfunctor()
+    public IPath fqnfunctor()
     {
         return m_functor;
     }
@@ -395,26 +372,26 @@ public final class CLiteral implements ILiteral
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <T> T raw()
+    public <V> V raw()
     {
-        return (T) this;
+        return (V) this;
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_hash;
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
-        return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof ILiteral && this.hashCode() == p_object.hashCode();
     }
 
     @Nonnull
     @Override
-    public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
+    public ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
@@ -431,29 +408,29 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final ILiteral shallowcopysuffix()
+    public ILiteral shallowcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.suffix() ),
+            m_at, m_negated, CPath.of( m_functor.suffix() ),
             m_values.values()
         );
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}{1}{2}{3}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues );
     }
 
     @Override
-    public final int compareTo( @Nonnull final ILiteral p_literal )
+    public int compareTo( @Nonnull final ILiteral p_literal )
     {
         return Integer.compare( this.hashCode(), p_literal.hashCode() );
     }
 
     @Nonnull
     @Override
-    public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
+    public synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
@@ -472,10 +449,10 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final synchronized ITerm deepcopysuffix()
+    public synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.suffix() ),
+            m_at, m_negated, CPath.of( m_functor.suffix() ),
             m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
         );
     }
@@ -484,7 +461,7 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    private static final class CParser extends IBaseParser<IASTVisitorType, TypeLexer, TypeParser>
+    private static final class CParser extends IBaseParser<IASTVisitorManual, ManualLexer, ManualParser>
     {
 
         /**
@@ -498,23 +475,23 @@ public final class CLiteral implements ILiteral
 
         @Nonnull
         @Override
-        public final IASTVisitorType parse( @Nonnull final InputStream p_stream ) throws Exception
+        public IASTVisitorManual parse( @Nonnull final InputStream p_stream ) throws Exception
         {
-            final IASTVisitorType l_visitor = new CASTVisitorType();
-            l_visitor.visit( this.parser( p_stream ).literal_type() );
+            final IASTVisitorManual l_visitor = new CASTVisitorManual();
+            l_visitor.visit( this.parser( p_stream ).root_literal() );
             return l_visitor;
         }
 
         @Override
-        protected final Class<TypeLexer> lexerclass()
+        protected Class<ManualLexer> lexerclass()
         {
-            return TypeLexer.class;
+            return ManualLexer.class;
         }
 
         @Override
-        protected final Class<TypeParser> parserclass()
+        protected Class<ManualParser> parserclass()
         {
-            return TypeParser.class;
+            return ManualParser.class;
         }
     }
 }

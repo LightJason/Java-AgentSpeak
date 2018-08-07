@@ -23,36 +23,28 @@
 
 package org.lightjason.agentspeak.consistency;
 
-import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefbase;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
-import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.consistency.filter.CAll;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.CSymmetricDifference;
 import org.lightjason.agentspeak.consistency.metric.CWeightedDifference;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
-import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 
-import javax.annotation.Nonnull;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -63,7 +55,7 @@ public final class TestCMetric extends IBaseTest
     /**
      * agent generator
      */
-    private CAgent.CAgentGenerator m_agentgenerator;
+    private CAgentGenerator m_agentgenerator;
     /**
      * literal view generator
      */
@@ -82,15 +74,15 @@ public final class TestCMetric extends IBaseTest
     public void initialize() throws Exception
     {
         m_generator = new CGenerator();
-        m_agentgenerator = new CAgent.CAgentGenerator( IOUtils.toInputStream( "", "UTF-8" ), Collections.emptySet() );
+        m_agentgenerator = new CAgentGenerator();
 
         m_literals = Stream.of(
-            CLiteral.from( "toplevel" ),
-            CLiteral.from( "first/sub1" ),
-            CLiteral.from( "first/sub2" ),
-            CLiteral.from( "second/sub3" ),
-            CLiteral.from( "second/sub4" ),
-            CLiteral.from( "second/sub/sub5" )
+            CLiteral.of( "toplevel" ),
+            CLiteral.of( "first/sub1" ),
+            CLiteral.of( "first/sub2" ),
+            CLiteral.of( "second/sub3" ),
+            CLiteral.of( "second/sub4" ),
+            CLiteral.of( "second/sub/sub5" )
         ).collect( Collectors.toSet() );
     }
 
@@ -100,7 +92,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric weight metric equality
      */
     @Test
-    public final void symmetricweightequality()
+    public void symmetricweightequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -118,7 +110,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric weight metric inequality
      */
     @Test
-    public final void symmetricweightinequality()
+    public void symmetricweightinequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -126,7 +118,7 @@ public final class TestCMetric extends IBaseTest
             "symmetric difference inequality",
             new CAll(), new CSymmetricDifference(),
             m_literals,
-            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.of( "diff" ) ) ).collect( Collectors.toSet() ),
             1, 0
         );
     }
@@ -136,7 +128,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric metric equality
      */
     @Test
-    public final void weightequality()
+    public void weightequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -155,7 +147,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric metric equality
      */
     @Test
-    public final void weightinequality()
+    public void weightinequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -165,7 +157,7 @@ public final class TestCMetric extends IBaseTest
             new CAll(),
             new CWeightedDifference(),
             m_literals,
-            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.of( "diff" ) ) ).collect( Collectors.toSet() ),
             28 + 1.0 / 6, 0
         );
     }
@@ -189,7 +181,7 @@ public final class TestCMetric extends IBaseTest
             p_filter.apply( this.agent( p_belief1 ) ),
             p_filter.apply( this.agent( p_belief2 ) )
         );
-        assertEquals( p_message, p_excepted, l_value, p_delta );
+        Assert.assertEquals( p_message, p_excepted, l_value, p_delta );
     }
 
 
@@ -199,59 +191,13 @@ public final class TestCMetric extends IBaseTest
      * @param p_literals literal collection
      * @return agent
      */
-    private CAgent agent( final Collection<ILiteral> p_literals )
+    private IAgent<?> agent( final Collection<ILiteral> p_literals )
     {
         Assume.assumeNotNull( m_generator );
 
-        final CAgent l_agent = m_agentgenerator.generatesingle();
+        final IAgent<?> l_agent = m_agentgenerator.generatesingle();
         p_literals.forEach( i -> l_agent.beliefbase().generate( m_generator, i.functorpath() ).add( i ) );
         return l_agent;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * agent class
-     */
-    private static final class CAgent extends IBaseAgent<CAgent>
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 4390503811927101766L;
-
-        /**
-         * ctor
-         *
-         * @param p_configuration agent configuration
-         */
-        private CAgent( final IAgentConfiguration<CAgent> p_configuration )
-        {
-            super( p_configuration );
-        }
-
-        /**
-         * agent generator class
-         */
-        private static final class CAgentGenerator extends IBaseAgentGenerator<CAgent>
-        {
-            /**
-             * ctor
-             *
-             * @throws Exception on any error
-             */
-            CAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
-            {
-                super( p_stream, p_actions );
-            }
-
-            @Override
-            public CAgent generatesingle( final Object... p_data )
-            {
-                return new CAgent( m_configuration );
-            }
-        }
-
     }
 
 
@@ -261,7 +207,7 @@ public final class TestCMetric extends IBaseTest
     private static final class CGenerator implements IViewGenerator
     {
         @Override
-        public final IView apply( final String p_name, final IView p_parent )
+        public IView apply( final String p_name, final IView p_parent )
         {
             return new CBeliefbase( new CMultiStorage<>() ).create( p_name, p_parent );
         }

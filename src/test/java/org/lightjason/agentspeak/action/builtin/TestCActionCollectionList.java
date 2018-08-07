@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.action.builtin.collection.list.CRemove;
 import org.lightjason.agentspeak.action.builtin.collection.list.CReverse;
 import org.lightjason.agentspeak.action.builtin.collection.list.CSet;
 import org.lightjason.agentspeak.action.builtin.collection.list.CSubList;
+import org.lightjason.agentspeak.action.builtin.collection.list.CSymmetricDifference;
 import org.lightjason.agentspeak.action.builtin.collection.list.CUnique;
 import org.lightjason.agentspeak.action.builtin.collection.list.CZip;
 import org.lightjason.agentspeak.language.CCommon;
@@ -66,17 +67,19 @@ public final class TestCActionCollectionList extends IBaseTest
      * test create empty list
      */
     @Test
-    public final void createempty()
+    public void createempty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CCreate().execute(
-            false, IContext.EMPTYPLAN,
-            Collections.emptyList(),
-            l_return
+        Assert.assertTrue(
+            new CCreate().execute(
+                false, IContext.EMPTYPLAN,
+                Collections.emptyList(),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
         Assert.assertTrue( l_return.get( 0 ).<List<?>>raw().isEmpty() );
     }
@@ -86,20 +89,22 @@ public final class TestCActionCollectionList extends IBaseTest
      * test create empty synchronized list
      */
     @Test
-    public final void createemptysynchronize()
+    public void createemptysynchronize()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CCreate().execute(
-            true, IContext.EMPTYPLAN,
-            Collections.emptyList(),
-            l_return
+        Assert.assertTrue(
+            new CCreate().execute(
+                true, IContext.EMPTYPLAN,
+                Collections.emptyList(),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
         Assert.assertTrue( l_return.get( 0 ).<List<?>>raw().isEmpty() );
-        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 0 ).raw().getClass() );
     }
 
 
@@ -107,26 +112,28 @@ public final class TestCActionCollectionList extends IBaseTest
      * test create non-empty list
      */
     @Test
-    public final void create()
+    public void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CCreate().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "a", 1, "b", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CCreate().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( "a", 1, "b", true ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 4 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<List<?>>raw().size() );
 
         final List<?> l_list = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_list.get( 0 ), "a" );
-        Assert.assertEquals( l_list.get( 1 ), 1 );
-        Assert.assertEquals( l_list.get( 2 ), "b" );
-        Assert.assertEquals( l_list.get( 3 ), true );
+        Assert.assertEquals( "a", l_list.get( 0 ) );
+        Assert.assertEquals( 1, l_list.get( 1 ) );
+        Assert.assertEquals( "b", l_list.get( 2 ) );
+        Assert.assertEquals( true, l_list.get( 3 ) );
     }
 
 
@@ -134,23 +141,25 @@ public final class TestCActionCollectionList extends IBaseTest
      * test complement action
      */
     @Test
-    public final void complement()
+    public void complement()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CComplement().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of(
-                CRawTerm.from( Stream.of( "a", "b", 1, 2 ).collect( Collectors.toList() ) ),
-                CRawTerm.from( Stream.of( "x", "y", 4, "a", 5, 1 ).collect( Collectors.toList() ) )
-            ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CComplement().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of(
+                    CRawTerm.of( Stream.of( "a", "b", 1, 2 ).collect( Collectors.toList() ) ),
+                    CRawTerm.of( Stream.of( "x", "y", 4, "a", 5, 1 ).collect( Collectors.toList() ) )
+                ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_return.get( 0 ), List.class ) );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().get( 0 ), "b" );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().get( 1 ), 2 );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertTrue( CCommon.isssignableto( l_return.get( 0 ), List.class ) );
+        Assert.assertEquals( "b", l_return.get( 0 ).<List<?>>raw().get( 0 ) );
+        Assert.assertEquals( 2, l_return.get( 0 ).<List<?>>raw().get( 1 ) );
     }
 
 
@@ -158,39 +167,43 @@ public final class TestCActionCollectionList extends IBaseTest
      * test get action
      */
     @Test
-    public final void get()
+    public void get()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final List<?> l_list = Stream.of( "a", 1, "b", true, "foobar", 56.78 ).collect( Collectors.toList() );
 
-        new CGet().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_list ), CRawTerm.from( 1 ), CRawTerm.from( 4 ), CRawTerm.from( 5 ) ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CGet().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( CRawTerm.of( l_list ), CRawTerm.of( 1 ), CRawTerm.of( 4 ), CRawTerm.of( 5 ) ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1 );
-        Assert.assertEquals( l_return.get( 1 ).raw(), "foobar" );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 56.78 );
+        Assert.assertEquals( 3, l_return.size() );
+        Assert.assertEquals( 1, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( "foobar", l_return.get( 1 ).raw() );
+        Assert.assertEquals( 56.78, l_return.get( 2 ).<Number>raw() );
     }
 
     /**
      * test reverse action
      */
     @Test
-    public final void reverse()
+    public void reverse()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final List<?> l_list = IntStream.range( 0, 10 ).mapToObj( i -> Math.random() ).collect( Collectors.toList() );
 
-        new CReverse().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CReverse().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( CRawTerm.of( l_list ) ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Lists.reverse( l_list ).toArray() );
+        Assert.assertArrayEquals( Lists.reverse( l_list ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -198,32 +211,31 @@ public final class TestCActionCollectionList extends IBaseTest
      * test remove action
      */
     @Test
-    public final void remove()
+    public void remove()
     {
         final Random l_random = new Random();
 
         final List<?> l_elements = IntStream.range( 0, l_random.nextInt( 100 ) + 1 ).map( i -> l_random.nextInt() ).boxed().collect( Collectors.toList() );
         final List<?> l_list = new ArrayList<>( l_elements );
-        final List<Integer> l_index = new ArrayList<>(
-                                        IntStream.range( 0, l_list.size() / 3 )
-                                                 .map( i ->  l_random.nextInt( l_list.size() ) )
-                                                 .boxed()
-                                                 .collect( Collectors.toSet() )
-                                      );
+        final List<Integer> l_index = IntStream.range( 0, l_list.size() / 3 )
+                                               .map( i -> l_random.nextInt( l_list.size() ) )
+                                               .boxed().distinct().collect( Collectors.toList() );
 
         final int l_startsize = l_list.size();
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CRemove().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.concat(
-                Stream.of( l_list ),
-                l_index.stream()
-            ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CRemove().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.concat(
+                    Stream.of( l_list ),
+                    l_index.stream()
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_startsize, l_list.size() + l_index.size() );
+        Assert.assertEquals( l_list.size() + l_index.size(), l_startsize );
         Assert.assertTrue(
             l_index.parallelStream()
                    .map( l_elements::get )
@@ -236,22 +248,24 @@ public final class TestCActionCollectionList extends IBaseTest
      * test set action
      */
     @Test
-    public final void set()
+    public void set()
     {
         final List<?> l_list1 = Stream.of( "" ).collect( Collectors.toList() );
         final List<?> l_list2 = Stream.of( "abc", 123, true ).collect( Collectors.toList() );
 
-        new CSet().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( 0 ), CRawTerm.from( "xxx" ), CRawTerm.from( l_list1 ), CRawTerm.from( l_list2 ) ).collect( Collectors.toList() ),
-            Collections.emptyList()
+        Assert.assertTrue(
+            new CSet().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( CRawTerm.of( 0 ), CRawTerm.of( "xxx" ), CRawTerm.of( l_list1 ), CRawTerm.of( l_list2 ) ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_list1.size(), 1 );
-        Assert.assertEquals( l_list1.get( 0 ), "xxx" );
+        Assert.assertEquals( 1, l_list1.size() );
+        Assert.assertEquals( "xxx", l_list1.get( 0 ) );
 
-        Assert.assertEquals( l_list2.size(), 3 );
-        Assert.assertEquals( l_list2.get( 0 ), "xxx" );
+        Assert.assertEquals( 3, l_list2.size() );
+        Assert.assertEquals( "xxx", l_list2.get( 0 ) );
     }
 
 
@@ -259,18 +273,20 @@ public final class TestCActionCollectionList extends IBaseTest
      * test add action
      */
     @Test
-    public final void add()
+    public void add()
     {
         final List<?> l_list = new ArrayList<>();
 
-        new CAdd().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( CRawTerm.from( "xyz" ), CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
-            Collections.emptyList()
+        Assert.assertTrue(
+            new CAdd().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( CRawTerm.of( "xyz" ), CRawTerm.of( l_list ) ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_list.size(), 1 );
-        Assert.assertEquals( l_list.get( 0 ), "xyz" );
+        Assert.assertEquals( 1, l_list.size() );
+        Assert.assertEquals( "xyz", l_list.get( 0 ) );
     }
 
 
@@ -278,12 +294,12 @@ public final class TestCActionCollectionList extends IBaseTest
      * test range error
      */
     @Test
-    public final void rangeerror()
+    public void rangeerror()
     {
         Assert.assertFalse(
             new CRange().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of().map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of().map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -294,41 +310,45 @@ public final class TestCActionCollectionList extends IBaseTest
      * test range
      */
     @Test
-    public final void range()
+    public void range()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CRange().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( 0, 5, 7, 9 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CRange().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( 0, 5, 7, 9 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        new CRange().execute(
-            true, IContext.EMPTYPLAN,
-            Stream.of( 1, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CRange().execute(
+                true, IContext.EMPTYPLAN,
+                Stream.of( 1, 7 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals( l_return.size(), 3 );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), IntStream.range( 0, 5 ).boxed().toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), IntStream.range( 7, 9 ).boxed().toArray() );
+        Assert.assertArrayEquals( IntStream.range( 0, 5 ).boxed().toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( IntStream.range( 7, 9 ).boxed().toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
 
-        Assert.assertArrayEquals( l_return.get( 2 ).<List<?>>raw().toArray(), IntStream.range( 1, 7 ).boxed().toArray() );
-        Assert.assertEquals( l_return.get( 2 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertArrayEquals( IntStream.range( 1, 7 ).boxed().toArray(), l_return.get( 2 ).<List<?>>raw().toArray() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 2 ).<List<?>>raw().getClass() );
     }
 
     /**
      * test sublist error
      */
     @Test
-    public final void sublisterror()
+    public void sublisterror()
     {
         Assert.assertFalse(
             new CSubList().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( new ArrayList<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( new ArrayList<>() ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -338,27 +358,31 @@ public final class TestCActionCollectionList extends IBaseTest
      * test sublist
      */
     @Test
-    public final void sublist()
+    public void sublist()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CSubList().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( Stream.of( "ax", "bx", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CSubList().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( Stream.of( "ax", "bx", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        new CSubList().execute(
-            true, IContext.EMPTYPLAN,
-            Stream.of( Stream.of( 8, 9, 10 ).collect( Collectors.toList() ), 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CSubList().execute(
+                true, IContext.EMPTYPLAN,
+                Stream.of( Stream.of( 8, 9, 10 ).collect( Collectors.toList() ), 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "ax", "bx" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "c", 1 ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 2 ).<List<?>>raw().toArray(), Stream.of( 9 ).toArray() );
+        Assert.assertArrayEquals( Stream.of( "ax", "bx" ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( "c", 1 ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 9 ).toArray(), l_return.get( 2 ).<List<?>>raw().toArray() );
     }
 
 
@@ -366,7 +390,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test flat action
      */
     @Test
-    public final void flat()
+    public void flat()
     {
         final Random l_random = new Random();
 
@@ -375,14 +399,16 @@ public final class TestCActionCollectionList extends IBaseTest
                                         .mapToObj( i -> RandomStringUtils.random( l_random.nextInt( 100 ) + 1 ) )
                                         .collect( Collectors.toList() );
 
-        new CFlat().execute(
-            false, IContext.EMPTYPLAN,
-            l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CFlat().execute(
+                false, IContext.EMPTYPLAN,
+                l_list.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), l_list.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_list.toArray() );
+        Assert.assertEquals( l_list.size(), l_return.size() );
+        Assert.assertArrayEquals( l_list.toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -390,7 +416,7 @@ public final class TestCActionCollectionList extends IBaseTest
      * test flatconcat action
      */
     @Test
-    public final void flatconcat()
+    public void flatconcat()
     {
         final Random l_random = new Random();
 
@@ -399,10 +425,12 @@ public final class TestCActionCollectionList extends IBaseTest
                                         .mapToObj( i -> RandomStringUtils.random( l_random.nextInt( 100 ) + 1 ) )
                                         .collect( Collectors.toList() );
 
-        new CFlatConcat().execute(
-            false, IContext.EMPTYPLAN,
-            l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CFlatConcat().execute(
+                false, IContext.EMPTYPLAN,
+                l_list.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -414,12 +442,12 @@ public final class TestCActionCollectionList extends IBaseTest
      * test zip action error
      */
     @Test
-    public final void ziperror()
+    public void ziperror()
     {
         Assert.assertFalse(
             new CZip().execute(
                 false, IContext.EMPTYPLAN,
-                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
@@ -430,38 +458,40 @@ public final class TestCActionCollectionList extends IBaseTest
      * test zip action
      */
     @Test
-    public final void zip()
+    public void zip()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CZip().execute(
-            false, IContext.EMPTYPLAN,
-            IntStream.range( 0, 6 ).boxed().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CZip().execute(
+                false, IContext.EMPTYPLAN,
+                IntStream.range( 0, 6 ).boxed().map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 3 );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 3, l_return.get( 0 ).<List<?>>raw().size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getKey(), 0 );
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getValue(), 3 );
+        Assert.assertEquals( 0, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getKey() );
+        Assert.assertEquals( 3, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getValue() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getKey(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getValue(), 4 );
+        Assert.assertEquals( 1, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getKey() );
+        Assert.assertEquals( 4, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getValue() );
 
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getKey(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getValue(), 5 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getKey() );
+        Assert.assertEquals( 5, l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getValue() );
 
-
-
-        new CZip().execute(
-            true, IContext.EMPTYPLAN,
-            Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CZip().execute(
+                true, IContext.EMPTYPLAN,
+                Stream.of( 1, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 1 ).<List<?>>raw().getClass() );
 
     }
 
@@ -470,14 +500,16 @@ public final class TestCActionCollectionList extends IBaseTest
      * test unique action
      */
     @Test
-    public final void unique()
+    public void unique()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CUnique().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( 1, 1, 3, 4, 5, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+        Assert.assertTrue(
+            new CUnique().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( 1, 1, 3, 4, 5, 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -486,12 +518,33 @@ public final class TestCActionCollectionList extends IBaseTest
 
         new CUnique().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( Collections.synchronizedList( Collections.emptyList() ).getClass(), l_return.get( 1 ).<List<?>>raw().getClass() );
+    }
+
+    /**
+     * test symmetric difference
+     */
+    @Test
+    public void symmetricdifference()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        Assert.assertTrue(
+            new CSymmetricDifference().execute(
+                false, IContext.EMPTYPLAN,
+                Stream.of( 1, 2, 3, 3, 4 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            ).value()
+        );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
+        Assert.assertArrayEquals( Stream.of( 1, 2, 4 ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
     }
 
 }

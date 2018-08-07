@@ -37,11 +37,11 @@ import java.util.List;
 
 
 /**
- * clears all elements from the beliefbase.
+ * clears all elements of the beliefbase.
  * The action clear th beliefbase, the arguments
  * are optional and can be string paths to beliefbases
  *
- * {@code agent/clearbeliefbase( "env", "foo" );}
+ * {@code .agent/clearbeliefbase( "env", "foo" );}
  */
 public final class CClearBeliefbase extends IBuiltinAction
 {
@@ -52,7 +52,7 @@ public final class CClearBeliefbase extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
@@ -63,10 +63,10 @@ public final class CClearBeliefbase extends IBuiltinAction
                     ? null
                     : CCommon.flatten( p_argument )
                              .parallel()
-                             .map( i -> CPath.from( i.raw() ) )
+                             .map( i -> CPath.of( i.raw() ) )
                              .toArray( IPath[]::new ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

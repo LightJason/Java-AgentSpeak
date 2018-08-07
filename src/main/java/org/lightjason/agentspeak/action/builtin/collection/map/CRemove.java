@@ -38,13 +38,13 @@ import java.util.Map;
 
 
 /**
- * removes elements from the map.
- * Removes of possible all arguments from the map,
+ * removes elements of the map.
+ * Removes of possible all arguments of the map,
  * first argument is the map reference all other
  * arguments are key values returns the arguments
  * (or null if not exists) and never fails
  *
- * {@code [A|B|C] = collection/map/remove( Map, "a", 12, "c");}
+ * {@code [A|B|C] = .collection/map/remove( Map, "a", 12, "c");}
  */
 public final class CRemove extends IBuiltinAction
 {
@@ -63,24 +63,23 @@ public final class CRemove extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 2;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )
                .map( i -> p_argument.get( 0 ).<Map<Object, Object>>raw().remove( i ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

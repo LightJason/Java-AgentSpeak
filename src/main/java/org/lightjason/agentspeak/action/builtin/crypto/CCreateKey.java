@@ -44,7 +44,7 @@ import java.util.Objects;
  * The argument is a string with the cryptographic algorithm AES, DES or RSA and the action return a key pair,
  * the action fails if the key cannot generated. The private key is set on RSA algorithm only
  *
- * {@code [PublicKey, PrivateKey] = cypto/createkey( "AES | DES | RSA" );}
+ * {@code [PublicKey, PrivateKey] = .cypto/createkey( "AES | DES | RSA" );}
  * @see https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/Data_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/RSA_(cryptosystem)
@@ -58,30 +58,29 @@ public final class CCreateKey extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         try
         {
-            final Pair<Key, Key> l_key = EAlgorithm.from( p_argument.get( 0 ).<String>raw() ).generateKey();
+            final Pair<Key, Key> l_key = ECryptAlgorithm.of( p_argument.get( 0 ).<String>raw() ).generateKey();
 
-            p_return.add( CRawTerm.from( l_key.getLeft() ) );
+            p_return.add( CRawTerm.of( l_key.getLeft() ) );
             if ( Objects.nonNull( l_key.getRight() ) )
-                p_return.add( CRawTerm.from( l_key.getRight() ) );
+                p_return.add( CRawTerm.of( l_key.getRight() ) );
 
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
         catch ( final NoSuchAlgorithmException | IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
         }
     }
 

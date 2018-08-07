@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;

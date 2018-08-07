@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.function.BiFunction;

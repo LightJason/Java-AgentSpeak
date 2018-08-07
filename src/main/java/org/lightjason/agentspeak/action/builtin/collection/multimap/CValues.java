@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Returns a list with all values of the argument
  * multimaps and fails never
  *
- * {@code L = collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
+ * {@code L = .collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
  */
 public final class CValues extends IBuiltinAction
 {
@@ -63,16 +63,15 @@ public final class CValues extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are map references
         final List<?> l_result = CCommon.flatten( p_argument )
@@ -80,11 +79,11 @@ public final class CValues extends IBuiltinAction
                                         .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

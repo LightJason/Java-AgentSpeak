@@ -42,7 +42,7 @@ import java.util.List;
  * returned in single instances, the action
  * never fails never
  *
- * {@code [A|B|C] = collections/list/flat( 1, [2,[3,4]] );}
+ * {@code [A|B|C] = .collections/list/flat( 1, [2,[3,4]] );}
  */
 public final class CFlat extends IBuiltinAction
 {
@@ -54,17 +54,17 @@ public final class CFlat extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument ).forEach( p_return::add );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

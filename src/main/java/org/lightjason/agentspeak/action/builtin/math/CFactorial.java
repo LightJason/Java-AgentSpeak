@@ -42,7 +42,7 @@ import java.util.List;
  * Creates the factorial \f$ ! x_i \f$ for all
  * unflattern arguments and the action fails never
  *
- * {@code [A|B|C|D|E] = math/factorial( 5, [[1,2], 3,4]);}
+ * {@code [A|B|C|D|E] = .math/factorial( 5, [[1,2], 3,4]);}
  * @see https://en.wikipedia.org/wiki/Factorial
  */
 public final class CFactorial extends IBuiltinAction
@@ -54,24 +54,24 @@ public final class CFactorial extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToInt( Number::intValue )
                .boxed()
                .map( CombinatoricsUtils::factorial )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

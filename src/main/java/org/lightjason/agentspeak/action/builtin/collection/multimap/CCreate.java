@@ -46,8 +46,8 @@ import java.util.stream.Collectors;
  * action fails on an odd number of arguments except zero only
  *
  * {@code
-    M1 = collection/multimap/create();
-    M2 = collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
+    M1 = .collection/multimap/create();
+    M2 = .collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
  * }
  */
 public final class CCreate extends IBuiltinAction
@@ -67,19 +67,18 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
-            return CFuzzyValue.from( false );
+        if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.of( false );
 
         final HashMultimap<Object, Object> l_map = HashMultimap.create();
         StreamUtils.windowed( l_arguments.stream(), 2 ).forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
-        p_return.add( CRawTerm.from( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
+        p_return.add( CRawTerm.of( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

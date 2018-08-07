@@ -73,6 +73,7 @@ import java.util.stream.Stream;
 
 /**
  * test for statistics actions
+ * @todo fix assert
  */
 public final class TestCActionMathStatistics extends IBaseTest
 {
@@ -90,7 +91,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * initialize
      */
     @Before
-    public final void initialize()
+    public void initialize()
     {
         m_summarystatistic = new SummaryStatistics();
         m_descriptivestatistic = new DescriptiveStatistics();
@@ -107,18 +108,18 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test create statistics
      */
     @Test
-    public final void createstatistics()
+    public void createstatistics()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreateStatistic().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "summary", "descriptive" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
         new CCreateStatistic().execute(
             true, IContext.EMPTYPLAN,
-            Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "summary", "descriptive" ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -133,7 +134,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test percentile
      */
     @Test
-    public final void percentile()
+    public void percentile()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final DescriptiveStatistics l_statistic1 = new DescriptiveStatistics();
@@ -144,13 +145,13 @@ public final class TestCActionMathStatistics extends IBaseTest
 
         new CSinglePercentile().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 50, l_statistic1, l_statistic2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 50, l_statistic1, l_statistic2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         new CMultiplePercentile().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_statistic1, 25, 75 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_statistic1, 25, 75 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -166,11 +167,11 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test clear
      */
     @Test
-    public final void clear()
+    public void clear()
     {
         new CClearStatistic().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -182,7 +183,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test create distribution
      */
     @Test
-    public final void createdistribution()
+    public void createdistribution()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -207,7 +208,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         "TRIANGULAR", "WELL44497B", 10, 15, 20,
                         "UNIFORM", "SYNCHRONIZEDWELL44497B", 10, 25,
                         "WEIBULL", 10, 23
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -236,11 +237,11 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test add statistics value
      */
     @Test
-    public final void addstatisticvalue()
+    public void addstatisticvalue()
     {
         new CAddStatisticValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
@@ -252,7 +253,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test multiple statistics value of summary
      */
     @Test
-    public final void summarymultiplestatisticvalue()
+    public void summarymultiplestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -265,7 +266,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "populationvariance", "quadraticmean",
                     "secondmoment", "standarddeviation",
                     "sumlog", "sumsquare"
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -287,7 +288,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test multiple statistics value of descriptive
      */
     @Test
-    public final void descriptivemultiplestatisticvalue()
+    public void descriptivemultiplestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -300,7 +301,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "populationvariance", "quadraticmean",
                     "standarddeviation", "sumsquare",
                     "kurtiosis", "count", "sum"
-                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -322,13 +323,13 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test add random sample
      */
     @Test
-    public final void randomsample()
+    public void randomsample()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRandomSample().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::from  ).collect( Collectors.toList() ),
+            Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -341,13 +342,13 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test random simple
      */
     @Test
-    public final void randomsimple()
+    public void randomsimple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRandomSimple().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -360,13 +361,13 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test single statistics value
      */
     @Test
-    public final void singlestatisticvalue()
+    public void singlestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSingleStatisticValue().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
@@ -379,7 +380,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test exponential selection with strict parameter
      */
     @Test
-    public final void exponentialselectionstrict()
+    public void exponentialselectionstrict()
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
@@ -389,7 +390,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         new CExponentialSelection().execute(
                             false, IContext.EMPTYPLAN,
                             Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 1 )
-                                        .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                  .map( CRawTerm::of ).collect( Collectors.toList() ),
                             l_return
                         ) );
 
@@ -412,7 +413,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test exponential selection with lazy parameter
      */
     @Test
-    public final void exponentialselectionlazy()
+    public void exponentialselectionlazy()
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
@@ -422,7 +423,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                                new CExponentialSelection().execute(
                                    false, IContext.EMPTYPLAN,
                                    Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 0.5 )
-                                         .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                         .map( CRawTerm::of ).collect( Collectors.toList() ),
                                    l_return
                                ) );
 
@@ -444,7 +445,7 @@ public final class TestCActionMathStatistics extends IBaseTest
      * test linear selection
      */
     @Test
-    public final void linearselection()
+    public void linearselection()
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
@@ -454,7 +455,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         new CLinearSelection().execute(
                             false, IContext.EMPTYPLAN,
                             Stream.of( Stream.of( "c", "d" ).collect( Collectors.toList() ), Stream.of( 3, 7 ).collect( Collectors.toList() ) )
-                                        .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                  .map( CRawTerm::of ).collect( Collectors.toList() ),
                             l_return
         ) );
 

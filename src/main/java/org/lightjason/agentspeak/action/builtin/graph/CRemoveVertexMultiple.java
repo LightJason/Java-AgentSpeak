@@ -31,11 +31,11 @@ import java.util.List;
 
 
 /**
- * removes any vertices from a single graph instance.
- * The action removes from the first graph argument all vertices,
+ * removes any vertices of a single graph instance.
+ * The action removes of the first graph argument all vertices,
  * the action never fails
  *
- * {@code graph/removevertexmultiple( Graph, Vertex1, Vertex2 );}
+ * {@code .graph/removevertexmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CRemoveVertexMultiple extends IApplyMultiple
 {
@@ -45,14 +45,14 @@ public final class CRemoveVertexMultiple extends IApplyMultiple
     private static final long serialVersionUID = -2553854674274649435L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.removeVertex( p_window.get( 0 ).raw() );
     }

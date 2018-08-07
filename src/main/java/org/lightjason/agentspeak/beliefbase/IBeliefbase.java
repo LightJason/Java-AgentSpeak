@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.beliefbase;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,123 +50,123 @@ public interface IBeliefbase extends IStructure
     {
 
         @Override
-        public final boolean empty()
+        public boolean empty()
         {
             return true;
         }
 
         @Override
-        public final int size()
+        public int size()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
         {
             return p_agent;
         }
 
         @Nonnull
         @Override
-        public final Stream<ITrigger> trigger( @Nonnull final IView p_view )
+        public Stream<ITrigger> trigger( @Nonnull final IView p_view )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<ILiteral> streamLiteral()
+        public Stream<ILiteral> streamLiteral()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<IView> streamView()
+        public Stream<IView> streamView()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IBeliefbase clear()
+        public IBeliefbase clear()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final ILiteral add( @Nonnull final ILiteral p_literal )
+        public ILiteral add( @Nonnull final ILiteral p_literal )
         {
             return p_literal;
         }
 
         @Nonnull
         @Override
-        public final IView add( @Nonnull final IView p_view )
+        public IView add( @Nonnull final IView p_view )
         {
             return p_view;
         }
 
         @Nonnull
         @Override
-        public final ILiteral remove( @Nonnull final ILiteral p_literal )
+        public ILiteral remove( @Nonnull final ILiteral p_literal )
         {
             return p_literal;
         }
 
         @Nonnull
         @Override
-        public final IView remove( @Nonnull final IView p_view )
+        public IView remove( @Nonnull final IView p_view )
         {
             return p_view;
         }
 
         @Override
-        public final boolean containsLiteral( @Nonnull final String p_key )
+        public boolean containsLiteral( @Nonnull final String p_key )
         {
             return false;
         }
 
         @Override
-        public final boolean containsView( @Nonnull final String p_key )
+        public boolean containsView( @Nonnull final String p_key )
         {
             return false;
         }
 
         @Nullable
         @Override
-        public final IView view( @Nonnull final String p_key )
+        public IView view( @Nonnull final String p_key )
         {
             return IView.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final Collection<ILiteral> literal( @Nonnull final String p_key )
+        public Collection<ILiteral> literal( @Nonnull final String p_key )
         {
             return Collections.emptySet();
         }
 
         @Nullable
         @Override
-        public final IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
+        public IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
         {
             return p_default;
         }
 
         @Nonnull
         @Override
-        public final IView create( @Nonnull final String p_name )
+        public IView create( @Nonnull final String p_name )
         {
             return IView.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IView create( @Nonnull final String p_name, @Nullable final IView p_parent
+        public IView create( @Nonnull final String p_name, @Nullable final IView p_parent
         )
         {
             return IView.EMPTY;

@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * coordinate (x- / y-position), all other tuples are the tuples
  * of x- / y-position, the action fails on wrong input
  *
- * {@code [In1|In2] = math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 );}
+ * {@code [In1|In2] = .math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 );}
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
  */
 public final class CInTriangle extends IBuiltinAction
@@ -64,15 +64,15 @@ public final class CInTriangle extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 8;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -80,7 +80,7 @@ public final class CInTriangle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 8 )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
         StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
                    .peek( i ->
@@ -99,16 +99,16 @@ public final class CInTriangle extends IBuiltinAction
                            + ( l_arguments.get( 2 ) - l_arguments.get( 0 ) ) * i.get( 1 )
                        );
                    } )
-                   .map( i -> ( i.get( 2 ) > 0 ) && ( i.get( 3 ) > 0 )
-                              && ( i.get( 2 ) + i.get( 3 ) < -l_arguments.get( 3 ) * l_arguments.get( 4 )
-                                                             + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
-                                                             + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
-                                                             + l_arguments.get( 2 ) * l_arguments.get( 5 ) )
+                   .map( i -> i.get( 2 ) > 0 && i.get( 3 ) > 0
+                              && i.get( 2 ) + i.get( 3 ) < -l_arguments.get( 3 ) * l_arguments.get( 4 )
+                                                            + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
+                                                            + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
+                                                            + l_arguments.get( 2 ) * l_arguments.get( 5 )
                    )
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

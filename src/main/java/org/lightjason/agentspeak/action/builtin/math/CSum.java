@@ -40,7 +40,7 @@ import java.util.List;
  * action for sum of elements.
  * Sums all unflatten arguments \f$ \sum_{i} x_i \f$, the action never fails
  *
- * {@code S = math/sum( 3, 4, [1, -5, [3, 4]], 10, 12);}
+ * {@code S = .math/sum( 3, 4, [1, -5, [3, 4]], 10, 12);}
  */
 public final class CSum extends IBuiltinAction
 {
@@ -51,23 +51,23 @@ public final class CSum extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 CCommon.flatten( p_argument )
                        .map( ITerm::<Number>raw )
                        .mapToDouble( Number::doubleValue ).sum()
             )
         );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

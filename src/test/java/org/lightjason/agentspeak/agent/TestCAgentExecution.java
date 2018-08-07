@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.agent;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +64,10 @@ import static org.junit.Assert.assertTrue;
  */
 public final class TestCAgentExecution extends IBaseTest
 {
+    /**
+     * number of maximum cycles
+     */
+    private static final int MAXIMUMCYCLES = 1000;
     /**
      * asl source
      */
@@ -109,7 +114,7 @@ public final class TestCAgentExecution extends IBaseTest
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
-            assertTrue( "asl could not be read: {0}", true );
+            Assert.fail( MessageFormat.format( "asl [{0}] could not be read", ASL ) );
         }
 
 
@@ -130,15 +135,19 @@ public final class TestCAgentExecution extends IBaseTest
      * @throws Exception is thrown on agent execution error
      */
     @Test
-    public final void executionorder() throws Exception
+    public void executionorder() throws Exception
     {
         Assume.assumeNotNull( m_agent );
         Assume.assumeNotNull( m_running );
 
-
-        while ( m_running.get() )
+        int l_cycles = MAXIMUMCYCLES;
+        while ( ( m_running.get() ) && ( l_cycles > 0 ) )
+        {
+            l_cycles--;
             m_agent.call();
+        }
 
+        Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
 
         // check execution results
         assertTrue(
@@ -152,9 +161,9 @@ public final class TestCAgentExecution extends IBaseTest
                       .allMatch( i -> m_result.get( i ).size() == m_log.asMap().getOrDefault( i, Collections.emptyList() ).size() )
         );
 
-        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> assertTrue(
+        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> Assert.assertTrue(
             MessageFormat.format( "expected result {0} for index {2} is not equal to log {1}", m_result.get( i ), m_log.get( i ), i ),
-            m_result.get( i ).stream().allMatch( j -> m_log.get( i ).contains( j ) )
+            m_log.get( i ).containsAll( m_result.get( i ) )
         ) );
 
     }
@@ -181,12 +190,13 @@ public final class TestCAgentExecution extends IBaseTest
                         new CStop(),
                         new CLog()
                     )
-                ).collect( Collectors.toSet() )
+                ).collect( Collectors.toSet() ),
+                CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() )
             );
         }
 
         @Override
-        public final CAgent generatesingle( final Object... p_data )
+        public CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration );
         }
@@ -218,7 +228,7 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final CAgent call() throws Exception
+        public CAgent call() throws Exception
         {
             super.call();
             m_cycle.incrementAndGet();
@@ -249,25 +259,25 @@ public final class TestCAgentExecution extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "stop" );
+            return CPath.of( "stop" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -283,25 +293,25 @@ public final class TestCAgentExecution extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "log" );
+            return CPath.of( "log" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 }

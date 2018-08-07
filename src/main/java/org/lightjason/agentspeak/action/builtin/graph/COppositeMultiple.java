@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for the first graph argument and each following tuple
  * of vertex and edge the opposite, the action never fails
  *
- * {@code [V1|V2] = graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
+ * {@code [V1|V2] = .graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */
 public final class COppositeMultiple extends IApplyMultiple
 {
@@ -46,17 +46,17 @@ public final class COppositeMultiple extends IApplyMultiple
     private static final long serialVersionUID = 3118466211222229379L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.getOpposite( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

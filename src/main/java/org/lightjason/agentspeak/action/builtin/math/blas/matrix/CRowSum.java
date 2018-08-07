@@ -49,8 +49,8 @@ import java.util.stream.IntStream;
  * the action never fails
  *
  * {@code
-    [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2 );
-    [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
+    [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2 );
+    [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
  * }
  */
 public final class CRowSum extends IAlgebra
@@ -62,33 +62,33 @@ public final class CRowSum extends IAlgebra
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
-                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .filter( i -> CCommon.isssignableto( i, String.class ) )
                                     .findFirst()
                                     .map( ITerm::<String>raw )
-                                    .map( EType::from )
+                                    .map( EType::of )
                                     .orElse( EType.DENSE );
 
         CCommon.flatten( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix2D.class ) )
+               .filter( i -> CCommon.isssignableto( i, DoubleMatrix2D.class ) )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( i -> IntStream.range( 0, i.rows() ).boxed().map( i::viewRow ).mapToDouble( DoubleMatrix1D::zSum ).toArray() )
                .map( i -> generate( i, l_type ) )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
     /**

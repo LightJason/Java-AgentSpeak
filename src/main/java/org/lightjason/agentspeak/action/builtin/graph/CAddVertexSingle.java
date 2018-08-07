@@ -36,7 +36,7 @@ import java.util.List;
  * the first argument is the vertex and all
  * other arguments are graphs, the action never fails
  *
- * {@code graph/addvertex( Vertex, Graph1, [Graph2, [Graph3]] );}
+ * {@code .graph/addvertex( Vertex, Graph1, [Graph2, [Graph3]] );}
  */
 public final class CAddVertexSingle extends IApplySingle
 {
@@ -46,14 +46,14 @@ public final class CAddVertexSingle extends IApplySingle
     private static final long serialVersionUID = -6979920592502178203L;
 
     @Override
-    protected final int skipsize()
+    protected int skipsize()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.addVertex( p_window.get( 0 ).raw() );
     }

@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the graph instance, that the first part of each vertex tuple is the neighbor
  * of the second part of the tuple, the action never fails
  *
- * {@code [B1|B2|B3] = graph/isneighbormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, vertex6]] );}
+ * {@code [B1|B2|B3] = .graph/isneighbormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, vertex6]] );}
  */
 public final class CIsNeighborMultiple extends IApplyMultiple
 {
@@ -46,17 +46,17 @@ public final class CIsNeighborMultiple extends IApplyMultiple
     private static final long serialVersionUID = 9069330248750589992L;
 
     @Override
-    protected final int windowsize()
+    protected int windowsize()
     {
         return 2;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
-            CRawTerm.from(
+            CRawTerm.of(
                 p_graph.isNeighbor( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );

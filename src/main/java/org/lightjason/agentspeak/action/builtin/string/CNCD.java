@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * the next string argument will be the input string and the distances will be
  * calculated between the second and all other arguments, the action fails on wrong input
  *
- * {@code [A|B] = string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" );}
+ * {@code [A|B] = .string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" );}
  * @see https://en.wikipedia.org/wiki/Normalized_compression_distance
  */
 public final class CNCD extends IBuiltinAction
@@ -57,15 +57,15 @@ public final class CNCD extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<String> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<String>raw )
@@ -75,9 +75,9 @@ public final class CNCD extends IBuiltinAction
         final int l_skip;
         final CCommon.ECompression l_compression;
 
-        if ( ( !l_arguments.isEmpty() ) && ( CCommon.ECompression.exist( l_arguments.get( 0 ) ) ) )
+        if ( !l_arguments.isEmpty() && CCommon.ECompression.exist( l_arguments.get( 0 ) ) )
         {
-            l_compression = CCommon.ECompression.from( l_arguments.get( 0 ) );
+            l_compression = CCommon.ECompression.of( l_arguments.get( 0 ) );
             l_skip = 1;
         }
         else
@@ -88,7 +88,7 @@ public final class CNCD extends IBuiltinAction
 
         // check input arguments
         if ( l_arguments.size() < 2 + l_skip )
-            return CFuzzyValue.from( false );
+            return CFuzzyValue.of( false );
 
 
         // calculate distance
@@ -96,9 +96,9 @@ public final class CNCD extends IBuiltinAction
                    .skip( l_skip + 1 )
                    .mapToDouble( i -> CCommon.ncd( l_compression, l_arguments.get( l_skip ), i ) )
                    .boxed()
-                   .map( CRawTerm::from )
+                   .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 }

@@ -101,7 +101,7 @@ public final class TestCViewMap extends IBaseTest
      */
     @Before
     @SuppressWarnings( "unchecked" )
-    public final void initialize() throws IOException
+    public void initialize() throws IOException
     {
         m_testlog = Collections.synchronizedList( new ArrayList<>() );
         m_data = new ObjectMapper().readValue(
@@ -114,7 +114,7 @@ public final class TestCViewMap extends IBaseTest
      * test stream
      */
     @Test
-    public final void stream()
+    public void stream()
     {
         Assume.assumeNotNull( m_data );
 
@@ -122,11 +122,11 @@ public final class TestCViewMap extends IBaseTest
             StreamUtils.zip(
                 new CViewMap( "main", m_data ).stream().limit( m_data.size() - 2 ),
                 Stream.of(
-                    CLiteral.from( "val", CRawTerm.from( 123L ) ),
-                    CLiteral.from( "str", CRawTerm.from( "text value" ) ),
-                    CLiteral.from( "logic", CRawTerm.from( true ) ),
-                    CLiteral.from( "obj/name", CRawTerm.from( "abcdef" ) ),
-                    CLiteral.from( "obj/val", CRawTerm.from( 357L ) )
+                    CLiteral.of( "val", CRawTerm.of( 123L ) ),
+                    CLiteral.of( "str", CRawTerm.of( "text value" ) ),
+                    CLiteral.of( "logic", CRawTerm.of( true ) ),
+                    CLiteral.of( "obj/name", CRawTerm.of( "abcdef" ) ),
+                    CLiteral.of( "obj/val", CRawTerm.of( 357L ) )
                 ),
                 Object::equals
             ).allMatch( i -> i )
@@ -137,27 +137,27 @@ public final class TestCViewMap extends IBaseTest
      * test contains literal
      */
     @Test
-    public final void containsliteral()
+    public void containsliteral()
     {
         Assume.assumeNotNull( m_data );
         final IView l_view = new CViewMap( "main", m_data );
 
-        Assert.assertTrue( l_view.containsLiteral( CPath.from( "val" ) ) );
-        Assert.assertTrue( l_view.containsLiteral( CPath.from( "obj/name" ) ) );
-        Assert.assertFalse( l_view.containsLiteral( CPath.from( "not/exists" ) ) );
+        Assert.assertTrue( l_view.containsLiteral( CPath.of( "val" ) ) );
+        Assert.assertTrue( l_view.containsLiteral( CPath.of( "obj/name" ) ) );
+        Assert.assertFalse( l_view.containsLiteral( CPath.of( "not/exists" ) ) );
     }
 
     /**
      * test contains view
      */
     @Test
-    public final void containsview()
+    public void containsview()
     {
         Assume.assumeNotNull( m_data );
         final IView l_view = new CViewMap( "main", m_data );
 
-        Assert.assertFalse( l_view.containsView( CPath.from( "not/exists" ) ) );
-        Assert.assertTrue( l_view.containsView( CPath.from( "obj" ) ) );
+        Assert.assertFalse( l_view.containsView( CPath.of( "not/exists" ) ) );
+        Assert.assertTrue( l_view.containsView( CPath.of( "obj" ) ) );
     }
 
     /**
@@ -166,16 +166,16 @@ public final class TestCViewMap extends IBaseTest
      * @throws Exception is thrown on execution error
      */
     @Test
-    public final void inagent() throws Exception
+    public void inagent() throws Exception
     {
         Assume.assumeNotNull( m_data );
 
         final IAgent<?> l_agent = new CAgent.CAgentGenerator(
             "!main. +!main <- "
             + ">>map/str(X); "
-            + "generic/print('string-value:', X); "
-            + "test/result( bool/equal(X, 'text value'), 'unified value incorrect' ). "
-            + "-!main <- test/result( fail, 'unification wrong').",
+            + ".generic/print('string-value:', X); "
+            + ".test/result( .bool/equal(X, 'text value'), 'unified value incorrect' ). "
+            + "-!main <- .test/result( fail, 'unification wrong').",
             m_data,
             m_actions
         ).generatesingle().call().call();
@@ -199,25 +199,25 @@ public final class TestCViewMap extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "generic/print" );
+            return CPath.of( "generic/print" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 0;
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            return CFuzzyValue.from( true );
+            return CFuzzyValue.of( true );
         }
     }
 
@@ -233,14 +233,14 @@ public final class TestCViewMap extends IBaseTest
 
         @Nonnull
         @Override
-        public final IPath name()
+        public IPath name()
         {
-            return CPath.from( "test/result" );
+            return CPath.of( "test/result" );
         }
 
         @Nonnegative
         @Override
-        public final int minimalArgumentNumber()
+        public int minimalArgumentNumber()
         {
             return 1;
         }
@@ -248,8 +248,7 @@ public final class TestCViewMap extends IBaseTest
         @Nonnull
         @Override
         public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_testlog.add(
                 new ImmutablePair<>(
@@ -260,7 +259,7 @@ public final class TestCViewMap extends IBaseTest
                 )
             );
 
-            return CFuzzyValue.from( p_argument.get( 0 ).<Boolean>raw() );
+            return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
         }
     }
 
@@ -305,9 +304,9 @@ public final class TestCViewMap extends IBaseTest
              * @param p_actions actions
              * @throws Exception thrown on error
              */
-            CAgentGenerator( final String p_asl, final Map<String, Object> p_map, final Set<IAction> p_actions ) throws Exception
+            CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Map<String, Object> p_map, @Nonnull final Set<IAction> p_actions ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_actions );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_actions, CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() ) );
                 m_map = p_map;
             }
 

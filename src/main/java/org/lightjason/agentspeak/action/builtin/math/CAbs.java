@@ -40,7 +40,7 @@ import java.util.List;
  * action for absolute value.
  * The action calculates \f$ \lvert x_i \rvert \f$ for all arguments
  *
- * {@code [A | B | C] = math/abs( -1, -5, 3 );}
+ * {@code [A | B | C] = .math/abs( -1, -5, 3 );}
  * @see https://en.wikipedia.org/wiki/Absolute_value
  */
 public final class CAbs extends IBuiltinAction
@@ -52,25 +52,25 @@ public final class CAbs extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::abs )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

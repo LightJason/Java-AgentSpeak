@@ -42,13 +42,13 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates a dense- or sparse-vector from as string.
+ * creates a dense- or sparse-vector of as string.
  * The action creates for each input argument a vector
  * by parsing the string, the last string can be "dense | sparse"
  * to defining a sparse / dense vector, the action never fails.
  * Seperator is comma, semicolon or space
  *
- * {@code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" );}
+ * {@code [V1|V2] = .math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|sparse" );}
  */
 public final class CParse extends IBuiltinAction
 {
@@ -67,23 +67,23 @@ public final class CParse extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int l_limit;
         final EType l_type;
-        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
-             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        if ( CCommon.isssignableto( l_arguments.get( l_arguments.size() - 1 ), String.class )
+             && EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) )
         {
-            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;
         }
         else
@@ -102,10 +102,10 @@ public final class CParse extends IBuiltinAction
                            .map( ITerm::<String>raw )
                            .map( CParse::parse )
                            .map( DenseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             case SPARSE:
                 l_arguments.stream()
@@ -113,15 +113,15 @@ public final class CParse extends IBuiltinAction
                            .map( ITerm::<String>raw )
                            .map( CParse::parse )
                            .map( SparseDoubleMatrix1D::new )
-                           .map( CRawTerm::from )
+                           .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.from( true );
+                return CFuzzyValue.of( true );
 
             default:
         }
 
-        return CFuzzyValue.from( false );
+        return CFuzzyValue.of( false );
     }
 
     /**

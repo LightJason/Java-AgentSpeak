@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates \f$ atan( x_i ) \f$ for all arguments, the return
  * value is in \f$ [0, \pi) \f$, the arguments must be in radians.
  *
- * {@code [A | B | C] = math/atan( -1, -5, 3 );}
+ * {@code [A | B | C] = .math/atan( -1, -5, 3 );}
  * @see https://en.wikipedia.org/wiki/Inverse_trigonometric_functions
  */
 public final class CATan extends IBuiltinAction
@@ -53,25 +53,25 @@ public final class CATan extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::atan )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

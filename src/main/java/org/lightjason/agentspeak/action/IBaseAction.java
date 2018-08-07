@@ -50,7 +50,7 @@ public abstract class IBaseAction implements IAction
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object instanceof IAction ) && ( this.hashCode() == p_object.hashCode() );
+        return p_object instanceof IAction && this.hashCode() == p_object.hashCode();
     }
 
     @Override

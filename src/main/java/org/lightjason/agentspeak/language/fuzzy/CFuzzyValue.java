@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -75,7 +74,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      */
     public CFuzzyValue( @Nonnull final T p_value, final double p_fuzzy )
     {
-        if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
+        if ( !( p_fuzzy >= 0 && p_fuzzy <= 1 ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
 
         m_fuzzy = p_fuzzy;
@@ -84,35 +83,35 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
 
     @Nonnull
     @Override
-    public final T value()
+    public T value()
     {
         return m_value;
     }
 
     @Override
-    public final double fuzzy()
+    public double fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Objects.isNull( m_value ) || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Nullable
     @Override
-    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
 
         return m_value;
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }
@@ -126,7 +125,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValue<N> from( @Nonnull final N p_value )
+    public static <N> IFuzzyValue<N> of( @Nonnull final N p_value )
     {
         return new CFuzzyValue<>( p_value );
     }
@@ -141,7 +140,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValue<N> from( @Nonnull final N p_value, final double p_fuzzy )
+    public static <N> IFuzzyValue<N> of( @Nonnull final N p_value, final double p_fuzzy )
     {
         return new CFuzzyValue<>( p_value, p_fuzzy );
     }

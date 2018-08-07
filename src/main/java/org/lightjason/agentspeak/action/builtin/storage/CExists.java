@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action checks if an element is within the action and
  * returns the boolean flag, the action never fails
  *
- * {@code [A|B] = storage/exist( "foo", "bar" );}
+ * {@code [A|B] = .storage/exist( "foo", "bar" );}
  */
 public final class CExists extends IStorage
 {
@@ -92,24 +92,23 @@ public final class CExists extends IStorage
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> ( !m_resolver.apply( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
-               .map( CRawTerm::from )
+               .map( i -> !m_resolver.apply( i ) && p_context.agent().storage().containsKey( i ) )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

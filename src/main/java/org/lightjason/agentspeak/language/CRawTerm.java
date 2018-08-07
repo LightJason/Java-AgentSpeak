@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
@@ -33,7 +32,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -45,10 +43,6 @@ import java.util.Objects;
 public final class CRawTerm<T> implements IRawTerm<T>
 {
     /**
-     * empty raw term
-     */
-    public static final ITerm EMPTY = new CRawTerm<>( null );
-    /**
      * serial id
      */
     private static final long serialVersionUID = 8660012856755452965L;
@@ -56,16 +50,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
      * value data
      */
     private final T m_value;
-    /**
-     * functor
-     */
-    private final IPath m_functor;
-    /**
-     * hash code cache
-     */
-    private final int m_hashcode;
 
-
+    /**
+     * ctor
+     */
+    public CRawTerm()
+    {
+        this( null );
+    }
 
     /**
      * ctor
@@ -76,22 +68,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressWarnings( "unchecked" )
     public <N> CRawTerm( @Nullable final N p_value )
     {
-        if ( p_value instanceof ITerm )
-        {
-            final ITerm l_term = (ITerm) p_value;
-            m_value = l_term.raw();
-            m_functor = l_term.fqnfunctor();
-        }
-        else
-        {
-            m_value = (T) p_value;
-            m_functor = Objects.isNull( p_value ) ? IPath.EMPTY : CPath.from( p_value.toString() );
-        }
-
-        m_hashcode = Objects.isNull( m_value ) ? 0 : m_value.hashCode();
+        m_value = p_value instanceof ITerm
+                  ? ( (ITerm) p_value ).raw()
+                  : (T) p_value;
     }
-
-
 
     /**
      * factory for a raw term
@@ -101,122 +81,115 @@ public final class CRawTerm<T> implements IRawTerm<T>
      *
      * @tparam N type
      */
-    public static <N> CRawTerm<N> from( final N p_value )
+    public static <N> CRawTerm<N> of( final N p_value )
     {
         return new CRawTerm<>( p_value );
     }
 
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
-        return m_hashcode;
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
     @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
-        return ( Objects.nonNull( p_object ) )
-               && (
-                   (
-                        ( p_object instanceof IVariable<?> )
-                        && ( ( (IVariable<?>) p_object ).allocated() )
-                        && ( this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode() )
-                   )
-                   || ( ( p_object instanceof ITerm ) && ( this.hashCode() == p_object.hashCode() ) )
-               );
+        return p_object instanceof IVariable<?> && ( (IVariable<?>) p_object ).allocated() && this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode()
+               || p_object instanceof ITerm && this.hashCode() == p_object.hashCode();
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return Objects.isNull( m_value ) ? "" : m_value.toString();
     }
 
     @Nonnull
     @Override
-    public final String functor()
+    public String functor()
     {
-        return m_functor.suffix();
+        return IPath.EMPTY.toString();
     }
 
     @Nonnull
     @Override
-    public final IPath functorpath()
+    public IPath functorpath()
     {
-        return m_functor.subpath( 0, m_functor.size() - 1 );
+        return IPath.EMPTY;
     }
 
     @Nonnull
     @Override
-    public final IPath fqnfunctor()
+    public IPath fqnfunctor()
     {
-        return m_functor;
+        return IPath.EMPTY;
     }
 
     @Override
-    public final boolean hasVariable()
+    public boolean hasVariable()
     {
         return false;
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <N> N raw()
+    public <V> V raw()
     {
-        return (N) m_value;
+        return (V) m_value;
     }
 
     @Override
-    public final boolean allocated()
+    public boolean allocated()
     {
-        return m_value != null;
+        return Objects.nonNull( m_value );
     }
 
     @Nonnull
     @Override
-    public final IRawTerm<T> thrownotallocated() throws IllegalStateException
+    public IRawTerm<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "notallocated" ) );
+            throw new CIllegalStateException( CCommon.languagestring( this, "notallocated" ) );
 
         return this;
     }
 
     @Override
-    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Nonnull
     @Override
-    public final IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
 
         return this;
     }
 
     @Nonnull
     @Override
-    public final ITerm deepcopy( final IPath... p_prefix )
+    public ITerm deepcopy( final IPath... p_prefix )
     {
-        return CRawTerm.from( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
+        return CRawTerm.of( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
     }
 
     @Nonnull
     @Override
-    public final ITerm deepcopysuffix()
+    public ITerm deepcopysuffix()
     {
-        return CRawTerm.from( m_value );
+        return CRawTerm.of( m_value );
     }
 
     @Override
-    public final int structurehash()
+    public int structurehash()
     {
         return 0;
     }

@@ -54,199 +54,199 @@ public interface IPath extends Serializable, Comparable<IPath>
 
         @Nonnull
         @Override
-        public final IPath append( @Nonnull final IPath p_path )
+        public IPath append( @Nonnull final IPath p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath append( @Nonnull final String p_path )
+        public IPath append( @Nonnull final String p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath remove( final int p_index )
+        public IPath remove( final int p_index )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath remove( final int p_start, final int p_end )
+        public IPath remove( final int p_start, final int p_end )
         {
             return this;
         }
 
         @Override
-        public final boolean endswith( @Nonnull final IPath p_path )
+        public boolean endswith( @Nonnull final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public final boolean empty()
+        public boolean empty()
         {
             return true;
         }
 
         @Nonnull
         @Override
-        public final String get( final int p_index )
+        public String get( final int p_index )
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final String path( final String p_separator )
+        public String path( final String p_separator )
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final String path()
+        public String path()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final String separator()
+        public String separator()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final IPath separator( @Nonnull final String p_separator )
+        public IPath separator( @Nonnull final String p_separator )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath lower()
+        public IPath lower()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath upper()
+        public IPath upper()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath subpath( final int p_fromindex )
+        public IPath subpath( final int p_fromindex )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath subpath( final int p_fromindex, final int p_toindex )
+        public IPath subpath( final int p_fromindex, final int p_toindex )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final String suffix()
+        public String suffix()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final IPath pushback( @Nonnull final IPath p_path )
+        public IPath pushback( @Nonnull final IPath p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath pushback( @Nonnull final String p_path )
+        public IPath pushback( @Nonnull final String p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath pushfront( @Nonnull final String p_path )
+        public IPath pushfront( @Nonnull final String p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath pushfront( @Nonnull final IPath p_path )
+        public IPath pushfront( @Nonnull final IPath p_path )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final String removesuffix()
+        public String removesuffix()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final IPath reverse()
+        public IPath reverse()
         {
             return this;
         }
 
         @Override
-        public final int size()
+        public int size()
         {
             return 0;
         }
 
         @Override
-        public final boolean startswith( final IPath p_path )
+        public boolean startswith( final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public final boolean startswith( final String p_path )
+        public boolean startswith( final String p_path )
         {
             return false;
         }
 
         @Nonnull
         @Override
-        public final Stream<String> stream()
+        public Stream<String> stream()
         {
             return Stream.empty();
         }
 
         @Override
-        public final int compareTo( @Nonnull final IPath p_path )
+        public int compareTo( @Nonnull final IPath p_path )
         {
             return Integer.compare( p_path.hashCode(), this.hashCode() );
         }
 
         @Override
-        public final int hashCode()
+        public int hashCode()
         {
             return 0;
         }
 
         @Override
         @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
-        public final boolean equals( final Object p_object )
+        public boolean equals( final Object p_object )
         {
-            return ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
-                   || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) );
+            return p_object instanceof IPath && this.hashCode() == p_object.hashCode()
+                   || p_object instanceof String && this.path().hashCode() == p_object.hashCode();
         }
     };
 
@@ -278,7 +278,7 @@ public interface IPath extends Serializable, Comparable<IPath>
     IPath remove( final int p_index );
 
     /**
-     * removes all elements from start index until end index (exclusive)
+     * removes all elements of start index until end index (exclusive)
      *
      * @param p_start start index
      * @param p_end end index (exclusive)
@@ -305,7 +305,7 @@ public interface IPath extends Serializable, Comparable<IPath>
     /**
      * returns an part of the path
      *
-     * @param p_index index position (negativ index is element from the end)
+     * @param p_index index position (negativ index is element of the end)
      * @return element
      */
     @Nonnull
@@ -374,7 +374,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * creates a path of the indices
      *
      * @param p_fromindex start index
-     * @param p_toindex end index (exclusive) / negative values from the end
+     * @param p_toindex end index (exclusive) / negative values of the end
      * @return path
      */
     @Nonnull
@@ -425,7 +425,7 @@ public interface IPath extends Serializable, Comparable<IPath>
     IPath pushfront( @Nonnull final IPath p_path );
 
     /**
-     * remove the suffix from the path
+     * remove the suffix of the path
      *
      * @return last item of the path
      */

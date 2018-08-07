@@ -41,7 +41,7 @@ import java.util.List;
  * All arguments of the action will change
  * to a upper-case string and the action never fails
  *
- * {@code [A|B|C|D] = string/upper("AbC", "Ef", ["de", "XYZ"]);}
+ * {@code [A|B|C|D] = .string/upper("AbC", "Ef", ["de", "XYZ"]);}
  */
 public final class CUpper extends IBuiltinAction
 {
@@ -52,23 +52,23 @@ public final class CUpper extends IBuiltinAction
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( String::toUpperCase )
-               .map( CRawTerm::from )
+               .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.of( true );
     }
 
 }

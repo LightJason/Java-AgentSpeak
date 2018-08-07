@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.builtin.collection.IMapApplySingle;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -36,7 +37,7 @@ import javax.annotation.Nullable;
  * other values are multimap references, the key-value pair
  * is added to all multimaps and the action never fails
  *
- * {@code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
+ * {@code .collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
  */
 public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {
@@ -46,8 +47,9 @@ public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
     private static final long serialVersionUID = 7300831158175726919L;
 
     @Override
-    protected final void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
-        p_instance.put( p_key, p_value );
+        if ( Objects.nonNull( p_value ) )
+            p_instance.put( p_key, p_value );
     }
 }
