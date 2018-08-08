@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.language.execution.assignment;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CArithmeticException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -91,7 +91,7 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_rhs.raw();
 
             default:
-                throw new CSyntaxErrorException( CCommon.languagestring( this, "unknownoperator", this ) );
+                throw new CArithmeticException( CCommon.languagestring( this, "unknownoperator", this ) );
         }
     }
 

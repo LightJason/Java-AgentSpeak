@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.error;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.parser.IContextException;
 import org.lightjason.agentspeak.language.execution.IContext;
 
 import javax.annotation.Nonnull;
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
 
 
 /**
- * runtime exception
+ * exception for any runtime error with execution context
  */
 public final class CRuntimeException extends RuntimeException implements IContextException
 {

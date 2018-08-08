@@ -21,25 +21,14 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.error;
+package org.lightjason.agentspeak.error.parser;
 
-import org.lightjason.agentspeak.language.execution.IContext;
-
-import javax.annotation.Nonnull;
+import org.lightjason.agentspeak.error.IException;
 
 
 /**
- * exception with execution context
+ * parser exception
  */
-public interface IContextException extends IException
+public interface IParserException extends IException
 {
-
-    /**
-     * returns the execution context
-     *
-     * @return context
-     */
-    @Nonnull
-    IContext context();
-
 }

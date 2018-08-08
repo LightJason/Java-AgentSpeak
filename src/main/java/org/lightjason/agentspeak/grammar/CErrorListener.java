@@ -30,7 +30,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.error.parser.CParserCharacterException;
 
 import java.util.BitSet;
 
@@ -47,7 +47,7 @@ public final class CErrorListener implements ANTLRErrorListener
                              final RecognitionException p_exception
     )
     {
-        throw new CSyntaxErrorException( CCommon.languagestring( this, "syntax", p_line, p_charposition ) );
+        throw new CParserCharacterException( CCommon.languagestring( this, "syntax", p_line, p_charposition ) );
     }
 
     @Override
