@@ -828,8 +828,7 @@ public final class CAgentSpeak
         if ( l_constraint instanceof ILiteral )
             return new CLiteralUnify(
                 Objects.nonNull( p_parallel ),
-                l_literal,
-                (ILiteral) l_constraint
+                (ILiteral) l_constraint, l_literal
             );
 
         if ( l_constraint instanceof IExecution )
@@ -879,6 +878,7 @@ public final class CAgentSpeak
      * @param p_visitor visitor
      * @param p_parallel parallel call
      * @param p_stream stream data
+     * @param p_iterationvariable iteration variable
      * @param p_body execution body
      * @param p_return return element
      * @return lambda expression
