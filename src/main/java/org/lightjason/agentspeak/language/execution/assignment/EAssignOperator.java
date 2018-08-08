@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.execution.assignment;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -113,6 +113,6 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
         return Arrays.stream( EAssignOperator.values() )
                      .filter( i -> i.m_operator.equals( p_value ) )
                      .findFirst()
-                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EAssignOperator.class, "unknown", p_value ) ) );
+                     .orElseThrow( () -> new CNoSuchElementException( CCommon.languagestring( EAssignOperator.class, "unknown", p_value ) ) );
     }
 }

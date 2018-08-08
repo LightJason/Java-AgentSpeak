@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.fuzzy;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CTypeNotAssignable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -130,7 +131,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     public T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
+            throw new CTypeNotAssignable( p_class );
 
         return m_value;
     }

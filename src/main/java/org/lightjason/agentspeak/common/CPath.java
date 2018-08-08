@@ -27,7 +27,7 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hasher;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -107,7 +107,7 @@ public final class CPath implements IPath
                            .filter( i -> !i.isEmpty() )
                            .collect( CPath.collectorfactory() );
             if ( m_path.size() == 0 )
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "pathempty" ) );
+                throw new CNoSuchElementException( CCommon.languagestring( this, "pathempty" ) );
         }
         this.normalize();
     }
@@ -249,7 +249,7 @@ public final class CPath implements IPath
     public IPath separator( @Nonnull final String p_separator )
     {
         if ( p_separator.isEmpty() )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "separatornotempty" ) );
+            throw new CNoSuchElementException( CCommon.languagestring( this, "separatornotempty" ) );
 
         m_separator = p_separator;
         return this;

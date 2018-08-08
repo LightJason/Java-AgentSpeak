@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
@@ -514,7 +515,7 @@ public final class CAgentSpeak
 
         final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
+            throw new CNoSuchElementException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
 
         if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
             throw new CIllegalArgumentException(

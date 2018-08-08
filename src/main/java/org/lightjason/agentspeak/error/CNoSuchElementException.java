@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 /**
  * no-such-element exception
  */
-public class CNoSuchElementException extends NoSuchElementException implements IException
+public final class CNoSuchElementException extends NoSuchElementException implements IException
 {
     /**
      * logger

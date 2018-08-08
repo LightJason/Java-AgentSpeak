@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
+import org.lightjason.agentspeak.error.CTypeNotAssignable;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -153,7 +154,7 @@ public abstract class IBaseVariable<T> implements IVariable<T>
     public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CNoSuchElementException( CCommon.languagestring( this, "notassignable", m_functor, p_class ) );
+            throw new CTypeNotAssignable( p_class );
 
         return this;
     }

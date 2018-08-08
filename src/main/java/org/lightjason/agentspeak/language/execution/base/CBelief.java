@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language.execution.base;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -37,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 
 
@@ -139,7 +139,7 @@ public final class CBelief extends IBaseExecution<ILiteral>
             return Arrays.stream( EAction.values() )
                          .filter( i -> i.m_operator.equals( p_value ) )
                          .findFirst()
-                         .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EAction.class, "unknownoperator", p_value ) ) );
+                         .orElseThrow( () -> new NoSuchElementException( CCommon.languagestring( EAction.class, "unknownoperator", p_value ) ) );
         }
     }
 }

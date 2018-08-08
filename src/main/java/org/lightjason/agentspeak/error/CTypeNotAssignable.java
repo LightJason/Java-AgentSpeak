@@ -21,72 +21,38 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.expression;
+
+package org.lightjason.agentspeak.error;
 
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
-import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.function.Function;
+import java.util.logging.Logger;
 
 
 /**
- * expression unary operator
+ * exception for type assignable errors
  */
-public enum EUnaryOperator implements Function<ITerm, Object>
+public final class CTypeNotAssignable extends TypeNotPresentException implements IException
 {
-    NEGATION( "~", "not" );
-
     /**
-     * text name of the enum
+     * logger
      */
-    private final String[] m_operator;
-
+    private static final Logger LOGGER = CCommon.logger( CTypeNotAssignable.class );
+    /**
+     * serial uid
+     */
+    private static final long serialVersionUID = -8404835333677510024L;
 
     /**
      * ctor
      *
-     * @param p_operator text name
+     * @param p_classtype class type of assignment
      */
-    EUnaryOperator( @Nonnull final String... p_operator )
+    public CTypeNotAssignable( @Nonnull final Class<?> p_classtype )
     {
-        m_operator = p_operator;
+        super( p_classtype.toString(), null );
+        LOGGER.warning( this.getMessage() );
     }
 
-    @Override
-    public String toString()
-    {
-        return m_operator[0];
-    }
-
-    @Override
-    public Object apply( @Nonnull final ITerm p_term )
-    {
-        switch ( this )
-        {
-            case NEGATION:
-                return !p_term.<Boolean>raw();
-
-            default:
-                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-        }
-    }
-
-    /**
-     * returns operator of a string
-     *
-     * @param p_value string
-     * @return operator
-     */
-    @Nonnull
-    public static EUnaryOperator of( @Nonnull final String p_value )
-    {
-        return Arrays.stream( EUnaryOperator.values() )
-                     .filter( i -> Arrays.stream( i.m_operator ).anyMatch( j -> j.equals( p_value ) ) )
-                     .findFirst()
-                     .orElseThrow( () -> new CNoSuchElementException( CCommon.languagestring( EUnaryOperator.class, "unknownoperator", p_value ) ) );
-    }
 }

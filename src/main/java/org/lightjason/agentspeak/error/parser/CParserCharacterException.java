@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * parser exception for wrong characters
  */
-public class CParserCharacterException extends IllegalStateException implements IParserException
+public final class CParserCharacterException extends IllegalStateException implements IParserException
 {
 
     /**

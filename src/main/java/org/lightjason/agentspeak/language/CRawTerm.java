@@ -26,8 +26,8 @@ package org.lightjason.agentspeak.language;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
+import org.lightjason.agentspeak.error.CTypeNotAssignable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -169,7 +169,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
+            throw new CTypeNotAssignable( p_class );
 
         return this;
     }

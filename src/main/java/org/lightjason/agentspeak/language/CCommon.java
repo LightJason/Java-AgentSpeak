@@ -38,7 +38,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -441,7 +441,7 @@ public final class CCommon
         {
             final ITerm l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
             if ( Objects.isNull( l_variable ) )
-                throw new CIllegalArgumentException(
+                throw new CNoSuchElementException(
                     org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
                 );
 
