@@ -42,7 +42,7 @@ public interface IFuzzyBundle<T extends Enum<?>>
      * @return fuzzy-set
      */
     @Nonnull
-    IFuzzySet<T> set();
+    IFuzzySet<T> fuzzyset();
 
     /**
      * defuzzification

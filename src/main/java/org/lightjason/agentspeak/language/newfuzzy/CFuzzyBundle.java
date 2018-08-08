@@ -57,7 +57,7 @@ public final class CFuzzyBundle<T extends Enum<?>> implements IFuzzyBundle<T>
 
     @Nonnull
     @Override
-    public final IFuzzySet<T> set()
+    public final IFuzzySet<T> fuzzyset()
     {
         return m_set;
     }

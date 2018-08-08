@@ -46,7 +46,6 @@ public interface IFuzzyValue<T extends Enum<?>>
      */
     Number fuzzy();
 
-
     /**
      * returns raw enum type
      *
