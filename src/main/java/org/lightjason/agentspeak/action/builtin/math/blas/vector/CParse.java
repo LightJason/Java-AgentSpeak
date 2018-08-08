@@ -119,9 +119,8 @@ public final class CParse extends IBuiltinAction
                 return CFuzzyValue.of( true );
 
             default:
+                return CFuzzyValue.of( false );
         }
-
-        return CFuzzyValue.of( false );
     }
 
     /**

@@ -40,7 +40,7 @@ import org.lightjason.agentspeak.action.builtin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CHash;
 import org.lightjason.agentspeak.action.builtin.crypto.ECryptAlgorithm;
-import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.error.context.CActionException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -184,7 +184,7 @@ public final class TestCActionCrypto extends IBaseTest
     /**
      * test hash exception
      */
-    @Test( expected = CRuntimeException.class )
+    @Test( expected = CActionException.class )
     public void hashexception()
     {
         new CHash().execute(

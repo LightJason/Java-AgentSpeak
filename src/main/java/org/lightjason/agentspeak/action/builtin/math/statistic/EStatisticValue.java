@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.builtin.math.statistic;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
@@ -113,7 +113,7 @@ public enum EStatisticValue
                 return p_statistic.getMean();
 
             default:
-                throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
+                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
         }
     }
 
@@ -164,7 +164,7 @@ public enum EStatisticValue
                 return p_statistic.getKurtosis();
 
             default:
-                throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
+                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
         }
     }
 }

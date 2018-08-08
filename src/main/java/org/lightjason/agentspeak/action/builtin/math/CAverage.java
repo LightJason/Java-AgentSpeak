@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.error.context.CActionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -66,7 +66,7 @@ public final class CAverage extends IBuiltinAction
     {
         p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()
-                   .orElseThrow( () -> new CRuntimeException( p_context ) )
+                   .orElseThrow( () -> new CActionException( p_context ) )
         ) );
         return CFuzzyValue.of( true );
     }

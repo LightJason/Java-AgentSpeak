@@ -21,53 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.generic;
+package org.lightjason.agentspeak.error;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.common.CCommon;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 
 /**
- * action for throwing a runtime execption.
- * The action fails never but throws a Java runtime exception on a boolean condition,
- * the first argument is a boolean value on true the exception is thrown, second argument
- * can be a string with a message. The exception must be catched outside the agent call method
- *
- * {@code .generic/throw( true, "a message" );}
+ * no-such-element exception
  */
-public final class CThrow extends IBuiltinAction
+public final class CNoSuchElementException extends NoSuchElementException implements IException
 {
     /**
-     * serial id
+     * logger
      */
-    private static final long serialVersionUID = -3116022203002012617L;
+    private static final Logger LOGGER = CCommon.logger( CNoSuchElementException.class );
+    /**
+     * serial uid
+     */
+    private static final transient long serialVersionUID = -8986035121952708243L;
 
-    @Nonnegative
-    @Override
-    public int minimalArgumentNumber()
+    /**
+     * ctor
+     */
+    public CNoSuchElementException()
     {
-        return 1;
+        super();
+        LOGGER.warning( "exception is thrown" );
     }
 
-    @Nonnull
-    @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    /**
+     * ctor
+     *
+     * @param p_message message
+     */
+    public CNoSuchElementException( @Nonnull final String p_message )
     {
-        if ( p_argument.get( 0 ).raw() )
-            throw p_argument.size() == 1 ? new CActionException( p_context ) : new CActionException(
-                p_argument.get( 1 ).<String>raw(),
-                p_context
-            );
-        return CFuzzyValue.of( true );
+        super( p_message );
+        LOGGER.warning( p_message );
     }
-
 }

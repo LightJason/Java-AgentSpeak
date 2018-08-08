@@ -21,53 +21,26 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.generic;
+package org.lightjason.agentspeak.error.context;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
-import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.error.IException;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
 
 
 /**
- * action for throwing a runtime execption.
- * The action fails never but throws a Java runtime exception on a boolean condition,
- * the first argument is a boolean value on true the exception is thrown, second argument
- * can be a string with a message. The exception must be catched outside the agent call method
- *
- * {@code .generic/throw( true, "a message" );}
+ * exception with execution context
  */
-public final class CThrow extends IBuiltinAction
+public interface IContextException extends IException
 {
+
     /**
-     * serial id
+     * returns the execution context
+     *
+     * @return context
      */
-    private static final long serialVersionUID = -3116022203002012617L;
-
-    @Nonnegative
-    @Override
-    public int minimalArgumentNumber()
-    {
-        return 1;
-    }
-
     @Nonnull
-    @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-    {
-        if ( p_argument.get( 0 ).raw() )
-            throw p_argument.size() == 1 ? new CActionException( p_context ) : new CActionException(
-                p_argument.get( 1 ).<String>raw(),
-                p_context
-            );
-        return CFuzzyValue.of( true );
-    }
+    IContext context();
 
 }

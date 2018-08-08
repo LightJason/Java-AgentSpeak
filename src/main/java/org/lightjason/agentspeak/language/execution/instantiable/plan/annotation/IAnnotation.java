@@ -74,7 +74,7 @@ public interface IAnnotation<T> extends IAssignable<T>
 
         @Nullable
         @Override
-        public Object throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+        public Object throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
         {
             return null;
         }

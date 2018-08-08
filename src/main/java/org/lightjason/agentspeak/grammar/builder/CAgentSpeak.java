@@ -34,7 +34,8 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CSyntaxErrorException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
+import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,10 +49,10 @@ import org.lightjason.agentspeak.language.execution.achievementtest.CTestRule;
 import org.lightjason.agentspeak.language.execution.assignment.CDeconstruct;
 import org.lightjason.agentspeak.language.execution.assignment.CMultiAssignment;
 import org.lightjason.agentspeak.language.execution.assignment.CSingleAssignment;
-import org.lightjason.agentspeak.language.execution.base.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.assignment.EAssignOperator;
 import org.lightjason.agentspeak.language.execution.base.CBelief;
 import org.lightjason.agentspeak.language.execution.base.CRepair;
+import org.lightjason.agentspeak.language.execution.base.CTernaryOperation;
 import org.lightjason.agentspeak.language.execution.expression.CBinaryExpression;
 import org.lightjason.agentspeak.language.execution.expression.CUnaryExpression;
 import org.lightjason.agentspeak.language.execution.expression.EBinaryOperator;
@@ -60,8 +61,8 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CAtomAnnotation;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CStringAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CConstantAnnotation;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.CStringAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
@@ -71,8 +72,8 @@ import org.lightjason.agentspeak.language.execution.lambda.CLambda;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
-import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
 import org.lightjason.agentspeak.language.execution.passing.CPassAction;
+import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariableLiteral;
@@ -251,7 +252,7 @@ public final class CAgentSpeak
                 return annotationdescription( l_type, p_annotation.getText() );
 
             default:
-                throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownannotation" ) );
+                throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownannotation" ) );
         }
     }
 
@@ -374,13 +375,13 @@ public final class CAgentSpeak
     public static Object bodyformular( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext... p_body )
     {
         if ( Objects.isNull( p_body ) )
-            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) );
+            throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) );
 
         return Arrays.stream( p_body )
                      .filter( Objects::nonNull )
                      .findFirst()
                      .map( p_visitor::visitChildren )
-                     .orElseThrow(  () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) ) );
+                     .orElseThrow(  () -> new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) ) );
     }
 
 
@@ -433,7 +434,7 @@ public final class CAgentSpeak
                 Objects.nonNull( p_doubleexclamationmark )
             );
 
-        throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownachievmentgoal" ) );
+        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownachievmentgoal" ) );
     }
 
     /**
@@ -458,7 +459,7 @@ public final class CAgentSpeak
                 return new CDecrement( (IVariable<Number>) p_visitor.visit( p_variable ) );
 
             default:
-                throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunary" ) );
+                throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownunary" ) );
         }
     }
 
@@ -514,7 +515,7 @@ public final class CAgentSpeak
 
         final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
+            throw new CNoSuchElementException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
 
         if ( l_actionliteral.orderedvalues().count() < l_action.minimalArgumentNumber() )
             throw new CIllegalArgumentException(
@@ -547,7 +548,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_variableexecute ) )
             return new CAchievementRuleVariable( (IExecution) p_visitor.visit( p_variableexecute ) );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownruleexecution" ) );
+        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownruleexecution" ) );
     }
 
     /**
@@ -664,7 +665,7 @@ public final class CAgentSpeak
                 (IExecution) p_visitor.visit( p_rhs )
             );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
+        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
     }
 
     /**
@@ -717,7 +718,7 @@ public final class CAgentSpeak
                                           @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable )
     {
         if ( Objects.nonNull( p_literal ) && Objects.nonNull( p_variable ) )
-            throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknowndeconstruct" ) );
+            throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknowndeconstruct" ) );
 
         return new CDeconstruct(
             p_variables.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) ),
@@ -741,7 +742,7 @@ public final class CAgentSpeak
                      .filter( Objects::nonNull )
                      .findFirst()
                      .map( p_visitor::visit )
-                     .orElseThrow( () -> new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) ) );
+                     .orElseThrow( () -> new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) ) );
     }
 
     /**
@@ -774,7 +775,7 @@ public final class CAgentSpeak
                 (IExecution) p_visitor.visit( p_expression )
             );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownassignment" ) );
+        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownassignment" ) );
     }
 
     /**
@@ -865,7 +866,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_expression ) )
             return p_visitor.visit( p_expression );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
+        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }
 
 
@@ -955,7 +956,7 @@ public final class CAgentSpeak
         if ( Objects.nonNull( p_variable ) )
             return passvariable( (IVariable<?>) p_visitor.visitChildren( p_variable ) );
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CAgentSpeak.class, "unknownlambdaelement" ) );
+        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownlambdaelement" ) );
     }
 
 }

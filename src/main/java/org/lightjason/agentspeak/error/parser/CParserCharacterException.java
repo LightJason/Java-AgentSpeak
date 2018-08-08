@@ -21,53 +21,69 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.generic;
+package org.lightjason.agentspeak.error.parser;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.common.CCommon;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
- * action for throwing a runtime execption.
- * The action fails never but throws a Java runtime exception on a boolean condition,
- * the first argument is a boolean value on true the exception is thrown, second argument
- * can be a string with a message. The exception must be catched outside the agent call method
- *
- * {@code .generic/throw( true, "a message" );}
+ * parser exception for wrong characters
  */
-public final class CThrow extends IBuiltinAction
+public final class CParserCharacterException extends IllegalStateException implements IParserException
 {
+
+    /**
+     * logger
+     */
+    private static final Logger LOGGER = CCommon.logger( CParserCharacterException.class );
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3116022203002012617L;
+    private static final transient long serialVersionUID = 5707340903232201805L;
 
-    @Nonnegative
-    @Override
-    public int minimalArgumentNumber()
+    /**
+     * ctor
+     */
+    public CParserCharacterException()
     {
-        return 1;
+        super();
+        LOGGER.warning( "exception is thrown" );
     }
 
-    @Nonnull
-    @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    /**
+     * ctor
+     *
+     * @param p_message message
+     */
+    public CParserCharacterException( @Nonnull final String p_message )
     {
-        if ( p_argument.get( 0 ).raw() )
-            throw p_argument.size() == 1 ? new CActionException( p_context ) : new CActionException(
-                p_argument.get( 1 ).<String>raw(),
-                p_context
-            );
-        return CFuzzyValue.of( true );
+        super( p_message );
+        LOGGER.warning( p_message );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_message message
+     * @param p_cause cause
+     */
+    public CParserCharacterException( @Nonnull final String p_message, @Nonnull final Throwable p_cause )
+    {
+        super( p_message, p_cause );
+        LOGGER.warning( p_message );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_cause cause
+     */
+    public CParserCharacterException( @Nonnull final Throwable p_cause )
+    {
+        super( p_cause );
+        LOGGER.warning( p_cause.getMessage() );
+    }
 }
