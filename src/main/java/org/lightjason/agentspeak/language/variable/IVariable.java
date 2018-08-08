@@ -84,7 +84,7 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
 
         @Nullable
         @Override
-        public IVariable<Object> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+        public IVariable<Object> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
         {
             return this;
         }

@@ -23,8 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable.plan.annotation;
 
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CTypeNotAssignable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,10 +81,10 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
 
     @Nullable
     @Override
-    public final T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+    public final T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
+            throw new CTypeNotAssignable( p_class );
 
         return m_value;
     }

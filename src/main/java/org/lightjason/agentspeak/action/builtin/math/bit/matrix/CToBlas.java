@@ -109,7 +109,6 @@ public final class CToBlas extends IBuiltinAction
                 return CFuzzyValue.of( true );
 
             default:
-
                 return CFuzzyValue.of( false );
         }
     }

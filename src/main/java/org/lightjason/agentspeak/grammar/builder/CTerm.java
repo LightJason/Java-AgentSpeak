@@ -28,10 +28,10 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
 import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.CRawTermList;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CRawTermList;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
@@ -136,7 +136,7 @@ public final class CTerm
                      .filter( Objects::nonNull )
                      .findFirst()
                      .map( p_visitor::visit )
-                     .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
+                     .orElseThrow( () -> new CParserSyntaxException( CCommon.languagestring( CTerm.class, "unknownterm" ) ) );
     }
 
     /**

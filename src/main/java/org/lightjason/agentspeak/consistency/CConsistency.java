@@ -36,10 +36,9 @@ import cern.jet.math.tdouble.DoubleMult;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -364,7 +363,7 @@ public final class CConsistency implements IConsistency
                     break;
 
                 default:
-                    throw new CIllegalStateException( CCommon.languagestring( this, "algorithm", this ) );
+                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
             }
 
             // normalize eigenvector and create positiv oriantation

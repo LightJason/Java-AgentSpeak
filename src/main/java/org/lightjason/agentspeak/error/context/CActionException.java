@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.error;
+package org.lightjason.agentspeak.error.context;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,14 +32,14 @@ import java.util.logging.Logger;
 
 
 /**
- * runtime exception
+ * exception of action execution
  */
-public final class CRuntimeException extends RuntimeException implements IContextException
+public class CActionException extends RuntimeException implements IContextException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CIllegalStateException.class );
+    private static final Logger LOGGER = CCommon.logger( CActionException.class );
     /**
      * serial id
      */
@@ -56,7 +56,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
      *
      * @param p_context execution context
      */
-    public CRuntimeException( final IContext p_context )
+    public CActionException( final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -69,7 +69,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
      * @param p_message execution message
      * @param p_context execution context
      */
-    public CRuntimeException( @Nonnull final String p_message, @Nonnull final IContext p_context )
+    public CActionException( @Nonnull final String p_message, @Nonnull final IContext p_context )
     {
         super( p_message );
         m_context = p_context;
@@ -83,7 +83,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
      * @param p_cause execption cause
      * @param p_context execution context
      */
-    public CRuntimeException( @Nonnull final String p_message, @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
+    public CActionException( @Nonnull final String p_message, @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
     {
         super( p_message, p_cause );
         m_context = p_context;
@@ -96,29 +96,11 @@ public final class CRuntimeException extends RuntimeException implements IContex
      * @param p_cause execption cause
      * @param p_context execution context
      */
-    public CRuntimeException( @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
+    public CActionException( @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
     {
         super( p_cause );
         m_context = p_context;
         LOGGER.warning( MessageFormat.format( "{0}: {1}", p_cause.getMessage(), m_context ) );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_message execution message
-     * @param p_cause execption cause
-     * @param p_enablesuppression suppression flag
-     * @param p_writablestacktrace stacktrace flag
-     * @param p_context execution context
-     */
-    protected CRuntimeException( final String p_message, final Throwable p_cause, final boolean p_enablesuppression,
-                                 final boolean p_writablestacktrace, final IContext p_context
-    )
-    {
-        super( p_message, p_cause, p_enablesuppression, p_writablestacktrace );
-        m_context = p_context;
-        LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }
 
     @Nonnull

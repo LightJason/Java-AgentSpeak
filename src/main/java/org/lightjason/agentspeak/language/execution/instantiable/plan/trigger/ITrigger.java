@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.execution.instantiable.plan.trigger;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.IStructureHash;
@@ -187,7 +187,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
             return Arrays.stream( EType.values() )
                          .filter( i -> i.m_operator.equals( p_sequence ) )
                          .findFirst()
-                         .orElseThrow( () -> new CIllegalArgumentException( CCommon.languagestring( EType.class, "unknowntrigger", p_sequence ) ) );
+                         .orElseThrow( () -> new CNoSuchElementException( CCommon.languagestring( EType.class, "unknowntrigger", p_sequence ) ) );
         }
 
         /**

@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.error.CTypeNotAssignable;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
 import org.lightjason.agentspeak.language.variable.CRelocateMutexVariable;
@@ -36,6 +37,7 @@ import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 
@@ -144,7 +146,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
     /**
      * check any variable
      */
-    @Test( expected = IllegalStateException.class )
+    @Test( expected = NoSuchElementException.class )
     public void variableany()
     {
         final IVariable<?> l_variable = new CVariable<Object>( "_" );
@@ -159,7 +161,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
     /**
      * test exception on value asiable
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test( expected = CTypeNotAssignable.class )
     public void variablevalueassignable()
     {
         new CVariable<Object>( "num", 123 ).throwvaluenotassignableto( String.class );

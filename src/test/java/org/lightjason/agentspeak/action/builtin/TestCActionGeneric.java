@@ -29,7 +29,7 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.generic.CPrint;
 import org.lightjason.agentspeak.action.builtin.generic.CThrow;
 import org.lightjason.agentspeak.action.builtin.generic.CUuid;
-import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.error.context.CActionException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -52,7 +52,7 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test throw action
      */
-    @Test( expected = CRuntimeException.class )
+    @Test( expected = CActionException.class )
     public void throwparameter()
     {
         new CThrow().execute(
@@ -66,7 +66,7 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test throw action
      */
-    @Test( expected = CRuntimeException.class )
+    @Test( expected = CActionException.class )
     public void throwwithoutparameter()
     {
         new CThrow().execute(

@@ -23,23 +23,66 @@
 
 package org.lightjason.agentspeak.error;
 
-import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 
 
 /**
- * exception with execution context
+ * unmodifiable exception
  */
-public interface IContextException extends IException
+public final class CUnmodifiableException extends IllegalStateException implements IException
 {
+    /**
+     * logger
+     */
+    private static final Logger LOGGER = CCommon.logger( CUnmodifiableException.class );
+    /**
+     * serial uid
+     */
+    private static final transient long serialVersionUID = 5813639345533228283L;
 
     /**
-     * returns the execution context
-     *
-     * @return context
+     * ctor
      */
-    @Nonnull
-    IContext context();
+    public CUnmodifiableException()
+    {
+        super();
+        LOGGER.warning( "exception is thrown" );
+    }
 
+    /**
+     * ctor
+     *
+     * @param p_message message
+     */
+    public CUnmodifiableException( @Nonnull final String p_message )
+    {
+        super( p_message );
+        LOGGER.warning( p_message );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_message message
+     * @param p_cause throwable
+     */
+    public CUnmodifiableException( @Nonnull final String p_message, @Nonnull final Throwable p_cause )
+    {
+        super( p_message, p_cause );
+        LOGGER.warning( p_message );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_cause throwable
+     */
+    public CUnmodifiableException( @Nonnull final Throwable p_cause )
+    {
+        super( p_cause );
+        LOGGER.warning( p_cause.getMessage() );
+    }
 }

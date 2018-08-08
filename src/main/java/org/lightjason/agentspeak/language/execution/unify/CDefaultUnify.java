@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.unify;
 
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -74,10 +75,10 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         // check unique variables - get variable frequency especially any variable "_"
         final Map<IVariable<?>, Integer> l_frequency = CCommon.variablefrequency( p_literal );
         if ( l_frequency.isEmpty() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable" ) );
+            throw new CNoSuchElementException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable" ) );
 
         if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).anyMatch( i -> i.getValue() > 1 ) )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "duplicatedvariable" ) );
+            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "duplicatedvariable" ) );
 
         // count variables
         m_variablenumber = l_frequency.size();

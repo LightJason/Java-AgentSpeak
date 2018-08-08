@@ -35,10 +35,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.lightjason.agentspeak.common.CCommon;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -83,7 +88,7 @@ public final class TestCLanguageLabels extends IBaseTest
         URI l_uri = null;
         try
         {
-            l_uri = CCommon.concaturl( CCommon.resourceurl(), "../../src/main/java/" ).toURI();
+            l_uri = TestCLanguageLabels.concaturl( TestCLanguageLabels.resourceurl(), "../../src/main/java/" ).toURI();
         }
         catch ( final Exception l_exception )
         {
@@ -100,8 +105,8 @@ public final class TestCLanguageLabels extends IBaseTest
                      {
                          LANGUAGEPROPERY.put(
                              l_languages[i],
-                             CCommon.concaturl(
-                                 CCommon.resourceurl(),
+                             TestCLanguageLabels.concaturl(
+                                 TestCLanguageLabels.resourceurl(),
                                  MessageFormat.format(
                                      "{0}/{1}/{2}",
                                      l_resource,
@@ -287,6 +292,34 @@ public final class TestCLanguageLabels extends IBaseTest
                 assertTrue( MessageFormat.format( "io exception: {0}", l_exception.getMessage() ), false );
             }
         } );
+    }
+
+
+    /**
+     * concats an URL with a path
+     *
+     * @param p_base base URL
+     * @param p_string additional path
+     * @return new URL
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    @Nonnull
+    private static URL concaturl( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    {
+        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
+    }
+
+    /**
+     * returns root path of the resource
+     *
+     * @return URL of file or null
+     */
+    @Nullable
+    private static URL resourceurl()
+    {
+        return CCommon.class.getClassLoader().getResource( "" );
     }
 
 

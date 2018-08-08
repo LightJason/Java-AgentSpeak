@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.language;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -109,7 +109,7 @@ public final class CRawTermList implements IRawTerm<List<?>>
     public IRawTerm<List<?>> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( CCommon.languagestring( this, "notallocated" ) );
+            throw new CNoSuchElementException( CCommon.languagestring( this, "notallocated" ) );
 
         return this;
     }
@@ -122,10 +122,10 @@ public final class CRawTermList implements IRawTerm<List<?>>
 
     @Nullable
     @Override
-    public IRawTerm<List<?>> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+    public IRawTerm<List<?>> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
+            throw new CIllegalStateException( CCommon.languagestring( this, "notassignable", p_class ) );
 
         return CRawTerm.of( m_value );
     }
