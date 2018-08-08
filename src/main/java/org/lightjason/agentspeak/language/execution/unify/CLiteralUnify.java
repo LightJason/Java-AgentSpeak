@@ -50,24 +50,24 @@ public final class CLiteralUnify extends CDefaultUnify
     /**
      * literal for unification
      */
-    private final ILiteral m_unifyliteral;
+    private final ILiteral m_source;
 
     /**
      * ctor
-     *
-     * @param p_parallel parallel execution
-     * @param p_literal literal
+     *  @param p_parallel parallel execution
+     * @param p_source source literal
+     * @param p_target target literal
      */
-    public CLiteralUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final ILiteral p_unifyliteral )
+    public CLiteralUnify( final boolean p_parallel, @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
     {
-        super( p_parallel, p_literal );
-        m_unifyliteral = p_unifyliteral;
+        super( p_parallel, p_target );
+        m_source = p_source;
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_unifyliteral );
+        return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_source );
     }
 
     @Nonnull
@@ -78,7 +78,7 @@ public final class CLiteralUnify extends CDefaultUnify
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
                                                        .unify(
-                                                           CCommon.replacebycontext( p_context, m_unifyliteral ).raw(),
+                                                           CCommon.replacebycontext( p_context, m_source ).raw(),
                                                            CCommon.replacebycontext( p_context, m_value ).raw()
                                                        );
 
@@ -94,7 +94,7 @@ public final class CLiteralUnify extends CDefaultUnify
     public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
-            literalvariable( m_unifyliteral ),
+            literalvariable( m_source ),
             super.variables()
         );
     }
