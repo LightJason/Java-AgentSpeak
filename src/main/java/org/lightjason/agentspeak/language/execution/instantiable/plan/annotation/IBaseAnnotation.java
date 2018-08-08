@@ -82,7 +82,7 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
 
     @Nullable
     @Override
-    public final T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+    public final T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );

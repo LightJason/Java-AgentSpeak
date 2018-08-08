@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 
@@ -144,7 +145,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
     /**
      * check any variable
      */
-    @Test( expected = IllegalStateException.class )
+    @Test( expected = NoSuchElementException.class )
     public void variableany()
     {
         final IVariable<?> l_variable = new CVariable<Object>( "_" );
@@ -159,7 +160,7 @@ public final class TestCTermVariablesConstant extends IBaseTest
     /**
      * test exception on value asiable
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test( expected = NoSuchElementException.class )
     public void variablevalueassignable()
     {
         new CVariable<Object>( "num", 123 ).throwvaluenotassignableto( String.class );

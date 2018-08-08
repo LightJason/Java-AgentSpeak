@@ -26,8 +26,7 @@ package org.lightjason.agentspeak.language.variable;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -138,7 +137,7 @@ public abstract class IBaseVariable<T> implements IVariable<T>
     public final IVariable<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( CCommon.languagestring( this, "notallocated", m_functor ) );
+            throw new CNoSuchElementException( CCommon.languagestring( this, "notallocated", m_functor ) );
 
         return this;
     }
@@ -151,10 +150,10 @@ public abstract class IBaseVariable<T> implements IVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+    public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", m_functor, p_class ) );
+            throw new CNoSuchElementException( CCommon.languagestring( this, "notassignable", m_functor, p_class ) );
 
         return this;
     }

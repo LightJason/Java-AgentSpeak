@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.variable;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CUnmodifiableException;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -119,7 +119,7 @@ public final class CConstant<T> extends IBaseVariable<T>
     @Override
     protected IVariable<T> setvalue( @Nullable final T p_value )
     {
-        throw new CIllegalStateException( CCommon.languagestring( this, "set", m_functor ) );
+        throw new CUnmodifiableException( CCommon.languagestring( this, "set", m_functor ) );
     }
 
     @Nullable

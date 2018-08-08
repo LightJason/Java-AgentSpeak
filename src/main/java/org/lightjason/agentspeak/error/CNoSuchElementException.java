@@ -21,26 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.error.parser;
+package org.lightjason.agentspeak.error;
 
-import org.lightjason.agentspeak.error.IException;
-import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 
 /**
- * exception with execution context
+ * no-such-element exception
  */
-public interface IContextException extends IException
+public class CNoSuchElementException extends NoSuchElementException implements IException
 {
+    /**
+     * logger
+     */
+    private static final Logger LOGGER = CCommon.logger( CNoSuchElementException.class );
+    /**
+     * serial uid
+     */
+    private static final transient long serialVersionUID = -8986035121952708243L;
 
     /**
-     * returns the execution context
-     *
-     * @return context
+     * ctor
      */
-    @Nonnull
-    IContext context();
+    public CNoSuchElementException()
+    {
+        super();
+        LOGGER.warning( "exception is thrown" );
+    }
 
+    /**
+     * ctor
+     *
+     * @param p_message message
+     */
+    public CNoSuchElementException( @Nonnull final String p_message )
+    {
+        super( p_message );
+        LOGGER.warning( p_message );
+    }
 }

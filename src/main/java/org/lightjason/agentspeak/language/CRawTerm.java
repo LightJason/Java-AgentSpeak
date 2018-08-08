@@ -27,7 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -153,7 +153,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     public IRawTerm<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( CCommon.languagestring( this, "notallocated" ) );
+            throw new CNoSuchElementException( CCommon.languagestring( this, "notallocated" ) );
 
         return this;
     }
@@ -166,7 +166,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );

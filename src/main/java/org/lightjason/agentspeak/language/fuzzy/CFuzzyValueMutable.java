@@ -127,7 +127,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
 
     @Nullable
     @Override
-    public T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalArgumentException
+    public T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", p_class ) );
