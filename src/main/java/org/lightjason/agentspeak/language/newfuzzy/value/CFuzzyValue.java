@@ -21,43 +21,69 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.set;
+package org.lightjason.agentspeak.language.newfuzzy.value;
 
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 
 /**
- * fuzzy set
+ * fuzzy value
  *
- * @tparam T enum type
+ * @tparam T fuzzy type
  */
-public interface IFuzzySet<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
+public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
 {
+    /**
+     * fuzzy type
+     */
+    private final T m_type;
+    /**
+     * fuzzy value
+     */
+    private final Number m_value;
 
     /**
-     * returns the definition of success
+     * ctor
      *
-     * @param p_agent agent of the execution
-     * @param p_execution execution element
-     * @return success fuzzy value
+     * @param p_type fuzzy type
+     * @param p_value fuzzy value
      */
-    @Nonnull
-    Stream<IFuzzyValue<T>> success( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution );
+    public CFuzzyValue( @NonNull final T p_type, @NonNull @NonNegative final Number p_value )
+    {
+        if ( p_value.doubleValue() < 0 || p_value.doubleValue() > 1 )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "valuerange", p_value )  );
 
-    /**
-     * returns the definition of fail
-     *
-     * @param p_agent agent of the execution
-     * @param p_execution execution element
-     * @return fail fuzzy value
-     */
-    @Nonnull
-    Stream<IFuzzyValue<T>> fail( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution );
+        m_type = p_type;
+        m_value = p_value;
+    }
 
+    @Nonnull
+    @Override
+    public T type()
+    {
+        return m_type;
+    }
+
+    @Override
+    public Number fuzzy()
+    {
+        return m_value;
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_type.hashCode() ^ m_value.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return p_object instanceof IFuzzyValue<?> && this.hashCode() == p_object.hashCode();
+    }
 }

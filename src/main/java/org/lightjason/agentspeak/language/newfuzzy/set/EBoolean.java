@@ -23,9 +23,11 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.set;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
@@ -53,60 +55,23 @@ public enum EBoolean implements IFuzzySet<EBoolean>
         m_value = p_value;
     }
 
-    /**
-     * raw type
-     *
-     * @return raw value
-     */
-    public final boolean raw()
-    {
-        return m_value;
-    }
-
     @Override
-    public final IFuzzyValue<EBoolean> apply( final EBoolean p_type, final Number p_number )
+    public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
     {
-        return new IFuzzyValue<EBoolean>()
-        {
-            private final EBoolean m_type = p_type;
-            private final Number m_value = p_number;
-
-            @Nonnull
-            @Override
-            public final EBoolean value()
-            {
-                return m_type;
-            }
-
-            @Override
-            public final Number fuzzy()
-            {
-                return m_value;
-            }
-
-            @Nonnull
-            @Override
-            @SuppressWarnings( "unchecked" )
-            public <N extends EBoolean> N raw()
-            {
-                return (N) m_type;
-            }
-        };
+        return new CFuzzyValue<>( this, p_value );
     }
 
     @Nonnull
     @Override
-    public Stream<IFuzzyValue<EBoolean>> success( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution
-    )
+    public Stream<IFuzzyValue<EBoolean>> success( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution )
     {
-        return Stream.of( this.apply( TRUE, 1 ), this.apply( FALSE, 0 ) );
+        return Stream.of( TRUE.apply( 1 ), FALSE.apply( 0 ) );
     }
 
     @Nonnull
     @Override
-    public Stream<IFuzzyValue<EBoolean>> fail( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution
-    )
+    public Stream<IFuzzyValue<EBoolean>> fail( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution )
     {
-        return Stream.of( this.apply( FALSE, 1 ), this.apply( TRUE, 0 ) );
+        return Stream.of( FALSE.apply( 1 ), TRUE.apply( 0 ) );
     }
 }

@@ -21,43 +21,55 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.set;
+package org.lightjason.agentspeak.language.fuzzy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.set.EBoolean;
 
-import javax.annotation.Nonnull;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * fuzzy set
- *
- * @tparam T enum type
+ * test fuzzy sets
  */
-public interface IFuzzySet<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
+public final class TestCFuzzySet
 {
 
     /**
-     * returns the definition of success
-     *
-     * @param p_agent agent of the execution
-     * @param p_execution execution element
-     * @return success fuzzy value
+     * success result test
      */
-    @Nonnull
-    Stream<IFuzzyValue<T>> success( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution );
+    @Test
+    public void success()
+    {
+        final Set<IFuzzyValue<EBoolean>> l_result = EBoolean.TRUE.success( IAgent.EMPTY, IPlan.EMPTY ).collect( Collectors.toSet() );
+        Assert.assertTrue(
+            Stream.of(
+                EBoolean.TRUE.apply( 1 ),
+                EBoolean.FALSE.apply( 0 )
+            ).parallel().allMatch( l_result::contains )
+        );
+
+    }
 
     /**
-     * returns the definition of fail
-     *
-     * @param p_agent agent of the execution
-     * @param p_execution execution element
-     * @return fail fuzzy value
+     * success result test
      */
-    @Nonnull
-    Stream<IFuzzyValue<T>> fail( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution );
+    @Test
+    public void fail()
+    {
+        final Set<IFuzzyValue<EBoolean>> l_result = EBoolean.TRUE.fail( IAgent.EMPTY, IPlan.EMPTY ).collect( Collectors.toSet() );
+        Assert.assertTrue(
+            Stream.of(
+                EBoolean.TRUE.apply( 0 ),
+                EBoolean.FALSE.apply( 1 )
+            ).parallel().allMatch( l_result::contains )
+        );
 
+    }
 }

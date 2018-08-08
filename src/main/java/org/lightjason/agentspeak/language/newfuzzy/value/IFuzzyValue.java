@@ -21,35 +21,31 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy;
-
-import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
+package org.lightjason.agentspeak.language.newfuzzy.value;
 
 import javax.annotation.Nonnull;
 
 
 /**
- * interface of fuzzy bundle
+ * fuzzy value
+ *
  * @tparam T enum type
  */
-public interface IFuzzyBundle<T extends Enum<?>>
+public interface IFuzzyValue<T extends Enum<?>>
 {
-
     /**
-     * returns the fuzzy set
+     * returns the value
      *
-     * @return fuzzy-set
+     * @return returns type
      */
     @Nonnull
-    IFuzzySet<T> fuzzyset();
+    T type();
 
     /**
-     * defuzzification
+     * returns the fuzzy number
      *
-     * @return defuzzification
+     * @return fuzzy number
      */
-    @Nonnull
-    IDefuzzification<T> defuzzification();
+    Number fuzzy();
 
 }
