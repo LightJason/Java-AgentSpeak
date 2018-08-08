@@ -25,8 +25,7 @@ package org.lightjason.agentspeak.action.builtin.math.linearprogram;
 
 import org.apache.commons.math3.optim.linear.Relationship;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
@@ -82,7 +81,7 @@ public abstract class IConstraint extends IBuiltinAction
                 return Relationship.EQ;
 
             default:
-                throw new CIllegalArgumentException( CCommon.languagestring( IConstraint.class, "relation", p_symbol ) );
+                throw new CEnumConstantNotPresentException( Relationship.class, p_symbol );
         }
     }
 

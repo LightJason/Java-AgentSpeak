@@ -30,21 +30,17 @@ import org.lightjason.agentspeak.action.binding.CMethodAction;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
@@ -353,68 +349,6 @@ public final class CCommon
             );
     }
 
-    /**
-     * concats an URL with a path
-     *
-     * @param p_base base URL
-     * @param p_string additional path
-     * @return new URL
-     *
-     * @throws URISyntaxException thrown on syntax error
-     * @throws MalformedURLException thrown on malformat
-     */
-    @Nonnull
-    public static URL concaturl( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
-    {
-        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
-    }
-
-    /**
-     * returns root path of the resource
-     *
-     * @return URL of file or null
-     */
-    @Nullable
-    public static URL resourceurl()
-    {
-        return CCommon.class.getClassLoader().getResource( "" );
-    }
-
-    /**
-     * returns a file of a resource e.g. Jar file
-     *
-     * @param p_file file
-     * @return URL of file or null
-     *
-     * @throws URISyntaxException thrown on syntax error
-     * @throws MalformedURLException thrown on malformat
-     */
-    @Nonnull
-    public static URL resourceurl( final String p_file ) throws URISyntaxException, MalformedURLException
-    {
-        return resourceurl( new File( p_file ) );
-    }
-
-    /**
-     * returns a file of a resource e.g. Jar file
-     *
-     * @param p_file file relative to the CMain
-     * @return URL of file or null
-     *
-     * @throws URISyntaxException is thrown on URI errors
-     * @throws MalformedURLException is thrown on malformat
-     */
-    @Nonnull
-    private static URL resourceurl( final File p_file ) throws URISyntaxException, MalformedURLException
-    {
-        if ( p_file.exists() )
-            return p_file.toURI().normalize().toURL();
-
-        final URL l_url = CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) );
-        if ( Objects.isNull( l_url ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( CCommon.class, "fileurlnull", p_file ) );
-        return l_url.toURI().normalize().toURL();
-    }
 
     // --- language operations ---------------------------------------------------------------------------------------------------------------------------------
 

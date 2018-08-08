@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
@@ -84,7 +85,7 @@ public final class CView implements IView
     public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase p_beliefbase, final IView p_parent )
     {
         if ( p_name.isEmpty() )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
+            throw new CNoSuchElementException( CCommon.languagestring( this, "empty" ) );
 
         m_name = p_name;
         m_beliefbase = p_beliefbase;
