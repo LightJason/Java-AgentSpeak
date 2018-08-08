@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -141,7 +142,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 
 
             default:
-                throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknownoperator", this ) );
+                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
         }
     }
 

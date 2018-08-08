@@ -25,8 +25,7 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Cipher;
@@ -91,7 +90,7 @@ public enum ECryptAlgorithm
                 return new ImmutablePair<>( l_key.getPublic(), l_key.getPrivate() );
 
             default:
-                throw new CIllegalStateException( CCommon.languagestring( this, "unknown", this ) );
+                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
         }
     }
 

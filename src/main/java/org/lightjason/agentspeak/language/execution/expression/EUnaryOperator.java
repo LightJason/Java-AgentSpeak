@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -70,7 +71,7 @@ public enum EUnaryOperator implements Function<ITerm, Object>
                 return !p_term.<Boolean>raw();
 
             default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "unknownoperator", this ) );
+                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
         }
     }
 

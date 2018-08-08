@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.error;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
@@ -30,37 +31,28 @@ import java.util.logging.Logger;
 
 
 /**
- * arithmetic exception
+ * enum-constant-not-present exception
  */
-public final class CArithmeticException extends ArithmeticException implements IException
+public final class CEnumConstantNotPresentException extends EnumConstantNotPresentException implements IException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CArithmeticException.class );
+    private static final Logger LOGGER = CCommon.logger( CEnumConstantNotPresentException.class );
     /**
      * serial uid
      */
-    private static final transient long serialVersionUID = 3442300932838910993L;
-
-    /**
-     * ctor
-     */
-    public CArithmeticException()
-    {
-        super();
-        LOGGER.warning( "exception is thrown" );
-    }
+    private static final long serialVersionUID = -2627223365911300936L;
 
     /**
      * ctor
      *
-     * @param p_message message
+     * @param p_enum enum type
+     * @param p_missing missing enum type
      */
-    public CArithmeticException( @Nonnull final String p_message )
+    public CEnumConstantNotPresentException( @Nonnull final Class<? extends Enum<?>> p_enum, @NonNull final String p_missing )
     {
-        super( p_message );
-        LOGGER.warning( p_message );
+        super( p_enum, p_missing );
+        LOGGER.warning( this.getMessage() );
     }
-
 }

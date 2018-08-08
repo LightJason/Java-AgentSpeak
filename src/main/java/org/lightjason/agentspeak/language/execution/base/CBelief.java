@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.execution.base;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -122,6 +123,7 @@ public final class CBelief extends IBaseExecution<ILiteral>
                     break;
 
                 default:
+                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
             }
         }
 

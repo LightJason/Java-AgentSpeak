@@ -37,8 +37,8 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -679,7 +679,7 @@ public final class CCommon
                 case XZ : return new XZCompressorOutputStream( p_datastream );
 
                 default :
-                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
+                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
             }
         }
 

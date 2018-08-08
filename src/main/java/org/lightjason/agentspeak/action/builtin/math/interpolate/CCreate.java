@@ -30,7 +30,7 @@ import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.interpolation.LoessInterpolator;
 import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -168,7 +168,7 @@ public final class CCreate extends IBuiltinAction
                     return new NevilleInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 default:
-                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
+                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
             }
         }
     }
