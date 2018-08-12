@@ -23,12 +23,22 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.norm;
 
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import java.util.function.BinaryOperator;
+
+
 /**
  * interface of fuzzy set operator
  *
  * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
  * @see https://en.wikipedia.org/wiki/T-norm
  */
-public interface IFuzzyTNorm
+public interface IFuzzyTNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValue<E>>
 {
+
+    // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
+    // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
+    // https://de.wikipedia.org/wiki/T-Norm
+
 }

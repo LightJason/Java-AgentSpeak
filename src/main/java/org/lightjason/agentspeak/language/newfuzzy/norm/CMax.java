@@ -23,19 +23,19 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.norm;
 
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * default fuzzy complement
+ * fuzzy maximum t-norm
  *
- * @tparam T fuzzy type
+ * @tparam E fuzzy element type
  */
-public final class CComplement<T extends Enum<?>> implements IFuzzyUnaryTNorm<T>
+public final class CMax<E extends Enum<?>> implements IFuzzyTNorm<E>
 {
     @Override
-    public IFuzzyValue<T> apply( final IFuzzyValue<T> p_value )
+    public IFuzzyValue<E> apply( final IFuzzyValue<E> p_value1, final IFuzzyValue<E> p_value2 )
     {
-        return p_value.apply( 1 - p_value.fuzzy().doubleValue() );
+        return p_value1.fuzzy() > p_value2.fuzzy() ? p_value1 : p_value2;
     }
 }

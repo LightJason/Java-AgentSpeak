@@ -23,16 +23,19 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.norm;
 
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
-
-import java.util.function.Function;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * unary fuzzy operator
+ * fuzzy minimum t-norm
  *
- * @tparam T value type
+ * @tparam E fuzzy element type
  */
-public interface IFuzzyUnaryTNorm<T extends Enum<?>> extends IFuzzyTNorm, Function<IFuzzyValue<T>, IFuzzyValue<T>>
+public final class CMin<E extends Enum<?>> implements IFuzzyTNorm<E>
 {
+    @Override
+    public IFuzzyValue<E> apply( final IFuzzyValue<E> p_value1, final IFuzzyValue<E> p_value2 )
+    {
+        return p_value1.fuzzy() < p_value2.fuzzy() ? p_value1 : p_value2;
+    }
 }
