@@ -21,11 +21,18 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.operator;
+package org.lightjason.agentspeak.language.newfuzzy.norm;
+
+import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+
+import java.util.function.Function;
+
 
 /**
- * fuzzy union
+ * unary fuzzy operator
+ *
+ * @tparam T value type
  */
-public class CUnion implements IFuzzyOperator
+public interface IFuzzyUnaryTNorm<T extends Enum<?>> extends IFuzzyTNorm, Function<IFuzzyValue<T>, IFuzzyValue<T>>
 {
 }

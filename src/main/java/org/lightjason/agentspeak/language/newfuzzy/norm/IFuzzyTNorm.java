@@ -21,21 +21,14 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.operator;
-
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
-
+package org.lightjason.agentspeak.language.newfuzzy.norm;
 
 /**
- * default fuzzy complement
+ * interface of fuzzy set operator
  *
- * @tparam T fuzzy type
+ * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
+ * @see https://en.wikipedia.org/wiki/T-norm
  */
-public final class CComplement<T extends Enum<?>> implements IFuzzyUnaryOperator<T>
+public interface IFuzzyTNorm
 {
-    @Override
-    public IFuzzyValue<T> apply( final IFuzzyValue<T> p_value )
-    {
-        return p_value.apply( 1 - p_value.fuzzy().doubleValue() );
-    }
 }
