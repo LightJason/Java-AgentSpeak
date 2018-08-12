@@ -23,7 +23,10 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.value;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 
 /**
@@ -31,7 +34,7 @@ import javax.annotation.Nonnull;
  *
  * @tparam T enum type
  */
-public interface IFuzzyValue<T extends Enum<?>>
+public interface IFuzzyValue<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
 {
     /**
      * returns the value
@@ -46,6 +49,7 @@ public interface IFuzzyValue<T extends Enum<?>>
      *
      * @return fuzzy number
      */
+    @NonNull
     Number fuzzy();
 
 }

@@ -21,57 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.set;
+package org.lightjason.agentspeak.language.newfuzzy.element;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
-import javax.annotation.Nonnull;
-import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
 
 /**
- * fuzzy boolean
+ * fuzzy set
+ *
+ * @tparam T enum type
  */
-public enum EBoolean implements IFuzzySet<EBoolean>
+public interface IFuzzyElement<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
 {
-    TRUE( true ),
-    FALSE( false );
 
     /**
-     * native type
+     * returns a raw value if it exist
+     *
+     * @tparam V raw value of the fuzzy set element
+     * @return raw value
      */
-    private final boolean m_value;
+    @Nullable
+    <V> V raw();
 
-    /**
-     * ctor
-     * @param p_value value
-     */
-    EBoolean( final boolean p_value )
-    {
-        m_value = p_value;
-    }
-
-    @Override
-    public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
-    {
-        return new CFuzzyValue<>( this, p_value );
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<EBoolean>> success( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution )
-    {
-        return Stream.of( TRUE.apply( 1 ), FALSE.apply( 0 ) );
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<EBoolean>> fail( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution )
-    {
-        return Stream.of( FALSE.apply( 1 ), TRUE.apply( 0 ) );
-    }
 }

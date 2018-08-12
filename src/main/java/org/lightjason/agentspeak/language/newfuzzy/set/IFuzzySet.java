@@ -23,41 +23,49 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.set;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 
 /**
- * fuzzy set
+ * interface of a fuzzy set
  *
- * @tparam T enum type
+ * @tparam U any input
+ * @tparam E fuzzy element type
  */
-public interface IFuzzySet<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
+public interface IFuzzySet<U, E extends Enum<?>> extends Function<U, Stream<IFuzzyValue<E>>>, BiConsumer<IAgent<?>, IInstantiable>
 {
 
     /**
      * returns the definition of success
      *
-     * @param p_agent agent of the execution
-     * @param p_execution execution element
-     * @return success fuzzy value
+     * @return success fuzzy value stream
      */
     @Nonnull
-    Stream<IFuzzyValue<T>> success( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution );
+    Stream<IFuzzyValue<E>> success();
 
     /**
      * returns the definition of fail
      *
-     * @param p_agent agent of the execution
-     * @param p_execution execution element
-     * @return fail fuzzy value
+     * @return fail fuzzy value stream
      */
     @Nonnull
-    Stream<IFuzzyValue<T>> fail( @Nonnull final IAgent<?> p_agent, @Nonnull final IExecution p_execution );
+    Stream<IFuzzyValue<E>> fail();
+
+    /**
+     * test for equality of two fuzzy values
+     *
+     * @param p_lhs left-hand argument
+     * @param p_rhs right-hand argument
+     * @return equality
+     */
+    boolean elementequal( @NonNull final IFuzzyValue<E> p_lhs, @NonNull final IFuzzyValue<E> p_rhs );
 
 }

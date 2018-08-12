@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
  * interface of fuzzy bundle
  * @tparam T enum type
  */
-public interface IFuzzyBundle<T extends Enum<?>>
+public interface IFuzzyBundle<U, E extends Enum<?>>
 {
 
     /**
@@ -42,7 +42,7 @@ public interface IFuzzyBundle<T extends Enum<?>>
      * @return fuzzy-set
      */
     @Nonnull
-    IFuzzySet<T> fuzzyset();
+    IFuzzySet<U, E> fuzzyset();
 
     /**
      * defuzzification
@@ -50,6 +50,6 @@ public interface IFuzzyBundle<T extends Enum<?>>
      * @return defuzzification
      */
     @Nonnull
-    IDefuzzification<T> defuzzification();
+    IDefuzzification<E> defuzzification();
 
 }

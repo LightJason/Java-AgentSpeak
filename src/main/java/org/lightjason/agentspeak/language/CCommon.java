@@ -27,6 +27,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.rits.cloning.Cloner;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
@@ -155,6 +156,19 @@ public final class CCommon
     public static List<ITerm> argumentlist()
     {
         return Collections.synchronizedList( new ArrayList<>() );
+    }
+
+    /**
+     * equality of floating-point numbers
+     *
+     * @param p_lhs left-hand argument
+     * @param p_rhs right-hand argument
+     * @param p_precision precision
+     * @return equality flag
+     */
+    public static boolean floatingequal( @NonNull final Number p_lhs, @NonNull final Number p_rhs, @NonNull final Number p_precision )
+    {
+        return Math.abs( p_lhs.doubleValue() - p_rhs.doubleValue() ) < p_precision.doubleValue();
     }
 
     //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------

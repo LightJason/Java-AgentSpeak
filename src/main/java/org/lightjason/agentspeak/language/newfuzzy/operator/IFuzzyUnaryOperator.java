@@ -21,51 +21,18 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.bundle;
+package org.lightjason.agentspeak.language.newfuzzy.operator;
 
-import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
+import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
-import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 
 /**
- * fuzzy bundle
+ * unary fuzzy operator
+ *
+ * @tparam T value type
  */
-public final class CFuzzyBundle<U, E extends Enum<?>> implements IFuzzyBundle<U, E>
+public interface IFuzzyUnaryOperator<T extends Enum<?>> extends IFuzzyOperator, Function<IFuzzyValue<T>, IFuzzyValue<T>>
 {
-    /**
-     * fuzzy set
-     */
-    private final IFuzzySet<U, E> m_set;
-    /**
-     * defuzzification
-     */
-    private final IDefuzzification<E> m_defuzzyfication;
-
-    /**
-     * ctor
-     *
-     * @param p_set fuzzy set
-     * @param p_defuzzyfication defuzzyfication
-     */
-    public CFuzzyBundle( @Nonnull final IFuzzySet<U, E> p_set, @Nonnull final IDefuzzification<E> p_defuzzyfication )
-    {
-        m_set = p_set;
-        m_defuzzyfication = p_defuzzyfication;
-    }
-
-    @Nonnull
-    @Override
-    public final IFuzzySet<U, E> fuzzyset()
-    {
-        return m_set;
-    }
-
-    @Nonnull
-    @Override
-    public final IDefuzzification<E> defuzzification()
-    {
-        return m_defuzzyfication;
-    }
 }

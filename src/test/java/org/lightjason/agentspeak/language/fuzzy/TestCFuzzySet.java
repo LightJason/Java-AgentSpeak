@@ -25,10 +25,10 @@ package org.lightjason.agentspeak.language.fuzzy;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.newfuzzy.set.CSmoothBoolean;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.set.EBoolean;
+import org.lightjason.agentspeak.language.newfuzzy.element.EBoolean;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,7 +47,7 @@ public final class TestCFuzzySet
     @Test
     public void success()
     {
-        final Set<IFuzzyValue<EBoolean>> l_result = EBoolean.TRUE.success( IAgent.EMPTY, IPlan.EMPTY ).collect( Collectors.toSet() );
+        final Set<IFuzzyValue<EBoolean>> l_result = new CSmoothBoolean().success().collect( Collectors.toSet() );
         Assert.assertTrue(
             Stream.of(
                 EBoolean.TRUE.apply( 1 ),
@@ -63,13 +63,43 @@ public final class TestCFuzzySet
     @Test
     public void fail()
     {
-        final Set<IFuzzyValue<EBoolean>> l_result = EBoolean.TRUE.fail( IAgent.EMPTY, IPlan.EMPTY ).collect( Collectors.toSet() );
+        final Set<IFuzzyValue<EBoolean>> l_result = new CSmoothBoolean().fail().collect( Collectors.toSet() );
         Assert.assertTrue(
             Stream.of(
                 EBoolean.TRUE.apply( 0 ),
                 EBoolean.FALSE.apply( 1 )
             ).parallel().allMatch( l_result::contains )
         );
-
     }
+
+    /**
+     * test true / false results
+     */
+    @Test
+    public void truefalse()
+    {
+        final IFuzzySet<Number, EBoolean> l_fuzzyset = new CSmoothBoolean( 0.01 );
+
+        Assert.assertTrue(
+            l_fuzzyset.apply( 0 )
+                      .parallel()
+                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 0.007 ) )
+                                      || l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 0.993 ) ) )
+        );
+
+        Assert.assertTrue(
+            l_fuzzyset.apply( 1 )
+                      .parallel()
+                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 0.007 ) )
+                                      || l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 0.993 ) ) )
+        );
+
+        Assert.assertTrue(
+            l_fuzzyset.apply( 0.5 )
+                      .parallel()
+                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 0.5 ) )
+                                      || l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 0.5 ) ) )
+        );
+    }
+
 }

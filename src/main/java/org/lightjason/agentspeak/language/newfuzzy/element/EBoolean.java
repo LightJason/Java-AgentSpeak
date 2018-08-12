@@ -21,51 +21,48 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.bundle;
+package org.lightjason.agentspeak.language.newfuzzy.element;
 
-import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
- * fuzzy bundle
+ * fuzzy boolean
  */
-public final class CFuzzyBundle<U, E extends Enum<?>> implements IFuzzyBundle<U, E>
+public enum EBoolean implements IFuzzyElement<EBoolean>
 {
+    TRUE( true ),
+    FALSE( false );
+
     /**
-     * fuzzy set
+     * native type
      */
-    private final IFuzzySet<U, E> m_set;
-    /**
-     * defuzzification
-     */
-    private final IDefuzzification<E> m_defuzzyfication;
+    private final Boolean m_value;
 
     /**
      * ctor
-     *
-     * @param p_set fuzzy set
-     * @param p_defuzzyfication defuzzyfication
+     * @param p_value value
      */
-    public CFuzzyBundle( @Nonnull final IFuzzySet<U, E> p_set, @Nonnull final IDefuzzification<E> p_defuzzyfication )
+    EBoolean( final boolean p_value )
     {
-        m_set = p_set;
-        m_defuzzyfication = p_defuzzyfication;
+        m_value = p_value;
     }
 
-    @Nonnull
     @Override
-    public final IFuzzySet<U, E> fuzzyset()
+    public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
     {
-        return m_set;
+        return new CFuzzyValue<>( this, p_value );
     }
 
-    @Nonnull
+    @Nullable
     @Override
-    public final IDefuzzification<E> defuzzification()
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
     {
-        return m_defuzzyfication;
+        return (V) m_value;
     }
 }

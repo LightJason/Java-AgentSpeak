@@ -24,17 +24,17 @@
 package org.lightjason.agentspeak.language.newfuzzy.value;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.checkerframework.checker.index.qual.NonNegative;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 
 
 /**
  * fuzzy value
  *
  * @tparam T fuzzy type
+ *
+ * @todo range checking
  */
 public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
 {
@@ -53,11 +53,8 @@ public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
      * @param p_type fuzzy type
      * @param p_value fuzzy value
      */
-    public CFuzzyValue( @NonNull final T p_type, @NonNull @NonNegative final Number p_value )
+    public CFuzzyValue( @NonNull final T p_type, @NonNull final Number p_value )
     {
-        if ( p_value.doubleValue() < 0 || p_value.doubleValue() > 1 )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "valuerange", p_value )  );
-
         m_type = p_type;
         m_value = p_value;
     }
@@ -69,6 +66,7 @@ public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
         return m_type;
     }
 
+    @NonNull
     @Override
     public Number fuzzy()
     {
@@ -85,5 +83,17 @@ public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
     public final boolean equals( final Object p_object )
     {
         return p_object instanceof IFuzzyValue<?> && this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public IFuzzyValue<T> apply( final Number p_number )
+    {
+        return new CFuzzyValue<>( m_type, p_number );
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}[{1}]", m_type, m_value );
     }
 }
