@@ -114,15 +114,15 @@ public final class TestCFuzzySet
         Assert.assertTrue(
             l_fuzzyset.apply( 0 )
                       .parallel()
-                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 0.007 ) )
-                                      || l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 0.993 ) ) )
+                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 0 ) )
+                                      || l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 1 ) ) )
         );
 
         Assert.assertTrue(
             l_fuzzyset.apply( 1 )
                       .parallel()
-                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 0.007 ) )
-                                      || l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 0.993 ) ) )
+                      .allMatch( i -> l_fuzzyset.elementequal( i, EBoolean.FALSE.apply( 0 ) )
+                                      || l_fuzzyset.elementequal( i, EBoolean.TRUE.apply( 1 ) ) )
         );
 
         Assert.assertTrue(
