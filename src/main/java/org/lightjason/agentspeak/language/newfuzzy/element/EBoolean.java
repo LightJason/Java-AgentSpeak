@@ -27,7 +27,9 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 
 /**
@@ -64,5 +66,19 @@ public enum EBoolean implements IFuzzyElement<EBoolean>
     public <V> V raw()
     {
         return (V) m_value;
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<EBoolean>> success()
+    {
+        return Stream.of( EBoolean.TRUE.apply( 1 ), EBoolean.FALSE.apply( 0 ) );
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<EBoolean>> fail()
+    {
+        return Stream.of( EBoolean.FALSE.apply( 1 ), EBoolean.TRUE.apply( 0 ) );
     }
 }

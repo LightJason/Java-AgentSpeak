@@ -25,8 +25,10 @@ package org.lightjason.agentspeak.language.newfuzzy.element;
 
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
@@ -45,5 +47,21 @@ public interface IFuzzyElement<T extends Enum<?>> extends Function<Number, IFuzz
      */
     @Nullable
     <V> V raw();
+
+    /**
+     * returns the definition of success
+     *
+     * @return success fuzzy value stream
+     */
+    @Nonnull
+    Stream<IFuzzyValue<T>> success();
+
+    /**
+     * returns the definition of fail
+     *
+     * @return fail fuzzy value stream
+     */
+    @Nonnull
+    Stream<IFuzzyValue<T>> fail();
 
 }

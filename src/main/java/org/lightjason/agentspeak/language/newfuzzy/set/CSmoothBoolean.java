@@ -37,7 +37,9 @@ import java.util.stream.Stream;
 
 /**
  * fuzzy set of smooth boolean elements
+ * @deprecated
  */
+@Deprecated
 public final class CSmoothBoolean implements IFuzzySet<Number, EBoolean>
 {
     /**

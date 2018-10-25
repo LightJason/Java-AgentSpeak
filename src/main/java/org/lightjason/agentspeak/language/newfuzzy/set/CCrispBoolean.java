@@ -37,7 +37,9 @@ import java.util.stream.Stream;
 
 /**
  * fuzzy set of crisp boolean
+ * @deprecated
  */
+@Deprecated
 public final class CCrispBoolean implements IFuzzySet<Number, EBoolean>
 {
     /**

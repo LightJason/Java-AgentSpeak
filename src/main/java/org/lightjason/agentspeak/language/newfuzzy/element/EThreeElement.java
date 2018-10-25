@@ -21,53 +21,65 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.set;
+package org.lightjason.agentspeak.language.newfuzzy.element;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
 /**
- * interface of a fuzzy set
- *
- * @tparam U any input
- * @tparam E fuzzy element type
- * @deprecated
+ * three element fuzzy with numerical representation
  */
-@Deprecated
-public interface IFuzzySet<U, E extends Enum<?>> extends Function<U, Stream<IFuzzyValue<E>>>, BiConsumer<IAgent<?>, IInstantiable>
+public enum EThreeElement implements IFuzzyElement<EThreeElement>
 {
+    LOW(1),
+    MEDIUM(10),
+    HIGH(100);
 
     /**
-     * returns the definition of success
-     *
-     * @return success fuzzy value stream
+     * integer representation of the value
      */
+    private final int m_value;
+
+    /**
+     * ctor
+     *
+     * @param p_value value
+     */
+    EThreeElement( final int p_value )
+    {
+        m_value = p_value;
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
+    {
+        return (V) Integer.valueOf( m_value );
+    }
+
     @Nonnull
-    Stream<IFuzzyValue<E>> success();
+    @Override
+    public Stream<IFuzzyValue<EThreeElement>> success()
+    {
+        return Stream.of( EThreeElement.LOW.apply( 0 ), EThreeElement.MEDIUM.apply( 0 ), EThreeElement.HIGH.apply( 1 ) );
+    }
 
-    /**
-     * returns the definition of fail
-     *
-     * @return fail fuzzy value stream
-     */
     @Nonnull
-    Stream<IFuzzyValue<E>> fail();
+    @Override
+    public Stream<IFuzzyValue<EThreeElement>> fail()
+    {
+        return Stream.of( EThreeElement.LOW.apply( 1 ), EThreeElement.MEDIUM.apply( 0 ), EThreeElement.HIGH.apply( 0 ) );
+    }
 
-    /**
-     * test for equality of two fuzzy values
-     *
-     * @param p_lhs left-hand argument
-     * @param p_rhs right-hand argument
-     * @return equality
-     */
-    boolean elementequal( @NonNull final IFuzzyValue<E> p_lhs, @NonNull final IFuzzyValue<E> p_rhs );
-
+    @Override
+    public IFuzzyValue<EThreeElement> apply( final Number p_number )
+    {
+        return new CFuzzyValue<>( this, p_number );
+    }
 }
