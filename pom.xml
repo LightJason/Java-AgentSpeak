@@ -107,7 +107,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven.compiler.source>1.10</maven.compiler.source>
+        <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
         <!-- will be set outside (build parameter) -->
@@ -244,6 +244,7 @@
 
         <dependency>
             <groupId>com.github.javaparser</groupId>
+
             <artifactId>javaparser-core</artifactId>
             <version>[3.5.11,)</version>
             <scope>test</scope>
