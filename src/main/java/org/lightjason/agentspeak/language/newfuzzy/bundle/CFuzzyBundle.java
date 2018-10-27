@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.newfuzzy.bundle;
 
 import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 
@@ -35,10 +34,6 @@ import javax.annotation.Nonnull;
 public final class CFuzzyBundle<U, E extends Enum<?>> implements IFuzzyBundle<U, E>
 {
     /**
-     * fuzzy set
-     */
-    private final IFuzzySet<U, E> m_set;
-    /**
      * defuzzification
      */
     private final IDefuzzification<E> m_defuzzyfication;
@@ -46,20 +41,11 @@ public final class CFuzzyBundle<U, E extends Enum<?>> implements IFuzzyBundle<U,
     /**
      * ctor
      *
-     * @param p_set fuzzy set
      * @param p_defuzzyfication defuzzyfication
      */
-    public CFuzzyBundle( @Nonnull final IFuzzySet<U, E> p_set, @Nonnull final IDefuzzification<E> p_defuzzyfication )
+    public CFuzzyBundle( @Nonnull final IDefuzzification<E> p_defuzzyfication )
     {
-        m_set = p_set;
         m_defuzzyfication = p_defuzzyfication;
-    }
-
-    @Nonnull
-    @Override
-    public final IFuzzySet<U, E> fuzzyset()
-    {
-        return m_set;
     }
 
     @Nonnull

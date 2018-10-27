@@ -31,7 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
  *
  * @tparam E fuzzy element type
  */
-public final class CMin<E extends Enum<?>> implements IFuzzyTNorm<E>
+public final class CMin<E extends Enum<?>> implements IFuzzyNorm<E>
 {
     @Override
     public IFuzzyValue<E> apply( final IFuzzyValue<E> p_value1, final IFuzzyValue<E> p_value2 )

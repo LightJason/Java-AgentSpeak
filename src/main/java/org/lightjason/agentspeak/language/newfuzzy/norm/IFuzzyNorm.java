@@ -21,53 +21,24 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.set;
+package org.lightjason.agentspeak.language.newfuzzy.norm;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnull;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.function.BinaryOperator;
 
 
 /**
- * interface of a fuzzy set
+ * interface of fuzzy set operator
  *
- * @tparam U any input
- * @tparam E fuzzy element type
- * @deprecated
+ * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
+ * @see https://en.wikipedia.org/wiki/T-norm
  */
-@Deprecated
-public interface IFuzzySet<U, E extends Enum<?>> extends Function<U, Stream<IFuzzyValue<E>>>, BiConsumer<IAgent<?>, IInstantiable>
+public interface IFuzzyNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValue<E>>
 {
 
-    /**
-     * returns the definition of success
-     *
-     * @return success fuzzy value stream
-     */
-    @Nonnull
-    Stream<IFuzzyValue<E>> success();
-
-    /**
-     * returns the definition of fail
-     *
-     * @return fail fuzzy value stream
-     */
-    @Nonnull
-    Stream<IFuzzyValue<E>> fail();
-
-    /**
-     * test for equality of two fuzzy values
-     *
-     * @param p_lhs left-hand argument
-     * @param p_rhs right-hand argument
-     * @return equality
-     */
-    boolean elementequal( @NonNull final IFuzzyValue<E> p_lhs, @NonNull final IFuzzyValue<E> p_rhs );
+    // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
+    // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
+    // https://de.wikipedia.org/wiki/T-Norm
 
 }
