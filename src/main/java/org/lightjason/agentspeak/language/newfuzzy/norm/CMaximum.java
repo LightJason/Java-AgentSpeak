@@ -27,15 +27,15 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * fuzzy minimum t-norm
+ * fuzzy maximum t-norm
  *
  * @tparam E fuzzy element type
  */
-public final class CMin<E extends Enum<?>> implements IFuzzyNorm<E>
+public final class CMaximum<E extends Enum<?>> implements IFuzzyNorm<E>
 {
     @Override
     public IFuzzyValue<E> apply( final IFuzzyValue<E> p_value1, final IFuzzyValue<E> p_value2 )
     {
-        return p_value1.fuzzy() < p_value2.fuzzy() ? p_value1 : p_value2;
+        return p_value1.fuzzy() > p_value2.fuzzy() ? p_value1 : p_value2;
     }
 }
