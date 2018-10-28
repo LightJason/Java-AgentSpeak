@@ -23,17 +23,6 @@
 
 package org.lightjason.agentspeak.language.fuzzy;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lightjason.agentspeak.language.newfuzzy.element.EBoolean;
-import org.lightjason.agentspeak.language.newfuzzy.element.EThreeElement;
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
-
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-
 /**
  * test fuzzy sets
  *
@@ -41,70 +30,5 @@ import java.util.stream.Stream;
  */
 public final class TestCFuzzyElement
 {
-
-    /**
-     * success fuzzy boolean
-     */
-    @Test
-    public void successboolean()
-    {
-        final Set<IFuzzyValue<EBoolean>> l_result = EBoolean.TRUE.success().collect( Collectors.toSet() );
-        Assert.assertTrue(
-            Stream.of(
-                EBoolean.TRUE.apply( 1 ),
-                EBoolean.FALSE.apply( 0 )
-            ).parallel().allMatch( l_result::contains )
-        );
-    }
-
-    /**
-     * fail fuzzy boolean
-     */
-    @Test
-    public void failboolean()
-    {
-        final Set<IFuzzyValue<EBoolean>> l_result = EBoolean.FALSE.fail().collect( Collectors.toSet() );
-        Assert.assertTrue(
-            Stream.of(
-                EBoolean.TRUE.apply( 0 ),
-                EBoolean.FALSE.apply( 1 )
-            ).parallel().allMatch( l_result::contains )
-        );
-    }
-
-
-
-
-    /**
-     * success fuzzy three element
-     */
-    @Test
-    public void successthreeelement()
-    {
-        final Set<IFuzzyValue<EThreeElement>> l_result = EThreeElement.HIGH.success().collect( Collectors.toSet() );
-        Assert.assertTrue(
-            Stream.of(
-                EThreeElement.HIGH.apply( 1 ),
-                EThreeElement.MEDIUM.apply( 0 ),
-                EThreeElement.LOW.apply( 0 )
-            ).parallel().allMatch( l_result::contains )
-        );
-    }
-
-    /**
-     * fail fuzzy three element
-     */
-    @Test
-    public void failthreeelement()
-    {
-        final Set<IFuzzyValue<EThreeElement>> l_result = EThreeElement.HIGH.fail().collect( Collectors.toSet() );
-        Assert.assertTrue(
-            Stream.of(
-                EThreeElement.HIGH.apply( 0 ),
-                EThreeElement.MEDIUM.apply( 0 ),
-                EThreeElement.LOW.apply( 1 )
-            ).parallel().allMatch( l_result::contains )
-        );
-    }
 
 }

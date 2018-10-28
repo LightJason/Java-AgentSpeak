@@ -26,9 +26,7 @@ package org.lightjason.agentspeak.language.newfuzzy.element;
 import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.stream.Stream;
 
 
 /**
@@ -36,9 +34,9 @@ import java.util.stream.Stream;
  */
 public enum EThreeElement implements IFuzzyElement<EThreeElement>
 {
-    LOW(1),
-    MEDIUM(10),
-    HIGH(100);
+    LOW( 1 ),
+    MEDIUM( 10 ),
+    HIGH( 100 );
 
     /**
      * integer representation of the value
@@ -61,20 +59,6 @@ public enum EThreeElement implements IFuzzyElement<EThreeElement>
     public <V> V raw()
     {
         return (V) Integer.valueOf( m_value );
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<EThreeElement>> success()
-    {
-        return Stream.of( EThreeElement.LOW.apply( 0 ), EThreeElement.MEDIUM.apply( 0 ), EThreeElement.HIGH.apply( 1 ) );
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<EThreeElement>> fail()
-    {
-        return Stream.of( EThreeElement.LOW.apply( 1 ), EThreeElement.MEDIUM.apply( 0 ), EThreeElement.HIGH.apply( 0 ) );
     }
 
     @Override

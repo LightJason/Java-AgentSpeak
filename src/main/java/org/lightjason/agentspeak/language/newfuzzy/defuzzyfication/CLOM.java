@@ -43,7 +43,7 @@ public class CLOM<T extends Enum<?>> implements IDefuzzification<T>
     }
 
     @Override
-    public final boolean continuousexecution( @Nonnull final Stream<IFuzzyValue<T>> p_value )
+    public final boolean execution( @Nonnull final Stream<IFuzzyValue<T>> p_value )
     {
         return false;
     }
@@ -51,6 +51,20 @@ public class CLOM<T extends Enum<?>> implements IDefuzzification<T>
     @Nonnull
     @Override
     public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    {
+        return null;
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<T>> success()
+    {
+        return null;
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<T>> fail()
     {
         return null;
     }

@@ -56,7 +56,7 @@ public interface IDefuzzification<T extends Enum<?>>
      * @param p_value fuzzy values
      * @return flag to continue
      */
-    boolean continuousexecution( @Nonnull final Stream<IFuzzyValue<T>> p_value );
+    boolean execution( @Nonnull final Stream<IFuzzyValue<T>> p_value );
 
     /**
      * update of the internal defuzzification
@@ -67,6 +67,22 @@ public interface IDefuzzification<T extends Enum<?>>
      */
     @Nonnull
     IAgent<?> update( @Nonnull final IAgent<?> p_agent );
+
+    /**
+     * returns the definition of success
+     *
+     * @return success fuzzy value stream
+     */
+    @Nonnull
+    Stream<IFuzzyValue<T>> success();
+
+    /**
+     * returns the definition of fail
+     *
+     * @return fail fuzzy value stream
+     */
+    @Nonnull
+    Stream<IFuzzyValue<T>> fail();
 
 }
 
