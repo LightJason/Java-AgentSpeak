@@ -40,5 +40,6 @@ public interface IFuzzyNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValu
     // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
     // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
     // https://de.wikipedia.org/wiki/T-Norm
+    // http://www.nicodubois.com/bois5.2.htm
 
 }
