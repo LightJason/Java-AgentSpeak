@@ -41,5 +41,6 @@ public interface IFuzzyNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValu
     // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
     // https://de.wikipedia.org/wiki/T-Norm
     // http://www.nicodubois.com/bois5.2.htm
+    // http://reinarz.org/dirk/fuzzykugel/fuzzy.html
 
 }
