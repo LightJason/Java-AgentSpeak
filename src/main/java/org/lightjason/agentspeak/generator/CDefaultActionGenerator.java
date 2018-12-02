@@ -21,13 +21,14 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.configuration;
+package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,9 +37,9 @@ import java.util.stream.Stream;
 
 
 /**
- * default action configuration lazy-loader
+ * default action generator lazy-loader
  */
-public final class CDefaultActionConfiguration implements IActionConfiguration
+public final class CDefaultActionGenerator implements IActionGenerator
 {
     /**
      * loaded actions
@@ -49,28 +50,62 @@ public final class CDefaultActionConfiguration implements IActionConfiguration
      */
     private final Set<String> m_packages;
     /**
-     * agent classes for action
+     * agent classes with action
      */
-    private final Set<Class<?>> m_agentclasses;
+    private final Set<Class<?>> m_classes;
 
-    public CDefaultActionConfiguration( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_agentclass )
+    /**
+     * ctor
+     */
+    public CDefaultActionGenerator()
     {
-        m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
-        m_agentclasses = p_agentclass.collect( Collectors.toUnmodifiableSet() );
+        this( Stream.of(), Stream.of() );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_packages list of packages
+     */
+    public CDefaultActionGenerator( @NonNull final Stream<String> p_packages )
+    {
+        this( p_packages, Stream.of() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_packages list of packages
+     * @param p_class list of agent classes
+     */
+    public CDefaultActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_class )
+    {
+        m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
+        m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
+    }
 
 
     @Override
     public IAction apply( @NonNull final IPath p_path )
     {
         // get action from cache
-        if (m_actions.containsKey( p_path ))
+        if ( m_actions.containsKey( p_path ) )
             return m_actions.get( p_path );
 
+        // searching within packages
+        CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) )
+               .filter( i -> i.name().equals( p_path ) )
+               .forEach( i -> m_actions.putIfAbsent( i.name(), i ) );
 
+        // searching with agent classes
+        if ( !m_classes.isEmpty() )
+            CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
+                   .filter( i -> i.name().equals( p_path ) )
+                   .forEach( i -> m_actions.putIfAbsent( i.name(), i ) );
 
+        if ( m_actions.containsKey( p_path ) )
+            return m_actions.get( p_path );
 
-        return null;
+        throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
     }
 }
