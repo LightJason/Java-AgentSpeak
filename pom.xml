@@ -107,7 +107,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven.compiler.source>1.10</maven.compiler.source>
+        <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
         <!-- will be set outside (build parameter) -->
@@ -216,7 +216,7 @@
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-graph-impl</artifactId>
             <version>2.1.1</version>
-         </dependency>
+        </dependency>
 
         <dependency>
             <groupId>net.sf.jung</groupId>
@@ -244,6 +244,7 @@
 
         <dependency>
             <groupId>com.github.javaparser</groupId>
+
             <artifactId>javaparser-core</artifactId>
             <version>[3.5.11,)</version>
             <scope>test</scope>
@@ -314,14 +315,30 @@
                 </configuration>
             </plugin>
 
+            <!-- @bug runs out of memory
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>3.3.1</version>
+                <version>1.4.5</version>
                 <reportSets>
                     <reportSet>
                         <reports>
                             <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            -->
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                            <report>report-integration</report>
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -449,7 +466,7 @@
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
@@ -637,7 +654,7 @@
                 </configuration>
             </plugin>
 
-            <!-- code-coverage report plugin -->
+            <!-- code-coverage report plugin
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -692,6 +709,8 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
+
 
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
