@@ -23,11 +23,11 @@
 
 package org.lightjason.agentspeak.generator;
 
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import java.util.Map;
 import java.util.Set;
@@ -37,75 +37,41 @@ import java.util.stream.Stream;
 
 
 /**
- * default action generator lazy-loader
+ * lambda-streaming generator lazy-loader
  */
-public final class CDefaultActionGenerator implements IActionGenerator
+public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerator
 {
     /**
-     * loaded actions
+     * loaded lambdas
      */
     private final Map<IPath, IAction> m_actions = new ConcurrentHashMap<>();
     /**
      * Java package for searching
      */
     private final Set<String> m_packages;
-    /**
-     * agent classes with action
-     */
-    private final Set<Class<?>> m_classes;
+
 
     /**
      * ctor
      */
-    public CDefaultActionGenerator()
+    public CLambdaStreamingGenerator()
     {
-        this( Stream.of(), Stream.of() );
+        this( Stream.of() );
     }
 
     /**
      * ctor
      *
-     * @param p_packages list of packages
+     * @param p_packages
      */
-    public CDefaultActionGenerator( @NonNull final Stream<String> p_packages )
-    {
-        this( p_packages, Stream.of() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_packages list of packages
-     * @param p_class list of agent classes
-     */
-    public CDefaultActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_class )
+    public CLambdaStreamingGenerator( @NonNull final Stream<String> p_packages )
     {
         m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
-        m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
     }
 
-
     @Override
-    public IAction apply( @NonNull final IPath p_path )
+    public ILambdaStreaming<?> apply( @NonNull final IPath p_iPath )
     {
-        // get action from cache
-        if ( m_actions.containsKey( p_path ) )
-            return m_actions.get( p_path );
-
-        // searching within packages
-        CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) )
-               .filter( i -> i.name().equals( p_path ) )
-               .forEach( i -> m_actions.putIfAbsent( i.name(), i ) );
-
-        // searching with agent classes
-        if ( !m_classes.isEmpty() )
-            CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
-                   .filter( i -> i.name().equals( p_path ) )
-                   .forEach( i -> m_actions.putIfAbsent( i.name(), i ) );
-
-        if ( m_actions.containsKey( p_path ) )
-            return m_actions.get( p_path );
-
-        throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
+        return null;
     }
 }
