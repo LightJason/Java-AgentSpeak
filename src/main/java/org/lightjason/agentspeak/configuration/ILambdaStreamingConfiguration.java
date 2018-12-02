@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action;
+package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
@@ -30,8 +30,8 @@ import java.util.function.Function;
 
 
 /**
- * lambda streaming loader
+ * lambda-streaming configuration / loader for lazy-loading
  */
-public interface ILambdaStreamingLoader extends Function<IPath, ILambdaStreaming<?>>
+public interface ILambdaStreamingConfiguration extends Function<IPath, ILambdaStreaming<?>>
 {
 }

@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action;
+package org.lightjason.agentspeak.configuration;
 
+import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.IPath;
 
 import java.util.function.Function;
@@ -31,6 +32,6 @@ import java.util.function.Function;
 /**
  * action lazy-loader class
  */
-public interface IActionLoader extends Function<IPath, IAction>
+public interface IActionConfiguration extends Function<IPath, IAction>
 {
 }
