@@ -24,13 +24,14 @@
 package org.lightjason.agentspeak.action;
 
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import java.util.function.Function;
 
 
 /**
- * action lazy-loader class
+ * lambda streaming loader
  */
-public interface IActionLoader extends Function<IPath, IAction>
+public interface ILambdaStreamingLoader extends Function<IPath, ILambdaStreaming<?>>
 {
 }
