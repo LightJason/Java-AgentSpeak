@@ -52,8 +52,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<String>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return String.class;
+        return Stream.of( String.class );
     }
 }

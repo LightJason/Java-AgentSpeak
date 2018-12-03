@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -49,8 +50,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<Map<?, ?>>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return Map.class;
+        return Stream.of( AbstractMap.class, Map.class );
     }
 }

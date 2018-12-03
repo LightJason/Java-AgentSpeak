@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 
+import cern.colt.matrix.AbstractMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
@@ -49,8 +50,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<DoubleMatrix1D>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return DoubleMatrix1D.class;
+        return Stream.of( AbstractMatrix1D.class, DoubleMatrix1D.class );
     }
 }

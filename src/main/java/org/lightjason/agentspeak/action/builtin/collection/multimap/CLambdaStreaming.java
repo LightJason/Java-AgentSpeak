@@ -50,8 +50,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<Multimap<?, ?>>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return MultiMap.class;
+        return Stream.of( MultiMap.class );
     }
 }

@@ -45,9 +45,9 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
     {
         @Nonnull
         @Override
-        public Class<?> assignable()
+        public Stream<Class<?>> assignable()
         {
-            return Object.class;
+            return Stream.of( Object.class );
         }
 
         @Override
@@ -63,6 +63,6 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
      * @return class
      */
     @NonNull
-    Class<?> assignable();
+    Stream<Class<?>> assignable();
 
 }

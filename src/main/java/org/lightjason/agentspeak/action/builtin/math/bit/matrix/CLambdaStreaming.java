@@ -54,8 +54,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<BitMatrix>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return BitMatrix.class;
+        return Stream.of( BitMatrix.class );
     }
 }

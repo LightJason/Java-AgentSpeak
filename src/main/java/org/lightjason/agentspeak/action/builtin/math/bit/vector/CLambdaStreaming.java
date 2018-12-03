@@ -49,8 +49,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<BitVector>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return BitVector.class;
+        return Stream.of( BitVector.class );
     }
 }

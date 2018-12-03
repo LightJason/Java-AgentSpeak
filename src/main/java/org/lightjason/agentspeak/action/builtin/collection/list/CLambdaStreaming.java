@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
+import java.util.AbstractList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -49,8 +50,8 @@ public final class CLambdaStreaming implements ILambdaStreaming<List<?>>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return List.class;
+        return Stream.of( AbstractList.class, List.class );
     }
 }

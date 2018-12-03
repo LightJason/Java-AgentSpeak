@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.builtin.collection.set;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
+import java.util.AbstractSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -48,8 +49,8 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<Set<?>>
 
     @NonNull
     @Override
-    public Class<?> assignable()
+    public Stream<Class<?>> assignable()
     {
-        return Set.class;
+        return Stream.of( AbstractSet.class, Set.class );
     }
 }

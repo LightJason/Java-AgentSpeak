@@ -34,8 +34,10 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,7 +55,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
     /**
      * streaming elements
      */
-    private final Map<Class<?>, ILambdaStreaming<?>> m_streaming;
+    private final Map<Class<?>, ILambdaStreaming<?>> m_streaming = new HashMap<>();
 
     /**
      * ctor
@@ -64,7 +66,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
     public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
     {
         super( p_value.toArray( IExecution[]::new ) );
-        m_streaming = p_streaming.stream().collect( Collectors.toMap( ILambdaStreaming::assignable, i -> i ) );
+        p_streaming.forEach( i -> i.assignable().forEach( j -> m_streaming.put( j, i ) ) );
     }
 
     @Nonnull
@@ -104,14 +106,18 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
      */
     private Stream<?> streaming( @Nonnull final ITerm p_value )
     {
-        return m_streaming.values()
-                          .parallelStream()
-                          .filter( i -> i.assignable().isAssignableFrom( p_value.raw().getClass() ) )
-                          .findFirst()
-                          .orElse( ILambdaStreaming.EMPTY )
-                          .apply( p_value.raw() );
+        if ( Objects.isNull( p_value.raw() ) )
+            return Stream.of();
 
+        return CCommon.classhierarchie( p_value.raw().getClass() )
+                      .map( m_streaming::get )
+                      .filter( Objects::nonNull )
+                      .findFirst()
+                      .stream()
+                      .flatMap( i -> i.apply( p_value.raw() ) );
     }
+
+
 
     @Override
     public String toString()
