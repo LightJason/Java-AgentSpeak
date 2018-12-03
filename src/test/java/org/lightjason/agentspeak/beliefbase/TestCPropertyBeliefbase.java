@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -143,7 +144,7 @@ public final class TestCPropertyBeliefbase extends IBaseTest
              */
             CAgentGenerator( final String p_asl ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet(), Collections.emptySet() );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), IActionGenerator.EMPTY, Collections.emptySet() );
             }
 
             @Override

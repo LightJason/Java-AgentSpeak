@@ -23,8 +23,11 @@
 
 package org.lightjason.agentspeak.generator;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 
 import java.util.function.Function;
 
@@ -34,4 +37,17 @@ import java.util.function.Function;
  */
 public interface IActionGenerator extends Function<IPath, IAction>
 {
+    /**
+     * empty generator
+     */
+    IActionGenerator EMPTY = new IActionGenerator()
+    {
+        @Override
+        public IAction apply( @NonNull final IPath p_path )
+        {
+            throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
+        }
+    };
+
+
 }

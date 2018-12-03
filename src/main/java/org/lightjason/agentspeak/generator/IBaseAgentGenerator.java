@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
@@ -69,12 +68,12 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with action
+     * @param p_actions action generator
      * @param p_lambdastreaming lambda streams
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
                                 @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws Exception
     {
         this( p_stream, p_actions, p_lambdastreaming, Collections.emptySet(), IVariableBuilder.EMPTY );
@@ -84,12 +83,12 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with action
+     * @param p_actions action generator
      * @param p_lambdastreaming lambda streaming
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
                                 @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
         this( p_stream, p_actions, p_lambdastreaming, Collections.emptySet(), p_variablebuilder );
@@ -99,13 +98,13 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with action
+     * @param p_actions action generator
      * @param p_lambdastreaming lambda streaming
      * @param p_planbundle set with planbundles
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
                                 @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final Set<IPlanBundle> p_planbundle,
                                 @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {

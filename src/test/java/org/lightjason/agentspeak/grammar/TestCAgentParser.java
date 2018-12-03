@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.grammar;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -63,7 +65,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     @Test
     public void belief() throws Exception
     {
-        final IASTVisitorAgent l_parser = new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+        final IASTVisitorAgent l_parser = new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() )
             .parse( streamfromstring( "foo(123). bar('test')." ) );
 
         final List<ILiteral> l_beliefs = new ArrayList<>( l_parser.initialbeliefs() );
@@ -83,7 +85,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     {
         Assert.assertEquals(
             ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "main" ) ),
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() )
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() )
                 .parse( streamfromstring( "!main." ) ).initialgoal()
         );
     }
@@ -97,7 +99,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void simplerule() throws Exception
     {
         final IRule l_rule = parsesinglerule(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "nexttower(T, M) :- T--; T = T < 0 ? M - 1 + T : T."
         );
 
@@ -143,7 +145,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
             + " :- X <= 2;  R = 1 "
             + " :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
             + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
-            Stream.of( l_values ).collect( Collectors.toSet() ),
+            new CActionStaticGenerator( Stream.of( l_values ) ),
             Collections.emptySet()
         ).generatesingle();
 
@@ -171,7 +173,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         final CCollectValues l_values = new CCollectValues();
 
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Stream.of( l_values ).collect( Collectors.toSet() ), Collections.emptySet() ),
+            new CParserAgent( new CActionStaticGenerator( Stream.of( l_values ) ), Collections.emptySet() ),
             "+!actiontest <- X=5; .push/value(X, [1,2,3], 'test data', inner('foobar'), 555, fail)."
         );
 
@@ -207,7 +209,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void successfailplan() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!mainsuccess <- success. +!mainfail <- fail."
         ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
@@ -237,7 +239,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void repair() throws Exception
     {
         final Map<ILiteral, IPlan> l_plans = parsemultipleplans(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!mainsuccess <- fail << fail << success. +!mainfail <- fail << fail."
         ).collect( Collectors.toMap( i -> i.trigger().literal(), i -> i ) );
 
@@ -267,7 +269,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void deconstructsimple() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!mainsuccess <- [X|Y] =.. foo(123)."
         );
 
@@ -293,7 +295,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void numberexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- R = 3 * 2 + 5 + 1 - 2 * ( 3 + 1 ) + 2 * 2 ** 3."
         );
 
@@ -316,7 +318,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void numbervariableexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- W = A * 2 - B * ( 3 + C ) + 2 ** D."
         );
 
@@ -355,7 +357,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void constantexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- O = pi * euler + gravity."
         );
 
@@ -382,7 +384,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void booleanoperators() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- AndTrue = true && true; AndFalse = true and false; OrTrue = true || false;"
             + "OrFalse = false or false; XorTrue = true xor false; XorFalse = true ^ true; NotFalse = not true; NotTrue = ~false."
         );
@@ -428,7 +430,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void booleanexpression() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserPlanBundle( Collections.emptySet(), Collections.emptySet() ),
+            new CParserPlanBundle( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- R = false || false and not ( true and false ) xor ( 2 < 3 )."
         );
 
@@ -453,7 +455,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void ternarytrue() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- P = 3 < 5 ? euler : pi."
         );
 
@@ -478,7 +480,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         final Random l_random = new Random();
 
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate(XVal, YVal) <- Res = XVal < YVal ? XVal + YVal - 2 : XVal + 3 - YVal + 4."
         );
 
@@ -509,7 +511,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void ternaryfalse() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!calculate <- N = 5 < 3 ? boltzmann : lightspeed."
         );
 
@@ -533,7 +535,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void multipleplanitems() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!items <- N = 'test'; P = 5; C = fail."
         );
 
@@ -560,7 +562,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void plandescription() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "@description('a long plan description') +!description <- success."
         );
 
@@ -576,7 +578,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void multipleplanexecution() throws Exception
     {
         final IPlan[] l_plans = parsemultipleplans(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!multi(X) : X > 5 <- Y = X + 3 : X <= 5 <- Y = X * 3."
         ).toArray( IPlan[]::new );
 
@@ -615,7 +617,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void annotation() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "@parallel @atomic @constant(StringValue,'abcd') @constant(NumberValue,12345) @tag('foo')"
             + "@variable(X,'x value description') @tag('bar') @description('description text') +!annotation(X) <- success."
         );
@@ -651,7 +653,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void termlist() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( Collections.emptySet(), Collections.emptySet() ),
+            new CParserAgent( IActionGenerator.EMPTY, Collections.emptySet() ),
             "+!list <- L = ['a', 1, true]."
         );
 
@@ -687,7 +689,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IPlan l_plan = parsesingleplan(
             new CParserAgent(
-                Stream.of( l_values ).collect( Collectors.toSet() ),
+                new CActionStaticGenerator( Stream.of( l_values ) ),
                 org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() )
             ),
             "+!lambda <- (L) -> I : .push/value(I)."
@@ -717,7 +719,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     public void inneraction() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( org.lightjason.agentspeak.common.CCommon.actionsFromPackage().collect( Collectors.toSet() ), Collections.emptySet() ),
+            new CParserAgent( new CActionStaticGenerator( org.lightjason.agentspeak.common.CCommon.actionsFromPackage() ), Collections.emptySet() ),
             "+!inner <- L = .math/max( .math/min( 3, 4, 1 ), -8, -6 ) ."
         );
 

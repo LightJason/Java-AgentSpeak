@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.CActionStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -184,13 +185,16 @@ public final class TestCAgentExecution extends IBaseTest
         {
             super(
                 p_stream,
-                Stream.concat(
-                    CCommon.actionsFromPackage(),
-                    Stream.of(
-                        new CStop(),
-                        new CLog()
+
+                new CActionStaticGenerator(
+                    Stream.concat(
+                        CCommon.actionsFromPackage(),
+                        Stream.of(
+                            new CStop(),
+                            new CLog()
+                        )
                     )
-                ).collect( Collectors.toSet() ),
+                ),
                 CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() )
             );
         }

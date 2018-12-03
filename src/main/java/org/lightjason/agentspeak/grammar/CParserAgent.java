@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
@@ -37,9 +37,9 @@ import java.util.Set;
 public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer, AgentParser>
 {
     /**
-     * set with actions
+     * action generator
      */
-    private final Set<IAction> m_actions;
+    private final IActionGenerator m_actions;
     /**
      * lambda streaming
      */
@@ -48,11 +48,11 @@ public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer
     /**
      * ctor
      *
-     * @param p_actions agent actions
+     * @param p_actions action generator
      * @param p_lambdastreaming lambda streaming structure
      * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserAgent( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CParserAgent( @Nonnull final IActionGenerator p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;

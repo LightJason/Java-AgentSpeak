@@ -25,13 +25,13 @@ package org.lightjason.agentspeak;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -159,7 +159,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator() throws Exception
         {
-            this( "", Collections.emptySet(), Collections.emptySet() );
+            this( "", IActionGenerator.EMPTY, Collections.emptySet() );
         }
 
         /**
@@ -170,7 +170,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator( @Nonnull final String p_asl ) throws Exception
         {
-            this( p_asl, Collections.emptySet(), Collections.emptySet() );
+            this( p_asl, IActionGenerator.EMPTY, Collections.emptySet() );
         }
 
         /**
@@ -181,7 +181,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator( @Nonnull final InputStream p_asl ) throws Exception
         {
-            super( p_asl, Collections.emptySet(), Collections.emptySet() );
+            super( p_asl, IActionGenerator.EMPTY, Collections.emptySet() );
         }
 
         /**
@@ -192,7 +192,7 @@ public abstract class IBaseTest
          * @param p_lambdastreaming lambda streaming
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Set<IAction> p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final IActionGenerator p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
             throws Exception
         {
             super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambdastreaming );
@@ -207,7 +207,7 @@ public abstract class IBaseTest
          * @param p_variablebuilder variable builder
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Set<IAction> p_action,
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final IActionGenerator p_action,
                                 @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
         {
             super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambdastreaming, p_variablebuilder );
@@ -222,7 +222,7 @@ public abstract class IBaseTest
          * @param p_variablebuilder variable builder
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final Set<IAction> p_action,
+        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final IActionGenerator p_action,
                                 @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
         {
             super( p_asl, p_action, p_lambdastreaming, p_variablebuilder );
@@ -236,7 +236,7 @@ public abstract class IBaseTest
          * @param p_lambdastreaming lambda streaming
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final Set<IAction> p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final IActionGenerator p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
             throws Exception
         {
             super( p_asl, p_action, p_lambdastreaming );

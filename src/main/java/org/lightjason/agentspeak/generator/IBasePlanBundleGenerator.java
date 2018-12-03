@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
@@ -57,11 +56,11 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with actions
+     * @param p_actions action generator
      * @param p_lambdastreaming lambda streams
      * @throws Exception thrown on error
      */
-    public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+    public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
                                      @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws Exception
     {
         final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions, p_lambdastreaming ).parse( p_stream );

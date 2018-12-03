@@ -54,14 +54,6 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
 
     /**
      * ctor
-     */
-    public CLambdaStreamingGenerator()
-    {
-        this( Stream.of() );
-    }
-
-    /**
-     * ctor
      *
      * @param p_packages stream of package names for searching
      */

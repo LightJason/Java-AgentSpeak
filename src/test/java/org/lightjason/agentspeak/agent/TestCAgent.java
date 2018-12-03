@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.generator.CActionStaticGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
@@ -124,12 +125,14 @@ public final class TestCAgent extends IBaseTest
             l_agent = new CAgentGenerator(
                 l_stream,
 
-                Stream.concat(
-                    PRINTENABLE
-                    ? Stream.of( new CTestResult() )
-                    : Stream.of( new CTestResult(), new CEmptyPrint() ),
-                    CCommon.actionsFromPackage()
-                ).collect( Collectors.toSet() ),
+                new CActionStaticGenerator(
+                    Stream.concat(
+                        PRINTENABLE
+                        ? Stream.of( new CTestResult() )
+                        : Stream.of( new CTestResult(), new CEmptyPrint() ),
+                        CCommon.actionsFromPackage()
+                    )
+                ),
 
                 CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() ),
 

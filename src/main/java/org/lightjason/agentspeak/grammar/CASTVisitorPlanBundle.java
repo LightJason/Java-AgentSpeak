@@ -26,9 +26,9 @@ package org.lightjason.agentspeak.grammar;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -40,11 +40,9 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -74,9 +72,9 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
      */
     private final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
     /**
-     * map with action definition
+     * action generator
      */
-    private final Map<IPath, IAction> m_actions;
+    private final IActionGenerator m_actions;
     /**
      * set with lambda-streaming structure
      */
@@ -85,14 +83,14 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     /**
      * ctor
      *
-     * @param p_actions set with actions
+     * @param p_actions action generator
      * @param p_lambdastreaming lambda streaming
      */
-    public CASTVisitorPlanBundle( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+    public CASTVisitorPlanBundle( @Nonnull final IActionGenerator p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
     {
+        m_actions = p_actions;
         m_lambdastream = p_lambdastreaming;
-        m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
-        LOGGER.info( MessageFormat.format( "create parser with actions : {0}", m_actions.keySet() ) );
+        LOGGER.info( MessageFormat.format( "create parser with action generator : {0}", m_actions ) );
     }
 
 

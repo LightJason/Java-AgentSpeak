@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,21 +49,22 @@ public final class CActionStaticGenerator implements IActionGenerator
 
     /**
      * ctor
+     *
+     * @param p_actions action set
      */
-    public CActionStaticGenerator()
+    public CActionStaticGenerator( @NonNull final Collection<IAction> p_actions )
     {
-        m_actions = Collections.unmodifiableMap( CCommon.actionsFromPackage().collect( Collectors.toMap( IAction::name, i -> i ) ) );
+        m_actions = Collections.unmodifiableMap( p_actions.stream().collect( Collectors.toMap( IAction::name, i -> i ) ) );
     }
 
     /**
      * ctor
      *
-     * @param p_packages package stream
+     * @param p_actions action stream
      */
-    public CActionStaticGenerator( @NonNull final Stream<String> p_packages )
+    public CActionStaticGenerator( @NonNull final Stream<IAction> p_actions )
     {
-        m_actions = Collections.unmodifiableMap( CCommon.actionsFromPackage( p_packages.toArray( String[]::new ) )
-                                                        .collect( Collectors.toMap( IAction::name, i -> i ) ) );
+        m_actions = Collections.unmodifiableMap( p_actions.collect( Collectors.toMap( IAction::name, i -> i ) ) );
     }
 
     @Override

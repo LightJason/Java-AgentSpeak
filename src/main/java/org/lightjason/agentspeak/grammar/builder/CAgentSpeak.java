@@ -32,10 +32,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
-import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
+import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -89,7 +89,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -504,16 +503,16 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_actionliteral action literal
-     * @param p_actions map with actions
+     * @param p_actions action generator
      * @return wrapped action
      */
     @Nonnull
     public static IExecution executeaction( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
+                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final IActionGenerator p_actions )
     {
         final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
 
-        final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
+        final IAction l_action = p_actions.apply( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
             throw new CNoSuchElementException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
 
