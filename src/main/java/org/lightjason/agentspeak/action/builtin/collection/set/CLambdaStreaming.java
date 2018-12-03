@@ -23,9 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.collection.set;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -41,15 +41,15 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<Set<?>>
     private static final long serialVersionUID = 7698873604877279069L;
 
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
-    {
-        return p_object instanceof Set<?>;
-    }
-
-    @Override
     public Stream<?> apply( final Set<?> p_objects )
     {
         return p_objects.stream();
     }
 
+    @NonNull
+    @Override
+    public Class<?> assignable()
+    {
+        return Set.class;
+    }
 }

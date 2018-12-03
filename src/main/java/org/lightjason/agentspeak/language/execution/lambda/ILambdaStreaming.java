@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.function.Function;
@@ -41,10 +43,11 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
      */
     ILambdaStreaming<?> EMPTY = new ILambdaStreaming<>()
     {
+        @Nonnull
         @Override
-        public boolean instaceof( @Nonnull final Object p_object )
+        public Class<?> assignable()
         {
-            return false;
+            return Object.class;
         }
 
         @Override
@@ -54,13 +57,12 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
         }
     };
 
-
     /**
-     * check if tha object is a type of
+     * returns the class which matches
      *
-     * @param p_object any object
-     * @return is an instace
+     * @return class
      */
-    boolean instaceof( @Nonnull final Object p_object );
+    @NonNull
+    Class<?> assignable();
 
 }

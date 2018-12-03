@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
 import cern.colt.matrix.tbit.BitVector;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
@@ -43,17 +44,18 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<BitMatrix>
     private static final long serialVersionUID = -7869879782838191012L;
 
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
-    {
-        return p_object instanceof BitMatrix;
-    }
-
-    @Override
     public Stream<?> apply( @Nonnull final BitMatrix p_matrix )
     {
         final BitVector l_vector = p_matrix.toBitVector();
         return IntStream.range( 0, l_vector.size() )
                         .boxed()
                         .map( i -> l_vector.getQuick( i ) ? 1 : 0 );
+    }
+
+    @NonNull
+    @Override
+    public Class<?> assignable()
+    {
+        return BitMatrix.class;
     }
 }

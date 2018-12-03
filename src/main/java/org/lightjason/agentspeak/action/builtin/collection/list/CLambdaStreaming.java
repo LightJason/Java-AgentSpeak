@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.collection.list;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
@@ -46,10 +47,10 @@ public final class CLambdaStreaming implements ILambdaStreaming<List<?>>
         return p_objects.stream();
     }
 
+    @NonNull
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
+    public Class<?> assignable()
     {
-        return p_object instanceof List<?>;
+        return List.class;
     }
-
 }

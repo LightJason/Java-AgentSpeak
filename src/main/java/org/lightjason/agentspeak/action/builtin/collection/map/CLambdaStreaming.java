@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.collection.map;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
@@ -46,9 +47,10 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<Map<?, ?>>
         return p_map.entrySet().stream();
     }
 
+    @NonNull
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
+    public Class<?> assignable()
     {
-        return p_object instanceof Map<?, ?>;
+        return Map.class;
     }
 }

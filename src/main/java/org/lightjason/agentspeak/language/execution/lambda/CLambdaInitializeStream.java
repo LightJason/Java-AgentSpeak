@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,7 +53,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
     /**
      * streaming elements
      */
-    private final Set<ILambdaStreaming<?>> m_streaming;
+    private final Map<Class<?>, ILambdaStreaming<?>> m_streaming;
 
     /**
      * ctor
@@ -63,7 +64,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
     public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
     {
         super( p_value.toArray( IExecution[]::new ) );
-        m_streaming = p_streaming;
+        m_streaming = p_streaming.stream().collect( Collectors.toMap( ILambdaStreaming::assignable, i -> i ) );
     }
 
     @Nonnull
@@ -103,8 +104,9 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
      */
     private Stream<?> streaming( @Nonnull final ITerm p_value )
     {
-        return m_streaming.parallelStream()
-                          .filter( i -> i.instaceof( p_value.raw() ) )
+        return m_streaming.values()
+                          .parallelStream()
+                          .filter( i -> i.assignable().isAssignableFrom( p_value.raw().getClass() ) )
                           .findFirst()
                           .orElse( ILambdaStreaming.EMPTY )
                           .apply( p_value.raw() );

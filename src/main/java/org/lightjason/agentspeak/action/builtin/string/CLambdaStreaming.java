@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
@@ -41,17 +42,18 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<String>
     private static final long serialVersionUID = -7098550858640627710L;
 
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
-    {
-        return p_object instanceof String;
-    }
-
-    @Override
     public Stream<?> apply( @Nonnull final String p_value )
     {
         return IntStream.range( 0, p_value.length() )
                         .boxed()
                         .map( p_value::charAt )
                         .map( String::valueOf );
+    }
+
+    @NonNull
+    @Override
+    public Class<?> assignable()
+    {
+        return String.class;
     }
 }

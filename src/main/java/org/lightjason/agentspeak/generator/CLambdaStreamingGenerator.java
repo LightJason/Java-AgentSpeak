@@ -70,7 +70,7 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
     }
 
     @Override
-    public ILambdaStreaming<?> apply( @NonNull final IPath p_iPath )
+    public ILambdaStreaming<?> apply( @NonNull final IPath p_path )
     {
         return null;
     }
