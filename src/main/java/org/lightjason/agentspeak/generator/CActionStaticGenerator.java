@@ -29,80 +29,45 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 
+import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * action lazy-loader generator
+ * action lazy-loader static generator
  */
-public final class CActionGenerator implements IActionGenerator
+public final class CActionStaticGenerator implements IActionGenerator
 {
     /**
      * loaded actions
      */
-    private final Map<IPath, IAction> m_actions = new ConcurrentHashMap<>();
-    /**
-     * Java package for searching
-     */
-    private final Set<String> m_packages;
-    /**
-     * agent classes with action
-     */
-    private final Set<Class<?>> m_classes;
+    private final Map<IPath, IAction> m_actions;
+
 
     /**
      * ctor
      */
-    public CActionGenerator()
+    public CActionStaticGenerator()
     {
-        this( Stream.of(), Stream.of() );
+        m_actions = Collections.unmodifiableMap( CCommon.actionsFromPackage().collect( Collectors.toMap( IAction::name, i -> i ) ) );
     }
 
     /**
      * ctor
      *
-     * @param p_packages list of packages
+     * @param p_packages package stream
      */
-    public CActionGenerator( @NonNull final Stream<String> p_packages )
+    public CActionStaticGenerator( @NonNull final Stream<String> p_packages )
     {
-        this( p_packages, Stream.of() );
+        m_actions = Collections.unmodifiableMap( CCommon.actionsFromPackage( p_packages.toArray( String[]::new ) )
+                                                        .collect( Collectors.toMap( IAction::name, i -> i ) ) );
     }
-
-    /**
-     * ctor
-     *
-     * @param p_packages list of packages
-     * @param p_class list of agent classes
-     */
-    public CActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_class )
-    {
-        m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
-        m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
-    }
-
 
     @Override
     public IAction apply( @NonNull final IPath p_path )
     {
-        // get action from cache
-        if ( m_actions.containsKey( p_path ) )
-            return m_actions.get( p_path );
-
-        // searching within packages
-        CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) )
-               .filter( i -> i.name().equals( p_path ) )
-               .forEach( i -> m_actions.putIfAbsent( i.name(), i ) );
-
-        // searching with agent classes
-        if ( !m_classes.isEmpty() )
-            CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
-                   .filter( i -> i.name().equals( p_path ) )
-                   .forEach( i -> m_actions.putIfAbsent( i.name(), i ) );
-
         if ( m_actions.containsKey( p_path ) )
             return m_actions.get( p_path );
 
