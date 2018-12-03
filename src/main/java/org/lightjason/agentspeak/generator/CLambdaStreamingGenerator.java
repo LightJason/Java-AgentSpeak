@@ -25,11 +25,12 @@ package org.lightjason.agentspeak.generator;
 
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
     /**
      * loaded lambdas
      */
-    private final Map<IPath, IAction> m_actions = new ConcurrentHashMap<>();
+    private final Map<Class<?>, ILambdaStreaming<?>> m_lambdas = new ConcurrentHashMap<>();
     /**
      * Java package for searching
      */
@@ -62,7 +63,7 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
     /**
      * ctor
      *
-     * @param p_packages
+     * @param p_packages stream of package names for searching
      */
     public CLambdaStreamingGenerator( @NonNull final Stream<String> p_packages )
     {
@@ -70,8 +71,35 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
     }
 
     @Override
-    public ILambdaStreaming<?> apply( @NonNull final IPath p_path )
+    public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
     {
-        return null;
+        // get lambda from cache
+        final Optional<? extends ILambdaStreaming<?>> l_cache = CCommon.classhierarchie( p_class )
+                                                                       .map( m_lambdas::get )
+                                                                       .filter( Objects::nonNull )
+                                                                       .findFirst();
+
+        if ( l_cache.isPresent() )
+            return l_cache.get();
+
+
+        // search lambda object
+        final Set<Class<?>> l_hierarchie = CCommon.classhierarchie( p_class ).collect( Collectors.toSet() );
+        final Optional<? extends ILambdaStreaming<?>> l_search = m_packages.parallelStream()
+                                                                           .flatMap( i -> org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage(
+                                                                               m_packages.toArray( String[]::new
+                                                                           ) ) )
+                                                                           .filter( i -> i.assignable().anyMatch( l_hierarchie::contains ) )
+                                                                           .findFirst();
+
+        if ( l_search.isPresent() )
+        {
+            l_search.get().assignable().forEach( i -> m_lambdas.putIfAbsent( i, l_search.get() ) );
+            return l_search.get();
+        }
+
+
+        return ILambdaStreaming.EMPTY;
     }
+
 }

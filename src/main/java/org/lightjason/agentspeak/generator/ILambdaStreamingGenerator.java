@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.generator;
 
-import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import java.util.function.Function;
@@ -32,6 +31,6 @@ import java.util.function.Function;
 /**
  * lambda-streaming generator / loader for lazy-loading
  */
-public interface ILambdaStreamingGenerator extends Function<IPath, ILambdaStreaming<?>>
+public interface ILambdaStreamingGenerator extends Function<Class<?>, ILambdaStreaming<?>>
 {
 }
