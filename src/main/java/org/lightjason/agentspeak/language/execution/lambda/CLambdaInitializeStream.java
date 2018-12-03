@@ -66,7 +66,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
     public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
     {
         super( p_value.toArray( IExecution[]::new ) );
-        p_streaming.forEach( i -> i.assignable().forEach( j -> m_streaming.put( j, i ) ) );
+        p_streaming.forEach( i -> i.assignable().forEach( j -> m_streaming.putIfAbsent( j, i ) ) );
     }
 
     @Nonnull
