@@ -24,11 +24,10 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.generator.IActionGenerator;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
-import java.util.Set;
 
 
 /**
@@ -41,29 +40,29 @@ public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, 
      */
     private final IActionGenerator m_actions;
     /**
-     * lambda streaming
+     * lambda generator
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastreaming;
+    private final ILambdaStreamingGenerator m_lambda;
 
     /**
      * ctor
      *
      * @param p_actions action generator
-     * @param p_lambdastreaming lambda streaming structure
+     * @param p_lambda lambda generator
      * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserPlanBundle( @Nonnull final IActionGenerator p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws NoSuchMethodException
+    public CParserPlanBundle( @Nonnull final IActionGenerator p_actions, @Nonnull final ILambdaStreamingGenerator p_lambda ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
+        m_lambda = p_lambda;
         m_actions = p_actions;
-        m_lambdastreaming = p_lambdastreaming;
     }
 
     @Nonnull
     @Override
     public IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambdastreaming );
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambda );
         l_visitor.visit( this.parser( p_stream ).planbundle() );
         return l_visitor;
     }

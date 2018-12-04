@@ -29,6 +29,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.generator.IActionGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -37,7 +38,6 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
@@ -83,20 +83,20 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
      */
     private final IActionGenerator m_actions;
     /**
-     * set with lambda-streaming structure
+     * lambda generator
      */
-    private final Set<ILambdaStreaming<?>> m_lambdastream;
+    private final ILambdaStreamingGenerator m_lambda;
 
     /**
      * ctor
      *
      * @param p_actions action generator
-     * @param p_lambdastreaming lambda streaming
+     * @param p_lambda lambda generator
      */
-    public CASTVisitorAgent( @Nonnull final IActionGenerator p_actions, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+    public CASTVisitorAgent( @Nonnull final IActionGenerator p_actions, @Nonnull final ILambdaStreamingGenerator p_lambda )
     {
+        m_lambda = p_lambda;
         m_actions = p_actions;
-        m_lambdastream = p_lambdastreaming;
         LOGGER.info( MessageFormat.format( "create parser with action generator : {0}", m_actions ) );
     }
 
@@ -297,7 +297,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return CAgentSpeak.lambdastream(
             this,
-            m_lambdastream,
+            m_lambda,
             p_context.HASH(),
             p_context.NUMBER(),
             p_context.variable(),

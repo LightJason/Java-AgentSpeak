@@ -29,13 +29,11 @@ import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
 import org.lightjason.agentspeak.grammar.CParserPlanBundle;
 import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -57,13 +55,13 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
      *
      * @param p_stream input stream
      * @param p_actions action generator
-     * @param p_lambdastreaming lambda streams
+     * @param p_lambda lambda generator
      * @throws Exception thrown on error
      */
     public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                     @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws Exception
+                                     @Nonnull final ILambdaStreamingGenerator p_lambda ) throws Exception
     {
-        final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions, p_lambdastreaming ).parse( p_stream );
+        final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions, p_lambda ).parse( p_stream );
 
         m_configuration = new CDefaultPlanBundleConfiguration(
             l_visitor.plans(),

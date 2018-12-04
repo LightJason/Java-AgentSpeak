@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
@@ -52,7 +53,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.LogManager;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -134,7 +134,7 @@ public final class TestCAgent extends IBaseTest
                     )
                 ),
 
-                CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() ),
+                new CLambdaStreamingStaticGenerator( CCommon.lambdastreamingFromPackage() ),
 
                 ( p_agent, p_runningcontext ) -> Stream.of(
                     new CConstant<>( "MyConstInt", 123 ),

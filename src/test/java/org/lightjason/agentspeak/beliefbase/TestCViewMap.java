@@ -44,6 +44,7 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -308,7 +309,11 @@ public final class TestCViewMap extends IBaseTest
              */
             CAgentGenerator( @Nonnull final String p_asl, @Nonnull final Map<String, Object> p_map, @Nonnull final Collection<IAction> p_actions ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), new CActionStaticGenerator( p_actions ), CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() ) );
+                super(
+                    IOUtils.toInputStream( p_asl, "UTF-8" ),
+                    new CActionStaticGenerator( p_actions ),
+                    new CLambdaStreamingStaticGenerator( CCommon.lambdastreamingFromPackage() )
+                );
                 m_map = p_map;
             }
 

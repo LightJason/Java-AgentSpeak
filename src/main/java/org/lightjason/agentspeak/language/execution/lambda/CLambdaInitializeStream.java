@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -34,11 +35,8 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,20 +51,20 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
      */
     private static final long serialVersionUID = -4625794081981849579L;
     /**
-     * streaming elements
+     * lambda generator
      */
-    private final Map<Class<?>, ILambdaStreaming<?>> m_streaming = new HashMap<>();
+    private final ILambdaStreamingGenerator m_lambda;
 
     /**
      * ctor
      *
      * @param p_value data
-     * @param p_streaming lambda streaming
+     * @param p_lambda lambda generator
      */
-    public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
+    public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final ILambdaStreamingGenerator p_lambda )
     {
         super( p_value.toArray( IExecution[]::new ) );
-        p_streaming.forEach( i -> i.assignable().forEach( j -> m_streaming.putIfAbsent( j, i ) ) );
+        m_lambda = p_lambda;
     }
 
     @Nonnull
@@ -91,32 +89,12 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
         p_return.add(
             CRawTerm.of(
                 l_return.stream()
-                        .flatMap( this::streaming )
+                        .flatMap( i -> Objects.isNull( i.raw() ) ? Stream.of() : m_lambda.apply( i.raw().getClass() ).apply( i.raw() ) )
             )
         );
 
         return l_result;
     }
-
-    /**
-     * streaming operator
-     *
-     * @param p_value value
-     * @return object stream
-     */
-    private Stream<?> streaming( @Nonnull final ITerm p_value )
-    {
-        if ( Objects.isNull( p_value.raw() ) )
-            return Stream.of();
-
-        return CCommon.classhierarchie( p_value.raw().getClass() )
-                      .map( m_streaming::get )
-                      .filter( Objects::nonNull )
-                      .findFirst()
-                      .stream()
-                      .flatMap( i -> i.apply( p_value.raw() ) );
-    }
-
 
 
     @Override

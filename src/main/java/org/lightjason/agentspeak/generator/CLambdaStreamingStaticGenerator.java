@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,20 +51,28 @@ public final class CLambdaStreamingStaticGenerator implements ILambdaStreamingGe
      */
     public CLambdaStreamingStaticGenerator()
     {
-        final Map<Class<?>, ILambdaStreaming<?>> l_lambda = new HashMap<>();
-        CCommon.lambdastreamingFromPackage().forEach( i -> i.assignable().forEach( j -> l_lambda.putIfAbsent( j, i ) ) );
-        m_lambdas = Collections.unmodifiableMap( l_lambda );
+        m_lambdas = Collections.emptyMap();
     }
 
     /**
      * ctor
      *
-     * @param p_packages stream of package names for searching
+     * @param p_lambda collections with lambda
      */
-    public CLambdaStreamingStaticGenerator( @NonNull final Stream<String> p_packages )
+    public CLambdaStreamingStaticGenerator( @NonNull final Collection<ILambdaStreaming<?>> p_lambda )
+    {
+        this( p_lambda.stream() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_lambda stream with lambda
+     */
+    public CLambdaStreamingStaticGenerator( @NonNull final Stream<ILambdaStreaming<?>> p_lambda )
     {
         final Map<Class<?>, ILambdaStreaming<?>> l_lambda = new HashMap<>();
-        CCommon.lambdastreamingFromPackage( p_packages.toArray( String[]::new ) ).forEach( i -> i.assignable().forEach( j -> l_lambda.putIfAbsent( j, i ) ) );
+        p_lambda.forEach( i -> i.assignable().forEach( j -> l_lambda.putIfAbsent( j, i ) ) );
         m_lambdas = Collections.unmodifiableMap( l_lambda );
     }
 

@@ -33,11 +33,11 @@ import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,7 +144,7 @@ public final class TestCPropertyBeliefbase extends IBaseTest
              */
             CAgentGenerator( final String p_asl ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), IActionGenerator.EMPTY, Collections.emptySet() );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
             }
 
             @Override

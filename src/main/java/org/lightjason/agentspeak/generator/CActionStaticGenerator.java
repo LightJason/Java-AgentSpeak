@@ -49,12 +49,20 @@ public final class CActionStaticGenerator implements IActionGenerator
 
     /**
      * ctor
+     */
+    public CActionStaticGenerator()
+    {
+        m_actions = Collections.emptyMap();
+    }
+
+    /**
+     * ctor
      *
      * @param p_actions action set
      */
     public CActionStaticGenerator( @NonNull final Collection<IAction> p_actions )
     {
-        m_actions = Collections.unmodifiableMap( p_actions.stream().collect( Collectors.toMap( IAction::name, i -> i ) ) );
+        this( p_actions.stream() );
     }
 
     /**

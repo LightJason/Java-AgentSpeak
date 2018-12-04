@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.generator;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import java.util.function.Function;
@@ -33,4 +34,16 @@ import java.util.function.Function;
  */
 public interface ILambdaStreamingGenerator extends Function<Class<?>, ILambdaStreaming<?>>
 {
+    /**
+     * empty lambda-streaming generator
+     */
+    ILambdaStreamingGenerator EMPTY = new ILambdaStreamingGenerator()
+    {
+        @Override
+        public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
+        {
+            return ILambdaStreaming.EMPTY;
+        }
+    };
+
 }

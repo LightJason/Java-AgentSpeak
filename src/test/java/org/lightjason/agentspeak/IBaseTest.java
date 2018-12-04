@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -40,7 +41,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -58,7 +58,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -159,7 +158,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator() throws Exception
         {
-            this( "", IActionGenerator.EMPTY, Collections.emptySet() );
+            this( "", IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
         }
 
         /**
@@ -170,7 +169,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator( @Nonnull final String p_asl ) throws Exception
         {
-            this( p_asl, IActionGenerator.EMPTY, Collections.emptySet() );
+            this( p_asl, IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
         }
 
         /**
@@ -181,7 +180,7 @@ public abstract class IBaseTest
          */
         public CAgentGenerator( @Nonnull final InputStream p_asl ) throws Exception
         {
-            super( p_asl, IActionGenerator.EMPTY, Collections.emptySet() );
+            super( p_asl, IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
         }
 
         /**
@@ -189,13 +188,13 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
-         * @param p_lambdastreaming lambda streaming
+         * @param p_lambda lambdas
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final IActionGenerator p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+        public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final IActionGenerator p_action, @Nonnull final ILambdaStreamingGenerator p_lambda )
             throws Exception
         {
-            super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambdastreaming );
+            super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambda );
         }
 
         /**
@@ -203,14 +202,14 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
-         * @param p_lambdastreaming lambda streaming
+         * @param p_lambda lambdas
          * @param p_variablebuilder variable builder
          * @throws Exception is thrown on any error
          */
         public CAgentGenerator( @Nonnull final String p_asl, @Nonnull final IActionGenerator p_action,
-                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
         {
-            super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambdastreaming, p_variablebuilder );
+            super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_action, p_lambda, p_variablebuilder );
         }
 
         /**
@@ -218,14 +217,14 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
-         * @param p_lambdastreaming lambda streaming
+         * @param p_lambda lambdas
          * @param p_variablebuilder variable builder
          * @throws Exception is thrown on any error
          */
         public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final IActionGenerator p_action,
-                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
         {
-            super( p_asl, p_action, p_lambdastreaming, p_variablebuilder );
+            super( p_asl, p_action, p_lambda, p_variablebuilder );
         }
 
         /**
@@ -233,13 +232,13 @@ public abstract class IBaseTest
          *
          * @param p_asl asl code
          * @param p_action actions
-         * @param p_lambdastreaming lambda streaming
+         * @param p_lambda lambdas
          * @throws Exception is thrown on any error
          */
-        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final IActionGenerator p_action, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming )
+        public CAgentGenerator( @Nonnull final InputStream p_asl, @Nonnull final IActionGenerator p_action, @Nonnull final ILambdaStreamingGenerator p_lambda )
             throws Exception
         {
-            super( p_asl, p_action, p_lambdastreaming );
+            super( p_asl, p_action, p_lambda );
         }
 
         @Nullable

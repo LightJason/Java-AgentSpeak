@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -53,7 +54,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -195,7 +195,7 @@ public final class TestCAgentExecution extends IBaseTest
                         )
                     )
                 ),
-                CCommon.lambdastreamingFromPackage().collect( Collectors.toSet() )
+                new CLambdaStreamingStaticGenerator( CCommon.lambdastreamingFromPackage() )
             );
         }
 

@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -276,7 +277,7 @@ public final class TestCHanoiTowers extends IBaseTest
                         CCommon.actionsFromPackage()
                     )
                 ),
-                Collections.emptySet(),
+                new CLambdaStreamingStaticGenerator(),
                 new IVariableBuilder()
                 {
                     @Override
