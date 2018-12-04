@@ -21,12 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.value;
+package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
-import java.util.function.Function;
 
 
 /**
@@ -34,7 +33,7 @@ import java.util.function.Function;
  *
  * @tparam T enum type
  */
-public interface IFuzzyValue<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
+public interface IFuzzyValue<T extends Enum<?>>
 {
     /**
      * returns the value

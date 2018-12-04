@@ -24,9 +24,8 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
@@ -36,31 +35,17 @@ import java.util.stream.Stream;
  */
 public enum EThreeElement implements IFuzzyMembership<EThreeElement>
 {
-    LOW( 1 ),
-    MEDIUM( 10 ),
-    HIGH( 100 );
+    LOW,
+    MEDIUM,
+    HIGH;
 
-    /**
-     * integer representation of the value
-     */
-    private final int m_value;
-
-    /**
-     * ctor
-     *
-     * @param p_value value
-     */
-    EThreeElement( final int p_value )
-    {
-        m_value = p_value;
-    }
 
     @Nullable
     @Override
     @SuppressWarnings( "unchecked" )
     public <V> V raw()
     {
-        return (V) Integer.valueOf( m_value );
+        return (V) Integer.valueOf( this.ordinal() );
     }
 
     @Override
@@ -70,8 +55,23 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
     }
 
     @Override
-    public IFuzzyValue<EThreeElement> apply( final Number p_number )
+    public IFuzzyValue<EThreeElement> apply( @NonNull final Number p_value )
     {
-        return new CFuzzyValue<>( this, p_number );
+        return new IFuzzyValue<EThreeElement>()
+        {
+            @Nonnull
+            @Override
+            public EThreeElement type()
+            {
+                return EThreeElement.this;
+            }
+
+            @NonNull
+            @Override
+            public Number fuzzy()
+            {
+                return p_value;
+            }
+        };
     }
 }
