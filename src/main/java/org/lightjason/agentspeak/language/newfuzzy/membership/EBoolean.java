@@ -21,21 +21,56 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.norm;
+package org.lightjason.agentspeak.language.newfuzzy.membership;
 
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+
+import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 
 /**
- * fuzzy maximum t-norm
- *
- * @tparam E fuzzy element type
+ * fuzzy boolean
  */
-public final class CMaximum<E extends Enum<?>> implements IFuzzyNorm<E>
+public enum EBoolean implements IFuzzyMembership<EBoolean>
 {
-    @Override
-    public IFuzzyValue<E> apply( final IFuzzyValue<E> p_value1, final IFuzzyValue<E> p_value2 )
+    TRUE( true ),
+    FALSE( false );
+
+    /**
+     * native type
+     */
+    private final Boolean m_value;
+
+    /**
+     * ctor
+     * @param p_value value
+     */
+    EBoolean( final boolean p_value )
     {
-        return p_value1.fuzzy() > p_value2.fuzzy() ? p_value1 : p_value2;
+        m_value = p_value;
     }
+
+    @Override
+    public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
+    {
+        return new CFuzzyValue<>( this, p_value );
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
+    {
+        return (V) m_value;
+    }
+
+    @Override
+    public Stream<EBoolean> members( @NonNull final Number p_value )
+    {
+        return Stream.of();
+    }
+
 }

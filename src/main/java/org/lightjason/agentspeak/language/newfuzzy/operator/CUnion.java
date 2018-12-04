@@ -21,21 +21,22 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.norm;
+package org.lightjason.agentspeak.language.newfuzzy.operator;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * fuzzy minimum t-norm
+ * fuzzy union operator
  *
- * @tparam E fuzzy element type
+ * @tparam T fuzzy type
  */
-public final class CMinimum<E extends Enum<?>> implements IFuzzyNorm<E>
+public final class CUnion<T extends Enum<?>> implements IFuzzyOperator<T>
 {
     @Override
-    public IFuzzyValue<E> apply( final IFuzzyValue<E> p_value1, final IFuzzyValue<E> p_value2 )
+    public IFuzzyValue<T> apply( @NonNull final IFuzzyValue<T> p_value1, @NonNull final IFuzzyValue<T> p_value2 )
     {
-        return p_value1.fuzzy() < p_value2.fuzzy() ? p_value1 : p_value2;
+        return null;
     }
 }

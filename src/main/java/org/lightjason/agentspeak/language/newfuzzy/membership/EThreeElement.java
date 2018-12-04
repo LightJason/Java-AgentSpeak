@@ -21,33 +21,57 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.norm;
+package org.lightjason.agentspeak.language.newfuzzy.membership;
 
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
-import java.util.function.BinaryOperator;
+import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 
 /**
- * interface of fuzzy set operator
- *
- * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
- * @see https://en.wikipedia.org/wiki/T-norm
+ * three element fuzzy with numerical representation
  */
-public interface IFuzzyNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValue<E>>
+public enum EThreeElement implements IFuzzyMembership<EThreeElement>
 {
+    LOW( 1 ),
+    MEDIUM( 10 ),
+    HIGH( 100 );
 
-    // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
-    // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
-    // https://de.wikipedia.org/wiki/T-Norm
-    // http://www.nicodubois.com/bois5.2.htm
-    // http://reinarz.org/dirk/fuzzykugel/fuzzy.html
-    // https://www.mathworks.com/help/fuzzy/fuzzy-inference-process.html
+    /**
+     * integer representation of the value
+     */
+    private final int m_value;
 
-    // http://www.lab4inf.fh-muenster.de/lab4inf/docs/Fuzzy_Logic_and_Control/03-FCL-Fuzzy_Inferenz.pdf
-    // https://www.informatik.uni-ulm.de/ni/Lehre/SS04/ProsemSC/ausarbeitungen/Bank.pdf
-    // https://www4.fh-swf.de/media/downloads/fbin/download_4/lehmann_1/internci2/ci2/skripte/fuzzy_3/Fuzzy-Tutorial_1_Gra_Leh30Teil.pdf
+    /**
+     * ctor
+     *
+     * @param p_value value
+     */
+    EThreeElement( final int p_value )
+    {
+        m_value = p_value;
+    }
 
-    // https://www.sciencedirect.com/science/article/pii/S0019995879907307
+    @Nullable
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
+    {
+        return (V) Integer.valueOf( m_value );
+    }
 
+    @Override
+    public Stream<EThreeElement> members( @NonNull final Number p_value )
+    {
+        return Stream.of();
+    }
+
+    @Override
+    public IFuzzyValue<EThreeElement> apply( final Number p_number )
+    {
+        return new CFuzzyValue<>( this, p_number );
+    }
 }

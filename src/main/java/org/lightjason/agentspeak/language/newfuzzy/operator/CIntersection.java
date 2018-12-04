@@ -21,49 +21,22 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.element;
+package org.lightjason.agentspeak.language.newfuzzy.operator;
 
-import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
-
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * three element fuzzy with numerical representation
+ * fuzzy intersection operator
+ *
+ * @tparam T fuzzy type
  */
-public enum EThreeElement implements IFuzzyElement<EThreeElement>
+public final class CIntersection<T extends Enum<?>> implements IFuzzyOperator<T>
 {
-    LOW( 1 ),
-    MEDIUM( 10 ),
-    HIGH( 100 );
-
-    /**
-     * integer representation of the value
-     */
-    private final int m_value;
-
-    /**
-     * ctor
-     *
-     * @param p_value value
-     */
-    EThreeElement( final int p_value )
-    {
-        m_value = p_value;
-    }
-
-    @Nullable
     @Override
-    @SuppressWarnings( "unchecked" )
-    public <V> V raw()
+    public IFuzzyValue<T> apply( @NonNull final IFuzzyValue<T> p_value1, @NonNull final IFuzzyValue<T> p_value2 )
     {
-        return (V) Integer.valueOf( m_value );
-    }
-
-    @Override
-    public IFuzzyValue<EThreeElement> apply( final Number p_number )
-    {
-        return new CFuzzyValue<>( this, p_number );
+        return null;
     }
 }

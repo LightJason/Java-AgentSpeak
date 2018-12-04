@@ -21,12 +21,14 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.element;
+package org.lightjason.agentspeak.language.newfuzzy.membership;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
@@ -34,7 +36,7 @@ import java.util.function.Function;
  *
  * @tparam T enum type
  */
-public interface IFuzzyElement<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
+public interface IFuzzyMembership<T extends Enum<?>> extends Function<Number, IFuzzyValue<T>>
 {
 
     /**
@@ -45,6 +47,14 @@ public interface IFuzzyElement<T extends Enum<?>> extends Function<Number, IFuzz
      */
     @Nullable
     <V> V raw();
+
+    /**
+     * returns the members based on a value
+     *
+     * @param p_value numeric value
+     * @return stream of member values
+     */
+    Stream<T> members( @NonNull final Number p_value );
 
 
 }

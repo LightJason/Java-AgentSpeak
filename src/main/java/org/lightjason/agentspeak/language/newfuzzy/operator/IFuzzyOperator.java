@@ -21,49 +21,33 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.element;
+package org.lightjason.agentspeak.language.newfuzzy.operator;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.newfuzzy.value.CFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.value.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nullable;
+import java.util.function.BinaryOperator;
 
 
 /**
- * fuzzy boolean
+ * interface of fuzzy set operator
+ *
+ * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
+ * @see https://en.wikipedia.org/wiki/T-norm
  */
-public enum EBoolean implements IFuzzyElement<EBoolean>
+public interface IFuzzyOperator<E extends Enum<?>> extends BinaryOperator<IFuzzyValue<E>>
 {
-    TRUE( true ),
-    FALSE( false );
 
-    /**
-     * native type
-     */
-    private final Boolean m_value;
+    // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
+    // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
+    // https://de.wikipedia.org/wiki/T-Norm
+    // http://www.nicodubois.com/bois5.2.htm
+    // http://reinarz.org/dirk/fuzzykugel/fuzzy.html
+    // https://www.mathworks.com/help/fuzzy/fuzzy-inference-process.html
 
-    /**
-     * ctor
-     * @param p_value value
-     */
-    EBoolean( final boolean p_value )
-    {
-        m_value = p_value;
-    }
+    // http://www.lab4inf.fh-muenster.de/lab4inf/docs/Fuzzy_Logic_and_Control/03-FCL-Fuzzy_Inferenz.pdf
+    // https://www.informatik.uni-ulm.de/ni/Lehre/SS04/ProsemSC/ausarbeitungen/Bank.pdf
+    // https://www4.fh-swf.de/media/downloads/fbin/download_4/lehmann_1/internci2/ci2/skripte/fuzzy_3/Fuzzy-Tutorial_1_Gra_Leh30Teil.pdf
 
-    @Override
-    public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
-    {
-        return new CFuzzyValue<>( this, p_value );
-    }
-
-    @Nullable
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public <V> V raw()
-    {
-        return (V) m_value;
-    }
+    // https://www.sciencedirect.com/science/article/pii/S0019995879907307
 
 }
