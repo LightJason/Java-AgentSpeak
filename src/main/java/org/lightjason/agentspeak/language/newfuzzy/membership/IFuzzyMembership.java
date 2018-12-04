@@ -53,7 +53,7 @@ public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, IF
      * @param p_value numeric value
      * @return stream of member values
      */
+    @NonNull
     Stream<IFuzzyValue<E>> member( @NonNull final Number p_value );
-
 
 }

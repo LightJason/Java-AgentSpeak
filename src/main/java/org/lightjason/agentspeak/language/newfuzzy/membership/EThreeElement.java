@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -47,6 +48,7 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
         return (V) Integer.valueOf( this.ordinal() );
     }
 
+    @Nonnull
     @Override
     public Stream<IFuzzyValue<EThreeElement>> member( @NonNull final Number p_value )
     {
