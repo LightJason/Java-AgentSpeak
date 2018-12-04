@@ -57,11 +57,10 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
     @Override
     public IFuzzyValue<EThreeElement> apply( @NonNull final Number p_value )
     {
-        return new IFuzzyValue<EThreeElement>()
+        return new IFuzzyValue<>()
         {
-            @Nonnull
             @Override
-            public EThreeElement type()
+            public EThreeElement get()
             {
                 return EThreeElement.this;
             }

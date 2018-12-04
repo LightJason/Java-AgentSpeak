@@ -55,11 +55,10 @@ public enum EBoolean implements IFuzzyMembership<EBoolean>
     @Override
     public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
     {
-        return new IFuzzyValue<EBoolean>()
+        return new IFuzzyValue<>()
         {
-            @Nonnull
             @Override
-            public EBoolean type()
+            public EBoolean get()
             {
                 return EBoolean.this;
             }

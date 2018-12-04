@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 
 /**
@@ -33,15 +33,8 @@ import javax.annotation.Nonnull;
  *
  * @tparam T enum type
  */
-public interface IFuzzyValue<T extends Enum<?>>
+public interface IFuzzyValue<T extends Enum<?>> extends Supplier<T>
 {
-    /**
-     * returns the value
-     *
-     * @return returns type
-     */
-    @Nonnull
-    T type();
 
     /**
      * returns the fuzzy number
