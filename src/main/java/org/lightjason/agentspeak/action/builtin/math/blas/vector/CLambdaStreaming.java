@@ -23,10 +23,11 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 
+import cern.colt.matrix.AbstractMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -42,14 +43,15 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<DoubleMatrix1D>
     private static final long serialVersionUID = -4092413210478148636L;
 
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
-    {
-        return p_object instanceof DoubleMatrix1D;
-    }
-
-    @Override
     public Stream<?> apply( final DoubleMatrix1D p_vector )
     {
         return Arrays.stream( p_vector.toArray() ).boxed();
+    }
+
+    @NonNull
+    @Override
+    public Stream<Class<?>> assignable()
+    {
+        return Stream.of( AbstractMatrix1D.class, DoubleMatrix1D.class );
     }
 }

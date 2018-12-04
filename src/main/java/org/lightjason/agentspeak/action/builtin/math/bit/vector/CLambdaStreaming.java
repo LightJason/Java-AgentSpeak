@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.action.builtin.math.bit.vector;
 
 import cern.colt.matrix.tbit.BitVector;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
-import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -42,14 +42,15 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<BitVector>
     private static final long serialVersionUID = 3608586892880271763L;
 
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
-    {
-        return p_object instanceof BitVector;
-    }
-
-    @Override
     public Stream<?> apply( final BitVector p_vector )
     {
         return IntStream.range( 0, p_vector.size() ).boxed().map( i -> p_vector.getQuick( i ) ? 1 : 0 );
+    }
+
+    @NonNull
+    @Override
+    public Stream<Class<?>> assignable()
+    {
+        return Stream.of( BitVector.class );
     }
 }

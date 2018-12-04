@@ -24,6 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.collection.multimap;
 
 import com.google.common.collect.Multimap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.antlr.v4.runtime.misc.MultiMap;
 import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
 import javax.annotation.Nonnull;
@@ -46,9 +48,10 @@ public final class CLambdaStreaming extends IBaseLambdaStreaming<Multimap<?, ?>>
         return p_multimap.asMap().entrySet().stream();
     }
 
+    @NonNull
     @Override
-    public boolean instaceof( @Nonnull final Object p_object )
+    public Stream<Class<?>> assignable()
     {
-        return p_object instanceof Multimap<?, ?>;
+        return Stream.of( MultiMap.class );
     }
 }

@@ -21,37 +21,69 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
-import javax.annotation.Nonnull;
-import java.util.AbstractList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
 /**
- * streaming of list
+ * lambda-streaming static generator
  */
-public final class CLambdaStreaming implements ILambdaStreaming<List<?>>
+public final class CLambdaStreamingStaticGenerator implements ILambdaStreamingGenerator
 {
     /**
-     * serial id
+     * loaded lambdas
      */
-    private static final long serialVersionUID = 7453430804177199062L;
+    private final Map<Class<?>, ILambdaStreaming<?>> m_lambdas;
 
-    @Override
-    public Stream<?> apply( @Nonnull final List<?> p_objects )
+
+    /**
+     * ctor
+     */
+    public CLambdaStreamingStaticGenerator()
     {
-        return p_objects.stream();
+        m_lambdas = Collections.emptyMap();
     }
 
-    @NonNull
-    @Override
-    public Stream<Class<?>> assignable()
+    /**
+     * ctor
+     *
+     * @param p_lambda collections with lambda
+     */
+    public CLambdaStreamingStaticGenerator( @NonNull final Collection<ILambdaStreaming<?>> p_lambda )
     {
-        return Stream.of( AbstractList.class, List.class );
+        this( p_lambda.stream() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_lambda stream with lambda
+     */
+    public CLambdaStreamingStaticGenerator( @NonNull final Stream<ILambdaStreaming<?>> p_lambda )
+    {
+        final Map<Class<?>, ILambdaStreaming<?>> l_lambda = new HashMap<>();
+        p_lambda.forEach( i -> i.assignable().forEach( j -> l_lambda.putIfAbsent( j, i ) ) );
+        m_lambdas = Collections.unmodifiableMap( l_lambda );
+    }
+
+    @Override
+    public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
+    {
+        final Optional<? extends ILambdaStreaming<?>> l_lambda = org.lightjason.agentspeak.language.CCommon.classhierarchie( p_class )
+                                                                                                           .map( m_lambdas::get )
+                                                                                                           .filter( Objects::nonNull )
+                                                                                                           .findFirst();
+
+        return l_lambda.isPresent() ? l_lambda.get() : ILambdaStreaming.EMPTY;
     }
 }

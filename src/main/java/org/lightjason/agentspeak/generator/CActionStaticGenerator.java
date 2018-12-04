@@ -21,41 +21,66 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
+package org.lightjason.agentspeak.generator;
 
-import cern.colt.matrix.tbit.BitMatrix;
-import cern.colt.matrix.tbit.BitVector;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 
-import javax.annotation.Nonnull;
-import java.util.stream.IntStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * streaming a bit matrix
+ * action lazy-loader static generator
  */
-public final class CLambdaStreaming extends IBaseLambdaStreaming<BitMatrix>
+public final class CActionStaticGenerator implements IActionGenerator
 {
     /**
-     * serial id
+     * loaded actions
      */
-    private static final long serialVersionUID = -7869879782838191012L;
+    private final Map<IPath, IAction> m_actions;
 
-    @Override
-    public Stream<?> apply( @Nonnull final BitMatrix p_matrix )
+
+    /**
+     * ctor
+     */
+    public CActionStaticGenerator()
     {
-        final BitVector l_vector = p_matrix.toBitVector();
-        return IntStream.range( 0, l_vector.size() )
-                        .boxed()
-                        .map( i -> l_vector.getQuick( i ) ? 1 : 0 );
+        m_actions = Collections.emptyMap();
     }
 
-    @NonNull
-    @Override
-    public Stream<Class<?>> assignable()
+    /**
+     * ctor
+     *
+     * @param p_actions action set
+     */
+    public CActionStaticGenerator( @NonNull final Collection<IAction> p_actions )
     {
-        return Stream.of( BitMatrix.class );
+        this( p_actions.stream() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_actions action stream
+     */
+    public CActionStaticGenerator( @NonNull final Stream<IAction> p_actions )
+    {
+        m_actions = Collections.unmodifiableMap( p_actions.collect( Collectors.toMap( IAction::name, i -> i ) ) );
+    }
+
+    @Override
+    public IAction apply( @NonNull final IPath p_path )
+    {
+        if ( m_actions.containsKey( p_path ) )
+            return m_actions.get( p_path );
+
+        throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
     }
 }

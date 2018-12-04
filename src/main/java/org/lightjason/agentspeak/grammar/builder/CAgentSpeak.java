@@ -32,10 +32,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
-import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
+import org.lightjason.agentspeak.generator.IActionGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -71,7 +72,6 @@ import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.execution.lambda.CLambda;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.execution.passing.CPassAction;
 import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
@@ -89,9 +89,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -504,16 +502,16 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_actionliteral action literal
-     * @param p_actions map with actions
+     * @param p_actions action generator
      * @return wrapped action
      */
     @Nonnull
     public static IExecution executeaction( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final Map<IPath, IAction> p_actions )
+                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final IActionGenerator p_actions )
     {
         final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
 
-        final IAction l_action = p_actions.get( l_actionliteral.fqnfunctor() );
+        final IAction l_action = p_actions.apply( l_actionliteral.fqnfunctor() );
         if ( Objects.isNull( l_action ) )
             throw new CNoSuchElementException( CCommon.languagestring( CAgentSpeak.class, "unknownaction", p_actionliteral.getText() ) );
 
@@ -905,7 +903,7 @@ public final class CAgentSpeak
      * build a lambda stream
      *
      * @param p_visitor visitor
-     * @param p_lambdastreaming lambda streaming
+     * @param p_lambda lambda generator
      * @param p_hash hash value (range or variable list)
      * @param p_number number values
      * @param p_variable variable
@@ -914,7 +912,7 @@ public final class CAgentSpeak
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static IExecution lambdastream( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming,
+    public static IExecution lambdastream( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final ILambdaStreamingGenerator p_lambda,
                                            @Nullable final TerminalNode p_hash, @Nullable final TerminalNode p_number,
                                            @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional )
     {
@@ -934,7 +932,7 @@ public final class CAgentSpeak
 
         return Objects.nonNull( p_hash )
             ? new CLambdaInitializeRange( l_stream )
-            : new CLambdaInitializeStream( l_stream, p_lambdastreaming );
+            : new CLambdaInitializeStream( l_stream, p_lambda );
     }
 
     /**

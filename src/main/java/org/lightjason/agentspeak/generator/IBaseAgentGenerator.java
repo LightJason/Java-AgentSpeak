@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
@@ -36,7 +35,6 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
 
@@ -69,47 +67,47 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with action
-     * @param p_lambdastreaming lambda streams
+     * @param p_actions action generator
+     * @param p_lambda lambda generator
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
-                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming ) throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
+                                @Nonnull final ILambdaStreamingGenerator p_lambda ) throws Exception
     {
-        this( p_stream, p_actions, p_lambdastreaming, Collections.emptySet(), IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, p_lambda, Collections.emptySet(), IVariableBuilder.EMPTY );
     }
 
     /**
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with action
-     * @param p_lambdastreaming lambda streaming
+     * @param p_actions action generator
+     * @param p_lambda lambda generator
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
-                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
+                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
-        this( p_stream, p_actions, p_lambdastreaming, Collections.emptySet(), p_variablebuilder );
+        this( p_stream, p_actions, p_lambda, Collections.emptySet(), p_variablebuilder );
     }
 
     /**
      * ctor
      *
      * @param p_stream input stream
-     * @param p_actions set with action
-     * @param p_lambdastreaming lambda streaming
+     * @param p_actions action generator
+     * @param p_lambda lambda generator
      * @param p_planbundle set with planbundles
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
-                                @Nonnull final Set<ILambdaStreaming<?>> p_lambdastreaming, @Nonnull final Set<IPlanBundle> p_planbundle,
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
+                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final Set<IPlanBundle> p_planbundle,
                                 @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CParserAgent( p_actions, p_lambdastreaming ).parse( p_stream );
+        final IASTVisitorAgent l_visitor = new CParserAgent( p_actions, p_lambda ).parse( p_stream );
         m_configuration = this.configuration(
             DEFAULTFUZZYBUNDLE,
 

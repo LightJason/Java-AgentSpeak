@@ -33,6 +33,8 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -58,7 +60,6 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.LogManager;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -258,22 +259,25 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             super(
                 p_stream,
-                Stream.concat(
+
+                new CActionStaticGenerator(
                     Stream.concat(
-                        Stream.of(
-                            new CTowerPush( FAILPROBABILITY ),
-                            new CTowerPop(),
-                            new CTowerSize(),
-                            new CStop()
-                        ),
                         Stream.concat(
-                            p_action,
-                            PRINTENABLE ? Stream.of() : Stream.of( new CEmptyPrint() )
-                        )
-                    ),
-                    CCommon.actionsFromPackage()
-                ).collect( Collectors.toSet() ),
-                Collections.emptySet(),
+                            Stream.of(
+                                new CTowerPush( FAILPROBABILITY ),
+                                new CTowerPop(),
+                                new CTowerSize(),
+                                new CStop()
+                            ),
+                            Stream.concat(
+                                p_action,
+                                PRINTENABLE ? Stream.of() : Stream.of( new CEmptyPrint() )
+                            )
+                        ),
+                        CCommon.actionsFromPackage()
+                    )
+                ),
+                new CLambdaStreamingStaticGenerator(),
                 new IVariableBuilder()
                 {
                     @Override
