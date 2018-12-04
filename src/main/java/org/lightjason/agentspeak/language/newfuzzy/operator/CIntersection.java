@@ -37,6 +37,6 @@ public final class CIntersection<T extends Enum<?>> implements IFuzzyOperator<T>
     @Override
     public IFuzzyValue<T> apply( @NonNull final IFuzzyValue<T> p_value1, @NonNull final IFuzzyValue<T> p_value2 )
     {
-        return null;
+        return p_value1.fuzzy() * p_value2.fuzzy() / Math.max( 1 - p_value1.fuzzy(), 1 - p_value2.fuzzy() );
     }
 }
