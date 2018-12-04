@@ -44,4 +44,8 @@ public interface IFuzzyNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValu
     // http://reinarz.org/dirk/fuzzykugel/fuzzy.html
     // https://www.mathworks.com/help/fuzzy/fuzzy-inference-process.html
 
+    // http://www.lab4inf.fh-muenster.de/lab4inf/docs/Fuzzy_Logic_and_Control/03-FCL-Fuzzy_Inferenz.pdf
+    // https://www.informatik.uni-ulm.de/ni/Lehre/SS04/ProsemSC/ausarbeitungen/Bank.pdf
+    // https://www4.fh-swf.de/media/downloads/fbin/download_4/lehmann_1/internci2/ci2/skripte/fuzzy_3/Fuzzy-Tutorial_1_Gra_Leh30Teil.pdf
+
 }
