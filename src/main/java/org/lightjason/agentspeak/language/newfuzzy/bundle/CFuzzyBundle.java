@@ -23,7 +23,10 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.bundle;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyElement;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 
 import javax.annotation.Nonnull;
 
@@ -31,27 +34,55 @@ import javax.annotation.Nonnull;
 /**
  * fuzzy bundle
  */
-public final class CFuzzyBundle<U, E extends Enum<?>> implements IFuzzyBundle<U, E>
+public final class CFuzzyBundle implements IFuzzyBundle
 {
+
+    /**
+     * fuzzy element
+     */
+    private final IFuzzyElement<?> m_element;
+    /**
+     * fuzzy membership
+     */
+    private final IFuzzyMembership<?> m_membership;
     /**
      * defuzzification
      */
-    private final IDefuzzification<E> m_defuzzyfication;
+    private final IDefuzzification<?> m_defuzzification;
 
     /**
      * ctor
      *
-     * @param p_defuzzyfication defuzzyfication
+     * @param p_element fuzzy element
+     * @param p_membership fuzzy membership
+     * @param p_defuzzification defuzzyfication
      */
-    public CFuzzyBundle( @Nonnull final IDefuzzification<E> p_defuzzyfication )
+    public CFuzzyBundle( @NonNull final IFuzzyElement<?> p_element, @NonNull final IFuzzyMembership<?> p_membership,
+                         @NonNull final IDefuzzification<?> p_defuzzification )
     {
-        m_defuzzyfication = p_defuzzyfication;
+        m_element = p_element;
+        m_membership = p_membership;
+        m_defuzzification = p_defuzzification;
+    }
+
+
+    @Override
+    public IFuzzyElement<?> element()
+    {
+        return m_element;
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyMembership<?> membership()
+    {
+        return m_membership;
     }
 
     @Nonnull
     @Override
-    public final IDefuzzification<E> defuzzification()
+    public IDefuzzification<?> defuzzification()
     {
-        return m_defuzzyfication;
+        return m_defuzzification;
     }
 }

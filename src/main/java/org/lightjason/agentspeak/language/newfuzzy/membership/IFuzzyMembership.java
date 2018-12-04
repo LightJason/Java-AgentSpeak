@@ -24,28 +24,33 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 
 /**
- * fuzzy set
+ * membership function
  *
- * @tparam T enum type
+ * @tparam E fuzzy element type
  */
 public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, Stream<IFuzzyValue<E>>>
 {
+    // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
+
 
     /**
-     * returns a raw value if it exist
+     * update of the internal defuzzification
+     * structure on the agent-cycle
      *
-     * @tparam V raw value of the fuzzy set element
-     * @return raw value
+     * @param p_agent agent object
+     * @return agent reference
      */
-    @NonNull
-    <V> V raw();
+    @Nonnull
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
     /**
      * returns a stream of fuzzy values which

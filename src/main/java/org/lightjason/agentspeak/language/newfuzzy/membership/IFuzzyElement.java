@@ -21,52 +21,28 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
+package org.lightjason.agentspeak.language.newfuzzy.membership;
 
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
 
 /**
- * defuzzification with least-of-maximum
+ * fuzzy set
+ *
+ * @tparam T enum type
  */
-public final class CLOM<E extends Enum<?>> implements IDefuzzification<E>
+public interface IFuzzyElement<E extends Enum<?>> extends Supplier<E>
 {
 
-    @Nonnull
-    @Override
-    public E defuzzify( @Nonnull final Stream<IFuzzyValue<E>> p_value )
-    {
-        return null;
-    }
+    /**
+     * returns a raw value if it exist
+     *
+     * @tparam V raw value of the fuzzy set element
+     * @return raw value
+     */
+    @NonNull
+    <V> V raw();
 
-    @Override
-    public boolean execution( @Nonnull final Stream<IFuzzyValue<E>> p_value )
-    {
-        return false;
-    }
-
-    @Nonnull
-    @Override
-    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
-    {
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<E>> success()
-    {
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<E>> fail()
-    {
-        return null;
-    }
 }

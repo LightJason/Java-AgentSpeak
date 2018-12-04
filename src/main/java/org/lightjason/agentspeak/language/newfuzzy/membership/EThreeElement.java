@@ -24,16 +24,12 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
-
-import java.util.stream.Stream;
 
 
 /**
  * three element fuzzy with numerical representation
  */
-public enum EThreeElement implements IFuzzyMembership<EThreeElement>
+public enum EThreeElement implements IFuzzyElement<EThreeElement>
 {
     LOW,
     MEDIUM,
@@ -47,33 +43,9 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
         return (V) Integer.valueOf( this.ordinal() );
     }
 
-    @NonNull
     @Override
-    public Stream<IFuzzyValue<EThreeElement>> success()
+    public EThreeElement get()
     {
-        return Stream.of(
-            CFuzzyValue.of( LOW, 0 ),
-            CFuzzyValue.of( MEDIUM, 0 ),
-            CFuzzyValue.of( HIGH, 1 )
-        );
+        return this;
     }
-
-    @NonNull
-    @Override
-    public Stream<IFuzzyValue<EThreeElement>> fail()
-    {
-        return Stream.of(
-            CFuzzyValue.of( LOW, 1 ),
-            CFuzzyValue.of( MEDIUM, 0 ),
-            CFuzzyValue.of( HIGH, 0 )
-        );
-    }
-
-    @NonNull
-    @Override
-    public Stream<IFuzzyValue<EThreeElement>> apply( @NonNull final Number p_number )
-    {
-        return Stream.of();
-    }
-
 }

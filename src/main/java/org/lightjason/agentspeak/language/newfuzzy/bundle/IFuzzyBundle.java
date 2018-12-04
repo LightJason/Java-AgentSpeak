@@ -23,7 +23,10 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.bundle;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyElement;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 
 import javax.annotation.Nonnull;
 
@@ -32,8 +35,23 @@ import javax.annotation.Nonnull;
  * interface of fuzzy bundle
  * @tparam T enum type
  */
-public interface IFuzzyBundle<U, E extends Enum<?>>
+public interface IFuzzyBundle
 {
+
+    /**
+     * fuzzy element
+     *
+     * @return fuzzy element
+     */
+    IFuzzyElement<?> element();
+
+    /**
+     * membership function
+     *
+     * @return function
+     */
+    @NonNull
+    IFuzzyMembership<?> membership();
 
     /**
      * defuzzification
@@ -41,6 +59,6 @@ public interface IFuzzyBundle<U, E extends Enum<?>>
      * @return defuzzification
      */
     @Nonnull
-    IDefuzzification<E> defuzzification();
+    IDefuzzification<?> defuzzification();
 
 }

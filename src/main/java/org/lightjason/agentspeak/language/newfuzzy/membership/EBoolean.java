@@ -24,19 +24,15 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
-
-import java.util.stream.Stream;
 
 
 /**
  * fuzzy boolean
  */
-public enum EBoolean implements IFuzzyMembership<EBoolean>
+public enum EBoolean implements IFuzzyElement<EBoolean>
 {
-    TRUE( true ),
-    FALSE( false );
+    FALSE( false ),
+    TRUE( true );
 
     /**
      * native type
@@ -61,31 +57,9 @@ public enum EBoolean implements IFuzzyMembership<EBoolean>
         return (V) m_value;
     }
 
-    @NonNull
     @Override
-    public Stream<IFuzzyValue<EBoolean>> success()
+    public EBoolean get()
     {
-        return Stream.of(
-            CFuzzyValue.of( TRUE, 1 ),
-            CFuzzyValue.of( FALSE, 0 )
-        );
+        return this;
     }
-
-    @NonNull
-    @Override
-    public Stream<IFuzzyValue<EBoolean>> fail()
-    {
-        return Stream.of(
-            CFuzzyValue.of( TRUE, 0 ),
-            CFuzzyValue.of( FALSE, 1 )
-        );
-    }
-
-    @NonNull
-    @Override
-    public Stream<IFuzzyValue<EBoolean>> apply( @NonNull final Number p_number )
-    {
-        return Stream.of();
-    }
-
 }
