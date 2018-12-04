@@ -48,7 +48,7 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
     }
 
     @Override
-    public Stream<EThreeElement> members( @NonNull final Number p_value )
+    public Stream<IFuzzyValue<EThreeElement>> member( @NonNull final Number p_value )
     {
         return Stream.of();
     }

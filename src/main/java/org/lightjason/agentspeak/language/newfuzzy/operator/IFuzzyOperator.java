@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.operator;
 
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
  * @see https://en.wikipedia.org/wiki/T-norm
  */
-public interface IFuzzyOperator<V extends IFuzzyValue<?>> extends BiFunction<V, V, Stream<V>>
+public interface IFuzzyOperator<E extends Enum<?>> extends BiFunction<IFuzzyValue<E>, IFuzzyValue<E>, Stream<IFuzzyValue<E>>>
 {
 
     // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8

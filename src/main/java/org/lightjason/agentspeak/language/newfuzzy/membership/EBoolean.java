@@ -67,9 +67,10 @@ public enum EBoolean implements IFuzzyMembership<EBoolean>
     }
 
     @Override
-    public Stream<EBoolean> members( @NonNull final Number p_value )
+    public Stream<IFuzzyValue<EBoolean>> member( @NonNull final Number p_value )
     {
         return Stream.of();
     }
+
 
 }
