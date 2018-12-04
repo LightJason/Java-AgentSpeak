@@ -55,7 +55,7 @@ public final class CIntersection<E extends Enum<?>> implements IFuzzyOperator<E>
     @Override
     public Stream<IFuzzyValue<E>> apply( @NonNull final IFuzzyValue<E> p_value1, @NonNull final IFuzzyValue<E> p_value2 )
     {
-        return m_membership.member(
+        return m_membership.apply(
             p_value1.fuzzy().doubleValue() * p_value2.fuzzy().doubleValue()
             / Math.max( 1 - p_value1.fuzzy().doubleValue(), 1 - p_value2.fuzzy().doubleValue() )
         );

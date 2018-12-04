@@ -27,7 +27,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -46,17 +45,12 @@ public enum EBoolean implements IFuzzyMembership<EBoolean>
 
     /**
      * ctor
+     *
      * @param p_value value
      */
     EBoolean( final boolean p_value )
     {
         m_value = p_value;
-    }
-
-    @Override
-    public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
-    {
-        return CFuzzyValue.of( this, p_value );
     }
 
     @NonNull
@@ -67,12 +61,31 @@ public enum EBoolean implements IFuzzyMembership<EBoolean>
         return (V) m_value;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Stream<IFuzzyValue<EBoolean>> member( @NonNull final Number p_value )
+    public Stream<IFuzzyValue<EBoolean>> success()
+    {
+        return Stream.of(
+            CFuzzyValue.of( TRUE, 1 ),
+            CFuzzyValue.of( FALSE, 0 )
+        );
+    }
+
+    @NonNull
+    @Override
+    public Stream<IFuzzyValue<EBoolean>> fail()
+    {
+        return Stream.of(
+            CFuzzyValue.of( TRUE, 0 ),
+            CFuzzyValue.of( FALSE, 1 )
+        );
+    }
+
+    @NonNull
+    @Override
+    public Stream<IFuzzyValue<EBoolean>> apply( @NonNull final Number p_number )
     {
         return Stream.of();
     }
-
 
 }

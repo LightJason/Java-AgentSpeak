@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  *
  * @tparam T enum type
  */
-public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, IFuzzyValue<E>>
+public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, Stream<IFuzzyValue<E>>>
 {
 
     /**
@@ -48,12 +48,21 @@ public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, IF
     <V> V raw();
 
     /**
-     * returns the member based on a value
+     * returns a stream of fuzzy values which
+     * represent a successful structure
      *
-     * @param p_value numeric value
-     * @return stream of member values
+     * @return fuzzy value stream
      */
     @NonNull
-    Stream<IFuzzyValue<E>> member( @NonNull final Number p_value );
+    Stream<IFuzzyValue<E>> success();
+
+    /**
+     * returns a stream of fuzzy values which
+     * represent a fail structure
+     *
+     * @return fuzzy value stream
+     */
+    @NonNull
+    Stream<IFuzzyValue<E>> fail();
 
 }
