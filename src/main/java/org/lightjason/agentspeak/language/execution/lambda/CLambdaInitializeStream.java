@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -35,7 +36,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,20 +51,20 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
      */
     private static final long serialVersionUID = -4625794081981849579L;
     /**
-     * streaming elements
+     * lambda generator
      */
-    private final Set<ILambdaStreaming<?>> m_streaming;
+    private final ILambdaStreamingGenerator m_lambda;
 
     /**
      * ctor
      *
      * @param p_value data
-     * @param p_streaming lambda streaming
+     * @param p_lambda lambda generator
      */
-    public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final Set<ILambdaStreaming<?>> p_streaming )
+    public CLambdaInitializeStream( @Nonnull final Stream<IExecution> p_value, @Nonnull final ILambdaStreamingGenerator p_lambda )
     {
         super( p_value.toArray( IExecution[]::new ) );
-        m_streaming = p_streaming;
+        m_lambda = p_lambda;
     }
 
     @Nonnull
@@ -88,28 +89,13 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
         p_return.add(
             CRawTerm.of(
                 l_return.stream()
-                        .flatMap( this::streaming )
+                        .flatMap( i -> Objects.isNull( i.raw() ) ? Stream.of() : m_lambda.apply( i.raw().getClass() ).apply( i.raw() ) )
             )
         );
 
         return l_result;
     }
 
-    /**
-     * streaming operator
-     *
-     * @param p_value value
-     * @return object stream
-     */
-    private Stream<?> streaming( @Nonnull final ITerm p_value )
-    {
-        return m_streaming.parallelStream()
-                          .filter( i -> i.instaceof( p_value.raw() ) )
-                          .findFirst()
-                          .orElse( ILambdaStreaming.EMPTY )
-                          .apply( p_value.raw() );
-
-    }
 
     @Override
     public String toString()

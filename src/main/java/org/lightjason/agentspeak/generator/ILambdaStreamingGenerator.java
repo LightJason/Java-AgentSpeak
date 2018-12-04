@@ -21,41 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
+package org.lightjason.agentspeak.generator;
 
-import cern.colt.matrix.tbit.BitMatrix;
-import cern.colt.matrix.tbit.BitVector;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
-import javax.annotation.Nonnull;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 
 /**
- * streaming a bit matrix
+ * lambda-streaming generator / loader for lazy-loading
  */
-public final class CLambdaStreaming extends IBaseLambdaStreaming<BitMatrix>
+public interface ILambdaStreamingGenerator extends Function<Class<?>, ILambdaStreaming<?>>
 {
     /**
-     * serial id
+     * empty lambda-streaming generator
      */
-    private static final long serialVersionUID = -7869879782838191012L;
-
-    @Override
-    public Stream<?> apply( @Nonnull final BitMatrix p_matrix )
+    ILambdaStreamingGenerator EMPTY = new ILambdaStreamingGenerator()
     {
-        final BitVector l_vector = p_matrix.toBitVector();
-        return IntStream.range( 0, l_vector.size() )
-                        .boxed()
-                        .map( i -> l_vector.getQuick( i ) ? 1 : 0 );
-    }
+        @Override
+        public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
+        {
+            return ILambdaStreaming.EMPTY;
+        }
+    };
 
-    @NonNull
-    @Override
-    public Stream<Class<?>> assignable()
-    {
-        return Stream.of( BitMatrix.class );
-    }
 }

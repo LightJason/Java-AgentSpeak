@@ -313,6 +313,23 @@ public final class CCommon
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * returns the class hierarchie of a given class
+     *
+     * @param p_class class
+     * @return stream start with the input class and ascending super class elements
+     */
+    @NonNull
+    public static Stream<Class<?>> classhierarchie( @NonNull final Class<?> p_class )
+    {
+        return Stream.concat(
+            Stream.of( p_class ),
+            Objects.isNull( p_class.getSuperclass() )
+            ? Stream.of()
+            : classhierarchie( p_class.getSuperclass() )
+        );
+    }
+
+    /**
      * stream of all class fields
      *
      * @param p_class class or null
