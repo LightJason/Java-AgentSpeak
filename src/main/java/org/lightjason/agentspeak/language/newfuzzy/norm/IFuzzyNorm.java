@@ -48,4 +48,6 @@ public interface IFuzzyNorm<E extends Enum<?>> extends BinaryOperator<IFuzzyValu
     // https://www.informatik.uni-ulm.de/ni/Lehre/SS04/ProsemSC/ausarbeitungen/Bank.pdf
     // https://www4.fh-swf.de/media/downloads/fbin/download_4/lehmann_1/internci2/ci2/skripte/fuzzy_3/Fuzzy-Tutorial_1_Gra_Leh30Teil.pdf
 
+    // https://www.sciencedirect.com/science/article/pii/S0019995879907307
+
 }
