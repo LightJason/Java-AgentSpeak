@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.newfuzzy.bundle;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyElement;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 
 import javax.annotation.Nonnull;
@@ -38,9 +38,9 @@ public final class CFuzzyBundle implements IFuzzyBundle
 {
 
     /**
-     * fuzzy element
+     * fuzzy set
      */
-    private final IFuzzyElement<?> m_element;
+    private final IFuzzySet<?> m_set;
     /**
      * fuzzy membership
      */
@@ -53,23 +53,23 @@ public final class CFuzzyBundle implements IFuzzyBundle
     /**
      * ctor
      *
-     * @param p_element fuzzy element
+     * @param p_set fuzzy set
      * @param p_membership fuzzy membership
      * @param p_defuzzification defuzzyfication
      */
-    public CFuzzyBundle( @NonNull final IFuzzyElement<?> p_element, @NonNull final IFuzzyMembership<?> p_membership,
+    public CFuzzyBundle( @NonNull final IFuzzySet<?> p_set, @NonNull final IFuzzyMembership<?> p_membership,
                          @NonNull final IDefuzzification<?> p_defuzzification )
     {
-        m_element = p_element;
+        m_set = p_set;
         m_membership = p_membership;
         m_defuzzification = p_defuzzification;
     }
 
 
     @Override
-    public IFuzzyElement<?> element()
+    public IFuzzySet<?> set()
     {
-        return m_element;
+        return m_set;
     }
 
     @NonNull

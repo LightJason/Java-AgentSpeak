@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -29,7 +29,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 /**
  * fuzzy boolean
  */
-public enum EBoolean implements IFuzzyElement<EBoolean>
+public enum EBoolean implements IFuzzySet<EBoolean>
 {
     FALSE( false ),
     TRUE( true );

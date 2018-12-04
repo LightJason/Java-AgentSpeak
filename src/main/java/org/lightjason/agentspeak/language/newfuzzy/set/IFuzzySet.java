@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  *
  * @tparam T enum type
  */
-public interface IFuzzyElement<E extends Enum<?>> extends Supplier<E>
+public interface IFuzzySet<E extends Enum<?>> extends Supplier<E>
 {
 
     /**

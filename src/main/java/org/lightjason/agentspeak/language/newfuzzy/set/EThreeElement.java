@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -29,7 +29,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 /**
  * three element fuzzy with numerical representation
  */
-public enum EThreeElement implements IFuzzyElement<EThreeElement>
+public enum EThreeElement implements IFuzzySet<EThreeElement>
 {
     LOW,
     MEDIUM,
