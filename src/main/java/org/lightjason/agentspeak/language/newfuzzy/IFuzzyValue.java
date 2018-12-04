@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 

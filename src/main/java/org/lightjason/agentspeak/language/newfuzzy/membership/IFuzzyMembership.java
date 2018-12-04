@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
-import javax.annotation.Nullable;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -44,7 +44,7 @@ public interface IFuzzyMembership<T extends Enum<?>> extends Function<Number, IF
      * @tparam V raw value of the fuzzy set element
      * @return raw value
      */
-    @Nullable
+    @NonNull
     <V> V raw();
 
     /**

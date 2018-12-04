@@ -26,17 +26,21 @@ package org.lightjason.agentspeak.language.newfuzzy.operator;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import java.util.stream.Stream;
+
 
 /**
  * fuzzy intersection operator
  *
  * @tparam T fuzzy type
  */
-public final class CIntersection<T extends Enum<?>> implements IFuzzyOperator<T>
+public final class CIntersection<V extends IFuzzyValue<?>> implements IFuzzyOperator<V>
 {
+
     @Override
-    public IFuzzyValue<T> apply( @NonNull final IFuzzyValue<T> p_value1, @NonNull final IFuzzyValue<T> p_value2 )
+    public Stream<V> apply( @NonNull final V p_value1, @NonNull final V p_value2 )
     {
-        return p_value1.fuzzy() * p_value2.fuzzy() / Math.max( 1 - p_value1.fuzzy(), 1 - p_value2.fuzzy() );
+        // p_value1.fuzzy() * p_value2.fuzzy() / Math.max( 1 - p_value1.fuzzy(), 1 - p_value2.fuzzy() );
+        return Stream.of();
     }
 }

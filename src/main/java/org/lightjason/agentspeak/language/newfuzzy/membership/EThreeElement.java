@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
@@ -39,8 +39,7 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
     MEDIUM,
     HIGH;
 
-
-    @Nullable
+    @NonNull
     @Override
     @SuppressWarnings( "unchecked" )
     public <V> V raw()
@@ -57,20 +56,6 @@ public enum EThreeElement implements IFuzzyMembership<EThreeElement>
     @Override
     public IFuzzyValue<EThreeElement> apply( @NonNull final Number p_value )
     {
-        return new IFuzzyValue<>()
-        {
-            @Override
-            public EThreeElement get()
-            {
-                return EThreeElement.this;
-            }
-
-            @NonNull
-            @Override
-            public Number fuzzy()
-            {
-                return p_value;
-            }
-        };
+        return CFuzzyValue.of( this, p_value );
     }
 }

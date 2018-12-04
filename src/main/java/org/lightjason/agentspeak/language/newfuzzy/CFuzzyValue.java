@@ -21,30 +21,79 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.operator;
+package org.lightjason.agentspeak.language.newfuzzy;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
-import java.util.stream.Stream;
+import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 
 
 /**
- * fuzzy union operator
- *
- * @tparam T fuzzy type
+ * immutable fuzzy value
  */
-public final class CUnion<V extends IFuzzyValue<?>> implements IFuzzyOperator<V>
+public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
 {
+    /**
+     * value
+     */
+    private final T m_value;
+    /**
+     * fuzzy value
+     */
+    private final Number m_fuzzy;
+
+    /**
+     * ctor
+     *
+     * @param p_value value
+     * @param p_fuzzy fuzzy
+     */
+    public CFuzzyValue( @Nonnull final T p_value, @NonNull final Number p_fuzzy )
+    {
+        if ( !( p_fuzzy.doubleValue() >= 0 && p_fuzzy.doubleValue() <= 1 ) )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
+
+        m_fuzzy = p_fuzzy;
+        m_value = p_value;
+    }
+
+    @Nonnull
+    @Override
+    public T get()
+    {
+        return m_value;
+    }
+
+    @NonNull
+    @Override
+    public Number fuzzy()
+    {
+        return m_fuzzy;
+    }
 
     @Override
-    public Stream<V> apply( @NonNull final V p_value1, @NonNull final V p_value2 )
+    public String toString()
     {
-        // ( p_value1.fuzzy() + p_value2.fuzzy()
-        //                 - p_value1.fuzzy() * p_value2.fuzzy()
-        //                 - Math.min( p_value1.fuzzy(), p_value2.fuzzy() ) )
-        //               / Math.max( 1 - p_value1.fuzzy(), 1 - p_value2.fuzzy() );
-
-        return Stream.of();
+        return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }
+
+    /**
+     * factory
+     *
+     * @param p_value value
+     * @param p_fuzzy fuzzy value
+     * @return fuzzy value
+     *
+     * @tparam N fuzzy type
+     */
+    @Nonnull
+    public static <N extends Enum<?>> IFuzzyValue<N> of( @Nonnull final N p_value, @NonNull final Number p_fuzzy )
+    {
+        return new CFuzzyValue<>( p_value, p_fuzzy );
+    }
+
 }
+

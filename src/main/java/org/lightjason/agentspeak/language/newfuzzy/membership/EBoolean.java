@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
@@ -55,24 +55,10 @@ public enum EBoolean implements IFuzzyMembership<EBoolean>
     @Override
     public final IFuzzyValue<EBoolean> apply( @NonNull final Number p_value )
     {
-        return new IFuzzyValue<>()
-        {
-            @Override
-            public EBoolean get()
-            {
-                return EBoolean.this;
-            }
-
-            @NonNull
-            @Override
-            public Number fuzzy()
-            {
-                return p_value;
-            }
-        };
+        return CFuzzyValue.of( this, p_value );
     }
 
-    @Nullable
+    @NonNull
     @Override
     @SuppressWarnings( "unchecked" )
     public <V> V raw()
