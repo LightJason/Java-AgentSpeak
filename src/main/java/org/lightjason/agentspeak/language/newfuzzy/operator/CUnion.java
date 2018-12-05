@@ -35,12 +35,12 @@ import java.util.stream.Stream;
  *
  * @tparam T fuzzy type
  */
-public final class CUnion<E extends Enum<?>> implements IFuzzyOperator<E>
+public final class CUnion implements IFuzzyOperator
 {
     /**
      * membership function
      */
-    private final IFuzzyMembership<E> m_membership;
+    private final IFuzzyMembership m_membership;
 
 
     /**
@@ -48,14 +48,14 @@ public final class CUnion<E extends Enum<?>> implements IFuzzyOperator<E>
      *
      * @param p_membership membership function
      */
-    public CUnion( @NonNull final IFuzzyMembership<E> p_membership )
+    public CUnion( @NonNull final IFuzzyMembership p_membership )
     {
         m_membership = p_membership;
     }
 
 
     @Override
-    public Stream<IFuzzyValue<E>> apply( @NonNull final IFuzzyValue<E> p_value1, @NonNull final IFuzzyValue<E> p_value2 )
+    public Stream<IFuzzyValue<?>> apply( @NonNull final IFuzzyValue<?> p_value1, @NonNull final IFuzzyValue<?> p_value2 )
     {
         return m_membership.apply(
             (

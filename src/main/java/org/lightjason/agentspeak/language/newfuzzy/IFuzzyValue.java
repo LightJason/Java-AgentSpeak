@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  *
  * @tparam T enum type
  */
-public interface IFuzzyValue<T extends Enum<?>> extends Supplier<T>
+public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
 {
 
     /**

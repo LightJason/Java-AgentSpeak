@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
  * @see https://en.wikipedia.org/wiki/T-norm
  */
-public interface IFuzzyOperator<E extends Enum<?>> extends BiFunction<IFuzzyValue<E>, IFuzzyValue<E>, Stream<IFuzzyValue<E>>>
+public interface IFuzzyOperator extends BiFunction<IFuzzyValue<?>, IFuzzyValue<?>, Stream<IFuzzyValue<?>>>
 {
 
     // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8

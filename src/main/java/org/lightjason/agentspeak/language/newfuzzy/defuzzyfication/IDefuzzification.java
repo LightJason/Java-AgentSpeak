@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
@@ -38,7 +39,7 @@ import java.util.stream.Stream;
  * @tparam S agent type
  * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IDefuzzification<T extends Enum<?>>
+public interface IDefuzzification
 {
 
     /**
@@ -48,15 +49,15 @@ public interface IDefuzzification<T extends Enum<?>>
      * @return native value
      */
     @Nonnull
-    T defuzzify( @Nonnull final Stream<IFuzzyValue<T>> p_value );
+    IFuzzySet<?> defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value );
 
     /**
      * returns a boolean to break execution
      *
-     * @param p_value fuzzy values
+     * @param p_value fuzzy set item
      * @return flag to continue
      */
-    boolean execution( @Nonnull final Stream<IFuzzyValue<T>> p_value );
+    boolean execution( @Nonnull final Stream<IFuzzySet<?>> p_value );
 
     /**
      * update of the internal defuzzification
@@ -67,22 +68,6 @@ public interface IDefuzzification<T extends Enum<?>>
      */
     @Nonnull
     IAgent<?> update( @Nonnull final IAgent<?> p_agent );
-
-    /**
-     * returns the definition of success
-     *
-     * @return success fuzzy value stream
-     */
-    @Nonnull
-    Stream<IFuzzyValue<T>> success();
-
-    /**
-     * returns the definition of fail
-     *
-     * @return fail fuzzy value stream
-     */
-    @Nonnull
-    Stream<IFuzzyValue<T>> fail();
 
 }
 

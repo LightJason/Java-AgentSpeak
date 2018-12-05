@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
@@ -33,18 +34,19 @@ import java.util.stream.Stream;
 /**
  * defuzzification with least-of-maximum
  */
-public final class CLOM<E extends Enum<?>> implements IDefuzzification<E>
+public final class CLOM implements IDefuzzification
 {
 
     @Nonnull
     @Override
-    public E defuzzify( @Nonnull final Stream<IFuzzyValue<E>> p_value )
+    public IFuzzySet<?> defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value
+    )
     {
         return null;
     }
 
     @Override
-    public boolean execution( @Nonnull final Stream<IFuzzyValue<E>> p_value )
+    public boolean execution( @Nonnull final Stream<IFuzzySet<?>> p_value )
     {
         return false;
     }
@@ -52,20 +54,6 @@ public final class CLOM<E extends Enum<?>> implements IDefuzzification<E>
     @Nonnull
     @Override
     public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
-    {
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<E>> success()
-    {
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<E>> fail()
     {
         return null;
     }

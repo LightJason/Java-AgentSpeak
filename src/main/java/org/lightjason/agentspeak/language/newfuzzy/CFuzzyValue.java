@@ -34,12 +34,12 @@ import java.text.MessageFormat;
 /**
  * immutable fuzzy value
  */
-public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
+public final class CFuzzyValue<E extends Enum<?>> implements IFuzzyValue<E>
 {
     /**
      * value
      */
-    private final T m_value;
+    private final E m_value;
     /**
      * fuzzy value
      */
@@ -51,7 +51,7 @@ public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
      * @param p_value value
      * @param p_fuzzy fuzzy
      */
-    public CFuzzyValue( @Nonnull final T p_value, @NonNull final Number p_fuzzy )
+    public CFuzzyValue( @Nonnull final E p_value, @NonNull final Number p_fuzzy )
     {
         if ( !( p_fuzzy.doubleValue() >= 0 && p_fuzzy.doubleValue() <= 1 ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
@@ -62,7 +62,7 @@ public final class CFuzzyValue<T extends Enum<?>> implements IFuzzyValue<T>
 
     @Nonnull
     @Override
-    public T get()
+    public E get()
     {
         return m_value;
     }

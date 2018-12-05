@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  *
  * @tparam E fuzzy element type
  */
-public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, Stream<IFuzzyValue<E>>>
+public interface IFuzzyMembership extends Function<Number, Stream<IFuzzyValue<?>>>
 {
     // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
 
@@ -59,7 +59,7 @@ public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, St
      * @return fuzzy value stream
      */
     @NonNull
-    Stream<IFuzzyValue<E>> success();
+    Stream<IFuzzyValue<?>> success();
 
     /**
      * returns a stream of fuzzy values which
@@ -68,6 +68,6 @@ public interface IFuzzyMembership<E extends Enum<?>> extends Function<Number, St
      * @return fuzzy value stream
      */
     @NonNull
-    Stream<IFuzzyValue<E>> fail();
+    Stream<IFuzzyValue<?>> fail();
 
 }
