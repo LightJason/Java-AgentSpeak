@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
@@ -57,7 +57,7 @@ public interface IDefuzzification
      * @param p_value fuzzy set item
      * @return flag to continue
      */
-    boolean execution( @Nonnull final Stream<IFuzzySet<?>> p_value );
+    boolean execution( @Nonnull final IFuzzySet<?> p_value );
 
     /**
      * update of the internal defuzzification
