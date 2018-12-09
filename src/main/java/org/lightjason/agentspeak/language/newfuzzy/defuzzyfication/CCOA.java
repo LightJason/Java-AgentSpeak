@@ -46,8 +46,15 @@ public final class CCOA implements IDefuzzification
     public IFuzzySet<?> defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
+        if ( l_values.length == 1 )
+            return null;
+
         final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue()* ( i.get().ordinal() + 1 ) ).sum()
                                 / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
+
+
+
+        //l_values[0].get().getClass().getEnumConstants()[l_result.intValue() - 1];
 
         return null;
     }
