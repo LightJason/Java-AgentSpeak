@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;

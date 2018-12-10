@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language.newfuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 

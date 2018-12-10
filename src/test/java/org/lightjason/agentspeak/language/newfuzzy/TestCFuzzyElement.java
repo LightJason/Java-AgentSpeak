@@ -21,7 +21,15 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.newfuzzy;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.CCOA;
+import org.lightjason.agentspeak.language.newfuzzy.set.EFourElement;
+
+import java.util.stream.Stream;
+
 
 /**
  * test fuzzy sets
@@ -30,5 +38,26 @@ package org.lightjason.agentspeak.language.fuzzy;
  */
 public final class TestCFuzzyElement
 {
+
+    /**
+     * test for defuzzification
+     */
+    @Test
+    public void coa()
+    {
+        Assert.assertEquals(
+            EFourElement.MEDIUMLOW,
+
+            new CCOA<>( EFourElement.class ).defuzzify(
+                Stream.of(
+                    CFuzzyValue.of( EFourElement.LOW, 0.6 ),
+                    CFuzzyValue.of( EFourElement.MEDIUMLOW, 0.4 ),
+                    CFuzzyValue.of( EFourElement.MEDIUMHIGH, 0.2 ),
+                    CFuzzyValue.of( EFourElement.HIGH, 0.2 )
+                )
+            )
+        );
+    }
+
 
 }

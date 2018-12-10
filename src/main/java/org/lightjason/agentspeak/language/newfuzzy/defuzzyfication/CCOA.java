@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
@@ -41,30 +42,33 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
     // https://arxiv.org/pdf/1612.00742.pdf
     // https://pdfs.semanticscholar.org/b63b/91843261d8cb9b13f991f08bf77b16ef5e87.pdf
 
-    private final IFuzzySet<E> m_set;
+    /**
+     * fuzzy class
+     */
+    private final Class<? extends IFuzzySet<E>> m_class;
 
     /**
      * ctor
      *
-     * @param p_set fuzzy set
+     * @param p_class fuzzy set class
      */
-    public CCOA( final IFuzzySet<E> p_set )
+    public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class )
     {
-        m_set = p_set;
+        m_class = p_class;
     }
 
     @Nonnull
     @Override
     public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
-        final IFuzzyValue<E>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
+        final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         if ( l_values.length == 1 )
-            return l_values[0].get();
+            return m_class.getEnumConstants()[0].get();
 
         final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() + 1 ) ).sum()
                                 / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
 
-        return m_set.get().getClass().getEnumConstants()[l_result.intValue() - 1];
+        return m_class.getEnumConstants()[l_result.intValue() - 1].get();
     }
 
     @Nonnull
