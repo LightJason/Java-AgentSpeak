@@ -45,12 +45,6 @@ public enum EFourElement implements IFuzzySet<EFourElement>
     }
 
     @Override
-    public boolean success()
-    {
-        return this.ordinal() <= 1;
-    }
-
-    @Override
     public EFourElement get()
     {
         return this;

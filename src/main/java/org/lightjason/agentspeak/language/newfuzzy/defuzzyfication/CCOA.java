@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -46,6 +47,11 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
      * fuzzy class
      */
     private final Class<? extends IFuzzySet<E>> m_class;
+    /**
+     * function to define successful execution
+     */
+    private final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> m_success;
+
 
     /**
      * ctor
@@ -54,7 +60,19 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
      */
     public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class )
     {
+        this( p_class, ( i, j ) -> i.ordinal() < j.getEnumConstants().length / 2 );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_class fuzzy set class
+     * @param p_success success function
+     */
+    public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    {
         m_class = p_class;
+        m_success = p_success;
     }
 
     @Nonnull
@@ -71,10 +89,16 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
         return m_class.getEnumConstants()[l_result.intValue() - 1].get();
     }
 
+    @Override
+    public boolean success( @NonNull final E p_value )
+    {
+        return m_success.apply( p_value, m_class );
+    }
+
     @Nonnull
     @Override
     public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
-        return null;
+        return p_agent;
     }
 }

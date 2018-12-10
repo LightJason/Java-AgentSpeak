@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
@@ -49,6 +50,14 @@ public interface IDefuzzification<E extends Enum<?>>
      */
     @Nonnull
     E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value );
+
+    /**
+     * returns a boolean to break execution
+     *
+     * @param p_value enum value
+     * @return flag to continue
+     */
+    boolean success( @NonNull E p_value );
 
     /**
      * update of the internal defuzzification

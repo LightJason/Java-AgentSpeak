@@ -58,12 +58,6 @@ public enum EBoolean implements IFuzzySet<EBoolean>
     }
 
     @Override
-    public boolean success()
-    {
-        return m_value;
-    }
-
-    @Override
     public EBoolean get()
     {
         return this;
