@@ -52,14 +52,6 @@ public interface IDefuzzification<E extends Enum<?>>
     E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value );
 
     /**
-     * returns a boolean to break execution
-     *
-     * @param p_value fuzzy set item
-     * @return flag to continue
-     */
-    boolean execution( @Nonnull final E p_value );
-
-    /**
      * update of the internal defuzzification
      * structure on the agent-cycle
      *

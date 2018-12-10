@@ -43,7 +43,11 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
 
     private final IFuzzySet<E> m_set;
 
-
+    /**
+     * ctor
+     *
+     * @param p_set fuzzy set
+     */
     public CCOA( final IFuzzySet<E> p_set )
     {
         m_set = p_set;
@@ -62,14 +66,6 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
 
         return m_set.get().getClass().getEnumConstants()[l_result.intValue() - 1];
     }
-
-
-    @Override
-    public boolean execution( @Nonnull final E p_value )
-    {
-        return false;
-    }
-
 
     @Nonnull
     @Override
