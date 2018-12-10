@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * @tparam S agent type
  * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IDefuzzification
+public interface IDefuzzification<E extends Enum<?>>
 {
 
     /**
@@ -49,7 +49,7 @@ public interface IDefuzzification
      * @return native value
      */
     @Nonnull
-    IFuzzySet<?> defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value );
+    E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value );
 
     /**
      * returns a boolean to break execution
@@ -57,7 +57,7 @@ public interface IDefuzzification
      * @param p_value fuzzy set item
      * @return flag to continue
      */
-    boolean execution( @Nonnull final IFuzzySet<?> p_value );
+    boolean execution( @Nonnull final E p_value );
 
     /**
      * update of the internal defuzzification

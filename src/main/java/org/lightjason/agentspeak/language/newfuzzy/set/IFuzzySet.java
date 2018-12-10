@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.newfuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 
@@ -44,5 +45,12 @@ public interface IFuzzySet<E extends Enum<?>> extends Supplier<E>
      */
     @NonNull
     <V> V raw();
+
+    /**
+     * returns a boolean to break execution
+     *
+     * @return flag to continue
+     */
+    boolean success();
 
 }

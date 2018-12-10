@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.language.newfuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * fuzzy boolean
@@ -55,6 +57,12 @@ public enum EBoolean implements IFuzzySet<EBoolean>
     public <V> V raw()
     {
         return (V) m_value;
+    }
+
+    @Override
+    public boolean success()
+    {
+        return m_value;
     }
 
     @Override

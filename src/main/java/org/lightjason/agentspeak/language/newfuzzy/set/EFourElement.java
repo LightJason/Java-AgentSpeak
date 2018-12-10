@@ -29,10 +29,11 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 /**
  * three element fuzzy with numerical representation
  */
-public enum EThreeElement implements IFuzzySet<EThreeElement>
+public enum EFourElement implements IFuzzySet<EFourElement>
 {
     LOW,
-    MEDIUM,
+    MEDIUMLOW,
+    MEDIUMHIGH,
     HIGH;
 
     @NonNull
@@ -44,7 +45,13 @@ public enum EThreeElement implements IFuzzySet<EThreeElement>
     }
 
     @Override
-    public EThreeElement get()
+    public boolean success()
+    {
+        return this.ordinal() <= 1;
+    }
+
+    @Override
+    public EFourElement get()
     {
         return this;
     }

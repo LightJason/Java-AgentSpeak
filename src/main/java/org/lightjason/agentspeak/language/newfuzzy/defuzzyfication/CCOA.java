@@ -35,35 +35,41 @@ import java.util.stream.Stream;
 /**
  * defuzzification with center-of-area
  */
-public final class CCOA implements IDefuzzification
+public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
 {
     // http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
     // https://arxiv.org/pdf/1612.00742.pdf
     // https://pdfs.semanticscholar.org/b63b/91843261d8cb9b13f991f08bf77b16ef5e87.pdf
 
-    @Nonnull
-    @Override
-    public IFuzzySet<?> defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    private final IFuzzySet<E> m_set;
+
+
+    public CCOA( final IFuzzySet<E> p_set )
     {
-        final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
-        if ( l_values.length == 1 )
-            return null;
-
-        final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue()* ( i.get().ordinal() + 1 ) ).sum()
-                                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
-
-
-
-        //l_values[0].get().getClass().getEnumConstants()[l_result.intValue() - 1];
-
-        return null;
+        m_set = p_set;
     }
 
+    @Nonnull
     @Override
-    public boolean execution( @Nonnull final IFuzzySet<?> p_value )
+    public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    {
+        final IFuzzyValue<E>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
+        if ( l_values.length == 1 )
+            return l_values[0].get();
+
+        final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() + 1 ) ).sum()
+                                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
+
+        return m_set.get().getClass().getEnumConstants()[l_result.intValue() - 1];
+    }
+
+
+    @Override
+    public boolean execution( @Nonnull final E p_value )
     {
         return false;
     }
+
 
     @Nonnull
     @Override
