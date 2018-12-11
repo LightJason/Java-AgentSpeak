@@ -28,6 +28,8 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.base.Function;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CActionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -73,7 +75,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 3 )
-            return CFuzzyValue.of( false );
+            throw new CActionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrong number of arguments" ) );
 
         final Map<Object, Number> l_weights = l_arguments.parallelStream()
                                                          .filter( i -> CCommon.isssignableto( i, Map.class ) )
@@ -103,7 +105,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
                                                    .orElseGet( Collections::emptyList );
 
         if ( l_vertices.isEmpty() )
-            return CFuzzyValue.of( false );
+            throw new CActionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 
 
         l_arguments.stream()

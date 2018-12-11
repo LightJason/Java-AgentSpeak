@@ -64,8 +64,7 @@ public final class CThrow extends IBuiltinAction
     {
         if ( p_argument.get( 0 ).raw() )
             throw p_argument.size() == 1 ? new CActionException( p_context ) : new CActionException(
-                p_argument.get( 1 ).<String>raw(),
-                p_context
+                p_context, p_argument.get( 1 ).<String>raw()
             );
         return Stream.of();
     }

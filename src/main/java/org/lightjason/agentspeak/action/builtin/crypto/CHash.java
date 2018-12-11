@@ -110,7 +110,7 @@ public final class CHash extends IBuiltinAction
         }
         catch ( final UnsupportedEncodingException l_exception )
         {
-            throw new CActionException( l_exception, p_context );
+            throw new CActionException( p_context, l_exception );
         }
     }
 
@@ -160,7 +160,7 @@ public final class CHash extends IBuiltinAction
                 }
                 catch ( final NoSuchAlgorithmException l_exception )
                 {
-                    throw new CActionException( l_exception, p_context );
+                    throw new CActionException( p_context, l_exception );
                 }
         }
     }

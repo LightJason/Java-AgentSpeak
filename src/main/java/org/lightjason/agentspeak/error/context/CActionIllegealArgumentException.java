@@ -32,12 +32,15 @@ import java.text.MessageFormat;
 import java.util.logging.Logger;
 
 
-public final class CIllegealExecutionArgumentException extends IllegalArgumentException implements IContextException
+/**
+ * action illegal-argument-exception
+ */
+public final class CActionIllegealArgumentException extends IllegalArgumentException implements IContextException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CIllegealExecutionArgumentException.class );
+    private static final Logger LOGGER = CCommon.logger( CActionIllegealArgumentException.class );
     /**
      * serial id
      */
@@ -54,7 +57,7 @@ public final class CIllegealExecutionArgumentException extends IllegalArgumentEx
      *
      * @param p_context execution context
      */
-    public CIllegealExecutionArgumentException( @NonNull final IContext p_context )
+    public CActionIllegealArgumentException( @NonNull final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -64,10 +67,10 @@ public final class CIllegealExecutionArgumentException extends IllegalArgumentEx
     /**
      * ctor
      *
-     * @param p_message execution message
      * @param p_context execution context
+     * @param p_message execution message
      */
-    public CIllegealExecutionArgumentException( @Nonnull final String p_message, @Nonnull final IContext p_context )
+    public CActionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final String p_message )
     {
         super( p_message );
         m_context = p_context;
@@ -77,11 +80,12 @@ public final class CIllegealExecutionArgumentException extends IllegalArgumentEx
     /**
      * ctor
      *
+     * @param p_context execution context
      * @param p_message execution message
      * @param p_cause execption cause
-     * @param p_context execution context
      */
-    public CIllegealExecutionArgumentException( @Nonnull final String p_message, @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
+    public CActionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
+    )
     {
         super( p_message, p_cause );
         m_context = p_context;
@@ -91,10 +95,10 @@ public final class CIllegealExecutionArgumentException extends IllegalArgumentEx
     /**
      * ctor
      *
-     * @param p_cause execption cause
      * @param p_context execution context
+     * @param p_cause execption cause
      */
-    public CIllegealExecutionArgumentException( @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
+    public CActionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         m_context = p_context;
