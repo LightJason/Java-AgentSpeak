@@ -41,14 +41,14 @@ public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
     /**
      * ctor
-     *
-     * @param p_class fuzzy set class
-     * @param p_default default fuzzy value
+     *  @param p_class fuzzy set class
      * @param p_membership membership function
+     * @param p_default default fuzzy value
      */
-    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final Number p_default, @NonNull final IFuzzyMembership<E> p_membership )
+    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<E> p_default
+    )
     {
-        super( p_class, p_default, p_membership );
+        super( p_class, p_membership, p_default );
     }
 
     @Nonnull

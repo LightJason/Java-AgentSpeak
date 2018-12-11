@@ -24,9 +24,11 @@
 package org.lightjason.agentspeak.language.newfuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -41,6 +43,55 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
     // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
     // http://www.nid.iitkgp.ernet.in/dsamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
     // https://profs.basu.ac.ir/khotanlou/upload_file/459.1778.file_ref.1938.2401.pdf
+
+
+    /**
+     * empty membership function
+     */
+    IFuzzyMembership<?> EMPTY = new IFuzzyMembership<>()
+    {
+        @NonNull
+        @Override
+        public Stream<IFuzzyValue<?>> success()
+        {
+            return Stream.of();
+        }
+
+        @NonNull
+        @Override
+        public Stream<IFuzzyValue<?>> fail()
+        {
+            return Stream.of();
+        }
+
+        @Override
+        @SuppressWarnings( "unchecked" )
+        public <T extends Enum<?>> IFuzzyMembership<T> raw()
+        {
+            return (IFuzzyMembership<T>) this;
+        }
+
+        @Override
+        public Stream<Number> range( @NonNull final Enum<?> p_value )
+        {
+            return Stream.of();
+        }
+
+        @Override
+        public Stream<IFuzzyValue<?>> apply( final Number p_number )
+        {
+            return Stream.of();
+        }
+
+        @Nonnull
+        @Override
+        public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        {
+            return p_agent;
+        }
+    };
+
+
 
     /**
      * returns a stream of fuzzy values which
@@ -67,5 +118,13 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
      * @return stream of positions
      */
     Stream<Number> range( @NonNull E p_value );
+
+    /**
+     * cast operation
+     *
+     * @rparam T target type
+     * @return fuzzy membership
+     */
+    <T extends Enum<?>> IFuzzyMembership<T> raw();
 
 }

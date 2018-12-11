@@ -59,6 +59,5 @@ public interface IDefuzzification extends IAgentUpdateable
      */
     boolean success( @NonNull Number p_value );
 
-
 }
 

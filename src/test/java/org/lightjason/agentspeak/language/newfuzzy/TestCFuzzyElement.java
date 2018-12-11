@@ -32,10 +32,8 @@ import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.CCOG;
 import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.EFourElement;
 import org.lightjason.agentspeak.language.newfuzzy.set.EThreeElement;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -54,16 +52,18 @@ public final class TestCFuzzyElement
     public void coa()
     {
         Assert.assertEquals(
-            EFourElement.MEDIUMLOW,
+            1.0,
 
-            new CWOA<>( EFourElement.class, EFourElement.HIGH ).defuzzify(
+            new CWOA<>( EFourElement.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( EFourElement.HIGH, 1 ) ).defuzzify(
                 Stream.of(
                     CFuzzyValue.of( EFourElement.LOW, 0.6 ),
                     CFuzzyValue.of( EFourElement.MEDIUMLOW, 0.4 ),
                     CFuzzyValue.of( EFourElement.MEDIUMHIGH, 0.2 ),
                     CFuzzyValue.of( EFourElement.HIGH, 0.2 )
                 )
-            )
+            ).doubleValue(),
+
+            0.01
         );
     }
 
@@ -74,65 +74,78 @@ public final class TestCFuzzyElement
     @Test
     public void ccog()
     {
-        System.out.println(
-        new CCOG<>(
-            EThreeElement.class,
-            EThreeElement.LOW,
-            new IFuzzyMembership<>()
-            {
-                @NonNull
-                @Override
-                public Stream<IFuzzyValue<?>> success()
-                {
-                    return Stream.of();
-                }
+        Assert.assertEquals(
+            67.419,
 
-                @NonNull
-                @Override
-                public Stream<IFuzzyValue<?>> fail()
+            new CCOG<>(
+                EThreeElement.class,
+                new IFuzzyMembership<>()
                 {
-                    return Stream.of();
-                }
-
-                @Override
-                public Stream<Number> range( @NonNull final EThreeElement p_value )
-                {
-                    switch ( p_value )
+                    @NonNull
+                    @Override
+                    public Stream<IFuzzyValue<?>> success()
                     {
-                        case LOW:
-                            return Stream.of( 0, 10, 20 );
-
-                        case MEDIUM:
-                            return Stream.of( 30, 40, 50, 60 );
-
-                        case HIGH:
-                            return Stream.of( 70, 80, 90, 100 );
-
-                        default:
-                            return Stream.of();
+                        return Stream.of();
                     }
-                }
 
-                @Override
-                public Stream<IFuzzyValue<?>> apply( final Number p_number )
-                {
-                    return Stream.of();
-                }
+                    @NonNull
+                    @Override
+                    public Stream<IFuzzyValue<?>> fail()
+                    {
+                        return Stream.of();
+                    }
 
-                @Nonnull
-                @Override
-                public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
-                {
-                    return p_agent;
-                }
-            }
-        ).defuzzify(
-            Stream.of(
-                CFuzzyValue.of( EThreeElement.LOW, 0.1 ),
-                CFuzzyValue.of( EThreeElement.MEDIUM, 0.2 ),
-                CFuzzyValue.of( EThreeElement.HIGH, 0.5 )
-            )
-        )
+                    @Override
+                    public Stream<Number> range( @NonNull final EThreeElement p_value )
+                    {
+                        switch ( p_value )
+                        {
+                            case LOW:
+                                return Stream.of( 0, 10, 20 );
+
+                            case MEDIUM:
+                                return Stream.of( 30, 40, 50, 60 );
+
+                            case HIGH:
+                                return Stream.of( 70, 80, 90, 100 );
+
+                            default:
+                                return Stream.of();
+                        }
+                    }
+
+                    @Override
+                    @SuppressWarnings( "unchecked" )
+                    public <T extends Enum<?>> IFuzzyMembership<T> raw()
+                    {
+                        return (IFuzzyMembership<T>) this;
+                    }
+
+                    @Override
+                    public Stream<IFuzzyValue<?>> apply( final Number p_number )
+                    {
+                        return Stream.of();
+                    }
+
+                    @Nonnull
+                    @Override
+                    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+                    {
+                        return p_agent;
+                    }
+                },
+
+                CFuzzyValue.of( EThreeElement.HIGH, 1 )
+
+            ).defuzzify(
+                Stream.of(
+                    CFuzzyValue.of( EThreeElement.LOW, 0.1 ),
+                    CFuzzyValue.of( EThreeElement.MEDIUM, 0.2 ),
+                    CFuzzyValue.of( EThreeElement.HIGH, 0.5 )
+                )
+            ).doubleValue(),
+
+            0.01
         );
 
     }

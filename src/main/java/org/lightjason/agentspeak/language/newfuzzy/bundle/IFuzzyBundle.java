@@ -60,6 +60,6 @@ public interface IFuzzyBundle extends IAgentUpdateable
      * @return defuzzification
      */
     @Nonnull
-    IDefuzzification<?> defuzzification();
+    IDefuzzification defuzzification();
 
 }
