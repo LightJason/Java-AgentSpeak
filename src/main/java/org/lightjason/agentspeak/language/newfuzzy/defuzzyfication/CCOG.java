@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
@@ -40,13 +41,19 @@ import java.util.stream.Stream;
 public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
     /**
+     * fuzzy membership function
+     */
+    private final IFuzzyMembership m_membership;
+
+    /**
      * ctor
      *
      * @param p_class fuzzy set class
      */
-    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class )
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership p_membership )
     {
         super( p_class );
+        m_membership = p_membership;
     }
 
     /**
@@ -55,9 +62,11 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
      * @param p_class fuzzy set class
      * @param p_success success function
      */
-    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success,
+                 @NonNull final IFuzzyMembership p_membership )
     {
         super( p_class, p_success );
+        m_membership = p_membership;
     }
 
     @Nonnull
