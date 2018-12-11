@@ -21,27 +21,44 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy value
+ * interface for a mutable fuzzy value
  *
- * @tparam T enum type
+ * @tparam T fuzzy type
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
 {
 
     /**
-     * returns the fuzzy number
+     * sets the fuzzy value
      *
-     * @return fuzzy number
+     * @param p_value new value
+     * @return self reference
      */
-    @NonNull
-    Number fuzzy();
+    @Nonnull
+    IFuzzyValueMutable<T> value( final T p_value );
+
+    /**
+     * sets the weight
+     *
+     * @param p_value weight
+     * @return self reference
+     */
+    @Nonnull
+    IFuzzyValueMutable<T> fuzzy( final double p_value );
+
+    /**
+     * returns an immutable instance of the object
+     *
+     * @return immutable instance
+     */
+    @Nonnull
+    IFuzzyValue<T> immutable();
 
 }

@@ -21,27 +21,50 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
+import java.util.stream.Stream;
 
 
 /**
- * fuzzy value
+ * defuzzification first-of-maxima-methods
  *
- * @tparam T enum type
+ * @tparam E
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
-
     /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
+     * ctor
+     *  @param p_class fuzzy set class
+     * @param p_membership membership function
+     * @param p_default default fuzzy value
      */
-    @NonNull
-    Number fuzzy();
+    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<E> p_default
+    )
+    {
+        super( p_class, p_membership, p_default );
+    }
 
+    @Nonnull
+    @Override
+    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    {
+        return p_value.reduce(
+            m_default,
+            ( i, j ) -> i.fuzzy().doubleValue() < j.fuzzy().doubleValue() ? j : i
+        ).fuzzy();
+    }
+
+    @Override
+    public boolean success( @NonNull final Number p_value )
+    {
+        // scale the gravity on the maximum to the enum result
+        return p_value.doubleValue() / this.maximum().orElse( 1 ) >= 0.5;
+    }
 }

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -29,19 +29,20 @@ import java.util.function.Supplier;
 
 
 /**
- * fuzzy value
+ * fuzzy set
  *
  * @tparam T enum type
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public interface IFuzzySet<E extends Enum<?>> extends Supplier<E>
 {
 
     /**
-     * returns the fuzzy number
+     * returns a raw value if it exist
      *
-     * @return fuzzy number
+     * @tparam V raw value of the fuzzy set element
+     * @return raw value
      */
     @NonNull
-    Number fuzzy();
+    <V> V raw();
 
 }

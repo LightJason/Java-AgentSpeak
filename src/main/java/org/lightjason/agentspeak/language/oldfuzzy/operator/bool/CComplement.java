@@ -21,27 +21,24 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy.operator.bool;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.oldfuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.oldfuzzy.operator.IFuzzyComplement;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy value
- *
- * @tparam T enum type
+ * fuzzy-boolean complement
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CComplement implements IFuzzyComplement<Boolean>
 {
-
-    /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
-     */
-    @NonNull
-    Number fuzzy();
-
+    @Nonnull
+    @Override
+    public IFuzzyValue<Boolean> complement( @Nonnull final IFuzzyValue<Boolean> p_value )
+    {
+        return CFuzzyValue.of( !p_value.value(), 1 - p_value.fuzzy() );
+    }
 }

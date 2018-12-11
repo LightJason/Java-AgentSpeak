@@ -21,27 +21,32 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+
+package org.lightjason.agentspeak.language.fuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import java.util.function.Supplier;
-
 
 /**
- * fuzzy value
- *
- * @tparam T enum type
+ * three element fuzzy with numerical representation
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public enum  EThreeElement implements IFuzzySet<EThreeElement>
 {
+    LOW,
+    MEDIUM,
+    HIGH;
 
-    /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
-     */
     @NonNull
-    Number fuzzy();
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
+    {
+        return (V) Integer.valueOf( this.ordinal() );
+    }
 
+    @Override
+    public EThreeElement get()
+    {
+        return this;
+    }
 }

@@ -24,28 +24,16 @@
 package org.lightjason.agentspeak.language.fuzzy.operator;
 
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
 
-import javax.annotation.Nonnull;
-import java.util.stream.Collector;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 
 /**
- * defines a fuzzy t-norm
+ * interface of fuzzy set operator
  *
- * @tparam T fuzzy type
+ * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
  */
-public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public interface IFuzzyOperator extends BiFunction<IFuzzyValue<?>, IFuzzyValue<?>, Stream<IFuzzyValue<?>>>
 {
-
-    /**
-     * calculates for a array of values the result
-     *
-     * @param p_values values
-     * @return result value
-     */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    IFuzzyValue<T> result( @Nonnull final IFuzzyValue<T>... p_values );
-
 }

@@ -21,27 +21,76 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.bundle;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy value
- *
- * @tparam T enum type
+ * fuzzy bundle
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CFuzzyBundle implements IFuzzyBundle
 {
 
     /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
+     * fuzzy set
      */
-    @NonNull
-    Number fuzzy();
+    private final IFuzzySet<?> m_set;
+    /**
+     * fuzzy membership
+     */
+    private final IFuzzyMembership<?> m_membership;
+    /**
+     * defuzzification
+     */
+    private final IDefuzzification m_defuzzification;
 
+    /**
+     * ctor
+     *
+     * @param p_set fuzzy set
+     * @param p_membership fuzzy membership
+     * @param p_defuzzification defuzzyfication
+     */
+    public CFuzzyBundle( @NonNull final IFuzzySet<?> p_set, @NonNull final IFuzzyMembership<?> p_membership,
+                         @NonNull final IDefuzzification p_defuzzification )
+    {
+        m_set = p_set;
+        m_membership = p_membership;
+        m_defuzzification = p_defuzzification;
+    }
+
+
+    @Override
+    public IFuzzySet<?> set()
+    {
+        return m_set;
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyMembership<?> membership()
+    {
+        return m_membership;
+    }
+
+    @Nonnull
+    @Override
+    public IDefuzzification defuzzification()
+    {
+        return m_defuzzification;
+    }
+
+    @Nonnull
+    @Override
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    {
+        return m_defuzzification.update( m_membership.update( p_agent ) );
+    }
 }

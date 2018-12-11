@@ -21,27 +21,44 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.operator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
 
-import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 
 /**
- * fuzzy value
+ * fuzzy intersection operator
  *
- * @tparam T enum type
+ * @tparam T fuzzy type
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CIntersection implements IFuzzyOperator
 {
+    /**
+     * membership function
+     */
+    private final IFuzzyMembership<?> m_membership;
 
     /**
-     * returns the fuzzy number
+     * ctor
      *
-     * @return fuzzy number
+     * @param p_membership membership function
      */
-    @NonNull
-    Number fuzzy();
+    public CIntersection( @NonNull final IFuzzyMembership<?> p_membership )
+    {
+        m_membership = p_membership;
+    }
+
+    @Override
+    public Stream<IFuzzyValue<?>> apply( @NonNull final IFuzzyValue<?> p_value1, @NonNull final IFuzzyValue<?> p_value2 )
+    {
+        return m_membership.apply(
+            p_value1.fuzzy().doubleValue() * p_value2.fuzzy().doubleValue()
+            / Math.max( 1 - p_value1.fuzzy().doubleValue(), 1 - p_value2.fuzzy().doubleValue() )
+        );
+    }
 
 }

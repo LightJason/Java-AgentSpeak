@@ -21,27 +21,52 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 
 /**
- * fuzzy value
- *
- * @tparam T enum type
+ * defuzzification with weighted-average-method
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
 
     /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
+     * ctor
+     *  @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
      */
-    @NonNull
-    Number fuzzy();
+    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<E> p_default
+    )
+    {
+        super( p_class, p_membership, p_default );
+    }
+
+    @Nonnull
+    @Override
+    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    {
+        final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
+        if ( l_values.length < 2 )
+            return l_values.length == 0 ? m_default.fuzzy() : l_values[0].fuzzy();
+
+        return Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() ) ).sum()
+               / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
+    }
+
+    @Override
+    public boolean success( @NonNull final Number p_value )
+    {
+        // scale the gravity on the maximum to the enum result
+        return p_value.doubleValue() / this.maximum().orElse( 1 ) >= 0.5;
+    }
 
 }

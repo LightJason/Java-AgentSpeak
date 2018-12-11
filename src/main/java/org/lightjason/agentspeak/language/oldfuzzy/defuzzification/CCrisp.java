@@ -21,27 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy.defuzzification;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.oldfuzzy.operator.IFuzzyComplement;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy value
+ * defuzzification to a crisp value
  *
- * @tparam T enum type
+ * @tparam T fuzzy type
+ * @tparam S agent type
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CCrisp<T> implements IDefuzzification<T>
 {
 
     /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
+     * fuzzy complement
      */
-    @NonNull
-    Number fuzzy();
+    private final IFuzzyComplement<T> m_complement;
 
+    /**
+     * ctor
+     *
+     * @param p_complement fuzzy complement operator
+     */
+    public CCrisp( @Nonnull final IFuzzyComplement<T> p_complement )
+    {
+        m_complement = p_complement;
+    }
+
+
+    @Nonnull
+    @Override
+    public T defuzzify( @Nonnull final IFuzzyValue<T> p_value )
+    {
+        return p_value.fuzzy() <= 0.5 ? m_complement.complement( p_value ).value() : p_value.value();
+    }
+
+    @Nonnull
+    @Override
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    {
+        return p_agent;
+    }
 }

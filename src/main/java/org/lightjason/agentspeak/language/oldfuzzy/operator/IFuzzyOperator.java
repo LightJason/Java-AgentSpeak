@@ -21,27 +21,31 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy.operator;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValueMutable;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
+import java.util.stream.Collector;
 
 
 /**
- * fuzzy value
+ * defines a fuzzy t-norm
  *
- * @tparam T enum type
+ * @tparam T fuzzy type
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
 
     /**
-     * returns the fuzzy number
+     * calculates for a array of values the result
      *
-     * @return fuzzy number
+     * @param p_values values
+     * @return result value
      */
-    @NonNull
-    Number fuzzy();
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    IFuzzyValue<T> result( @Nonnull final IFuzzyValue<T>... p_values );
 
 }

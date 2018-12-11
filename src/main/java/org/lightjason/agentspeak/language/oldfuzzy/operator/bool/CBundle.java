@@ -21,27 +21,35 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy.operator.bool;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.oldfuzzy.defuzzification.IDefuzzification;
+import org.lightjason.agentspeak.language.oldfuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.oldfuzzy.operator.IFuzzyOperator;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
+import java.util.AbstractMap;
 
 
 /**
- * fuzzy value
- *
- * @tparam T enum type
+ * boolean fuzzy bundle
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public final class CBundle extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean>> implements IFuzzyBundle<Boolean>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 646232211237092457L;
 
     /**
-     * returns the fuzzy number
+     * ctor
      *
-     * @return fuzzy number
+     * @param p_key fuzzy operator
+     * @param p_value defuzzification
      */
-    @NonNull
-    Number fuzzy();
+    public CBundle( @Nonnull final IFuzzyOperator<Boolean> p_key, @Nonnull final IDefuzzification<Boolean> p_value )
+    {
+        super( p_key, p_value );
+    }
 
 }

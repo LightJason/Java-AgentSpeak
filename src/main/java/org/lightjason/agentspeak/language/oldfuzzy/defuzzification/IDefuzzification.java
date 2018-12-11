@@ -21,27 +21,41 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy.defuzzification;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValue;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy value
+ * defuzzification interface
  *
- * @tparam T enum type
+ * @tparam T fuzzy type
+ * @tparam S agent type
+ * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public interface IDefuzzification<T>
 {
 
     /**
-     * returns the fuzzy number
+     * runs the defuzzyification algorithm
      *
-     * @return fuzzy number
+     * @param p_value fuzzy value
+     * @return native value
      */
-    @NonNull
-    Number fuzzy();
+    @Nonnull
+    T defuzzify( @Nonnull final IFuzzyValue<T> p_value );
+
+    /**
+     * update of the internal defuzzification
+     * structure on the agent-cycle
+     *
+     * @param p_agent agent object
+     * @return agent reference
+     */
+    @Nonnull
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }

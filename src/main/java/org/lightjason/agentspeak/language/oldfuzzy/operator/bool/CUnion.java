@@ -21,79 +21,76 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.oldfuzzy.operator.bool;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.oldfuzzy.CFuzzyValueMutable;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.oldfuzzy.IFuzzyValueMutable;
+import org.lightjason.agentspeak.language.oldfuzzy.operator.IFuzzyOperator;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 /**
- * immutable fuzzy value
+ * fuzzy-boolean disjunction / union
  */
-public final class CFuzzyValue<E extends Enum<?>> implements IFuzzyValue<E>
+public final class CUnion implements IFuzzyOperator<Boolean>
 {
-    /**
-     * value
-     */
-    private final E m_value;
-    /**
-     * fuzzy value
-     */
-    private final Number m_fuzzy;
 
-    /**
-     * ctor
-     *
-     * @param p_value value
-     * @param p_fuzzy fuzzy
-     */
-    public CFuzzyValue( @Nonnull final E p_value, @NonNull final Number p_fuzzy )
+    @Override
+    public Supplier<IFuzzyValueMutable<Boolean>> supplier()
     {
-        if ( !( p_fuzzy.doubleValue() >= 0 && p_fuzzy.doubleValue() <= 1 ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
-
-        m_fuzzy = p_fuzzy;
-        m_value = p_value;
+        return CUnion::factory;
     }
 
+    @Override
+    public BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    {
+        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
+    }
+
+    @Override
+    public BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
+    {
+        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
+    }
+
+    @Override
+    public Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    {
+        return IFuzzyValueMutable::immutable;
+    }
+
+    @Override
+    public Set<Characteristics> characteristics()
+    {
+        return Collections.emptySet();
+    }
+
+    @SafeVarargs
     @Nonnull
     @Override
-    public E get()
+    @SuppressWarnings( "varargs" )
+    public final IFuzzyValue<Boolean> result( @Nonnull final IFuzzyValue<Boolean>... p_values )
     {
-        return m_value;
-    }
-
-    @NonNull
-    @Override
-    public Number fuzzy()
-    {
-        return m_fuzzy;
-    }
-
-    @Override
-    public String toString()
-    {
-        return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
+        return Arrays.stream( p_values ).collect( this );
     }
 
     /**
-     * factory
+     * factory of the initialize value
      *
-     * @param p_value value
-     * @param p_fuzzy fuzzy value
      * @return fuzzy value
-     *
-     * @tparam N fuzzy type
      */
-    @Nonnull
-    public static <N extends Enum<?>> IFuzzyValue<N> of( @Nonnull final N p_value, @NonNull final Number p_fuzzy )
+    private static IFuzzyValueMutable<Boolean> factory()
     {
-        return new CFuzzyValue<>( p_value, p_fuzzy );
+        return CFuzzyValueMutable.of( false, 0 );
     }
 
 }
-

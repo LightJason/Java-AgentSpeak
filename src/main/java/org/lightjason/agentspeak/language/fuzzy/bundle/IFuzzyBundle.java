@@ -21,27 +21,45 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.bundle;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgentUpdateable;
+import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy value
- *
+ * interface of fuzzy bundle
  * @tparam T enum type
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public interface IFuzzyBundle extends IAgentUpdateable
 {
 
     /**
-     * returns the fuzzy number
+     * fuzzy set
      *
-     * @return fuzzy number
+     * @return fuzzy set
+     */
+    IFuzzySet<?> set();
+
+    /**
+     * membership function
+     *
+     * @return function
      */
     @NonNull
-    Number fuzzy();
+    IFuzzyMembership<?> membership();
+
+    /**
+     * defuzzification
+     *
+     * @return defuzzification
+     */
+    @Nonnull
+    IDefuzzification defuzzification();
 
 }

@@ -21,27 +21,45 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import java.util.function.Supplier;
-
 
 /**
- * fuzzy value
- *
- * @tparam T enum type
+ * fuzzy crisp
  */
-public interface IFuzzyValue<E extends Enum<?>> extends Supplier<E>
+public enum ECrisp implements IFuzzySet<ECrisp>
 {
+    FALSE( false ),
+    TRUE( true );
 
     /**
-     * returns the fuzzy number
-     *
-     * @return fuzzy number
+     * native type
      */
-    @NonNull
-    Number fuzzy();
+    private final Boolean m_value;
 
+    /**
+     * ctor
+     *
+     * @param p_value value
+     */
+    ECrisp( final boolean p_value )
+    {
+        m_value = p_value;
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
+    {
+        return (V) m_value;
+    }
+
+    @Override
+    public ECrisp get()
+    {
+        return this;
+    }
 }
