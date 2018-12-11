@@ -94,7 +94,7 @@ public final class CBinaryExpression implements IBinaryExpression
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

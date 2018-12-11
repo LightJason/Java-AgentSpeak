@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -85,10 +84,10 @@ public final class CVariableUnify extends CDefaultUnify
                                                        );
 
         if ( l_variables.size() != m_variablenumber )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         CCommon.updatecontext( p_context, l_variables.stream() );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Nonnull

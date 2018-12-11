@@ -76,7 +76,7 @@ public final class CUnaryExpression implements IUnaryExpression
         final List<ITerm> l_return = CCommon.argumentlist();
 
         if ( !m_element.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 1 )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         p_return.add(
             CRawTerm.of(
@@ -84,7 +84,7 @@ public final class CUnaryExpression implements IUnaryExpression
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Nonnull
