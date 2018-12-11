@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.fuzzy.bundle;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgentUpdateable;
-import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.IDefuzzification;
 import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 

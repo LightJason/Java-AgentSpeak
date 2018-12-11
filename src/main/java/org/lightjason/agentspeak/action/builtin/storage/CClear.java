@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.storage;
 
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -38,8 +37,7 @@ import java.util.stream.Stream;
 /**
  * removes all elements of the storage.
  * The action removes all elements of the storage
- * except the elements wich are forbidden, the action
- * never fails
+ * except the elements wich are forbidden
  *
  * {@code .storage/clear();}
  */
@@ -90,14 +88,14 @@ public final class CClear extends IStorage
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_context.agent().storage().keySet().parallelStream()
                  .filter( i -> !m_resolver.apply( i ) )
                  .forEach( i -> p_context.agent().storage().remove( i ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

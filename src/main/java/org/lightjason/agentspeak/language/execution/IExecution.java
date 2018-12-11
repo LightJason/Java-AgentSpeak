@@ -46,10 +46,10 @@ public interface IExecution extends Serializable
      * @param p_context current execution context
      * @param p_argument parameter of the action
      * @param p_return return values
-     * @return fuzzy boolean
+     * @return fuzzy value stream
      */
     @Nonnull
-    IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+    Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     );
 

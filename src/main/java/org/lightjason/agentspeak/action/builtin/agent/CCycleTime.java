@@ -27,18 +27,18 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action to get cycle time.
  * The action returns the time between
  * the last cycle and the current time
- * in nanoseconds and fails never
+ * in nanoseconds
  *
  * {@code T = .agent/cycletime();}
  */
@@ -51,15 +51,15 @@ public final class CCycleTime extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(
                 System.nanoTime() - p_context.agent().cycletime()
             )
         );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

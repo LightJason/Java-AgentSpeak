@@ -37,7 +37,7 @@ import java.util.List;
  * returns the neighbors of a vertex of each graph instance.
  * The actions returns a list of neighbors of a vertex for
  * each graph argument, the first argument is the vertex,
- * all other graphs, the action never fails
+ * all other graphs
  *
  * {@code [N1|N2] = .graph/neighborssingle( Vertex, Graph1, Graph2 );}
  */

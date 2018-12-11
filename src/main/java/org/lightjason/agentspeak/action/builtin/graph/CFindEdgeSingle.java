@@ -35,8 +35,7 @@ import java.util.List;
  * returns an edge between vertices for each graph instance.
  * The action returns an edge between two vertices,
  * the first two arguments are vertices, all other arguments
- * are graphs, returning values are edges of each graph instance,
- * the action never fails
+ * are graphs, returning values are edges of each graph instance
  *
  * {@code [E1|E2|E3] = .graph/findedgesingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */

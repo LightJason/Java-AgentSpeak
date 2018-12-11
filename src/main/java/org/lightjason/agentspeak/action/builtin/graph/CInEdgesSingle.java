@@ -38,7 +38,7 @@ import java.util.List;
  * returns incomming edges of a vertex of each graph instance.
  * The actions returns a list incoming edges of a vertex for
  * each graph instance, the first argument is the vertex, all
- * other graphs, the action never fails
+ * other graphs
  *
  * {@code [OE1|OE2] = .graph/inedgessingle( Vertex, Graph1, Graph2 );}
  */

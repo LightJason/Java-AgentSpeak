@@ -38,13 +38,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * creates a hashmap.
  * Returns an empty hashmap (key-value pair) and
- * optional arguments must be even and it will create a key-value structure, the
- * action fails on an odd number of arguments except zero only
+ * optional arguments must be even and it will create a key-value structure
  *
  * {@code M = .collection/map/create();}
  */
@@ -65,8 +65,8 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )
@@ -77,7 +77,7 @@ public final class CCreate extends IBuiltinAction
                    .forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
         p_return.add( CRawTerm.of( l_map ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

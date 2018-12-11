@@ -36,6 +36,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
  * (left-upper corner x- / y-postion, right-bottom corner
  * x- / y-position), all other arguments will used
  * as tuples with x- / y-position and will be checked
- * to the rectangle, the action fail on wrong input
+ * to the rectangle
  *
  * {@code [In1|In2] = .math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
  */
@@ -72,8 +73,8 @@ public final class CInRectangle extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -92,7 +93,7 @@ public final class CInRectangle extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

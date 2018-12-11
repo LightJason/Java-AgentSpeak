@@ -34,8 +34,7 @@ import java.util.List;
 /**
  * returns the number neighbors of each vertices of a single graph instance.
  * The actions returns the number of neighbors of each vertices for a single
- * graph, the first argument is the graph, all other arguments are vertices,
- * the action never fails
+ * graph, the first argument is the graph, all other arguments are vertices
  *
  * {@code [C1|C2] = .graph/neighborscountmultiple( Graph, Vertex1, Vertex2 );}
  */

@@ -28,21 +28,20 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * set a single element of a vector.
  * The first argument is the index,
  * the second argument the value and
- * all other arguments are vector objects,
- * the action never fails
+ * all other arguments are vector objects
  *
  * {@code .math/blas/vector/assign( 3, 5.3, Vector1, [Vector2, [Vector3]] );}
  */
@@ -70,8 +69,8 @@ public final class CSet extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -81,6 +80,6 @@ public final class CSet extends IBuiltinAction
                    .map( ITerm::<DoubleMatrix1D>raw )
                    .forEach( i -> i.setQuick( l_arguments.get( 0 ).<Number>raw().intValue(), l_arguments.get( 1 ).<Number>raw().doubleValue() ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

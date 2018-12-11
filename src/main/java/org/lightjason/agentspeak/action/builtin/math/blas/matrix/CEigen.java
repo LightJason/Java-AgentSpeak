@@ -30,19 +30,19 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * creates the real eigenvalues and eigenvectors of a matrix.
  * For each input matrix argument the eigen decomposition
  * is executed and two elements eigenvalues (as vector) and
- * eigenvectors (as matrix) are returned, the action never fails.
+ * eigenvectors (as matrix) are returned
  *
  * {@code [Values1|Vectors1|Values2|Vectors2] = .math/blas/matrix/eigen( Matrix1, Matrix2 );}
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
@@ -71,8 +71,8 @@ public final class CEigen extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
@@ -83,6 +83,6 @@ public final class CEigen extends IBuiltinAction
                    p_return.add( CRawTerm.of( i.getV() ) );
                } );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

@@ -70,8 +70,8 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_result = CCommon.argumentlist();
 
@@ -92,7 +92,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
         if ( l_assign.size() < l_flatresult.size() )
             l_assign.get( l_assign.size() - 1 ).<IVariable<Object>>term().set( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Override

@@ -31,12 +31,12 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,8 +44,7 @@ import java.util.List;
  * All input arguments will be converted to a
  * dense or sparse vector, so the arguments must be
  * lists of numbers, the last optional argument can be a string
- * with "dense | sparse" to create dense or sparse structures,
- * the action never fails
+ * with "dense | sparse" to create dense or sparse structures
  *
  * {@code [V1|V2] = .math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
  */
@@ -73,8 +72,8 @@ public final class CFromList extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final int l_limit;
         final EType l_type;
@@ -109,7 +108,7 @@ public final class CFromList extends IBuiltinAction
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

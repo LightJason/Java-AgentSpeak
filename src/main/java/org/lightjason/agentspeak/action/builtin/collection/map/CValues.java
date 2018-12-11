@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -37,12 +36,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns all values of the map.
  * Returns a list with all values of the argument
- * maps and fails never
+ * maps
  *
  * {@code L = .collection/map/values( Map1, Map2, Map3 );}
  */
@@ -70,8 +70,8 @@ public final class CValues extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are map references
         final List<?> l_result = CCommon.flatten( p_argument )
@@ -83,7 +83,7 @@ public final class CValues extends IBuiltinAction
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

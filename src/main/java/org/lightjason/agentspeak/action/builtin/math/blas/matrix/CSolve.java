@@ -32,12 +32,12 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -45,8 +45,7 @@ import java.util.List;
  * The action solve the equation \f$ A \cdot X = B \f$
  * for each input tuple, \f$ A \f$ is the first matrix argument
  * within the tuple and \f$ B \f$ the second, which can be a
- * matrix or vector, for each tuple the action returns \f$ X \f$,
- * the action never fails
+ * matrix or vector, for each tuple the action returns \f$ X \f$
  *
  * {@code [R1|R2] = .math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
  */
@@ -66,8 +65,8 @@ public final class CSolve extends IAlgebra
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument ),
@@ -77,7 +76,7 @@ public final class CSolve extends IAlgebra
             .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

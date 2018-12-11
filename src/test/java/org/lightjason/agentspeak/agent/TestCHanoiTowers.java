@@ -329,8 +329,8 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             return CFuzzyValue.of( true );
         }
@@ -362,8 +362,8 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             m_running.set( false );
@@ -398,8 +398,8 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
@@ -451,8 +451,8 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
@@ -496,8 +496,8 @@ public final class TestCHanoiTowers extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )

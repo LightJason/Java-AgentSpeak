@@ -39,7 +39,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -63,9 +62,9 @@ import java.util.stream.Stream;
  * defines the default costs, the ordering of
  * the arguments is completly independed, for each
  * graph two arguments will be returned, the
- * adjacency matrix and the node names and the action
- * never fails. The cost-map does not need an entry for each edge
- * non-existing edges have got on default zero costs with 1
+ * adjacency matrix and the node names. The cost-map does
+ * not need an entry for each edge non-existing edges have
+ * got on default zero costs with 1
  *
  * {@code
     [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
@@ -91,8 +90,8 @@ public final class CAdjacencyMatrix extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // --- filter parameters ---
         final EType l_type = CCommon.flatten( p_argument )
@@ -127,7 +126,7 @@ public final class CAdjacencyMatrix extends IBuiltinAction
                    p_return.add( CRawTerm.of( i.getRight() ) );
                } );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

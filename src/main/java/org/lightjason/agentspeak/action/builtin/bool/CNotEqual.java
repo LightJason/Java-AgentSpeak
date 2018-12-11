@@ -29,7 +29,7 @@ package org.lightjason.agentspeak.action.builtin.bool;
  * The actions checks the first argument
  * to all others arguments of unequality,
  * list structures won't be unflaten, but
- * elementwise compared, the action never fails.
+ * elementwise compared.
  * On number arguments not the value must equal, also
  * the type (double / integral) must be equal, so keep
  * in mind, that you use the correct number type on the argument input

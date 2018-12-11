@@ -34,8 +34,7 @@ import java.util.List;
 /**
  * returns the vertex degree of multiple graphs.
  * The action returns for a vertex as first
- * argument the degree on each graph argument,
- * the action never fails
+ * argument the degree on each graph argument
  *
  * {@code [D1|D2] = .graph/degree( Vertex, Graph1, Graph2 );}
  */

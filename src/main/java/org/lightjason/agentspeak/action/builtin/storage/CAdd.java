@@ -27,7 +27,6 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * adds or overwrites an element in the agent-storage.
  * The action adds all tuples into the storage, the arguments
- * are tuples of a name and any value, the action never fails
+ * are tuples of a name and any value
  *
  * {@code .storage/add( "foo", X, "bar", Y );}
  */
@@ -99,8 +98,8 @@ public final class CAdd extends IStorage
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
             p_argument.stream(),
@@ -108,7 +107,7 @@ public final class CAdd extends IStorage
             2
         ).forEach( i -> this.add( p_context.agent(), i.get( 0 ).<String>raw(), i.get( 1 ) ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

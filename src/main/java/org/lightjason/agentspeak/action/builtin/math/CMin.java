@@ -35,13 +35,13 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.OptionalDouble;
+import java.util.stream.Stream;
 
 
 /**
  * action for minimum.
  * The action calculates for all unflatten arguments
- * the minimum with \f$ min( x_0, x_1, \ldots, x_i ) \f$,
- * the action fails on wrong input
+ * the minimum with \f$ min( x_0, x_1, \ldots, x_i ) \f$
  *
  * {@code Max = .math/min( 2, 5, 7, [3, 2] );}
  */
@@ -61,8 +61,8 @@ public final class CMin extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final OptionalDouble l_value = CCommon.flatten( p_argument )
                                               .map( ITerm::<Number>raw )
@@ -73,6 +73,6 @@ public final class CMin extends IBuiltinAction
             return CFuzzyValue.of( false );
 
         p_return.add( CRawTerm.of( l_value.getAsDouble() ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

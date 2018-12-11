@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the opposit of each vertex and edge tuple of a single graph instance.
  * The action returns for the first graph argument and each following tuple
- * of vertex and edge the opposite, the action never fails
+ * of vertex and edge the opposite
  *
  * {@code [V1|V2] = .graph/oppositemultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */

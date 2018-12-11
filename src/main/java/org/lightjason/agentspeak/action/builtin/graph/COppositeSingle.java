@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the opposit of a vertex and edge of any graph instance.
  * The action returns the opposite vertex, the first argument is the vertex,
- * second the edge and any other the graphs, the action never fails
+ * second the edge and any other the graphs
  *
  * {@code [V1|V2] = .graph/oppositesingle( Vertex, Edge, Graph1, Graph2 );}
  */

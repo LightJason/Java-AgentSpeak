@@ -29,18 +29,18 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action for average.
- * The action calculates \f$ \frac{1}{i} \sum_{i} x_i \f$ over all arguments, action
- * fails never, but can throw a runtime exception
+ * The action calculates \f$ \frac{1}{i} \sum_{i} x_i \f$ over all arguments,
+ * but can throw a runtime exception
  *
  * {@code A = .math/average( 1, 3, 9, [10, [11, 12]] );}
  * @see https://en.wikipedia.org/wiki/Average
@@ -61,14 +61,14 @@ public final class CAverage extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()
                    .orElseThrow( () -> new CActionException( p_context ) )
         ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

@@ -28,19 +28,19 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action to replace all occurence within a string.
  * The action replaces the first argument with the second argument
  * on each string beginning at the third argument and returns
- * all replaced strings, the action never fails. The first argument
+ * all replaced strings. The first argument
  * of the action be defined as a regular expression
  *
  * {@code [A|B] = .string/replace( "search", "replace with", "this is a search string", "this is another string" );}
@@ -62,8 +62,8 @@ public final class CReplace extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final String l_search = p_argument.get( 0 ).<String>raw();
         final String l_replace = p_argument.get( 1 ).<String>raw();
@@ -74,7 +74,7 @@ public final class CReplace extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

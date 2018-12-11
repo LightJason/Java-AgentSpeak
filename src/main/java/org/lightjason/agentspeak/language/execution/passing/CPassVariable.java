@@ -62,8 +62,8 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return )
     {
         CCommon.replacebycontext( p_context, Arrays.stream( m_value ) )
                .map( ITerm::raw )

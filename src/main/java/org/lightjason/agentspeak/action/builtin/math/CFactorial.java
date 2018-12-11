@@ -29,18 +29,18 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action for calculating factorial.
  * Creates the factorial \f$ ! x_i \f$ for all
- * unflattern arguments and the action fails never
+ * unflattern arguments
  *
  * {@code [A|B|C|D|E] = .math/factorial( 5, [[1,2], 3,4]);}
  * @see https://en.wikipedia.org/wiki/Factorial
@@ -61,8 +61,8 @@ public final class CFactorial extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
@@ -71,7 +71,8 @@ public final class CFactorial extends IBuiltinAction
                .map( CombinatoricsUtils::factorial )
                .map( CRawTerm::of )
                .forEach( p_return::add );
-        return CFuzzyValue.of( true );
+
+        return Stream.of();
     }
 
 }

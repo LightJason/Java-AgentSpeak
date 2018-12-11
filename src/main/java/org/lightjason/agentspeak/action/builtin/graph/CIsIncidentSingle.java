@@ -34,8 +34,7 @@ import java.util.List;
 /**
  * checks if a vertex and an edge incident for each graph instance.
  * The actions checks for the first vertex argument and the second
- * egde argument if both are incident on each graph instance, the
- * action never fails
+ * egde argument if both are incident on each graph instance
  *
  * {@code [B1|B2] = .graph/isincidentsingle( Vertex, Edge, Graph1, Graph2 );}
  */

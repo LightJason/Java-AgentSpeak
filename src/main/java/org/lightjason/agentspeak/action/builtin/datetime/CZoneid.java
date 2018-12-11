@@ -36,8 +36,7 @@ import java.util.List;
  * The action returns the zone-id
  * of a parsed string or date-time object,
  * if the string is empty or "now" the current
- * date-time is used, the action fails on
- * wrong input
+ * date-time is used
  *
  * {@code ZoneID = .datetime/zoneid( "now" );}
  */

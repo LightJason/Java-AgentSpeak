@@ -37,7 +37,7 @@ import java.util.List;
  * returns all edges of all vertex tuples for a single graph instance.
  * The first argument is a graph instance and all other arguments are tuples
  * of vertices, for each tuple a list of all edges between the vertices is
- * returned, the action never fails
+ * returned
  *
  * {@code [L1|L2] = .graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] );}
  */

@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks if a vertex is successor of another vertex of each graph instance.
  * The action checks for the first vertex argument that the second vertex
- * argument is successor within the given graph instances, the action never fails
+ * argument is successor within the given graph instances
  *
  * {@code [B1|B2|B3] = .graph/issuccessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */

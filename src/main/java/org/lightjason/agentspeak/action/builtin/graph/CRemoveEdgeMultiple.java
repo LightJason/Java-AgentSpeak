@@ -34,8 +34,7 @@ import java.util.List;
  * removes edges of any graph instance.
  * The action removes any edge of a single
  * graph instace, the first argument is the
- * graph all other arguments are edges, the
- * action never fails
+ * graph all other arguments are edges
  *
  * {@code .graph/removeedgemultiple( Graph, Edge1, Edge2 );}
  */

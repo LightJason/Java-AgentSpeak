@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -37,13 +36,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
  * action for index of maximum.
  * The action takes of the given unflatten input the maximum and
- * returns the index within the unflatten argument list, the
- * action never fails
+ * returns the index within the unflatten argument list
  *
  * {@code MaxIndex = .math/maxindex( 5, 6, [7,8, [1,2,3]] );}
  */
@@ -63,8 +62,8 @@ public final class CMaxIndex extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_list = CCommon.flatten( p_argument )
                                            .map( ITerm::<Number>raw )
@@ -81,6 +80,6 @@ public final class CMaxIndex extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

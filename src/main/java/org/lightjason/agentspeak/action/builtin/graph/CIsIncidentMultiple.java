@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks if a vertex and edge tuple is incident for a single graph instance.
  * The first argument is a graph instance and each tuple of vertex and edge
- * will be checked for incident, the action never fails
+ * will be checked for incident
  *
  * {@code [B1|B2] = .graph/isincidentmultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */

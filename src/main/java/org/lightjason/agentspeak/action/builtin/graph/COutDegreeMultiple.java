@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the out-degree of each vertex of a single graph instance.
  * The action returns for a graph instance as first argument the
- * out-degree of each vertex, the action never fails
+ * out-degree of each vertex
  *
  * {@code [D1|D2] = .graph/outdegreemultiple( Graph, Vertex1, Vertex2 );}
  */

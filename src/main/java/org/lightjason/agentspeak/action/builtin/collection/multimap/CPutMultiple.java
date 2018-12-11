@@ -34,8 +34,7 @@ import java.util.Objects;
 /**
  * adds all elements to a single multimap argument.
  * First argument is a multimap and all other arguments
- * are key-value pairs, the action fails on wrong
- * input number
+ * are key-value pairs
  *
  * {@code .collection/multimap/putmultiple( MultiMap, Key1, Value1, [Key2, Value2] );}
  */

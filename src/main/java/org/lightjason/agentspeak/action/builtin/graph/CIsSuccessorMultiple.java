@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks all vertex tuples if the first part the successor of the second on a single graph instance.
  * The action checks for the first graph argument if the first part of all vertex tuples
- * a successor of the second part, the action never fails
+ * a successor of the second part
  *
  * {@code [B1|B2|B3] = .graph/issuccessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */

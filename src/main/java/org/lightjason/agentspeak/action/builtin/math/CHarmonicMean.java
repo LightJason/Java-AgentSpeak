@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -40,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * action for harmonic mean.
  * The action calculates \f$ \frac{i}{\sum_{i} \frac{1}{x_i}} \f$
- * over all unflatten arguments, action fails never
+ * over all unflatten arguments
  *
  * {@code G = .math/harmonicmean( 1, 3, 9, [10, [11, 12]] );}
  * @see https://en.wikipedia.org/wiki/Average
@@ -61,8 +60,8 @@ public final class CHarmonicMean extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(
@@ -76,7 +75,7 @@ public final class CHarmonicMean extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 

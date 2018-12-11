@@ -145,8 +145,8 @@ public final class CMethodAction extends IBaseAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         try
@@ -183,14 +183,14 @@ public final class CMethodAction extends IBaseAction
      * @return execution return
      */
     @Nonnull
-    private static IFuzzyValue<Boolean> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
+    private static Stream<IFuzzyValue<?>> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
     {
         // void result of the execution
         if ( Objects.isNull( p_result ) || void.class.equals( p_result.getClass() ) )
-            return CFuzzyValue.of( true );
+            return Stream.of();
 
         // otherwise object is returned
         p_return.add( CRawTerm.of( p_result ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

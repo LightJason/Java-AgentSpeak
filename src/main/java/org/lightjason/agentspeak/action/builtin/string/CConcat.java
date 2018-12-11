@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -36,12 +35,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * action to concat / join all strings.
  * All string arguments will be join to a single
- * result, the action never fails
+ * result
  *
  * {@code S = .string/concat("A", "B", "C");}
  */
@@ -61,8 +61,8 @@ public final class CConcat extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument )
@@ -70,7 +70,7 @@ public final class CConcat extends IBuiltinAction
                    .map( i -> i.raw().toString() )
                    .collect( Collectors.joining() )
         ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

@@ -38,8 +38,7 @@ import java.util.List;
  * The action returns a list of edges between two vertices
  * of each graph instance, the first two
  * arguments are vertices, all other arguments
- * are graphs and return values are lists,
- * the action never fails
+ * are graphs and return values are lists
  *
  * {@code [L1|L2] = .graph/edgelist( Vertex1, Vertex2, Graph1, Graph2 );}
  */

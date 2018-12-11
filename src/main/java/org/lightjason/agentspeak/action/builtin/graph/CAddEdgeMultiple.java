@@ -36,7 +36,7 @@ import java.util.List;
  * argument is the graph reference, and all other triples
  * are the edges, the first argument of the triple is the
  * edge identifier, the second the start vertex, and the third
- * the end vertex, the action never fails
+ * the end vertex
  *
  * {@code .graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 );}
  */

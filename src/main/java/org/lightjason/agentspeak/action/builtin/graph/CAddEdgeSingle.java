@@ -34,8 +34,7 @@ import java.util.List;
  * adds a single edge to the multiple graph.
  * The action adds to each graph the first triple
  * (edge identifier, start vertex, end vertex)
- * to all other arguments are graphs, the action
- * never fails
+ * to all other arguments are graphs
  *
  * {@code .graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 );}
  */

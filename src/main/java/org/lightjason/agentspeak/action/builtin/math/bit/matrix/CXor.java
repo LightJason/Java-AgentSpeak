@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
  * The action runs the logical xor operator, the first
  * argument is the bit matrix, that is combined with
  * all other bit matrices, so \f$ m_i = m_i \text{ ^ } m_1 \f$
- * is performed, the action never fails
+ * is performed
  *
  * {@code .math/bit/matrix/xor( Matrix, Matrix1, Matrix2 );}
  */

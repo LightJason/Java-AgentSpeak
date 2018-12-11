@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * remove an edge of any graph instance.
  * The action removes an edge aas first argument of
- * all graph arguments, the action never fails
+ * all graph arguments
  *
  * {@code .graph/removeedgesingle( Edge, Graph1, Graph2 );}
  */

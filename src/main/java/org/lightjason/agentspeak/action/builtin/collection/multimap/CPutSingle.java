@@ -35,7 +35,7 @@ import java.util.Objects;
  * adds an single element to multiple multimap arguments.
  * First argument is a key, second the value, all
  * other values are multimap references, the key-value pair
- * is added to all multimaps and the action never fails
+ * is added to all multimaps
  *
  * {@code .collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
  */

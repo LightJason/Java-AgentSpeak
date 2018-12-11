@@ -68,8 +68,8 @@ public final class CDecrement implements IUnary
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final IVariable<Number> l_variable = CCommon.replacebycontext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( !l_variable.valueassignableto( Number.class ) )
@@ -77,7 +77,7 @@ public final class CDecrement implements IUnary
 
 
         l_variable.set( l_variable.<Number>raw().doubleValue() - 1 );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Nonnull

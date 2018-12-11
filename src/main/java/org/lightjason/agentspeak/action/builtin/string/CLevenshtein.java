@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -45,7 +46,7 @@ import java.util.stream.IntStream;
  * argument the distance will be calculated to the rest,
  * if there are numerical arguments the first will be used
  * for the inserting weight, second replace weight and third
- * for the delete weight, the action fails on wrong input
+ * for the delete weight
  *
  * {@code [A|B] = .string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
  * @see https://en.wikipedia.org/wiki/Levenshtein_distance
@@ -66,8 +67,8 @@ public final class CLevenshtein extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // extract string arguments
         final List<String> l_strings = CCommon.flatten( p_argument )
@@ -98,6 +99,6 @@ public final class CLevenshtein extends IBuiltinAction
                  .map( CRawTerm::of )
                  .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

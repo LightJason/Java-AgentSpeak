@@ -36,8 +36,7 @@ import java.util.List;
  * The action returns a date-time object based
  * on the string input arguments, the action
  * parses the string if the string is empty or
- * "now" the current date-time will returned, the
- * action never fails
+ * "now" the current date-time will returned
  *
  * {@code [O1|O2] = .datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" );}
  */

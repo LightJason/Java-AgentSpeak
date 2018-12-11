@@ -35,12 +35,12 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns percentile value.
- * gets percentile value in $[0,100]$ of the statistic,
- * the action fails on wrong input
+ * gets percentile value in $[0,100]$ of the statistic
  *
  * {@code [V1|V2|V3] = .math/statistic/multiplepercentile( Statistic, 50, [25, 75] );}
  */
@@ -67,8 +67,8 @@ public final class CMultiplePercentile extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
@@ -82,6 +82,6 @@ public final class CMultiplePercentile extends IBuiltinAction
                    .mapToObj( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

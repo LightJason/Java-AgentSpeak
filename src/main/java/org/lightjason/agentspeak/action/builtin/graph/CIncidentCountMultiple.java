@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the number of vertices that are incident to each edge of a single graph instance.
  * The action returns the number of verticies that are incident to each edge
- * for a single graph object, the action never fails
+ * for a single graph object
  *
  * {@code [C1|C2] = .graph/incidentcountmultiple( Graph, Edge1, Edge2 );}
  */

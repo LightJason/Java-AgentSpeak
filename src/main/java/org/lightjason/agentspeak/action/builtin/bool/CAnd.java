@@ -28,19 +28,19 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * combines all arguments to a single result with the and-operator.
  * This action uses the logical conjunction
  * to combine all logical arguments in a single
- * result, the action never fails
+ * result
  *
  * {@code R = .bool/and( Logical1, [Logical2, Logical3], Logical4 );}
  * @see https://en.wikipedia.org/wiki/Logical_conjunction
@@ -61,8 +61,8 @@ public final class CAnd extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.of(
@@ -70,7 +70,7 @@ public final class CAnd extends IBuiltinAction
                        .allMatch( ITerm::<Boolean>raw )
             )
         );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

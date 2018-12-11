@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * returns outgoing edges of any vertex of a single graph.
  * The action return for a single graph instance all outgoing edges
- * of each vertex, the action never fails
+ * of each vertex
  *
  * {@code [OE1|OE2] = .graph/outedgesmultiple( Graph, Vertex1, Vertex2 );}
  */

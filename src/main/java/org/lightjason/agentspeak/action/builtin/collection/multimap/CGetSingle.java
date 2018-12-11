@@ -38,7 +38,7 @@ import java.util.List;
  * returns a single element of all multimap elements.
  * The first argument will be used as key and all
  * arguments are multimap references, the key will be
- * returned of each multimap, the action fails never,
+ * returned of each multimap
  *
  * {@code [A|B|C] = .collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 );}
  */

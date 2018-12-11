@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * adds multiple vertices to a single graph.
  * The first argument is a graph instance, and
- * all other arguments are vertices, the action never
- * fails
+ * all other arguments are vertices
  *
  * {@code .graph/addvertexmultiple( Graph, Vertex1, Vertex2, [ Vertex3, Vertex4 ] );}
  */

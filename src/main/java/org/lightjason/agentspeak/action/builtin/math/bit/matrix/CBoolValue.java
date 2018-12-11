@@ -37,14 +37,14 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns for the index tuple a boolean value.
  * The action returns for the first argument, which
  * is a bit matrix, all boolean values for all
- * given index tuples (row / column), the action
- * fail on incorrect input
+ * given index tuples (row / column)
  *
  * {@code [B1|B2] = .math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] );}
  */
@@ -72,8 +72,8 @@ public final class CBoolValue extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
@@ -90,6 +90,6 @@ public final class CBoolValue extends IBuiltinAction
             .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

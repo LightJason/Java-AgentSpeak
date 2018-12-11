@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * removes a vertex of each graph instance.
  * The action removes of all graph instances the given
- * vertex, the action never fails
+ * vertex
  *
  * {@code .graph/removevertexsingle( Vertex, Graph1, Graph2 );}
  */

@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -36,12 +35,12 @@ import javax.annotation.Nonnull;
 import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action to encodes a string with Base64.
- * The base64 encoded version is created of each string argument,
- * the action never fails
+ * The base64 encoded version is created of each string argument
  *
  * {@code [A|B] = .string/base64encode( "Hello", "AgentSpeak(L++)" );}
  * @see https://en.wikipedia.org/wiki/Base64
@@ -62,8 +61,8 @@ public final class CBase64Encode extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
@@ -71,7 +70,7 @@ public final class CBase64Encode extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

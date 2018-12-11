@@ -36,7 +36,7 @@ import java.util.Map;
  * returns a single element of all map elements.
  * The first argument will be used as key and all
  * arguments are map references, the key will be
- * returned of each map, the action fails never,
+ * returned of each map
  *
  * {@code [A|B|C] = .collection/map/getsingle( "key", Map1, Map2, Map3 );}
  */

@@ -37,7 +37,7 @@ import java.util.List;
  * returns incomming edges of all vertices of a single graph instance.
  * The actions returns a list incoming edges of each vertex for
  * a single graph instance, the first argument is the graph instance, all
- * other arguments are vertices, the action never fails
+ * other arguments are vertices
  *
  * {@code [OE1|OE2] = .graph/inedgesmultiple( Graph, Vertex1, Vertex2 );}
  */

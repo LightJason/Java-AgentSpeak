@@ -34,8 +34,7 @@ import java.util.List;
 /**
  * returns of any edge the vertices of a single graph instance.
  * The actions returns for any edges the connected vertices
- * of a single graph instance,
- * the action never fails
+ * of a single graph instance
  *
  * {@code [V1|V2|V3|V4] = .graph/endpointmultiple( Graph, Edge1, Edge2 );}
  */

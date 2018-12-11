@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -36,12 +35,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * action to create a set.
  * The action creates a set and put all given arguments
- * inside the set, the action never fails
+ * inside the set
  *
  * {@code
     S = .collection/set/create( "1", [ 1, 2, 3] );
@@ -65,8 +65,8 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Set<?> l_return = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() );
 
@@ -78,6 +78,6 @@ public final class CCreate extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

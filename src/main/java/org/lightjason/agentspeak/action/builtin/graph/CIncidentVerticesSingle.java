@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * returns a list of incident vertices of an edge of each graph instance.
  * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * of each graph argument
  *
  * {@code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 );}
  */

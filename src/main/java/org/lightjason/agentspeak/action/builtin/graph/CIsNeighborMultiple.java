@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks all vertex tuple, if the first part is a neighbor of the second one of a single graph instance.
  * The action checks for the graph instance, that the first part of each vertex tuple is the neighbor
- * of the second part of the tuple, the action never fails
+ * of the second part of the tuple
  *
  * {@code [B1|B2|B3] = .graph/isneighbormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, vertex6]] );}
  */

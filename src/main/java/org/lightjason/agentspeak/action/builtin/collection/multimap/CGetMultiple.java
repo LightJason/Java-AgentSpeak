@@ -38,7 +38,7 @@ import java.util.List;
  * returns a multiple element of a single multimap.
  * The first argument is a multimap reference and all
  * other arguments are key values, the action
- * returns the value of each key and never fails
+ * returns the value of each key
  *
  * {@code [V1|V2] = .collection/multimap/getmultiple( MultiMap, "key1", "key2" );}
  */

@@ -37,12 +37,13 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns all values of the multimap.
  * Returns a list with all values of the argument
- * multimaps and fails never
+ * multimaps
  *
  * {@code L = .collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
  */
@@ -70,8 +71,8 @@ public final class CValues extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are map references
         final List<?> l_result = CCommon.flatten( p_argument )

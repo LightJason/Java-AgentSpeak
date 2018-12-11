@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the in-degree of a vertex of multiple graph instances.
  * The action returns for a vertex as first argument the in-degree
- * on each graph argument, the action fails on wrong input
+ * on each graph argument
  *
  * {@code [D1|D2] = .graph/indegreesingle( Vertex, Graph1, Graph2 );}
  */

@@ -27,17 +27,17 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.error.context.CActionException;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action for throwing a runtime execption.
- * The action fails never but throws a Java runtime exception on a boolean condition,
+ * The action throws a Java runtime exception on a boolean condition,
  * the first argument is a boolean value on true the exception is thrown, second argument
  * can be a string with a message. The exception must be catched outside the agent call method
  *
@@ -59,15 +59,15 @@ public final class CThrow extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( p_argument.get( 0 ).raw() )
             throw p_argument.size() == 1 ? new CActionException( p_context ) : new CActionException(
                 p_argument.get( 1 ).<String>raw(),
                 p_context
             );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

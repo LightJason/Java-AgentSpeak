@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
@@ -64,8 +65,8 @@ public final class CJsonList extends IBaseRest
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         try
         {
@@ -87,7 +88,7 @@ public final class CJsonList extends IBaseRest
                     )
                 );
 
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
         catch ( final IOException l_exception )
         {

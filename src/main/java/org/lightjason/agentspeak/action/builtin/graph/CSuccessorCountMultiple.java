@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the number of successors of each vertex of a single graph instance.
  * The action returns for the graph argument the number
- * of successors of the given vertices, the action never fails
+ * of successors of the given vertices
  *
  * {@code [C1|C2] = .graph/successorcountmultiple( Graph, Vertex1, Vertex2 );}
  */

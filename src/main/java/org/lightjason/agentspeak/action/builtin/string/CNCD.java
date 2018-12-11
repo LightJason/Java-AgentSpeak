@@ -35,6 +35,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
  * string, if the first argument matches a compression algorithm ( BZIP |
  * GZIP | DEFLATE | PACK200 | XZ ), it will be used for defining the compression,
  * the next string argument will be the input string and the distances will be
- * calculated between the second and all other arguments, the action fails on wrong input
+ * calculated between the second and all other arguments
  *
  * {@code [A|B] = .string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" );}
  * @see https://en.wikipedia.org/wiki/Normalized_compression_distance
@@ -64,8 +65,8 @@ public final class CNCD extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<String> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<String>raw )
@@ -99,6 +100,6 @@ public final class CNCD extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

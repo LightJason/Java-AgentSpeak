@@ -36,13 +36,14 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * action check if a point is within a triangle.
  * The first three tuple of arguments defines the triangle
  * coordinate (x- / y-position), all other tuples are the tuples
- * of x- / y-position, the action fails on wrong input
+ * of x- / y-position
  *
  * {@code [In1|In2] = .math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 );}
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
@@ -71,8 +72,8 @@ public final class CInTriangle extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -108,7 +109,7 @@ public final class CInTriangle extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

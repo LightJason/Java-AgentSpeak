@@ -38,14 +38,14 @@ import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * creates a list of tuples with elements of two lists.
  * Creates list of tupels of the first half arguments and the
  * second half arguments with \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$
- * and result \f$ \langle x_i, y_i \rangle \f$, the action fails
- * on an odd number of arguments
+ * and result \f$ \langle x_i, y_i \rangle \f$
  *
  * {@code T = .collection/list/zip( [1,3,5,7], [2,4,6,8] );}
  */
@@ -73,8 +73,8 @@ public final class CZip extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_arguments = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )
@@ -92,7 +92,7 @@ public final class CZip extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

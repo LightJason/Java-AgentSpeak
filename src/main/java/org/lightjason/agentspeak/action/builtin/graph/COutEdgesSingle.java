@@ -37,8 +37,7 @@ import java.util.List;
  * returns outgoing edges of a vertex of each graph.
  * The actions returns a list outgoing edges
  * of a vertex for each graph argument, the first
- * argument is the vertex, all other graphs,
- * the action never fails
+ * argument is the vertex, all other graphs
  *
  * {@code [OE1|OE2] = .graph/outedgessingle( Vertex, Graph1, Graph2 );}
  */

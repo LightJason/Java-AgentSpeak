@@ -34,7 +34,7 @@ import java.util.Map;
  * adds an single element to multiple map arguments.
  * First argument is a key, second the value, all
  * other values are map references, the key-value pair
- * is added to all maps and the action never fails
+ * is added to all maps
  *
  * {@code .collection/map/putsingle( "key", "value", Map1, Map2 );}
  */

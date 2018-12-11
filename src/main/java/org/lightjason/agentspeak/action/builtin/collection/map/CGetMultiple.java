@@ -36,7 +36,7 @@ import java.util.Map;
  * returns a multiple element of a single map.
  * The first argument is a map reference and all
  * other arguments are key values, the action
- * returns the value of each key and never fails
+ * returns the value of each key
  *
  * {@code [V1|V2] = .collection/map/getmultiple( Map, "key1", "key2" );}
  */

@@ -34,7 +34,7 @@ import java.util.List;
  * adds a vertex to the graph.
  * The action adds a vertex to the graph, so
  * the first argument is the vertex and all
- * other arguments are graphs, the action never fails
+ * other arguments are graphs
  *
  * {@code .graph/addvertex( Vertex, Graph1, [Graph2, [Graph3]] );}
  */
