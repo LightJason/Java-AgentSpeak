@@ -35,7 +35,7 @@ import java.util.OptionalDouble;
 
 
 /**
- * abstract class of defuzzification
+ * abstract class of defuzzification base structure
  *
  * @tparam E fuzzy set enum type
  */
@@ -50,8 +50,6 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      */
     protected final IFuzzyMembership<E> m_membership;
     /**
-     * ctor
-     *
      * fuzzy class fuzzy set class
      */
     protected final Class<? extends IFuzzySet<E>> m_class;

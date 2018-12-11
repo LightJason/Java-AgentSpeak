@@ -27,9 +27,9 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 
 /**
- * fuzzy boolean
+ * fuzzy crisp
  */
-public enum EBoolean implements IFuzzySet<EBoolean>
+public enum ECrisp implements IFuzzySet<ECrisp>
 {
     FALSE( false ),
     TRUE( true );
@@ -44,7 +44,7 @@ public enum EBoolean implements IFuzzySet<EBoolean>
      *
      * @param p_value value
      */
-    EBoolean( final boolean p_value )
+    ECrisp( final boolean p_value )
     {
         m_value = p_value;
     }
@@ -58,7 +58,7 @@ public enum EBoolean implements IFuzzySet<EBoolean>
     }
 
     @Override
-    public EBoolean get()
+    public ECrisp get()
     {
         return this;
     }

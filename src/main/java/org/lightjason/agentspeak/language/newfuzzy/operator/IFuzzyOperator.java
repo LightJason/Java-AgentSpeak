@@ -33,22 +33,7 @@ import java.util.stream.Stream;
  * interface of fuzzy set operator
  *
  * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
- * @see https://en.wikipedia.org/wiki/T-norm
  */
 public interface IFuzzyOperator extends BiFunction<IFuzzyValue<?>, IFuzzyValue<?>, Stream<IFuzzyValue<?>>>
 {
-
-    // https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
-    // https://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream/reduction.html
-    // https://de.wikipedia.org/wiki/T-Norm
-    // http://www.nicodubois.com/bois5.2.htm
-    // http://reinarz.org/dirk/fuzzykugel/fuzzy.html
-    // https://www.mathworks.com/help/fuzzy/fuzzy-inference-process.html
-
-    // http://www.lab4inf.fh-muenster.de/lab4inf/docs/Fuzzy_Logic_and_Control/03-FCL-Fuzzy_Inferenz.pdf
-    // https://www.informatik.uni-ulm.de/ni/Lehre/SS04/ProsemSC/ausarbeitungen/Bank.pdf
-    // https://www4.fh-swf.de/media/downloads/fbin/download_4/lehmann_1/internci2/ci2/skripte/fuzzy_3/Fuzzy-Tutorial_1_Gra_Leh30Teil.pdf
-
-    // https://www.sciencedirect.com/science/article/pii/S0019995879907307
-
 }

@@ -38,9 +38,7 @@ import java.util.stream.Stream;
 
 
 /**
- * test fuzzy sets
- *
- * Stream<IFuzzyValue> -> t-Norm (convert stream to single value) use collector or reduce -> defuzzification
+ * test fuzzy structure
  */
 public final class TestCFuzzyElement
 {

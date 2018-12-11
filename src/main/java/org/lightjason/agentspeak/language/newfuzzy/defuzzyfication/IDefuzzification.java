@@ -37,7 +37,10 @@ import java.util.stream.Stream;
  *
  * @tparam T fuzzy type
  * @tparam S agent type
+ *
  * @see https://en.wikipedia.org/wiki/Defuzzification
+ * @see https://profs.basu.ac.ir/khotanlou/upload_file/459.1778.file_ref.1938.2401.pdf
+ * @see http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
  */
 public interface IDefuzzification extends IAgentUpdateable
 {

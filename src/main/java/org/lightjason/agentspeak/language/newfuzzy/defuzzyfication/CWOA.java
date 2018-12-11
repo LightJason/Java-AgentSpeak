@@ -38,10 +38,6 @@ import java.util.stream.Stream;
  */
 public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
-    // http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
-    // https://arxiv.org/pdf/1612.00742.pdf
-    // https://pdfs.semanticscholar.org/b63b/91843261d8cb9b13f991f08bf77b16ef5e87.pdf
-
 
     /**
      * ctor
