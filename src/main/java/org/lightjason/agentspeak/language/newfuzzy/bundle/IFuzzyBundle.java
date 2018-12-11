@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.newfuzzy.bundle;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.IDefuzzification;
 import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
@@ -35,7 +36,7 @@ import javax.annotation.Nonnull;
  * interface of fuzzy bundle
  * @tparam T enum type
  */
-public interface IFuzzyBundle
+public interface IFuzzyBundle extends IAgentUpdateable
 {
 
     /**

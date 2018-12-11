@@ -21,41 +21,71 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgentUpdateable;
-import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
-import java.util.function.Function;
-import java.util.stream.Stream;
+import javax.annotation.Nonnull;
+import java.util.function.BiFunction;
 
 
 /**
- * membership function
+ * abstract class of defuzzification
  *
- * @tparam E fuzzy element type
+ * @tparam E fuzzy set enum type
  */
-public interface IFuzzyMembership extends IAgentUpdateable, Function<Number, Stream<IFuzzyValue<?>>>
+public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzzification<E>
 {
-    // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
+    /**
+     * ctor
+     *
+     * fuzzy class fuzzy set class
+     */
+    protected final Class<? extends IFuzzySet<E>> m_class;
+    /**
+     * function to define successful execution
+     */
+    private final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> m_success;
+
+
 
     /**
-     * returns a stream of fuzzy values which
-     * represent a successful structure
+     * ctor
      *
-     * @return fuzzy value stream
+     * @param p_class fuzzy set class
      */
-    @NonNull
-    Stream<IFuzzyValue<?>> success();
+    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class )
+    {
+        this( p_class, ( i, j ) -> i.ordinal() < j.getEnumConstants().length / 2 );
+    }
+
 
     /**
-     * returns a stream of fuzzy values which
-     * represent a fail structure
+     * ctor
      *
-     * @return fuzzy value stream
+     * @param p_class fuzzy set class
+     * @param p_success class of success execution
      */
-    @NonNull
-    Stream<IFuzzyValue<?>> fail();
+    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class,
+                                    @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    {
+        m_class = p_class;
+        m_success = p_success;
+    }
 
+
+    @Override
+    public final boolean success( @NonNull final E p_value )
+    {
+        return m_success.apply( p_value, m_class );
+    }
+
+    @Nonnull
+    @Override
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    {
+        return p_agent;
+    }
 }

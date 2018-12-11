@@ -21,41 +21,55 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
-import java.util.function.Function;
+import javax.annotation.Nonnull;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
 /**
- * membership function
+ * defuzzification with center-of-gravity
  *
- * @tparam E fuzzy element type
+ * @tparam E fuzzy set enum type
  */
-public interface IFuzzyMembership extends IAgentUpdateable, Function<Number, Stream<IFuzzyValue<?>>>
+public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
-    // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
+    /**
+     * ctor
+     *
+     * @param p_class fuzzy set class
+     */
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class )
+    {
+        super( p_class );
+    }
 
     /**
-     * returns a stream of fuzzy values which
-     * represent a successful structure
+     * ctor
      *
-     * @return fuzzy value stream
+     * @param p_class fuzzy set class
+     * @param p_success success function
      */
-    @NonNull
-    Stream<IFuzzyValue<?>> success();
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    {
+        super( p_class, p_success );
+    }
 
-    /**
-     * returns a stream of fuzzy values which
-     * represent a fail structure
-     *
-     * @return fuzzy value stream
-     */
-    @NonNull
-    Stream<IFuzzyValue<?>> fail();
+    @Nonnull
+    @Override
+    public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    {
+        final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
+        if ( l_values.length == 1 )
+            return m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
+
+
+        return null;
+    }
 
 }

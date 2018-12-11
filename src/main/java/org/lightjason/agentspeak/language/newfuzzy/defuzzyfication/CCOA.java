@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
@@ -37,20 +36,11 @@ import java.util.stream.Stream;
 /**
  * defuzzification with center-of-area
  */
-public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
+public final class CCOA<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
     // http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
     // https://arxiv.org/pdf/1612.00742.pdf
     // https://pdfs.semanticscholar.org/b63b/91843261d8cb9b13f991f08bf77b16ef5e87.pdf
-
-    /**
-     * fuzzy class
-     */
-    private final Class<? extends IFuzzySet<E>> m_class;
-    /**
-     * function to define successful execution
-     */
-    private final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> m_success;
 
 
     /**
@@ -60,7 +50,7 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
      */
     public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class )
     {
-        this( p_class, ( i, j ) -> i.ordinal() < j.getEnumConstants().length / 2 );
+        super( p_class );
     }
 
     /**
@@ -71,8 +61,7 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
      */
     public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
     {
-        m_class = p_class;
-        m_success = p_success;
+        super( p_class, p_success );
     }
 
     @Nonnull
@@ -81,7 +70,7 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         if ( l_values.length == 1 )
-            return m_class.getEnumConstants()[0].get();
+            return m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
 
         final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() + 1 ) ).sum()
                                 / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
@@ -89,16 +78,4 @@ public final class CCOA<E extends Enum<?>> implements IDefuzzification<E>
         return m_class.getEnumConstants()[l_result.intValue() - 1].get();
     }
 
-    @Override
-    public boolean success( @NonNull final E p_value )
-    {
-        return m_success.apply( p_value, m_class );
-    }
-
-    @Nonnull
-    @Override
-    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
-    {
-        return p_agent;
-    }
 }

@@ -21,41 +21,25 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.agent;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgentUpdateable;
-import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
-
-import java.util.function.Function;
-import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 
 /**
- * membership function
- *
- * @tparam E fuzzy element type
+ * interface of updatetable structure by agent
  */
-public interface IFuzzyMembership extends IAgentUpdateable, Function<Number, Stream<IFuzzyValue<?>>>
+public interface IAgentUpdateable
 {
-    // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
 
     /**
-     * returns a stream of fuzzy values which
-     * represent a successful structure
+     * update of the internal defuzzification
+     * structure on the agent-cycle
      *
-     * @return fuzzy value stream
+     * @param p_agent agent object
+     * @return agent reference
      */
-    @NonNull
-    Stream<IFuzzyValue<?>> success();
-
-    /**
-     * returns a stream of fuzzy values which
-     * represent a fail structure
-     *
-     * @return fuzzy value stream
-     */
-    @NonNull
-    Stream<IFuzzyValue<?>> fail();
+    @Nonnull
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }
