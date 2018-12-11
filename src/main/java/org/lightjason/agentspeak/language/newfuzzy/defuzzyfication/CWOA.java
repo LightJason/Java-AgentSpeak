@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -49,36 +49,28 @@ public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
      * @param p_class fuzzy set class
      * @param p_default fuzzy enum type
      */
-    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default )
+    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final Number p_default, @NonNull final IFuzzyMembership<E> p_membership )
     {
-        super( p_class, p_default );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_class fuzzy set class
-     * @param p_default fuzzy enum type
-     * @param p_success success function
-     */
-    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default,
-                 @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
-    {
-        super( p_class, p_default, p_success );
+        super( p_class, p_default, p_membership );
     }
 
     @Nonnull
     @Override
-    public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         if ( l_values.length < 2 )
-            return l_values.length == 0 ? m_default : m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
+            return l_values.length == 0 ? m_default.fuzzy() : l_values[0].fuzzy();
 
-        final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() ) ).sum()
-                                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
+        return Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() ) ).sum()
+               / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
+    }
 
-        return this.index2enum( l_result.intValue() );
+    @Override
+    public boolean success( @NonNull final Number p_value )
+    {
+        // scale the gravity on the maximum to the enum result
+        return p_value.doubleValue() / this.maximum().orElse( 1 ) >= 0.5;
     }
 
 }

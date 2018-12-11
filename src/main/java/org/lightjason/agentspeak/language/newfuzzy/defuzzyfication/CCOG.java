@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -41,65 +40,45 @@ import java.util.stream.Stream;
  */
 public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
-    /**
-     * fuzzy membership function
-     */
-    private final IFuzzyMembership<E> m_membership;
 
     /**
      * ctor
      *
      * @param p_class fuzzy set class
-     * @param p_default fuzzy enum type
+     * @param p_default default fuzzy value
+     * @param p_membership membership function
      */
-    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default, @NonNull final IFuzzyMembership<E> p_membership )
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final Number p_default, @NonNull final IFuzzyMembership<E> p_membership )
     {
-        super( p_class, p_default );
-        m_membership = p_membership;
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_class fuzzy set class
-     * @param p_default fuzzy enum type
-     * @param p_success success function
-     */
-    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success,
-                 @NonNull final IFuzzyMembership<E> p_membership )
-    {
-        super( p_class, p_default, p_success );
-        m_membership = p_membership;
+        super( p_class, p_default, p_membership );
     }
 
     @Nonnull
     @Override
-    public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         if ( l_values.length < 2 )
-            return l_values.length == 0 ? m_default : m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
+            return l_values.length == 0 ? m_default.fuzzy() : l_values[0].fuzzy();
 
-
-        // gets the maximum value of all membership functions
-        final Number l_max = Arrays.stream( m_class.getEnumConstants() )
-                                   .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
-                                                                  .mapToDouble( Number::doubleValue )
-                                                                  .max()
-                                                                  .orElse( 0 ) )
-                                   .max()
-                                   .orElse( 1 );
 
         // calculate the gravity of the given values
-        final Number l_result = Arrays.stream( l_values )
-                                      .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).mapToDouble( Number::doubleValue ).sum()
-                                                         * i.fuzzy().doubleValue() )
-                                      .sum()
-                                / Arrays.stream( l_values ).mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).count()
-                                                                              * i.fuzzy().doubleValue() ).sum();
+        return Arrays.stream( l_values )
+                     .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
+                                                    .mapToDouble( Number::doubleValue )
+                                                    .sum()
+                                        * i.fuzzy().doubleValue() )
+                     .sum()
+                    / Arrays.stream( l_values )
+                            .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).count()
+                                               * i.fuzzy().doubleValue() ).sum();
+    }
 
+    @Override
+    public boolean success( @NonNull final Number p_value )
+    {
         // scale the gravity on the maximum to the enum result
-        return this.index2enum( (int)( l_result.doubleValue() / l_max.doubleValue() * ( m_class.getEnumConstants().length - 1 ) ) );
+        return p_value.doubleValue() / this.maximum().orElse( 1 ) >= 0.5;
     }
 
 }

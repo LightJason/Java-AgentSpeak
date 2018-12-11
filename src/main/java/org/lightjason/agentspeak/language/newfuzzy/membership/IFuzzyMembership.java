@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.newfuzzy.membership;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

@@ -25,10 +25,13 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
-import java.util.function.BiFunction;
+import java.util.Arrays;
+import java.util.OptionalDouble;
 
 
 /**
@@ -36,22 +39,22 @@ import java.util.function.BiFunction;
  *
  * @tparam E fuzzy set enum type
  */
-public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzzification<E>
+public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzzification
 {
     /**
-     * default value on empty input
+     * default fuzzy value for numeric value
      */
-    protected final E m_default;
+    protected final IFuzzyValue m_default;
+    /**
+     * fuzzy membership function
+     */
+    protected final IFuzzyMembership<E> m_membership;
     /**
      * ctor
      *
      * fuzzy class fuzzy set class
      */
     protected final Class<? extends IFuzzySet<E>> m_class;
-    /**
-     * function to define successful execution
-     */
-    private final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> m_success;
 
 
 
@@ -59,28 +62,31 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      * ctor
      *
      * @param p_class fuzzy set class
-     * @param p_default fuzzy enum type
+     * @param p_default default fuzzy value
+     * @param p_membership membership function
      */
-    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default )
-    {
-        this( p_class, p_default, ( i, j ) -> i.ordinal() < j.getEnumConstants().length / 2 );
-    }
-
-
-    /**
-     * ctor
-     *
-     * @param p_class fuzzy set class
-     * @param p_default fuzzy enum type
-     * @param p_success class of success execution
-     */
-    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default,
-                                    @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final Number p_default,
+                                    @NonNull final IFuzzyMembership<E> p_membership )
     {
         m_class = p_class;
-        m_default = p_default;
-        m_success = p_success;
+        m_default = new IFuzzyValue()
+        {
+            @NonNull
+            @Override
+            public Number fuzzy()
+            {
+                return p_default;
+            }
+
+            @Override
+            public Object get()
+            {
+                return null;
+            }
+        };
+        m_membership = p_membership;
     }
+
 
     /**
      * returns the enum values based on an index
@@ -93,10 +99,19 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
         return m_class.getEnumConstants()[p_index].get();
     }
 
-    @Override
-    public final boolean success( @NonNull final E p_value )
+    /**
+     * returns the maximum of all memberships
+     *
+     * @return optional membership maximum value
+     */
+    protected final OptionalDouble maximum()
     {
-        return m_success.apply( p_value, m_class );
+        return Arrays.stream( m_class.getEnumConstants() )
+                                   .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
+                                                                  .mapToDouble( Number::doubleValue )
+                                                                  .max()
+                                                                  .orElse( 0 ) )
+                                   .max();
     }
 
     @Nonnull
