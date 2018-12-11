@@ -55,19 +55,19 @@ public final class CSleep extends IBuiltinAction
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            p_context.agent().sleep(
+        p_context.agent().sleep(
 
-                p_argument.size() > 0
-                ? p_argument.get( 0 ).<Number>raw().longValue()
-                : Long.MAX_VALUE,
+            p_argument.size() > 0
+            ? p_argument.get( 0 ).<Number>raw().longValue()
+            : Long.MAX_VALUE,
 
-                p_argument.size() > 1
-                ? p_argument.subList( 1, p_argument.size() ).stream()
-                : Stream.empty()
+            p_argument.size() > 1
+            ? p_argument.subList( 1, p_argument.size() ).stream()
+            : Stream.empty()
 
-            ).sleeping()
         );
+
+        return Stream.of();
     }
 
 }
