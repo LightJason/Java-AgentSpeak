@@ -88,7 +88,7 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      * @param p_index index
      * @return enum value
      */
-    protected final E indexvalue( int p_index )
+    protected final E index2enum( int p_index )
     {
         return m_class.getEnumConstants()[p_index].get();
     }

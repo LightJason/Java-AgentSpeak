@@ -78,7 +78,7 @@ public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
         final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() ) ).sum()
                                 / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
 
-        return this.indexvalue( l_result.intValue() );
+        return this.index2enum( l_result.intValue() );
     }
 
 }

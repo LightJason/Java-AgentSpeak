@@ -80,14 +80,26 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
         if ( l_values.length < 2 )
             return l_values.length == 0 ? m_default : m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
 
+
+        // gets the maximum value of all membership functions
+        final Number l_max = Arrays.stream( m_class.getEnumConstants() )
+                                   .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
+                                                                  .mapToDouble( Number::doubleValue )
+                                                                  .max()
+                                                                  .orElse( 0 ) )
+                                   .max()
+                                   .orElse( 1 );
+
+        // calculate the gravity of the given values
         final Number l_result = Arrays.stream( l_values )
-                                      .mapToDouble( i -> m_membership.range( this.indexvalue( i.get().ordinal() ) ).mapToDouble( Number::doubleValue ).sum()
+                                      .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).mapToDouble( Number::doubleValue ).sum()
                                                          * i.fuzzy().doubleValue() )
                                       .sum()
-                                / Arrays.stream( l_values ).mapToDouble( i -> m_membership.range( this.indexvalue( i.get().ordinal() ) ).count()
+                                / Arrays.stream( l_values ).mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).count()
                                                                               * i.fuzzy().doubleValue() ).sum();
 
-        return this.indexvalue( l_result.intValue() );
+        // scale the gravity on the maximum to the enum result
+        return this.index2enum( (int)( l_result.doubleValue() / l_max.doubleValue() * ( m_class.getEnumConstants().length - 1 ) ) );
     }
 
 }

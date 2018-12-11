@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
  * @tparam S agent type
  * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IDefuzzification<E extends Enum<?>>
+public interface IDefuzzification<E extends Enum<?>> extends IAgentUpdateable
 {
 
     /**
@@ -59,15 +60,6 @@ public interface IDefuzzification<E extends Enum<?>>
      */
     boolean success( @NonNull E p_value );
 
-    /**
-     * update of the internal defuzzification
-     * structure on the agent-cycle
-     *
-     * @param p_agent agent object
-     * @return agent reference
-     */
-    @Nonnull
-    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }
 

@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -67,7 +66,7 @@ public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
     @Override
     public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
-        return this.indexvalue(
+        return this.index2enum(
             p_value.reduce(
                 CFuzzyValue.of( m_default, 0 ),
                 ( i, j ) -> i.fuzzy().doubleValue() < j.fuzzy().doubleValue() ? j : i

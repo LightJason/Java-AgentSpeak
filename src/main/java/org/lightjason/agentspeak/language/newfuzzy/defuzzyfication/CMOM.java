@@ -9,7 +9,6 @@ import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 
@@ -52,7 +51,7 @@ public class CMOM<E extends Enum<?>> extends IBaseDefuzzification<E>
     public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
-        return this.indexvalue(
+        return this.index2enum(
             m_membership.apply(
                 Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum()
                 / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).average().orElse( 1 )

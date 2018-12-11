@@ -74,6 +74,7 @@ public final class TestCFuzzyElement
     @Test
     public void ccog()
     {
+        System.out.println(
         new CCOG<>(
             EThreeElement.class,
             EThreeElement.LOW,
@@ -131,6 +132,7 @@ public final class TestCFuzzyElement
                 CFuzzyValue.of( EThreeElement.MEDIUM, 0.2 ),
                 CFuzzyValue.of( EThreeElement.HIGH, 0.5 )
             )
+        )
         );
 
     }

@@ -41,6 +41,7 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
 {
     // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
     // http://www.nid.iitkgp.ernet.in/dsamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
+    // https://profs.basu.ac.ir/khotanlou/upload_file/459.1778.file_ref.1938.2401.pdf
 
     /**
      * returns a stream of fuzzy values which
