@@ -39,6 +39,10 @@ import java.util.function.BiFunction;
 public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzzification<E>
 {
     /**
+     * default value on empty input
+     */
+    protected final E m_default;
+    /**
      * ctor
      *
      * fuzzy class fuzzy set class
@@ -55,10 +59,11 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      * ctor
      *
      * @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
      */
-    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class )
+    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default )
     {
-        this( p_class, ( i, j ) -> i.ordinal() < j.getEnumConstants().length / 2 );
+        this( p_class, p_default, ( i, j ) -> i.ordinal() < j.getEnumConstants().length / 2 );
     }
 
 
@@ -66,15 +71,27 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      * ctor
      *
      * @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
      * @param p_success class of success execution
      */
-    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class,
+    protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default,
                                     @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
     {
         m_class = p_class;
+        m_default = p_default;
         m_success = p_success;
     }
 
+    /**
+     * returns the enum values based on an index
+     *
+     * @param p_index index
+     * @return enum value
+     */
+    protected final E indexvalue( int p_index )
+    {
+        return m_class.getEnumConstants()[p_index].get();
+    }
 
     @Override
     public final boolean success( @NonNull final E p_value )

@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.newfuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
@@ -34,23 +35,20 @@ import java.util.stream.Stream;
 
 
 /**
- * defuzzification with center-of-area
+ * defuzzification first-of-maxima-methods
+ *
+ * @tparam E
  */
-public final class CCOA<E extends Enum<?>> extends IBaseDefuzzification<E>
+public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
-    // http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
-    // https://arxiv.org/pdf/1612.00742.pdf
-    // https://pdfs.semanticscholar.org/b63b/91843261d8cb9b13f991f08bf77b16ef5e87.pdf
-
-
     /**
      * ctor
      *
      * @param p_class fuzzy set class
      */
-    public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class )
+    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default )
     {
-        super( p_class );
+        super( p_class, p_default );
     }
 
     /**
@@ -59,23 +57,21 @@ public final class CCOA<E extends Enum<?>> extends IBaseDefuzzification<E>
      * @param p_class fuzzy set class
      * @param p_success success function
      */
-    public CCOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default,
+                 @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
     {
-        super( p_class, p_success );
+        super( p_class, p_default, p_success );
     }
 
     @Nonnull
     @Override
     public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
-        final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
-        if ( l_values.length == 1 )
-            return m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
-
-        final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() + 1 ) ).sum()
-                                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
-
-        return m_class.getEnumConstants()[l_result.intValue() - 1].get();
+        return this.indexvalue(
+            p_value.reduce(
+                CFuzzyValue.of( m_default, 0 ),
+                ( i, j ) -> i.fuzzy().doubleValue() < j.fuzzy().doubleValue() ? j : i
+            ).get().ordinal()
+        );
     }
-
 }

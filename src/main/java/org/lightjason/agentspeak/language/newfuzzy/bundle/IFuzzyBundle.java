@@ -52,7 +52,7 @@ public interface IFuzzyBundle extends IAgentUpdateable
      * @return function
      */
     @NonNull
-    IFuzzyMembership membership();
+    IFuzzyMembership<?> membership();
 
     /**
      * defuzzification

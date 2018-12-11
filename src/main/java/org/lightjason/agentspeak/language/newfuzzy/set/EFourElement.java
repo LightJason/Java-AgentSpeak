@@ -27,7 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 
 /**
- * three element fuzzy with numerical representation
+ * four element fuzzy with numerical representation
  */
 public enum EFourElement implements IFuzzySet<EFourElement>
 {

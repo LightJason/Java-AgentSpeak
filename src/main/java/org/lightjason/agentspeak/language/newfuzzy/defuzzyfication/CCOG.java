@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -43,16 +44,17 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
     /**
      * fuzzy membership function
      */
-    private final IFuzzyMembership m_membership;
+    private final IFuzzyMembership<E> m_membership;
 
     /**
      * ctor
      *
      * @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
      */
-    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership p_membership )
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default, @NonNull final IFuzzyMembership<E> p_membership )
     {
-        super( p_class );
+        super( p_class, p_default );
         m_membership = p_membership;
     }
 
@@ -60,12 +62,13 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
      * ctor
      *
      * @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
      * @param p_success success function
      */
-    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success,
-                 @NonNull final IFuzzyMembership p_membership )
+    public CCOG( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default, @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success,
+                 @NonNull final IFuzzyMembership<E> p_membership )
     {
-        super( p_class, p_success );
+        super( p_class, p_default, p_success );
         m_membership = p_membership;
     }
 
@@ -74,11 +77,17 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
     public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
-        if ( l_values.length == 1 )
-            return m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
+        if ( l_values.length < 2 )
+            return l_values.length == 0 ? m_default : m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
 
+        final Number l_result = Arrays.stream( l_values )
+                                      .mapToDouble( i -> m_membership.range( this.indexvalue( i.get().ordinal() ) ).mapToDouble( Number::doubleValue ).sum()
+                                                         * i.fuzzy().doubleValue() )
+                                      .sum()
+                                / Arrays.stream( l_values ).mapToDouble( i -> m_membership.range( this.indexvalue( i.get().ordinal() ) ).count()
+                                                                              * i.fuzzy().doubleValue() ).sum();
 
-        return null;
+        return this.indexvalue( l_result.intValue() );
     }
 
 }

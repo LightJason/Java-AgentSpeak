@@ -21,51 +21,64 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.newfuzzy.membership;
+package org.lightjason.agentspeak.language.newfuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.newfuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
-import java.util.function.Function;
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
 /**
- * membership function
- *
- * @tparam E fuzzy element type
+ * defuzzification with weighted-average-method
  */
-public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, Function<Number, Stream<IFuzzyValue<?>>>
+public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
-    // https://de.wikipedia.org/wiki/Fuzzylogik#Ausschlie%C3%9Fende-ODER-Schaltung
-    // http://www.nid.iitkgp.ernet.in/dsamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
+    // http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
+    // https://arxiv.org/pdf/1612.00742.pdf
+    // https://pdfs.semanticscholar.org/b63b/91843261d8cb9b13f991f08bf77b16ef5e87.pdf
+
 
     /**
-     * returns a stream of fuzzy values which
-     * represent a successful structure
+     * ctor
      *
-     * @return fuzzy value stream
+     * @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
      */
-    @NonNull
-    Stream<IFuzzyValue<?>> success();
+    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default )
+    {
+        super( p_class, p_default );
+    }
 
     /**
-     * returns a stream of fuzzy values which
-     * represent a fail structure
+     * ctor
      *
-     * @return fuzzy value stream
+     * @param p_class fuzzy set class
+     * @param p_default fuzzy enum type
+     * @param p_success success function
      */
-    @NonNull
-    Stream<IFuzzyValue<?>> fail();
+    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final E p_default,
+                 @NonNull final BiFunction<E, Class<? extends IFuzzySet<E>>, Boolean> p_success )
+    {
+        super( p_class, p_default, p_success );
+    }
 
-    /**
-     * stream of numbers of the range positions
-     *
-     * @param p_value fuzzy enum value
-     * @return stream of positions
-     */
-    Stream<Number> range( @NonNull E p_value );
+    @Nonnull
+    @Override
+    public E defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    {
+        final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
+        if ( l_values.length < 2 )
+            return l_values.length == 0 ? m_default : m_class.getEnumConstants()[l_values[0].get().ordinal()].get();
+
+        final Number l_result = Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() ) ).sum()
+                                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
+
+        return this.indexvalue( l_result.intValue() );
+    }
 
 }

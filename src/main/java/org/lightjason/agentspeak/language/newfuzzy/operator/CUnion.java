@@ -40,7 +40,7 @@ public final class CUnion implements IFuzzyOperator
     /**
      * membership function
      */
-    private final IFuzzyMembership m_membership;
+    private final IFuzzyMembership<?> m_membership;
 
 
     /**
@@ -48,7 +48,7 @@ public final class CUnion implements IFuzzyOperator
      *
      * @param p_membership membership function
      */
-    public CUnion( @NonNull final IFuzzyMembership p_membership )
+    public CUnion( @NonNull final IFuzzyMembership<?> p_membership )
     {
         m_membership = p_membership;
     }

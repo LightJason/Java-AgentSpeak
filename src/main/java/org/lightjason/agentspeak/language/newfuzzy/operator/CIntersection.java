@@ -40,14 +40,14 @@ public final class CIntersection implements IFuzzyOperator
     /**
      * membership function
      */
-    private final IFuzzyMembership m_membership;
+    private final IFuzzyMembership<?> m_membership;
 
     /**
      * ctor
      *
      * @param p_membership membership function
      */
-    public CIntersection( @NonNull final IFuzzyMembership p_membership )
+    public CIntersection( @NonNull final IFuzzyMembership<?> p_membership )
     {
         m_membership = p_membership;
     }

@@ -23,11 +23,19 @@
 
 package org.lightjason.agentspeak.language.newfuzzy;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.CCOA;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.CWOA;
+import org.lightjason.agentspeak.language.newfuzzy.defuzzyfication.CCOG;
+import org.lightjason.agentspeak.language.newfuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.newfuzzy.set.EFourElement;
+import org.lightjason.agentspeak.language.newfuzzy.set.EThreeElement;
+import org.lightjason.agentspeak.language.newfuzzy.set.IFuzzySet;
 
+import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -40,7 +48,7 @@ public final class TestCFuzzyElement
 {
 
     /**
-     * test for defuzzification
+     * test of center-of-area
      */
     @Test
     public void coa()
@@ -48,7 +56,7 @@ public final class TestCFuzzyElement
         Assert.assertEquals(
             EFourElement.MEDIUMLOW,
 
-            new CCOA<>( EFourElement.class ).defuzzify(
+            new CWOA<>( EFourElement.class, EFourElement.HIGH ).defuzzify(
                 Stream.of(
                     CFuzzyValue.of( EFourElement.LOW, 0.6 ),
                     CFuzzyValue.of( EFourElement.MEDIUMLOW, 0.4 ),
@@ -59,5 +67,72 @@ public final class TestCFuzzyElement
         );
     }
 
+
+    /**
+     * test of center-of-gravizry
+     */
+    @Test
+    public void ccog()
+    {
+        new CCOG<>(
+            EThreeElement.class,
+            EThreeElement.LOW,
+            new IFuzzyMembership<>()
+            {
+                @NonNull
+                @Override
+                public Stream<IFuzzyValue<?>> success()
+                {
+                    return Stream.of();
+                }
+
+                @NonNull
+                @Override
+                public Stream<IFuzzyValue<?>> fail()
+                {
+                    return Stream.of();
+                }
+
+                @Override
+                public Stream<Number> range( @NonNull final EThreeElement p_value )
+                {
+                    switch ( p_value )
+                    {
+                        case LOW:
+                            return Stream.of( 0, 10, 20 );
+
+                        case MEDIUM:
+                            return Stream.of( 30, 40, 50, 60 );
+
+                        case HIGH:
+                            return Stream.of( 70, 80, 90, 100 );
+
+                        default:
+                            return Stream.of();
+                    }
+                }
+
+                @Override
+                public Stream<IFuzzyValue<?>> apply( final Number p_number )
+                {
+                    return Stream.of();
+                }
+
+                @Nonnull
+                @Override
+                public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+                {
+                    return p_agent;
+                }
+            }
+        ).defuzzify(
+            Stream.of(
+                CFuzzyValue.of( EThreeElement.LOW, 0.1 ),
+                CFuzzyValue.of( EThreeElement.MEDIUM, 0.2 ),
+                CFuzzyValue.of( EThreeElement.HIGH, 0.5 )
+            )
+        );
+
+    }
 
 }
