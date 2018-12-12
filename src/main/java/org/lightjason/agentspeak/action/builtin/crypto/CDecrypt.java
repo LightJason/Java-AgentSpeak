@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -84,11 +83,11 @@ public final class CDecrypt extends IBuiltinAction
             throw new CActionIllegalStateExcepton( p_context, l_exception );
         }
 
-        return CFuzzyValue.of(
-                   CCommon.flatten( p_argument.stream().skip( 1 ) )
-                          .map( ITerm::<String>raw )
-                          .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
-        );
+        return CCommon.flatten( p_argument.stream().skip( 1 ) )
+                      .map( ITerm::<String>raw )
+                      .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
+               ? Stream.of()
+               : p_context.agent().fuzzy().membership().fail();
     }
 
     /**

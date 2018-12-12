@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  * encrypting algorithm.
  * Encrypts a set of datasets, which can be complex objects, the first argument of the action
  * is the encrypting key and all other arguments are datasets, the action returns all encypted
- * datasets and fails if one encryption fails or on a wrong algorithm
+ * datasets and fails if one encryption fails
  *
  * {@code [Encypt1 | Encrypt2 | Encypt3] = .crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
@@ -81,14 +81,14 @@ public final class CEncrypt extends IBuiltinAction
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.of( false );
+            throw new CActionIllegalStateExcepton( p_context, l_exception );
         }
 
-        return CFuzzyValue.of(
-                   CCommon.flatten( p_argument.stream().skip( 1 ) )
-                          .map( ITerm::<Serializable>raw )
-                          .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
-        );
+        return CCommon.flatten( p_argument.stream().skip( 1 ) )
+                      .map( ITerm::<Serializable>raw )
+                      .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
+               ? Stream.of()
+               : p_context.agent().fuzzy().membership().fail();
     }
 
 
