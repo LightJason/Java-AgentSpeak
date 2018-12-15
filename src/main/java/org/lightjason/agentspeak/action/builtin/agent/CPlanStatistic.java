@@ -70,10 +70,9 @@ public final class CPlanStatistic extends IBuiltinAction
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            CCommon.flatten( p_argument )
-                   .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().trigger(), p_context.agent(), p_return ) )
-        );
+        return CCommon.flatten( p_argument ).allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().trigger(), p_context.agent(), p_return ) )
+            ? Stream.of()
+            : p_context.agent().fuzzy().membership().fail();
     }
 
     /**

@@ -71,13 +71,10 @@ public final class CRemovePlan extends IBuiltinAction
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            StreamUtils.windowed(
-                CCommon.flatten( p_argument ),
-                2,
-                2
-            ).allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
-        );
+        return StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
+                          .allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
+            ? Stream.of()
+            : p_context.agent().fuzzy().membership().fail();
     }
 
     /**
