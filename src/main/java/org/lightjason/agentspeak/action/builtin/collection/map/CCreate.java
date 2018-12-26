@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.collection.map;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CActionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -70,7 +71,7 @@ public final class CCreate extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.of( false );
+            throw new CActionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumberodd" ) );
 
         final Map<Object, Object> l_map = p_parallel ? new ConcurrentHashMap<>() : new HashMap<>();
         StreamUtils.windowed( l_arguments.stream(), 2, 2 )

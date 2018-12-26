@@ -29,6 +29,7 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -78,7 +79,7 @@ public final class CElementWise extends IBuiltinAction
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        if (!StreamUtils.windowed(
+        if ( !StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
             3,
                 3
@@ -107,7 +108,7 @@ public final class CElementWise extends IBuiltinAction
                 }
 
             } ) )
-            throw;
+                throw new CActionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 
         return Stream.of();
     }

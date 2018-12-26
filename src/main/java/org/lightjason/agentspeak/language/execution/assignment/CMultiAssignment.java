@@ -23,15 +23,12 @@
 
 package org.lightjason.agentspeak.language.execution.assignment;
 
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -83,7 +80,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
                     m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result )
                 )
         ) || l_result.isEmpty() )
-            throw new CActionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" ) );
+            throw new CActionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 
 
         // position matching on list index

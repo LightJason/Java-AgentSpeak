@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.collection;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CActionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -74,7 +75,7 @@ public abstract class IMapApplyMultiple<T> extends IBuiltinAction
 
         final List<ITerm> l_list = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_list.size() % 2 == 0 )
-            return CFuzzyValue.of( false );
+            throw new CActionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumbereven" ) );
 
         StreamUtils.windowed(
             l_list.stream()

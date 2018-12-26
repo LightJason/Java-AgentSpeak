@@ -70,7 +70,7 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Nonnull

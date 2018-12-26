@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.math.shape;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CActionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -81,7 +82,7 @@ public final class CInTriangle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 8 )
-            return CFuzzyValue.of( false );
+            throw new CActionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber", 8, l_arguments.size() ) );
 
         StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
                    .peek( i ->
