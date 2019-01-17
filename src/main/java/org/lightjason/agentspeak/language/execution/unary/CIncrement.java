@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentExcepti
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -70,11 +69,13 @@ public final class CIncrement implements IUnary
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final IVariable<Number> l_variable = CCommon.replacebycontext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( !l_variable.valueassignableto( Number.class ) )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "variable must contains a number" ) );
+            throw new CExecutionIllegealArgumentException(
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "variable must contains a number" ) );
 
         l_variable.set( l_variable.<Number>raw().doubleValue() + 1 );
         return Stream.of();

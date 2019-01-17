@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -63,7 +62,8 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.replacebycontext( p_context, Arrays.stream( m_value ) )
                .map( ITerm::raw )

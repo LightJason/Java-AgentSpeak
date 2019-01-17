@@ -78,7 +78,8 @@ public final class CBinaryExpression implements IBinaryExpression
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
@@ -108,7 +109,8 @@ public final class CBinaryExpression implements IBinaryExpression
      * @return execution result
      */
     private static boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final int l_arguments = p_return.size();
         final boolean l_result = p_context.agent().fuzzy().getValue().defuzzify(

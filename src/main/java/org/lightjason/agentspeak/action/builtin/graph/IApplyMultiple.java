@@ -82,12 +82,14 @@ public abstract class IApplyMultiple extends IBuiltinAction
 
     /**
      * apply call
+     *
      * @param p_parallel parallel execution
      * @param p_graph graph instance
      * @param p_window window list
      * @param p_return return list
      */
     protected abstract void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                   @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return );
+                                   @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    );
 
 }

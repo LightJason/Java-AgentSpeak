@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * and returns the value
  *
  * {@code [C1|C2] = .math/blas/matrix/condition(M1,M2);}
+ *
  * @see https://en.wikipedia.org/wiki/Condition_number
  */
 public final class CCondition extends IAlgebra
@@ -70,7 +71,8 @@ public final class CCondition extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // first argument must be a term with a matrix object
         // arguments are matrix objects

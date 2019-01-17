@@ -211,5 +211,4 @@ public abstract class IBaseVariable<T> implements IVariable<T>
         return MessageFormat.format( "{0}({1})", m_functor, Objects.nonNull( this.getvalue() ) ? this.getvalue() : "" );
     }
 
-
 }

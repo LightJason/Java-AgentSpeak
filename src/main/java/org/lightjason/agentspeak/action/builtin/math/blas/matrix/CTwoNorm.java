@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * two-norm and returns the value
  *
  * {@code [N1|N2] = .math/blas/matrix/twonorm(M1,M2);}
+ *
  * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
 public final class CTwoNorm extends IAlgebra
@@ -70,7 +71,8 @@ public final class CTwoNorm extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )

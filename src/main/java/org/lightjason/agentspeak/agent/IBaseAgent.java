@@ -109,7 +109,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * map with all existing plans and successful / fail runs
      */
     protected final Multimap<ITrigger, IPlanStatistic> m_plans = Multimaps.synchronizedMultimap(
-                                                                    TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
+        TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
     /**
      * nano seconds at the last cycle
      */
@@ -367,9 +367,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * create the plan executionlist with clearing internal structures
      *
-     * @note must be synchronized for avoid indeterministic trigger list
-     *
      * @return collection with execution plan and context
+     *
+     * @note must be synchronized for avoid indeterministic trigger list
      */
     @Nonnull
     private synchronized Collection<Pair<IPlanStatistic, IContext>> generateexecutionlist()

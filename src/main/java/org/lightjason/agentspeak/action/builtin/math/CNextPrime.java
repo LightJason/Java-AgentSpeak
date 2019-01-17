@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * the given argument value
  *
  * {@code [A|B|C] = .math/nextprime( [12, [144, 1096]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */
@@ -63,7 +64,8 @@ public final class CNextPrime extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

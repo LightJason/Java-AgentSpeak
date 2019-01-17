@@ -57,7 +57,8 @@ public final class CTheory extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(
@@ -66,7 +67,7 @@ public final class CTheory extends IBuiltinAction
                            .filter( i -> Objects.nonNull( i.raw() ) )
                            .map( ITerm::<String>raw )
                            .collect( Collectors.joining( "" ) ),
-                        p_context
+                    p_context
                 )
             )
         );

@@ -24,11 +24,11 @@
 package org.lightjason.agentspeak.action.builtin.string;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -47,6 +47,7 @@ import java.util.stream.Stream;
  * calculated between the second and all other arguments
  *
  * {@code [A|B] = .string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" );}
+ *
  * @see https://en.wikipedia.org/wiki/Normalized_compression_distance
  */
 public final class CNCD extends IBuiltinAction
@@ -66,7 +67,8 @@ public final class CNCD extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<String> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<String>raw )
@@ -89,7 +91,7 @@ public final class CNCD extends IBuiltinAction
 
         // check input arguments
         if ( l_arguments.size() < 2 + l_skip )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "at lest two arguments are needed" ) );
 
 
         // calculate distance

@@ -73,12 +73,13 @@ public final class CGetPlan extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         return StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
                           .allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
-            ? Stream.of()
-            : p_context.agent().fuzzy().membership().fail();
+               ? Stream.of()
+               : p_context.agent().fuzzy().membership().fail();
     }
 
     /**
@@ -91,7 +92,8 @@ public final class CGetPlan extends IBuiltinAction
      * @return flag to query plan successfully
      */
     private static boolean query( @Nonnull final ITrigger.EType p_trigger, @Nonnull final ITerm p_literal,
-                                  @Nonnull final IAgent<?> p_agent, @Nonnull final List<ITerm> p_return )
+                                  @Nonnull final IAgent<?> p_agent, @Nonnull final List<ITerm> p_return
+    )
     {
         final ILiteral l_literal;
         try

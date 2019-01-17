@@ -47,6 +47,7 @@ import java.util.stream.Stream;
  * a list with the symmetric difference \f$ (\mathbb{X} \setminus \mathbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) \f$
  *
  * {@code D = .collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
 public final class CSymmetricDifference extends IBuiltinAction
@@ -75,7 +76,8 @@ public final class CSymmetricDifference extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // create a multiset and counts the occurence of element -> on an odd number the element will be returned
         final Multiset<Object> l_count = ConcurrentHashMultiset.create();

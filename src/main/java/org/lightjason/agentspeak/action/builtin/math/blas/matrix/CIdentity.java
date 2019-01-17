@@ -47,8 +47,8 @@ import java.util.stream.Stream;
  * type dense or space (default sparse)
  *
  * {@code
-     [E1|E2] = .math/blas/matrix/identity( 2, 3 );
-     [E3|E4] = .math/blas/matrix/identity( 2, 3, "dense" );
+ * [E1|E2] = .math/blas/matrix/identity( 2, 3 );
+ * [E3|E4] = .math/blas/matrix/identity( 2, 3, "dense" );
  * }
  */
 public final class CIdentity extends IAlgebra
@@ -68,7 +68,8 @@ public final class CIdentity extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
@@ -82,7 +83,7 @@ public final class CIdentity extends IAlgebra
                .filter( i -> CCommon.isssignableto( i, Number.class ) )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
-               .map( i  -> generate( i, l_type ) )
+               .map( i -> generate( i, l_type ) )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
@@ -102,8 +103,10 @@ public final class CIdentity extends IAlgebra
     {
         switch ( p_type )
         {
-            case DENSE: return DoubleFactory2D.dense.identity( p_size );
-            default: return DoubleFactory2D.sparse.identity( p_size );
+            case DENSE:
+                return DoubleFactory2D.dense.identity( p_size );
+            default:
+                return DoubleFactory2D.sparse.identity( p_size );
         }
     }
 }

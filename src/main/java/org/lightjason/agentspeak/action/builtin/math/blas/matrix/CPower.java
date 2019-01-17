@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * input matrix
  *
  * {@code [M1|M2|M3] = .blas/matrix/power(3, M1, [M2, [M3]]);}
+ *
  * @see https://en.wikipedia.org/wiki/Matrix_exponential
  */
 public final class CPower extends IAlgebra
@@ -73,7 +74,8 @@ public final class CPower extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

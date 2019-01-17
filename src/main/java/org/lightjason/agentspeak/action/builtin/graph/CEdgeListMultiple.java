@@ -56,9 +56,10 @@ public final class CEdgeListMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ) .raw() ) );
+        final List<?> l_return = new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() ) );
 
         p_return.add(
             CRawTerm.of(

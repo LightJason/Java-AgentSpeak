@@ -57,7 +57,8 @@ public abstract class IBetween extends IBuiltinAction
      * ctor
      */
     protected IBetween()
-    {}
+    {
+    }
 
     @Nonnegative
     @Override
@@ -76,7 +77,7 @@ public abstract class IBetween extends IBuiltinAction
             StreamUtils.windowed(
                 CCommon.flatten( p_argument )
                        .map( ITerm::<ZonedDateTime>raw )
-                       .map( i ->  new DateTime( i.toInstant().toEpochMilli(), DateTimeZone.forTimeZone( TimeZone.getTimeZone( i.getZone() ) ) ) )
+                       .map( i -> new DateTime( i.toInstant().toEpochMilli(), DateTimeZone.forTimeZone( TimeZone.getTimeZone( i.getZone() ) ) ) )
                        .map( Instant::new ),
                 2,
                 2

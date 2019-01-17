@@ -54,6 +54,7 @@ import java.util.stream.Stream;
  * elements must be set and the last argument is the \f$ r_{const} \f$, the action fails on wrong input
  *
  * {@code .math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 );}
+ *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -75,7 +76,8 @@ public final class CEquationConstraint extends IConstraint
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -119,8 +121,8 @@ public final class CEquationConstraint extends IConstraint
 
                 // r_const value
                 l_rhs.get( l_rhs.size() - 1 )
-                     .<Number>raw()
-                     .doubleValue()
+                    .<Number>raw()
+                    .doubleValue()
 
             )
         );

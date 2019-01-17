@@ -104,7 +104,8 @@ public abstract class IBaseInstantiable implements IInstantiable
 
     /**
      * ctor
-     *  @param p_annotation annotation map
+     *
+     * @param p_annotation annotation map
      * @param p_execution execution elements
      * @param p_hash hash code
      */
@@ -195,7 +196,8 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"

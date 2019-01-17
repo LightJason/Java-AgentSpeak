@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * result
  *
  * {@code R = .bool/or( Logical1, [Logical2, Logical3], Logical4 );}
+ *
  * @see https://en.wikipedia.org/wiki/Logical_disjunction
  */
 public final class COr extends IBuiltinAction
@@ -62,7 +63,8 @@ public final class COr extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

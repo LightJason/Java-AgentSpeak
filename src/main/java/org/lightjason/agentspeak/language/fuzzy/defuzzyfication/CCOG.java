@@ -43,7 +43,8 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
 
     /**
      * ctor
-     *  @param p_class fuzzy set class
+     *
+     * @param p_class fuzzy set class
      * @param p_membership membership function
      * @param p_default default fuzzy value
      */
@@ -69,9 +70,9 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
                                                     .sum()
                                         * i.fuzzy().doubleValue() )
                      .sum()
-                    / Arrays.stream( l_values )
-                            .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).count()
-                                               * i.fuzzy().doubleValue() ).sum();
+               / Arrays.stream( l_values )
+                       .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) ).count()
+                                          * i.fuzzy().doubleValue() ).sum();
     }
 
     @Override

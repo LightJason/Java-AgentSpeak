@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * but can throw a runtime exception
  *
  * {@code A = .math/average( 1, 3, 9, [10, [11, 12]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CAverage extends IBuiltinAction
@@ -62,7 +63,8 @@ public final class CAverage extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add( CRawTerm.of(
             CCommon.flatten( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()

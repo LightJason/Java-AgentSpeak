@@ -63,7 +63,8 @@ public final class CRepair extends IBaseExecution<IExecution[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         return Arrays.stream( m_value )
                      .map( i -> execute( p_context, i ) )

@@ -55,17 +55,18 @@ public final class CPlanList extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_list = p_context.agent()
-                 .plans()
-                 .values()
-                 .stream()
-                 .map( i -> i.plan().trigger() )
-                 .sorted()
-                 .distinct()
-                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.type().toString(), i.literal() ) )
-                 .collect( Collectors.toList() );
+                                        .plans()
+                                        .values()
+                                        .stream()
+                                        .map( i -> i.plan().trigger() )
+                                        .sorted()
+                                        .distinct()
+                                        .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.type().toString(), i.literal() ) )
+                                        .collect( Collectors.toList() );
 
         p_return.add(
             CRawTerm.of(

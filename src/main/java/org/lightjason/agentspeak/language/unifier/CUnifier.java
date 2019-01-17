@@ -107,7 +107,8 @@ public final class CUnifier implements IUnifier
     @Nonnull
     @Override
     public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                       @Nonnull final IExecution p_expression, final boolean p_parallel )
+                                       @Nonnull final IExecution p_expression, final boolean p_parallel
+    )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
@@ -162,23 +163,23 @@ public final class CUnifier implements IUnifier
         // evalute expression result first, after that evaluate return arguments
         final List<ITerm> l_return = CCommon.argumentlist();
         final IFuzzyValue<Boolean> l_result =
-                            p_expression.execute(
-                                false,
-                                CCommon.updatecontext(
-                                    p_context.duplicate(),
-                                    p_variables.stream()
-                                ),
-                                Collections.emptyList(),
-                                l_return
-                            );
+            p_expression.execute(
+                false,
+                CCommon.updatecontext(
+                    p_context.duplicate(),
+                    p_variables.stream()
+                ),
+                Collections.emptyList(),
+                l_return
+            );
 
         return p_context.agent()
                         .fuzzy()
                         .getValue()
                         .defuzzify( l_result )
-                        && l_return.size() == 1
-                        && l_return.get( 0 ).<IRawTerm<?>>term().valueassignableto( Boolean.class )
-                        && l_return.get( 0 ).<Boolean>raw();
+               && l_return.size() == 1
+               && l_return.get( 0 ).<IRawTerm<?>>term().valueassignableto( Boolean.class )
+               && l_return.get( 0 ).<Boolean>raw();
     }
 
     /**

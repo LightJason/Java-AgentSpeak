@@ -70,7 +70,8 @@ public final class CUnaryExpression implements IUnaryExpression
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 

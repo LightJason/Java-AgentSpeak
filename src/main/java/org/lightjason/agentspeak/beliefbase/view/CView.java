@@ -93,7 +93,6 @@ public final class CView implements IView
     }
 
 
-
     // --- agent operations ------------------------------------------------------------------------------------------------------------------------------------
 
     @Nonnull
@@ -114,7 +113,6 @@ public final class CView implements IView
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 
     // --- operations ------------------------------------------------------------------------------------------------------------------------------------------
@@ -170,7 +168,7 @@ public final class CView implements IView
     public IView remove( @Nonnull final Stream<ILiteral> p_literal )
     {
         p_literal.parallel()
-            .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().remove( i.shallowcopysuffix() ) );
+                 .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().remove( i.shallowcopysuffix() ) );
         return this;
     }
 
@@ -185,7 +183,7 @@ public final class CView implements IView
     @Override
     public IView clear( @Nullable final IPath... p_path )
     {
-        if ( Objects.isNull( p_path )  || p_path.length == 0 )
+        if ( Objects.isNull( p_path ) || p_path.length == 0 )
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
@@ -201,7 +199,7 @@ public final class CView implements IView
                && ( p_path.size() == 1
                     ? m_beliefbase.containsView( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                        .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+                          .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
@@ -219,8 +217,6 @@ public final class CView implements IView
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
-
     // --- streaming access ------------------------------------------------------------------------------------------------------------------------------------
 
     @Nonnull
@@ -230,9 +226,9 @@ public final class CView implements IView
         // build path relative to this view
         final IPath l_path = this.path();
         return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
-               ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
-               : Arrays.stream( p_path )
-                       .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
+                 ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
+                 : Arrays.stream( p_path )
+                         .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
         ).map( i -> i.shallowcopy( l_path ) );
     }
 
@@ -243,13 +239,13 @@ public final class CView implements IView
         // build path relative to this view
         final IPath l_path = this.path();
         return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
-               ? Stream.concat(
-                   m_beliefbase.streamLiteral().filter( i -> i.negated() == p_negated ),
-                   m_beliefbase.streamView().flatMap( i -> i.stream( p_negated ) )
-               )
-               : Arrays.stream( p_path )
-                       .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
-                       .filter( j -> j.negated() == p_negated )
+                 ? Stream.concat(
+            m_beliefbase.streamLiteral().filter( i -> i.negated() == p_negated ),
+            m_beliefbase.streamView().flatMap( i -> i.stream( p_negated ) )
+        )
+                 : Arrays.stream( p_path )
+                         .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
+                         .filter( j -> j.negated() == p_negated )
         ).map( i -> i.shallowcopy( l_path ) );
     }
 
@@ -265,8 +261,8 @@ public final class CView implements IView
     public IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
     {
         Arrays.stream( p_paths )
-            .parallel()
-            .forEach( i -> this.walk( i, p_generator ) );
+              .parallel()
+              .forEach( i -> this.walk( i, p_generator ) );
         return this;
     }
 
@@ -290,12 +286,12 @@ public final class CView implements IView
         {
             // add is run here for avoid overwriting view with a new object reference
             l_view = m_beliefbase.viewOrDefault(
-                        l_root,
+                l_root,
 
-                        Objects.isNull( p_generator ) || p_generator.length == 0
-                        ? null
-                        : p_generator[0].apply( l_root, this )
-                     );
+                Objects.isNull( p_generator ) || p_generator.length == 0
+                ? null
+                : p_generator[0].apply( l_root, this )
+            );
 
             if ( Objects.isNull( l_view ) )
                 return Stream.empty();
@@ -323,7 +319,6 @@ public final class CView implements IView
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 
     // --- basic access ----------------------------------------------------------------------------------------------------------------------------------------

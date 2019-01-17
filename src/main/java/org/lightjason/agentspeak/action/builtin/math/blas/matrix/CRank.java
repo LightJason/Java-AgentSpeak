@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * For each input matrix the rank is calculated and returned
  *
  * {@code [R1|R2] = .math/blas/matrix/rank(M1,M2);}
+ *
  * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
  */
 public final class CRank extends IAlgebra
@@ -69,7 +70,8 @@ public final class CRank extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )

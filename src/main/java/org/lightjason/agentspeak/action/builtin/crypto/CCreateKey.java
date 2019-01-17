@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * The private key is set on RSA algorithm only
  *
  * {@code [PublicKey, PrivateKey] = .cypto/createkey( "AES | DES | RSA" );}
+ *
  * @see https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/Data_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/RSA_(cryptosystem)
@@ -67,7 +68,8 @@ public final class CCreateKey extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         try
         {

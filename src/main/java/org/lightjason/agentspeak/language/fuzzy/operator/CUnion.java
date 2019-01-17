@@ -62,7 +62,7 @@ public final class CUnion implements IFuzzyOperator
                 p_value1.fuzzy().doubleValue() + p_value2.fuzzy().doubleValue()
                 - p_value1.fuzzy().doubleValue() * p_value2.fuzzy().doubleValue()
                 - Math.min( p_value1.fuzzy().doubleValue(), p_value2.fuzzy().doubleValue() )
-                ) / Math.max( 1 - p_value1.fuzzy().doubleValue(), 1 - p_value2.fuzzy().doubleValue() )
+            ) / Math.max( 1 - p_value1.fuzzy().doubleValue(), 1 - p_value2.fuzzy().doubleValue() )
         );
 
     }

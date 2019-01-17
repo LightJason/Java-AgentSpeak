@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * input argument the rounded value
  *
  * {@code [I1|I2|I3] = .math/round( 5.5, [1.2, [2.7]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Rounding
  */
 public final class CRound extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CRound extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

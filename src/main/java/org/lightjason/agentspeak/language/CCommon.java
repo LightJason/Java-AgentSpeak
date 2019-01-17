@@ -199,7 +199,9 @@ public final class CCommon
      * @return context object
      */
     @Nonnull
-    public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+    public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent,
+                                        @Nonnull final Stream<IVariable<?>> p_variable
+    )
     {
         return new CContext(
             p_agent,
@@ -218,15 +220,17 @@ public final class CCommon
     /**
      * unifies trigger and creates the set of variables
      *
-     * @note target trigger literal must be cloned to avoid variable overwriting
      * @param p_unifier unifier
      * @param p_source input trigger (with values)
      * @param p_target trigger (of a plan / rule)
      * @return pair of valid unification and unified variables
+     *
+     * @note target trigger literal must be cloned to avoid variable overwriting
      */
     @Nonnull
     public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( @Nonnull final IUnifier p_unifier,
-                                                                 @Nonnull final ITrigger p_source, @Nonnull final ITrigger p_target )
+                                                                 @Nonnull final ITrigger p_source, @Nonnull final ITrigger p_target
+    )
     {
         // filter for avoid duplicated instantiation on non-existing values
         if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )
@@ -251,7 +255,8 @@ public final class CCommon
      */
     @Nonnull
     public static Pair<IPlanStatistic, IContext> instantiateplan( @Nonnull final IPlanStatistic p_planstatistic,
-                                                                  @Nonnull final IAgent<?> p_agent, @Nonnull final Set<IVariable<?>> p_variables )
+                                                                  @Nonnull final IAgent<?> p_agent, @Nonnull final Set<IVariable<?>> p_variables
+    )
     {
         return new ImmutablePair<>(
             p_planstatistic,
@@ -351,8 +356,9 @@ public final class CCommon
      * concat multiple streams
      *
      * @param p_streams streams
-     * @tparam T any value type
      * @return concated stream
+     *
+     * @tparam T any value type
      */
     @Nonnull
     @SafeVarargs
@@ -366,8 +372,9 @@ public final class CCommon
      * concat multiple streams
      *
      * @param p_streams streams
-     * @tparam T any value type
      * @return concated stream
+     *
+     * @tparam T any value type
      */
     @Nonnull
     @SafeVarargs
@@ -382,8 +389,9 @@ public final class CCommon
      *
      * @param p_stream stream
      * @param p_parallel parallel
-     * @tparam T stream elements
      * @return modified stream
+     *
+     * @tparam T stream elements
      */
     public static <T> Stream<T> parallelstream( final Stream<T> p_stream, final boolean p_parallel )
     {
@@ -401,9 +409,9 @@ public final class CCommon
     {
         return Collections.unmodifiableMap(
             flattenrecursive( p_literal.orderedvalues() )
-                  .filter( i -> i instanceof IVariable<?> )
-                  .map( i -> (IVariable<?>) i )
-                  .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
+                .filter( i -> i instanceof IVariable<?> )
+                .map( i -> (IVariable<?>) i )
+                .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
         );
     }
 
@@ -555,8 +563,9 @@ public final class CCommon
      * creates a deep-clone of an object
      *
      * @param p_object input object
-     * @tparam T object type
      * @return deep-copy
+     *
+     * @tparam T object type
      */
     @Nullable
     @SuppressWarnings( "unchecked" )
@@ -576,10 +585,12 @@ public final class CCommon
      * @param p_replaceweight replace weight
      * @param p_deleteweight delete weight
      * @return distance
+     *
      * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
      */
     public static double levenshtein( @Nonnull final String p_first, @Nonnull final String p_second, final double p_insertweight,
-                                      final double p_replaceweight, final double p_deleteweight )
+                                      final double p_replaceweight, final double p_deleteweight
+    )
     {
         // the array of distances
         double[] l_cost = IntStream.range( 0, p_first.length() + 1 ).mapToDouble( i -> i ).toArray();
@@ -645,6 +656,7 @@ public final class CCommon
      * @param p_compression compression algorithm
      * @param p_input input string
      * @return number of compression bytes
+     *
      * @warning counting stream returns the correct number of bytes after flushing
      */
     private static double compress( @Nonnull final ECompression p_compression, @Nonnull final String p_input )
@@ -682,16 +694,17 @@ public final class CCommon
          * enum names
          */
         private static final Set<String> ALGORITHMS = Collections.unmodifiableSet(
-                                                          Arrays.stream( ECompression.values() )
-                                                                .map( i -> i.name().toUpperCase( Locale.ROOT ) )
-                                                                .collect( Collectors.toSet() )
-                                                      );
+            Arrays.stream( ECompression.values() )
+                  .map( i -> i.name().toUpperCase( Locale.ROOT ) )
+                  .collect( Collectors.toSet() )
+        );
 
         /**
          * creates a compression stream
          *
          * @param p_datastream data-counting stream
          * @return compression output stream
+         *
          * @throws IOException throws on any io error
          */
         @Nonnull
@@ -699,17 +712,22 @@ public final class CCommon
         {
             switch ( this )
             {
-                case BZIP : return new BZip2CompressorOutputStream( p_datastream );
+                case BZIP:
+                    return new BZip2CompressorOutputStream( p_datastream );
 
-                case GZIP : return new GzipCompressorOutputStream( p_datastream );
+                case GZIP:
+                    return new GzipCompressorOutputStream( p_datastream );
 
-                case DEFLATE : return new DeflateCompressorOutputStream( p_datastream );
+                case DEFLATE:
+                    return new DeflateCompressorOutputStream( p_datastream );
 
-                case PACK200 : return new Pack200CompressorOutputStream( p_datastream );
+                case PACK200:
+                    return new Pack200CompressorOutputStream( p_datastream );
 
-                case XZ : return new XZCompressorOutputStream( p_datastream );
+                case XZ:
+                    return new XZCompressorOutputStream( p_datastream );
 
-                default :
+                default:
                     throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
             }
         }
@@ -739,6 +757,5 @@ public final class CCommon
         }
 
     }
-
 
 }

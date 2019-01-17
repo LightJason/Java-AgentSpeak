@@ -76,34 +76,35 @@ public final class CAddStatisticValue extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final double[] l_values = l_arguments.parallelStream()
-                                           .filter( i -> CCommon.isssignableto( i, Number.class ) )
-                                           .map( ITerm::<Number>raw )
-                                           .mapToDouble( Number::doubleValue ).toArray();
+                                             .filter( i -> CCommon.isssignableto( i, Number.class ) )
+                                             .map( ITerm::<Number>raw )
+                                             .mapToDouble( Number::doubleValue ).toArray();
 
         return CFuzzyValue.of(
             l_arguments.parallelStream()
-                   .filter( i -> CCommon.isssignableto( i, StatisticalSummary.class ) )
-                   .allMatch( i ->
-                   {
-
-                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
+                       .filter( i -> CCommon.isssignableto( i, StatisticalSummary.class ) )
+                       .allMatch( i ->
                        {
-                           Arrays.stream( l_values ).forEach( j -> i.<SummaryStatistics>raw().addValue( j ) );
-                           return true;
-                       }
 
-                       if ( CCommon.isssignableto( i, DescriptiveStatistics.class ) )
-                       {
-                           Arrays.stream( l_values ).forEach( j -> i.<DescriptiveStatistics>raw().addValue( j ) );
-                           return true;
-                       }
+                           if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
+                           {
+                               Arrays.stream( l_values ).forEach( j -> i.<SummaryStatistics>raw().addValue( j ) );
+                               return true;
+                           }
 
-                       return false;
-                   } )
+                           if ( CCommon.isssignableto( i, DescriptiveStatistics.class ) )
+                           {
+                               Arrays.stream( l_values ).forEach( j -> i.<DescriptiveStatistics>raw().addValue( j ) );
+                               return true;
+                           }
+
+                           return false;
+                       } )
         );
 
     }

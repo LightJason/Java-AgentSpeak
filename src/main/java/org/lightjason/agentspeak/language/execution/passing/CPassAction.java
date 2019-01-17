@@ -82,13 +82,14 @@ public final class CPassAction implements IExecution
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.argumentlist();
 
         if ( !CCommon.replacebycontext( p_context, Arrays.stream( m_arguments ) )
-               .flatMap( i -> innerexecution( i, p_parallel, p_context, p_argument, l_arguments ) )
-               .collect( p_context.agent().fuzzy().getKey() ).value() )
+                     .flatMap( i -> innerexecution( i, p_parallel, p_context, p_argument, l_arguments ) )
+                     .collect( p_context.agent().fuzzy().getKey() ).value() )
             return CFuzzyValue.of( false );
 
         final int l_returnsize = p_return.size();
@@ -117,7 +118,8 @@ public final class CPassAction implements IExecution
      */
     @Nonnull
     private static Stream<IFuzzyValue<Boolean>> innerexecution( final ITerm p_term, final boolean p_parallel, @Nonnull final IContext p_context,
-                                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // explicit check to null values because of unsetted / unbind variables
         if ( Objects.isNull( p_term.raw() ) || !CCommon.isssignableto( p_term, IExecution.class ) )
@@ -159,6 +161,7 @@ public final class CPassAction implements IExecution
             ".{0}{1}{2}",
             m_parallel ? "@" : "",
             m_execution,
-            m_arguments.length == 0 ? "" : "[" + StringUtils.join( m_arguments, ", " ) + "]" );
+            m_arguments.length == 0 ? "" : "[" + StringUtils.join( m_arguments, ", " ) + "]"
+        );
     }
 }

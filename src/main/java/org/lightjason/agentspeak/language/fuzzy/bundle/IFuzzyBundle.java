@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 
 /**
  * interface of fuzzy bundle
+ *
  * @tparam T enum type
  */
 public interface IFuzzyBundle extends IAgentUpdateable

@@ -24,11 +24,11 @@
 package org.lightjason.agentspeak.action.builtin.string;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -49,6 +49,7 @@ import java.util.stream.Stream;
  * for the delete weight
  *
  * {@code [A|B] = .string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
+ *
  * @see https://en.wikipedia.org/wiki/Levenshtein_distance
  */
 public final class CLevenshtein extends IBuiltinAction
@@ -68,25 +69,26 @@ public final class CLevenshtein extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // extract string arguments
         final List<String> l_strings = CCommon.flatten( p_argument )
-                                             .filter( i -> CCommon.isssignableto( i, String.class ) )
-                                             .map( ITerm::<String>raw )
-                                             .collect( Collectors.toList() );
+                                              .filter( i -> CCommon.isssignableto( i, String.class ) )
+                                              .map( ITerm::<String>raw )
+                                              .collect( Collectors.toList() );
 
         if ( l_strings.size() < 2 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "at lest two arguments are needed" ) );
 
 
         // create weight
         final List<Double> l_weights = CCommon.flatten( p_argument )
-                                                  .filter( i -> CCommon.isssignableto( i, Number.class ) )
-                                                  .map( ITerm::<Number>raw )
-                                                  .mapToDouble( Number::doubleValue )
-                                                  .boxed()
-                                                  .collect( Collectors.toList() );
+                                              .filter( i -> CCommon.isssignableto( i, Number.class ) )
+                                              .map( ITerm::<Number>raw )
+                                              .mapToDouble( Number::doubleValue )
+                                              .boxed()
+                                              .collect( Collectors.toList() );
 
         // if weights not set, set defaults
         IntStream.range( l_weights.size(), 3 ).forEach( i -> l_weights.add( 1.0 ) );

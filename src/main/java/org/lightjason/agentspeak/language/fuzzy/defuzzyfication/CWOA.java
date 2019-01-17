@@ -41,7 +41,8 @@ public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
 
     /**
      * ctor
-     *  @param p_class fuzzy set class
+     *
+     * @param p_class fuzzy set class
      * @param p_default fuzzy enum type
      */
     public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<E> p_default
@@ -58,7 +59,7 @@ public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
         if ( l_values.length < 2 )
             return l_values.length == 0 ? m_default.fuzzy() : l_values[0].fuzzy();
 
-        return Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy() .doubleValue() * ( i.get().ordinal() ) ).sum()
+        return Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() * ( i.get().ordinal() ) ).sum()
                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum();
     }
 

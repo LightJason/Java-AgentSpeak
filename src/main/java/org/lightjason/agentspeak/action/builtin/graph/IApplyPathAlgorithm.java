@@ -74,7 +74,8 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 3 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrong number of arguments" ) );
+            throw new CExecutionIllegealArgumentException(
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrong number of arguments" ) );
 
         final Map<Object, Number> l_weights = l_arguments.parallelStream()
                                                          .filter( i -> CCommon.isssignableto( i, Map.class ) )
@@ -94,14 +95,14 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
         final Function<Object, Number> l_weightfunction = e -> l_weights.getOrDefault( e, l_defaultvalue );
 
         final List<ITerm> l_vertices = StreamUtils.windowed( l_arguments.stream(), 2 )
-                                                   .filter( i -> !( CCommon.isssignableto( i.get( 0 ), String.class )
-                                                                 && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
-                                                                 && CCommon.isssignableto( i.get( 1 ), Number.class ) )
-                                                                 && !( CCommon.isssignableto( i.get( 0 ), Graph.class )
-                                                                 || CCommon.isssignableto( i.get( 1 ), Graph.class ) )
-                                                   )
-                                                   .findFirst()
-                                                   .orElseGet( Collections::emptyList );
+                                                  .filter( i -> !( CCommon.isssignableto( i.get( 0 ), String.class )
+                                                                   && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
+                                                                   && CCommon.isssignableto( i.get( 1 ), Number.class ) )
+                                                                && !( CCommon.isssignableto( i.get( 0 ), Graph.class )
+                                                                      || CCommon.isssignableto( i.get( 1 ), Graph.class ) )
+                                                  )
+                                                  .findFirst()
+                                                  .orElseGet( Collections::emptyList );
 
         if ( l_vertices.isEmpty() )
             throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
@@ -127,7 +128,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
      * @return result of action
      */
     protected abstract Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,
-                                     @Nonnull final Function<Object, Number> p_weightfunction );
-
+                                     @Nonnull final Function<Object, Number> p_weightfunction
+    );
 
 }

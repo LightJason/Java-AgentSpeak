@@ -49,6 +49,7 @@ import java.util.stream.Stream;
  * argument is the \f$ d \f$ value (constant) of the objective function
  *
  * {@code LP = .math/linearprogram/create(1,2, [3, [4,5]], 10);}
+ *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -77,7 +78,8 @@ public final class CCreate extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( i -> i.<Number>raw().doubleValue() )

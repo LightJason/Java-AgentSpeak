@@ -56,7 +56,8 @@ public abstract class IPlusMinus extends IBuiltinAction
      * ctor
      */
     protected IPlusMinus()
-    {}
+    {
+    }
 
     @Nonnegative
     @Override
@@ -68,14 +69,15 @@ public abstract class IPlusMinus extends IBuiltinAction
     @Nonnull
     @Override
     public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         switch ( l_arguments.get( 0 ).<String>raw().trim().toLowerCase( Locale.ROOT ) )
         {
 
-            case "minus" :
+            case "minus":
                 this.applyminus(
                     l_arguments.stream()
                                .skip( 2 )
@@ -88,7 +90,7 @@ public abstract class IPlusMinus extends IBuiltinAction
                 return CFuzzyValue.of( true );
 
 
-            case "plus" :
+            case "plus":
                 this.applyplus(
                     l_arguments.stream()
                                .skip( 2 )

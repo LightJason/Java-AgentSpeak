@@ -65,13 +65,14 @@ public final class CSize extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // any term type
         p_argument.stream()
-               .map( CSize::size )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+                  .map( CSize::size )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
 
         return Stream.of();
     }

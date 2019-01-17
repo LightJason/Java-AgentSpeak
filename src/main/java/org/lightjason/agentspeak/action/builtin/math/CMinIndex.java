@@ -63,7 +63,8 @@ public final class CMinIndex extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_list = CCommon.flatten( p_argument )
                                            .map( ITerm::<Number>raw )
@@ -74,9 +75,9 @@ public final class CMinIndex extends IBuiltinAction
         p_return.add(
             CRawTerm.of(
                 (double) IntStream.range( 0, l_list.size() )
-                                .parallel()
-                                .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
-                                .orElseThrow( () -> new CExecutionException( p_context ) )
+                                  .parallel()
+                                  .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
+                                  .orElseThrow( () -> new CExecutionException( p_context ) )
             )
         );
 

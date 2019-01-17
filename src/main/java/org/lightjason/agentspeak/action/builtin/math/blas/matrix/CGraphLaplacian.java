@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * is calculated and returned
  *
  * {@code [L1|L2] = .math/blas/matrix/graphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 );}
+ *
  * @see https://en.wikipedia.org/wiki/Laplacian_matrix
  */
 public final class CGraphLaplacian extends IAlgebra
@@ -73,7 +74,8 @@ public final class CGraphLaplacian extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )

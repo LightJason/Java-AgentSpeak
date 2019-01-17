@@ -30,7 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 /**
  * three element fuzzy with numerical representation
  */
-public enum  EThreeElement implements IFuzzySet<EThreeElement>
+public enum EThreeElement implements IFuzzySet<EThreeElement>
 {
     LOW,
     MEDIUM,

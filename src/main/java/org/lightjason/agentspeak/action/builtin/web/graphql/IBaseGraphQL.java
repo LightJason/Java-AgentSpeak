@@ -82,6 +82,7 @@ public abstract class IBaseGraphQL extends IBaseWeb
      * @param p_url endpoint url
      * @param p_query query
      * @return result literal stream
+     *
      * @throws IOException is thrown on parsing and connection errors
      */
     protected static Stream<ITerm> sendquery( @Nonnull final String p_url, @Nonnull final String p_query ) throws IOException
@@ -96,7 +97,8 @@ public abstract class IBaseGraphQL extends IBaseWeb
     @Nonnull
     @Override
     public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_argument.size() < 3 )
@@ -106,7 +108,8 @@ public abstract class IBaseGraphQL extends IBaseWeb
         {
             p_return.add(
                 p_argument.size() == 3
-                ? CLiteral.of( l_argument.get( l_argument.size() - 1 ).<String>raw(), sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) ) )
+                ? CLiteral
+                    .of( l_argument.get( l_argument.size() - 1 ).<String>raw(), sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) ) )
                 : IBaseRest.baseliteral(
                     l_argument.stream().skip( 2 ).map( ITerm::<String>raw ),
                     sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) )
@@ -126,6 +129,7 @@ public abstract class IBaseGraphQL extends IBaseWeb
      *
      * @param p_argument query argument
      * @return graphql query
+     *
      * @note query must be encapsulate as string in a json object with key query
      */
     @Nonnull

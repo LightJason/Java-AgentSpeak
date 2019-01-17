@@ -45,6 +45,7 @@ import java.util.stream.Stream;
  * tupel
  *
  * {@code [B1|B2] = .math/binomial( 49, 6,  30, 5 );}
+ *
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
 public final class CBinomial extends IBuiltinAction
@@ -64,7 +65,8 @@ public final class CBinomial extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument )

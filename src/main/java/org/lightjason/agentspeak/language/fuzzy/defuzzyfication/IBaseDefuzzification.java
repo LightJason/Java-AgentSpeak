@@ -58,7 +58,8 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
 
     /**
      * ctor
-     *  @param p_class fuzzy set class
+     *
+     * @param p_class fuzzy set class
      * @param p_membership membership function
      * @param p_default default fuzzy value
      */
@@ -91,11 +92,11 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
     protected final OptionalDouble maximum()
     {
         return Arrays.stream( m_class.getEnumConstants() )
-                                   .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
-                                                                  .mapToDouble( Number::doubleValue )
-                                                                  .max()
-                                                                  .orElse( 0 ) )
-                                   .max();
+                     .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
+                                                    .mapToDouble( Number::doubleValue )
+                                                    .max()
+                                                    .orElse( 0 ) )
+                     .max();
     }
 
     @Nonnull

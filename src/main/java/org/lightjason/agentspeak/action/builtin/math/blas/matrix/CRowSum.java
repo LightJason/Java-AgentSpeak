@@ -48,8 +48,8 @@ import java.util.stream.Stream;
  * a string value defines a sparse or dense resulting vector
  *
  * {@code
-    [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2 );
-    [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
+ * [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2 );
+ * [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
  * }
  */
 public final class CRowSum extends IAlgebra
@@ -69,7 +69,8 @@ public final class CRowSum extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
@@ -102,8 +103,10 @@ public final class CRowSum extends IAlgebra
     {
         switch ( p_type )
         {
-            case SPARSE: return new SparseDoubleMatrix1D( p_value );
-            default : return new DenseDoubleMatrix1D( p_value );
+            case SPARSE:
+                return new SparseDoubleMatrix1D( p_value );
+            default:
+                return new DenseDoubleMatrix1D( p_value );
         }
     }
 

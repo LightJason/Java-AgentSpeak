@@ -69,7 +69,8 @@ public final class CReverse extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // all arguments are list references
         p_return.addAll( Lists.reverse( CCommon.flatten( p_argument ).collect( Collectors.toList() ) ) );

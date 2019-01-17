@@ -70,9 +70,11 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        set( CCommon.replacebycontext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replacebycontext( p_context, m_righthand ).raw() );
+        set(
+            CCommon.replacebycontext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replacebycontext( p_context, m_righthand ).raw() );
         return Stream.of();
     }
 

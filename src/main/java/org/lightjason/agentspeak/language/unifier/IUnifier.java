@@ -57,7 +57,8 @@ public interface IUnifier
         @Nonnull
         @Override
         public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                           @Nonnull final IExecution p_expression, final boolean p_parallel )
+                                           @Nonnull final IExecution p_expression, final boolean p_parallel
+        )
         {
             return CFuzzyValue.of( false );
         }
@@ -88,7 +89,8 @@ public interface IUnifier
      */
     @Nonnull
     IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                @Nonnull final IExecution p_expression, final boolean p_parallel );
+                                @Nonnull final IExecution p_expression, final boolean p_parallel
+    );
 
 
     /**

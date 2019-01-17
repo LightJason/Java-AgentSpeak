@@ -67,6 +67,7 @@ import java.util.stream.Stream;
  * that all arguments the values of \f$ x_i \f$
  *
  * {@code [Value|CountXi|Xi] = .math/linearprogram/solve( LP, "maximize", "non-negative" );}
+ *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -95,7 +96,8 @@ public final class CSolve extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // first argument is the LP pair object, second argument is the goal-type (maximize / minimize),
         // third & fourth argument can be the number of iterations or string with "non-negative" variables

@@ -76,7 +76,8 @@ public final class CRange extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Integer> l_arguments = CCommon.flatten( p_argument )
                                                  .map( ITerm::<Number>raw )
@@ -91,10 +92,10 @@ public final class CRange extends IBuiltinAction
             2,
             2
         )
-            .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
-            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
+                   .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
         return Stream.of();
     }

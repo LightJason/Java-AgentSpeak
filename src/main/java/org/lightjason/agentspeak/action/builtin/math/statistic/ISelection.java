@@ -73,13 +73,15 @@ public abstract class ISelection extends IBuiltinAction
     @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
         final List<Object> l_items = p_argument.get( 0 ).<List<Object>>raw().stream()
-                                                                  .map( i -> i instanceof ITerm ? CCommon.replacebycontext( p_context, (ITerm) i ).raw() : i  )
-                                                                  .collect( Collectors.toList() );
+                                                                            .map( i -> i instanceof ITerm ? CCommon.replacebycontext( p_context, (ITerm) i )
+                                                                                                                   .raw() : i )
+                                                                            .collect( Collectors.toList() );
         final List<Double> l_weight = this.weight(
             l_items,
             p_argument.get( 1 ).<List<?>>raw().stream()

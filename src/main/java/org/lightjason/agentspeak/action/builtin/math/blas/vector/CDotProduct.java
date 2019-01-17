@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * the dot-product, so the argument number must be odd
  *
  * {@code [D1|D2] = .math/blas/vector(V1,V2, [V3, V4] );}
+ *
  * @see https://en.wikipedia.org/wiki/Dot_product
  */
 public final class CDotProduct extends IBuiltinAction
@@ -73,7 +74,8 @@ public final class CDotProduct extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<DoubleMatrix1D> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )

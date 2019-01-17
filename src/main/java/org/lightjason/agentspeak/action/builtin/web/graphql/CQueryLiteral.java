@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * The action fails on connection and parsing errors.
  *
  * {@code L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" ); GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql-fake" );}
+ *
  * @see http://graphql.org/
  */
 public final class CQueryLiteral extends IBaseGraphQL
@@ -127,6 +128,7 @@ public final class CQueryLiteral extends IBaseGraphQL
 
     /**
      * format query argument
+     *
      * @param p_literal literal
      * @return functor with value
      */

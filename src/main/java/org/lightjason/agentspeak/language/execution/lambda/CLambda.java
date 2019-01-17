@@ -78,7 +78,8 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_return return variable
      */
     public CLambda( final boolean p_parallel, @Nonnull final IExecution p_stream, @Nonnull final IVariable<?> p_iterator,
-                    @Nonnull final Stream<IExecution> p_body, @Nonnull final IVariable<?> p_return )
+                    @Nonnull final Stream<IExecution> p_body, @Nonnull final IVariable<?> p_return
+    )
     {
         super( p_body.toArray( IExecution[]::new ) );
         m_return = p_return;
@@ -90,7 +91,8 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_init = CCommon.argumentlist();
         if ( !m_stream.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
@@ -112,7 +114,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
         final IVariable<Object> l_iterator = m_iterator.shallowcopy();
 
         // duplicate context, but don't use new variable instances, so use first existing variables
-        final IContext l_context =  p_context.duplicate(
+        final IContext l_context = p_context.duplicate(
             CCommon.streamconcatstrict(
                 Stream.of( l_iterator ),
                 p_context.instancevariables().values().stream(),
@@ -137,16 +139,16 @@ public final class CLambda extends IBaseExecution<IExecution[]>
     private IFuzzyValue<Boolean> parallel( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
     {
         return p_iterator.parallel()
-                  .map( i -> m_iterator.shallowcopy().set( i ) )
-                  .map( i -> p_context.duplicate(
-                      CCommon.streamconcatstrict(
-                          Stream.of( i ),
-                          p_context.instancevariables().values().stream(),
-                          Arrays.stream( m_value ).flatMap( IExecution::variables )
-                      )
-                  ) )
-                  .flatMap( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ).stream() )
-                  .collect( p_context.agent().fuzzy().getKey() );
+                         .map( i -> m_iterator.shallowcopy().set( i ) )
+                         .map( i -> p_context.duplicate(
+                             CCommon.streamconcatstrict(
+                                 Stream.of( i ),
+                                 p_context.instancevariables().values().stream(),
+                                 Arrays.stream( m_value ).flatMap( IExecution::variables )
+                             )
+                         ) )
+                         .flatMap( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ).stream() )
+                         .collect( p_context.agent().fuzzy().getKey() );
     }
 
 

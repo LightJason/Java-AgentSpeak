@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * action returns all values
  *
  * {@code [A | B | C] = .math/sigmoid( 1, 1, 1, 10, 20, 30 );}
+ *
  * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
 public final class CSigmoid extends IBuiltinAction
@@ -65,12 +66,13 @@ public final class CSigmoid extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final Function<Double, Double> l_sigmoid = i -> p_argument.get( 0 ).<Number>raw().doubleValue()
-                                                          / ( p_argument.get( 1 ).<Number>raw().doubleValue()
-                                                              + Math.exp( -p_argument.get( 2 ).<Number>raw().doubleValue() * i )
-                                                          );
+                                                        / ( p_argument.get( 1 ).<Number>raw().doubleValue()
+                                                            + Math.exp( -p_argument.get( 2 ).<Number>raw().doubleValue() * i )
+                                                        );
 
         CCommon.flatten( p_argument )
                .skip( 2 )

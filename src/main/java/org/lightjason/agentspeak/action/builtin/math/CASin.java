@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * value is in \f$ [0, \pi) \f$, the arguments must be in radians.
  *
  * {@code [A | B | C] = .math/asin( -1, -5, 3 );}
+ *
  * @see https://en.wikipedia.org/wiki/Inverse_trigonometric_functions
  */
 public final class CASin extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CASin extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .mapToDouble( i -> i.<Number>raw().doubleValue() )

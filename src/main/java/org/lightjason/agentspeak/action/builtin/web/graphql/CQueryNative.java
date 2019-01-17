@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
  * and parsing errors.
  *
  * {@code GQ = web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql-fake" );}
+ *
  * @see http://graphql.org/
  */
 public final class CQueryNative extends IBaseGraphQL

@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * is calculated
  *
  * {@code [X|Y|Z] = .math/sinh( 3.2, [5,8, [1.2]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CSinh extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CSinh extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

@@ -42,8 +42,8 @@ import java.util.stream.Stream;
  * Actions translates multimap objects into map objects
  *
  * {@code
-    X = .collection/multimap/asmap( MultiMap );
-    [A|B] = .collection/multimap/asmap( MultiMap1, MultiMap2 );
+ * X = .collection/multimap/asmap( MultiMap );
+ * [A|B] = .collection/multimap/asmap( MultiMap1, MultiMap2 );
  * }
  */
 public final class CAsMap extends IBuiltinAction
@@ -71,7 +71,8 @@ public final class CAsMap extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Multimap<?, ?>>raw )

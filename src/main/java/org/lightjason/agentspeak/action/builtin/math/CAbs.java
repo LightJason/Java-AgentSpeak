@@ -41,6 +41,7 @@ import java.util.stream.Stream;
  * The action calculates \f$ \lvert x_i \rvert \f$ for all arguments
  *
  * {@code [A | B | C] = .math/abs( -1, -5, 3 );}
+ *
  * @see https://en.wikipedia.org/wiki/Absolute_value
  */
 public final class CAbs extends IBuiltinAction
@@ -60,7 +61,8 @@ public final class CAbs extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

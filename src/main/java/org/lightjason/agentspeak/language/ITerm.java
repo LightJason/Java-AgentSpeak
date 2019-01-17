@@ -140,8 +140,9 @@ public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
     /**
      * cast to any raw value type
      *
-     * @tparam raw type
      * @return any type
+     *
+     * @tparam raw type
      */
     @Nullable
     <V> V raw();

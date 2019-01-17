@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * for all unflatten arguments
  *
  * {@code [A|B|C] = .math/log10( [1,2], 3 );}
+ *
  * @see https://en.wikipedia.org/wiki/Logarithm
  */
 public final class CLog10 extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CLog10 extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

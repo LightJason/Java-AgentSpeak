@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * and returns it
  *
  * {@code [D1|D2|D3] = .math/blas/determinant(M1, [M2, M3]);}
+ *
  * @see https://en.wikipedia.org/wiki/Determinant
  */
 public final class CDeterminant extends IAlgebra
@@ -70,7 +71,8 @@ public final class CDeterminant extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // input matrix objects
         CCommon.flatten( p_argument )

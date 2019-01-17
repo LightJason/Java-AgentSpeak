@@ -53,7 +53,8 @@ public final class CLiteralUnify extends CDefaultUnify
 
     /**
      * ctor
-     *  @param p_parallel parallel execution
+     *
+     * @param p_parallel parallel execution
      * @param p_source source literal
      * @param p_target target literal
      */
@@ -72,7 +73,8 @@ public final class CLiteralUnify extends CDefaultUnify
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()

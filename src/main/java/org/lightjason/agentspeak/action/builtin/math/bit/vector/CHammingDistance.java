@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * and all other arguments
  *
  * {@code [A|B] = .math/bit/vector/hammingdistance( Vector1, Vector2, Vector3 );}
+ *
  * @see https://en.wikipedia.org/wiki/Hamming_distance
  */
 public final class CHammingDistance extends IBuiltinAction
@@ -65,7 +66,8 @@ public final class CHammingDistance extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<BitVector> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<BitVector>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )

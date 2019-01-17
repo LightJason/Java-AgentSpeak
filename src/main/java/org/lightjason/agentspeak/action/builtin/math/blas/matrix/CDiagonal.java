@@ -48,8 +48,8 @@ import java.util.stream.Stream;
  * a sparse or dense matrix (default sparse)
  *
  * {@code
-      [D1|D2] = .math/blas/matrix/diagonal( Vector1, Vector2 );
-      [D3|D4] = .math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
+ * [D1|D2] = .math/blas/matrix/diagonal( Vector1, Vector2 );
+ * [D3|D4] = .math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
  * }
  */
 public final class CDiagonal extends IAlgebra
@@ -69,7 +69,8 @@ public final class CDiagonal extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
@@ -82,7 +83,7 @@ public final class CDiagonal extends IAlgebra
         CCommon.flatten( p_argument )
                .filter( i -> CCommon.isssignableto( i, DoubleMatrix1D.class ) )
                .map( ITerm::<DoubleMatrix1D>raw )
-               .map( i  -> generate( i, l_type ) )
+               .map( i -> generate( i, l_type ) )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
@@ -102,8 +103,10 @@ public final class CDiagonal extends IAlgebra
     {
         switch ( p_type )
         {
-            case DENSE: return DoubleFactory2D.dense.diagonal( p_elements );
-            default: return DoubleFactory2D.sparse.diagonal( p_elements );
+            case DENSE:
+                return DoubleFactory2D.dense.diagonal( p_elements );
+            default:
+                return DoubleFactory2D.sparse.diagonal( p_elements );
         }
     }
 }

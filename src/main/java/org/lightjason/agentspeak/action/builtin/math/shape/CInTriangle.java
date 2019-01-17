@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * of x- / y-position
  *
  * {@code [In1|In2] = .math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 );}
+ *
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
  */
 public final class CInTriangle extends IBuiltinAction
@@ -73,7 +74,8 @@ public final class CInTriangle extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -81,7 +83,8 @@ public final class CInTriangle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 8 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber", 8, l_arguments.size() ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon
+                .languagestring( this, "argumentnumber", 8, l_arguments.size() ) );
 
         StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
                    .peek( i ->
@@ -102,9 +105,9 @@ public final class CInTriangle extends IBuiltinAction
                    } )
                    .map( i -> i.get( 2 ) > 0 && i.get( 3 ) > 0
                               && i.get( 2 ) + i.get( 3 ) < -l_arguments.get( 3 ) * l_arguments.get( 4 )
-                                                            + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
-                                                            + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
-                                                            + l_arguments.get( 2 ) * l_arguments.get( 5 )
+                                                           + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
+                                                           + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
+                                                           + l_arguments.get( 2 ) * l_arguments.get( 5 )
                    )
                    .map( CRawTerm::of )
                    .forEach( p_return::add );

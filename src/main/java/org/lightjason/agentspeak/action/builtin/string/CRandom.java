@@ -62,13 +62,14 @@ public final class CRandom extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final CharacterPredicate l_characters = p_char -> p_argument.get( 0 ).<String>raw().contains( new String( Character.toChars( p_char ) ) );
 
         CCommon.flatten( p_argument )
                .skip( 1 )
-               .map( i -> new RandomStringGenerator.Builder().filteredBy( l_characters  ).build().generate( i.<Number>raw().intValue() ) )
+               .map( i -> new RandomStringGenerator.Builder().filteredBy( l_characters ).build().generate( i.<Number>raw().intValue() ) )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 

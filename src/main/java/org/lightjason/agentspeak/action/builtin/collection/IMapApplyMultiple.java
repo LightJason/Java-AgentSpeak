@@ -69,7 +69,8 @@ public abstract class IMapApplyMultiple<T> extends IBuiltinAction
     @Nonnull
     @Override
     public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
 
         final List<ITerm> l_list = CCommon.flatten( p_argument ).collect( Collectors.toList() );
@@ -82,7 +83,7 @@ public abstract class IMapApplyMultiple<T> extends IBuiltinAction
             2,
             2
         )
-                   .forEach( i ->  this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+                   .forEach( i -> this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
 
         return Stream.of();
     }

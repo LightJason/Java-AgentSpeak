@@ -78,7 +78,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Collection.class )
-                                     && equalcollection(  p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() )
+                                        && equalcollection( p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() )
                           )
             );
 
@@ -89,7 +89,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Map.class )
-                                     && equalmap(  p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
+                                        && equalmap( p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
                           )
             );
 
@@ -100,7 +100,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Multimap.class )
-                                     && equalmultimap(  p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
+                                        && equalmultimap( p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
                           )
             );
 
@@ -109,7 +109,7 @@ public class CEqual extends IBuiltinAction
             p_return,
             p_argument.stream()
                       .skip( 1 )
-                      .map( i -> equalobject(  p_argument.get( 0 ).<Object>raw(), i.<Object>raw() ) )
+                      .map( i -> equalobject( p_argument.get( 0 ).<Object>raw(), i.<Object>raw() ) )
         );
     }
 
@@ -145,6 +145,7 @@ public class CEqual extends IBuiltinAction
 
     /**
      * compare any objects
+     *
      * @param p_source source object
      * @param p_target object to compare
      * @return equality boolean flag

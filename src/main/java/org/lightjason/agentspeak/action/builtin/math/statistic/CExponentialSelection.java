@@ -38,6 +38,7 @@ import java.util.stream.Stream;
  * list contains numeric values for defining the weights, the third argument is the demand / rational factor
  *
  * {@code S = .math/statistic/exponentialselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3], RationalFactor );}
+ *
  * @see https://en.wikipedia.org/wiki/Boltzmann_distribution
  * @see https://en.wikipedia.org/wiki/Log-linear_model
  */

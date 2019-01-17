@@ -41,7 +41,8 @@ public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
 {
     /**
      * ctor
-     *  @param p_class fuzzy set class
+     *
+     * @param p_class fuzzy set class
      * @param p_membership membership function
      * @param p_default default fuzzy value
      */

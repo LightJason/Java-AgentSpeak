@@ -70,15 +70,16 @@ public final class CGet extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_list = p_argument.get( 0 ).<List<?>>raw();
 
         CCommon.flatten( p_argument.subList( 1, p_argument.size() ) )
-                   .map( i -> i.<Number>raw().intValue() )
-                   .map( l_list::get )
-                   .map( CRawTerm::of )
-                   .forEach( p_return::add );
+               .map( i -> i.<Number>raw().intValue() )
+               .map( l_list::get )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
 
         return Stream.of();
     }

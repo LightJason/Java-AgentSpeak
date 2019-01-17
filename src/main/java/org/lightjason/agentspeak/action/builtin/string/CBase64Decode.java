@@ -24,17 +24,17 @@
 package org.lightjason.agentspeak.action.builtin.string;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Stream;
@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * based64 encoded, the action fails on decoding error. Return null on encoding errors
  *
  * {@code [A|B] = .string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" );}
+ *
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Decode extends IBuiltinAction
@@ -65,37 +66,36 @@ public final class CBase64Decode extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return CFuzzyValue.of(
-            CCommon.flatten( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
-               .allMatch( i -> CBase64Decode.apply( i, p_return ) )
-        );
+               .forEach( i -> CBase64Decode.apply( p_context, i, p_return ) );
+
+        return Stream.of();
     }
 
     /**
      * create a string with encoding
      *
+     * @param p_context execution context
      * @param p_string byte character
      * @param p_return return list
-     * @return boolean successful run
      */
-    private static boolean apply( @Nonnull final String p_string, @Nonnull final List<ITerm> p_return )
+    private static void apply( @Nonnull final IContext p_context, @Nonnull final String p_string, @Nonnull final List<ITerm> p_return )
     {
         try
         {
             p_return.add(
                 CRawTerm.of(
-                    new String( Base64.getDecoder().decode( p_string.getBytes( Charset.forName( "UTF-8" ) ) ), "UTF-8" )
+                    new String( Base64.getDecoder().decode( p_string.getBytes( Charset.forName( "UTF-8" ) ) ), StandardCharsets.UTF_8 )
                 )
             );
-
-            return true;
         }
-        catch ( final IllegalArgumentException | UnsupportedEncodingException l_exception )
+        catch ( final IllegalArgumentException l_exception )
         {
-            return false;
+            throw new CExecutionIllegealArgumentException( p_context, l_exception );
         }
     }
 

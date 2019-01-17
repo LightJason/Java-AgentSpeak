@@ -48,7 +48,6 @@ import java.util.stream.Stream;
  * the full belieflist is returned
  *
  * {@code L = .agent/belieflist( true, "path/subpath/literalfunctor" );}
- *
  */
 public final class CBeliefList extends IBuiltinAction
 {
@@ -73,8 +72,8 @@ public final class CBeliefList extends IBuiltinAction
 
         p_return.add(
             CRawTerm.of( p_parallel
-                           ? Collections.synchronizedList( l_literal )
-                           : l_literal
+                         ? Collections.synchronizedList( l_literal )
+                         : l_literal
             )
         );
 

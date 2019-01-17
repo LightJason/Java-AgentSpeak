@@ -47,6 +47,7 @@ import java.util.stream.Stream;
  * and k is the second value of the tupel
  *
  * {@code [S1|S2] = .math/stirling(2,3, [4,5]);}
+ *
  * @see https://en.wikipedia.org/wiki/Stirling_number
  */
 public final class CStirling extends IBuiltinAction
@@ -66,7 +67,8 @@ public final class CStirling extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument )

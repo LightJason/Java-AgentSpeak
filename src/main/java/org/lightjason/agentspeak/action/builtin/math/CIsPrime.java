@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * and returns a boolean of this check
  *
  * {@code [P1|P2] = .math/isprime(3, 4);}
+ *
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */
@@ -63,7 +64,8 @@ public final class CIsPrime extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

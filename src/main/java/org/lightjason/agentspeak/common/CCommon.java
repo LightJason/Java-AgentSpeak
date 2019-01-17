@@ -76,17 +76,17 @@ public final class CCommon
      * language resource bundle
      **/
     private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(
-                                                        MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "language" ),
-                                                        Locale.getDefault(),
-                                                        new CUTF8Control()
+        MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "language" ),
+        Locale.getDefault(),
+        new CUTF8Control()
     );
     /**
      * properties of the package
      */
     private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle(
-                                                        MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "configuration" ),
-                                                        Locale.getDefault(),
-                                                        new CUTF8Control()
+        MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "configuration" ),
+        Locale.getDefault(),
+        new CUTF8Control()
     );
 
 
@@ -94,7 +94,8 @@ public final class CCommon
      * private ctor - avoid instantiation
      */
     private CCommon()
-    {}
+    {
+    }
 
     /**
      * returns a logger instance
@@ -173,10 +174,11 @@ public final class CCommon
 
     /**
      * returns actions by a class
-     * @note class must be an inheritance of the IAgent interface
      *
      * @param p_class class list
      * @return action stream
+     *
+     * @note class must be an inheritance of the IAgent interface
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
@@ -283,12 +285,12 @@ public final class CCommon
 
         final IAgentAction l_annotation = p_class.getAnnotation( IAgentAction.class );
         return new ImmutablePair<>(
-                   l_annotation.classes().length == 0
-                   || Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
-                            .parallel()
-                            .anyMatch( p_class::equals ),
-                   l_annotation.access()
-               );
+            l_annotation.classes().length == 0
+            || Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
+                     .parallel()
+                     .anyMatch( p_class::equals ),
+            l_annotation.access()
+        );
     }
 
     /**
@@ -310,7 +312,6 @@ public final class CCommon
     }
 
 
-
     // --- resource access -------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -318,8 +319,9 @@ public final class CCommon
      *
      * @param p_class class
      * @param p_package full-qualified package name or empty for default package
-     * @tparam T class type
      * @return object stream
+     *
+     * @tparam T class type
      */
     @SuppressWarnings( "unchecked" )
     private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nullable final String... p_package )
@@ -414,7 +416,8 @@ public final class CCommon
     {
 
         public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
-                                         final boolean p_reload ) throws IOException
+                                         final boolean p_reload
+        ) throws IOException
         {
             final InputStream l_stream;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );

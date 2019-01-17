@@ -55,9 +55,9 @@ public final class CDaysBetween extends IBetween
     protected Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
     {
         return p_datetime
-                .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )
-                .mapToDouble( Days::getDays )
-                .boxed();
+            .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )
+            .mapToDouble( Days::getDays )
+            .boxed();
     }
 
 }

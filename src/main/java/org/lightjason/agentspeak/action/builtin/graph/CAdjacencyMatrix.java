@@ -67,11 +67,12 @@ import java.util.stream.Stream;
  * got on default zero costs with 1
  *
  * {@code
-    [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
-    [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2 );
-    [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, 1, Graph2 );
-    [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
+ * [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
+ * [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2 );
+ * [M1|N1|M2|N2] = .graph/adjacencymatrix( Graph1, 1, Graph2 );
+ * [M1|N1|M2|N2] = .graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
  * }
+ *
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
 public final class CAdjacencyMatrix extends IBuiltinAction
@@ -91,7 +92,8 @@ public final class CAdjacencyMatrix extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // --- filter parameters ---
         final EType l_type = CCommon.flatten( p_argument )
@@ -139,17 +141,18 @@ public final class CAdjacencyMatrix extends IBuiltinAction
      * @return pair of double matrix and vertices
      */
     private static Pair<DoubleMatrix2D, Collection<?>> apply( @Nonnull final Graph<Object, Object> p_graph, @Nonnull final Map<?, Number> p_cost,
-                                                              final double p_defaultcost, @Nonnull final EType p_type )
+                                                              final double p_defaultcost, @Nonnull final EType p_type
+    )
     {
         // index map for matching vertex to index position within matrix
         final Map<Object, Integer> l_index = new HashMap<>();
 
         // extract vertices of edges
         p_graph.getEdges()
-            .stream()
-            .map( p_graph::getEndpoints )
-            .flatMap( i -> Stream.of( i.getFirst(), i.getSecond() ) )
-            .forEach( i -> l_index.putIfAbsent( i, 0 ) );
+               .stream()
+               .map( p_graph::getEndpoints )
+               .flatMap( i -> Stream.of( i.getFirst(), i.getSecond() ) )
+               .forEach( i -> l_index.putIfAbsent( i, 0 ) );
 
         // define for each vertex an index number in [0, size)
         StreamUtils.zip(
@@ -174,8 +177,8 @@ public final class CAdjacencyMatrix extends IBuiltinAction
                .stream()
                .map( i -> new ImmutablePair<>( p_graph.getEndpoints( i ), p_cost.getOrDefault( i, p_defaultcost ).doubleValue() ) )
                .forEach( i -> l_matrix.setQuick(
-                                  l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ),
-                                  i.getRight() + l_matrix.getQuick( l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ) )
+                   l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ),
+                   i.getRight() + l_matrix.getQuick( l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ) )
                ) );
 
         // on undirected graphs, add the transposefor cost duplicating

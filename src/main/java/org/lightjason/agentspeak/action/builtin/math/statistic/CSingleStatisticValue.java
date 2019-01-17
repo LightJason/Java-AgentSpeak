@@ -75,22 +75,17 @@ public final class CSingleStatisticValue extends IBuiltinAction
     @Override
     @SuppressWarnings( "unchecked" )
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final EStatisticValue l_value = EStatisticValue.of( l_arguments.get( 0 ).<String>raw() );
 
         l_arguments.stream()
                    .skip( 1 )
-                   .mapToDouble( i ->
-                   {
-
-                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
-                           return l_value.value( i.<SummaryStatistics>raw() );
-
-                       return l_value.value( i.<DescriptiveStatistics>raw() );
-
-                   } )
+                   .mapToDouble( i -> CCommon.isssignableto( i, SummaryStatistics.class )
+                                      ? l_value.value( i.<SummaryStatistics>raw() )
+                                      : l_value.value( i.<DescriptiveStatistics>raw() ) )
                    .boxed()
                    .map( CRawTerm::of )
                    .forEach( p_return::add );

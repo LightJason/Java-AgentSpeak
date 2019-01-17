@@ -107,7 +107,6 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                 return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
 
 
-
             case OR:
                 return p_lhs.<Boolean>raw() || p_rhs.<Boolean>raw();
 
@@ -118,13 +117,11 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
                 return p_lhs.<Boolean>raw() ^ p_rhs.<Boolean>raw();
 
 
-
             case EQUAL:
                 return checkequal( p_lhs, p_rhs );
 
             case NOTEQUAL:
                 return !checkequal( p_lhs, p_rhs );
-
 
 
             case GREATER:
@@ -138,7 +135,6 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 
             case LESSEQUAL:
                 return compare( p_lhs, p_rhs ) <= 0;
-
 
 
             default:
@@ -211,9 +207,10 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
      * type mapping method
      *
      * @param p_value value
+     * @return casted value
+     *
      * @tparam N return type
      * @tparam M value type
-     * @return casted value
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )

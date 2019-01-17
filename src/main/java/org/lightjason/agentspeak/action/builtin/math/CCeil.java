@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * all values
  *
  * {@code [A|B|C] = .math/ceil(1.3, 2.8, 9.7);}
+ *
  * @see https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
  */
 public final class CCeil extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CCeil extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

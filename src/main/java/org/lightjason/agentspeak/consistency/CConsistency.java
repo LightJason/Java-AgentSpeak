@@ -108,7 +108,8 @@ public final class CConsistency implements IConsistency
      * @param p_epsilon epsilon consistency
      */
     private CConsistency( @Nonnull final EAlgorithm p_algorithm, @Nonnull final IFilter p_filter, @Nonnull final IMetric p_metric,
-                          final int p_iteration, final double p_epsilon )
+                          final int p_iteration, final double p_epsilon
+    )
     {
         m_filter = p_filter;
         m_metric = p_metric;
@@ -161,7 +162,7 @@ public final class CConsistency implements IConsistency
                      // row-wise normalization for getting probabilities
                      final double l_norm = ALGEBRA.norm1( l_matrix.viewRow( i ) );
                      if ( l_norm != 0 )
-                        l_matrix.viewRow( i ).assign( DoubleMult.div( l_norm ) );
+                         l_matrix.viewRow( i ).assign( DoubleMult.div( l_norm ) );
 
                      // set epsilon slope for preventing periodic markov chains
                      l_matrix.setQuick( i, i, m_epsilon );

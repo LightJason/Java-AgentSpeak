@@ -88,17 +88,18 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      */
     public CPlan( @Nonnull final IAnnotation<?>[] p_annotation, @Nonnull final ITrigger p_event,
-                  @Nonnull final IExecution p_condition, @Nonnull final IExecution[] p_body )
+                  @Nonnull final IExecution p_condition, @Nonnull final IExecution[] p_body
+    )
     {
         super(
             p_annotation, p_body,
 
             Stream.of(
-                    p_event.hashCode(),
-                    p_condition.hashCode(),
-                    Arrays.hashCode( p_body ),
-                    Arrays.hashCode( p_annotation )
-                ).reduce( 0, ( i, j ) -> i ^ j )
+                p_event.hashCode(),
+                p_condition.hashCode(),
+                Arrays.hashCode( p_body ),
+                Arrays.hashCode( p_annotation )
+            ).reduce( 0, ( i, j ) -> i ^ j )
         );
 
         m_triggerevent = p_event;
@@ -115,7 +116,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
 
@@ -133,8 +135,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.of(
             m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
-                    && l_return.size() == 1
-                    && l_return.get( 0 ).<Boolean>raw()
+            && l_return.size() == 1
+            && l_return.get( 0 ).<Boolean>raw()
         );
     }
 

@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -68,13 +67,14 @@ public final class CIsString extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         return CCommon.flatten( p_argument )
-               .map( ITerm::raw )
-               .allMatch( i -> i instanceof String || i instanceof Character || i instanceof CharSequence )
-                ? p_context.agent().fuzzy().membership().fail()
-                : p_context.agent().fuzzy().membership().success();
+                      .map( ITerm::raw )
+                      .allMatch( i -> i instanceof String || i instanceof Character || i instanceof CharSequence )
+               ? p_context.agent().fuzzy().membership().fail()
+               : p_context.agent().fuzzy().membership().success();
     }
 
 }

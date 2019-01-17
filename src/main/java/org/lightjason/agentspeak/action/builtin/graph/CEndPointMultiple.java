@@ -53,7 +53,8 @@ public final class CEndPointMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.getEndpoints( p_window.get( 0 ).raw() )
                .stream()

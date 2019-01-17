@@ -44,10 +44,9 @@ import java.util.stream.Stream;
  * other arguments which must be vectors
  *
  * {@code
-    .math/blas/vector/assign(2, Vector1, [Vector2, Vector3] );
-    .math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
+ * .math/blas/vector/assign(2, Vector1, [Vector2, Vector3] );
+ * .math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
  * }
- *
  */
 public final class CAssign extends IBuiltinAction
 {
@@ -74,7 +73,8 @@ public final class CAssign extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

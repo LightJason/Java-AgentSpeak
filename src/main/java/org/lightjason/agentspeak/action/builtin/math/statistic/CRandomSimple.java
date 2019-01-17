@@ -72,18 +72,14 @@ public final class CRandomSimple extends IBuiltinAction
             p_argument.size() == 0
             ? Stream.of( 1 )
             : CCommon.flatten( p_argument )
-               .map( ITerm::<Number>raw )
-               .map( Number::intValue )
+                     .map( ITerm::<Number>raw )
+                     .map( Number::intValue )
         ).map( i -> i == 1
-                    ? Math.random()
-                    : p_parallel
-                      ? Collections.synchronizedList(
-                        IntStream.range( 0, i ).mapToDouble( j -> Math.random() ).boxed().collect( Collectors.toList() )
-                      )
-                      : IntStream.range( 0, i ).mapToDouble( j -> Math.random() ).boxed().collect( Collectors.toList() )
-               )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+                        ? Math.random()
+                        : p_parallel
+                            ? Collections.synchronizedList( IntStream.range( 0, i ).mapToDouble( j -> Math.random() ).boxed().collect( Collectors.toList() ) )
+                            : IntStream.range( 0, i ).mapToDouble( j -> Math.random() ).boxed().collect( Collectors.toList() )
+        ).map( CRawTerm::of ).forEach( p_return::add );
 
         return Stream.of();
     }

@@ -46,8 +46,8 @@ import java.util.stream.Stream;
  * optional arguments must be even and it will create a key-value structure
  *
  * {@code
-    M1 = .collection/multimap/create();
-    M2 = .collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
+ * M1 = .collection/multimap/create();
+ * M2 = .collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
  * }
  */
 public final class CCreate extends IBuiltinAction
@@ -68,7 +68,8 @@ public final class CCreate extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )

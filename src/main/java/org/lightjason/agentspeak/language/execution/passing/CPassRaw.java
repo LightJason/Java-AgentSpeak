@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -38,6 +37,7 @@ import java.util.stream.Stream;
 
 /**
  * action to pass static data into the return structure
+ *
  * @tparam T any raw data
  */
 public final class CPassRaw<T> extends IBaseExecution<ITerm>
@@ -60,7 +60,8 @@ public final class CPassRaw<T> extends IBaseExecution<ITerm>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add( m_value );
         return Stream.of();

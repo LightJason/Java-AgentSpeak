@@ -66,15 +66,16 @@ public final class CSolve extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument ),
             2
         )
-            .map( i -> DENSEALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .map( i -> DENSEALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
         return Stream.of();
     }

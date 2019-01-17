@@ -59,7 +59,8 @@ public final class CFuzzyBundle implements IFuzzyBundle
      * @param p_defuzzification defuzzyfication
      */
     public CFuzzyBundle( @NonNull final IFuzzySet<?> p_set, @NonNull final IFuzzyMembership<?> p_membership,
-                         @NonNull final IDefuzzification p_defuzzification )
+                         @NonNull final IDefuzzification p_defuzzification
+    )
     {
         m_set = p_set;
         m_membership = p_membership;

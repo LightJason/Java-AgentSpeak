@@ -60,7 +60,8 @@ public final class CThrow extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         if ( p_argument.get( 0 ).raw() )
             throw p_argument.size() == 1 ? new CExecutionException( p_context ) : new CExecutionException(

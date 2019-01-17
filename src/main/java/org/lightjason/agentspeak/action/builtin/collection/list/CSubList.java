@@ -73,7 +73,8 @@ public final class CSubList extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatten( p_argument.stream().skip( 1 ) ) )
                                               .collect( Collectors.toList() );
@@ -89,10 +90,10 @@ public final class CSubList extends IBuiltinAction
             2,
             2
         )
-            .map( i -> l_arguments.get( 0 ).<List<?>>raw().subList( i.get( 0 ), i.get( 1 ) ) )
-            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .map( i -> l_arguments.get( 0 ).<List<?>>raw().subList( i.get( 0 ), i.get( 1 ) ) )
+                   .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
         return Stream.of();
     }

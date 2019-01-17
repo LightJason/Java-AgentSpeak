@@ -72,7 +72,8 @@ public final class CUnion extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // all arguments must be lists
         final List<Object> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );

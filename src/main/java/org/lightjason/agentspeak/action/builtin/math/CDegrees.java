@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * \f$ \frac{x_i \cdot 180}{\pi} \f$
  *
  * {@code A = .math/degrees( pi );}
+ *
  * @see https://en.wikipedia.org/wiki/Radian
  */
 public final class CDegrees extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CDegrees extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

@@ -71,14 +71,15 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_result = CCommon.argumentlist();
 
         if ( p_context.agent().fuzzy().defuzzification().success(
-                p_context.agent().fuzzy().defuzzification().defuzzify(
-                    m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result )
-                )
+            p_context.agent().fuzzy().defuzzification().defuzzify(
+                m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result )
+            )
         ) || l_result.isEmpty() )
             throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 

@@ -72,7 +72,8 @@ public final class CIs extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final Class<?> l_class;
@@ -87,9 +88,9 @@ public final class CIs extends IBuiltinAction
 
         return CFuzzyValue.of(
             l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::raw )
-                   .allMatch( i -> l_class.isAssignableFrom( i.getClass() ) )
+                       .skip( 1 )
+                       .map( ITerm::raw )
+                       .allMatch( i -> l_class.isAssignableFrom( i.getClass() ) )
         );
     }
 

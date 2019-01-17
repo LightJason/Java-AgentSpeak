@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * interpolation
  *
  * {@code [A|B|C] = .math/interpolate/singleinterpolate( InterpolatingFunction, 3, [10, [50]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
 public final class CSingleInterpolate extends IBuiltinAction
@@ -73,7 +74,8 @@ public final class CSingleInterpolate extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 

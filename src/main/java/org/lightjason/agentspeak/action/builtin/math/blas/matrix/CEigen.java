@@ -45,6 +45,7 @@ import java.util.stream.Stream;
  * eigenvectors (as matrix) are returned
  *
  * {@code [Values1|Vectors1|Values2|Vectors2] = .math/blas/matrix/eigen( Matrix1, Matrix2 );}
+ *
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
  */
 public final class CEigen extends IBuiltinAction
@@ -72,7 +73,8 @@ public final class CEigen extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )

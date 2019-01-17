@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * is the URL of the webservice and second argument the functor of the literal
  *
  * {@code W = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );}
+ *
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/XML
@@ -64,7 +65,8 @@ public final class CXMLObject extends IBaseRest
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         try
         {

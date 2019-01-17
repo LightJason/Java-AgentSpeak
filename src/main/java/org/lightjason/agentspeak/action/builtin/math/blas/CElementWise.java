@@ -50,7 +50,6 @@ import java.util.stream.Stream;
  * all arguments are triples of matrix-operator-matrix|scalar,
  * the action fails on assigning problems
  * {@code [M1|M2|M3] = .math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]);}
- *
  */
 public final class CElementWise extends IBuiltinAction
 {
@@ -77,38 +76,40 @@ public final class CElementWise extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         if ( !StreamUtils.windowed(
-                CCommon.flatten( p_argument ),
+            CCommon.flatten( p_argument ),
             3,
-                3
-            ).allMatch( i ->
+            3
+        ).allMatch( i ->
+        {
+
+            switch ( i.get( 1 ).<String>raw().trim() )
             {
+                case "+":
+                    return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.plus, ( n, m ) -> n + m, p_return );
 
-                switch ( i.get( 1 ).<String>raw().trim() )
-                {
-                    case "+" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.plus, ( n, m ) -> n + m, p_return );
+                case "|+|":
+                    return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.plusAbs, ( n, m ) -> Math.abs( n + m ), p_return );
 
-                    case "|+|" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ),  DoubleFunctions.plusAbs, ( n, m ) -> Math.abs( n + m ), p_return );
+                case "-":
+                    return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.minus, ( n, m ) -> n - m, p_return );
 
-                    case "-" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.minus, ( n, m ) -> n - m, p_return );
+                case "*":
+                    return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.mult, ( n, m ) -> n * m, p_return );
 
-                    case "*" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.mult, ( n, m ) -> n * m, p_return );
+                case "/":
+                    return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.div, ( n, m ) -> n / m, p_return );
 
-                    case "/" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.div, ( n, m ) -> n / m, p_return );
+                default:
+                    return false;
+            }
 
-                    default:
-                        return false;
-                }
+        } ) )
 
-            } ) )
-                throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
+            throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 
         return Stream.of();
     }
@@ -123,13 +124,15 @@ public final class CElementWise extends IBuiltinAction
      * @param p_scalarfunction scalar function for value
      * @param p_return return list
      * @return successful executed
+     *
      * @note DoubleMatrix1D and DoubleMatrix2D does not use an equal
      * super class for defining the assign method, so code must be
      * created twice for each type
      */
     private static boolean apply( final ITerm p_left, final ITerm p_right,
                                   final DoubleDoubleFunction p_matrixfunction, final BiFunction<Double, Double, Double> p_scalarfunction,
-                                  final List<ITerm> p_return )
+                                  final List<ITerm> p_return
+    )
     {
         // operation for matrix
         if ( CCommon.isssignableto( p_left, DoubleMatrix2D.class ) )
@@ -173,7 +176,5 @@ public final class CElementWise extends IBuiltinAction
 
         return false;
     }
-
-
 
 }

@@ -234,6 +234,7 @@ public interface IView extends IStructure
      * returns a stream to the root node,
      *
      * @return stream of views
+     *
      * @note the stream is exclusive of the
      * root node and starts with the current node
      */
@@ -252,6 +253,7 @@ public interface IView extends IStructure
      * returns the full path
      *
      * @return path
+     *
      * @note the path is relative to the
      * root node, exclusive root element
      */

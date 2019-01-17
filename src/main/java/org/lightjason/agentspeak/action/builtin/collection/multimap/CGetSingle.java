@@ -51,7 +51,8 @@ public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
-                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

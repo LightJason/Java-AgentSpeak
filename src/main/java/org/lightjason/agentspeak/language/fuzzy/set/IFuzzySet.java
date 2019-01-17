@@ -39,8 +39,9 @@ public interface IFuzzySet<E extends Enum<?>> extends Supplier<E>
     /**
      * returns a raw value if it exist
      *
-     * @tparam V raw value of the fuzzy set element
      * @return raw value
+     *
+     * @tparam V raw value of the fuzzy set element
      */
     @NonNull
     <V> V raw();

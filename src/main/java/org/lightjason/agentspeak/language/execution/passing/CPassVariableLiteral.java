@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -79,7 +78,8 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final IVariable<?> l_variable = CCommon.replacebycontext( p_context, m_value ).<IVariable<?>>term().thrownotallocated();
 
@@ -95,7 +95,8 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
             return Stream.of();
         }
 
-        throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "only literal or string values can be processed" ) );
+        throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon
+            .languagestring( this, "only literal or string values can be processed" ) );
     }
 
     @Nonnull

@@ -70,7 +70,8 @@ public final class CDecrypt extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final Key l_key = p_argument.get( 0 ).raw();
         final ECryptAlgorithm l_algorithm;
@@ -100,7 +101,8 @@ public final class CDecrypt extends IBuiltinAction
      * @return successful execution
      */
     private static boolean decrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
-                                    @Nonnull final String p_dataset, @Nonnull final List<ITerm> p_return )
+                                    @Nonnull final String p_dataset, @Nonnull final List<ITerm> p_return
+    )
     {
         try
         {

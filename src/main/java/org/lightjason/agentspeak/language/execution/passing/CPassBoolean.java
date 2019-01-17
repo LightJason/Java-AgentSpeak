@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.execution.passing;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -35,7 +34,7 @@ import java.util.stream.Stream;
 
 
 /**
- *action to pass a boolean
+ * action to pass a boolean
  */
 public final class CPassBoolean extends IBaseExecution<Boolean>
 {
@@ -57,10 +56,11 @@ public final class CPassBoolean extends IBaseExecution<Boolean>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         return m_value
-            ? p_context.agent().fuzzy().membership().success()
-            : p_context.agent().fuzzy().membership().fail();
+               ? p_context.agent().fuzzy().membership().success()
+               : p_context.agent().fuzzy().membership().fail();
     }
 }

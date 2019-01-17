@@ -125,7 +125,7 @@ public final class CMethodAction extends IBaseAction
         p_stream.defaultReadObject();
 
         // deserialize method handle
-        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[])p_stream.readObject() );
+        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[]) p_stream.readObject() );
         m_methodhandle = MethodHandles.lookup().unreflect( m_method );
     }
 
@@ -153,20 +153,20 @@ public final class CMethodAction extends IBaseAction
         {
             return m_arguments == 0
 
-                ? CMethodAction.returnvalues(
+                   ? CMethodAction.returnvalues(
                 m_methodhandle.invoke( p_context.agent() ),
                 p_return
-                )
+            )
 
-                : CMethodAction.returnvalues(
-                    m_methodhandle.invokeWithArguments(
-                        Stream.concat(
-                            Stream.of( p_context.agent() ),
-                            p_argument.stream().map( ITerm::raw )
-                        ).collect( Collectors.toList() )
-                    ),
-                    p_return
-                );
+                   : CMethodAction.returnvalues(
+                       m_methodhandle.invokeWithArguments(
+                           Stream.concat(
+                               Stream.of( p_context.agent() ),
+                               p_argument.stream().map( ITerm::raw )
+                           ).collect( Collectors.toList() )
+                       ),
+                       p_return
+                   );
         }
         catch ( final Throwable l_throwable )
         {

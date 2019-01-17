@@ -74,7 +74,8 @@ public final class CInRectangle extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -88,7 +89,7 @@ public final class CInRectangle extends IBuiltinAction
         StreamUtils.windowed( l_arguments.stream().skip( 4 ), 2, 2 )
                    // check in order upper-left x-position <= x-value <= buttom-right x-position, upper-left y-position <= y-value <= buttom-right y-position
                    .map( i -> l_arguments.get( 0 ) <= i.get( 0 ) && i.get( 0 ) <= l_arguments.get( 2 )
-                         && l_arguments.get( 1 ) <= i.get( 1 ) && i.get( 1 ) <= l_arguments.get( 3 )
+                              && l_arguments.get( 1 ) <= i.get( 1 ) && i.get( 1 ) <= l_arguments.get( 3 )
                    )
                    .map( CRawTerm::of )
                    .forEach( p_return::add );

@@ -69,7 +69,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
     /**
      * ctor
      *
-     *  @param p_functor variable name
+     * @param p_functor variable name
      * @param p_relocate variable which should be relocated
      */
     public CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_relocate )
@@ -86,7 +86,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
      * @param p_variable referenced variable
      * @param p_value value
      */
-    private CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_variable, @Nullable  final T p_value )
+    private CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_variable, @Nullable final T p_value )
     {
         super( p_functor );
         this.setvalue( p_value );
@@ -100,7 +100,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
      * @param p_variable referenced variable
      * @param p_value value
      */
-    private CRelocateMutexVariable( @Nonnull final String p_functor, @Nonnull final IVariable<?> p_variable, @Nullable  final T p_value )
+    private CRelocateMutexVariable( @Nonnull final String p_functor, @Nonnull final IVariable<?> p_variable, @Nullable final T p_value )
     {
         super( p_functor );
         this.setvalue( p_value );

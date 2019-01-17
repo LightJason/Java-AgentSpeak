@@ -35,6 +35,7 @@ import alice.tuprolog.TermVisitor;
 import alice.tuprolog.Theory;
 import alice.tuprolog.Var;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -58,8 +59,8 @@ import java.util.stream.Stream;
 /**
  * prolog solving structure
  *
- * @see https://github.com/bolerio/hgdb/wiki/TuProlog
  * @todo replace string concatination on belief generating after a new version of the library is published
+ * @see https://github.com/bolerio/hgdb/wiki/TuProlog
  */
 public abstract class IBaseSolve extends IBuiltinAction
 {
@@ -71,7 +72,8 @@ public abstract class IBaseSolve extends IBuiltinAction
     @Nonnull
     @Override
     public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                 @Nonnull final List<ITerm> p_return )
+                                                 @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -82,19 +84,18 @@ public abstract class IBaseSolve extends IBuiltinAction
             // appending a struct generated theory and a string generated theory,
             // see https://bitbucket.org/tuprologteam/tuprolog/issues/18/nullpointer-exception-on-theory-append
             l_theory = new Theory(
-                            p_context.agent()
-                                     .beliefbase()
-                                     .stream()
-                                     .map( CSolveAll::toprologterm )
-                                     .map( i -> i.toString() + "." )
-                                     .collect( Collectors.joining( "\n" ) )
-                                     + "\n"
+                p_context.agent()
+                         .beliefbase()
+                         .stream()
+                         .map( CSolveAll::toprologterm )
+                         .map( i -> i.toString() + "." )
+                         .collect( Collectors.joining( "\n" ) )
+                + "\n"
             );
         }
         catch ( final Exception l_exception )
         {
-            LOGGER.warning( l_exception.getMessage() );
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
         }
 
         // add theory objects to the current theory
@@ -119,7 +120,7 @@ public abstract class IBaseSolve extends IBuiltinAction
                                                 .toArray( SolveInfo[]::new );
 
         // result checking
-        if ( !this.issuccess( l_result  ) )
+        if ( !this.issuccess( l_result ) )
             return CFuzzyValue.of( false );
 
         // result extraction to result values
@@ -182,6 +183,7 @@ public abstract class IBaseSolve extends IBuiltinAction
      *
      * @param p_term agentspeak term
      * @return prolog term
+     *
      * @todo tuprolog cannot deal with java native objects
      */
     //Checkstyle:OFF:NPathComplexity
@@ -214,8 +216,9 @@ public abstract class IBaseSolve extends IBuiltinAction
      * extract data of a variable
      *
      * @param p_term variable
-     * @tparam T return type
      * @return value
+     *
+     * @tparam T return type
      */
     @Nullable
     protected static Object fromprologterm( @Nonnull final Var p_term )

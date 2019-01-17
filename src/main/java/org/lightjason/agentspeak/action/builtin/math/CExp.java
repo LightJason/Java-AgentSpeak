@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * for each argument
  *
  * {@code [X|Y] = .math/exp(1,8);}
+ *
  * @see https://en.wikipedia.org/wiki/Exponential_function
  */
 public final class CExp extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CExp extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

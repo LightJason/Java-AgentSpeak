@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * \f$ sgn(x) = \begin{cases} -1 & \text{if } x < 0 \\ 0 & \text{if } x = 0 \\ 1 & \text{if } x > 0 \end{cases} \f$
  *
  * {@code [A|B|C] = .math/signum(-3, 0, 8);}
+ *
  * @see https://en.wikipedia.org/wiki/Sign_function
  */
 public final class CSignum extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CSignum extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

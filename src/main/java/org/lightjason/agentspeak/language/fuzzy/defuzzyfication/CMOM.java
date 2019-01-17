@@ -47,7 +47,9 @@ public class CMOM<E extends Enum<?>> extends IBaseDefuzzification<E>
      * @param p_membership membership function
      * @param p_default fuzzy enum type
      */
-    public CMOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<E> p_default )
+    public CMOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership,
+                 @NonNull final IFuzzyValue<E> p_default
+    )
     {
         super( p_class, p_membership, p_default );
     }
@@ -58,12 +60,12 @@ public class CMOM<E extends Enum<?>> extends IBaseDefuzzification<E>
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         return m_membership.apply(
-                Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum()
-                / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).average().orElse( 1 )
-            ).reduce(
-                m_default,
-                ( i, j ) -> i.fuzzy().doubleValue() < j.fuzzy().doubleValue() ? j : i
-            ).fuzzy();
+            Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).sum()
+            / Arrays.stream( l_values ).mapToDouble( i -> i.fuzzy().doubleValue() ).average().orElse( 1 )
+        ).reduce(
+            m_default,
+            ( i, j ) -> i.fuzzy().doubleValue() < j.fuzzy().doubleValue() ? j : i
+        ).fuzzy();
     }
 
     @Override

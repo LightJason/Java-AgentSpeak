@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * unflattern arguments
  *
  * {@code [A|B|C|D|E] = .math/factorial( 5, [[1,2], 3,4]);}
+ *
  * @see https://en.wikipedia.org/wiki/Factorial
  */
 public final class CFactorial extends IBuiltinAction
@@ -62,7 +63,8 @@ public final class CFactorial extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )

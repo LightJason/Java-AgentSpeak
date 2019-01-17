@@ -56,6 +56,7 @@ import java.util.stream.Stream;
  * values are the y-values
  *
  * {@code PI = .math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]);}
+ *
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  * @see https://en.wikipedia.org/wiki/Divided_differences
  * @see https://en.wikipedia.org/wiki/Linear_interpolation
@@ -87,7 +88,8 @@ public final class CCreate extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
@@ -107,11 +109,11 @@ public final class CCreate extends IBuiltinAction
                                     .toArray(),
 
                          l_arguments.stream()
-                                     .skip( l_datasize + 1 )
-                                     .map( ITerm::<Number>raw )
-                                     .mapToDouble( Number::doubleValue )
-                                     .toArray()
-                )
+                                    .skip( l_datasize + 1 )
+                                    .map( ITerm::<Number>raw )
+                                    .mapToDouble( Number::doubleValue )
+                                    .toArray()
+                     )
             )
         );
 

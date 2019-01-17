@@ -147,5 +147,4 @@ public final class CVariable<T> extends IBaseVariable<T>
         return m_value;
     }
 
-
 }

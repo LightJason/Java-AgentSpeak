@@ -86,5 +86,4 @@ public final class CSinglePercentile extends IBuiltinAction
         return Stream.of();
     }
 
-
 }

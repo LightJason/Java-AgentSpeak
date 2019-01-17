@@ -73,7 +73,8 @@ public final class CNumericValue extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
@@ -81,15 +82,15 @@ public final class CNumericValue extends IBuiltinAction
 
         StreamUtils.windowed(
             l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-                   2
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+                       .mapToInt( Number::intValue )
+                       .boxed(),
+            2
         ).mapToDouble( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) ? 1 : 0 )
-            .boxed()
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .boxed()
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
         return Stream.of();
     }

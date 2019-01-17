@@ -213,7 +213,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
     @Override
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
@@ -230,7 +229,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.literal(), p_context.expression() );
     }
-
 
 
 
@@ -278,7 +276,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
     @Override
     public Object visitLambda( final AgentParser.LambdaContext p_context )
     {
@@ -320,7 +317,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return this.visit( p_context.variable() );
     }
-
 
 
 
@@ -375,7 +371,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
     @Override
     public Object visitTernaryoperation( final AgentParser.TernaryoperationContext p_context )
     {
@@ -401,7 +396,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
 
-
     @Override
     public Object visitExecuteaction( final AgentParser.ExecuteactionContext p_context )
     {
@@ -419,7 +413,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
-
 
 
 

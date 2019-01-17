@@ -52,6 +52,7 @@ import java.util.stream.Stream;
  * for all other unflatten arguments a hash value is calculated and the action returns the hash values back
  *
  * {@code [Hash1 | Hash2 | Hash3] = .crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 );}
+ *
  * @see https://en.wikipedia.org/wiki/Secure_Hash_Algorithm
  * @see https://en.wikipedia.org/wiki/MD2_(cryptography)
  * @see https://en.wikipedia.org/wiki/MD5
@@ -79,7 +80,8 @@ public final class CHash extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .skip( 1 )
@@ -141,7 +143,7 @@ public final class CHash extends IBuiltinAction
             case "murmur3-128":
                 return Hashing.murmur3_128().newHasher().putBytes( p_data ).hash().toString();
 
-            case "sha-384" :
+            case "sha-384":
                 return Hashing.sha384().newHasher().putBytes( p_data ).hash().toString();
 
             case "sha-256":

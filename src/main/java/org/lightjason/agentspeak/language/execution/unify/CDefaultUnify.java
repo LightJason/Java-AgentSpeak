@@ -67,7 +67,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
      * @param p_parallel parallel execution
      * @param p_literal literal
      */
-    public CDefaultUnify( final boolean p_parallel,  @Nonnull final ILiteral p_literal )
+    public CDefaultUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
         m_parallel = p_parallel;

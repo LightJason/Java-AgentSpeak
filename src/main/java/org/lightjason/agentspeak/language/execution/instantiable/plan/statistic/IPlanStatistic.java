@@ -109,5 +109,4 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
     @Nonnull
     Stream<IVariable<?>> variables();
 
-
 }

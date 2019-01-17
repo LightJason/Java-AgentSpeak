@@ -59,12 +59,12 @@ public final class CClearBeliefbase extends IBuiltinAction
         p_context.agent()
                  .beliefbase()
                  .clear(
-                    p_argument.size() == 0
-                    ? null
-                    : CCommon.flatten( p_argument )
-                             .parallel()
-                             .map( i -> CPath.of( i.raw() ) )
-                             .toArray( IPath[]::new ) );
+                     p_argument.size() == 0
+                     ? null
+                     : CCommon.flatten( p_argument )
+                              .parallel()
+                              .map( i -> CPath.of( i.raw() ) )
+                              .toArray( IPath[]::new ) );
 
         return Stream.of();
     }

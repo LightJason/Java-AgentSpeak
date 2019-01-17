@@ -73,22 +73,23 @@ public final class CBoolValue extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
             throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumbereven" ) );
 
         StreamUtils.windowed(
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-        2
+            l_arguments.stream()
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+                       .mapToInt( Number::intValue )
+                       .boxed(),
+            2
         ).map( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
         return Stream.of();
     }

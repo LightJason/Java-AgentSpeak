@@ -42,6 +42,7 @@ import java.util.stream.Stream;
  * over all unflatten arguments
  *
  * {@code G = .math/harmonicmean( 1, 3, 9, [10, [11, 12]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CHarmonicMean extends IBuiltinAction
@@ -61,7 +62,8 @@ public final class CHarmonicMean extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

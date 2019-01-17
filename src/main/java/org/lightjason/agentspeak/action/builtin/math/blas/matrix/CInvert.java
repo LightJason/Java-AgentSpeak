@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * it
  *
  * {@code [I1|I2] = .math/blas/matrix/invert(M1,M2);}
+ *
  * @see https://en.wikipedia.org/wiki/Invertible_matrix
  */
 public final class CInvert extends IAlgebra
@@ -70,7 +71,8 @@ public final class CInvert extends IAlgebra
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )

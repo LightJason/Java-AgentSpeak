@@ -46,6 +46,7 @@ import java.util.stream.Stream;
  * are returned
  *
  * {@code [Values1|U1|V1|Values2|U2|V2] = .blas/matrix/singularvalue(Matrix1, Matrix2);}
+ *
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
  */
 public final class CSingularValue extends IBuiltinAction
@@ -73,7 +74,8 @@ public final class CSingularValue extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )

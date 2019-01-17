@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * the last argument will used to encapsulate the list elements
  *
  * {@code W = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );}
+ *
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/JSON
@@ -66,7 +67,8 @@ public final class CJsonList extends IBaseRest
     @Override
     @SuppressWarnings( "unchecked" )
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         try
         {

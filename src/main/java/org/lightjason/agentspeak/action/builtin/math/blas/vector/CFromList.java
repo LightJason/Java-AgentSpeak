@@ -73,7 +73,8 @@ public final class CFromList extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final int l_limit;
         final EType l_type;
@@ -95,16 +96,7 @@ public final class CFromList extends IBuiltinAction
                   .limit( l_limit )
                   .map( ITerm::<List<Number>>raw )
                   .map( i -> i.stream().mapToDouble( Number::doubleValue ).toArray() )
-                  .map( i ->
-                  {
-                      switch ( l_type )
-                      {
-                          case SPARSE:
-                              return new SparseDoubleMatrix1D( i );
-                          default:
-                              return new DenseDoubleMatrix1D( i );
-                      }
-                  } )
+                  .map( i -> l_type == EType.SPARSE ? new SparseDoubleMatrix1D( i ) : new DenseDoubleMatrix1D( i ) )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 

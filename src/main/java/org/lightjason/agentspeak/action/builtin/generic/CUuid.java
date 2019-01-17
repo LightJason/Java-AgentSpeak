@@ -41,6 +41,7 @@ import java.util.stream.Stream;
  * The action creates a random uuid value
  *
  * {@code U1 = .generic/uuid(); }
+ *
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  */
 public final class CUuid extends IBuiltinAction
@@ -54,7 +55,8 @@ public final class CUuid extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

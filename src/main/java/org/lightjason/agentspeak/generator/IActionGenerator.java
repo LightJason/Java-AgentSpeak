@@ -49,5 +49,4 @@ public interface IActionGenerator extends Function<IPath, IAction>
         }
     };
 
-
 }

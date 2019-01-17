@@ -39,6 +39,7 @@ public interface IGenerator<T>
      *
      * @param p_data any object data
      * @return object
+     *
      * @note can return null which will be ignored than on multiple generation
      */
     @Nullable

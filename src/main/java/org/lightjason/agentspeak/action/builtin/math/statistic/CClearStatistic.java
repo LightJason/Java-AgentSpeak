@@ -70,7 +70,8 @@ public final class CClearStatistic extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         return CFuzzyValue.of(
             CCommon.flatten( p_argument )
@@ -79,10 +80,10 @@ public final class CClearStatistic extends IBuiltinAction
                    {
 
                        if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
-                            return CClearStatistic.apply( i.<SummaryStatistics>raw() );
+                           return CClearStatistic.apply( i.<SummaryStatistics>raw() );
 
                        return CCommon.isssignableto( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
-                            i.<DescriptiveStatistics>raw() );
+                           i.<DescriptiveStatistics>raw() );
 
                    } )
         );

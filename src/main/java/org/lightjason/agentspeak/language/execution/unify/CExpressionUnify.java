@@ -73,7 +73,8 @@ public final class CExpressionUnify extends CDefaultUnify
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         return p_context.agent().unifier().unify( p_context, m_value, m_variablenumber, m_expression, m_parallel );
     }

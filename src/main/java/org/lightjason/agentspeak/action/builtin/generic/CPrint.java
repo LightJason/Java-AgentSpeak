@@ -144,7 +144,8 @@ public final class CPrint extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         m_stream.println( MessageFormat.format( "{0}", this.format( p_argument ) ) );
         return Stream.of();
@@ -179,6 +180,7 @@ public final class CPrint extends IBuiltinAction
 
     /**
      * interface of a serializable supplier
+     *
      * @tparam T supplier type
      */
     @FunctionalInterface
@@ -188,6 +190,7 @@ public final class CPrint extends IBuiltinAction
          * supplier exception
          *
          * @return item
+         *
          * @throws Exception is thrown on any error
          */
         T get() throws Exception;

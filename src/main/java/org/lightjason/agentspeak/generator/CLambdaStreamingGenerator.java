@@ -80,7 +80,7 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
         final Optional<? extends ILambdaStreaming<?>> l_search = m_packages.parallelStream()
                                                                            .flatMap( i -> org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage(
                                                                                m_packages.toArray( String[]::new
-                                                                           ) ) )
+                                                                               ) ) )
                                                                            .filter( i -> i.assignable().anyMatch( l_hierarchie::contains ) )
                                                                            .findFirst();
 

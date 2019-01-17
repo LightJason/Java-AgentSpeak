@@ -44,8 +44,8 @@ import java.util.stream.Stream;
  * inside the set
  *
  * {@code
-    S = .collection/set/create( "1", [ 1, 2, 3] );
-    S = .collection/set/create();
+ * S = .collection/set/create( "1", [ 1, 2, 3] );
+ * S = .collection/set/create();
  * }
  */
 public final class CCreate extends IBuiltinAction
@@ -66,7 +66,8 @@ public final class CCreate extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final Set<?> l_return = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() );
 

@@ -229,7 +229,7 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * @return literal with bounded variables
      */
     @Nonnull
-    ILiteral bind( @Nonnull final IContext p_context  );
+    ILiteral bind( @Nonnull final IContext p_context );
 
     /**
      * bind the variable values to the literal
@@ -238,6 +238,6 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * @return literal with values
      */
     @Nonnull
-    ILiteral allocate( @Nonnull final IContext p_context  );
+    ILiteral allocate( @Nonnull final IContext p_context );
 
 }
