@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -76,7 +76,7 @@ public final class CMaxIndex extends IBuiltinAction
                 (double) IntStream.range( 0, l_list.size() )
                                 .parallel()
                                 .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? j : i )
-                                .orElseThrow( () -> new CActionException( p_context ) )
+                                .orElseThrow( () -> new CExecutionException( p_context ) )
             )
         );
 

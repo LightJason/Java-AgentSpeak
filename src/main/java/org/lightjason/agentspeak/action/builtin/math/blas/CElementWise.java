@@ -29,7 +29,7 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -108,7 +108,7 @@ public final class CElementWise extends IBuiltinAction
                 }
 
             } ) )
-                throw new CActionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
+                throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 
         return Stream.of();
     }

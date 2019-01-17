@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.unary;
 
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -73,7 +75,7 @@ public final class CDecrement implements IUnary
     {
         final IVariable<Number> l_variable = CCommon.replacebycontext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( !l_variable.valueassignableto( Number.class ) )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "variable must contains a number" ) );
 
 
         l_variable.set( l_variable.<Number>raw().doubleValue() - 1 );

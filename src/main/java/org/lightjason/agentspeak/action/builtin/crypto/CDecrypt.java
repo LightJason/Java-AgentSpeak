@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -80,7 +80,7 @@ public final class CDecrypt extends IBuiltinAction
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            throw new CActionIllegalStateExcepton( p_context, l_exception );
+            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
         }
 
         return CCommon.flatten( p_argument.stream().skip( 1 ) )

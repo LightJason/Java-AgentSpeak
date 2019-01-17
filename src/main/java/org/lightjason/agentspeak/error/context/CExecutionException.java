@@ -33,18 +33,18 @@ import java.util.logging.Logger;
 
 
 /**
- * action illegal-state-exception
+ * execution exception
  */
-public final class CActionIllegalStateExcepton extends IllegalStateException implements IContextException
+public class CExecutionException extends RuntimeException implements IContextException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CActionIllegalStateExcepton.class );
+    private static final Logger LOGGER = CCommon.logger( CExecutionException.class );
     /**
      * serial id
      */
-    private static final transient long serialVersionUID = -6105724877615938517L;
+    private static final transient long serialVersionUID = -1053856178724776159L;
     /**
      * execution context
      */
@@ -57,7 +57,7 @@ public final class CActionIllegalStateExcepton extends IllegalStateException imp
      *
      * @param p_context execution context
      */
-    public CActionIllegalStateExcepton( @NonNull final IContext p_context )
+    public CExecutionException( @NonNull final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -70,7 +70,7 @@ public final class CActionIllegalStateExcepton extends IllegalStateException imp
      * @param p_context execution context
      * @param p_message execution message
      */
-    public CActionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final String p_message )
+    public CExecutionException( @Nonnull final IContext p_context, @Nonnull final String p_message )
     {
         super( p_message );
         m_context = p_context;
@@ -84,7 +84,7 @@ public final class CActionIllegalStateExcepton extends IllegalStateException imp
      * @param p_message execution message
      * @param p_cause execption cause
      */
-    public CActionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
+    public CExecutionException( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
     )
     {
         super( p_message, p_cause );
@@ -98,7 +98,7 @@ public final class CActionIllegalStateExcepton extends IllegalStateException imp
      * @param p_context execution context
      * @param p_cause execption cause
      */
-    public CActionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
+    public CExecutionException( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         m_context = p_context;
@@ -111,4 +111,5 @@ public final class CActionIllegalStateExcepton extends IllegalStateException imp
     {
         return m_context;
     }
+
 }

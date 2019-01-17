@@ -27,7 +27,7 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -156,7 +156,7 @@ public final class CParse extends IBuiltinAction
                       return i.size();
                   } )
                   .max()
-                  .orElseThrow( () -> new CActionException( p_context ) )
+                  .orElseThrow( () -> new CExecutionException( p_context ) )
             ];
 
         IntStream.range( 0, l_return.length )

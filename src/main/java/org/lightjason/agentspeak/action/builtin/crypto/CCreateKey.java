@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -81,7 +81,7 @@ public final class CCreateKey extends IBuiltinAction
         }
         catch ( final NoSuchAlgorithmException | IllegalArgumentException l_exception )
         {
-            throw new CActionIllegalStateExcepton( p_context, l_exception );
+            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
         }
     }
 

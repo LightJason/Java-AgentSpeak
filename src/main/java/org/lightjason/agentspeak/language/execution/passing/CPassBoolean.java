@@ -59,6 +59,8 @@ public final class CPassBoolean extends IBaseExecution<Boolean>
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                            @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of( m_value );
+        return m_value
+            ? p_context.agent().fuzzy().membership().success()
+            : p_context.agent().fuzzy().membership().fail();
     }
 }

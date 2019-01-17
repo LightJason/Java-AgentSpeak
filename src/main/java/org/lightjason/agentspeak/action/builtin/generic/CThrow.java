@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.generic;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -63,7 +63,7 @@ public final class CThrow extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( p_argument.get( 0 ).raw() )
-            throw p_argument.size() == 1 ? new CActionException( p_context ) : new CActionException(
+            throw p_argument.size() == 1 ? new CExecutionException( p_context ) : new CExecutionException(
                 p_context, p_argument.get( 1 ).<String>raw()
             );
         return Stream.of();

@@ -33,18 +33,18 @@ import java.util.logging.Logger;
 
 
 /**
- * action illegal-argument-exception
+ * execution illegal-state-exception
  */
-public final class CActionIllegealArgumentException extends IllegalArgumentException implements IContextException
+public final class CExecutionIllegalStateExcepton extends IllegalStateException implements IContextException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CActionIllegealArgumentException.class );
+    private static final Logger LOGGER = CCommon.logger( CExecutionIllegalStateExcepton.class );
     /**
      * serial id
      */
-    private static final transient long serialVersionUID = 5617594778721053861L;
+    private static final transient long serialVersionUID = -6105724877615938517L;
     /**
      * execution context
      */
@@ -57,7 +57,7 @@ public final class CActionIllegealArgumentException extends IllegalArgumentExcep
      *
      * @param p_context execution context
      */
-    public CActionIllegealArgumentException( @NonNull final IContext p_context )
+    public CExecutionIllegalStateExcepton( @NonNull final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -70,7 +70,7 @@ public final class CActionIllegealArgumentException extends IllegalArgumentExcep
      * @param p_context execution context
      * @param p_message execution message
      */
-    public CActionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final String p_message )
+    public CExecutionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final String p_message )
     {
         super( p_message );
         m_context = p_context;
@@ -84,7 +84,7 @@ public final class CActionIllegealArgumentException extends IllegalArgumentExcep
      * @param p_message execution message
      * @param p_cause execption cause
      */
-    public CActionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
+    public CExecutionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
     )
     {
         super( p_message, p_cause );
@@ -98,7 +98,7 @@ public final class CActionIllegealArgumentException extends IllegalArgumentExcep
      * @param p_context execution context
      * @param p_cause execption cause
      */
-    public CActionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
+    public CExecutionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         m_context = p_context;

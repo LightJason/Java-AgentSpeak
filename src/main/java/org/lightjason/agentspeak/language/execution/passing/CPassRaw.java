@@ -63,6 +63,6 @@ public final class CPassRaw<T> extends IBaseExecution<ITerm>
                                            @Nonnull final List<ITerm> p_return )
     {
         p_return.add( m_value );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

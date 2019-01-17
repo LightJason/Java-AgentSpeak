@@ -27,7 +27,7 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -110,7 +110,7 @@ public final class CHash extends IBuiltinAction
         }
         catch ( final UnsupportedEncodingException l_exception )
         {
-            throw new CActionException( p_context, l_exception );
+            throw new CExecutionException( p_context, l_exception );
         }
     }
 
@@ -160,7 +160,7 @@ public final class CHash extends IBuiltinAction
                 }
                 catch ( final NoSuchAlgorithmException l_exception )
                 {
-                    throw new CActionException( p_context, l_exception );
+                    throw new CExecutionException( p_context, l_exception );
                 }
         }
     }

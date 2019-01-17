@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.passing;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -85,16 +86,16 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
         if ( l_variable.valueassignableto( String.class ) )
         {
             p_return.add( this.bystring( p_context, l_variable.raw() ) );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
         if ( l_variable.valueassignableto( ILiteral.class ) )
         {
             p_return.add( this.byliteral( p_context, l_variable.raw() ) );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
-        return CFuzzyValue.of( false );
+        throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "only literal or string values can be processed" ) );
     }
 
     @Nonnull
