@@ -63,14 +63,13 @@ public final class CRepair extends IBaseExecution<IExecution[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return Arrays.stream( m_value )
                      .map( i -> execute( p_context, i ) )
-                     .filter( i -> p_context.agent().fuzzy().getValue().defuzzify( i ) )
+                     .filter( i -> p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().defuzzify( i ) ) )
                      .findFirst()
-                     .orElseGet( () -> CFuzzyValue.of( false ) );
+                     .orElseGet( () -> p_context.agent().fuzzy().membership().fail() );
     }
 
     @Nonnull
@@ -95,14 +94,10 @@ public final class CRepair extends IBaseExecution<IExecution[]>
      * @param p_execution execution
      * @return execution result
      */
-    private static IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
+    private static Stream<IFuzzyValue<?>> execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
-        final IFuzzyValue<Boolean> l_result = p_execution.execute( false, p_context, Collections.emptyList(), l_return );
-
-        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).raw() instanceof Boolean )
-               ? CFuzzyValue.of( l_return.get( 0 ).raw() )
-               : l_result;
+        return p_execution.execute( false, p_context, Collections.emptyList(), l_return );
     }
 
 }

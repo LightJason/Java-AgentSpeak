@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.base;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -81,8 +82,17 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     {
         final List<ITerm> l_argument = CCommon.argumentlist();
 
-        if ( !m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument ).value() || l_argument.size() != 1 )
-            return CFuzzyValue.of( false );
+        if ( !p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().defuzzify(
+                    m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument )
+                )
+        ) )
+            return m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
+
+        if ( l_argument.size() != 1 )
+            throw new CExecutionIllegalStateExcepton(
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "return argument does not exist"
+            ) );
 
         return l_argument.get( 0 ).raw()
                ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )
