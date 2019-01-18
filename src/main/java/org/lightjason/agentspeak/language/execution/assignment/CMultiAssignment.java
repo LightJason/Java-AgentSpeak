@@ -54,18 +54,18 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     /**
      * right-hand argument
      */
-    private final IExecution m_righthand;
+    private final IExecution m_rhs;
 
     /**
      * ctor
      *
-     * @param p_lefthand left-hand variable list
-     * @param p_righthand right-hand argument
+     * @param p_lhs left-hand variable list
+     * @param p_rhs right-hand argument
      */
-    public CMultiAssignment( @Nonnull final Stream<IVariable<?>> p_lefthand, @Nonnull final IExecution p_righthand )
+    public CMultiAssignment( @Nonnull final Stream<IVariable<?>> p_lhs, @Nonnull final IExecution p_rhs )
     {
-        super( Collections.unmodifiableList( p_lefthand.collect( Collectors.toList() ) ) );
-        m_righthand = p_righthand;
+        super( Collections.unmodifiableList( p_lhs.collect( Collectors.toList() ) ) );
+        m_rhs = p_rhs;
     }
 
     @Nonnull
@@ -76,12 +76,17 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     {
         final List<ITerm> l_result = CCommon.argumentlist();
 
-        if ( p_context.agent().fuzzy().defuzzification().success(
-            p_context.agent().fuzzy().defuzzification().defuzzify(
-                m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result )
-            )
-        ) || l_result.isEmpty() )
-            throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
+        if ( !p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply( m_rhs.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ) )
+             )
+        )
+            return p_context.agent().fuzzy().membership().fail();
+
+        if ( l_result.isEmpty() )
+            throw new CExecutionIllegalStateExcepton(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "right-hand-arguments are empty" )
+            );
 
 
         // position matching on list index
@@ -103,7 +108,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     @Override
     public int hashCode()
     {
-        return super.hashCode() ^ m_righthand.hashCode();
+        return super.hashCode() ^ m_rhs.hashCode();
     }
 
     @Override
@@ -115,7 +120,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} = {1}", m_value, m_righthand );
+        return MessageFormat.format( "{0} = {1}", m_value, m_rhs );
     }
 
     @Nonnull
@@ -124,7 +129,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
     {
         return Stream.concat(
             Objects.isNull( m_value ) ? Stream.empty() : m_value.stream(),
-            m_righthand.variables()
+            m_rhs.variables()
         );
     }
 }

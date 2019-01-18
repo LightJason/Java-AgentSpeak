@@ -28,7 +28,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgentUpdateable;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnull;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * @see https://profs.basu.ac.ir/khotanlou/upload_file/459.1778.file_ref.1938.2401.pdf
  * @see http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
  */
-public interface IDefuzzification extends IAgentUpdateable
+public interface IDefuzzification extends IAgentUpdateable, Function<Stream<IFuzzyValue<?>>, Number>
 {
 
     /**
@@ -50,8 +50,8 @@ public interface IDefuzzification extends IAgentUpdateable
      * @param p_value fuzzy value
      * @return numeric value
      */
-    @Nonnull
-    Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value );
+    //@Nonnull
+    //Number apply( @Nonnull final Stream<IFuzzyValue<?>> p_value );
 
     /**
      * returns a boolean to break execution

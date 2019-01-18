@@ -56,7 +56,7 @@ public class CMOM<E extends Enum<?>> extends IBaseDefuzzification<E>
 
     @Nonnull
     @Override
-    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    public Number apply( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         return m_membership.apply(

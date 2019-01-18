@@ -66,7 +66,7 @@ public final class CRepair extends IBaseExecution<IExecution[]>
     {
         return Arrays.stream( m_value )
                      .map( i -> execute( p_context, i ) )
-                     .filter( i -> p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().defuzzify( i ) ) )
+                     .filter( i -> p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( i ) ) )
                      .findFirst()
                      .orElseGet( () -> p_context.agent().fuzzy().membership().fail() );
     }

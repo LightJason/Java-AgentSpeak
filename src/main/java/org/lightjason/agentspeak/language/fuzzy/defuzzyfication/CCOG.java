@@ -56,7 +56,7 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
 
     @Nonnull
     @Override
-    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    public Number apply( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         final IFuzzyValue<?>[] l_values = p_value.toArray( IFuzzyValue<?>[]::new );
         if ( l_values.length < 2 )

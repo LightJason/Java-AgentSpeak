@@ -82,7 +82,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
         final List<ITerm> l_argument = CCommon.argumentlist();
 
         if ( !p_context.agent().fuzzy().defuzzification().success(
-                p_context.agent().fuzzy().defuzzification().defuzzify(
+                p_context.agent().fuzzy().defuzzification().apply(
                     m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument )
                 )
         ) )

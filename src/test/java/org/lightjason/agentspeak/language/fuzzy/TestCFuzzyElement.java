@@ -52,7 +52,7 @@ public final class TestCFuzzyElement
         Assert.assertEquals(
             1.0,
 
-            new CWOA<>( EFourElement.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( EFourElement.HIGH, 1 ) ).defuzzify(
+            new CWOA<>( EFourElement.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( EFourElement.HIGH, 1 ) ).apply(
                 Stream.of(
                     CFuzzyValue.of( EFourElement.LOW, 0.6 ),
                     CFuzzyValue.of( EFourElement.MEDIUMLOW, 0.4 ),
@@ -135,7 +135,7 @@ public final class TestCFuzzyElement
 
                 CFuzzyValue.of( EThreeElement.HIGH, 1 )
 
-            ).defuzzify(
+            ).apply(
                 Stream.of(
                     CFuzzyValue.of( EThreeElement.LOW, 0.1 ),
                     CFuzzyValue.of( EThreeElement.MEDIUM, 0.2 ),

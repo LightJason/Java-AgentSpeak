@@ -54,7 +54,7 @@ public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
 
     @Nonnull
     @Override
-    public Number defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_value )
+    public Number apply( @Nonnull final Stream<IFuzzyValue<?>> p_value )
     {
         return p_value.reduce(
             m_default,
