@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.execution.achievementtest;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -67,6 +66,8 @@ public final class CTestRule extends ITest
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.of( p_context.agent().rules().asMap().containsKey( m_value ) );
+        return p_context.agent().rules().asMap().containsKey( m_value )
+               ? p_context.agent().fuzzy().membership().success()
+               : p_context.agent().fuzzy().membership().fail();
     }
 }
