@@ -338,7 +338,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             m_trigger.putIfAbsent( p_trigger.hashCode(), p_trigger );
         }
 
-        return CFuzzyValue.of( true );
+        return m_fuzzy.membership().success();
     }
 
     @Override
