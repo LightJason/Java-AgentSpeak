@@ -50,7 +50,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.IT
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnegative;
@@ -136,7 +136,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * fuzzy result collector
      */
-    private final IFuzzyBundle<Boolean> m_fuzzy;
+    private final IFuzzyBundle m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -273,7 +273,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzyBundle<Boolean> fuzzy()
+    public final IFuzzyBundle fuzzy()
     {
         return m_fuzzy;
     }
@@ -351,8 +351,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // check wakup-event otherwise suspend
             return (T) this;
 
-        // update defuzzification
-        m_fuzzy.getValue().update( this );
+        // update fuzzification
+        m_fuzzy.update( this );
 
         // clear running plan- and trigger list and execute elements
         this.execute( this.generateexecutionlist() );

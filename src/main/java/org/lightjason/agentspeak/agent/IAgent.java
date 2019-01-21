@@ -83,7 +83,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
         @Override
         public Stream<IFuzzyValue<?>> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
         @Nonnull
