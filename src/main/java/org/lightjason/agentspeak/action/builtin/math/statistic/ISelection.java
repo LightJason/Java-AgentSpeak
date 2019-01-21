@@ -24,11 +24,11 @@
 package org.lightjason.agentspeak.action.builtin.math.statistic;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -93,7 +93,7 @@ public abstract class ISelection extends IBuiltinAction
         );
 
         if ( l_items.isEmpty() || l_items.size() != l_weight.size() )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" ) );
 
         // select a random value and scale with the sum
         double l_random = m_random.nextDouble() * l_weight.stream().mapToDouble( i -> i ).sum();
@@ -103,13 +103,13 @@ public abstract class ISelection extends IBuiltinAction
             if ( l_random <= 0 )
             {
                 p_return.add( CRawTerm.of( l_items.get( i ) ) );
-                return CFuzzyValue.of( true );
+                return Stream.of();
             }
         }
 
         // on rounding error return last element
         p_return.add( CRawTerm.of( l_items.get( l_items.size() - 1 ) ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

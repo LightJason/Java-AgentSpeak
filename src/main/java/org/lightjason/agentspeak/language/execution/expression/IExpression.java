@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -58,7 +57,7 @@ public interface IExpression extends IExecution
         )
         {
             p_return.add( CRawTerm.of( true ) );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
         @Nonnull

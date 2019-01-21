@@ -26,10 +26,10 @@ package org.lightjason.agentspeak.action.builtin.math.statistic;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -70,23 +70,26 @@ public final class CClearStatistic extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            CCommon.flatten( p_argument )
-                   .parallel()
-                   .allMatch( i ->
-                   {
+        if ( !CCommon.flatten( p_argument )
+               .parallel()
+               .allMatch( i ->
+               {
 
-                       if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
-                           return CClearStatistic.apply( i.<SummaryStatistics>raw() );
+                   if ( CCommon.isssignableto( i, SummaryStatistics.class ) )
+                       return CClearStatistic.apply( i.<SummaryStatistics>raw() );
 
-                       return CCommon.isssignableto( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
-                           i.<DescriptiveStatistics>raw() );
+                   return CCommon.isssignableto( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
+                       i.<DescriptiveStatistics>raw() );
 
-                   } )
-        );
+               } ) )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argument error" )
+            );
+
+        return Stream.of();
     }
 
     /**
