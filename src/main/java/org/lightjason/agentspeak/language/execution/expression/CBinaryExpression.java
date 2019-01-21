@@ -113,8 +113,10 @@ public final class CBinaryExpression implements IBinaryExpression
     )
     {
         final int l_arguments = p_return.size();
-        final boolean l_result = p_context.agent().fuzzy().getValue().defuzzify(
-            p_execution.execute( p_parallel, p_context, p_argument, p_return )
+        final boolean l_result = p_context.agent().fuzzy().defuzzification().success(
+            p_context.agent().fuzzy().defuzzification().apply(
+                p_execution.execute( p_parallel, p_context, p_argument, p_return )
+            )
         );
 
         // if no result value exists from execution, just use defuzzificated execution result
