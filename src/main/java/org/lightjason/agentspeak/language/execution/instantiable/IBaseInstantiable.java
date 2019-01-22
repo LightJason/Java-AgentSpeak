@@ -208,7 +208,7 @@ public abstract class IBaseInstantiable implements IInstantiable
 
         // if atomic flag if exists use this for return value
         return m_atomic
-               ? CFuzzyValue.of( true )
+               ? p_context.agent().fuzzy().membership().success()
                : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
     }
 

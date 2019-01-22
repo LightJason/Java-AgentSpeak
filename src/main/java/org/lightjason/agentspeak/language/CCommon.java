@@ -279,10 +279,9 @@ public final class CCommon
      * @note stream is stopped iif an execution is failed
      */
     @Nonnull
-    public static List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
-    )
+    public static List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
     {
-        final List<IFuzzyValue<Boolean>> l_result = new ArrayList<>();
+        final List<IFuzzyValue> l_result = new ArrayList<>();
         return p_execution
             .map( i ->
             {
@@ -306,12 +305,12 @@ public final class CCommon
      * @note each element is executed
      */
     @Nonnull
-    public static List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    public static List<IFuzzyValue> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
     )
     {
         return p_execution
             .parallel()
-            .map( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
+            .flatMap( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
             .collect( Collectors.toList() );
     }
 
