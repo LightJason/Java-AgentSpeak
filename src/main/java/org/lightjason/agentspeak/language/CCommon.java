@@ -279,17 +279,12 @@ public final class CCommon
      * @note stream is stopped iif an execution is failed
      */
     @Nonnull
-    public static List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
+    public static List<IFuzzyValue<?>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
     {
-        final List<IFuzzyValue> l_result = new ArrayList<>();
+        final List<IFuzzyValue<?>> l_result = new ArrayList<>();
         return p_execution
-            .map( i ->
-            {
-                final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() );
-                l_result.add( l_return );
-                return p_context.agent().fuzzy().getValue().defuzzify( l_return );
-            } )
-            .filter( i -> !i )
+            .peek( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ).forEach( l_result::add ) )
+            .filter( i -> !p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) )
             .findFirst()
             .map( i -> l_result )
             .orElseGet( () -> l_result );
@@ -305,7 +300,7 @@ public final class CCommon
      * @note each element is executed
      */
     @Nonnull
-    public static List<IFuzzyValue> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    public static List<IFuzzyValue<?>> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
     )
     {
         return p_execution

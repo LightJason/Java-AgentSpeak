@@ -45,15 +45,6 @@ public interface IDefuzzification extends IAgentUpdateable, Function<Stream<IFuz
 {
 
     /**
-     * runs the defuzzyification algorithm
-     *
-     * @param p_value fuzzy value
-     * @return numeric value
-     */
-    //@Nonnull
-    //Number apply( @Nonnull final Stream<IFuzzyValue<?>> p_value );
-
-    /**
      * returns a boolean to break execution
      *
      * @param p_value defuzzifcated value
