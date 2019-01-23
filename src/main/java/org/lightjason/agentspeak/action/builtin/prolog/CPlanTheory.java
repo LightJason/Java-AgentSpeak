@@ -81,7 +81,7 @@ public final class CPlanTheory extends IBuiltinAction
         }
         catch ( final InvalidTheoryException l_exception )
         {
-            throw new CExecutionIllegalStateExcepton( p_context,l_exception );
+            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
         }
     }
 }
