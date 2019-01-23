@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -85,7 +84,7 @@ public final class CValues extends IBuiltinAction
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

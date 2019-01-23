@@ -29,11 +29,11 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -48,8 +48,7 @@ import java.util.stream.Stream;
  * converts the bit matrix to a blas matrix.
  * The action converts the bit matrix to a blas matrix,
  * the last argument can be "dense" or "sparse", all
- * other arguments are bit matrices and the actions
- * never fails
+ * other arguments are bit matrices
  *
  * {@code [A|B] = .math/bit/matrix/toblas( BitMatrix1, BitMatrix2, "dense | sparse" );}
  */
@@ -97,7 +96,7 @@ public final class CToBlas extends IBuiltinAction
                            .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.of( true );
+                return Stream.of();
 
 
             case SPARSE:
@@ -108,10 +107,13 @@ public final class CToBlas extends IBuiltinAction
                            .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.of( true );
+                return Stream.of();
 
             default:
-                return CFuzzyValue.of( false );
+                throw new CExecutionIllegealArgumentException(
+                    p_context,
+                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" )
+                );
         }
     }
 
