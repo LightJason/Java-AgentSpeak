@@ -25,6 +25,10 @@
 package org.lightjason.agentspeak.language.fuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import java.util.Locale;
 
 
 /**
@@ -45,8 +49,8 @@ public enum EThreeElement implements IFuzzySet<EThreeElement>
     }
 
     @Override
-    public EThreeElement get()
+    public IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number )
     {
-        return this;
+        return CFuzzyValue.of( ECrisp.valueOf( p_name.toUpperCase( Locale.ROOT ) ), p_number );
     }
 }

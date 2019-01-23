@@ -24,8 +24,9 @@
 package org.lightjason.agentspeak.language.fuzzy.set;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import java.util.function.Supplier;
+import java.util.function.BiFunction;
 
 
 /**
@@ -33,7 +34,7 @@ import java.util.function.Supplier;
  *
  * @tparam T enum type
  */
-public interface IFuzzySet<E extends Enum<?>> extends Supplier<E>
+public interface IFuzzySet<E extends Enum<?>> extends BiFunction<String, Number, IFuzzyValue<?>>
 {
 
     /**
