@@ -24,10 +24,10 @@
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -72,10 +72,13 @@ public abstract class ICast extends IBuiltinAction
                                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.of(
-            CCommon.flatten( p_argument )
-                   .allMatch( i -> this.cast( i, p_return ) )
-        );
+        if ( !CCommon.flatten( p_argument ).allMatch( i -> this.cast( i, p_return ) ) )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "cannotcast" )
+            );
+
+        return Stream.of();
     }
 
 
