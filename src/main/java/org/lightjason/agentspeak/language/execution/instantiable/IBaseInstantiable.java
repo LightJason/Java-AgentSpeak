@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -201,14 +202,14 @@ public abstract class IBaseInstantiable implements IInstantiable
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        final List<IFuzzyValue<Boolean>> l_result = m_parallel
-                                                    ? CCommon.executeparallel( p_context, Arrays.stream( m_execution ) )
-                                                    : CCommon.executesequential( p_context, Arrays.stream( m_execution ) );
+        final Pair<List<IFuzzyValue<?>>, Boolean> l_result = m_parallel
+                                                             ? CCommon.executeparallel( p_context, Arrays.stream( m_execution ) )
+                                                             : CCommon.executesequential( p_context, Arrays.stream( m_execution ) );
 
         // if atomic flag if exists use this for return value
         return m_atomic
                ? p_context.agent().fuzzy().membership().success()
-               : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
+               : l_result.getKey().stream();
     }
 
 

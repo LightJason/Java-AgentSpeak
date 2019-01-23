@@ -69,6 +69,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -274,20 +275,25 @@ public final class CCommon
      *
      * @param p_context execution context
      * @param p_execution execution stream
-     * @return list with execution results
+     * @return list with execution results and successful execution
      *
      * @note stream is stopped iif an execution is failed
      */
     @Nonnull
-    public static List<IFuzzyValue<?>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
+    public static Pair<List<IFuzzyValue<?>>, Boolean> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
     {
         final List<IFuzzyValue<?>> l_result = new ArrayList<>();
+        final AtomicBoolean l_success = new AtomicBoolean();
+
         return p_execution
             .peek( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ).forEach( l_result::add ) )
-            .filter( i -> !p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) )
+            .filter( i -> {
+                l_success.set( p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) );
+                return !l_success.get();
+            } )
             .findFirst()
-            .map( i -> l_result )
-            .orElseGet( () -> l_result );
+            .map( i -> new ImmutablePair<>( l_result, l_success.get() ) )
+            .orElse( new ImmutablePair<>( l_result, l_success.get() ) );
     }
 
     /**
@@ -295,18 +301,26 @@ public final class CCommon
      *
      * @param p_context execution context
      * @param p_execution execution stream
-     * @return list with execution results
+     * @return list with execution results and successful execution
      *
      * @note each element is executed
      */
     @Nonnull
-    public static List<IFuzzyValue<?>> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    public static Pair<List<IFuzzyValue<?>>, Boolean> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
     )
     {
-        return p_execution
-            .parallel()
-            .flatMap( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
-            .collect( Collectors.toList() );
+        final List<IFuzzyValue<?>> l_result = p_execution.parallel()
+                                                         .flatMap( i -> i.execute(
+                                                             false, p_context, Collections.emptyList(), Collections.emptyList() )
+                                                         )
+                                                         .collect( Collectors.toList() );
+
+        return new ImmutablePair<>(
+            l_result,
+            p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply( l_result.stream() )
+            )
+        );
     }
 
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
