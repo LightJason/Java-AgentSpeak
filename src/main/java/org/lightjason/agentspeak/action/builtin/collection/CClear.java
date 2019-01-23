@@ -25,10 +25,10 @@ package org.lightjason.agentspeak.action.builtin.collection;
 
 import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -41,8 +41,7 @@ import java.util.stream.Stream;
 
 /**
  * clears all elements of the collection.
- * The action removes all elements of each collection arguments,
- * the action fails on a non-collection argument
+ * The action removes all elements of each collection arguments
  *
  * {@code .collection/clear( Map, MultiMap, Set, List );}
  */
@@ -63,13 +62,15 @@ public final class CClear extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            p_argument.parallelStream()
-                      .allMatch( CClear::clear )
-        );
+        if ( !p_argument.parallelStream().allMatch( CClear::clear ) )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargument" )
+            );
+
+        return Stream.of();
     }
 
     /**

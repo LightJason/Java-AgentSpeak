@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.action.builtin.collection.list;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -85,7 +85,10 @@ public final class CRange extends IBuiltinAction
                                                  .boxed()
                                                  .collect( Collectors.toList() );
         if ( l_arguments.isEmpty() || l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this,  "wrongoremptyargument" )
+            );
 
         StreamUtils.windowed(
             l_arguments.stream(),
