@@ -26,11 +26,11 @@ package org.lightjason.agentspeak.action.builtin.math.blas;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -75,8 +75,7 @@ public final class CMultiply extends IAlgebra
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            StreamUtils.windowed(
+        if ( !StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
                 2
@@ -102,7 +101,10 @@ public final class CMultiply extends IAlgebra
                     i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.mult( v, u ), p_return );
 
             } )
-        );
+        )
+            throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "" ) );
+
+        return Stream.of();
     }
 
     /**

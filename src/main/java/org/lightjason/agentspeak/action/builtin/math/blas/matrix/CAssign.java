@@ -25,10 +25,10 @@ package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -78,8 +78,7 @@ public final class CAssign extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        return CFuzzyValue.of(
-            l_arguments.stream()
+        if ( !l_arguments.stream()
                        .skip( 1 )
                        .parallel()
                        .allMatch( i ->
@@ -99,7 +98,9 @@ public final class CAssign extends IBuiltinAction
 
                            return false;
 
-                       } )
-        );
+                       } ) )
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments" ) );
+
+        return Stream.of();
     }
 }
