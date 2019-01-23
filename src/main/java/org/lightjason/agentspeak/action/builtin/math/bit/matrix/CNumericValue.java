@@ -26,11 +26,11 @@ package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
 import cern.colt.matrix.tbit.BitMatrix;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -78,7 +78,7 @@ public final class CNumericValue extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "evenarguments" ) );
 
         StreamUtils.windowed(
             l_arguments.stream()

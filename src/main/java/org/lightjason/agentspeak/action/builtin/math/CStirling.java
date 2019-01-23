@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -82,7 +81,7 @@ public final class CStirling extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

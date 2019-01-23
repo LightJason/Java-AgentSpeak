@@ -50,7 +50,6 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -220,7 +219,7 @@ public final class TestCViewMap extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -262,7 +261,9 @@ public final class TestCViewMap extends IBaseTest
                 )
             );
 
-            return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
+            return p_argument.get( 0 ).<Boolean>raw()
+                   ? p_context.agent().fuzzy().membership().success()
+                   : p_context.agent().fuzzy().membership().fail();
         }
     }
 
