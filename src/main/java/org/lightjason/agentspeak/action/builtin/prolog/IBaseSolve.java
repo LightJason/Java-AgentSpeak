@@ -42,7 +42,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -121,7 +120,7 @@ public abstract class IBaseSolve extends IBuiltinAction
 
         // result checking
         if ( !this.issuccess( l_result ) )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         // result extraction to result values
         Arrays.stream( l_result )
@@ -142,7 +141,7 @@ public abstract class IBaseSolve extends IBuiltinAction
               .map( CRawTerm::of )
               .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return p_context.agent().fuzzy().membership().success();
 
     }
 
