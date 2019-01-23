@@ -26,11 +26,11 @@ package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -79,7 +79,10 @@ public final class CDotProduct extends IBuiltinAction
     {
         final List<DoubleMatrix1D> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" )
+            );
 
         StreamUtils.windowed( l_arguments.stream(), 2 )
                    .map( i -> i.get( 0 ).zDotProduct( i.get( 1 ) ) )
