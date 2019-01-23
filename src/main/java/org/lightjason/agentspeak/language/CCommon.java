@@ -287,7 +287,8 @@ public final class CCommon
 
         return p_execution
             .peek( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ).forEach( l_result::add ) )
-            .filter( i -> {
+            .filter( i ->
+            {
                 l_success.set( p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) );
                 return !l_success.get();
             } )
