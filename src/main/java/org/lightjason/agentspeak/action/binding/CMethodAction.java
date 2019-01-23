@@ -153,11 +153,7 @@ public final class CMethodAction extends IBaseAction
         {
             return m_arguments == 0
 
-                   ? CMethodAction.returnvalues(
-                m_methodhandle.invoke( p_context.agent() ),
-                p_return
-            )
-
+                   ? CMethodAction.returnvalues( m_methodhandle.invoke( p_context.agent() ), p_return )
                    : CMethodAction.returnvalues(
                        m_methodhandle.invokeWithArguments(
                            Stream.concat(
@@ -171,7 +167,7 @@ public final class CMethodAction extends IBaseAction
         catch ( final Throwable l_throwable )
         {
             LOGGER.warning( MessageFormat.format( "binding method [{0}] throws error [{1}] in agent: ", m_name, l_throwable, p_context.agent() ) );
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
         }
     }
 
