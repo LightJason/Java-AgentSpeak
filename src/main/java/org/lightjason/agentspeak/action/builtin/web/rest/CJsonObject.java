@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.web.rest;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -89,7 +89,7 @@ public final class CJsonObject extends IBaseRest
         }
         catch ( final IOException l_exception )
         {
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
         }
     }
 
