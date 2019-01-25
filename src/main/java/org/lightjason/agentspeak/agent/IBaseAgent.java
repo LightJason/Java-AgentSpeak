@@ -322,7 +322,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final Stream<IFuzzyValue<?>> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
     {
         if ( m_sleepingcycles.get() > 0 )
-            return CFuzzyValue.of( false );
+            return m_fuzzy.membership().fail();
 
         // check if literal does not store any variables
         if ( p_trigger.literal().hasVariable() )
