@@ -67,7 +67,9 @@ public final class CTestGoal extends ITest
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return CFuzzyValue.of( p_context.agent().runningplans().keySet().contains( m_value ) );
+        return p_context.agent().runningplans().keySet().contains( m_value )
+               ? p_context.agent().fuzzy().membership().success()
+               : p_context.agent().fuzzy().membership().fail();
     }
 
 }
