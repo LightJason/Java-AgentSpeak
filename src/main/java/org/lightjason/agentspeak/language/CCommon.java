@@ -273,6 +273,38 @@ public final class CCommon
     /**
      * sequential execute
      *
+     * @param p_parallel parallel execution flag
+     * @param p_context execution context
+     * @param p_argument arguments
+     * @param p_return return values
+     * @param p_execution execution stream
+     * @return list with execution results and successful execution
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    @Nonnull
+    public static Pair<List<IFuzzyValue<?>>, Boolean> executesequential( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return,
+                                                                         @Nonnull final Stream<IExecution> p_execution )
+    {
+        final List<IFuzzyValue<?>> l_result = new ArrayList<>();
+        final AtomicBoolean l_success = new AtomicBoolean();
+
+        return p_execution
+            .peek( i -> i.execute( p_parallel, p_context, p_argument, p_return ).forEach( l_result::add ) )
+            .filter( i ->
+            {
+                l_success.set( p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) );
+                return !l_success.get();
+            } )
+            .findFirst()
+            .map( i -> new ImmutablePair<>( l_result, l_success.get() ) )
+            .orElse( new ImmutablePair<>( l_result, l_success.get() ) );
+    }
+
+    /**
+     * sequential execute
+     *
      * @param p_context execution context
      * @param p_execution execution stream
      * @return list with execution results and successful execution
@@ -282,19 +314,7 @@ public final class CCommon
     @Nonnull
     public static Pair<List<IFuzzyValue<?>>, Boolean> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
     {
-        final List<IFuzzyValue<?>> l_result = new ArrayList<>();
-        final AtomicBoolean l_success = new AtomicBoolean();
-
-        return p_execution
-            .peek( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ).forEach( l_result::add ) )
-            .filter( i ->
-            {
-                l_success.set( p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) );
-                return !l_success.get();
-            } )
-            .findFirst()
-            .map( i -> new ImmutablePair<>( l_result, l_success.get() ) )
-            .orElse( new ImmutablePair<>( l_result, l_success.get() ) );
+        return executesequential( false, p_context, Collections.emptyList(), Collections.emptyList(), p_execution );
     }
 
     /**
