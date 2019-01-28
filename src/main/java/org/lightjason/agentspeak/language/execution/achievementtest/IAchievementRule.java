@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -38,6 +37,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -69,12 +69,12 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
      * @return boolean result
      */
     @Nonnull
-    protected static IFuzzyValue<Boolean> findandexecute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value )
+    protected static Stream<IFuzzyValue<?>> findandexecute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value )
     {
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );
         if ( Objects.isNull( l_rules ) )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         // first step allocate all variables of the literal with the current context variables
         final ILiteral l_allocate = p_value.bind( p_context );
@@ -82,9 +82,10 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
         // second step execute backtracking rules sequential
         return l_rules.stream()
                       .map( i -> executerule( p_context, l_allocate, i ) )
-                      .filter( IFuzzyValue::value )
-                      .findFirst()
-                      .orElse( CFuzzyValue.of( false ) );
+                      .map( i -> p_context.agent().fuzzy().defuzzification().apply( i ) )
+                      .anyMatch( i -> !p_context.agent().fuzzy().defuzzification().success( i ) )
+                      ? p_context.agent().fuzzy().membership().fail()
+                      : p_context.agent().fuzzy().membership().success();
     }
 
     /**
@@ -95,24 +96,26 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
      * @param p_rule rule
      * @return execution result
      */
-    private static IFuzzyValue<Boolean> executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
+    private static Stream<IFuzzyValue<?>> executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
 
-        if ( p_rule.execute(
-            false,
-            p_rule.instantiate( p_context.agent(), l_variables.stream() ),
-            Collections.emptyList(),
-            Collections.emptyList()
-        ).value() )
+        if ( p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply( p_rule.execute(
+                false,
+                    p_rule.instantiate( p_context.agent(), l_variables.stream() ),
+                    Collections.emptyList(),
+                    Collections.emptyList()
+                ) )
+            ) )
         {
             l_variables.parallelStream()
                        .filter( i -> i instanceof IRelocateVariable<?> )
                        .forEach( i -> i.<IRelocateVariable<?>>term().relocate() );
-            return CFuzzyValue.of( true );
+            return p_context.agent().fuzzy().membership().success();
         }
 
-        return CFuzzyValue.of( false );
+        return p_context.agent().fuzzy().membership().fail();
     }
 
     @Override
