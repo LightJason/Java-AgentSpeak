@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -106,8 +107,8 @@ public final class CUnifier implements IUnifier
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                       @Nonnull final IExecution p_expression, final boolean p_parallel
+    public Stream<IFuzzyValue<?>> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                         @Nonnull final IExecution p_expression, final boolean p_parallel
     )
     {
         // get all possible variables
