@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -114,7 +113,7 @@ public final class CUnifier implements IUnifier
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = CCommon.parallelstream( l_variables.stream(), p_parallel )
@@ -124,10 +123,10 @@ public final class CUnifier implements IUnifier
 
         // if no match
         if ( l_result.isEmpty() )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         CCommon.updatecontext( p_context, l_result.stream() );
-        return CFuzzyValue.of( true );
+        return p_context.agent().fuzzy().membership().success();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
