@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -60,11 +59,10 @@ public interface IPlan extends IInstantiable
             return ITrigger.EMPTY;
         }
 
-        @Nonnull
         @Override
-        public IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context )
+        public boolean condition( @Nonnull final IContext p_context )
         {
-            return CFuzzyValue.of( true );
+            return true;
         }
 
         @Override
@@ -107,7 +105,7 @@ public interface IPlan extends IInstantiable
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
         @Nonnull
@@ -132,7 +130,6 @@ public interface IPlan extends IInstantiable
      * @param p_context execution context
      * @return execution result
      */
-    @Nonnull
-    IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context );
+    boolean condition( @Nonnull final IContext p_context );
 
 }
