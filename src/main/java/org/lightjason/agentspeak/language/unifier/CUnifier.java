@@ -162,21 +162,22 @@ public final class CUnifier implements IUnifier
     {
         // evalute expression result first, after that evaluate return arguments
         final List<ITerm> l_return = CCommon.argumentlist();
-        final IFuzzyValue<Boolean> l_result =
-            p_expression.execute(
-                false,
-                CCommon.updatecontext(
-                    p_context.duplicate(),
-                    p_variables.stream()
-                ),
-                Collections.emptyList(),
-                l_return
-            );
 
-        return p_context.agent()
-                        .fuzzy()
-                        .getValue()
-                        .defuzzify( l_result )
+        final boolean l_result = p_context.agent().fuzzy().defuzzification().success(
+            p_context.agent().fuzzy().defuzzification().apply(
+                p_expression.execute(
+                    false,
+                    CCommon.updatecontext(
+                        p_context.duplicate(),
+                        p_variables.stream()
+                    ),
+                    Collections.emptyList(),
+                    l_return
+                )
+            )
+        );
+
+        return l_result
                && l_return.size() == 1
                && l_return.get( 0 ).<IRawTerm<?>>term().valueassignableto( Boolean.class )
                && l_return.get( 0 ).<Boolean>raw();
