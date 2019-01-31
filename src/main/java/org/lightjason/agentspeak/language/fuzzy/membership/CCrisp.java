@@ -24,12 +24,12 @@
 package org.lightjason.agentspeak.language.fuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.math3.util.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -40,42 +40,63 @@ import java.util.stream.Stream;
  */
 public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
 {
-    private final Map<E, Pair<Number, Number>> m_values;
+    /**
+     * enum values
+     */
+    private final E[] m_values;
+    /**
+     * evan / odd element flag
+     */
+    private final boolean m_evan;
+    /**
+     * index value of the middle
+     */
+    private final int m_splitindex;
 
 
+    /**
+     * ctor
+     *
+     * @param p_type enum class type
+     */
     public CCrisp( final Class<E> p_type )
     {
-        p_type.getEnumConstants();
-
-
+        m_values = p_type.getEnumConstants();
+        m_evan = m_values.length % 2 == 0;
+        m_splitindex = m_values.length / 2;
     }
-
 
     @NonNull
     @Override
     public Stream<IFuzzyValue<?>> success()
     {
-        return Stream.of(
-
-        );
+        return m_evan
+               ? Stream.concat(
+                   IntStream.range( 0, m_splitindex ).mapToObj( i -> CFuzzyValue.of( m_values[i], 0 ) ),
+                   IntStream.range( m_splitindex, m_values.length ).mapToObj( i -> CFuzzyValue.of( m_values[i], 1 ) )
+                 )
+               : Stream.of();
     }
 
     @NonNull
     @Override
     public Stream<IFuzzyValue<?>> fail()
     {
-        return Stream.of(
-
-        );
+        return m_evan
+               ? Stream.concat(
+                    IntStream.range( 0, m_splitindex ).mapToObj( i -> CFuzzyValue.of( m_values[i], 1 ) ),
+                    IntStream.range( m_splitindex, m_values.length ).mapToObj( i -> CFuzzyValue.of( m_values[i], 0 ) )
+                )
+               : Stream.of();
     }
 
     @Override
     public Stream<Number> range( @NonNull final E p_value )
     {
-        // 1 = eval number of elements
         // linear interpolation on the middle value on odd elements
-
-        return Stream.of();
+        return m_evan
+               ? Stream.of( 1 )
+               : Stream.of();
     }
 
     @Override
