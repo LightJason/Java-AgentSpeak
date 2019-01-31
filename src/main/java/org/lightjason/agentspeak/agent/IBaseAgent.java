@@ -354,7 +354,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         m_fuzzy.update( this );
 
         // clear running plan- and trigger list and execute elements
-        this.execute( this.generateexecutionlist() );
+        this.execute( this.generateexecutionlist() )
+            .forEach( i ->
+            {
+            } );
 
 
         // set the cycle time
@@ -406,7 +409,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // create execution context
             .map( i -> CCommon.instantiateplan( i.getLeft().getRight(), this, i.getRight().getRight() ) )
             // check plan-condition
-            .filter( i -> m_fuzzy.getValue().defuzzify( i.getLeft().plan().condition( i.getRight() ) ) )
+            .filter( i -> i.getLeft().plan().condition( i.getRight() ) )
             // collectors-call must be toList not toSet because plan-execution can be have equal elements
             // so a set avoid multiple plan-execution
             .collect( Collectors.toList() );
@@ -419,7 +422,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @return fuzzy result for each executaed plan
      */
     @Nonnull
-    private IFuzzyValue<Boolean> execute( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
+    private Stream<IFuzzyValue<?>> execute( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
@@ -429,19 +432,29 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // execute plan and return values and return execution result
         return p_execution.parallelStream()
-                          .map( i ->
+                          .flatMap( i ->
                           {
-                              final IFuzzyValue<Boolean> l_result = i.getLeft()
-                                                                     .plan()
-                                                                     .execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() );
-                              if ( m_fuzzy.getValue().defuzzify( l_result ) )
-                                  // increment successful runs
+                              // execute plan
+                              final Number l_result = i.getRight().agent().fuzzy().defuzzification().apply(
+                                  i.getLeft().plan().execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() )
+                              );
+
+                              // check strict execution result
+                              if ( i.getRight().agent().fuzzy().defuzzification().success( l_result ) )
+                              {
                                   i.getLeft().incrementsuccessful();
+                                  return i.getRight().agent().fuzzy().membership().success();
+                              }
                               else
-                                  // increment failed runs and create delete goal-event
+                              {
                                   i.getLeft().incrementfail();
-                              return l_result;
-                          } ).collect( m_fuzzy.getKey() );
+                                  i.getRight().agent().trigger(
+                                      ITrigger.EType.DELETEGOAL.builddefault( i.getLeft().plan().literal().allocate( i.getRight() ) )
+                                  );
+                                  return i.getRight().agent().fuzzy().membership().fail();
+                              }
+
+                          } );
     }
 
     /**

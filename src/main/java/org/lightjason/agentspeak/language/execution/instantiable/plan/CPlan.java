@@ -115,21 +115,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IFuzzyValue<?>[] l_result = super.execute( p_parallel, p_context, p_argument, p_return ).toArray( IFuzzyValue[]::new );
-
-        // create delete-goal trigger
-        if ( !p_context.agent().fuzzy().defuzzification().success(
-                p_context.agent().fuzzy().defuzzification().apply(
-                    Arrays.stream( l_result )
-                )
-            )
-        )
-            p_context.agent().trigger( ITrigger.EType.DELETEGOAL.builddefault( m_triggerevent.literal().allocate( p_context ) ) );
-
-        return Arrays.stream( l_result );
+        return super.execute( p_parallel, p_context, p_argument, p_return );
     }
 
     @Override
