@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -119,24 +118,32 @@ public final class CPlan extends IBaseInstantiable implements IPlan
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
+        final IFuzzyValue<?>[] l_result = super.execute( p_parallel, p_context, p_argument, p_return ).toArray( IFuzzyValue[]::new );
 
         // create delete-goal trigger
-        if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
+        if ( !p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply(
+                    Arrays.stream( l_result )
+                )
+            )
+        )
             p_context.agent().trigger( ITrigger.EType.DELETEGOAL.builddefault( m_triggerevent.literal().allocate( p_context ) ) );
 
-        return l_result;
+        return Arrays.stream( l_result );
     }
 
     @Override
     public boolean condition( @Nonnull final IContext p_context )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        return CFuzzyValue.of(
-            m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
+
+        return p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply(
+                    m_condition.execute( false, p_context, Collections.emptyList(), l_return )
+                )
+            )
             && l_return.size() == 1
-            && l_return.get( 0 ).<Boolean>raw()
-        );
+            && l_return.get( 0 ).<Boolean>raw();
     }
 
     @Override
