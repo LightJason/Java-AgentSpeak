@@ -21,62 +21,66 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.unary;
+package org.lightjason.agentspeak.language.fuzzy.membership;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.language.variable.CVariable;
-import org.lightjason.agentspeak.language.variable.IVariable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
+import javax.annotation.Nonnull;
+import java.util.stream.Stream;
 
 
 /**
- * test unary operators
+ * membership which represent a strict crisp structure
+ *
+ * @tparam E fuzzy enum
  */
-public final class TestCUnary extends IBaseTest
+public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
 {
-
-    /**
-     * decrement
-     */
-    @Test
-    public void decrement()
+    @NonNull
+    @Override
+    public Stream<IFuzzyValue<?>> success()
     {
-        final IVariable<Object> l_value = new CVariable<>( "Value" );
-        l_value.set( 5 );
+        return Stream.of(
 
-        Assert.assertTrue(
-            new CDecrement( l_value ).execute(
-                false,
-                new CLocalContext( l_value ),
-                Collections.emptyList(),
-                Collections.emptyList()
-            )
         );
-
-        Assert.assertEquals( 4, l_value.<Number>raw().intValue() );
     }
 
-    /**
-     * decrement
-     */
-    @Test
-    public void increment()
+    @NonNull
+    @Override
+    public Stream<IFuzzyValue<?>> fail()
     {
-        final IVariable<Object> l_value = new CVariable<>( "Value" );
-        l_value.set( 7 );
+        return Stream.of(
 
-        Assert.assertTrue(
-            new CIncrement( l_value ).execute(
-                false,
-                new CLocalContext( l_value ),
-                Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
         );
+    }
 
-        Assert.assertEquals( 8, l_value.<Number>raw().intValue() );
+    @Override
+    public Stream<Number> range( @NonNull final E p_value )
+    {
+        return null;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <T extends Enum<?>> IFuzzyMembership<T> raw()
+    {
+        return (IFuzzyMembership<T>) this;
+    }
+
+    @Override
+    public Stream<IFuzzyValue<?>> apply( final Number p_number )
+    {
+        return p_number.doubleValue() <= 0.5
+               ? this.fail()
+               : this.success();
+    }
+
+    @Nonnull
+    @Override
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    {
+        return p_agent;
     }
 }
