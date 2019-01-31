@@ -24,10 +24,12 @@
 package org.lightjason.agentspeak.language.fuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.math3.util.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -38,6 +40,17 @@ import java.util.stream.Stream;
  */
 public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
 {
+    private final Map<E, Pair<Number, Number>> m_values;
+
+
+    public CCrisp( final Class<E> p_type )
+    {
+        p_type.getEnumConstants();
+
+
+    }
+
+
     @NonNull
     @Override
     public Stream<IFuzzyValue<?>> success()
@@ -59,7 +72,10 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
     @Override
     public Stream<Number> range( @NonNull final E p_value )
     {
-        return null;
+        // 1 = eval number of elements
+        // linear interpolation on the middle value on odd elements
+
+        return Stream.of();
     }
 
     @Override
