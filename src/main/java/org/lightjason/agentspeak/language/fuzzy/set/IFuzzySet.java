@@ -47,4 +47,12 @@ public interface IFuzzySet<E extends Enum<?>> extends BiFunction<String, Number,
     @NonNull
     <V> V raw();
 
+    /**
+     * returns a casted enum type
+     *
+     * @tparam U enum type
+     * @return casted enum
+     */
+    <U extends Enum<?>> U rawenum();
+
 }

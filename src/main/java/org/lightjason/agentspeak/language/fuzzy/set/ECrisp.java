@@ -62,6 +62,13 @@ public enum ECrisp implements IFuzzySet<ECrisp>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
+    public <U extends Enum<?>> U rawenum()
+    {
+        return (U) this;
+    }
+
+    @Override
     public IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number )
     {
         return CFuzzyValue.of( ECrisp.valueOf( p_name.toUpperCase( Locale.ROOT ) ), p_number );

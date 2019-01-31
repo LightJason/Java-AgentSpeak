@@ -81,7 +81,7 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      */
     protected final E index2enum( int p_index )
     {
-        return m_class.getEnumConstants()[p_index].get();
+        return m_class.getEnumConstants()[p_index].rawenum();
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
     protected final OptionalDouble maximum()
     {
         return Arrays.stream( m_class.getEnumConstants() )
-                     .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
+                     .mapToDouble( i -> m_membership.range( this.index2enum( i.rawenum().ordinal() ) )
                                                     .mapToDouble( Number::doubleValue )
                                                     .max()
                                                     .orElse( 0 ) )
