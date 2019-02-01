@@ -34,20 +34,21 @@ import java.util.stream.Stream;
 
 
 /**
- * membership which represent a strict crisp structure
+ * membership which represent a strict crisp structure (on odd fuzzy set elements the bias is used for splitt element
+ * in failing / successfull structure)
  *
  * @tparam E fuzzy enum
  */
 public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
 {
     /**
-     * enum values
+     * enum class
      */
-    private final E[] m_values;
+    private final Class<E> m_class;
     /**
-     * evan / odd element flag
+     * even / odd element flag
      */
-    private final boolean m_evan;
+    private final boolean m_even;
     /**
      * index value of the middle
      */
@@ -57,46 +58,57 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
     /**
      * ctor
      *
-     * @param p_type enum class type
+     * @param p_class enum class type
      */
-    public CCrisp( final Class<E> p_type )
+    public CCrisp( final Class<E> p_class )
     {
-        m_values = p_type.getEnumConstants();
-        m_evan = m_values.length % 2 == 0;
-        m_splitindex = m_values.length / 2;
+        m_class = p_class;
+        m_even = m_class.getEnumConstants().length % 2 == 0;
+        m_splitindex = m_class.getEnumConstants().length / 2;
     }
 
     @NonNull
     @Override
     public Stream<IFuzzyValue<?>> success()
     {
-        return m_evan
+        return m_even
                ? Stream.concat(
-                   IntStream.range( 0, m_splitindex ).mapToObj( i -> CFuzzyValue.of( m_values[i], 0 ) ),
-                   IntStream.range( m_splitindex, m_values.length ).mapToObj( i -> CFuzzyValue.of( m_values[i], 1 ) )
+                   IntStream.range( 0, m_splitindex )
+                            .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) ),
+                   IntStream.range( m_splitindex, m_class.getEnumConstants().length )
+                            .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) )
                  )
-               : Stream.of();
+               : Stream.concat(
+                    IntStream.rangeClosed( 0, m_splitindex )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) ),
+                    IntStream.range( m_splitindex, m_class.getEnumConstants().length )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) )
+                 );
     }
 
     @NonNull
     @Override
     public Stream<IFuzzyValue<?>> fail()
     {
-        return m_evan
+        return m_even
                ? Stream.concat(
-                    IntStream.range( 0, m_splitindex ).mapToObj( i -> CFuzzyValue.of( m_values[i], 1 ) ),
-                    IntStream.range( m_splitindex, m_values.length ).mapToObj( i -> CFuzzyValue.of( m_values[i], 0 ) )
+                    IntStream.range( 0, m_splitindex )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) ),
+                    IntStream.range( m_splitindex, m_class.getEnumConstants().length )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) )
                 )
-               : Stream.of();
+               : Stream.concat(
+                    IntStream.range( 0, m_splitindex )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) ),
+                    IntStream.rangeClosed( m_splitindex, m_class.getEnumConstants().length )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) )
+                );
     }
 
     @Override
     public Stream<Number> range( @NonNull final E p_value )
     {
-        // linear interpolation on the middle value on odd elements
-        return m_evan
-               ? Stream.of( 1 )
-               : Stream.of();
+        return Stream.of( 1 );
     }
 
     @Override

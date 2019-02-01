@@ -33,6 +33,8 @@ import java.util.function.BiFunction;
  * fuzzy set
  *
  * @tparam T enum type
+ * @note Enum types must be ordered, at the beginning there are the bad values, at the end there are the good ones,
+ * so the enum must be sorted from bad to good
  */
 public interface IFuzzySet<E extends Enum<?>> extends BiFunction<String, Number, IFuzzyValue<?>>
 {
