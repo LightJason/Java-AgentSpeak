@@ -21,78 +21,32 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.bundle;
+package org.lightjason.agentspeak.action.builtin.math.statistic;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
-import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import javax.annotation.Nonnull;
 
-
 /**
- * fuzzy bundle
- * @bug null return
+ * statistic value
  */
-public final class CFuzzyBundle implements IFuzzyBundle
+public interface IStatisticValue
 {
-
     /**
-     * fuzzy set
-     */
-    private final Class<? extends IFuzzySet<?>> m_set;
-    /**
-     * fuzzy membership
-     */
-    private final IFuzzyMembership<?> m_membership;
-    /**
-     * defuzzification
-     */
-    private final IDefuzzification m_defuzzification;
-
-    /**
-     * ctor
+     * returns the statistic values
      *
-     * @param p_set fuzzy set
-     * @param p_membership fuzzy membership
-     * @param p_defuzzification defuzzyfication
+     * @param p_statistic summary statistic
+     * @return value
      */
-    public CFuzzyBundle( @NonNull final Class<? extends IFuzzySet<?>> p_set, @NonNull final IFuzzyMembership<?> p_membership,
-                         @NonNull final IDefuzzification p_defuzzification
-    )
-    {
-        m_set = p_set;
-        m_membership = p_membership;
-        m_defuzzification = p_defuzzification;
-    }
+    double value( @Nonnull final SummaryStatistics p_statistic );
 
+    /**
+     * returns the statistic values
+     *
+     * @param p_statistic descriptive statistic
+     * @return value
+     */
+    double value( @Nonnull final DescriptiveStatistics p_statistic );
 
-    @Override
-    public IFuzzySet<?> set()
-    {
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public IFuzzyMembership<?> membership()
-    {
-        return m_membership;
-    }
-
-    @Nonnull
-    @Override
-    public IDefuzzification defuzzification()
-    {
-        return m_defuzzification;
-    }
-
-    @Nonnull
-    @Override
-    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
-    {
-        return m_defuzzification.update( m_membership.update( p_agent ) );
-    }
 }
