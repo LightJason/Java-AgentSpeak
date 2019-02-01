@@ -21,50 +21,14 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.set;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+package org.lightjason.agentspeak.language.fuzzy.bundle;
 
-import java.util.function.Function;
-
+import java.util.function.Supplier;
 
 /**
- * fuzzy set
- *
- * @tparam T enum type
- * @note Enum types must be ordered, at the beginning there are the bad values, at the end there are the good ones,
- * so the enum must be sorted from bad to good
+ * interface of a fuzzy bundle factory
  */
-public interface IFuzzySet<E extends Enum<?>> extends Function<Number, IFuzzyValue<?>>
+public interface IFuzzyBundleFactory extends Supplier<IFuzzyBundle>
 {
-
-    /**
-     * returns a raw value if it exist
-     *
-     * @return raw value
-     *
-     * @tparam V raw value of the fuzzy set element
-     */
-    @NonNull
-    <V> V raw();
-
-    /**
-     * returns a casted enum type
-     *
-     * @tparam U enum type
-     * @return casted enum
-     */
-    <U extends Enum<?>> U rawenum();
-
-    /**
-     * returns a fuzzy value by name and value
-     *
-     * @param p_name name
-     * @param p_number value
-     * @return fuzzy value
-     */
-    @NonNull
-    IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number );
-
 }

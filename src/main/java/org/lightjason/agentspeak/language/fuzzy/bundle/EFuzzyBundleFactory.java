@@ -21,50 +21,33 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.set;
+package org.lightjason.agentspeak.language.fuzzy.bundle;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-
-import java.util.function.Function;
-
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 
 /**
- * fuzzy set
- *
- * @tparam T enum type
- * @note Enum types must be ordered, at the beginning there are the bad values, at the end there are the good ones,
- * so the enum must be sorted from bad to good
+ * fuzzy bundles factory
  */
-public interface IFuzzySet<E extends Enum<?>> extends Function<Number, IFuzzyValue<?>>
+public enum EFuzzyBundleFactory implements IFuzzyBundleFactory
 {
+    CRISP;
 
-    /**
-     * returns a raw value if it exist
-     *
-     * @return raw value
-     *
-     * @tparam V raw value of the fuzzy set element
-     */
-    @NonNull
-    <V> V raw();
+    @Override
+    public IFuzzyBundle get()
+    {
+        switch ( this )
+        {
+            /*
+            case CRISP:
+                final IFuzzyMembership<ECrisp> l_membership = new CCrisp<>( ECrisp.class );
+                final IDefuzzification l_defuzzy = new CCOG<ECrisp>( ECrisp.class, l_membership, ECrisp.TRUE.apply( 1 ) );
+                return
+            */
 
-    /**
-     * returns a casted enum type
-     *
-     * @tparam U enum type
-     * @return casted enum
-     */
-    <U extends Enum<?>> U rawenum();
-
-    /**
-     * returns a fuzzy value by name and value
-     *
-     * @param p_name name
-     * @param p_number value
-     * @return fuzzy value
-     */
-    @NonNull
-    IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number );
+            default:
+                throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", this ) );
+        }
+    }
 
 }

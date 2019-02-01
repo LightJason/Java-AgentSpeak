@@ -23,16 +23,10 @@
 
 package org.lightjason.agentspeak.generator;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
-import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.IDefuzzification;
-import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
-import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 import org.lightjason.agentspeak.language.unifier.CUnifier;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
-
-import javax.annotation.Nonnull;
 
 
 /**
@@ -45,35 +39,7 @@ public interface IAgentGenerator<T extends IAgent<?>> extends IGenerator<T>
      *
      * @bug not implemented yet
      */
-    IFuzzyBundle DEFAULTFUZZYBUNDLE = new IFuzzyBundle()
-    {
-        @Override
-        public IFuzzySet<?> set()
-        {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public IFuzzyMembership<?> membership()
-        {
-            return null;
-        }
-
-        @Nonnull
-        @Override
-        public IDefuzzification defuzzification()
-        {
-            return null;
-        }
-
-        @Nonnull
-        @Override
-        public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
-        {
-            return null;
-        }
-    };
+    IFuzzyBundle DEFAULTFUZZYBUNDLE = null;
 
     /**
      * default unification

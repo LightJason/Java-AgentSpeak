@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
@@ -44,7 +45,7 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
     /**
      * enum class
      */
-    private final Class<E> m_class;
+    private final Class<? extends IFuzzySet<E>> m_class;
     /**
      * even / odd element flag
      */
@@ -60,7 +61,7 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
      *
      * @param p_class enum class type
      */
-    public CCrisp( final Class<E> p_class )
+    public CCrisp( final Class<? extends IFuzzySet<E>> p_class )
     {
         m_class = p_class;
         m_even = m_class.getEnumConstants().length % 2 == 0;
@@ -74,15 +75,15 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
         return m_even
                ? Stream.concat(
                    IntStream.range( 0, m_splitindex )
-                            .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) ),
+                            .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) ),
                    IntStream.range( m_splitindex, m_class.getEnumConstants().length )
-                            .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) )
+                            .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) )
                  )
                : Stream.concat(
                     IntStream.rangeClosed( 0, m_splitindex )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) ),
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) ),
                     IntStream.range( m_splitindex, m_class.getEnumConstants().length )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) )
                  );
     }
 
@@ -93,15 +94,15 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
         return m_even
                ? Stream.concat(
                     IntStream.range( 0, m_splitindex )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) ),
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) ),
                     IntStream.range( m_splitindex, m_class.getEnumConstants().length )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) )
                 )
                : Stream.concat(
                     IntStream.range( 0, m_splitindex )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 0 ) ),
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) ),
                     IntStream.rangeClosed( m_splitindex, m_class.getEnumConstants().length )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i], 1 ) )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) )
                 );
     }
 

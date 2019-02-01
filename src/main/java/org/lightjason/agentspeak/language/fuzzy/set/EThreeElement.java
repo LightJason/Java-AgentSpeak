@@ -55,9 +55,17 @@ public enum EThreeElement implements IFuzzySet<EThreeElement>
         return (U) this;
     }
 
+    @NonNull
+    @Override
+    public IFuzzyValue<?> apply( @NonNull final Number p_number )
+    {
+        return CFuzzyValue.of( this, p_number );
+    }
+
+    @NonNull
     @Override
     public IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number )
     {
-        return CFuzzyValue.of( ECrisp.valueOf( p_name.toUpperCase( Locale.ROOT ) ), p_number );
+        return EThreeElement.valueOf( p_name.toUpperCase( Locale.ROOT ) ).apply( p_number );
     }
 }
