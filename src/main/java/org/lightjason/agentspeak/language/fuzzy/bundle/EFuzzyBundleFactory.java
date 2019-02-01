@@ -25,6 +25,10 @@ package org.lightjason.agentspeak.language.fuzzy.bundle;
 
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
+import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CCOG;
+import org.lightjason.agentspeak.language.fuzzy.membership.CCrisp;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
 
 /**
  * fuzzy bundles factory
@@ -38,12 +42,13 @@ public enum EFuzzyBundleFactory implements IFuzzyBundleFactory
     {
         switch ( this )
         {
-            /*
             case CRISP:
                 final IFuzzyMembership<ECrisp> l_membership = new CCrisp<>( ECrisp.class );
-                final IDefuzzification l_defuzzy = new CCOG<ECrisp>( ECrisp.class, l_membership, ECrisp.TRUE.apply( 1 ) );
-                return
-            */
+                return new CFuzzyBundle(
+                        null,
+                        l_membership,
+                        new CCOG<ECrisp>( ECrisp.class, l_membership, ECrisp.TRUE.apply( 1 ) )
+                );
 
             default:
                 throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", this ) );

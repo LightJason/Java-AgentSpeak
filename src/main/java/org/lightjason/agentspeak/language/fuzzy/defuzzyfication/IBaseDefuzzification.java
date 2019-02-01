@@ -44,7 +44,7 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
     /**
      * default fuzzy value for numeric value
      */
-    protected final IFuzzyValue<E> m_default;
+    protected final IFuzzyValue<?> m_default;
     /**
      * fuzzy membership function
      */
@@ -64,7 +64,7 @@ public abstract class IBaseDefuzzification<E extends Enum<?>> implements IDefuzz
      * @param p_default default fuzzy value
      */
     protected IBaseDefuzzification( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership,
-                                    @NonNull final IFuzzyValue<E> p_default
+                                    @NonNull final IFuzzyValue<?> p_default
     )
     {
         m_class = p_class;

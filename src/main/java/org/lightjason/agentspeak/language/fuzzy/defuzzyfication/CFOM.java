@@ -46,7 +46,7 @@ public final class CFOM<E extends Enum<?>> extends IBaseDefuzzification<E>
      * @param p_membership membership function
      * @param p_default default fuzzy value
      */
-    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<E> p_default
+    public CFOM( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<?> p_default
     )
     {
         super( p_class, p_membership, p_default );
