@@ -572,7 +572,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     }
 
     /**
-     * test multiple plan execution
+     * test multiple plan execute
      *
      * @throws Exception thrown on stream and parser error
      */
@@ -713,7 +713,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     }
 
     /**
-     * test of inner action execution
+     * test of inner action execute
      *
      * @throws Exception thrown on stream and parser error
      */

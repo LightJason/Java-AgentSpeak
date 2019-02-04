@@ -309,7 +309,7 @@ public final class TestCActionAgent extends IBaseTest
     /**
      * execute agent cycle
      *
-     * @return execution context
+     * @return execute context
      */
     private IContext next()
     {

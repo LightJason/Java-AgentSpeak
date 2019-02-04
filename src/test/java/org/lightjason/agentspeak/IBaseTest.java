@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
@@ -108,10 +109,36 @@ public abstract class IBaseTest
     }
 
     /**
+     * execution with defuzzyfication
+     *
+     * @param p_execution execution object
+     * @param p_parallel parallel execution
+     * @param p_arguments execution arguments
+     * @param p_return return values
+     * @param p_variables context variables
+     * @return execution result
+     */
+    protected boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final List<ITerm> p_arguments,
+                               @Nonnull final List<ITerm> p_return, @Nullable final IVariable<?>... p_variables )
+    {
+        final IContext l_context = new CLocalContext( p_variables );
+        return l_context.agent().fuzzy().defuzzification().success(
+            l_context.agent().fuzzy().defuzzification().apply(
+                p_execution.execute(
+                    p_parallel,
+                    l_context,
+                    p_arguments,
+                    p_return
+                )
+            )
+        );
+    }
+
+    /**
      * execute agent cycle
      *
      * @param p_agent agent
-     * @return execution successful flag
+     * @return execute successful flag
      */
     protected static boolean agentcycle( @Nonnull final IAgent<?> p_agent )
     {

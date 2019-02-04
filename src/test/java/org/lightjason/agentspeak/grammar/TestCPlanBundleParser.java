@@ -481,7 +481,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
     }
 
     /**
-     * test multiple plan execution
+     * test multiple plan execute
      *
      * @throws Exception thrown on stream and parser error
      */

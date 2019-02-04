@@ -95,7 +95,7 @@ public final class TestCHanoiTowers extends IBaseTest
      */
     private Map<Integer, CTower> m_tower;
     /**
-     * running flag (agent can disable execution)
+     * running flag (agent can disable execute)
      */
     private AtomicBoolean m_running;
 
@@ -122,9 +122,9 @@ public final class TestCHanoiTowers extends IBaseTest
 
 
     /**
-     * test execution
+     * test execute
      *
-     * @throws InterruptedException is thrown on execution error
+     * @throws InterruptedException is thrown on execute error
      */
     @Test
     public void play() throws InterruptedException

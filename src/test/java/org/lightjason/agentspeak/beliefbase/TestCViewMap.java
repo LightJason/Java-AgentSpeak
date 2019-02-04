@@ -165,7 +165,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test in-agent definition
      *
-     * @throws Exception is thrown on execution error
+     * @throws Exception is thrown on execute error
      */
     @Test
     public void inagent() throws Exception

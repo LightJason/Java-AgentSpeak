@@ -285,7 +285,7 @@ public final class TestCActionDateTime extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            "action execution error",
+            "action execute error",
             new CTime().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::of ).collect( Collectors.toList() ),

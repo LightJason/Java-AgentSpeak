@@ -131,7 +131,7 @@ public final class TestCActionCrypto extends IBaseTest
     }
 
     /**
-     * test decrypt execution array
+     * test decrypt execute array
      *
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */

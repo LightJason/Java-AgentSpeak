@@ -56,7 +56,7 @@ import java.util.stream.Stream;
 public final class TestCActionStorage extends IBaseTest
 {
     /**
-     * execution context
+     * execute context
      */
     private IContext m_context;
 
