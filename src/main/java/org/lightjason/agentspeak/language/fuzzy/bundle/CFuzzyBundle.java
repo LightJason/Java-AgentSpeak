@@ -34,7 +34,6 @@ import javax.annotation.Nonnull;
 
 /**
  * fuzzy bundle
- * @bug null return
  */
 public final class CFuzzyBundle implements IFuzzyBundle
 {
@@ -72,7 +71,8 @@ public final class CFuzzyBundle implements IFuzzyBundle
     @Override
     public IFuzzySet<?> set()
     {
-        return null;
+        // one element must exist, so return the first element
+        return m_set.getEnumConstants()[0];
     }
 
     @NonNull
