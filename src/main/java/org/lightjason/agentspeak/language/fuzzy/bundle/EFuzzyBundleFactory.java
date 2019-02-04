@@ -45,7 +45,7 @@ public enum EFuzzyBundleFactory implements IFuzzyBundleFactory
             case CRISP:
                 final IFuzzyMembership<ECrisp> l_membership = new CCrisp<>( ECrisp.class );
                 return new CFuzzyBundle(
-                        null,
+                        ECrisp.class,
                         l_membership,
                         new CCOG<ECrisp>( ECrisp.class, l_membership, ECrisp.TRUE.apply( 1 ) )
                 );
