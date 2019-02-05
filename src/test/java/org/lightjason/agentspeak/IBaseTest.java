@@ -115,7 +115,7 @@ public abstract class IBaseTest
      * @param p_parallel parallel execution
      * @param p_arguments execution arguments
      * @param p_return return values
-     * @param p_variables context variables
+     * @param p_variables optional variables
      * @return execution result
      */
     protected boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final List<ITerm> p_arguments,
@@ -132,7 +132,7 @@ public abstract class IBaseTest
      * @param p_arguments execution arguments
      * @param p_return return values
      * @param p_agent agent
-     * @param p_variables context variables
+     * @param p_variables optional variables
      * @return execution result
      */
     protected boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final List<ITerm> p_arguments,
@@ -147,6 +147,24 @@ public abstract class IBaseTest
                     p_arguments,
                     p_return
                 )
+            )
+        );
+    }
+
+    /**
+     * defuzzification
+     *
+     * @param p_values fuzzy values
+     * @param p_agent agent
+     * @param p_variables optional variables
+     * @return execution result
+     */
+    protected boolean defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_values, @Nonnull final IAgent<?> p_agent, @Nullable final IVariable<?>... p_variables )
+    {
+        final IContext l_context = new CLocalContext( p_agent, p_variables );
+        return  l_context.agent().fuzzy().defuzzification().success(
+            l_context.agent().fuzzy().defuzzification().apply(
+                p_values
             )
         );
     }

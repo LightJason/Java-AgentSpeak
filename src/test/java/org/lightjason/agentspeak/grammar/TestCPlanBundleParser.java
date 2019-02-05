@@ -92,12 +92,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         final IVariable<?> l_tvar = new CVariable<>( "T" ).set( 0 );
 
         Assert.assertTrue(
-            l_rule.execute(
+            execute(
+                l_rule,
                 false,
-                new CLocalContext( l_tvar ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_tvar
+            )
         );
 
         Assert.assertEquals( 1.0, l_tvar.<Number>raw() );
@@ -130,11 +131,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         ).generatesingle();
 
         Assert.assertTrue(
-            l_agent.trigger(
-                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "ack", CRawTerm.of( l_nvalue ), CRawTerm.of( l_mvalue ) ) ),
+            defuzzify(
+                l_agent.trigger(
+                    ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "ack", CRawTerm.of( l_nvalue ), CRawTerm.of( l_mvalue ) ) ),
                 true
+                ),
+                l_agent
             )
-                   .value()
         );
 
         Assert.assertEquals( 3, l_values.value().size() );
@@ -160,6 +163,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plans.get( CLiteral.of( "testsuccess" ) ).toString(),
+
             l_plans.get( CLiteral.of( "testsuccess" ) )
                    .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
                    .value()
