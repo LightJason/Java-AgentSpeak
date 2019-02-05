@@ -51,12 +51,14 @@ public final class TestCDeconstruct extends IBaseTest
         final IVariable<?> l_inner = new CVariable<>( "Inner" );
 
         Assert.assertTrue(
-            new CDeconstruct( Stream.of( l_outer, l_inner ), CLiteral.of( "foobar", CRawTerm.of( 5 ), CRawTerm.of( "test" ) ) ).execute(
+            execute(
+                new CDeconstruct( Stream.of( l_outer, l_inner ), CLiteral.of( "foobar", CRawTerm.of( 5 ), CRawTerm.of( "test" ) ) ),
                 false,
-                new CLocalContext( l_outer, l_inner ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_outer,
+                l_inner
+            )
         );
 
         Assert.assertEquals( "foobar", l_outer.raw() );
@@ -78,12 +80,15 @@ public final class TestCDeconstruct extends IBaseTest
         l_argument.set( CLiteral.of( "foo", CRawTerm.of( "bar" ), CRawTerm.of( 7 ) ) );
 
         Assert.assertTrue(
-            new CDeconstruct( Stream.of( l_outer, l_inner ), l_argument ).execute(
+            execute(
+                new CDeconstruct( Stream.of( l_outer, l_inner ), l_argument ),
                 false,
-                new CLocalContext( l_outer, l_inner, l_argument ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_outer,
+                l_inner,
+                l_argument
+            )
         );
 
         Assert.assertEquals( "foo", l_outer.raw() );

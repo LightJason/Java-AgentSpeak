@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
@@ -96,15 +95,16 @@ public final class TestCUnaryExpression extends IBaseTest
         l_var.set( p_data[0] );
 
         Assert.assertTrue(
-            new CUnaryExpression(
-                (EUnaryOperator) p_data[1],
-                new CPassVariable( l_var )
-            ).execute(
+            execute(
+                new CUnaryExpression(
+                    (EUnaryOperator) p_data[1],
+                    new CPassVariable( l_var )
+                ),
                 false,
-                new CLocalContext( l_var ),
                 Collections.emptyList(),
-                l_return
-            ).value()
+                l_return,
+                l_var
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );
@@ -125,15 +125,15 @@ public final class TestCUnaryExpression extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CUnaryExpression(
-                (EUnaryOperator) p_data[1],
-                new CPassRaw<>( p_data[0] )
-            ).execute(
+            execute(
+                new CUnaryExpression(
+                    (EUnaryOperator) p_data[1],
+                    new CPassRaw<>( p_data[0] )
+                ),
                 false,
-                IContext.EMPTYPLAN,
                 Collections.emptyList(),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );
