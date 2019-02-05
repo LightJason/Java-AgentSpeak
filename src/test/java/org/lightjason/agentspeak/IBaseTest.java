@@ -121,7 +121,24 @@ public abstract class IBaseTest
     protected boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final List<ITerm> p_arguments,
                                @Nonnull final List<ITerm> p_return, @Nullable final IVariable<?>... p_variables )
     {
-        final IContext l_context = new CLocalContext( p_variables );
+        return execute( p_execution, p_parallel, p_arguments, p_return, IAgent.EMPTY, p_variables );
+    }
+
+    /**
+     * execution with defuzzyfication
+     *
+     * @param p_execution execution object
+     * @param p_parallel parallel execution
+     * @param p_arguments execution arguments
+     * @param p_return return values
+     * @param p_agent agent
+     * @param p_variables context variables
+     * @return execution result
+     */
+    protected boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final List<ITerm> p_arguments,
+                               @Nonnull final List<ITerm> p_return, @Nonnull IAgent<?> p_agent, @Nullable final IVariable<?>... p_variables )
+    {
+        final IContext l_context = new CLocalContext( p_agent, p_variables );
         return l_context.agent().fuzzy().defuzzification().success(
             l_context.agent().fuzzy().defuzzification().apply(
                 p_execution.execute(
