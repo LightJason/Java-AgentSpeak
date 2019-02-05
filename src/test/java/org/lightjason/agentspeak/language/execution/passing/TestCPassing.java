@@ -84,7 +84,14 @@ public final class TestCPassing extends IBaseTest
         final IVariable<?> l_string = new CVariable<>( "foo" ).set( "hello" );
         final IVariable<?> l_number = new CVariable<>( "bar" ).set( 5 );
 
-        execute( new CPassVariable( l_string, l_number ),false, Collections.emptyList(), l_return, l_string, l_number );
+        execute(
+            new CPassVariable( l_string, l_number ),
+            false,
+            Collections.emptyList(),
+            l_return,
+            l_string,
+            l_number
+        );
 
         Assert.assertEquals( 2, l_return.size() );
         Assert.assertEquals( "hello", l_return.get( 0 ).raw() );
