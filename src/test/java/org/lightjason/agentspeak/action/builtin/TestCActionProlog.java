@@ -85,12 +85,12 @@ public final class TestCActionProlog extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertFalse(
-            new CSolveAll().execute(
-                    false,
-                    IContext.EMPTYPLAN,
-                    Stream.of( "q(X)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                    l_return
-            ).value()
+            execute(
+                new CSolveAll(),
+                false,
+                Stream.of( "q(X)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return
+            )
         );
     }
 
@@ -111,12 +111,13 @@ public final class TestCActionProlog extends IBaseTest
         );
 
         Assert.assertTrue(
-            new CSolveAll().execute(
-                    false,
-                    m_context,
-                    Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                    l_return
-            ).value()
+            execute(
+                new CSolveAll(),
+                false,
+                Stream.of( "q(X).", "q(_).", "q(5).", "s(S).", "l(L)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return,
+                m_context
+            )
         );
 
 
@@ -150,12 +151,13 @@ public final class TestCActionProlog extends IBaseTest
         );
 
         Assert.assertTrue(
-            new CSolveAll().execute(
+            execute(
+                new CSolveAll(),
                 false,
-                m_context,
                 Stream.of( "query(X).", l_return.get( 0 ) ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                l_return
-            ).value()
+                l_return,
+                m_context
+            )
         );
 
         Assert.assertEquals( 2, l_return.size() );
@@ -178,12 +180,13 @@ public final class TestCActionProlog extends IBaseTest
         );
 
         Assert.assertTrue(
-            new CSolveAny().execute(
+            execute(
+                new CSolveAny(),
                 false,
-                m_context,
                 Stream.of( "a(X).", "foo(_).", "bar(5)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                l_return
-            ).value()
+                l_return,
+                m_context
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );
