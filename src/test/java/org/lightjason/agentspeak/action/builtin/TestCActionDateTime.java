@@ -213,11 +213,12 @@ public final class TestCActionDateTime extends IBaseTest
     public void createerror()
     {
         Assert.assertFalse(
-            new CCreate().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CCreate(),
+                false,
                 Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -286,11 +287,12 @@ public final class TestCActionDateTime extends IBaseTest
 
         Assert.assertTrue(
             "action execute error",
-            new CTime().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CTime(),
+                false,
                 Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 4, l_return.size() );

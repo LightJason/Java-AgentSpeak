@@ -114,19 +114,21 @@ public final class TestCActionCrypto extends IBaseTest
         final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
 
         Assert.assertFalse(
-            new CEncrypt().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CEncrypt(),
+                false,
                 Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertFalse(
-            new CDecrypt().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CDecrypt(),
+                false,
                 Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -142,20 +144,22 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CEncrypt().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CEncrypt(),
+                false,
                 Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );
         Assert.assertFalse(
-            new CDecrypt().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CDecrypt(),
+                false,
                 Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
     }
 
@@ -171,11 +175,12 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CHash().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CHash(),
+                false,
                 Stream.of( CRawTerm.of( p_hash.getLeft() ), CRawTerm.of( "test string" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertArrayEquals( p_hash.getRight(), l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ) );
@@ -216,12 +221,12 @@ public final class TestCActionCrypto extends IBaseTest
     public void createkeyError()
     {
         Assert.assertFalse(
-
-            new CCreateKey().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CCreateKey(),
+                false,
                 Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 

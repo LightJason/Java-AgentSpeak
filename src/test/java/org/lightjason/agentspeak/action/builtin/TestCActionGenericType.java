@@ -119,11 +119,12 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertFalse(
-            new CParseLiteral().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CParseLiteral(),
+                false,
                 Stream.of( "Main/parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
     }
 
@@ -179,19 +180,21 @@ public final class TestCActionGenericType extends IBaseTest
     public void is()
     {
         Assert.assertFalse(
-            new CIs().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIs(),
+                false,
                 Stream.of( "java.lang.String", "text foo", 123, 88.98 ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertTrue(
-            new CIs().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIs(),
+                false,
                 Stream.of( "java.lang.Number", 123, 44.5 ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -203,19 +206,21 @@ public final class TestCActionGenericType extends IBaseTest
     public void isnull()
     {
         Assert.assertFalse(
-            new CIsNull().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIsNull(),
+                false,
                 Stream.of( "test type string", null ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertTrue(
-            new CIsNull().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIsNull(),
+                false,
                 Stream.of( CRawTerm.of( null ) ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -227,19 +232,21 @@ public final class TestCActionGenericType extends IBaseTest
     public void isnumeric()
     {
         Assert.assertFalse(
-            new CIsNumeric().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIsNumeric(),
+                false,
                 Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertTrue(
-            new CIsNumeric().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIsNumeric(),
+                false,
                 Stream.of( 123, 77L, 112.123, 44.5f ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -251,19 +258,21 @@ public final class TestCActionGenericType extends IBaseTest
     public void isstring()
     {
         Assert.assertFalse(
-            new CIsString().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIsString(),
+                false,
                 Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertTrue(
-            new CIsString().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CIsString(),
+                false,
                 Stream.of( "okay 1", 'c', "ok 2" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -318,11 +327,12 @@ public final class TestCActionGenericType extends IBaseTest
     public void tofloaterror()
     {
         Assert.assertFalse(
-            new CToNumber().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CToNumber(),
+                false,
                 Stream.of( "" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 

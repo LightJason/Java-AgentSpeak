@@ -77,11 +77,12 @@ public final class TestCActionCollectionTuple extends IBaseTest
     public void createerror()
     {
         Assert.assertFalse(
-            new CCreate().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CCreate(),
+                false,
                 Collections.emptyList(),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 

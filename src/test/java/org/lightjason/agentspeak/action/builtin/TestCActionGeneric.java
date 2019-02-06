@@ -131,11 +131,12 @@ public final class TestCActionGeneric extends IBaseTest
         l_print.formatter().add( l_format2 );
 
         Assert.assertTrue(
-            l_print.execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                l_print,
+                false,
                 Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertEquals( "FOOBAR-1234-yes\n", l_output.toString( "utf-8" ) );
