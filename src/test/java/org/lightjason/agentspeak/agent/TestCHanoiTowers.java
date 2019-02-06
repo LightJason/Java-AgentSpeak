@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -332,7 +331,7 @@ public final class TestCHanoiTowers extends IBaseTest
         public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -367,7 +366,7 @@ public final class TestCHanoiTowers extends IBaseTest
         )
         {
             m_running.set( false );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -403,10 +402,10 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
-                return CFuzzyValue.of( false );
+                return p_context.agent().fuzzy().membership().fail();
 
             p_return.add( CRawTerm.of( l_tower.size() ) );
-            return CFuzzyValue.of( true );
+            return p_context.agent().fuzzy().membership().success();
         }
     }
 
@@ -456,16 +455,16 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
-                return CFuzzyValue.of( false );
+                return p_context.agent().fuzzy().membership().fail();
 
             try
             {
                 l_tower.push( p_argument.get( 1 ).<CSlice>raw() );
-                return CFuzzyValue.of( true );
+                return p_context.agent().fuzzy().membership().success();
             }
             catch ( final IllegalStateException l_exception )
             {
-                return CFuzzyValue.of( false );
+                return p_context.agent().fuzzy().membership().fail();
             }
         }
     }
@@ -501,16 +500,16 @@ public final class TestCHanoiTowers extends IBaseTest
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( Objects.isNull( l_tower ) )
-                return CFuzzyValue.of( false );
+                return p_context.agent().fuzzy().membership().success();
 
             try
             {
                 p_return.add( CRawTerm.of( l_tower.pop() ) );
-                return CFuzzyValue.of( true );
+                return p_context.agent().fuzzy().membership().success();
             }
             catch ( final IllegalStateException l_exception )
             {
-                return CFuzzyValue.of( false );
+                return p_context.agent().fuzzy().membership().fail();
             }
         }
     }

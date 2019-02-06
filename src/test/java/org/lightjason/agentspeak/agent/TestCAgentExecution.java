@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -281,7 +280,7 @@ public final class TestCAgentExecution extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -315,7 +314,7 @@ public final class TestCAgentExecution extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 }
