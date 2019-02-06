@@ -34,11 +34,9 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -163,17 +161,22 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plans.get( CLiteral.of( "testsuccess" ) ).toString(),
-
-            l_plans.get( CLiteral.of( "testsuccess" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "testsuccess" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
 
         Assert.assertFalse(
             l_plans.get( CLiteral.of( "testfail" ) ).toString(),
-            l_plans.get( CLiteral.of( "testfail" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "testfail" ) ),
+            false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -194,16 +197,22 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plans.get( CLiteral.of( "threesuccess" ) ).toString(),
-            l_plans.get( CLiteral.of( "threesuccess" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "threesuccess" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
 
         Assert.assertFalse(
             l_plans.get( CLiteral.of( "twofail" ) ).toString(),
-            l_plans.get( CLiteral.of( "twofail" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "twofail" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -225,7 +234,14 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_avar, l_bvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_avar,
+                l_bvar
+            )
         );
 
         Assert.assertEquals( "bar", l_avar.raw() );
@@ -250,7 +266,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_xvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_xvar
+            )
         );
 
         Assert.assertEquals( 22.0, l_xvar.<Number>raw() );
@@ -279,12 +301,17 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_result, l_avar, l_bvar, l_cvar, l_dvar ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_result,
+                l_avar,
+                l_bvar,
+                l_cvar,
+                l_dvar
+            )
         );
 
         Assert.assertEquals(
@@ -312,7 +339,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         Assert.assertEquals(
@@ -349,12 +382,20 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_andtrue, l_andfalse, l_ortrue, l_orfalse, l_xortrue, l_xorfalse, l_notfalse, l_nottrue ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_andtrue,
+                l_andfalse,
+                l_ortrue,
+                l_orfalse,
+                l_xortrue,
+                l_xorfalse,
+                l_notfalse,
+                l_nottrue
+            )
         );
 
         Assert.assertTrue( l_plan.toString(),  l_andtrue.raw() );
@@ -387,7 +428,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         //Checkstyle:OFF:SimplifyBooleanExpression
@@ -412,7 +459,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "gravity" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
@@ -435,7 +488,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "minimumvalue" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
@@ -460,7 +519,15 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_nvar, l_pvar, l_cvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_nvar,
+                l_pvar,
+                l_cvar
+            )
         );
 
         Assert.assertEquals( "foo", l_nvar.raw() );
@@ -511,9 +578,9 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
             )
                   .map( i -> new CLocalContext( i, l_var ) )
                   .map( i -> Arrays.stream( l_plans )
-                                   .filter( j -> j.condition( i ).value() )
-                                   .map( j -> j.execute( false, i, Collections.emptyList(), Collections.emptyList() ) )
-                                   .filter( IFuzzyValue::value )
+                                   .filter( j -> j.condition( i ) )
+                                   .map( j -> execute( j, false, Collections.emptyList(), Collections.emptyList(), i ) )
+                                   .filter( j -> j )
                                    .findFirst()
                                    .map( j -> l_var )
                                    .get()
@@ -576,12 +643,13 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_var ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_var
+            )
         );
 
         Assert.assertTrue( l_var.toString(), l_var.raw() instanceof List<?> );
