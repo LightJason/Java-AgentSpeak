@@ -48,8 +48,6 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
@@ -223,11 +221,12 @@ public final class TestCActionAgent extends IBaseTest
         m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.of( l_plan ) );
 
         Assert.assertTrue(
-            new CRemovePlan().execute(
-                false, m_context,
+            execute(
+                new CRemovePlan(),
+                false,
                 Stream.of( "+!", "testremoveplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -239,11 +238,12 @@ public final class TestCActionAgent extends IBaseTest
     public void removeplanerror()
     {
         Assert.assertFalse(
-            new CRemovePlan().execute(
-                false, m_context,
+            execute(
+                new CRemovePlan(),
+                false,
                 Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -353,9 +353,9 @@ public final class TestCActionAgent extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> condition( @Nonnull final IContext p_context )
+        public boolean condition( @Nonnull final IContext p_context )
         {
-            return CFuzzyValue.of( true );
+            return true;
         }
 
         @Override
