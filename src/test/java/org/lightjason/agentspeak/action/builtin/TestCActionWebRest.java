@@ -54,13 +54,14 @@ public final class TestCActionWebRest extends IBaseTest
     public void jsonlisterror()
     {
         Assert.assertFalse(
-            new CJsonList().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CJsonList(),
+                false,
                 Stream.of( "jsonlist", "testjsonlist" )
                       .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -116,13 +117,14 @@ public final class TestCActionWebRest extends IBaseTest
     public void jsonobjecterror()
     {
         Assert.assertFalse(
-            new CJsonObject().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CJsonObject(),
+                false,
                 Stream.of( "jsonobject", "testjsonobject" )
                       .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
@@ -183,13 +185,14 @@ public final class TestCActionWebRest extends IBaseTest
     public void xmlobjecterror()
     {
         Assert.assertFalse(
-            new CXMLObject().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CXMLObject(),
+                false,
                 Stream.of( "xmlobject", "testxml" )
                       .map( CRawTerm::of )
                       .collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
     }
 
