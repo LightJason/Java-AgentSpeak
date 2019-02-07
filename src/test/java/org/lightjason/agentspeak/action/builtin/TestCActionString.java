@@ -44,8 +44,10 @@ import org.lightjason.agentspeak.action.builtin.string.CReverse;
 import org.lightjason.agentspeak.action.builtin.string.CSize;
 import org.lightjason.agentspeak.action.builtin.string.CStartsWith;
 import org.lightjason.agentspeak.action.builtin.string.CUpper;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.UnsupportedEncodingException;
 import java.util.AbstractMap;
@@ -119,18 +121,16 @@ public final class TestCActionString extends IBaseTest
      *
      * @throws UnsupportedEncodingException is thrown on test data encoding
      */
-    @Test
+    @Test(expected = CExecutionIllegealArgumentException.class)
     public void base64decodeerror() throws UnsupportedEncodingException
     {
-        Assert.assertFalse(
-            execute(
-                new CBase64Decode(),
-                false,
-                Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
-                      .map( CRawTerm::of )
-                      .collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CBase64Decode().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
+              .map( CRawTerm::of )
+              .collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
