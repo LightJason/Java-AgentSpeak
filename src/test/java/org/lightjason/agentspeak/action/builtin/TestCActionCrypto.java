@@ -41,6 +41,8 @@ import org.lightjason.agentspeak.action.builtin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CHash;
 import org.lightjason.agentspeak.action.builtin.crypto.ECryptAlgorithm;
 import org.lightjason.agentspeak.error.context.CExecutionException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -108,27 +110,23 @@ public final class TestCActionCrypto extends IBaseTest
      *
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void wrongalgorithm() throws NoSuchAlgorithmException
     {
         final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
 
-        Assert.assertFalse(
-            execute(
-                new CEncrypt(),
-                false,
-                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CEncrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
-        Assert.assertFalse(
-            execute(
-                new CDecrypt(),
-                false,
-                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CDecrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -137,29 +135,27 @@ public final class TestCActionCrypto extends IBaseTest
      *
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
-    @Test
+    @Test( expected = CExecutionIllegalStateException.class )
     public void decryptexecutionerror() throws NoSuchAlgorithmException
     {
         final Pair<Key, Key> l_key = ECryptAlgorithm.RSA.generateKey();
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
-            execute(
-                new CEncrypt(),
-                false,
-                Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                l_return
-            )
+
+        new CEncrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( 1, l_return.size() );
-        Assert.assertFalse(
-            execute(
-                new CDecrypt(),
-                false,
-                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                l_return
-            )
+
+        new CDecrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
         );
     }
 
@@ -217,16 +213,14 @@ public final class TestCActionCrypto extends IBaseTest
     /**
      * test key generation on error call
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void createkeyError()
     {
-        Assert.assertFalse(
-            execute(
-                new CCreateKey(),
-                false,
-                Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CCreateKey().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 

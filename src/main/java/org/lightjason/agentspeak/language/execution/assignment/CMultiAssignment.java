@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.assignment;
 
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -83,7 +83,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
             return p_context.agent().fuzzy().membership().fail();
 
         if ( l_result.isEmpty() )
-            throw new CExecutionIllegalStateExcepton(
+            throw new CExecutionIllegalStateException(
                 p_context,
                 org.lightjason.agentspeak.common.CCommon.languagestring( this, "right-hand-arguments are empty" )
             );

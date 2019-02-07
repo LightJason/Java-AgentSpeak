@@ -28,7 +28,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.base.Function;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -105,7 +105,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
                                                   .orElseGet( Collections::emptyList );
 
         if ( l_vertices.isEmpty() )
-            throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
 
 
         l_arguments.stream()

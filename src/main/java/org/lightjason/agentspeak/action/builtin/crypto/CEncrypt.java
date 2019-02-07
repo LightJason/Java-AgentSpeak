@@ -23,9 +23,11 @@
 
 package org.lightjason.agentspeak.action.builtin.crypto;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -82,14 +84,14 @@ public final class CEncrypt extends IBuiltinAction
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
+            throw new CExecutionIllegealArgumentException( p_context, l_exception );
         }
 
-        return CCommon.flatten( p_argument.stream().skip( 1 ) )
-                      .map( ITerm::<Serializable>raw )
-                      .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
-               ? Stream.of()
-               : p_context.agent().fuzzy().membership().fail();
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::<Serializable>raw )
+               .forEach( i -> encrypt( l_algorithm, l_key, i, p_return, p_context ) );
+
+        return Stream.of();
     }
 
 
@@ -100,11 +102,11 @@ public final class CEncrypt extends IBuiltinAction
      * @param p_key key
      * @param p_dataset dataset
      * @param p_return return argument
-     * @return successful execution
+     * @param p_context execution context
      */
-    private static boolean encrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
-                                    @Nonnull final Serializable p_dataset, @Nonnull final List<ITerm> p_return
-    )
+    private static void encrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
+                                 @Nonnull final Serializable p_dataset, @Nonnull final List<ITerm> p_return,
+                                 @NonNull final IContext p_context )
     {
         try
         {
@@ -117,12 +119,10 @@ public final class CEncrypt extends IBuiltinAction
                     )
                 )
             );
-
-            return true;
         }
         catch ( final IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException l_exception )
         {
-            return false;
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
 

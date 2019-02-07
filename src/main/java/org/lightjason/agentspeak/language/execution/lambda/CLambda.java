@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -101,7 +101,7 @@ public final class CLambda extends IBaseExecution<IExecution[]>
              )
              || l_init.size() != 1
         )
-            throw new CExecutionIllegalStateExcepton(
+            throw new CExecutionIllegalStateException(
                 p_context,
                 org.lightjason.agentspeak.common.CCommon.languagestring( this, "initializationerror" )
             );

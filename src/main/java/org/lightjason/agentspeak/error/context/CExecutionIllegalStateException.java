@@ -35,12 +35,12 @@ import java.util.logging.Logger;
 /**
  * execution illegal-state-exception
  */
-public final class CExecutionIllegalStateExcepton extends IllegalStateException implements IContextException
+public final class CExecutionIllegalStateException extends IllegalStateException implements IContextException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CExecutionIllegalStateExcepton.class );
+    private static final Logger LOGGER = CCommon.logger( CExecutionIllegalStateException.class );
     /**
      * serial id
      */
@@ -57,7 +57,7 @@ public final class CExecutionIllegalStateExcepton extends IllegalStateException 
      *
      * @param p_context execution context
      */
-    public CExecutionIllegalStateExcepton( @NonNull final IContext p_context )
+    public CExecutionIllegalStateException( @NonNull final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -70,7 +70,7 @@ public final class CExecutionIllegalStateExcepton extends IllegalStateException 
      * @param p_context execution context
      * @param p_message execution message
      */
-    public CExecutionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final String p_message )
+    public CExecutionIllegalStateException( @Nonnull final IContext p_context, @Nonnull final String p_message )
     {
         super( p_message );
         m_context = p_context;
@@ -84,7 +84,7 @@ public final class CExecutionIllegalStateExcepton extends IllegalStateException 
      * @param p_message execution message
      * @param p_cause execption cause
      */
-    public CExecutionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
+    public CExecutionIllegalStateException( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
     )
     {
         super( p_message, p_cause );
@@ -98,7 +98,7 @@ public final class CExecutionIllegalStateExcepton extends IllegalStateException 
      * @param p_context execution context
      * @param p_cause execption cause
      */
-    public CExecutionIllegalStateExcepton( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
+    public CExecutionIllegalStateException( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         m_context = p_context;

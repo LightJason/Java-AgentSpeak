@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.action.builtin.math.blas;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -102,7 +102,7 @@ public final class CMultiply extends IAlgebra
 
             } )
         )
-            throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "" ) );
 
         return Stream.of();
     }

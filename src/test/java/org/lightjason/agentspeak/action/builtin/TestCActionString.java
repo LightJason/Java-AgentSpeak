@@ -121,7 +121,7 @@ public final class TestCActionString extends IBaseTest
      *
      * @throws UnsupportedEncodingException is thrown on test data encoding
      */
-    @Test(expected = CExecutionIllegealArgumentException.class)
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void base64decodeerror() throws UnsupportedEncodingException
     {
         new CBase64Decode().execute(

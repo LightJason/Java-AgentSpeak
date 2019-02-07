@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -81,7 +81,7 @@ public final class CUnaryExpression implements IUnaryExpression
                     m_element.execute( p_parallel, p_context, p_argument, l_return )
                 )
             ) || l_return.size() != 1 )
-            throw new CExecutionIllegalStateExcepton( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "binary execution fails" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "binary execution fails" ) );
 
         p_return.add(
             CRawTerm.of(

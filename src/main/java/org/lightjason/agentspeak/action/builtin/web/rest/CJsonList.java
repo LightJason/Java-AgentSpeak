@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web.rest;
 
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -94,7 +94,7 @@ public final class CJsonList extends IBaseRest
         }
         catch ( final IOException l_exception )
         {
-            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
 

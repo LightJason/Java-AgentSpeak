@@ -35,7 +35,7 @@ import alice.tuprolog.TermVisitor;
 import alice.tuprolog.Theory;
 import alice.tuprolog.Var;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -94,7 +94,7 @@ public abstract class IBaseSolve extends IBuiltinAction
         }
         catch ( final Exception l_exception )
         {
-            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
 
         // add theory objects to the current theory

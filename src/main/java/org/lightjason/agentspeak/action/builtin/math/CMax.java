@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -71,7 +71,7 @@ public final class CMax extends IBuiltinAction
                                               .max();
 
         if ( !l_value.isPresent() )
-            throw new CExecutionIllegalStateExcepton(
+            throw new CExecutionIllegalStateException(
                 p_context,
                 org.lightjason.agentspeak.common.CCommon.languagestring( this, "novaluepresent" )
             );

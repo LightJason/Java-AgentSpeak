@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.base;
 
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -89,7 +89,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
             return m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
 
         if ( l_argument.size() != 1 )
-            throw new CExecutionIllegalStateExcepton(
+            throw new CExecutionIllegalStateException(
                 p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "return argument does not exist"
             ) );
 

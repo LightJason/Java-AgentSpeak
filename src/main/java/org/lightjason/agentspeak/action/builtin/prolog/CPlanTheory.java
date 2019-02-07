@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegalStateExcepton;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -81,7 +81,7 @@ public final class CPlanTheory extends IBuiltinAction
         }
         catch ( final InvalidTheoryException l_exception )
         {
-            throw new CExecutionIllegalStateExcepton( p_context, l_exception );
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
 }
