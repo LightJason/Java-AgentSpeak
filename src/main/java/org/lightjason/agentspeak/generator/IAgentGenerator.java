@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.generator;
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.bundle.EFuzzyBundleFactory;
 import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.CUnifier;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
@@ -39,7 +40,7 @@ public interface IAgentGenerator<T extends IAgent<?>> extends IGenerator<T>
      *
      * @bug not implemented yet
      */
-    IFuzzyBundle DEFAULTFUZZYBUNDLE = null;
+    IFuzzyBundle DEFAULTFUZZYBUNDLE = EFuzzyBundleFactory.CRISP.get();
 
     /**
      * default unification
