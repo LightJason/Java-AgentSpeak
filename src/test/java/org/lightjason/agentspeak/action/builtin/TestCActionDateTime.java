@@ -52,6 +52,7 @@ import org.lightjason.agentspeak.action.builtin.datetime.CSecondsBetween;
 import org.lightjason.agentspeak.action.builtin.datetime.CTime;
 import org.lightjason.agentspeak.action.builtin.datetime.CYearsBetween;
 import org.lightjason.agentspeak.action.builtin.datetime.CZoneid;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -209,16 +210,14 @@ public final class TestCActionDateTime extends IBaseTest
     /**
      * test create error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void createerror()
     {
-        Assert.assertFalse(
-            execute(
-                new CCreate(),
-                false,
-                Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CCreate().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
