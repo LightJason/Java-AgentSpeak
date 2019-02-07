@@ -184,7 +184,7 @@ public final class TestCActionWebRest extends IBaseTest
     public void xmlobjecterror()
     {
         new CXMLObject().execute(
-        false,
+            false,
             IContext.EMPTYPLAN,
             Stream.of( "xmlobject", "testxml" )
                   .map( CRawTerm::of )
