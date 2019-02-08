@@ -76,7 +76,7 @@ public final class CUnaryExpression implements IUnaryExpression
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( p_context.agent().fuzzy().defuzzification().success(
+        if ( !p_context.agent().fuzzy().defuzzification().success(
                 p_context.agent().fuzzy().defuzzification().apply(
                     m_element.execute( p_parallel, p_context, p_argument, l_return )
                 )
