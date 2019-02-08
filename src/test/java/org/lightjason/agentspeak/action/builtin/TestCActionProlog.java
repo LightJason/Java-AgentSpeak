@@ -39,7 +39,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,30 +78,11 @@ public final class TestCActionProlog extends IBaseTest
 
     /**
      * solve on an empty structure
-     *
-     * @bug defuzzy error
      */
     @Test
     public void solveempty()
     {
         final List<ITerm> l_return = new ArrayList<>();
-
-        final List<IFuzzyValue<?>> l_values = new CSolveAll().execute(
-            false,
-            IContext.EMPTYPLAN,
-            Stream.of( "q(X)." ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            l_return
-        ).collect( Collectors.toList() );
-
-        final IContext l_context = new CLocalContext( IAgent.EMPTY );
-        final Number l_result = l_context.agent().fuzzy().defuzzification().apply( l_values.stream() );
-        final boolean l_success = l_context.agent().fuzzy().defuzzification().success( l_result );
-
-        System.out.println( l_values );
-        System.out.println( l_result );
-        System.out.println( l_success );
-
-        /*
         Assert.assertFalse(
             execute(
                 new CSolveAll(),
@@ -111,7 +91,6 @@ public final class TestCActionProlog extends IBaseTest
                 l_return
             )
         );
-        */
     }
 
     /**
