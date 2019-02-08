@@ -94,8 +94,13 @@ public final class TestCActionProlog extends IBaseTest
             l_return
         ).collect( Collectors.toList() );
 
+        final IContext l_context = new CLocalContext( IAgent.EMPTY );
+        final Number l_result = l_context.agent().fuzzy().defuzzification().apply( l_values.stream() );
+        final boolean l_success = l_context.agent().fuzzy().defuzzification().success( l_result );
+
         System.out.println( l_values );
-        System.out.println( defuzzify( l_values.stream(), IAgent.EMPTY ) );
+        System.out.println( l_result );
+        System.out.println( l_success );
 
         /*
         Assert.assertFalse(
