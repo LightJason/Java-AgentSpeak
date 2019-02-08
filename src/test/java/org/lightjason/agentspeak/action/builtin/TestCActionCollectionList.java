@@ -42,6 +42,7 @@ import org.lightjason.agentspeak.action.builtin.collection.list.CSubList;
 import org.lightjason.agentspeak.action.builtin.collection.list.CSymmetricDifference;
 import org.lightjason.agentspeak.action.builtin.collection.list.CUnique;
 import org.lightjason.agentspeak.action.builtin.collection.list.CZip;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -302,16 +303,14 @@ public final class TestCActionCollectionList extends IBaseTest
     /**
      * test range error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void rangeerror()
     {
-        Assert.assertFalse(
-            execute(
-                new CRange(),
-                false,
-                Stream.of().map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CRange().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of().map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -354,16 +353,14 @@ public final class TestCActionCollectionList extends IBaseTest
     /**
      * test sublist error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void sublisterror()
     {
-        Assert.assertFalse(
-            execute(
-                new CSubList(),
-                false,
-                Stream.of( new ArrayList<>() ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CSubList().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( new ArrayList<>() ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -458,16 +455,14 @@ public final class TestCActionCollectionList extends IBaseTest
     /**
      * test zip action error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void ziperror()
     {
-        Assert.assertFalse(
-            execute(
-                new CZip(),
-                false,
-                Stream.of( "" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            )
+        new CZip().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
