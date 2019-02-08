@@ -386,16 +386,14 @@ public final class TestCActionString extends IBaseTest
     /**
      * tets for levenshtein distance error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void levenshteinerror()
     {
-        Assert.assertFalse(
-            execute(
-                new CLevenshtein(),
-                false,
-                Collections.emptyList(),
-                Collections.emptyList()
-            )
+        new CLevenshtein().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Collections.emptyList(),
+            Collections.emptyList()
         );
     }
 
@@ -464,16 +462,14 @@ public final class TestCActionString extends IBaseTest
     /**
      * test normalized compression distance error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void ncderror()
     {
-        Assert.assertFalse(
-            execute(
-                new CNCD(),
-                false,
-                Collections.emptyList(),
-                Collections.emptyList()
-            )
+        new CNCD().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Collections.emptyList(),
+            Collections.emptyList()
         );
     }
 
