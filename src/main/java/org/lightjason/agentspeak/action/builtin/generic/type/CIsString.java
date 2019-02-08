@@ -73,8 +73,8 @@ public final class CIsString extends IBuiltinAction
         return CCommon.flatten( p_argument )
                       .map( ITerm::raw )
                       .allMatch( i -> i instanceof String || i instanceof Character || i instanceof CharSequence )
-               ? p_context.agent().fuzzy().membership().fail()
-               : p_context.agent().fuzzy().membership().success();
+               ? p_context.agent().fuzzy().membership().success()
+               : p_context.agent().fuzzy().membership().fail();
     }
 
 }
