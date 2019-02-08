@@ -64,10 +64,17 @@ public final class CRepair extends IBaseExecution<IExecution[]>
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
+        // each repair statement creates a stream, the stream must be cached as array and return again,
+        // because the stream must be defuzzified, after that the stream is closed
         return Arrays.stream( m_value )
                      .map( i -> execute( p_context, i ) )
-                     .filter( i -> p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( i ) ) )
+                     .filter( i -> p_context.agent().fuzzy().defuzzification().success(
+                         p_context.agent().fuzzy().defuzzification().apply(
+                             Arrays.stream( i )
+                         )
+                     ) )
                      .findFirst()
+                     .map( Arrays::stream )
                      .orElseGet( () -> p_context.agent().fuzzy().membership().fail() );
     }
 
@@ -93,10 +100,10 @@ public final class CRepair extends IBaseExecution<IExecution[]>
      * @param p_execution execution
      * @return execution result
      */
-    private static Stream<IFuzzyValue<?>> execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
+    private static IFuzzyValue<?>[] execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
-        return p_execution.execute( false, p_context, Collections.emptyList(), l_return );
+        return p_execution.execute( false, p_context, Collections.emptyList(), l_return ).toArray( IFuzzyValue[]::new );
     }
 
 }
