@@ -62,7 +62,6 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
         if ( l_values.length < 2 )
             return l_values.length == 0 ? m_default.fuzzy() : l_values[0].fuzzy();
 
-
         // calculate the gravity of the given values
         return Arrays.stream( l_values )
                      .mapToDouble( i -> m_membership.range( this.index2enum( i.get().ordinal() ) )
