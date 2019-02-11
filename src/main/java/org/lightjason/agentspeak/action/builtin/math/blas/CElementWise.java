@@ -108,8 +108,7 @@ public final class CElementWise extends IBuiltinAction
             }
 
         } ) )
-
-            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "operatorerror" ) );
 
         return Stream.of();
     }

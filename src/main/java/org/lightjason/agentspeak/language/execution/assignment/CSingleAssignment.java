@@ -89,7 +89,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
         if ( l_result.size() != 1 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "right-hand-side arguments must contains one element" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "rhsincorrect" )
             );
 
         final IVariable<Object> l_lhs = CCommon.replacebycontext( p_context, m_value ).term();

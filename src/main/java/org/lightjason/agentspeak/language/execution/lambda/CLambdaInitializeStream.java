@@ -82,7 +82,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
         if ( l_return.size() == 0 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "emptyarguments" )
             );
 
 

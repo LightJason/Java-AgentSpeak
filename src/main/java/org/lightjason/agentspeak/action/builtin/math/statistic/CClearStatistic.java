@@ -86,7 +86,7 @@ public final class CClearStatistic extends IBuiltinAction
                } ) )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argument error" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" )
             );
 
         return Stream.of();
