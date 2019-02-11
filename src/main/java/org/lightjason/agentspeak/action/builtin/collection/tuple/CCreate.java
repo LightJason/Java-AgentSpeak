@@ -79,7 +79,7 @@ public final class CCreate extends IBuiltinAction
         if ( l_arguments.size() < 2 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "twoarguments" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments", 2 )
             );
 
 
