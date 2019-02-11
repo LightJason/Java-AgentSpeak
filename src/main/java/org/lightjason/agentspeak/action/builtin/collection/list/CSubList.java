@@ -82,7 +82,7 @@ public final class CSubList extends IBuiltinAction
         if ( l_arguments.size() % 2 == 0 || l_arguments.size() < 3 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentseven" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnotoddandlessthan", 3 )
             );
 
         StreamUtils.windowed(

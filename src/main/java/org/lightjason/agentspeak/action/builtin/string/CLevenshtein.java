@@ -79,7 +79,7 @@ public final class CLevenshtein extends IBuiltinAction
                                               .collect( Collectors.toList() );
 
         if ( l_strings.size() < 2 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "at lest two arguments are needed" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumberwrong", 2 ) );
 
 
         // create weight

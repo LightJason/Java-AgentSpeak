@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -81,7 +82,7 @@ public final class CZip extends IBuiltinAction
         if ( l_arguments.size() % 2 == 1 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentseven" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
             );
 
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(

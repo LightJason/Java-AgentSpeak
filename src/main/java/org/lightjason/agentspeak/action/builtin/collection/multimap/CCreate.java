@@ -72,10 +72,10 @@ public final class CCreate extends IBuiltinAction
     )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )
+        if ( l_arguments.size() % 2 == 1 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentseven" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
             );
 
         final HashMultimap<Object, Object> l_map = HashMultimap.create();

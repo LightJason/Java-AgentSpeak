@@ -80,7 +80,7 @@ public final class CRange extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongoddarguments" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnotodd" ) );
 
         StreamUtils.windowed(
             l_arguments.stream()

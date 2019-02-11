@@ -65,10 +65,10 @@ public final class CHypot extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        if ( p_argument.size() % 2 != 0 )
+        if ( p_argument.size() % 2 == 1 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "oddargumentsneeded" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
             );
 
         StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
