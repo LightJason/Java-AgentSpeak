@@ -104,7 +104,7 @@ public abstract class IBaseGraphQL extends IBaseWeb
         if ( l_argument.size() < 3 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( IBaseGraphQL.class, "wrongarguments", 3 )
             );
 
         try

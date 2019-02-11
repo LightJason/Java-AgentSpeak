@@ -40,13 +40,8 @@ public interface IActionGenerator extends Function<IPath, IAction>
     /**
      * empty generator
      */
-    IActionGenerator EMPTY = new IActionGenerator()
-    {
-        @Override
-        public IAction apply( @NonNull final IPath p_path )
-        {
-            throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
-        }
+    IActionGenerator EMPTY = p_path -> {
+        throw new CNoSuchElementException( CCommon.languagestring( IActionGenerator.class, "notfound", p_path ) );
     };
 
 }

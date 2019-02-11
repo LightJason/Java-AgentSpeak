@@ -123,7 +123,7 @@ public final class CParse extends IBuiltinAction
             default:
                 throw new CExecutionIllegealArgumentException(
                     p_context,
-                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargument" )
+                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknownargument" )
                 );
         }
     }

@@ -138,7 +138,7 @@ public abstract class IBaseVariable<T> implements IVariable<T>
     public final IVariable<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CNoSuchElementException( CCommon.languagestring( this, "notallocated", m_functor ) );
+            throw new CNoSuchElementException( CCommon.languagestring( IBaseVariable.class, "notallocated", m_functor ) );
 
         return this;
     }

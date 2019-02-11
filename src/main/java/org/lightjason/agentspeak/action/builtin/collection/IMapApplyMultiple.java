@@ -75,7 +75,7 @@ public abstract class IMapApplyMultiple<T> extends IBuiltinAction
 
         final List<ITerm> l_list = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_list.size() % 2 == 0 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnotodd" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( IMapApplyMultiple.class, "argumentsnotodd" ) );
 
         StreamUtils.windowed(
             l_list.stream()

@@ -106,7 +106,7 @@ public abstract class IPlusMinus extends IBuiltinAction
             default:
                 throw new CExecutionIllegealArgumentException(
                     p_context,
-                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknownargument", l_arguments.get( 0 ).raw() )
+                    org.lightjason.agentspeak.common.CCommon.languagestring( IPlusMinus.class, "unknownargument", l_arguments.get( 0 ).raw() )
                 );
 
         }

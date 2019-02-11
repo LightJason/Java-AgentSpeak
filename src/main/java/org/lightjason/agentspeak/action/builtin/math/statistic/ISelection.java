@@ -78,10 +78,8 @@ public abstract class ISelection extends IBuiltinAction
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
-        final List<Object> l_items = p_argument.get( 0 ).<List<Object>>raw().stream()
-                                                                            .map( i -> i instanceof ITerm ? CCommon.replacebycontext( p_context, (ITerm) i )
-                                                                                                                   .raw() : i )
-                                                                            .collect( Collectors.toList() );
+        final List<Object> l_items = p_argument.get( 0 ).<List<Object>>raw().stream().map( i -> i instanceof ITerm ? CCommon.replacebycontext( p_context, (ITerm) i )
+                                                                                                                   .raw() : i ).collect( Collectors.toList() );
         final List<Double> l_weight = this.weight(
             l_items,
             p_argument.get( 1 ).<List<?>>raw().stream()
@@ -93,7 +91,7 @@ public abstract class ISelection extends IBuiltinAction
         );
 
         if ( l_items.isEmpty() || l_items.size() != l_weight.size() )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( ISelection.class, "novaluepresent" ) );
 
         // select a random value and scale with the sum
         double l_random = m_random.nextDouble() * l_weight.stream().mapToDouble( i -> i ).sum();

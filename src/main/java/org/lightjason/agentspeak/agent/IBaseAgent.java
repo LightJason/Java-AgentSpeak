@@ -325,7 +325,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // check if literal does not store any variables
         if ( p_trigger.literal().hasVariable() )
-            throw new CNoSuchElementException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
+            throw new CNoSuchElementException( org.lightjason.agentspeak.common.CCommon.languagestring( IBaseAgent.class, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
         if ( Objects.nonNull( p_immediately ) && p_immediately.length > 0 && p_immediately[0] )
