@@ -85,7 +85,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
         if ( l_result.isEmpty() )
             throw new CExecutionIllegalStateException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "right-hand-arguments are empty" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "rhsincorrect" )
             );
 
 

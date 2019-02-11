@@ -102,7 +102,7 @@ public final class CMultiply extends IAlgebra
 
             } )
         )
-            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "operatorerror" ) );
 
         return Stream.of();
     }
