@@ -71,7 +71,7 @@ public final class TestCAgentExecution extends IBaseTest
     /**
      * asl source
      */
-    private static final String ASL = "src/test/resources/agent/execute.asl";
+    private static final String ASL = "src/test/resources/agent/execution.asl";
     /**
      * agent reference
      */
