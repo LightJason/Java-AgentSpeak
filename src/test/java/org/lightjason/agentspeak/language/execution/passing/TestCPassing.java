@@ -40,21 +40,6 @@ import java.util.List;
  */
 public final class TestCPassing extends IBaseTest
 {
-    /**
-     * test boolean passing
-     */
-    @Test
-    public void passboolean()
-    {
-        Assert.assertTrue(
-            execute(
-                new CPassBoolean( true ),
-                false,
-                Collections.emptyList(),
-                Collections.emptyList()
-            )
-        );
-    }
 
     /**
      * test raw data
