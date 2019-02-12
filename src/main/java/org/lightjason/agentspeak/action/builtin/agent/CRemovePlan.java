@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.action.builtin.agent;
 import com.codepoetics.protonpack.StreamUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -68,11 +68,10 @@ public final class CRemovePlan extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
-                          .allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent() ) )
+                          .allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context ) )
                ? Stream.of()
                : p_context.agent().fuzzy().membership().fail();
     }
@@ -82,10 +81,10 @@ public final class CRemovePlan extends IBuiltinAction
      *
      * @param p_trigger trigger type
      * @param p_literal literal as string or literal object
-     * @param p_agent agent
+     * @param p_context execution context
      * @return flag to remove plan successfully
      */
-    private static boolean remove( @Nonnull final ITrigger.EType p_trigger, @Nonnull final ITerm p_literal, @Nonnull final IAgent<?> p_agent )
+    private static boolean remove( @Nonnull final ITrigger.EType p_trigger, @Nonnull final ITerm p_literal, @Nonnull final IContext p_context )
     {
         final ILiteral l_literal;
         try
@@ -98,9 +97,9 @@ public final class CRemovePlan extends IBuiltinAction
         }
         catch ( final Exception l_exception )
         {
-            return false;
+            throw new CExecutionIllegealArgumentException( p_context, l_exception );
         }
 
-        return !p_agent.plans().removeAll( p_trigger.builddefault( l_literal ) ).isEmpty();
+        return !p_context.agent().plans().removeAll( p_trigger.builddefault( l_literal ) ).isEmpty();
     }
 }

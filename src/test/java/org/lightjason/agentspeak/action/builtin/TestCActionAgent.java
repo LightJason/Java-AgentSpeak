@@ -225,7 +225,8 @@ public final class TestCActionAgent extends IBaseTest
                 new CRemovePlan(),
                 false,
                 Stream.of( "+!", "testremoveplan" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
+                Collections.emptyList(),
+                m_context
             )
         );
     }
@@ -234,7 +235,7 @@ public final class TestCActionAgent extends IBaseTest
     /**
      * test remove plan error
      */
-    @Test
+    @Test( expected = UnsupportedOperationException.class )
     public void removeplanerror()
     {
         Assert.assertFalse(
