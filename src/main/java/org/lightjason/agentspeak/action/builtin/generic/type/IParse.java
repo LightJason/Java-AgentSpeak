@@ -74,7 +74,7 @@ public abstract class IParse extends IBuiltinAction
                      .allMatch( Map.Entry::getKey ) )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "notparseable" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( IParse.class, "parseerror" )
             );
 
         return Stream.of();

@@ -81,7 +81,7 @@ public final class CUnaryExpression implements IUnaryExpression
                     m_element.execute( p_parallel, p_context, p_argument, l_return )
                 )
             ) || l_return.size() != 1 )
-            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "binary execution fails" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
         p_return.add(
             CRawTerm.of(

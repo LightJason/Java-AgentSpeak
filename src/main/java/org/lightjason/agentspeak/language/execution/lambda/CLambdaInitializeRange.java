@@ -75,7 +75,7 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
         if ( l_return.size() == 0 || l_return.size() > 3 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments", 3 )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 3 )
             );
 
         if ( l_return.size() == 1 )

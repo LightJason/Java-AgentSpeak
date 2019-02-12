@@ -84,7 +84,7 @@ public final class CInCircle extends IBuiltinAction
         if ( l_arguments.size() < 5 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" )
             );
 
 

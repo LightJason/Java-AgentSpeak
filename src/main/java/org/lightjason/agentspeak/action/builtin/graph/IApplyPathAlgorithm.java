@@ -75,7 +75,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 3 )
             throw new CExecutionIllegealArgumentException(
-                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrong number of arguments" ) );
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( IApplyPathAlgorithm.class, "wrongargumentnumber", 4 ) );
 
         final Map<Object, Number> l_weights = l_arguments.parallelStream()
                                                          .filter( i -> CCommon.isssignableto( i, Map.class ) )

@@ -71,7 +71,7 @@ public final class CHammingDistance extends IBuiltinAction
     {
         final List<BitMatrix> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<BitMatrix>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments", 2 ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 2 ) );
 
         l_arguments.stream()
                    .skip( 1 )

@@ -130,7 +130,7 @@ public final class CCreate extends IBuiltinAction
 
 
             default:
-                throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargument" ) );
+                throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknownargument" ) );
         }
     }
 

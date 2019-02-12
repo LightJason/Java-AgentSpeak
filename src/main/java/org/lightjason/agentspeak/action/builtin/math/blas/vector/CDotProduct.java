@@ -81,7 +81,7 @@ public final class CDotProduct extends IBuiltinAction
         if ( l_arguments.size() % 2 == 1 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
             );
 
         StreamUtils.windowed( l_arguments.stream(), 2 )
