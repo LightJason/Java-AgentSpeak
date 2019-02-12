@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.agent;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -563,7 +564,7 @@ public final class TestCHanoiTowers extends IBaseTest
         private static final transient long serialVersionUID = 1361367629042813689L;
 
         @Override
-        public synchronized CSlice push( final CSlice p_item )
+        public synchronized CSlice push( @NonNull final CSlice p_item )
         {
             if ( ( this.size() > 0 ) && ( this.peek().size() < p_item.size() ) )
                 throw new IllegalStateException();

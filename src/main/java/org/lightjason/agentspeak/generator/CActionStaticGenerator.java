@@ -72,7 +72,7 @@ public final class CActionStaticGenerator implements IActionGenerator
      */
     public CActionStaticGenerator( @NonNull final Stream<IAction> p_actions )
     {
-        m_actions = Collections.unmodifiableMap( p_actions.collect( Collectors.toMap( IAction::name, i -> i, (i, j) -> i ) ) );
+        m_actions = Collections.unmodifiableMap( p_actions.collect( Collectors.toMap( IAction::name, i -> i, ( i, j ) -> i ) ) );
     }
 
     @Override
