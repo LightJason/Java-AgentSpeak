@@ -70,7 +70,7 @@ public final class CContainsVertex extends IBuiltinAction
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
             throw new CExecutionIllegealArgumentException(
-                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrong number of arguments" ) );
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 3 ) );
 
         l_arguments.stream()
                    .skip( 1 )

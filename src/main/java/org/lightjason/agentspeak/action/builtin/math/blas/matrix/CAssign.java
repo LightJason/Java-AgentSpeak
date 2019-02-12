@@ -99,7 +99,7 @@ public final class CAssign extends IBuiltinAction
                            return false;
 
                        } ) )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "operatorerror" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" ) );
 
         return Stream.of();
     }
