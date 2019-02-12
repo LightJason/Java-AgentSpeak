@@ -67,7 +67,7 @@ public final class CClear extends IBuiltinAction
         if ( !p_argument.parallelStream().allMatch( CClear::clear ) )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargument" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" )
             );
 
         return Stream.of();

@@ -75,7 +75,7 @@ public final class CDecrement implements IUnary
         final IVariable<Number> l_variable = CCommon.replacebycontext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( !l_variable.valueassignableto( Number.class ) )
             throw new CExecutionIllegealArgumentException(
-                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "variable must contains a number" ) );
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "notnumber", l_variable ) );
 
 
         l_variable.set( l_variable.<Number>raw().doubleValue() - 1 );

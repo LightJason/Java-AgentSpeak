@@ -86,7 +86,7 @@ public final class CInRectangle extends IBuiltinAction
         if ( l_arguments.size() < 6 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" )
             );
 
         StreamUtils.windowed( l_arguments.stream().skip( 4 ), 2, 2 )

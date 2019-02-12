@@ -73,7 +73,7 @@ public final class CMin extends IBuiltinAction
         if ( !l_value.isPresent() )
             throw new CExecutionIllegalStateException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "valuenotpresent" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "novaluepresent" )
             );
 
         p_return.add( CRawTerm.of( l_value.getAsDouble() ) );

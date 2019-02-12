@@ -98,14 +98,14 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
                                                   .filter( i -> !( CCommon.isssignableto( i.get( 0 ), String.class )
                                                                    && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
                                                                    && CCommon.isssignableto( i.get( 1 ), Number.class ) )
-                                                                && !( CCommon.isssignableto( i.get( 0 ), Graph.class )
-                                                                      || CCommon.isssignableto( i.get( 1 ), Graph.class ) )
+                                                                   && !( CCommon.isssignableto( i.get( 0 ), Graph.class )
+                                                                   || CCommon.isssignableto( i.get( 1 ), Graph.class ) )
                                                   )
                                                   .findFirst()
                                                   .orElseGet( Collections::emptyList );
 
         if ( l_vertices.isEmpty() )
-            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "stateerror" ) );
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "verticesempty" ) );
 
 
         l_arguments.stream()

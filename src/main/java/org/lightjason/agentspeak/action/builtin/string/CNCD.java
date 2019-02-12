@@ -91,7 +91,7 @@ public final class CNCD extends IBuiltinAction
 
         // check input arguments
         if ( l_arguments.size() < 2 + l_skip )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "at lest two arguments are needed" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 2 ) );
 
 
         // calculate distance

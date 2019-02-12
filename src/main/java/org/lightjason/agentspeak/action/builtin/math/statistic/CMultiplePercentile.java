@@ -73,7 +73,7 @@ public final class CMultiplePercentile extends IBuiltinAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" ) );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 2 ) );
 
         final DescriptiveStatistics l_statistic = l_arguments.get( 0 ).raw();
         l_arguments.stream()

@@ -90,7 +90,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
 
         if ( l_argument.size() != 1 )
             throw new CExecutionIllegalStateException(
-                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "return argument does not exist"
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument"
             ) );
 
         return l_argument.get( 0 ).raw()

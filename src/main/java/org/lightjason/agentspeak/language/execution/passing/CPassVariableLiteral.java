@@ -96,7 +96,7 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
         }
 
         throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon
-            .languagestring( this, "only literal or string values can be processed" ) );
+            .languagestring( this, "notstringorliteral", l_variable ) );
     }
 
     @Nonnull

@@ -75,7 +75,7 @@ public abstract class ICast extends IBuiltinAction
         if ( !CCommon.flatten( p_argument ).allMatch( i -> this.cast( i, p_return ) ) )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "cannotcast" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( ICast.class, "cannotcast" )
             );
 
         return Stream.of();
