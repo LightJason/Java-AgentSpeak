@@ -80,7 +80,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         new CCreate().execute(
                 false,
                 IContext.EMPTYPLAN,
-                Collections.emptyList(),
+                Stream.of( "x" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
         );
     }
