@@ -122,7 +122,7 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
     @Override
     public Stream<IFuzzyValue<?>> apply( final Number p_number )
     {
-        return p_number.doubleValue() <= 0.5
+        return p_number.doubleValue() < 0.5
                ? this.fail()
                : this.success();
     }

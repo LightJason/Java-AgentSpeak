@@ -78,7 +78,7 @@ public final class CCOG<E extends Enum<?>> extends IBaseDefuzzification<E>
     public boolean success( @NonNull final Number p_value )
     {
         // scale the gravity on the maximum to the enum result
-        return p_value.doubleValue() / this.maximum().orElse( 1 ) >= 0.5;
+        return p_value.doubleValue() / this.maximum().orElse( 1 ) > 0.5;
     }
 
 }
