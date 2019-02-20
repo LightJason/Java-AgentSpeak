@@ -193,9 +193,9 @@ public final class TestCLanguageLabels extends IBaseTest
                  {
                      try
                      {
-                         final CJavaVistor l_parser = new CJavaVistor();
-                         l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
-                         return l_parser.labels().stream();
+                         final CJavaVistor l_visitor = new CJavaVistor();
+                         new JavaParser().parse( i.toFile() ).getResult().get().accept( l_visitor, null );
+                         return l_visitor.labels().stream();
                      }
                      catch ( final IOException l_excpetion )
                      {
