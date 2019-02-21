@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -59,6 +60,10 @@ public final class CBinaryExpression implements IBinaryExpression
      * right-hand-side
      */
     private final IExecution m_rhs;
+    /**
+     * left-hand-side strict-bind
+     */
+    private final BiFunction<ITerm, List<ITerm>, Boolean> m_lhsbind;
 
     /**
      * ctor
@@ -72,6 +77,32 @@ public final class CBinaryExpression implements IBinaryExpression
         m_operator = p_operator;
         m_lhs = p_lhs;
         m_rhs = p_rhs;
+
+        // on boolean expression "or" & "and" the left-hand-side has got a more strict bind
+        switch ( m_operator )
+        {
+            case AND:
+                m_lhsbind = ( i, j ) ->
+                {
+                    if ( !i.<Boolean>raw() )
+                        j.add( CRawTerm.of( false ) );
+                    return !i.<Boolean>raw();
+                };
+                break;
+
+            case OR:
+                m_lhsbind = ( i, j ) ->
+                {
+                    if ( i.<Boolean>raw() )
+                        j.add( CRawTerm.of( true ) );
+                    return i.<Boolean>raw();
+                };
+                break;
+
+            default:
+                m_lhsbind = ( i, j ) -> false;
+        }
+
     }
 
     @Nonnull
@@ -86,27 +117,9 @@ public final class CBinaryExpression implements IBinaryExpression
         if ( l_return.size() != 1 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
-        // on boolean expression "or" & "and" the left-hand-side is used only iif argument is "true" or "false"
-        switch ( m_operator )
-        {
-            case AND:
-                if ( !l_return.get( 0 ).<Boolean>raw() )
-                {
-                    p_return.add( CRawTerm.of( false ) );
-                    return Stream.of();
-                }
-                break;
-
-            case OR:
-                if ( l_return.get( 0 ).<Boolean>raw() )
-                {
-                    p_return.add( CRawTerm.of( true ) );
-                    return Stream.of();
-                }
-                break;
-
-            default:
-        }
+        // additional check for left-hand-arguments
+        if ( m_lhsbind.apply( l_return.get( 0 ), p_return ) )
+            return Stream.of();
 
         // right-hand-side execution
         execute( m_rhs, p_parallel, p_context, p_argument, l_return );
