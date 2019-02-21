@@ -74,10 +74,6 @@ public final class CBinaryExpression implements IBinaryExpression
         m_rhs = p_rhs;
     }
 
-
-    /**
-     * @bug type error compare "string > double"
-     */
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
@@ -85,10 +81,34 @@ public final class CBinaryExpression implements IBinaryExpression
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
+        // left-hand-side execution
         execute( m_lhs, p_parallel, p_context, p_argument, l_return );
         if ( l_return.size() != 1 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
+        // on boolean expression "or" & "and" the left-hand-side is used only iif argument is "true" or "false"
+        switch ( m_operator )
+        {
+            case AND:
+                if ( !l_return.get( 0 ).<Boolean>raw() )
+                {
+                    p_return.add( CRawTerm.of( false ) );
+                    return Stream.of();
+                }
+                break;
+
+            case OR:
+                if ( l_return.get( 0 ).<Boolean>raw() )
+                {
+                    p_return.add( CRawTerm.of( true ) );
+                    return Stream.of();
+                }
+                break;
+
+            default:
+        }
+
+        // right-hand-side execution
         execute( m_rhs, p_parallel, p_context, p_argument, l_return );
         if ( l_return.size() != 2 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );

@@ -398,13 +398,13 @@ public final class TestCActionMathStatistics extends IBaseTest
         Assert.assertEquals(
             (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "a" ) / l_return.size(),
             0.73,
-            0.02
+            0.05
         );
 
         Assert.assertEquals(
             (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "b" ) / l_return.size(),
             0.27,
-            0.02
+            0.05
         );
     }
 
