@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -76,11 +77,8 @@ public final class CUnaryExpression implements IUnaryExpression
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( !p_context.agent().fuzzy().defuzzification().success(
-                p_context.agent().fuzzy().defuzzification().apply(
-                    m_element.execute( p_parallel, p_context, p_argument, l_return )
-                )
-            ) || l_return.size() != 1 )
+        final IFuzzyValue<?>[] l_result =  m_element.execute( p_parallel, p_context, p_argument, l_return ).toArray( IFuzzyValue[]::new );
+        if ( l_return.size() != 1 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
         p_return.add(
@@ -89,7 +87,7 @@ public final class CUnaryExpression implements IUnaryExpression
             )
         );
 
-        return Stream.of();
+        return Arrays.stream( l_result );
     }
 
     @Nonnull

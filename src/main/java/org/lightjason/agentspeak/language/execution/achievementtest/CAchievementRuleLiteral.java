@@ -60,8 +60,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return findandexecute( m_value.hasAt(), p_context, m_value );
     }
