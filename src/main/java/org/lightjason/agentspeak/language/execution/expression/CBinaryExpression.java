@@ -75,18 +75,22 @@ public final class CBinaryExpression implements IBinaryExpression
     }
 
 
+    /**
+     * @bug type error compare "string > double"
+     */
     @Nonnull
     @Override
-    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return
-    )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( !execute( m_lhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 1 )
+        execute( m_lhs, p_parallel, p_context, p_argument, l_return );
+        if ( l_return.size() != 1 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
-        if ( !execute( m_rhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 2 )
+        execute( m_rhs, p_parallel, p_context, p_argument, l_return );
+        if ( l_return.size() != 2 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
         p_return.add(
@@ -106,10 +110,9 @@ public final class CBinaryExpression implements IBinaryExpression
      * @param p_context execution context
      * @param p_argument argument list
      * @param p_return return list
-     * @return execution result
      */
-    private static boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final IContext p_context,
-                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    private static void execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final IContext p_context,
+                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         final int l_arguments = p_return.size();
@@ -122,8 +125,6 @@ public final class CBinaryExpression implements IBinaryExpression
         // if no result value exists from execution, just use defuzzificated execution result
         if ( p_return.size() == l_arguments )
             p_return.add( CRawTerm.of( l_result ) );
-
-        return l_result;
     }
 
     @Nonnull
