@@ -82,8 +82,7 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
         // second step execute backtracking rules sequential
         return l_rules.stream()
                       .map( i -> executerule( p_context, l_allocate, i ) )
-                      .map( i -> p_context.agent().fuzzy().defuzzification().apply( i ) )
-                      .anyMatch( i -> !p_context.agent().fuzzy().defuzzification().success( i ) )
+                      .anyMatch( i -> !i )
                       ? p_context.agent().fuzzy().membership().fail()
                       : p_context.agent().fuzzy().membership().success();
     }
@@ -96,9 +95,13 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
      * @param p_rule rule
      * @return execution result
      */
-    private static Stream<IFuzzyValue<?>> executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
+    private static boolean executerule( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, @Nonnull final IRule p_rule )
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
+
+        //System.out.println(l_variables);
+        //System.out.println(p_rule);
+        //System.out.println();
 
         if ( p_context.agent().fuzzy().defuzzification().success(
                 p_context.agent().fuzzy().defuzzification().apply( p_rule.execute(
@@ -112,10 +115,10 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
             l_variables.parallelStream()
                        .filter( i -> i instanceof IRelocateVariable<?> )
                        .forEach( i -> i.<IRelocateVariable<?>>term().relocate() );
-            return p_context.agent().fuzzy().membership().success();
+            return true;
         }
 
-        return p_context.agent().fuzzy().membership().fail();
+        return false;
     }
 
     @Override
