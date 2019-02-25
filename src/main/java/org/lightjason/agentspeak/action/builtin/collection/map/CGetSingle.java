@@ -36,7 +36,7 @@ import java.util.Map;
  * returns a single element of all map elements.
  * The first argument will be used as key and all
  * arguments are map references, the key will be
- * returned of each map, the action fails never,
+ * returned of each map
  *
  * {@code [A|B|C] = .collection/map/getsingle( "key", Map1, Map2, Map3 );}
  */
@@ -49,7 +49,8 @@ public final class CGetSingle extends IMapGetSingle<Map<Object, Object>>
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
-                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

@@ -21,43 +21,78 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.passing;
+package org.lightjason.agentspeak.language.fuzzy.bundle;
 
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IBaseExecution;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 
 /**
- *action to pass a boolean
+ * fuzzy bundle
  */
-public final class CPassBoolean extends IBaseExecution<Boolean>
+public final class CFuzzyBundle implements IFuzzyBundle
 {
+
     /**
-     * serial id
+     * fuzzy set
      */
-    private static final long serialVersionUID = 3194588988262987118L;
+    private final Class<? extends IFuzzySet<?>> m_set;
+    /**
+     * fuzzy membership
+     */
+    private final IFuzzyMembership<?> m_membership;
+    /**
+     * defuzzification
+     */
+    private final IDefuzzification m_defuzzification;
 
     /**
      * ctor
      *
-     * @param p_value data
+     * @param p_set fuzzy set
+     * @param p_membership fuzzy membership
+     * @param p_defuzzification defuzzyfication
      */
-    public CPassBoolean( final boolean p_value )
+    public CFuzzyBundle( @NonNull final Class<? extends IFuzzySet<?>> p_set, @NonNull final IFuzzyMembership<?> p_membership,
+                         @NonNull final IDefuzzification p_defuzzification
+    )
     {
-        super( p_value );
+        m_set = p_set;
+        m_membership = p_membership;
+        m_defuzzification = p_defuzzification;
+    }
+
+
+    @Override
+    public IFuzzySet<?> set()
+    {
+        // one element must exist, so return the first element
+        return m_set.getEnumConstants()[0];
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyMembership<?> membership()
+    {
+        return m_membership;
     }
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public IDefuzzification defuzzification()
     {
-        return CFuzzyValue.of( m_value );
+        return m_defuzzification;
+    }
+
+    @Nonnull
+    @Override
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+    {
+        return m_defuzzification.update( m_membership.update( p_agent ) );
     }
 }

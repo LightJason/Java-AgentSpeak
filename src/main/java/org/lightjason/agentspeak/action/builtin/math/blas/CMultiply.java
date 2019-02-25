@@ -26,17 +26,18 @@ package org.lightjason.agentspeak.action.builtin.math.blas;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 
 /**
@@ -71,31 +72,39 @@ public final class CMultiply extends IAlgebra
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.of(
-            StreamUtils.windowed(
+        if ( !StreamUtils.windowed(
                 CCommon.flatten( p_argument ),
                 2,
                 2
             ).parallel().allMatch( i ->
             {
 
-                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix1D.class ) )
-                    return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply( i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.multOuter( u, v, null ), p_return );
+                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.isssignableto(
+                    i.get( 1 ), DoubleMatrix1D.class ) )
+                    return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply(
+                        i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.multOuter( u, v, null ), p_return );
 
-                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix2D.class ) )
+                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.isssignableto(
+                    i.get( 1 ), DoubleMatrix2D.class ) )
                     return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply( i.get( 0 ), i.get( 1 ), DENSEALGEBRA::mult, p_return );
 
-                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix1D.class ) )
+                if ( CCommon.isssignableto( i.get( 0 ), DoubleMatrix2D.class ) && CCommon.isssignableto(
+                    i.get( 1 ), DoubleMatrix1D.class ) )
                     return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply( i.get( 0 ), i.get( 1 ), DENSEALGEBRA::mult, p_return );
 
-                return CCommon.isssignableto( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.isssignableto( i.get( 1 ), DoubleMatrix2D.class )
-                       && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply( i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.mult( v, u ), p_return );
+                return CCommon.isssignableto( i.get( 0 ), DoubleMatrix1D.class ) && CCommon.isssignableto(
+                    i.get( 1 ), DoubleMatrix2D.class )
+                       && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply(
+                    i.get( 0 ), i.get( 1 ), ( u, v ) -> DENSEALGEBRA.mult( v, u ), p_return );
 
             } )
-        );
+        )
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "operatorerror" ) );
+
+        return Stream.of();
     }
 
     /**
@@ -105,15 +114,15 @@ public final class CMultiply extends IAlgebra
      * @param p_right second element
      * @param p_function function for the two elements
      * @param p_return return list
+     * @return successful executed
+     *
      * @tparam U first argument type
      * @tparam V second argument type
-     * @return successful executed
      */
     private static <U, V> boolean apply( final ITerm p_left, final ITerm p_right, final BiFunction<U, V, ?> p_function, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.of( p_function.apply( p_left.raw(), p_right.raw() ) ) );
         return true;
     }
-
 
 }

@@ -179,6 +179,7 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
 
         /**
          * returns a trigger type by the char sequence
+         *
          * @param p_sequence sequence
          * @return trigger type
          */

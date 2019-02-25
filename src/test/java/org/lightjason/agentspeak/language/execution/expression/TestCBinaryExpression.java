@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
@@ -156,16 +155,18 @@ public final class TestCBinaryExpression extends IBaseTest
         final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_data[1] );
 
         Assert.assertTrue(
-            new CBinaryExpression(
-                (EBinaryOperator) p_data[2],
-                new CPassVariable( l_lhs ),
-                new CPassVariable( l_rhs )
-            ).execute(
+            execute(
+                new CBinaryExpression(
+                    (EBinaryOperator) p_data[2],
+                    new CPassVariable( l_lhs ),
+                    new CPassVariable( l_rhs )
+                ),
                 false,
-                new CLocalContext( l_lhs, l_rhs ),
                 Collections.emptyList(),
-                l_return
-            ).value()
+                l_return,
+                l_lhs,
+                l_rhs
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );
@@ -188,16 +189,16 @@ public final class TestCBinaryExpression extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CBinaryExpression(
-                (EBinaryOperator) p_data[2],
-                new CPassRaw<>( p_data[0] ),
-                new CPassRaw<>( p_data[1] )
-            ).execute(
+            execute(
+                new CBinaryExpression(
+                    (EBinaryOperator) p_data[2],
+                    new CPassRaw<>( p_data[0] ),
+                    new CPassRaw<>( p_data[1] )
+                ),
                 false,
-                IContext.EMPTYPLAN,
                 Collections.emptyList(),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );

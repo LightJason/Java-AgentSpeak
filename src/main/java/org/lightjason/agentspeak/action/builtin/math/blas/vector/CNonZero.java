@@ -29,18 +29,18 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * returns the number of non-zero cells.
  * Gets the number of non-zero cells on each vector
- * input and returns the value, the action never fails
+ * input and returns the value
  *
  * {@code [NZ1|NZ2] = .math/blas/vector/nonzero(V1,V2);}
  */
@@ -68,8 +68,9 @@ public final class CNonZero extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
@@ -79,6 +80,6 @@ public final class CNonZero extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

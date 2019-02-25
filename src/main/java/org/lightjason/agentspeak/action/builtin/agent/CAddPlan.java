@@ -29,19 +29,18 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * adds a plan to the plan-base.
  * The actions adds all arguments which
- * are plans to the plan-base of the current
- * agent, the action never fails
+ * are plans to the plan-base of the current agent
  *
  * {@code .agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] );}
  */
@@ -61,8 +60,8 @@ public final class CAddPlan extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         CCommon.flatten( p_argument )
@@ -71,6 +70,6 @@ public final class CAddPlan extends IBuiltinAction
                .map( CPlanStatistic::of )
                .forEach( i -> p_context.agent().plans().put( i.plan().trigger(), i ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

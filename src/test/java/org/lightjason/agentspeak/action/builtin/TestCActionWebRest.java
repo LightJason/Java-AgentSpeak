@@ -29,6 +29,8 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.web.rest.CJsonList;
 import org.lightjason.agentspeak.action.builtin.web.rest.CJsonObject;
 import org.lightjason.agentspeak.action.builtin.web.rest.CXMLObject;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -50,17 +52,16 @@ public final class TestCActionWebRest extends IBaseTest
     /**
      * test json list error
      */
-    @Test
+    @Test( expected = CExecutionIllegalStateException.class )
     public void jsonlisterror()
     {
-        Assert.assertFalse(
-            new CJsonList().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( "jsonlist", "testjsonlist" )
-                      .map( CRawTerm::of )
-                      .collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CJsonList().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "jsonlist", "testjsonlist" )
+                  .map( CRawTerm::of )
+                  .collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -112,17 +113,17 @@ public final class TestCActionWebRest extends IBaseTest
     /**
      * test json object error
      */
-    @Test
+    @Test( expected = CExecutionIllegalStateException.class )
     public void jsonobjecterror()
     {
-        Assert.assertFalse(
-            new CJsonObject().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( "jsonobject", "testjsonobject" )
-                      .map( CRawTerm::of )
-                      .collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+
+        new CJsonObject().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "jsonobject", "testjsonobject" )
+                  .map( CRawTerm::of )
+                  .collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -179,17 +180,16 @@ public final class TestCActionWebRest extends IBaseTest
     /**
      * test xml object error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void xmlobjecterror()
     {
-        Assert.assertFalse(
-            new CXMLObject().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( "xmlobject", "testxml" )
-                      .map( CRawTerm::of )
-                      .collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CXMLObject().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "xmlobject", "testxml" )
+                  .map( CRawTerm::of )
+                  .collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 

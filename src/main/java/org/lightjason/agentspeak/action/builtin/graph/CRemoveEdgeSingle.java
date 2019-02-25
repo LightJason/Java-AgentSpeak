@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * remove an edge of any graph instance.
  * The action removes an edge aas first argument of
- * all graph arguments, the action never fails
+ * all graph arguments
  *
  * {@code .graph/removeedgesingle( Edge, Graph1, Graph2 );}
  */
@@ -52,7 +52,8 @@ public final class CRemoveEdgeSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.removeEdge( p_window.get( 0 ).raw() );
     }

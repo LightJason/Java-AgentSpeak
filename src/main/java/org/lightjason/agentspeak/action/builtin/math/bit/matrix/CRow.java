@@ -34,8 +34,7 @@ import java.util.stream.IntStream;
  * returns a single row of a bit matrix.
  * The action returns a row of a matrix as vector,
  * the first argument is the index of the row, all
- * other arguments are matrix object, the action
- * never fails
+ * other arguments are matrix object
  *
  * {@code [R1|R2] = .math/bit/matrix/row(2, Matrix1, [Matrix2]);}
  */

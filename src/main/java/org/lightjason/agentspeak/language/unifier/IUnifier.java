@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -56,10 +55,11 @@ public interface IUnifier
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                           @Nonnull final IExecution p_expression, final boolean p_parallel )
+        public Stream<IFuzzyValue<?>> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                           @Nonnull final IExecution p_expression, final boolean p_parallel
+        )
         {
-            return CFuzzyValue.of( false );
+            return Stream.of();
         }
     };
 
@@ -84,11 +84,12 @@ public interface IUnifier
      * @param p_variables number of unified variables
      * @param p_expression expression
      * @param p_parallel parallel executon
-     * @return boolean if a unifier can be done
+     * @return fuzzy result
      */
     @Nonnull
-    IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                @Nonnull final IExecution p_expression, final boolean p_parallel );
+    Stream<IFuzzyValue<?>> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                  @Nonnull final IExecution p_expression, final boolean p_parallel
+    );
 
 
     /**

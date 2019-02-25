@@ -23,13 +23,13 @@
 
 package org.lightjason.agentspeak.language.execution.passing;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -77,24 +77,26 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final IVariable<?> l_variable = CCommon.replacebycontext( p_context, m_value ).<IVariable<?>>term().thrownotallocated();
 
         if ( l_variable.valueassignableto( String.class ) )
         {
             p_return.add( this.bystring( p_context, l_variable.raw() ) );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
         if ( l_variable.valueassignableto( ILiteral.class ) )
         {
             p_return.add( this.byliteral( p_context, l_variable.raw() ) );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
-        return CFuzzyValue.of( false );
+        throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon
+            .languagestring( this, "notstringorliteral", l_variable ) );
     }
 
     @Nonnull

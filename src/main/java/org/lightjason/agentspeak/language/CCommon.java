@@ -69,6 +69,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -158,6 +159,19 @@ public final class CCommon
         return Collections.synchronizedList( new ArrayList<>() );
     }
 
+    /**
+     * equality of floating-point numbers
+     *
+     * @param p_lhs left-hand argument
+     * @param p_rhs right-hand argument
+     * @param p_precision precision
+     * @return equality flag
+     */
+    public static boolean floatingequal( @NonNull final Number p_lhs, @NonNull final Number p_rhs, @NonNull final Number p_precision )
+    {
+        return Math.abs( p_lhs.doubleValue() - p_rhs.doubleValue() ) < p_precision.doubleValue();
+    }
+
     //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -186,7 +200,9 @@ public final class CCommon
      * @return context object
      */
     @Nonnull
-    public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+    public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent,
+                                        @Nonnull final Stream<IVariable<?>> p_variable
+    )
     {
         return new CContext(
             p_agent,
@@ -205,15 +221,17 @@ public final class CCommon
     /**
      * unifies trigger and creates the set of variables
      *
-     * @note target trigger literal must be cloned to avoid variable overwriting
      * @param p_unifier unifier
      * @param p_source input trigger (with values)
      * @param p_target trigger (of a plan / rule)
      * @return pair of valid unification and unified variables
+     *
+     * @note target trigger literal must be cloned to avoid variable overwriting
      */
     @Nonnull
     public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( @Nonnull final IUnifier p_unifier,
-                                                                 @Nonnull final ITrigger p_source, @Nonnull final ITrigger p_target )
+                                                                 @Nonnull final ITrigger p_source, @Nonnull final ITrigger p_target
+    )
     {
         // filter for avoid duplicated instantiation on non-existing values
         if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )
@@ -238,7 +256,8 @@ public final class CCommon
      */
     @Nonnull
     public static Pair<IPlanStatistic, IContext> instantiateplan( @Nonnull final IPlanStatistic p_planstatistic,
-                                                                  @Nonnull final IAgent<?> p_agent, @Nonnull final Set<IVariable<?>> p_variables )
+                                                                  @Nonnull final IAgent<?> p_agent, @Nonnull final Set<IVariable<?>> p_variables
+    )
     {
         return new ImmutablePair<>(
             p_planstatistic,
@@ -254,28 +273,48 @@ public final class CCommon
     /**
      * sequential execute
      *
+     * @param p_parallel parallel execution flag
      * @param p_context execution context
+     * @param p_argument arguments
+     * @param p_return return values
      * @param p_execution execution stream
-     * @return list with execution results
+     * @return list with execution results and successful execution
      *
      * @note stream is stopped iif an execution is failed
      */
     @Nonnull
-    public static List<IFuzzyValue<Boolean>> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
-    )
+    public static Pair<List<IFuzzyValue<?>>, Boolean> executesequential( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return,
+                                                                         @Nonnull final Stream<IExecution> p_execution )
     {
-        final List<IFuzzyValue<Boolean>> l_result = new ArrayList<>();
+        final List<IFuzzyValue<?>> l_result = new ArrayList<>();
+        final AtomicBoolean l_success = new AtomicBoolean();
+
         return p_execution
-            .map( i ->
+            .peek( i -> i.execute( p_parallel, p_context, p_argument, p_return ).forEach( l_result::add ) )
+            .filter( i ->
             {
-                final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() );
-                l_result.add( l_return );
-                return p_context.agent().fuzzy().getValue().defuzzify( l_return );
+                l_success.set( p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) );
+                return !l_success.get();
             } )
-            .filter( i -> !i )
             .findFirst()
-            .map( i -> l_result )
-            .orElseGet( () -> l_result );
+            .map( i -> new ImmutablePair<>( l_result, l_success.get() ) )
+            .orElse( new ImmutablePair<>( l_result, l_success.get() ) );
+    }
+
+    /**
+     * sequential execute
+     *
+     * @param p_context execution context
+     * @param p_execution execution stream
+     * @return list with execution results and successful execution
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    @Nonnull
+    public static Pair<List<IFuzzyValue<?>>, Boolean> executesequential( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution )
+    {
+        return executesequential( false, p_context, Collections.emptyList(), Collections.emptyList(), p_execution );
     }
 
     /**
@@ -283,18 +322,26 @@ public final class CCommon
      *
      * @param p_context execution context
      * @param p_execution execution stream
-     * @return list with execution results
+     * @return list with execution results and successful execution
      *
      * @note each element is executed
      */
     @Nonnull
-    public static List<IFuzzyValue<Boolean>> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
+    public static Pair<List<IFuzzyValue<?>>, Boolean> executeparallel( @Nonnull final IContext p_context, @Nonnull final Stream<IExecution> p_execution
     )
     {
-        return p_execution
-            .parallel()
-            .map( i -> i.execute( false, p_context, Collections.emptyList(), Collections.emptyList() ) )
-            .collect( Collectors.toList() );
+        final List<IFuzzyValue<?>> l_result = p_execution.parallel()
+                                                         .flatMap( i -> i.execute(
+                                                             false, p_context, Collections.emptyList(), Collections.emptyList() )
+                                                         )
+                                                         .collect( Collectors.toList() );
+
+        return new ImmutablePair<>(
+            l_result,
+            p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply( l_result.stream() )
+            )
+        );
     }
 
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
@@ -338,8 +385,9 @@ public final class CCommon
      * concat multiple streams
      *
      * @param p_streams streams
-     * @tparam T any value type
      * @return concated stream
+     *
+     * @tparam T any value type
      */
     @Nonnull
     @SafeVarargs
@@ -353,8 +401,9 @@ public final class CCommon
      * concat multiple streams
      *
      * @param p_streams streams
-     * @tparam T any value type
      * @return concated stream
+     *
+     * @tparam T any value type
      */
     @Nonnull
     @SafeVarargs
@@ -369,8 +418,9 @@ public final class CCommon
      *
      * @param p_stream stream
      * @param p_parallel parallel
-     * @tparam T stream elements
      * @return modified stream
+     *
+     * @tparam T stream elements
      */
     public static <T> Stream<T> parallelstream( final Stream<T> p_stream, final boolean p_parallel )
     {
@@ -388,9 +438,9 @@ public final class CCommon
     {
         return Collections.unmodifiableMap(
             flattenrecursive( p_literal.orderedvalues() )
-                  .filter( i -> i instanceof IVariable<?> )
-                  .map( i -> (IVariable<?>) i )
-                  .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
+                .filter( i -> i instanceof IVariable<?> )
+                .map( i -> (IVariable<?>) i )
+                .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
         );
     }
 
@@ -542,8 +592,9 @@ public final class CCommon
      * creates a deep-clone of an object
      *
      * @param p_object input object
-     * @tparam T object type
      * @return deep-copy
+     *
+     * @tparam T object type
      */
     @Nullable
     @SuppressWarnings( "unchecked" )
@@ -563,10 +614,12 @@ public final class CCommon
      * @param p_replaceweight replace weight
      * @param p_deleteweight delete weight
      * @return distance
+     *
      * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
      */
     public static double levenshtein( @Nonnull final String p_first, @Nonnull final String p_second, final double p_insertweight,
-                                      final double p_replaceweight, final double p_deleteweight )
+                                      final double p_replaceweight, final double p_deleteweight
+    )
     {
         // the array of distances
         double[] l_cost = IntStream.range( 0, p_first.length() + 1 ).mapToDouble( i -> i ).toArray();
@@ -632,6 +685,7 @@ public final class CCommon
      * @param p_compression compression algorithm
      * @param p_input input string
      * @return number of compression bytes
+     *
      * @warning counting stream returns the correct number of bytes after flushing
      */
     private static double compress( @Nonnull final ECompression p_compression, @Nonnull final String p_input )
@@ -669,16 +723,17 @@ public final class CCommon
          * enum names
          */
         private static final Set<String> ALGORITHMS = Collections.unmodifiableSet(
-                                                          Arrays.stream( ECompression.values() )
-                                                                .map( i -> i.name().toUpperCase( Locale.ROOT ) )
-                                                                .collect( Collectors.toSet() )
-                                                      );
+            Arrays.stream( ECompression.values() )
+                  .map( i -> i.name().toUpperCase( Locale.ROOT ) )
+                  .collect( Collectors.toSet() )
+        );
 
         /**
          * creates a compression stream
          *
          * @param p_datastream data-counting stream
          * @return compression output stream
+         *
          * @throws IOException throws on any io error
          */
         @Nonnull
@@ -686,17 +741,22 @@ public final class CCommon
         {
             switch ( this )
             {
-                case BZIP : return new BZip2CompressorOutputStream( p_datastream );
+                case BZIP:
+                    return new BZip2CompressorOutputStream( p_datastream );
 
-                case GZIP : return new GzipCompressorOutputStream( p_datastream );
+                case GZIP:
+                    return new GzipCompressorOutputStream( p_datastream );
 
-                case DEFLATE : return new DeflateCompressorOutputStream( p_datastream );
+                case DEFLATE:
+                    return new DeflateCompressorOutputStream( p_datastream );
 
-                case PACK200 : return new Pack200CompressorOutputStream( p_datastream );
+                case PACK200:
+                    return new Pack200CompressorOutputStream( p_datastream );
 
-                case XZ : return new XZCompressorOutputStream( p_datastream );
+                case XZ:
+                    return new XZCompressorOutputStream( p_datastream );
 
-                default :
+                default:
                     throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
             }
         }
@@ -726,6 +786,5 @@ public final class CCommon
         }
 
     }
-
 
 }

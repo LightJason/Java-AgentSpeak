@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -36,15 +35,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * creates the complement between lists.
  * The action uses two input arguments \f$ \mathbb{A} \f$ and \f$ \mathbb{B} \f$ and returns a
- * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$, the action fails
- * on empty lists
+ * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$
  *
  * {@code L = .collection/list/complement( [1,2,3], [3,4,5] );}
+ *
  * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
  */
 public final class CComplement extends IBuiltinAction
@@ -72,18 +72,19 @@ public final class CComplement extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         if ( p_argument.get( 0 ).<List<?>>raw().isEmpty() && p_argument.get( 1 ).<List<?>>raw().isEmpty() )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         // all arguments must be lists, first argument is the full list
         final Collection<Object> l_result = new LinkedList<>( p_argument.get( 0 ).<Collection<Object>>raw() );
         l_result.removeAll( p_argument.get( 1 ).<Collection<Object>>raw() );
         p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

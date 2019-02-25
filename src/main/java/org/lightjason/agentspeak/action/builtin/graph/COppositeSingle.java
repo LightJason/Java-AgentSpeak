@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the opposit of a vertex and edge of any graph instance.
  * The action returns the opposite vertex, the first argument is the vertex,
- * second the edge and any other the graphs, the action never fails
+ * second the edge and any other the graphs
  *
  * {@code [V1|V2] = .graph/oppositesingle( Vertex, Edge, Graph1, Graph2 );}
  */
@@ -53,7 +53,8 @@ public final class COppositeSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

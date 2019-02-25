@@ -23,13 +23,13 @@
 
 package org.lightjason.agentspeak.language.execution.base;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -75,13 +75,23 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_argument = CCommon.argumentlist();
 
-        if ( !m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument ).value() || l_argument.size() != 1 )
-            return CFuzzyValue.of( false );
+        if ( !p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply(
+                    m_value.execute( p_parallel, p_context, Collections.emptyList(), l_argument )
+                )
+        ) )
+            return m_false.execute( p_parallel, p_context, Collections.emptyList(), p_return );
+
+        if ( l_argument.size() != 1 )
+            throw new CExecutionIllegalStateException(
+                p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument"
+            ) );
 
         return l_argument.get( 0 ).raw()
                ? m_true.execute( p_parallel, p_context, Collections.emptyList(), p_return )

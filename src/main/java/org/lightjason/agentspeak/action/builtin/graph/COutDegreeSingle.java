@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the out-degree of a vertex of each graph instance.
  * The action returns for a vertex as first argument the
- * out-degree on each graph instance, the action never fails
+ * out-degree on each graph instance
  *
  * {@code [D1|D2] = .graph/outdegreesingle( Vertex, Graph1, Graph2 );}
  */
@@ -53,7 +53,8 @@ public final class COutDegreeSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

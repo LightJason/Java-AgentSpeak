@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * check if an element exists within the agent-storage.
  * The action checks if an element is within the action and
- * returns the boolean flag, the action never fails
+ * returns the boolean flag
  *
  * {@code [A|B] = .storage/exist( "foo", "bar" );}
  */
@@ -99,8 +98,9 @@ public final class CExists extends IStorage
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
@@ -108,7 +108,7 @@ public final class CExists extends IStorage
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

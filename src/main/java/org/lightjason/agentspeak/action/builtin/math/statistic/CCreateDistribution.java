@@ -54,12 +54,10 @@ import org.apache.commons.math3.random.Well44497a;
 import org.apache.commons.math3.random.Well44497b;
 import org.apache.commons.math3.random.Well512a;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -70,8 +68,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -122,6 +123,7 @@ import java.util.stream.IntStream;
  * + synchronizedwell44497b
  *
  * {@code [D1|D2] = .math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] );}
+ *
  * @see https://en.wikipedia.org/wiki/Beta_distribution
  * @see https://en.wikipedia.org/wiki/Cauchy_distribution
  * @see https://en.wikipedia.org/wiki/Chi-squared_distribution
@@ -164,8 +166,9 @@ public final class CCreateDistribution extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -194,7 +197,7 @@ public final class CCreateDistribution extends IBuiltinAction
 
                      // generate distribution object, arguments after distribution are the initialize parameter
                      return i.getValue()
-                             .get(
+                             .apply(
                                  l_generator.get(),
                                  l_arguments.stream()
                                             .skip( i.getKey() + 1 + l_skip )
@@ -208,41 +211,209 @@ public final class CCreateDistribution extends IBuiltinAction
                  .map( CRawTerm::of )
                  .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 
     /**
      * usable distributions
      */
-    private enum EDistribution
+    private enum EDistribution implements BiFunction<RandomGenerator, double[], AbstractRealDistribution>
     {
-        BETA( 2 ),
-        CAUCHY( 2 ),
-        CHISQUARE( 1 ),
-        EXPONENTIAL( 1 ),
-        F( 2 ),
-        GAMMA( 2 ),
-        GUMBLE( 2 ),
-        LAPLACE( 2 ),
-        LEVY( 2 ),
-        LOGISTIC( 2 ),
-        LOGNORMAL( 2 ),
-        NAKAGAMI( 2 ),
-        NORMAL( 2 ),
-        PARETO( 2 ),
-        T( 1 ),
-        TRIANGULAR( 3 ),
-        UNIFORM( 2 ),
-        WEIBULL( 2 );
+        BETA( 2 )
+        {
+
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new BetaDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        CAUCHY( 2 )
+        {
+
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new CauchyDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        CHISQUARE( 1 )
+        {
+
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new ChiSquaredDistribution( p_generator, p_arguments[0] );
+            }
+
+        },
+        EXPONENTIAL( 1 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new ExponentialDistribution( p_generator, p_arguments[0] );
+            }
+
+        },
+        F( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new FDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        GAMMA( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new GammaDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        GUMBLE( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new GumbelDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        LAPLACE( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new LaplaceDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        LEVY( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new LevyDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        LOGISTIC( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new LogisticDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        LOGNORMAL( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new LogNormalDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        NAKAGAMI( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new NakagamiDistribution(
+                        p_generator, p_arguments[0], p_arguments[1],
+                        NakagamiDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY
+                );
+            }
+
+        },
+        NORMAL( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new NormalDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        PARETO( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new ParetoDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        T( 1 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new TDistribution( p_generator, p_arguments[0] );
+            }
+
+        },
+        TRIANGULAR( 3 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new TriangularDistribution( p_generator, p_arguments[0], p_arguments[1], p_arguments[2] );
+            }
+
+        },
+        UNIFORM( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new UniformRealDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        },
+        WEIBULL( 2 )
+        {
+            @Nonnull
+            @Override
+            public AbstractRealDistribution apply( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
+            {
+                return new WeibullDistribution( p_generator, p_arguments[0], p_arguments[1] );
+            }
+
+        };
 
         /**
          * enum name list
          */
         private static final Set<String> NAMES = Collections.unmodifiableSet(
-                                                    Arrays.stream( EDistribution.values() )
-                                                          .map( i -> i.name().toUpperCase( Locale.ROOT ) )
-                                                          .collect( Collectors.toSet() )
+            Arrays.stream( EDistribution.values() )
+                  .map( i -> i.name().toUpperCase( Locale.ROOT ) )
+                  .collect( Collectors.toSet() )
         );
 
         /**
@@ -293,104 +464,207 @@ public final class CCreateDistribution extends IBuiltinAction
             return m_arguments;
         }
 
-        /**
-         * returns the distribution object
-         *
-         * @param p_generator random generator
-         * @param p_arguments arguments
-         * @return real distribution
-         */
-        @Nonnull
-        public AbstractRealDistribution get( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
-        {
-            switch ( this )
-            {
-                case BETA:
-                    return new BetaDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case CAUCHY:
-                    return new CauchyDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case CHISQUARE:
-                    return new ChiSquaredDistribution( p_generator, p_arguments[0] );
-
-                case EXPONENTIAL:
-                    return new ExponentialDistribution( p_generator, p_arguments[0] );
-
-                case F:
-                    return new FDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case GAMMA:
-                    return new GammaDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case GUMBLE:
-                    return new GumbelDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case LAPLACE:
-                    return new LaplaceDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case LEVY:
-                    return new LevyDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case LOGISTIC:
-                    return new LogisticDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case LOGNORMAL:
-                    return new LogNormalDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case NAKAGAMI:
-                    return new NakagamiDistribution(
-                        p_generator, p_arguments[0], p_arguments[1],
-                        NakagamiDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY
-                    );
-
-                case NORMAL:
-                    return new NormalDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case PARETO:
-                    return new ParetoDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case T:
-                    return new TDistribution( p_generator, p_arguments[0] );
-
-                case TRIANGULAR:
-                    return new TriangularDistribution( p_generator, p_arguments[0], p_arguments[1], p_arguments[2] );
-
-                case UNIFORM:
-                    return new UniformRealDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                case WEIBULL:
-                    return new WeibullDistribution( p_generator, p_arguments[0], p_arguments[1] );
-
-                default:
-                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-            }
-        }
     }
 
     /**
      * number generator
      */
-    private enum EGenerator
+    private enum EGenerator implements Supplier<RandomGenerator>
     {
-        MERSENNETWISTER,
-        SYNCHRONIZEDMERSENNETWISTER,
-        ISAAC,
-        SYNCHRONIZEDISAAC,
-        INTERNAL,
-        SYNCHRONIZEDINTERNAL,
-        WELL512A,
-        SYNCHRONIZEDWELL512A,
-        WELL1024A,
-        SYNCHRONIZEDWELL1024A,
-        WELL19937A,
-        SYNCHRONIZEDWELL19937A,
-        WELL19937C,
-        SYNCHRONIZEDWELL19937C,
-        WELL4449A,
-        SYNCHRONIZEDWELL4449A,
-        WELL44497B,
-        SYNCHRONIZEDWELL44497B;
+        MERSENNETWISTER
+        {
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new MersenneTwister();
+            }
+
+        },
+        SYNCHRONIZEDMERSENNETWISTER
+        {
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new MersenneTwister() );
+            }
+
+        },
+        ISAAC
+        {
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new ISAACRandom();
+            }
+
+        },
+        SYNCHRONIZEDISAAC
+        {
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new ISAACRandom() );
+            }
+
+        },
+        INTERNAL
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new JDKRandomGenerator();
+            }
+
+        },
+        SYNCHRONIZEDINTERNAL
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new JDKRandomGenerator() );
+            }
+
+        },
+        WELL512A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new Well512a();
+            }
+
+        },
+        SYNCHRONIZEDWELL512A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new Well512a() );
+            }
+
+        },
+        WELL1024A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new Well1024a();
+            }
+
+        },
+        SYNCHRONIZEDWELL1024A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new Well1024a() );
+            }
+
+        },
+        WELL19937A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new Well19937a();
+            }
+
+        },
+        SYNCHRONIZEDWELL19937A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new Well19937a() );
+            }
+
+        },
+        WELL19937C
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new Well19937c();
+            }
+
+        },
+        SYNCHRONIZEDWELL19937C
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new Well19937c() );
+            }
+
+        },
+        WELL4449A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new Well44497a();
+            }
+
+        },
+        SYNCHRONIZEDWELL4449A
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new Well44497a() );
+            }
+
+        },
+        WELL44497B
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new Well44497b();
+            }
+
+        },
+        SYNCHRONIZEDWELL44497B
+        {
+
+            @Nonnull
+            @Override
+            public RandomGenerator get()
+            {
+                return new SynchronizedRandomGenerator( new Well44497b() );
+            }
+
+        };
 
         /**
          * additional factory
@@ -402,75 +676,6 @@ public final class CCreateDistribution extends IBuiltinAction
         public static EGenerator of( @Nonnull final String p_value )
         {
             return EGenerator.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
-        }
-
-        /**
-         * returns a number generator
-         *
-         * @return generator
-         */
-        @Nonnull
-        public RandomGenerator get()
-        {
-            switch ( this )
-            {
-                case MERSENNETWISTER:
-                    return new MersenneTwister();
-
-                case SYNCHRONIZEDMERSENNETWISTER:
-                    return new SynchronizedRandomGenerator( new MersenneTwister() );
-
-                case ISAAC:
-                    return new ISAACRandom();
-
-                case SYNCHRONIZEDISAAC:
-                    return new SynchronizedRandomGenerator( new ISAACRandom() );
-
-                case INTERNAL:
-                    return new JDKRandomGenerator();
-
-                case SYNCHRONIZEDINTERNAL:
-                    return new SynchronizedRandomGenerator( new JDKRandomGenerator() );
-
-                case WELL512A:
-                    return new Well512a();
-
-                case SYNCHRONIZEDWELL512A:
-                    return new SynchronizedRandomGenerator( new Well512a() );
-
-                case WELL1024A:
-                    return new Well1024a();
-
-                case SYNCHRONIZEDWELL1024A:
-                    return new SynchronizedRandomGenerator( new Well1024a() );
-
-                case WELL19937A:
-                    return new Well19937a();
-
-                case SYNCHRONIZEDWELL19937A:
-                    return new SynchronizedRandomGenerator( new Well19937a() );
-
-                case WELL19937C:
-                    return new Well19937c();
-
-                case SYNCHRONIZEDWELL19937C:
-                    return new SynchronizedRandomGenerator( new Well19937c() );
-
-                case WELL4449A:
-                    return new Well44497a();
-
-                case SYNCHRONIZEDWELL4449A:
-                    return new SynchronizedRandomGenerator( new Well44497a() );
-
-                case WELL44497B:
-                    return new Well44497b();
-
-                case SYNCHRONIZEDWELL44497B:
-                    return new SynchronizedRandomGenerator( new Well44497b() );
-
-                default:
-                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-            }
         }
     }
 }

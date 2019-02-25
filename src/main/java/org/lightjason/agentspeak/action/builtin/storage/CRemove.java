@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -43,7 +42,7 @@ import java.util.stream.Stream;
  * removes an element by name of the storage.
  * The actions removes any value of the storage
  * which is referenced by the key and returns the
- * value, the action never fails
+ * value
  *
  * {@code [A|B] = .storage/remove("foo", "bar");}
  */
@@ -101,14 +100,15 @@ public final class CRemove extends IStorage
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .forEach( i -> this.remove( p_context.agent(), i, p_return ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 

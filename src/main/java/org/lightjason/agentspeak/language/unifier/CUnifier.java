@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -42,6 +41,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -106,13 +106,14 @@ public final class CUnifier implements IUnifier
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                       @Nonnull final IExecution p_expression, final boolean p_parallel )
+    public Stream<IFuzzyValue<?>> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                         @Nonnull final IExecution p_expression, final boolean p_parallel
+    )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = CCommon.parallelstream( l_variables.stream(), p_parallel )
@@ -122,10 +123,10 @@ public final class CUnifier implements IUnifier
 
         // if no match
         if ( l_result.isEmpty() )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         CCommon.updatecontext( p_context, l_result.stream() );
-        return CFuzzyValue.of( true );
+        return p_context.agent().fuzzy().membership().success();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -161,24 +162,25 @@ public final class CUnifier implements IUnifier
     {
         // evalute expression result first, after that evaluate return arguments
         final List<ITerm> l_return = CCommon.argumentlist();
-        final IFuzzyValue<Boolean> l_result =
-                            p_expression.execute(
-                                false,
-                                CCommon.updatecontext(
-                                    p_context.duplicate(),
-                                    p_variables.stream()
-                                ),
-                                Collections.emptyList(),
-                                l_return
-                            );
 
-        return p_context.agent()
-                        .fuzzy()
-                        .getValue()
-                        .defuzzify( l_result )
-                        && l_return.size() == 1
-                        && l_return.get( 0 ).<IRawTerm<?>>term().valueassignableto( Boolean.class )
-                        && l_return.get( 0 ).<Boolean>raw();
+        final boolean l_result = p_context.agent().fuzzy().defuzzification().success(
+            p_context.agent().fuzzy().defuzzification().apply(
+                p_expression.execute(
+                    false,
+                    CCommon.updatecontext(
+                        p_context.duplicate(),
+                        p_variables.stream()
+                    ),
+                    Collections.emptyList(),
+                    l_return
+                )
+            )
+        );
+
+        return l_result
+               && l_return.size() == 1
+               && l_return.get( 0 ).<IRawTerm<?>>term().valueassignableto( Boolean.class )
+               && l_return.get( 0 ).<Boolean>raw();
     }
 
     /**

@@ -73,7 +73,6 @@ import org.lightjason.agentspeak.language.execution.lambda.CLambda;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeRange;
 import org.lightjason.agentspeak.language.execution.lambda.CLambdaInitializeStream;
 import org.lightjason.agentspeak.language.execution.passing.CPassAction;
-import org.lightjason.agentspeak.language.execution.passing.CPassBoolean;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariableLiteral;
@@ -117,7 +116,6 @@ public final class CAgentSpeak
     }
 
 
-
     // --- base structure --------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -134,7 +132,8 @@ public final class CAgentSpeak
     @SuppressWarnings( "unchecked" )
     public static Stream<IPlan> plan( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                       @Nullable final List<TerminalNode> p_annotation, @Nonnull final RuleContext p_trigger,
-                                      @Nonnull final RuleContext p_literal, @Nonnull final List<? extends RuleContext> p_body )
+                                      @Nonnull final RuleContext p_literal, @Nonnull final List<? extends RuleContext> p_body
+    )
     {
         final ITrigger l_trigger = CTrigger.of(
             ITrigger.EType.of( p_visitor.visit( p_trigger ).toString() ),
@@ -168,7 +167,8 @@ public final class CAgentSpeak
      */
     @SuppressWarnings( "unchecked" )
     public static Pair<IExecution, IExecution[]> plandefinition( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                                                  @Nullable final RuleContext p_expression, @Nonnull final RuleContext p_body )
+                                                                 @Nullable final RuleContext p_expression, @Nonnull final RuleContext p_body
+    )
     {
         return new ImmutablePair<>(
             Objects.nonNull( p_expression )
@@ -189,7 +189,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static Stream<IRule> rule( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                      @Nullable final RuleContext p_literal, @Nullable final List<? extends RuleContext> p_body )
+                                      @Nullable final RuleContext p_literal, @Nullable final List<? extends RuleContext> p_body
+    )
     {
         if ( Objects.isNull( p_literal ) || Objects.isNull( p_body ) || p_body.isEmpty() )
             return Stream.empty();
@@ -199,7 +200,6 @@ public final class CAgentSpeak
                      .map( i -> ( (Stream<IExecution>) p_visitor.visit( i ) ).toArray( IExecution[]::new ) )
                      .map( i -> new CRule( l_literal, i ) );
     }
-
 
 
     // --- annotation ------------------------------------------------------------------------------------------------------------------------------------------
@@ -223,6 +223,7 @@ public final class CAgentSpeak
 
     /**
      * build annotation object
+     *
      * @param p_annotation annotation terminal
      * @return null or annoation
      */
@@ -245,8 +246,8 @@ public final class CAgentSpeak
             case CONSTANT:
                 return annotationconstant( l_type, p_annotation.getText() );
 
-            case TAG :
-            case DESCRIPTION :
+            case TAG:
+            case DESCRIPTION:
                 return annotationdescription( l_type, p_annotation.getText() );
 
             default:
@@ -312,7 +313,6 @@ public final class CAgentSpeak
     }
 
 
-
     // --- execution content -----------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -354,11 +354,12 @@ public final class CAgentSpeak
      */
     @Nonnull
     public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                        @Nullable final RuleContext p_repairformula, @Nullable final RuleContext p_block )
+                                        @Nullable final RuleContext p_repairformula, @Nullable final RuleContext p_block
+    )
     {
         return Objects.nonNull( p_repairformula )
-            ? Stream.of( p_visitor.visit( p_repairformula ) )
-            : (Stream<?>) p_visitor.visitChildren( p_block );
+               ? Stream.of( p_visitor.visit( p_repairformula ) )
+               : (Stream<?>) p_visitor.visitChildren( p_block );
     }
 
 
@@ -379,9 +380,8 @@ public final class CAgentSpeak
                      .filter( Objects::nonNull )
                      .findFirst()
                      .map( p_visitor::visitChildren )
-                     .orElseThrow(  () -> new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) ) );
+                     .orElseThrow( () -> new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownbody" ) ) );
     }
-
 
 
     // --- execution elements ----------------------------------------------------------------------------------------------------------------------------------
@@ -397,8 +397,8 @@ public final class CAgentSpeak
     public static IExecution executetestgoal( @Nullable final TerminalNode p_dollar, @Nonnull final TerminalNode p_atom )
     {
         return Objects.nonNull( p_dollar )
-            ? new CTestRule( CPath.of( p_atom.getText() ) )
-            : new CTestGoal( CPath.of( p_atom.getText() ) );
+               ? new CTestRule( CPath.of( p_atom.getText() ) )
+               : new CTestGoal( CPath.of( p_atom.getText() ) );
     }
 
     /**
@@ -406,7 +406,7 @@ public final class CAgentSpeak
      *
      * @param p_visitor visitor
      * @param p_doubleexclamationmark immediatly
-     * @param p_literal  literal
+     * @param p_literal literal
      * @param p_variable variable
      * @param p_arguments arguments
      * @return achievment goal
@@ -416,7 +416,8 @@ public final class CAgentSpeak
     public static IExecution executeachievementgoal( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                                      @Nullable final TerminalNode p_doubleexclamationmark,
                                                      @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable,
-                                                     @Nullable final RuleContext p_arguments )
+                                                     @Nullable final RuleContext p_arguments
+    )
     {
         if ( Objects.nonNull( p_literal ) )
             return new CAchievementGoalLiteral( (ILiteral) p_visitor.visit( p_literal ), Objects.nonNull( p_doubleexclamationmark ) );
@@ -446,7 +447,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution executeunary( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                           @Nonnull final TerminalNode p_operator, @Nonnull final RuleContext p_variable )
+                                           @Nonnull final TerminalNode p_operator, @Nonnull final RuleContext p_variable
+    )
     {
         switch ( p_operator.getText() )
         {
@@ -472,7 +474,8 @@ public final class CAgentSpeak
      */
     @Nonnull
     public static IExecution executeternary( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                             @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false )
+                                             @Nonnull final RuleContext p_expression, @Nonnull final RuleContext p_true, @Nonnull final RuleContext p_false
+    )
     {
         return new CTernaryOperation(
             (IExpression) p_visitor.visit( p_expression ),
@@ -492,7 +495,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution executebelief( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_literal,
-                                            @Nonnull final TerminalNode p_belieftrigger )
+                                            @Nonnull final TerminalNode p_belieftrigger
+    )
     {
         return new CBelief( CBelief.EAction.of( p_belieftrigger.getText() ), (ILiteral) p_visitor.visit( p_literal ) );
     }
@@ -507,7 +511,8 @@ public final class CAgentSpeak
      */
     @Nonnull
     public static IExecution executeaction( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final IActionGenerator p_actions )
+                                            @Nonnull final RuleContext p_actionliteral, @Nonnull final IActionGenerator p_actions
+    )
     {
         final ILiteral l_actionliteral = (ILiteral) p_visitor.visit( p_actionliteral );
 
@@ -538,7 +543,8 @@ public final class CAgentSpeak
      */
     @Nonnull
     public static IExecution executerule( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                          @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variableexecute )
+                                          @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variableexecute
+    )
     {
         if ( Objects.nonNull( p_literal ) )
             return new CAchievementRuleLiteral( (ILiteral) p_visitor.visit( p_literal ) );
@@ -565,25 +571,14 @@ public final class CAgentSpeak
      * build a data pass execution
      *
      * @param p_data native data
-     * @tparam T data type
      * @return data pass execution
+     *
+     * @tparam T data type
      */
     @Nonnull
     public static <T> IExecution passdata( @Nonnull final T p_data )
     {
         return new CPassRaw<>( p_data );
-    }
-
-    /**
-     * build a boolean execution
-     *
-     * @param p_value value
-     * @return execution
-     */
-    @Nonnull
-    public static IExecution passboolean( final boolean p_value )
-    {
-        return new CPassBoolean( p_value );
     }
 
     /**
@@ -597,7 +592,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution passvaribaleliteral( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                                  @Nonnull final RuleContext p_variable, @Nullable final RuleContext p_termlist )
+                                                  @Nonnull final RuleContext p_variable, @Nullable final RuleContext p_termlist
+    )
     {
         return new CPassVariableLiteral(
             (IVariable<?>) p_visitor.visit( p_variable ),
@@ -618,10 +614,9 @@ public final class CAgentSpeak
     public static Stream<IVariable<?>> variablelist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final List<? extends RuleContext> p_list )
     {
         return Objects.isNull( p_list )
-            ? Stream.empty()
-            : p_list.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) );
+               ? Stream.empty()
+               : p_list.stream().map( i -> (IVariable<?>) p_visitor.visit( i ) );
     }
-
 
 
     // --- expression ------------------------------------------------------------------------------------------------------------------------------------------
@@ -644,7 +639,8 @@ public final class CAgentSpeak
     public static IExecution expression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext p_term,
                                          @Nullable final RuleContext p_unification, @Nullable final TerminalNode p_unaryoperator,
                                          @Nullable final RuleContext p_expression, @Nullable final Token p_binaryoperator,
-                                         @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
+                                         @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs
+    )
     {
         final IExecution l_term = termexecution( p_visitor, p_unification, p_term );
         if ( Objects.nonNull( l_term ) )
@@ -713,7 +709,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution deconstruct( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_variables,
-                                          @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable )
+                                          @Nullable final RuleContext p_literal, @Nullable final RuleContext p_variable
+    )
     {
         if ( Objects.nonNull( p_literal ) && Objects.nonNull( p_variable ) )
             throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknowndeconstruct" ) );
@@ -757,7 +754,8 @@ public final class CAgentSpeak
     @SuppressWarnings( "unchecked" )
     public static IExecution singleassignment( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final RuleContext p_lhs,
                                                @Nonnull final TerminalNode p_operator, @Nullable final RuleContext p_ternary,
-                                               @Nullable final RuleContext p_expression )
+                                               @Nullable final RuleContext p_expression
+    )
     {
         if ( Objects.nonNull( p_ternary ) )
             return new CSingleAssignment(
@@ -787,14 +785,14 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution multiassignment( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                              @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution )
+                                              @Nonnull final RuleContext p_variable, @Nonnull final RuleContext p_execution
+    )
     {
         return new CMultiAssignment(
             (Stream<IVariable<?>>) p_visitor.visit( p_variable ),
             (IExecution) p_visitor.visit( p_execution )
         );
     }
-
 
 
     // --- unification -----------------------------------------------------------------------------------------------------------------------------------------
@@ -811,7 +809,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution unification( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_parallel,
-                                          @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint )
+                                          @Nonnull final RuleContext p_literal, @Nullable final RuleContext p_constraint
+    )
     {
         final ILiteral l_literal = (ILiteral) p_visitor.visit( p_literal );
         final Object l_constraint = Objects.nonNull( p_constraint ) ? p_visitor.visit( p_constraint ) : null;
@@ -852,7 +851,8 @@ public final class CAgentSpeak
     public static Object unificationconstraint( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                                 @Nullable final RuleContext p_variable,
                                                 @Nullable final RuleContext p_literal,
-                                                @Nullable final RuleContext p_expression )
+                                                @Nullable final RuleContext p_expression
+    )
     {
         if ( Objects.nonNull( p_variable ) )
             return p_visitor.visit( p_variable );
@@ -865,7 +865,6 @@ public final class CAgentSpeak
 
         throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownunificationconstraint" ) );
     }
-
 
 
     // --- lambda expression -----------------------------------------------------------------------------------------------------------------------------------
@@ -886,7 +885,8 @@ public final class CAgentSpeak
     public static IExecution lambda( @Nonnull final ParseTreeVisitor<?> p_visitor, boolean p_parallel,
                                      @Nonnull final RuleContext p_stream, @Nonnull final RuleContext p_iterationvariable,
                                      @Nonnull final RuleContext p_body,
-                                     @Nullable final RuleContext p_return )
+                                     @Nullable final RuleContext p_return
+    )
     {
         return new CLambda(
             p_parallel,
@@ -914,7 +914,8 @@ public final class CAgentSpeak
     @SuppressWarnings( "unchecked" )
     public static IExecution lambdastream( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final ILambdaStreamingGenerator p_lambda,
                                            @Nullable final TerminalNode p_hash, @Nullable final TerminalNode p_number,
-                                           @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional )
+                                           @Nullable final RuleContext p_variable, @Nullable final List<? extends RuleContext> p_additional
+    )
     {
         final Stream<IExecution> l_stream = org.lightjason.agentspeak.language.CCommon.streamconcatstrict(
             Objects.nonNull( p_number )
@@ -931,8 +932,8 @@ public final class CAgentSpeak
         );
 
         return Objects.nonNull( p_hash )
-            ? new CLambdaInitializeRange( l_stream )
-            : new CLambdaInitializeStream( l_stream, p_lambda );
+               ? new CLambdaInitializeRange( l_stream )
+               : new CLambdaInitializeStream( l_stream, p_lambda );
     }
 
     /**
@@ -946,7 +947,8 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution lambdaelement( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                            @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable )
+                                            @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable
+    )
     {
         if ( Objects.nonNull( p_number ) )
             return passdata( CRaw.numbervalue( p_number ) );

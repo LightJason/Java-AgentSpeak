@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns all edges between vertices for a graph instance.
  * The action returns for each tuple of vertices the edge of a single
- * graph instance, the action never fails
+ * graph instance
  *
  * {@code [E1|E2|E3] = .graph/findedgesingle( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */

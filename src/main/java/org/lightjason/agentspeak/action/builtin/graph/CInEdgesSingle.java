@@ -38,7 +38,7 @@ import java.util.List;
  * returns incomming edges of a vertex of each graph instance.
  * The actions returns a list incoming edges of a vertex for
  * each graph instance, the first argument is the vertex, all
- * other graphs, the action never fails
+ * other graphs
  *
  * {@code [OE1|OE2] = .graph/inedgessingle( Vertex, Graph1, Graph2 );}
  */
@@ -57,7 +57,8 @@ public final class CInEdgesSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getInEdges( p_window.get( 0 ).raw() ) );
 

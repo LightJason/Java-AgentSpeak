@@ -28,20 +28,21 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action for exponential value.
  * Calculate the exponential function \f$ e^{x_i} \f$
- * for each argument, the action never fails
+ * for each argument
  *
  * {@code [X|Y] = .math/exp(1,8);}
+ *
  * @see https://en.wikipedia.org/wiki/Exponential_function
  */
 public final class CExp extends IBuiltinAction
@@ -60,8 +61,9 @@ public final class CExp extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
@@ -71,7 +73,7 @@ public final class CExp extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

@@ -34,8 +34,7 @@ import java.util.List;
 /**
  * returns multiple vertex degrees of a single graph.
  * The action returns for each vertex the degree of the
- * graph reference within the first argument,
- * the action never fails
+ * graph reference within the first argument
  *
  * {@code [D1|D2] = .graph/degree( Graph, Vertex1, Vertex2 );}
  */
@@ -54,7 +53,8 @@ public final class CDegreeMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

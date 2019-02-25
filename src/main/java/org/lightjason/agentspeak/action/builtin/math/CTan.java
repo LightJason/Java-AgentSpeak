@@ -28,21 +28,21 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action for tangens value.
  * The action calculates for each unflatten input
- * value in radians the \f$ tan( x_i ) \f$ value,
- * the action never fails
+ * value in radians the \f$ tan( x_i ) \f$ value
  *
  * {@code [X|Y|Z] = .math/tan( pi, 1.3*pi, 0.43*pi );}
+ *
  * @see https://en.wikipedia.org/wiki/Trigonometric_functions
  */
 public final class CTan extends IBuiltinAction
@@ -61,8 +61,9 @@ public final class CTan extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
@@ -72,7 +73,7 @@ public final class CTan extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

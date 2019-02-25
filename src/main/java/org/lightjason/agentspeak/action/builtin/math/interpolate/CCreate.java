@@ -31,11 +31,11 @@ import org.apache.commons.math3.analysis.interpolation.LoessInterpolator;
 import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -43,6 +43,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -55,6 +56,7 @@ import java.util.stream.Collectors;
  * values are the y-values
  *
  * {@code PI = .math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]);}
+ *
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  * @see https://en.wikipedia.org/wiki/Divided_differences
  * @see https://en.wikipedia.org/wiki/Linear_interpolation
@@ -85,12 +87,13 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnotodd" ) );
 
         final int l_datasize = ( l_arguments.size() - 1 ) / 2;
         p_return.add(
@@ -106,15 +109,15 @@ public final class CCreate extends IBuiltinAction
                                     .toArray(),
 
                          l_arguments.stream()
-                                     .skip( l_datasize + 1 )
-                                     .map( ITerm::<Number>raw )
-                                     .mapToDouble( Number::doubleValue )
-                                     .toArray()
-                )
+                                    .skip( l_datasize + 1 )
+                                    .map( ITerm::<Number>raw )
+                                    .mapToDouble( Number::doubleValue )
+                                    .toArray()
+                     )
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 

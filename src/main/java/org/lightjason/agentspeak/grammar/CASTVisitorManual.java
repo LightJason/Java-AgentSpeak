@@ -120,8 +120,6 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
 
 
 
-
-
     @Override
     public Object visitExecuteaction( final ManualParser.ExecuteactionContext p_context )
     {

@@ -59,7 +59,8 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
      * @throws Exception thrown on error
      */
     public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                     @Nonnull final ILambdaStreamingGenerator p_lambda ) throws Exception
+                                     @Nonnull final ILambdaStreamingGenerator p_lambda
+    ) throws Exception
     {
         final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions, p_lambda ).parse( p_stream );
 
@@ -85,9 +86,9 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
     public final Stream<IPlanBundle> generatemultiple( final int p_number, @Nullable final Object... p_data )
     {
         return IntStream.range( 0, p_number )
-                    .parallel()
-                    .mapToObj( i -> this.generatesingle( p_data ) )
-                    .filter( Objects::nonNull );
+                        .parallel()
+                        .mapToObj( i -> this.generatesingle( p_data ) )
+                        .filter( Objects::nonNull );
     }
 
 }

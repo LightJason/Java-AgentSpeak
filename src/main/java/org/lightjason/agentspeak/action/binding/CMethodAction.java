@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -125,7 +124,7 @@ public final class CMethodAction extends IBaseAction
         p_stream.defaultReadObject();
 
         // deserialize method handle
-        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[])p_stream.readObject() );
+        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[]) p_stream.readObject() );
         m_methodhandle = MethodHandles.lookup().unreflect( m_method );
     }
 
@@ -145,33 +144,29 @@ public final class CMethodAction extends IBaseAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         try
         {
             return m_arguments == 0
 
-                ? CMethodAction.returnvalues(
-                m_methodhandle.invoke( p_context.agent() ),
-                p_return
-                )
-
-                : CMethodAction.returnvalues(
-                    m_methodhandle.invokeWithArguments(
-                        Stream.concat(
-                            Stream.of( p_context.agent() ),
-                            p_argument.stream().map( ITerm::raw )
-                        ).collect( Collectors.toList() )
-                    ),
-                    p_return
-                );
+                   ? CMethodAction.returnvalues( m_methodhandle.invoke( p_context.agent() ), p_return )
+                   : CMethodAction.returnvalues(
+                       m_methodhandle.invokeWithArguments(
+                           Stream.concat(
+                               Stream.of( p_context.agent() ),
+                               p_argument.stream().map( ITerm::raw )
+                           ).collect( Collectors.toList() )
+                       ),
+                       p_return
+                   );
         }
         catch ( final Throwable l_throwable )
         {
             LOGGER.warning( MessageFormat.format( "binding method [{0}] throws error [{1}] in agent: ", m_name, l_throwable, p_context.agent() ) );
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
         }
     }
 
@@ -183,14 +178,14 @@ public final class CMethodAction extends IBaseAction
      * @return execution return
      */
     @Nonnull
-    private static IFuzzyValue<Boolean> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
+    private static Stream<IFuzzyValue<?>> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
     {
         // void result of the execution
         if ( Objects.isNull( p_result ) || void.class.equals( p_result.getClass() ) )
-            return CFuzzyValue.of( true );
+            return Stream.of();
 
         // otherwise object is returned
         p_return.add( CRawTerm.of( p_result ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

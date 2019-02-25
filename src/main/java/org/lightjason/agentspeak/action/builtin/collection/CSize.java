@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -37,12 +36,13 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
  * returns the size of the collection.
  * All arguments must be collections and the action returns
- * the size of each collection, the action never fails.
+ * the size of each collection.
  * On non-collection type the action returns a zero value
  *
  * {@code [A|B|C|D] = .collection/size( Collection, Map, MultiMap, Tupel );}
@@ -64,16 +64,17 @@ public final class CSize extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // any term type
         p_argument.stream()
-               .map( CSize::size )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+                  .map( CSize::size )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

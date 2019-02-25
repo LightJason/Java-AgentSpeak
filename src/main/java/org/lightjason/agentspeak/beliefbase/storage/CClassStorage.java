@@ -106,7 +106,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     }
 
     @Override
-    public  boolean containsMultiElement( @Nonnull final String p_key )
+    public boolean containsMultiElement( @Nonnull final String p_key )
     {
         return m_fields.containsKey( p_key );
     }

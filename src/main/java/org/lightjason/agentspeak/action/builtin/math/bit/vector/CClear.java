@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -36,13 +35,14 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * sets the indexed bit to false within the bit vector.
  * The action gets bit vectors and index positions and
  * in each bit vector the given bit positions are set
- * to false, the action never fails
+ * to false
  *
  * {@code .math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] );}
  */
@@ -70,8 +70,9 @@ public final class CClear extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int[] l_index = l_arguments.parallelStream()
@@ -85,6 +86,6 @@ public final class CClear extends IBuiltinAction
                    .map( ITerm::<BitVector>raw )
                    .forEach( i -> Arrays.stream( l_index ).forEach( i::clear ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

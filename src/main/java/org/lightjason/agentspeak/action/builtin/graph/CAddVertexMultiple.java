@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * adds multiple vertices to a single graph.
  * The first argument is a graph instance, and
- * all other arguments are vertices, the action never
- * fails
+ * all other arguments are vertices
  *
  * {@code .graph/addvertexmultiple( Graph, Vertex1, Vertex2, [ Vertex3, Vertex4 ] );}
  */
@@ -53,7 +52,8 @@ public final class CAddVertexMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.addVertex( p_window.get( 0 ).raw() );
     }

@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -40,8 +39,7 @@ import java.util.stream.Stream;
 /**
  * unflats the tuples into variables.
  * All arguments are tupels and each tuple
- * will be extract into two variables, the
- * action never fails
+ * will be extract into two variables
  *
  * {@code [A|B|C|D] = .collection/tupel/flat( Tupel1, Tupel2 );}
  */
@@ -69,8 +67,9 @@ public final class CFlat extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_argument.stream()
                   .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
@@ -78,7 +77,7 @@ public final class CFlat extends IBuiltinAction
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

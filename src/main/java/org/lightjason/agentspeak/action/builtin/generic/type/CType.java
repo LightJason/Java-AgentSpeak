@@ -27,18 +27,18 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * returns for each argument the underlying type.
  * The actions returns for each argument the data type
- * as a string name, the action never fails
+ * as a string name
  *
  * {@code [T1|T2] = .generic/type/type( A, B );}
  */
@@ -66,10 +66,11 @@ public final class CType extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::of ).forEach( p_return::add );
-        return CFuzzyValue.of( true );
+        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map( CRawTerm::of ).forEach( p_return::add );
+        return Stream.of();
     }
 }

@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -37,13 +36,14 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
  * checks a collection is empty.
  * All arguments are collection elements and for each argument
  * a boolean flag for empty is returned, on all non-collection
- * types empty is always false, the action never fails
+ * types empty is always false
  *
  * {@code [A|B|C] = .collection/list/isempty(List, Map, MultiMap);}
  */
@@ -63,15 +63,16 @@ public final class CIsEmpty extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_argument.stream()
-               .map( CIsEmpty::empty )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+                  .map( CIsEmpty::empty )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 

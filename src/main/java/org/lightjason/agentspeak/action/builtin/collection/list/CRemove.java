@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -38,13 +37,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
  * removes an element of the list by the index.
  * Removes an element by the list index, the first argument is the
  * list object, all other element indices which should removed, the
- * action returns the removed arguments and never fails
+ * action returns the removed arguments
  *
  * {@code [A|B|C] = .collection/list/remove( L, 3, [4, [5]] );}
  */
@@ -73,8 +73,9 @@ public final class CRemove extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Object> l_list = p_argument.get( 0 ).<List<Object>>raw();
         final Set<Integer> l_removed = new HashSet<>();
@@ -100,7 +101,7 @@ public final class CRemove extends IBuiltinAction
         l_list.clear();
         l_list.addAll( l_result );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

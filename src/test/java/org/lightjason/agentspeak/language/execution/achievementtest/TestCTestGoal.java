@@ -74,11 +74,12 @@ public final class TestCTestGoal extends IBaseTest
     {
         Assume.assumeNotNull( m_agent );
 
-        new CAchievementGoalLiteral( CLiteral.of( "foo" ), false ).execute(
+        execute(
+            new CAchievementGoalLiteral( CLiteral.of( "foo" ), false ),
             false,
-            new CLocalContext( m_agent ),
             Collections.emptyList(),
-            Collections.emptyList()
+            Collections.emptyList(),
+            m_agent
         );
 
         m_agent.inspect( new IInspector()
@@ -129,11 +130,13 @@ public final class TestCTestGoal extends IBaseTest
 
         final IVariable<?> l_var = new CVariable<>( "Var" ).set( "bar" );
 
-        new CAchievementGoalVariable( new CPassVariableLiteral( l_var ) ).execute(
+        execute(
+            new CAchievementGoalVariable( new CPassVariableLiteral( l_var ) ),
             false,
-            new CLocalContext( m_agent, l_var ),
             Collections.emptyList(),
-            Collections.emptyList()
+            Collections.emptyList(),
+            m_agent,
+            l_var
         );
 
         m_agent.inspect( new IInspector()

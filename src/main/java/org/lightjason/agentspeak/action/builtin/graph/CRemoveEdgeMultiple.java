@@ -34,8 +34,7 @@ import java.util.List;
  * removes edges of any graph instance.
  * The action removes any edge of a single
  * graph instace, the first argument is the
- * graph all other arguments are edges, the
- * action never fails
+ * graph all other arguments are edges
  *
  * {@code .graph/removeedgemultiple( Graph, Edge1, Edge2 );}
  */
@@ -54,7 +53,8 @@ public final class CRemoveEdgeMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.removeEdge( p_window.get( 0 ).raw() );
     }

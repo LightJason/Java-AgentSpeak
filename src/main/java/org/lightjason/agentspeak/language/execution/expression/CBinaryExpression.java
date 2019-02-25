@@ -23,18 +23,20 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -59,6 +61,10 @@ public final class CBinaryExpression implements IBinaryExpression
      * right-hand-side
      */
     private final IExecution m_rhs;
+    /**
+     * left-hand-side strict-bind
+     */
+    private final BiFunction<ITerm, List<ITerm>, Boolean> m_lhsbind;
 
     /**
      * ctor
@@ -72,21 +78,54 @@ public final class CBinaryExpression implements IBinaryExpression
         m_operator = p_operator;
         m_lhs = p_lhs;
         m_rhs = p_rhs;
-    }
 
+        // on boolean expression "or" & "and" the left-hand-side has got a more strict bind
+        switch ( m_operator )
+        {
+            case AND:
+                m_lhsbind = ( i, j ) ->
+                {
+                    if ( !i.<Boolean>raw() )
+                        j.add( CRawTerm.of( false ) );
+                    return !i.<Boolean>raw();
+                };
+                break;
+
+            case OR:
+                m_lhsbind = ( i, j ) ->
+                {
+                    if ( i.<Boolean>raw() )
+                        j.add( CRawTerm.of( true ) );
+                    return i.<Boolean>raw();
+                };
+                break;
+
+            default:
+                m_lhsbind = ( i, j ) -> false;
+        }
+
+    }
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( !execute( m_lhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 1 )
-            return CFuzzyValue.of( false );
+        // left-hand-side execution
+        final IFuzzyValue<?>[] l_left = execute( m_lhs, p_parallel, p_context, p_argument, l_return );
+        if ( l_return.size() != 1 )
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
-        if ( !execute( m_rhs, p_parallel, p_context, p_argument, l_return ) || l_return.size() != 2 )
-            return CFuzzyValue.of( false );
+        // additional check for left-hand-arguments
+        if ( m_lhsbind.apply( l_return.get( 0 ), p_return ) )
+            return Stream.of();
+
+        // right-hand-side execution
+        final IFuzzyValue<?>[] l_right = execute( m_rhs, p_parallel, p_context, p_argument, l_return );
+        if ( l_return.size() != 2 )
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
         p_return.add(
             CRawTerm.of(
@@ -94,7 +133,7 @@ public final class CBinaryExpression implements IBinaryExpression
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.concat( Arrays.stream( l_left ), Arrays.stream( l_right ) );
     }
 
     /**
@@ -105,21 +144,26 @@ public final class CBinaryExpression implements IBinaryExpression
      * @param p_context execution context
      * @param p_argument argument list
      * @param p_return return list
-     * @return execution result
+     * @return return fuzzy result
      */
-    private static boolean execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    private static IFuzzyValue<?>[] execute( @Nonnull final IExecution p_execution, final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final int l_arguments = p_return.size();
-        final boolean l_result = p_context.agent().fuzzy().getValue().defuzzify(
-            p_execution.execute( p_parallel, p_context, p_argument, p_return )
+        final boolean l_result = p_context.agent().fuzzy().defuzzification().success(
+            p_context.agent().fuzzy().defuzzification().apply(
+                p_execution.execute( p_parallel, p_context, p_argument, p_return )
+            )
         );
 
         // if no result value exists from execution, just use defuzzificated execution result
         if ( p_return.size() == l_arguments )
             p_return.add( CRawTerm.of( l_result ) );
 
-        return l_result;
+        return l_result
+               ? p_context.agent().fuzzy().membership().success().toArray( IFuzzyValue[]::new )
+               : p_context.agent().fuzzy().membership().fail().toArray( IFuzzyValue[]::new );
     }
 
     @Nonnull

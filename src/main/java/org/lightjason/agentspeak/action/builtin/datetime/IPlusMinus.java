@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.action.builtin.datetime;
 
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -56,7 +56,8 @@ public abstract class IPlusMinus extends IBuiltinAction
      * ctor
      */
     protected IPlusMinus()
-    {}
+    {
+    }
 
     @Nonnegative
     @Override
@@ -67,15 +68,16 @@ public abstract class IPlusMinus extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         switch ( l_arguments.get( 0 ).<String>raw().trim().toLowerCase( Locale.ROOT ) )
         {
 
-            case "minus" :
+            case "minus":
                 this.applyminus(
                     l_arguments.stream()
                                .skip( 2 )
@@ -85,10 +87,10 @@ public abstract class IPlusMinus extends IBuiltinAction
                     .map( CRawTerm::of )
                     .forEach( p_return::add );
 
-                return CFuzzyValue.of( true );
+                return Stream.of();
 
 
-            case "plus" :
+            case "plus":
                 this.applyplus(
                     l_arguments.stream()
                                .skip( 2 )
@@ -98,11 +100,14 @@ public abstract class IPlusMinus extends IBuiltinAction
                     .map( CRawTerm::of )
                     .forEach( p_return::add );
 
-                return CFuzzyValue.of( true );
+                return Stream.of();
 
 
             default:
-                return CFuzzyValue.of( false );
+                throw new CExecutionIllegealArgumentException(
+                    p_context,
+                    org.lightjason.agentspeak.common.CCommon.languagestring( IPlusMinus.class, "unknownargument", l_arguments.get( 0 ).raw() )
+                );
 
         }
     }

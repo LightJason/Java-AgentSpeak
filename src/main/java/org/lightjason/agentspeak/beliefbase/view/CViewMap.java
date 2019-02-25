@@ -337,9 +337,9 @@ public final class CViewMap implements IView
     {
         return !p_path.empty()
                && ( p_path.size() == 1
-                   ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
-                   : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                         .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+                    ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                          .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
@@ -398,11 +398,12 @@ public final class CViewMap implements IView
         final Object l_data = m_data.get( l_key );
         return l_data instanceof Map<?, ?>
                ? Stream.concat(
-                    Stream.of( this ),
-                    new CViewMap(
-                        l_key, (Map<String, Object>) l_data, this,
-                        m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_literaltokey, m_keytoliteral
-                    ).walk( p_path.subpath( 1 ), p_generator ) )
+            Stream.of( this ),
+            new CViewMap(
+                l_key, (Map<String, Object>) l_data, this,
+                m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_literaltokey, m_keytoliteral
+            ).walk( p_path.subpath( 1 ), p_generator )
+        )
                : Stream.of( this );
     }
 
@@ -424,14 +425,14 @@ public final class CViewMap implements IView
         public int size()
         {
             return (int) m_data.values()
-                         .stream()
-                         .filter( i -> !( i instanceof Map<?, ?> ) )
-                         .count()
-                    + m_data.entrySet()
-                            .stream()
-                            .filter( i -> i instanceof Map<?, ?> )
-                            .mapToInt( i -> new CViewMap( i.getKey(), (Map<String, Object>) i.getValue() ).size() )
-                            .sum();
+                               .stream()
+                               .filter( i -> !( i instanceof Map<?, ?> ) )
+                               .count()
+                   + m_data.entrySet()
+                           .stream()
+                           .filter( i -> i instanceof Map<?, ?> )
+                           .mapToInt( i -> new CViewMap( i.getKey(), (Map<String, Object>) i.getValue() ).size() )
+                           .sum();
         }
 
         @Nonnull
@@ -521,7 +522,7 @@ public final class CViewMap implements IView
         public boolean containsView( @Nonnull final String p_key )
         {
             final String l_key = m_literaltokey.apply( p_key );
-            return m_data.containsKey( l_key ) &&  m_data.get( l_key ) instanceof Map<?, ?>;
+            return m_data.containsKey( l_key ) && m_data.get( l_key ) instanceof Map<?, ?>;
         }
 
         @Nullable

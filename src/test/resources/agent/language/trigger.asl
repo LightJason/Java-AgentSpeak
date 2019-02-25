@@ -41,6 +41,7 @@
 
     +delbelief("test");
 
+
     !goaloneparameter( 1 );
     !goaltwoparameter( 1, 2 );
     !goaltwoparametererror( 2, 3 );
@@ -50,6 +51,7 @@
 
     !equalname( "foobar" );
     !equalname( "foo", "bar" );
+
 
     !hashcollision/Ea;
     !hashcollision/FB;

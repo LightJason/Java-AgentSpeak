@@ -201,6 +201,4 @@ public final class CBeliefbase extends IBaseBeliefbase
         return m_storage.toString();
     }
 
-
-
 }

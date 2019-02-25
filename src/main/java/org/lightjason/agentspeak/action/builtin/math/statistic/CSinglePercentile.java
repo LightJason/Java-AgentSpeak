@@ -25,22 +25,23 @@ package org.lightjason.agentspeak.action.builtin.math.statistic;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns for any static object a percentile value.
  * The actions reutnrs for any statistic value the
- * given percentile value and the action fails on wrong input
+ * given percentile value
  *
  * {@code [V1|V2|V3] = .math/statistic/multiplepercentile( 2, Statistic1, [Statistic2, Statistic3] );}
  */
@@ -67,13 +68,13 @@ public final class CSinglePercentile extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return
     )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" ) );
 
         final double l_value = l_arguments.get( 0 ).<Number>raw().doubleValue();
         l_arguments.stream()
@@ -82,8 +83,7 @@ public final class CSinglePercentile extends IBuiltinAction
                    .mapToObj( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
-
 
 }

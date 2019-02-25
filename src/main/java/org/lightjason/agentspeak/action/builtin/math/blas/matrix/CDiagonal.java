@@ -32,12 +32,12 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -45,12 +45,11 @@ import java.util.List;
  * The action returns for each vector element a
  * matrix which contains the vetcor elements on
  * the diagonal line. A string value indicates
- * a sparse or dense matrix (default sparse),
- * the action fails never
+ * a sparse or dense matrix (default sparse)
  *
  * {@code
-      [D1|D2] = .math/blas/matrix/diagonal( Vector1, Vector2 );
-      [D3|D4] = .math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
+ * [D1|D2] = .math/blas/matrix/diagonal( Vector1, Vector2 );
+ * [D3|D4] = .math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
  * }
  */
 public final class CDiagonal extends IAlgebra
@@ -69,8 +68,9 @@ public final class CDiagonal extends IAlgebra
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
@@ -83,12 +83,12 @@ public final class CDiagonal extends IAlgebra
         CCommon.flatten( p_argument )
                .filter( i -> CCommon.isssignableto( i, DoubleMatrix1D.class ) )
                .map( ITerm::<DoubleMatrix1D>raw )
-               .map( i  -> generate( i, l_type ) )
+               .map( i -> generate( i, l_type ) )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**
@@ -103,8 +103,10 @@ public final class CDiagonal extends IAlgebra
     {
         switch ( p_type )
         {
-            case DENSE: return DoubleFactory2D.dense.diagonal( p_elements );
-            default: return DoubleFactory2D.sparse.diagonal( p_elements );
+            case DENSE:
+                return DoubleFactory2D.dense.diagonal( p_elements );
+            default:
+                return DoubleFactory2D.sparse.diagonal( p_elements );
         }
     }
 }

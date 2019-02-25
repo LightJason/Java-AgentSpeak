@@ -34,7 +34,7 @@ import java.util.Map;
  * adds an single element pair to all map iif not exists.
  * First and second argument is a key-value pair, all
  * other values are map references, the key-value pair
- * is added to all maps iif not exists and the action never fails
+ * is added to all maps iif not exists
  *
  * {@code .collection/map/putsingleifabsent( "key", "value", Map1, Map2 );}
  */

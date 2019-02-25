@@ -25,26 +25,28 @@ package org.lightjason.agentspeak.action.builtin.math.shape;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * action check if a point is within a triangle.
  * The first three tuple of arguments defines the triangle
  * coordinate (x- / y-position), all other tuples are the tuples
- * of x- / y-position, the action fails on wrong input
+ * of x- / y-position
  *
  * {@code [In1|In2] = .math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 );}
+ *
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
  */
 public final class CInTriangle extends IBuiltinAction
@@ -71,8 +73,9 @@ public final class CInTriangle extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -80,7 +83,8 @@ public final class CInTriangle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 8 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon
+                .languagestring( this, "wrongargumentnumber", 8 ) );
 
         StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
                    .peek( i ->
@@ -101,14 +105,14 @@ public final class CInTriangle extends IBuiltinAction
                    } )
                    .map( i -> i.get( 2 ) > 0 && i.get( 3 ) > 0
                               && i.get( 2 ) + i.get( 3 ) < -l_arguments.get( 3 ) * l_arguments.get( 4 )
-                                                            + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
-                                                            + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
-                                                            + l_arguments.get( 2 ) * l_arguments.get( 5 )
+                                                           + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
+                                                           + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
+                                                           + l_arguments.get( 2 ) * l_arguments.get( 5 )
                    )
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

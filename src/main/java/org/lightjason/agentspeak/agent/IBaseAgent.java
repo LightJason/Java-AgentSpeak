@@ -48,9 +48,8 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnegative;
@@ -109,7 +108,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * map with all existing plans and successful / fail runs
      */
     protected final Multimap<ITrigger, IPlanStatistic> m_plans = Multimaps.synchronizedMultimap(
-                                                                    TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
+        TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
     /**
      * nano seconds at the last cycle
      */
@@ -136,7 +135,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * fuzzy result collector
      */
-    private final IFuzzyBundle<Boolean> m_fuzzy;
+    private final IFuzzyBundle m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -273,7 +272,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzyBundle<Boolean> fuzzy()
+    public final IFuzzyBundle fuzzy()
     {
         return m_fuzzy;
     }
@@ -319,14 +318,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
+    public final Stream<IFuzzyValue<?>> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
     {
         if ( m_sleepingcycles.get() > 0 )
-            return CFuzzyValue.of( false );
+            return m_fuzzy.membership().fail();
 
         // check if literal does not store any variables
         if ( p_trigger.literal().hasVariable() )
-            throw new CNoSuchElementException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
+            throw new CNoSuchElementException( org.lightjason.agentspeak.common.CCommon.languagestring( IBaseAgent.class, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
         if ( Objects.nonNull( p_immediately ) && p_immediately.length > 0 && p_immediately[0] )
@@ -338,7 +337,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             m_trigger.putIfAbsent( p_trigger.hashCode(), p_trigger );
         }
 
-        return CFuzzyValue.of( true );
+        return m_fuzzy.membership().success();
     }
 
     @Override
@@ -351,11 +350,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // check wakup-event otherwise suspend
             return (T) this;
 
-        // update defuzzification
-        m_fuzzy.getValue().update( this );
+        // update fuzzification
+        m_fuzzy.update( this );
 
         // clear running plan- and trigger list and execute elements
-        this.execute( this.generateexecutionlist() );
+        this.execute( this.generateexecutionlist() )
+            .forEach( i ->
+            {
+            } );
 
 
         // set the cycle time
@@ -367,9 +369,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * create the plan executionlist with clearing internal structures
      *
-     * @note must be synchronized for avoid indeterministic trigger list
-     *
      * @return collection with execution plan and context
+     *
+     * @note must be synchronized for avoid indeterministic trigger list
      */
     @Nonnull
     private synchronized Collection<Pair<IPlanStatistic, IContext>> generateexecutionlist()
@@ -407,7 +409,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // create execution context
             .map( i -> CCommon.instantiateplan( i.getLeft().getRight(), this, i.getRight().getRight() ) )
             // check plan-condition
-            .filter( i -> m_fuzzy.getValue().defuzzify( i.getLeft().plan().condition( i.getRight() ) ) )
+            .filter( i -> i.getLeft().plan().condition( i.getRight() ) )
             // collectors-call must be toList not toSet because plan-execution can be have equal elements
             // so a set avoid multiple plan-execution
             .collect( Collectors.toList() );
@@ -420,7 +422,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @return fuzzy result for each executaed plan
      */
     @Nonnull
-    private IFuzzyValue<Boolean> execute( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
+    private Stream<IFuzzyValue<?>> execute( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
@@ -430,19 +432,29 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // execute plan and return values and return execution result
         return p_execution.parallelStream()
-                          .map( i ->
+                          .flatMap( i ->
                           {
-                              final IFuzzyValue<Boolean> l_result = i.getLeft()
-                                                                     .plan()
-                                                                     .execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() );
-                              if ( m_fuzzy.getValue().defuzzify( l_result ) )
-                                  // increment successful runs
+                              // execute plan
+                              final Number l_result = i.getRight().agent().fuzzy().defuzzification().apply(
+                                  i.getLeft().plan().execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() )
+                              );
+
+                              // check strict execution result
+                              if ( i.getRight().agent().fuzzy().defuzzification().success( l_result ) )
+                              {
                                   i.getLeft().incrementsuccessful();
+                                  return i.getRight().agent().fuzzy().membership().success();
+                              }
                               else
-                                  // increment failed runs and create delete goal-event
+                              {
                                   i.getLeft().incrementfail();
-                              return l_result;
-                          } ).collect( m_fuzzy.getKey() );
+                                  i.getRight().agent().trigger(
+                                      ITrigger.EType.DELETEGOAL.builddefault( i.getLeft().plan().literal().allocate( i.getRight() ) )
+                                  );
+                                  return i.getRight().agent().fuzzy().membership().fail();
+                              }
+
+                          } );
     }
 
     /**

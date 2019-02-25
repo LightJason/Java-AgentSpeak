@@ -38,7 +38,7 @@ import java.util.List;
  * returns a multiple element of a single multimap.
  * The first argument is a multimap reference and all
  * other arguments are key values, the action
- * returns the value of each key and never fails
+ * returns the value of each key
  *
  * {@code [V1|V2] = .collection/multimap/getmultiple( MultiMap, "key1", "key2" );}
  */
@@ -51,7 +51,8 @@ public final class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
-                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

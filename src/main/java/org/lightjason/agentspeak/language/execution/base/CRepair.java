@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -62,14 +61,21 @@ public final class CRepair extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
+        // each repair statement creates a stream, the stream must be cached as array and return again,
+        // because the stream must be defuzzified, after that the stream is closed
         return Arrays.stream( m_value )
                      .map( i -> execute( p_context, i ) )
-                     .filter( i -> p_context.agent().fuzzy().getValue().defuzzify( i ) )
+                     .filter( i -> p_context.agent().fuzzy().defuzzification().success(
+                         p_context.agent().fuzzy().defuzzification().apply(
+                             Arrays.stream( i )
+                         )
+                     ) )
                      .findFirst()
-                     .orElseGet( () -> CFuzzyValue.of( false ) );
+                     .map( Arrays::stream )
+                     .orElseGet( () -> p_context.agent().fuzzy().membership().fail() );
     }
 
     @Nonnull
@@ -94,14 +100,19 @@ public final class CRepair extends IBaseExecution<IExecution[]>
      * @param p_execution execution
      * @return execution result
      */
-    private static IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
+    private static IFuzzyValue<?>[] execute( @Nonnull final IContext p_context, @Nonnull final IExecution p_execution )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
-        final IFuzzyValue<Boolean> l_result = p_execution.execute( false, p_context, Collections.emptyList(), l_return );
+        final IFuzzyValue<?>[] l_fuzzyreturn = p_execution.execute( false, p_context, Collections.emptyList(), l_return ).toArray( IFuzzyValue[]::new );
 
-        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).raw() instanceof Boolean )
-               ? CFuzzyValue.of( l_return.get( 0 ).raw() )
-               : l_result;
+        // if an return argument exist and it contains an boolean this value is used, ...
+        if ( l_return.size() == 1 && CCommon.isssignableto( l_return.get( 0 ), Boolean.class ) )
+            return l_return.get( 0 ).<Boolean>raw()
+                   ? p_context.agent().fuzzy().membership().success().toArray( IFuzzyValue[]::new )
+                   : p_context.agent().fuzzy().membership().fail().toArray( IFuzzyValue[]::new );
+
+        // ... otherwise the fuzzy result is used
+        return l_fuzzyreturn;
     }
 
 }

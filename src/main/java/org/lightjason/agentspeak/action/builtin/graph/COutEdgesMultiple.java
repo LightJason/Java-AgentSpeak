@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * returns outgoing edges of any vertex of a single graph.
  * The action return for a single graph instance all outgoing edges
- * of each vertex, the action never fails
+ * of each vertex
  *
  * {@code [OE1|OE2] = .graph/outedgesmultiple( Graph, Vertex1, Vertex2 );}
  */
@@ -55,7 +55,8 @@ public final class COutEdgesMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getOutEdges( p_window.get( 0 ).raw() ) );
 

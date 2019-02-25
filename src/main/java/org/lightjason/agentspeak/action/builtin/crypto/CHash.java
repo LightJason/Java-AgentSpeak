@@ -27,12 +27,11 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -43,15 +42,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 
 /**
  * hash algorithm.
  * The actions creates a hash values of datasets, the first argument is the name of the hasing algorithm
  * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-256, SHA-384, SHA-512),
- * for all other unflatten arguments a hash value is calculated and the action returns the hash values back and never fails
+ * for all other unflatten arguments a hash value is calculated and the action returns the hash values back
  *
  * {@code [Hash1 | Hash2 | Hash3] = .crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 );}
+ *
  * @see https://en.wikipedia.org/wiki/Secure_Hash_Algorithm
  * @see https://en.wikipedia.org/wiki/MD2_(cryptography)
  * @see https://en.wikipedia.org/wiki/MD5
@@ -78,8 +79,9 @@ public final class CHash extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .skip( 1 )
@@ -87,7 +89,7 @@ public final class CHash extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 
@@ -110,7 +112,7 @@ public final class CHash extends IBuiltinAction
         }
         catch ( final UnsupportedEncodingException l_exception )
         {
-            throw new CActionException( l_exception, p_context );
+            throw new CExecutionException( p_context, l_exception );
         }
     }
 
@@ -141,7 +143,7 @@ public final class CHash extends IBuiltinAction
             case "murmur3-128":
                 return Hashing.murmur3_128().newHasher().putBytes( p_data ).hash().toString();
 
-            case "sha-384" :
+            case "sha-384":
                 return Hashing.sha384().newHasher().putBytes( p_data ).hash().toString();
 
             case "sha-256":
@@ -160,7 +162,7 @@ public final class CHash extends IBuiltinAction
                 }
                 catch ( final NoSuchAlgorithmException l_exception )
                 {
-                    throw new CActionException( l_exception, p_context );
+                    throw new CExecutionException( p_context, l_exception );
                 }
         }
     }

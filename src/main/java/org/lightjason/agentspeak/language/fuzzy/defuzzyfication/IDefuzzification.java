@@ -21,18 +21,36 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.operator;
+package org.lightjason.agentspeak.language.fuzzy.defuzzyfication;
 
-import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
 
-import java.util.Map;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgentUpdateable;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
- * fuzzy operators
+ * defuzzification interface
  *
+ * @tparam T fuzzy type
  * @tparam S agent type
+ * @see https://en.wikipedia.org/wiki/Defuzzification
+ * @see https://profs.basu.ac.ir/khotanlou/upload_file/459.1778.file_ref.1938.2401.pdf
+ * @see http://www.nid.iitkgp.ernet.in/DSamanta/courses/archive/sca/Archives/Chapter%205%20Defuzzification%20Methods.pdf
  */
-public interface IFuzzyBundle<T> extends Map.Entry<IFuzzyOperator<T>, IDefuzzification<T>>
+public interface IDefuzzification extends IAgentUpdateable, Function<Stream<IFuzzyValue<?>>, Number>
 {
+
+    /**
+     * returns a boolean to break execution
+     *
+     * @param p_value defuzzifcated value
+     * @return flag to continue
+     */
+    boolean success( @NonNull Number p_value );
+
 }
+

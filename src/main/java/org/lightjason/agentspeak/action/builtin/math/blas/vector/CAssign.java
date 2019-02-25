@@ -25,16 +25,17 @@ package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -43,10 +44,9 @@ import java.util.stream.Collectors;
  * other arguments which must be vectors
  *
  * {@code
-    .math/blas/vector/assign(2, Vector1, [Vector2, Vector3] );
-    .math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
+ * .math/blas/vector/assign(2, Vector1, [Vector2, Vector3] );
+ * .math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
  * }
- *
  */
 public final class CAssign extends IBuiltinAction
 {
@@ -72,13 +72,14 @@ public final class CAssign extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        return CFuzzyValue.of(
-            l_arguments.stream()
+
+        if ( !l_arguments.stream()
                        .skip( 1 )
                        .parallel()
                        .allMatch( i ->
@@ -98,7 +99,12 @@ public final class CAssign extends IBuiltinAction
 
                            return false;
 
-                       } )
-        );
+                       } ) )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" )
+            );
+
+        return Stream.of();
     }
 }

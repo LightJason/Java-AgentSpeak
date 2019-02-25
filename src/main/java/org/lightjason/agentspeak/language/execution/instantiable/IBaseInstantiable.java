@@ -23,13 +23,13 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -104,7 +104,8 @@ public abstract class IBaseInstantiable implements IInstantiable
 
     /**
      * ctor
-     *  @param p_annotation annotation map
+     *
+     * @param p_annotation annotation map
      * @param p_execution execution elements
      * @param p_hash hash code
      */
@@ -194,20 +195,21 @@ public abstract class IBaseInstantiable implements IInstantiable
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        final List<IFuzzyValue<Boolean>> l_result = m_parallel
-                                                    ? CCommon.executeparallel( p_context, Arrays.stream( m_execution ) )
-                                                    : CCommon.executesequential( p_context, Arrays.stream( m_execution ) );
+        final Pair<List<IFuzzyValue<?>>, Boolean> l_result = m_parallel
+                                                             ? CCommon.executeparallel( p_context, Arrays.stream( m_execution ) )
+                                                             : CCommon.executesequential( p_context, Arrays.stream( m_execution ) );
 
         // if atomic flag if exists use this for return value
         return m_atomic
-               ? CFuzzyValue.of( true )
-               : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
+               ? p_context.agent().fuzzy().membership().success()
+               : l_result.getKey().stream();
     }
 
 

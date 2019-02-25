@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.generator.CActionStaticGenerator;
 import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CConstant;
 
@@ -188,11 +187,10 @@ public final class TestCAgent extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -222,8 +220,8 @@ public final class TestCAgent extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             Assert.assertTrue(
                 MessageFormat.format(
@@ -235,7 +233,7 @@ public final class TestCAgent extends IBaseTest
                 p_argument.get( 0 ).<Boolean>raw()
             );
             m_count.incrementAndGet();
-            return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
+            return Stream.of();
         }
     }
 

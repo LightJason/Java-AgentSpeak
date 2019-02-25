@@ -33,8 +33,7 @@ import java.util.Map;
 /**
  * adds multiple element to a single map iif not exists.
  * First argument is a map and all other arguments
- * are key-value pairs, all pars are added to the map,
- * the action fails on wrong input number
+ * are key-value pairs, all pars are added to the map
  *
  * {@code .collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
  */

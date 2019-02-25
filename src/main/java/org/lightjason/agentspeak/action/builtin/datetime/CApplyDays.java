@@ -36,8 +36,7 @@ import java.util.stream.Stream;
  * argument is a string with minus or plus,
  * the second argument the number and all other
  * arguments are date-time objects, the action
- * returns the modified date-time objects, the action
- * never fails
+ * returns the modified date-time objects
  *
  * {@code [O1|O2] = .datetime/applydays( "minus|plus" 3, DateTime1, DateTime2 );}
  */

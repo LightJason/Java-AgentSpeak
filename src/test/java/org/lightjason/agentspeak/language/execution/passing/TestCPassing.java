@@ -27,7 +27,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -41,21 +40,6 @@ import java.util.List;
  */
 public final class TestCPassing extends IBaseTest
 {
-    /**
-     * test boolean passing
-     */
-    @Test
-    public void passboolean()
-    {
-        Assert.assertTrue(
-            new CPassBoolean( true ).execute(
-                false,
-                IContext.EMPTYPLAN,
-                Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
-        );
-    }
 
     /**
      * test raw data
@@ -65,9 +49,9 @@ public final class TestCPassing extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CPassRaw<>( "foo" ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return );
-        new CPassRaw<>( false ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return );
-        new CPassRaw<>( 12 ).execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return );
+        execute( new CPassRaw<>( "foo" ), false, Collections.emptyList(), l_return );
+        execute( new CPassRaw<>( false ), false, Collections.emptyList(), l_return );
+        execute( new CPassRaw<>( 12 ), false, Collections.emptyList(), l_return );
 
         Assert.assertEquals( 3, l_return.size() );
         Assert.assertEquals( "foo", l_return.get( 0 ).raw() );
@@ -85,7 +69,14 @@ public final class TestCPassing extends IBaseTest
         final IVariable<?> l_string = new CVariable<>( "foo" ).set( "hello" );
         final IVariable<?> l_number = new CVariable<>( "bar" ).set( 5 );
 
-        new CPassVariable( l_string, l_number ).execute( false, new CLocalContext( l_string, l_number ), Collections.emptyList(), l_return );
+        execute(
+            new CPassVariable( l_string, l_number ),
+            false,
+            Collections.emptyList(),
+            l_return,
+            l_string,
+            l_number
+        );
 
         Assert.assertEquals( 2, l_return.size() );
         Assert.assertEquals( "hello", l_return.get( 0 ).raw() );

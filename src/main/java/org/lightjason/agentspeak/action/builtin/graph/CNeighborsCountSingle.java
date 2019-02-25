@@ -35,7 +35,7 @@ import java.util.List;
  * returns the number neighbors of a vertex of each graph instance.
  * The actions returns the number of neighbors of a vertex for
  * each graph argument, the first argument is the vertex, all
- * other graphs, the action never fails
+ * other graphs
  *
  * {@code [C1|C2] = .graph/neighborscountsingle( Vertex, Graph1, Graph2 );}
  */
@@ -54,7 +54,8 @@ public final class CNeighborsCountSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

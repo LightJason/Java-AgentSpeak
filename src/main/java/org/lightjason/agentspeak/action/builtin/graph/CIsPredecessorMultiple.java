@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks all vertex tuples if the first part the predecessor of the second on a single graph instance.
  * The action checks for the first graph argument if the first part of all vertex tuples
- * a predecessor of the second part, the action never fails
+ * a predecessor of the second part
  *
  * {@code [B1|B2|B3] = .graph/ispredecessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */
@@ -53,7 +53,8 @@ public final class CIsPredecessorMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

@@ -28,19 +28,20 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 
 /**
  * create an uuid.
- * The action creates a random uuid value and never fails
+ * The action creates a random uuid value
  *
  * {@code U1 = .generic/uuid(); }
+ *
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  */
 public final class CUuid extends IBuiltinAction
@@ -53,8 +54,9 @@ public final class CUuid extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(
@@ -62,6 +64,6 @@ public final class CUuid extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

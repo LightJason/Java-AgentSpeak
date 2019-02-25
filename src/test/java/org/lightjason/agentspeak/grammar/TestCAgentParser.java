@@ -35,11 +35,9 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -107,26 +105,30 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IVariable<Object> l_tvar = new CVariable<>( "T" ).set( 0 );
         final IVariable<Object> l_mvar = new CVariable<>( "M" ).set( 3 );
-        final IContext l_context = new CLocalContext( l_tvar, l_mvar );
+
 
         Assert.assertTrue(
-            l_rule.execute(
+            execute(
+                l_rule,
                 false,
-                l_context,
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_tvar,
+                l_mvar
+            )
         );
         Assert.assertEquals( 1.0, l_tvar.<Number>raw() );
 
         l_tvar.set( 3 );
         Assert.assertTrue(
-            l_rule.execute(
+            execute(
+                l_rule,
                 false,
-                l_context,
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_tvar,
+                l_mvar
+            )
         );
         Assert.assertEquals( 2.0, l_tvar.<Number>raw() );
     }
@@ -144,7 +146,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IAgent<?> l_agent = new CAgentGenerator(
             "fibonacci(X, R)"
-            + " :- X <= 2;  R = 1 "
+            + " :- X <= 2;  R = 1"
             + " :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
             + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
             new CActionStaticGenerator( Stream.of( l_values ) ),
@@ -152,11 +154,14 @@ public final class TestCAgentParser extends IBaseGrammarTest
         ).generatesingle();
 
         Assert.assertTrue(
-            l_agent.trigger(
-                ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( l_fibonacci ) ) ),
-                true
+            defuzzify(
+                l_agent.trigger(
+                    ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "fib", CRawTerm.of( l_fibonacci ) ) ),
+                    true
+                ),
+                l_agent
             )
-                   .value()
+
         );
 
         Assert.assertEquals( 2, l_values.value().size() );
@@ -183,12 +188,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_xvar ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_xvar
+            )
         );
 
         Assert.assertEquals( 5.0, l_xvar.<Number>raw() );
@@ -219,16 +225,22 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plans.get( CLiteral.of( "mainsuccess" ) ).toString(),
-            l_plans.get( CLiteral.of( "mainsuccess" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "mainsuccess" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
 
         Assert.assertFalse(
             l_plans.get( CLiteral.of( "mainfail" ) ).toString(),
-            l_plans.get( CLiteral.of( "mainfail" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "mainfail" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -249,16 +261,22 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plans.get( CLiteral.of( "mainsuccess" ) ).toString(),
-            l_plans.get( CLiteral.of( "mainsuccess" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "mainsuccess" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
 
         Assert.assertFalse(
             l_plans.get( CLiteral.of( "mainfail" ) ).toString(),
-            l_plans.get( CLiteral.of( "mainfail" ) )
-                   .execute( false, IContext.EMPTYPLAN, Collections.emptyList(), Collections.emptyList() )
-                   .value()
+            execute(
+                l_plans.get( CLiteral.of( "mainfail" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -280,7 +298,14 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_xvar, l_yvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_xvar,
+                l_yvar
+            )
         );
 
         Assert.assertEquals( "foo", l_xvar.raw() );
@@ -305,7 +330,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_resultvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_resultvar
+            )
         );
 
         Assert.assertEquals( 20.0, l_resultvar.<Number>raw() );
@@ -334,12 +365,17 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_result, l_avar, l_bvar, l_cvar, l_dvar ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_result,
+                l_avar,
+                l_bvar,
+                l_cvar,
+                l_dvar
+            )
         );
 
         Assert.assertEquals(
@@ -367,7 +403,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         Assert.assertEquals(
@@ -402,12 +444,20 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_andtrue, l_andfalse, l_ortrue, l_orfalse, l_xortrue, l_xorfalse, l_notfalse, l_nottrue ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_andtrue,
+                l_andfalse,
+                l_ortrue,
+                l_orfalse,
+                l_xortrue,
+                l_xorfalse,
+                l_notfalse,
+                l_nottrue
+            )
         );
 
         Assert.assertTrue( l_plan.toString(), l_andtrue.raw() );
@@ -440,7 +490,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         //Checkstyle:OFF:SimplifyBooleanExpression
@@ -465,7 +521,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "euler" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
@@ -492,7 +554,15 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result, l_xvar, l_yvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result,
+                l_xvar,
+                l_yvar
+            )
         );
 
         Assert.assertEquals(
@@ -521,7 +591,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_result ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_result
+            )
         );
 
         Assert.assertEquals( CCommon.NUMERICCONSTANT.get( "lightspeed" ), l_result.<Number>raw().doubleValue(), 0.00000001 );
@@ -547,7 +623,15 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute( false, new CLocalContext( l_nvar, l_pvar, l_cvar ), Collections.emptyList(), Collections.emptyList() ).value()
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_nvar,
+                l_pvar,
+                l_cvar
+            )
         );
 
         Assert.assertEquals( "test", l_nvar.raw() );
@@ -572,7 +656,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
     }
 
     /**
-     * test multiple plan execution
+     * test multiple plan execute
      *
      * @throws Exception thrown on stream and parser error
      */
@@ -598,9 +682,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
             )
                   .map( i -> new CLocalContext( i, l_var ) )
                   .map( i -> Arrays.stream( l_plans )
-                                   .filter( j -> j.condition( i ).value() )
-                                   .map( j -> j.execute( false, i, Collections.emptyList(), Collections.emptyList() ) )
-                                   .filter( IFuzzyValue::value )
+                                   .filter( j -> j.condition( i ) )
+                                   .map( j -> execute( j, false, Collections.emptyList(), Collections.emptyList(), i ) )
+                                   .filter( j -> j )
                                    .findFirst()
                                    .map( j -> l_var )
                                    .get()
@@ -663,12 +747,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_var ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_var
+            )
         );
 
         Assert.assertTrue( l_var.toString(), l_var.raw() instanceof List<?> );
@@ -701,19 +786,20 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_var ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_var
+            )
         );
 
         Assert.assertArrayEquals( Stream.of( 1, 2, 3, 4 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
     }
 
     /**
-     * test of inner action execution
+     * test of inner action execute
      *
      * @throws Exception thrown on stream and parser error
      */
@@ -729,12 +815,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertTrue(
             l_plan.toString(),
-            l_plan.execute(
+            execute(
+                l_plan,
                 false,
-                new CLocalContext( l_var ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_var
+            )
         );
 
         Assert.assertEquals( 1.0, l_var.<Number>raw() );

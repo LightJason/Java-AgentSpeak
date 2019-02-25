@@ -200,7 +200,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
@@ -217,7 +216,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     {
         return CAgentSpeak.unificationconstraint( this, p_context.variable(), p_context.literal(), p_context.expression() );
     }
-
 
 
 
@@ -262,7 +260,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             p_context.variable()
         );
     }
-
 
 
 
@@ -359,7 +356,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public Object visitTernaryoperation( final PlanBundleParser.TernaryoperationContext p_context )
     {
@@ -385,7 +381,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
 
 
 
-
     @Override
     public Object visitExecuteaction( final PlanBundleParser.ExecuteactionContext p_context )
     {
@@ -403,7 +398,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     {
         return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
     }
-
 
 
 

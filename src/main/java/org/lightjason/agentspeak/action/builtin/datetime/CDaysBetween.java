@@ -35,11 +35,11 @@ import java.util.stream.Stream;
 /**
  * returns the days between two dates.
  * The actions returns the number of days between
- * two date-time objects, the action never
- * fails. A positive value will be returned iif the
- * first date-time item is before the second one, a
- * negative value will be returned iif the first
- * date-time item is after the second date-time item
+ * two date-time objects. A positive value will be
+ * returned iif the first date-time item is before
+ * the second one, a negative value will be returned
+ * iif the first date-time item is after the second
+ * date-time item
  *
  * {@code [D1|D2] = .datetime/daysbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
  */
@@ -55,9 +55,9 @@ public final class CDaysBetween extends IBetween
     protected Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
     {
         return p_datetime
-                .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )
-                .mapToDouble( Days::getDays )
-                .boxed();
+            .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )
+            .mapToDouble( Days::getDays )
+            .boxed();
     }
 
 }

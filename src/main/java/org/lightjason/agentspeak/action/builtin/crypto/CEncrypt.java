@@ -23,13 +23,15 @@
 
 package org.lightjason.agentspeak.action.builtin.crypto;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -43,13 +45,14 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * encrypting algorithm.
  * Encrypts a set of datasets, which can be complex objects, the first argument of the action
  * is the encrypting key and all other arguments are datasets, the action returns all encypted
- * datasets and fails if one encryption fails or on a wrong algorithm
+ * datasets and fails if one encryption fails
  *
  * {@code [Encypt1 | Encrypt2 | Encypt3] = .crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
@@ -69,8 +72,9 @@ public final class CEncrypt extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final Key l_key = p_argument.get( 0 ).raw();
         final ECryptAlgorithm l_algorithm;
@@ -80,14 +84,14 @@ public final class CEncrypt extends IBuiltinAction
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, l_exception );
         }
 
-        return CFuzzyValue.of(
-                   CCommon.flatten( p_argument.stream().skip( 1 ) )
-                          .map( ITerm::<Serializable>raw )
-                          .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
-        );
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::<Serializable>raw )
+               .forEach( i -> encrypt( l_algorithm, l_key, i, p_return, p_context ) );
+
+        return Stream.of();
     }
 
 
@@ -98,10 +102,11 @@ public final class CEncrypt extends IBuiltinAction
      * @param p_key key
      * @param p_dataset dataset
      * @param p_return return argument
-     * @return successful execution
+     * @param p_context execution context
      */
-    private static boolean encrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
-                                    @Nonnull final Serializable p_dataset, @Nonnull final List<ITerm> p_return )
+    private static void encrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
+                                 @Nonnull final Serializable p_dataset, @Nonnull final List<ITerm> p_return,
+                                 @NonNull final IContext p_context )
     {
         try
         {
@@ -114,16 +119,11 @@ public final class CEncrypt extends IBuiltinAction
                     )
                 )
             );
-
-            return true;
         }
         catch ( final IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException l_exception )
         {
-            return false;
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
-
-
-
 
 }

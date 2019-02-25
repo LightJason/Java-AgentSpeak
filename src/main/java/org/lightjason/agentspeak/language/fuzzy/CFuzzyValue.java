@@ -23,49 +23,27 @@
 
 package org.lightjason.agentspeak.language.fuzzy;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CTypeNotAssignable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.text.MessageFormat;
-import java.util.Objects;
 
 
 /**
  * immutable fuzzy value
  */
-public final class CFuzzyValue<T> implements IFuzzyValue<T>
+public final class CFuzzyValue<E extends Enum<?>> implements IFuzzyValue<E>
 {
     /**
      * value
      */
-    private final T m_value;
+    private final E m_value;
     /**
      * fuzzy value
      */
-    private final double m_fuzzy;
-
-    /**
-     * ctor
-     *
-     * @param p_value fuzzy value
-     */
-    public CFuzzyValue( @Nonnull final IFuzzyValue<T> p_value )
-    {
-        this( p_value.value(), p_value.fuzzy() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_value value
-     */
-    public CFuzzyValue( @Nonnull final T p_value )
-    {
-        this( p_value, 1 );
-    }
+    private final Number m_fuzzy;
 
     /**
      * ctor
@@ -73,9 +51,9 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * @param p_value value
      * @param p_fuzzy fuzzy
      */
-    public CFuzzyValue( @Nonnull final T p_value, final double p_fuzzy )
+    public CFuzzyValue( @Nonnull final E p_value, @NonNull final Number p_fuzzy )
     {
-        if ( !( p_fuzzy >= 0 && p_fuzzy <= 1 ) )
+        if ( !( p_fuzzy.doubleValue() >= 0 && p_fuzzy.doubleValue() <= 1 ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
 
         m_fuzzy = p_fuzzy;
@@ -84,31 +62,16 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
 
     @Nonnull
     @Override
-    public T value()
+    public E get()
     {
         return m_value;
     }
 
+    @NonNull
     @Override
-    public double fuzzy()
+    public Number fuzzy()
     {
         return m_fuzzy;
-    }
-
-    @Override
-    public boolean valueassignableto( @Nonnull final Class<?> p_class )
-    {
-        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.getClass() );
-    }
-
-    @Nullable
-    @Override
-    public T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
-    {
-        if ( !this.valueassignableto( p_class ) )
-            throw new CTypeNotAssignable( p_class );
-
-        return m_value;
     }
 
     @Override
@@ -121,28 +84,16 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * factory
      *
      * @param p_value value
-     * @return fuzzy value
-     *
-     * @tparam N fuzzy type
-     */
-    @Nonnull
-    public static <N> IFuzzyValue<N> of( @Nonnull final N p_value )
-    {
-        return new CFuzzyValue<>( p_value );
-    }
-
-    /**
-     * factory
-     *
-     * @param p_value value
      * @param p_fuzzy fuzzy value
      * @return fuzzy value
      *
      * @tparam N fuzzy type
      */
     @Nonnull
-    public static <N> IFuzzyValue<N> of( @Nonnull final N p_value, final double p_fuzzy )
+    public static <N extends Enum<?>> IFuzzyValue<N> of( @Nonnull final N p_value, @NonNull final Number p_fuzzy )
     {
         return new CFuzzyValue<>( p_value, p_fuzzy );
     }
+
 }
+

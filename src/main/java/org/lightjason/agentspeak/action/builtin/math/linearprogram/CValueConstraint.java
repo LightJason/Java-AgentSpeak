@@ -29,7 +29,6 @@ import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -37,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -51,10 +51,10 @@ import java.util.stream.Collectors;
  * the first \f$ n-2 \f$ arguments are the \f$ c_i \f$,
  * the \f$ n-1 \f$ argument ist the relation symbol
  * (\f$ = \f$, \f$ \geq \f$ or \f$ \leq \f$) as string
- * and the last value is the \f$ v \f$ value and the action
- * never fails
+ * and the last value is the \f$ v \f$ value
  *
  * {@code .math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 );}
+ *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -74,8 +74,9 @@ public final class CValueConstraint extends IConstraint
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -92,7 +93,7 @@ public final class CValueConstraint extends IConstraint
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

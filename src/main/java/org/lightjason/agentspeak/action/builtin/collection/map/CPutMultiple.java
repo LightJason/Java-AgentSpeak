@@ -33,8 +33,7 @@ import java.util.Map;
 /**
  * adds all elements to a single map argument.
  * First argument is a map and all other arguments
- * are key-value pairs, the action fails on wrong
- * input number
+ * are key-value pairs
  *
  * {@code .collection/map/putmultiple( Map, Key1, Value1, [Key2, Value2] );}
  */

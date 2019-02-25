@@ -21,76 +21,65 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.operator.bool;
+package org.lightjason.agentspeak.language.fuzzy.set;
 
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValueMutable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.Locale;
 
 
 /**
- * fuzzy-boolean disjunction / union
+ * fuzzy crisp
  */
-public final class CUnion implements IFuzzyOperator<Boolean>
+public enum ECrisp implements IFuzzySet<ECrisp>
 {
-
-    @Override
-    public Supplier<IFuzzyValueMutable<Boolean>> supplier()
-    {
-        return CUnion::factory;
-    }
-
-    @Override
-    public BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
-    {
-        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
-    }
-
-    @Override
-    public BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
-    {
-        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
-    }
-
-    @Override
-    public Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
-    {
-        return IFuzzyValueMutable::immutable;
-    }
-
-    @Override
-    public Set<Characteristics> characteristics()
-    {
-        return Collections.emptySet();
-    }
-
-    @SafeVarargs
-    @Nonnull
-    @Override
-    @SuppressWarnings( "varargs" )
-    public final IFuzzyValue<Boolean> result( @Nonnull final IFuzzyValue<Boolean>... p_values )
-    {
-        return Arrays.stream( p_values ).collect( this );
-    }
+    FALSE( false ),
+    TRUE( true );
 
     /**
-     * factory of the initialize value
-     *
-     * @return fuzzy value
+     * native type
      */
-    private static IFuzzyValueMutable<Boolean> factory()
+    private final Boolean m_value;
+
+    /**
+     * ctor
+     *
+     * @param p_value value
+     */
+    ECrisp( final boolean p_value )
     {
-        return CFuzzyValueMutable.of( false, 0 );
+        m_value = p_value;
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
+    {
+        return (V) m_value;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <U extends Enum<?>> U rawenum()
+    {
+        return (U) this;
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyValue<?> apply( @NonNull final Number p_number )
+    {
+        return CFuzzyValue.of( this, p_number );
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number )
+    {
+        return ECrisp.valueOf( p_name.toUpperCase( Locale.ROOT ) ).apply( p_number );
     }
 
 }

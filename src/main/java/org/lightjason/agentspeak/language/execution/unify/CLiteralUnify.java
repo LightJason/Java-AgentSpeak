@@ -27,7 +27,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -54,7 +53,8 @@ public final class CLiteralUnify extends CDefaultUnify
 
     /**
      * ctor
-     *  @param p_parallel parallel execution
+     *
+     * @param p_parallel parallel execution
      * @param p_source source literal
      * @param p_target target literal
      */
@@ -72,8 +72,9 @@ public final class CLiteralUnify extends CDefaultUnify
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
@@ -83,10 +84,10 @@ public final class CLiteralUnify extends CDefaultUnify
                                                        );
 
         if ( l_variables.size() != m_variablenumber )
-            return CFuzzyValue.of( false );
+            return p_context.agent().fuzzy().membership().fail();
 
         CCommon.updatecontext( p_context, l_variables.stream() );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Nonnull

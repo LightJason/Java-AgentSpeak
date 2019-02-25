@@ -35,7 +35,7 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnull;
@@ -73,7 +73,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      */
     @SuppressWarnings( "unchecked" )
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                @Nonnull final ILambdaStreamingGenerator p_lambda ) throws Exception
+                                @Nonnull final ILambdaStreamingGenerator p_lambda
+    ) throws Exception
     {
         this( p_stream, p_actions, p_lambda, Collections.emptySet(), IVariableBuilder.EMPTY );
     }
@@ -88,7 +89,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder
+    ) throws Exception
     {
         this( p_stream, p_actions, p_lambda, Collections.emptySet(), p_variablebuilder );
     }
@@ -105,7 +107,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      */
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
                                 @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final Set<IPlanBundle> p_planbundle,
-                                @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
+                                @Nonnull final IVariableBuilder p_variablebuilder
+    ) throws Exception
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions, p_lambda ).parse( p_stream );
         m_configuration = this.configuration(
@@ -146,10 +149,11 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_variablebuilder variable builder
      * @return configuration object
      */
-    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                                     @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                                     @Nonnull final ITrigger p_initialgoal, @Nonnull final IUnifier p_unifier,
-                                                    @Nonnull final IVariableBuilder p_variablebuilder )
+                                                    @Nonnull final IVariableBuilder p_variablebuilder
+    )
     {
         return new CDefaultAgentConfiguration<>(
             p_fuzzy,
@@ -167,9 +171,9 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     public final Stream<T> generatemultiple( final int p_number, @Nullable final Object... p_data )
     {
         return IntStream.range( 0, p_number )
-                    .parallel()
-                    .mapToObj( i -> this.generatesingle( p_data ) )
-                    .filter( Objects::nonNull );
+                        .parallel()
+                        .mapToObj( i -> this.generatesingle( p_data ) )
+                        .filter( Objects::nonNull );
     }
 
 }

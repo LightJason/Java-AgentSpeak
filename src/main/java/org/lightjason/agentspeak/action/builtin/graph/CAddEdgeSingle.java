@@ -34,8 +34,7 @@ import java.util.List;
  * adds a single edge to the multiple graph.
  * The action adds to each graph the first triple
  * (edge identifier, start vertex, end vertex)
- * to all other arguments are graphs, the action
- * never fails
+ * to all other arguments are graphs
  *
  * {@code .graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 );}
  */
@@ -54,7 +53,8 @@ public final class CAddEdgeSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw(), p_graph.getDefaultEdgeType() );
     }

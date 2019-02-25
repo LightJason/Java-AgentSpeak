@@ -27,10 +27,10 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -53,6 +54,7 @@ import java.util.stream.Collectors;
  * elements must be set and the last argument is the \f$ r_{const} \f$, the action fails on wrong input
  *
  * {@code .math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 );}
+ *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -73,8 +75,9 @@ public final class CEquationConstraint extends IConstraint
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
@@ -89,7 +92,10 @@ public final class CEquationConstraint extends IConstraint
 
         // test content
         if ( l_lhs.size() < 2 || l_rhs.size() < 3 || !CCommon.isssignableto( l_rhs.get( 0 ), String.class ) )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongarguments" )
+            );
 
         // create constraint
         l_arguments.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
@@ -118,13 +124,13 @@ public final class CEquationConstraint extends IConstraint
 
                 // r_const value
                 l_rhs.get( l_rhs.size() - 1 )
-                     .<Number>raw()
-                     .doubleValue()
+                    .<Number>raw()
+                    .doubleValue()
 
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

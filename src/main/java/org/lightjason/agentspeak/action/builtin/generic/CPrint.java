@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.action.builtin.math.blas.CFormat1D;
 import org.lightjason.agentspeak.action.builtin.math.blas.CFormat2D;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -45,12 +44,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * action for sum of elements.
  * Prints a set of messages to the commandline / output-stream, the command
- * can be used with a variable set of arguments and fails never
+ * can be used with a variable set of arguments
  *
  * {@code .generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y);}
  */
@@ -143,11 +143,12 @@ public final class CPrint extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         m_stream.println( MessageFormat.format( "{0}", this.format( p_argument ) ) );
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**
@@ -179,6 +180,7 @@ public final class CPrint extends IBuiltinAction
 
     /**
      * interface of a serializable supplier
+     *
      * @tparam T supplier type
      */
     @FunctionalInterface
@@ -188,6 +190,7 @@ public final class CPrint extends IBuiltinAction
          * supplier exception
          *
          * @return item
+         *
          * @throws Exception is thrown on any error
          */
         T get() throws Exception;

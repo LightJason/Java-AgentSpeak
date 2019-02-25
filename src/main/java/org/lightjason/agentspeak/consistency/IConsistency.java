@@ -104,6 +104,7 @@ public interface IConsistency extends Callable<IConsistency>
 
     /**
      * clear
+     *
      * @return self reference
      */
     @Nonnull

@@ -221,7 +221,7 @@ public final class CLiteral implements ILiteral
     /**
      * factory
      *
-     * @param p_at  at
+     * @param p_at at
      * @param p_negated negation
      * @param p_functor functor path
      * @param p_values vales
@@ -235,7 +235,7 @@ public final class CLiteral implements ILiteral
     /**
      * factory
      *
-     * @param p_at  at
+     * @param p_at at
      * @param p_negated negation
      * @param p_functor functor path
      * @param p_values vales
@@ -396,9 +396,9 @@ public final class CLiteral implements ILiteral
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
                ? new CLiteral(
-                   m_at, m_negated, m_functor,
-                   m_values.values()
-               )
+            m_at, m_negated, m_functor,
+            m_values.values()
+        )
 
                : new CLiteral(
                    m_at, m_negated, p_prefix[0].append( m_functor ),
@@ -466,6 +466,7 @@ public final class CLiteral implements ILiteral
 
         /**
          * ctor
+         *
          * @throws NoSuchMethodException on ctor-method call
          */
         CParser() throws NoSuchMethodException

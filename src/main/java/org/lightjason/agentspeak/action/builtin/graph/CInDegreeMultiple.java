@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the in-degree of multiple vertices of a single graph instance.
  * The action returns for a graph as first argument the in-degree of each
- * vertex argument, the action fails on wrong input
+ * vertex argument
  *
  * {@code [D1|D2] = .graph/indegreemultiple( Graph, Vertex1, Vertex2 );}‚
  */
@@ -53,7 +53,8 @@ public final class CInDegreeMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

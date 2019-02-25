@@ -21,44 +21,39 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
+package org.lightjason.agentspeak.action.builtin.agent;
 
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * interface for a mutable fuzzy value
+ * action to pass data to the fuzzy-membership function.
+ * The action passes any data to the agent fuzzy-membershop
+ * function for any modification of the function
  *
- * @tparam T fuzzy type
+ * {@code .agent/fuzzymembership(5, "hello");}
  */
-public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
+public final class CFuzzyMembership extends IBuiltinAction
 {
-
     /**
-     * sets the fuzzy value
-     *
-     * @param p_value new value
-     * @return self reference
+     * serial id
      */
-    @Nonnull
-    IFuzzyValueMutable<T> value( final T p_value );
+    private static final long serialVersionUID = 7815588503920853463L;
 
-    /**
-     * sets the weight
-     *
-     * @param p_value weight
-     * @return self reference
-     */
     @Nonnull
-    IFuzzyValueMutable<T> fuzzy( final double p_value );
-
-    /**
-     * returns an immutable instance of the object
-     *
-     * @return immutable instance
-     */
-    @Nonnull
-    IFuzzyValue<T> immutable();
+    @Override
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        return p_context.agent().fuzzy().membership().modify( CCommon.flatten( p_argument ) );
+    }
 
 }

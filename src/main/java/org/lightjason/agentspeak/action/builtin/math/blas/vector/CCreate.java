@@ -27,24 +27,25 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * creates a dense- or sparse-vector.
  * The action creates a vector, the first \f$ n-1 \f$ arguments are
  * the size of the vector, the last argument defines as string a
- * dense or sparse vector (default is dense) and the action never fails
+ * dense or sparse vector (default is dense)
  *
  * {@code [A|B|C] = math/blas/vector/create( 3, 2, 1, "dense | sparse");}
  */
@@ -72,8 +73,9 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final int l_limit;
@@ -104,7 +106,7 @@ public final class CCreate extends IBuiltinAction
                            .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.of( true );
+                return Stream.of();
 
 
             case SPARSE:
@@ -117,11 +119,14 @@ public final class CCreate extends IBuiltinAction
                            .map( CRawTerm::of )
                            .forEach( p_return::add );
 
-                return CFuzzyValue.of( true );
+                return Stream.of();
 
 
             default:
-                return CFuzzyValue.of( false );
+                throw new CExecutionIllegealArgumentException(
+                    p_context,
+                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknownargument", l_type )
+                );
         }
     }
 

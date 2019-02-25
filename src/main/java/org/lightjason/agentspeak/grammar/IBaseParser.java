@@ -81,7 +81,8 @@ public abstract class IBaseParser<T extends IASTVisitor, L extends Lexer, P exte
      * @throws InvocationTargetException on lexer / parser invocation error
      * @throws InstantiationException on lexer / parser instantiation error
      */
-    protected final P parser( @Nonnull final InputStream p_stream ) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
+    protected final P parser( @Nonnull final InputStream p_stream )
+        throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         final L l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );
         l_lexer.removeErrorListeners();

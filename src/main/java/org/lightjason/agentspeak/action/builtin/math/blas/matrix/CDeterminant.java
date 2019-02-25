@@ -29,20 +29,21 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * returns the determinant of a matrix.
  * Calculates for each input matrix the determinat
- * and returns it, the action never fails
+ * and returns it
  *
  * {@code [D1|D2|D3] = .math/blas/determinant(M1, [M2, M3]);}
+ *
  * @see https://en.wikipedia.org/wiki/Determinant
  */
 public final class CDeterminant extends IAlgebra
@@ -69,8 +70,9 @@ public final class CDeterminant extends IAlgebra
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // input matrix objects
         CCommon.flatten( p_argument )
@@ -79,6 +81,6 @@ public final class CDeterminant extends IAlgebra
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

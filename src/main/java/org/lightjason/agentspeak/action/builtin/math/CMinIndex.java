@@ -24,12 +24,11 @@
 package org.lightjason.agentspeak.action.builtin.math;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -37,13 +36,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
  * action for index of minimum.
  * The action takes of the given unflatten input the minimum and
- * returns the index within the unflatten argument list, the
- * action never fails
+ * returns the index within the unflatten argument list
  *
  * {@code MinIndex = .math/minindex( 5, 6, [7,8, [1,2,3]] );}
  */
@@ -63,8 +62,9 @@ public final class CMinIndex extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_list = CCommon.flatten( p_argument )
                                            .map( ITerm::<Number>raw )
@@ -75,12 +75,12 @@ public final class CMinIndex extends IBuiltinAction
         p_return.add(
             CRawTerm.of(
                 (double) IntStream.range( 0, l_list.size() )
-                                .parallel()
-                                .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
-                                .orElseThrow( () -> new CActionException( p_context ) )
+                                  .parallel()
+                                  .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
+                                  .orElseThrow( () -> new CExecutionException( p_context ) )
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

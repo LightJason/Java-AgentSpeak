@@ -67,7 +67,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
      * @param p_parallel parallel execution
      * @param p_literal literal
      */
-    public CDefaultUnify( final boolean p_parallel,  @Nonnull final ILiteral p_literal )
+    public CDefaultUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
         m_parallel = p_parallel;
@@ -92,8 +92,8 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         return p_context.agent().unifier().unify(

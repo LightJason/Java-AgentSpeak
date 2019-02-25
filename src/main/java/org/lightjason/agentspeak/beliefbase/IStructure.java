@@ -23,17 +23,18 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import org.lightjason.agentspeak.agent.IAgent;
-
-import javax.annotation.Nonnull;
+import org.lightjason.agentspeak.agent.IAgentUpdateable;
 
 
 /**
  * interface for equal method on views and beliefbases
  *
  * @tparam T agent type
+ * @warning call update on a storage and on all storage-view, if exists different views
+ * which are point to the same storage, the update is called more than once, so the storage must
+ * limit the number of update calls
  */
-public interface IStructure
+public interface IStructure extends IAgentUpdateable
 {
 
     /**
@@ -49,18 +50,5 @@ public interface IStructure
      * @return size
      */
     int size();
-
-    /**
-     * updates all items
-     *
-     * @param p_agent agent which runs the update call
-     * @return agent
-     *
-     * @warning call update on a storage and on all storage-view, if exists different views
-     * which are point to the same storage, the update is called more than once, so the storage must
-     * limit the number of update calls
-     */
-    @Nonnull
-    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }

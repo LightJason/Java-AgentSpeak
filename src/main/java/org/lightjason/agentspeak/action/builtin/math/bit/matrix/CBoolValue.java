@@ -26,25 +26,25 @@ package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
 import cern.colt.matrix.tbit.BitMatrix;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns for the index tuple a boolean value.
  * The action returns for the first argument, which
  * is a bit matrix, all boolean values for all
- * given index tuples (row / column), the action
- * fail on incorrect input
+ * given index tuples (row / column)
  *
  * {@code [B1|B2] = .math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] );}
  */
@@ -72,24 +72,25 @@ public final class CBoolValue extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnotodd" ) );
 
         StreamUtils.windowed(
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-        2
+            l_arguments.stream()
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+                       .mapToInt( Number::intValue )
+                       .boxed(),
+            2
         ).map( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

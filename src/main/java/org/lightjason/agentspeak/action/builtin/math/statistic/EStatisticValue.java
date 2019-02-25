@@ -34,22 +34,232 @@ import java.util.Locale;
 /**
  * enum of statistic value types
  */
-public enum EStatisticValue
+public enum EStatisticValue implements IStatisticValue
 {
-    GEOMETRICMEAN,
-    MAX,
-    MIN,
-    COUNT,
-    POPULATIONVARIANCE,
-    QUADRATICMEAN,
-    SECONDMOMENT,
-    STANDARDDEVIATION,
-    SUM,
-    SUMLOG,
-    SUMSQUARE,
-    VARIANCE,
-    MEAN,
-    KURTIOSIS;
+    GEOMETRICMEAN
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getGeometricMean();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getGeometricMean();
+        }
+
+    },
+    MAX
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getMax();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getMax();
+        }
+
+    },
+    MIN
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getMin();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getMin();
+        }
+
+    },
+    COUNT
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getN();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getN();
+        }
+
+    },
+    POPULATIONVARIANCE
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getPopulationVariance();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getPopulationVariance();
+        }
+
+    },
+    QUADRATICMEAN
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getQuadraticMean();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getQuadraticMean();
+        }
+
+    },
+    SECONDMOMENT
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getSecondMoment();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
+        }
+
+    },
+    STANDARDDEVIATION
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getStandardDeviation();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getStandardDeviation();
+        }
+
+    },
+    SUM
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getSum();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getSum();
+        }
+
+    },
+    SUMLOG
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getSumOfLogs();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
+        }
+
+    },
+    SUMSQUARE
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getSumsq();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getSumsq();
+        }
+
+    },
+    VARIANCE
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getVariance();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getVariance();
+        }
+
+    },
+    MEAN
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            return p_statistic.getMean();
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getMean();
+        }
+
+    },
+    KURTIOSIS
+    {
+
+        @Override
+        public double value( @Nonnull final SummaryStatistics p_statistic )
+        {
+            throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
+        }
+
+        @Override
+        public double value( @Nonnull final DescriptiveStatistics p_statistic )
+        {
+            return p_statistic.getKurtosis();
+        }
+
+    };
 
     /**
      * additional factory
@@ -63,108 +273,4 @@ public enum EStatisticValue
         return EStatisticValue.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }
 
-    /**
-     * returns a statistic value
-     *
-     * @param p_statistic statistic object
-     * @return statistic value
-     */
-    public double value( @Nonnull final SummaryStatistics p_statistic )
-    {
-        switch ( this )
-        {
-            case GEOMETRICMEAN:
-                return p_statistic.getGeometricMean();
-
-            case MAX:
-                return p_statistic.getMax();
-
-            case MIN:
-                return p_statistic.getMin();
-
-            case COUNT:
-                return p_statistic.getN();
-
-            case POPULATIONVARIANCE:
-                return p_statistic.getPopulationVariance();
-
-            case QUADRATICMEAN:
-                return p_statistic.getQuadraticMean();
-
-            case SECONDMOMENT:
-                return p_statistic.getSecondMoment();
-
-            case STANDARDDEVIATION:
-                return p_statistic.getStandardDeviation();
-
-            case SUM:
-                return p_statistic.getSum();
-
-            case SUMLOG:
-                return p_statistic.getSumOfLogs();
-
-            case SUMSQUARE:
-                return p_statistic.getSumsq();
-
-            case VARIANCE:
-                return p_statistic.getVariance();
-
-            case MEAN:
-                return p_statistic.getMean();
-
-            default:
-                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-        }
-    }
-
-    /**
-     * returns a statistic value
-     *
-     * @param p_statistic statistic object
-     * @return statistic value
-     */
-    public double value( @Nonnull final DescriptiveStatistics p_statistic )
-    {
-        switch ( this )
-        {
-            case GEOMETRICMEAN:
-                return p_statistic.getGeometricMean();
-
-            case MAX:
-                return p_statistic.getMax();
-
-            case MIN:
-                return p_statistic.getMin();
-
-            case COUNT:
-                return p_statistic.getN();
-
-            case POPULATIONVARIANCE:
-                return p_statistic.getPopulationVariance();
-
-            case QUADRATICMEAN:
-                return p_statistic.getQuadraticMean();
-
-            case STANDARDDEVIATION:
-                return p_statistic.getStandardDeviation();
-
-            case SUM:
-                return p_statistic.getSum();
-
-            case SUMSQUARE:
-                return p_statistic.getSumsq();
-
-            case VARIANCE:
-                return p_statistic.getVariance();
-
-            case MEAN:
-                return p_statistic.getMean();
-
-            case KURTIOSIS:
-                return p_statistic.getKurtosis();
-
-            default:
-                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-        }
-    }
 }

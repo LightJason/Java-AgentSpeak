@@ -29,7 +29,7 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.generic.CPrint;
 import org.lightjason.agentspeak.action.builtin.generic.CThrow;
 import org.lightjason.agentspeak.action.builtin.generic.CUuid;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -52,7 +52,7 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test throw action
      */
-    @Test( expected = CActionException.class )
+    @Test( expected = CExecutionException.class )
     public void throwparameter()
     {
         new CThrow().execute(
@@ -66,7 +66,7 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test throw action
      */
-    @Test( expected = CActionException.class )
+    @Test( expected = CExecutionException.class )
     public void throwwithoutparameter()
     {
         new CThrow().execute(
@@ -131,11 +131,12 @@ public final class TestCActionGeneric extends IBaseTest
         l_print.formatter().add( l_format2 );
 
         Assert.assertTrue(
-            l_print.execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                l_print,
+                false,
                 Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
+            )
         );
 
         Assert.assertEquals( "FOOBAR-1234-yes\n", l_output.toString( "utf-8" ) );

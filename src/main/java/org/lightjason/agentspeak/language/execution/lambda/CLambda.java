@@ -23,12 +23,12 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -78,7 +78,8 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_return return variable
      */
     public CLambda( final boolean p_parallel, @Nonnull final IExecution p_stream, @Nonnull final IVariable<?> p_iterator,
-                    @Nonnull final Stream<IExecution> p_body, @Nonnull final IVariable<?> p_return )
+                    @Nonnull final Stream<IExecution> p_body, @Nonnull final IVariable<?> p_return
+    )
     {
         super( p_body.toArray( IExecution[]::new ) );
         m_return = p_return;
@@ -89,12 +90,21 @@ public final class CLambda extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_init = CCommon.argumentlist();
-        if ( !m_stream.execute( p_parallel, p_context, p_argument, l_init ).value() || l_init.size() != 1 )
-            return CFuzzyValue.of( false );
+        if ( !p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply(
+                    m_stream.execute( p_parallel, p_context, p_argument, l_init )
+                )
+             )
+             || l_init.size() != 1
+        )
+            throw new CExecutionIllegalStateException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "initializationerror" )
+            );
 
         return m_parallel ? this.parallel( p_context, l_init.get( 0 ).raw() ) : this.sequential( p_context, l_init.get( 0 ).raw() );
     }
@@ -106,13 +116,13 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_iterator iterator stream
      * @return execution result
      */
-    private IFuzzyValue<Boolean> sequential( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
+    private Stream<IFuzzyValue<?>> sequential( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
     {
         // build iterator variable
         final IVariable<Object> l_iterator = m_iterator.shallowcopy();
 
         // duplicate context, but don't use new variable instances, so use first existing variables
-        final IContext l_context =  p_context.duplicate(
+        final IContext l_context = p_context.duplicate(
             CCommon.streamconcatstrict(
                 Stream.of( l_iterator ),
                 p_context.instancevariables().values().stream(),
@@ -120,11 +130,13 @@ public final class CLambda extends IBaseExecution<IExecution[]>
             )
         );
 
-        // execute lambda body and calulate result over all loops
+        // execute lambda body and calculate result over all loops
         return p_iterator
             .peek( l_iterator::set )
-            .flatMap( i -> CCommon.executesequential( l_context, Arrays.stream( m_value ) ).stream() )
-            .collect( p_context.agent().fuzzy().getKey() );
+            .allMatch( i -> CCommon.executesequential( l_context, Arrays.stream( m_value ) ).getValue() )
+            ? p_context.agent().fuzzy().membership().success()
+            : p_context.agent().fuzzy().membership().fail();
+
     }
 
     /**
@@ -134,19 +146,20 @@ public final class CLambda extends IBaseExecution<IExecution[]>
      * @param p_iterator iterator stream
      * @return execution result
      */
-    private IFuzzyValue<Boolean> parallel( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
+    private Stream<IFuzzyValue<?>> parallel( @Nonnull final IContext p_context, @Nonnull final Stream<?> p_iterator )
     {
         return p_iterator.parallel()
-                  .map( i -> m_iterator.shallowcopy().set( i ) )
-                  .map( i -> p_context.duplicate(
-                      CCommon.streamconcatstrict(
-                          Stream.of( i ),
-                          p_context.instancevariables().values().stream(),
-                          Arrays.stream( m_value ).flatMap( IExecution::variables )
-                      )
-                  ) )
-                  .flatMap( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ).stream() )
-                  .collect( p_context.agent().fuzzy().getKey() );
+                         .map( i -> m_iterator.shallowcopy().set( i ) )
+                         .map( i -> p_context.duplicate(
+                             CCommon.streamconcatstrict(
+                                 Stream.of( i ),
+                                 p_context.instancevariables().values().stream(),
+                                 Arrays.stream( m_value ).flatMap( IExecution::variables )
+                             )
+                         ) )
+                         .allMatch( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ).getValue() )
+                         ? p_context.agent().fuzzy().membership().success()
+                         : p_context.agent().fuzzy().membership().fail();
     }
 
 

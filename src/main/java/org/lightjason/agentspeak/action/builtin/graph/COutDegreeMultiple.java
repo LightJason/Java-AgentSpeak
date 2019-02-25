@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * returns the out-degree of each vertex of a single graph instance.
  * The action returns for a graph instance as first argument the
- * out-degree of each vertex, the action never fails
+ * out-degree of each vertex
  *
  * {@code [D1|D2] = .graph/outdegreemultiple( Graph, Vertex1, Vertex2 );}
  */
@@ -53,7 +53,8 @@ public final class COutDegreeMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

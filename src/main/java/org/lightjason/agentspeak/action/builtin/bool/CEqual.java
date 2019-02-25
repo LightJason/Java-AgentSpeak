@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -46,7 +45,7 @@ import java.util.stream.Stream;
  * The actions checks the first argument
  * to all others arguments of equality,
  * list structures won't be unflaten, but
- * elementwise compared, the action never fails.
+ * elementwise compared.
  * On number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  *
@@ -68,8 +67,8 @@ public class CEqual extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         if ( CCommon.isssignableto( p_argument.get( 0 ), Collection.class ) )
@@ -79,7 +78,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Collection.class )
-                                     && equalcollection(  p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() )
+                                        && equalcollection( p_argument.get( 0 ).<Collection<?>>raw().toArray(), i.raw() )
                           )
             );
 
@@ -90,7 +89,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Map.class )
-                                     && equalmap(  p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
+                                        && equalmap( p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
                           )
             );
 
@@ -101,7 +100,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Multimap.class )
-                                     && equalmultimap(  p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
+                                        && equalmultimap( p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
                           )
             );
 
@@ -110,7 +109,7 @@ public class CEqual extends IBuiltinAction
             p_return,
             p_argument.stream()
                       .skip( 1 )
-                      .map( i -> equalobject(  p_argument.get( 0 ).<Object>raw(), i.<Object>raw() ) )
+                      .map( i -> equalobject( p_argument.get( 0 ).<Object>raw(), i.<Object>raw() ) )
         );
     }
 
@@ -134,18 +133,19 @@ public class CEqual extends IBuiltinAction
      * @param p_stream boolean input stream
      * @return boolean flag
      */
-    private IFuzzyValue<Boolean> pack( @Nonnull final List<ITerm> p_return, @Nonnull final Stream<Boolean> p_stream )
+    private Stream<IFuzzyValue<?>> pack( @Nonnull final List<ITerm> p_return, @Nonnull final Stream<Boolean> p_stream )
     {
         p_stream.map( this::apply )
                 .map( CRawTerm::of )
                 .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 
     /**
      * compare any objects
+     *
      * @param p_source source object
      * @param p_target object to compare
      * @return equality boolean flag

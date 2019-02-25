@@ -27,27 +27,27 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * creates a multi-hashmap.
  * The action creates a multi-hashmap object and returns the object,
- * optional arguments must be even and it will create a key-value structure, the
- * action fails on an odd number of arguments except zero only
+ * optional arguments must be even and it will create a key-value structure
  *
  * {@code
-    M1 = .collection/multimap/create();
-    M2 = .collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
+ * M1 = .collection/multimap/create();
+ * M2 = .collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
  * }
  */
 public final class CCreate extends IBuiltinAction
@@ -67,18 +67,22 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() > 0 && l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.of( false );
+        if ( l_arguments.size() % 2 == 1 )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
+            );
 
         final HashMultimap<Object, Object> l_map = HashMultimap.create();
         StreamUtils.windowed( l_arguments.stream(), 2 ).forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
         p_return.add( CRawTerm.of( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

@@ -29,13 +29,13 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -48,7 +48,6 @@ import java.util.stream.Collectors;
  * the full belieflist is returned
  *
  * {@code L = .agent/belieflist( true, "path/subpath/literalfunctor" );}
- *
  */
 public final class CBeliefList extends IBuiltinAction
 {
@@ -59,8 +58,8 @@ public final class CBeliefList extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         final List<ILiteral> l_literal = (
@@ -73,12 +72,12 @@ public final class CBeliefList extends IBuiltinAction
 
         p_return.add(
             CRawTerm.of( p_parallel
-                           ? Collections.synchronizedList( l_literal )
-                           : l_literal
+                         ? Collections.synchronizedList( l_literal )
+                         : l_literal
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

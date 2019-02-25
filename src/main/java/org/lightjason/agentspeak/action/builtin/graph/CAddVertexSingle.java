@@ -34,7 +34,7 @@ import java.util.List;
  * adds a vertex to the graph.
  * The action adds a vertex to the graph, so
  * the first argument is the vertex and all
- * other arguments are graphs, the action never fails
+ * other arguments are graphs
  *
  * {@code .graph/addvertex( Vertex, Graph1, [Graph2, [Graph3]] );}
  */
@@ -53,7 +53,8 @@ public final class CAddVertexSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.addVertex( p_window.get( 0 ).raw() );
     }

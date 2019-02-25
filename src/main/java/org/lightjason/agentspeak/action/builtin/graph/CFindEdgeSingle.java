@@ -35,8 +35,7 @@ import java.util.List;
  * returns an edge between vertices for each graph instance.
  * The action returns an edge between two vertices,
  * the first two arguments are vertices, all other arguments
- * are graphs, returning values are edges of each graph instance,
- * the action never fails
+ * are graphs, returning values are edges of each graph instance
  *
  * {@code [E1|E2|E3] = .graph/findedgesingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
@@ -55,7 +54,8 @@ public final class CFindEdgeSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

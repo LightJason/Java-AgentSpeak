@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -40,25 +39,130 @@ import java.util.function.BiFunction;
  */
 public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
 {
-    PLUS( "+" ),
-    MINUS( "-" ),
+    PLUS( "+" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    MINUS( "-" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    MULTIPLY( "*" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    DIVIDE( "/" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    MODULO( "%", "mod" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return CCommon.modulo( p_lhs.raw(), p_rhs.raw() );
+        }
+    },
+    POWER( "**" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
+        }
+    },
+    OR( "||", "or" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Boolean>raw() || p_rhs.<Boolean>raw();
+        }
+    },
+    AND( "&&", "and" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Boolean>raw() && p_rhs.<Boolean>raw();
+        }
+    },
+    XOR( "^", "xor" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Boolean>raw() ^ p_rhs.<Boolean>raw();
+        }
+    },
 
-    MULTIPLY( "*" ),
-    DIVIDE( "/" ),
-    MODULO( "%", "mod" ),
-    POWER( "**" ),
 
-    OR( "||", "or" ),
-    AND( "&&", "and" ),
-    XOR( "^", "xor" ),
+    EQUAL( "==" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return checkequal( p_lhs, p_rhs );
+        }
+    },
+    NOTEQUAL( "\\==", "!=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return !checkequal( p_lhs, p_rhs );
+        }
+    },
 
-    EQUAL( "==" ),
-    NOTEQUAL( "\\==", "!=" ),
 
-    LESS( "<" ),
-    LESSEQUAL( "<=" ),
-    GREATER( ">" ),
-    GREATEREQUAL( ">=" );
+    LESS( "<" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return compare( p_lhs, p_rhs ) < 0;
+        }
+    },
+    LESSEQUAL( "<=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return compare( p_lhs, p_rhs ) <= 0;
+        }
+    },
+    GREATER( ">" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return compare( p_lhs, p_rhs ) > 0;
+        }
+    },
+    GREATEREQUAL( ">=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return compare( p_lhs, p_rhs ) >= 0;
+        }
+    };
 
 
 
@@ -82,70 +186,6 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
     {
         return m_operator[0];
     }
-
-    @Override
-    public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
-    {
-        switch ( this )
-        {
-            case PLUS:
-                return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
-
-            case MINUS:
-                return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
-
-            case MULTIPLY:
-                return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
-
-            case DIVIDE:
-                return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
-
-            case MODULO:
-                return CCommon.modulo( p_lhs.raw(), p_rhs.raw() );
-
-            case POWER:
-                return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
-
-
-
-            case OR:
-                return p_lhs.<Boolean>raw() || p_rhs.<Boolean>raw();
-
-            case AND:
-                return p_lhs.<Boolean>raw() && p_rhs.<Boolean>raw();
-
-            case XOR:
-                return p_lhs.<Boolean>raw() ^ p_rhs.<Boolean>raw();
-
-
-
-            case EQUAL:
-                return checkequal( p_lhs, p_rhs );
-
-            case NOTEQUAL:
-                return !checkequal( p_lhs, p_rhs );
-
-
-
-            case GREATER:
-                return compare( p_lhs, p_rhs ) > 0;
-
-            case GREATEREQUAL:
-                return compare( p_lhs, p_rhs ) >= 0;
-
-            case LESS:
-                return compare( p_lhs, p_rhs ) < 0;
-
-            case LESSEQUAL:
-                return compare( p_lhs, p_rhs ) <= 0;
-
-
-
-            default:
-                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-        }
-    }
-
 
     /**
      * equal method with number handling
@@ -211,9 +251,10 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
      * type mapping method
      *
      * @param p_value value
+     * @return casted value
+     *
      * @tparam N return type
      * @tparam M value type
-     * @return casted value
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )

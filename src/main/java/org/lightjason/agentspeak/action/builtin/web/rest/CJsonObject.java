@@ -23,16 +23,17 @@
 
 package org.lightjason.agentspeak.action.builtin.web.rest;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
@@ -41,6 +42,7 @@ import java.util.Map;
  * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
  *
  * {@code W = web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );}
+ *
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/JSON
@@ -63,8 +65,9 @@ public final class CJsonObject extends IBaseRest
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         try
         {
@@ -82,11 +85,11 @@ public final class CJsonObject extends IBaseRest
                 )
             );
 
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
         catch ( final IOException l_exception )
         {
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
 

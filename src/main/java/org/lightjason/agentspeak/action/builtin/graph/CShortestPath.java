@@ -43,8 +43,8 @@ import java.util.List;
  * not need an entry for each edge non-existing edges have got on default zero weight
  *
  * {@code
-   [D1|D2] = .graph/shortestpath( StartVertex, EndVertex, Graph1, Graph2 );
-   [D3|D4] = .graph/shortestpath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+ * [D1|D2] = .graph/shortestpath( StartVertex, EndVertex, Graph1, Graph2 );
+ * [D3|D4] = .graph/shortestpath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
  * }
  */
 public final class CShortestPath extends IApplyPathAlgorithm
@@ -56,10 +56,11 @@ public final class CShortestPath extends IApplyPathAlgorithm
 
     @Override
     protected Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,
-                            @Nonnull final Function<Object, Number> p_weightfunction )
+                            @Nonnull final Function<Object, Number> p_weightfunction
+    )
     {
         return new DijkstraShortestPath<>( p_graph, p_weightfunction )
-                                   .getPath( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() );
+            .getPath( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() );
     }
 
 }

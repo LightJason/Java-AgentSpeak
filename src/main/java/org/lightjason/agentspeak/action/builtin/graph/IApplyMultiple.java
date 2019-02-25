@@ -29,12 +29,12 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -56,8 +56,8 @@ public abstract class IApplyMultiple extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         StreamUtils.windowed(
@@ -67,7 +67,7 @@ public abstract class IApplyMultiple extends IBuiltinAction
         )
                    .forEach( i -> this.apply( p_parallel, p_argument.get( 0 ).<Graph<Object, Object>>raw(), i, p_return ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 
@@ -82,12 +82,14 @@ public abstract class IApplyMultiple extends IBuiltinAction
 
     /**
      * apply call
+     *
      * @param p_parallel parallel execution
      * @param p_graph graph instance
      * @param p_window window list
      * @param p_return return list
      */
     protected abstract void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                                   @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return );
+                                   @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    );
 
 }

@@ -25,17 +25,18 @@ package org.lightjason.agentspeak.action.builtin.math.shape;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -43,8 +44,7 @@ import java.util.stream.Collectors;
  * The action checks if a point is within a circle,
  * the first three arguments defines the circle (x- / y-position
  * and radius), all other arguments will be used as tuples
- * (x- / y-position) which defines the point, the action fails
- * on wrong input
+ * (x- / y-position) which defines the point
  *
  * {@code [In1|In2] = .math/shape/incircle( 1,1,1,  2,2.5, [3,4] );}
  */
@@ -72,8 +72,9 @@ public final class CInCircle extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
@@ -81,7 +82,10 @@ public final class CInCircle extends IBuiltinAction
                                                 .boxed()
                                                 .collect( Collectors.toList() );
         if ( l_arguments.size() < 5 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber" )
+            );
 
 
         StreamUtils.windowed( l_arguments.stream().skip( 3 ), 2, 2 )
@@ -89,7 +93,7 @@ public final class CInCircle extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

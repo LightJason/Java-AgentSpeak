@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * removes a vertex of each graph instance.
  * The action removes of all graph instances the given
- * vertex, the action never fails
+ * vertex
  *
  * {@code .graph/removevertexsingle( Vertex, Graph1, Graph2 );}
  */
@@ -52,7 +52,8 @@ public final class CRemoveVertexSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.removeVertex( p_window.get( 0 ).raw() );
     }

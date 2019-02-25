@@ -50,7 +50,6 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -166,7 +165,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test in-agent definition
      *
-     * @throws Exception is thrown on execution error
+     * @throws Exception is thrown on execute error
      */
     @Test
     public void inagent() throws Exception
@@ -216,11 +215,11 @@ public final class TestCViewMap extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -250,8 +249,8 @@ public final class TestCViewMap extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_testlog.add(
                 new ImmutablePair<>(
@@ -262,7 +261,9 @@ public final class TestCViewMap extends IBaseTest
                 )
             );
 
-            return CFuzzyValue.of( p_argument.get( 0 ).<Boolean>raw() );
+            return p_argument.get( 0 ).<Boolean>raw()
+                   ? p_context.agent().fuzzy().membership().success()
+                   : p_context.agent().fuzzy().membership().fail();
         }
     }
 

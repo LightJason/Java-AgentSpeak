@@ -21,28 +21,25 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.operator;
-
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+package org.lightjason.agentspeak.agent;
 
 import javax.annotation.Nonnull;
 
 
 /**
- * fuzzy complement
- *
- * @tparam T fuzzy type
+ * interface of updatetable structure by agent
  */
-public interface IFuzzyComplement<T>
+public interface IAgentUpdateable
 {
 
     /**
-     * creates the complement of a fuzzy value
+     * update of the internal defuzzification
+     * structure on the agent-cycle
      *
-     * @param p_value value
-     * @return complement value
+     * @param p_agent agent object
+     * @return agent reference
      */
     @Nonnull
-    IFuzzyValue<T> complement( @Nonnull final IFuzzyValue<T> p_value );
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }

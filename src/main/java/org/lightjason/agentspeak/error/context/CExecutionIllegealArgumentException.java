@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.error.context;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.execution.IContext;
 
@@ -32,18 +33,18 @@ import java.util.logging.Logger;
 
 
 /**
- * exception of action execution
+ * execution illegal-argument-exception
  */
-public class CActionException extends RuntimeException implements IContextException
+public final class CExecutionIllegealArgumentException extends IllegalArgumentException implements IContextException
 {
     /**
      * logger
      */
-    private static final Logger LOGGER = CCommon.logger( CActionException.class );
+    private static final Logger LOGGER = CCommon.logger( CExecutionIllegealArgumentException.class );
     /**
      * serial id
      */
-    private static final transient long serialVersionUID = -1053856178724776159L;
+    private static final transient long serialVersionUID = 5617594778721053861L;
     /**
      * execution context
      */
@@ -56,7 +57,7 @@ public class CActionException extends RuntimeException implements IContextExcept
      *
      * @param p_context execution context
      */
-    public CActionException( final IContext p_context )
+    public CExecutionIllegealArgumentException( @NonNull final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -66,10 +67,10 @@ public class CActionException extends RuntimeException implements IContextExcept
     /**
      * ctor
      *
-     * @param p_message execution message
      * @param p_context execution context
+     * @param p_message execution message
      */
-    public CActionException( @Nonnull final String p_message, @Nonnull final IContext p_context )
+    public CExecutionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final String p_message )
     {
         super( p_message );
         m_context = p_context;
@@ -79,11 +80,12 @@ public class CActionException extends RuntimeException implements IContextExcept
     /**
      * ctor
      *
+     * @param p_context execution context
      * @param p_message execution message
      * @param p_cause execption cause
-     * @param p_context execution context
      */
-    public CActionException( @Nonnull final String p_message, @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
+    public CExecutionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final String p_message, @Nonnull final Throwable p_cause
+    )
     {
         super( p_message, p_cause );
         m_context = p_context;
@@ -93,10 +95,10 @@ public class CActionException extends RuntimeException implements IContextExcept
     /**
      * ctor
      *
-     * @param p_cause execption cause
      * @param p_context execution context
+     * @param p_cause execption cause
      */
-    public CActionException( @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
+    public CExecutionIllegealArgumentException( @Nonnull final IContext p_context, @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         m_context = p_context;
@@ -109,5 +111,4 @@ public class CActionException extends RuntimeException implements IContextExcept
     {
         return m_context;
     }
-
 }

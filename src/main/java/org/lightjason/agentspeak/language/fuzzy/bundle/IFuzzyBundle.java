@@ -21,41 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.defuzzification;
+package org.lightjason.agentspeak.language.fuzzy.bundle;
 
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.agent.IAgentUpdateable;
+import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.IDefuzzification;
+import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
 
 import javax.annotation.Nonnull;
 
 
 /**
- * defuzzification interface
+ * interface of fuzzy bundle
  *
- * @tparam T fuzzy type
- * @tparam S agent type
- * @see https://en.wikipedia.org/wiki/Defuzzification
+ * @tparam T enum type
  */
-public interface IDefuzzification<T>
+public interface IFuzzyBundle extends IAgentUpdateable
 {
 
     /**
-     * runs the defuzzyification algorithm
+     * fuzzy set
      *
-     * @param p_value fuzzy value
-     * @return native value
+     * @return fuzzy set
      */
-    @Nonnull
-    T defuzzify( @Nonnull final IFuzzyValue<T> p_value );
+    IFuzzySet<?> set();
 
     /**
-     * update of the internal defuzzification
-     * structure on the agent-cycle
+     * membership function
      *
-     * @param p_agent agent object
-     * @return agent reference
+     * @return function
+     */
+    @NonNull
+    IFuzzyMembership<?> membership();
+
+    /**
+     * defuzzification
+     *
+     * @return defuzzification
      */
     @Nonnull
-    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
+    IDefuzzification defuzzification();
 
 }

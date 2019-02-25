@@ -28,19 +28,18 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * performs the logical not operation to all bit vectors.
  * Each input argument defines a bit vector and
- * the action apply the logical not operator, the action
- * never fails
+ * the action apply the logical not operator
  *
  * {@code .math/bit/vector/not( Vector1, Vector2 );}
  */
@@ -68,14 +67,15 @@ public final class CNot extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .parallel()
                .map( ITerm::<BitVector>raw )
                .forEach( BitVector::not );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

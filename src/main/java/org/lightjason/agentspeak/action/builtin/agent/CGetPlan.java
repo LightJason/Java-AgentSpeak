@@ -35,7 +35,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -43,6 +42,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -72,16 +72,14 @@ public final class CGetPlan extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return CFuzzyValue.of(
-            StreamUtils.windowed(
-                CCommon.flatten( p_argument ),
-                2,
-                2
-            ).allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
-        );
+        return StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
+                          .allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
+               ? Stream.of()
+               : p_context.agent().fuzzy().membership().fail();
     }
 
     /**
@@ -94,12 +92,12 @@ public final class CGetPlan extends IBuiltinAction
      * @return flag to query plan successfully
      */
     private static boolean query( @Nonnull final ITrigger.EType p_trigger, @Nonnull final ITerm p_literal,
-                                  @Nonnull final IAgent<?> p_agent, @Nonnull final List<ITerm> p_return )
+                                  @Nonnull final IAgent<?> p_agent, @Nonnull final List<ITerm> p_return
+    )
     {
         final ILiteral l_literal;
         try
         {
-
             l_literal = CCommon.isssignableto( p_literal, ILiteral.class )
                         ? p_literal.<ILiteral>raw()
                         : CLiteral.parse( p_literal.<String>raw() );

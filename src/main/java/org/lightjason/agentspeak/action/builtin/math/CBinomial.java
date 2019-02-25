@@ -30,21 +30,22 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action for calculating binomial coefficient.
  * Calcluates \f$ \binom{n}{k} \f$, where n is the
  * first argument and k the second of each given input
- * tupel, the action fails never
+ * tupel
  *
  * {@code [B1|B2] = .math/binomial( 49, 6,  30, 5 );}
+ *
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
 public final class CBinomial extends IBuiltinAction
@@ -63,8 +64,9 @@ public final class CBinomial extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument )
@@ -78,7 +80,7 @@ public final class CBinomial extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

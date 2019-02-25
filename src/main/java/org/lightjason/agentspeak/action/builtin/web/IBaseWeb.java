@@ -94,8 +94,9 @@ public abstract class IBaseWeb extends IBuiltinAction
      * sets the default header definition
      *
      * @param p_request request
-     * @tparam T request type
      * @return input request
+     *
+     * @tparam T request type
      */
     private static <T extends HttpRequestBase> T header( @Nonnull final T p_request )
     {
@@ -129,6 +130,7 @@ public abstract class IBaseWeb extends IBuiltinAction
      *
      * @param p_get get request
      * @return output data as string
+     *
      * @throws IOException is thrown on connection errors
      */
     protected static String httpgetexecute( @Nonnull final HttpGet p_get ) throws IOException
@@ -141,6 +143,7 @@ public abstract class IBaseWeb extends IBuiltinAction
      *
      * @param p_post post request
      * @return output data as string
+     *
      * @throws IOException is thrown on connection errors
      */
     protected static String httppostexecute( @Nonnull final HttpPost p_post ) throws IOException

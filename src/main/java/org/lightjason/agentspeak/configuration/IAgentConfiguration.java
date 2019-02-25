@@ -28,7 +28,7 @@ import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnull;
@@ -76,12 +76,12 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
     IVariableBuilder variablebuilder();
 
     /**
-     * returns the fuzzy operator
+     * returns the fuzzy bundle
      *
-     * @return operator object
+     * @return bundle
      */
     @Nonnull
-    IFuzzyBundle<Boolean> fuzzy();
+    IFuzzyBundle fuzzy();
 
     /**
      * returns the initial beliefs

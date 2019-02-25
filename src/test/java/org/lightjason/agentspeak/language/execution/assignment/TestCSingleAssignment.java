@@ -107,15 +107,17 @@ public final class TestCSingleAssignment extends IBaseTest
         final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_data[1] );
 
         Assert.assertTrue(
-            new CSingleAssignment(
-                (EAssignOperator) p_data[2], l_lhs,
-                new CPassVariable( l_rhs )
-            ).execute(
+            execute(
+                new CSingleAssignment(
+                    (EAssignOperator) p_data[2], l_lhs,
+                    new CPassVariable( l_rhs )
+                ),
                 false,
-                new CLocalContext( l_lhs, l_rhs ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_lhs,
+                l_rhs
+            )
         );
 
         Assert.assertEquals( p_data[3], l_lhs.raw() );
@@ -136,15 +138,16 @@ public final class TestCSingleAssignment extends IBaseTest
         final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
 
         Assert.assertTrue(
-            new CSingleAssignment(
-                (EAssignOperator) p_data[2], l_lhs,
-                new CPassRaw<>( p_data[1] )
-            ).execute(
+            execute(
+                new CSingleAssignment(
+                    (EAssignOperator) p_data[2], l_lhs,
+                    new CPassRaw<>( p_data[1] )
+                ),
                 false,
-                new CLocalContext( l_lhs ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_lhs
+            )
         );
 
         Assert.assertEquals( p_data[3], l_lhs.raw() );

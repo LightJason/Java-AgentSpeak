@@ -30,12 +30,12 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -43,9 +43,10 @@ import java.util.List;
  * The  action calculates the stirling number
  * with \f$ S(n,k)=\left\{\begin{matrix} n \\ k \end{matrix}\right\}= S_n^{(k)} \f$
  * of each tuple of the unflatten argument list, n is the first value of the tupel
- * and k is the second value of the tupel, the action fails never
+ * and k is the second value of the tupel
  *
  * {@code [S1|S2] = .math/stirling(2,3, [4,5]);}
+ *
  * @see https://en.wikipedia.org/wiki/Stirling_number
  */
 public final class CStirling extends IBuiltinAction
@@ -64,8 +65,9 @@ public final class CStirling extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         StreamUtils.windowed(
             CCommon.flatten( p_argument )
@@ -79,7 +81,7 @@ public final class CStirling extends IBuiltinAction
                    .map( CRawTerm::of )
                    .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

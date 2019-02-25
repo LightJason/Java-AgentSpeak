@@ -23,17 +23,17 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -69,10 +69,13 @@ public final class CFuzzyReturn extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_return = CCommon.flatten( p_argument ).limit( 2 ).collect( Collectors.toList() );
-        return CFuzzyValue.of( l_return.get( 0 ).<Boolean>raw(), l_return.get( 1 ).<Number>raw().doubleValue() );
+        return StreamUtils.windowed(
+            CCommon.flatten( p_argument ),
+            2,
+            2
+        ).map( i -> p_context.agent().fuzzy().set().apply( i.get( 0 ).<String>raw(), i.get( 1 ).<Number>raw() ) );
     }
 }

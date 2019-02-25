@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -39,6 +38,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -46,10 +46,10 @@ import java.util.stream.Collectors;
  * This action creates the linear program with
  * the objective functions \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + d \f$,
  * the first \f$ n-1 \f$ arguments are the \f$ c_i \f$ values (coefficients) and the last
- * argument is the \f$ d \f$ value (constant) of the objective function, the action
- * is never failing
+ * argument is the \f$ d \f$ value (constant) of the objective function
  *
  * {@code LP = .math/linearprogram/create(1,2, [3, [4,5]], 10);}
+ *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -77,8 +77,9 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( i -> i.<Number>raw().doubleValue() )
@@ -94,7 +95,7 @@ public final class CCreate extends IBuiltinAction
             )
         ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

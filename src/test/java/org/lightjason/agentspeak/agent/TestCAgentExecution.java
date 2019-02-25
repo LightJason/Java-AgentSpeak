@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -61,7 +60,7 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * test for agent execution ordering
+ * test for agent execute ordering
  */
 public final class TestCAgentExecution extends IBaseTest
 {
@@ -78,11 +77,11 @@ public final class TestCAgentExecution extends IBaseTest
      */
     private IAgent<?> m_agent;
     /**
-     * running flag (agent can disable execution)
+     * running flag (agent can disable execute)
      */
     private AtomicBoolean m_running;
     /**
-     * logs for plan execution
+     * logs for plan execute
      */
     private final Multimap<Long, String> m_log = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
@@ -119,7 +118,7 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
 
-        // define execution results
+        // define execute results
         m_result.put( 0L, "main" );
         m_result.put( 1L, "single run" );
         m_result.put( 1L, "first" );
@@ -131,9 +130,9 @@ public final class TestCAgentExecution extends IBaseTest
     }
 
     /**
-     * execution ordering test
+     * execute ordering test
      *
-     * @throws Exception is thrown on agent execution error
+     * @throws Exception is thrown on agent execute error
      */
     @Test
     public void executionorder() throws Exception
@@ -150,14 +149,14 @@ public final class TestCAgentExecution extends IBaseTest
 
         Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
 
-        // check execution results
+        // check execute results
         assertTrue(
             MessageFormat.format(  "number of cycles are incorrect, excpected [{0}] contains [{1}]", m_result.asMap().size(), m_log.asMap().size() ),
             LongStream.range( 0, m_result.asMap().size() ).allMatch( m_log::containsKey )
         );
 
         assertTrue(
-            MessageFormat.format( "number of log elements during execution are incorrect, expected {0} result {1}", m_result.asMap(), m_log.asMap() ),
+            MessageFormat.format( "number of log elements during execute are incorrect, expected {0} result {1}", m_result.asMap(), m_log.asMap() ),
             LongStream.range( 0, m_result.asMap().size() )
                       .allMatch( i -> m_result.get( i ).size() == m_log.asMap().getOrDefault( i, Collections.emptyList() ).size() )
         );
@@ -277,11 +276,11 @@ public final class TestCAgentExecution extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 
@@ -311,11 +310,11 @@ public final class TestCAgentExecution extends IBaseTest
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
     }
 }

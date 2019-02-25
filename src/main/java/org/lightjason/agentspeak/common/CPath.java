@@ -87,7 +87,7 @@ public final class CPath implements IPath
     public CPath( @Nonnull final IPath p_path )
     {
         m_path = p_path.stream().filter( i -> !i.isEmpty() )
-                                .collect( CPath.collectorfactory() );
+                       .collect( CPath.collectorfactory() );
         m_separator = p_path.separator();
     }
 
@@ -289,7 +289,7 @@ public final class CPath implements IPath
                 p_fromindex,
                 p_toindex > 0 ? p_toindex : this.size() + p_toindex
             )
-            .mapToObj( m_path::get )
+                       .mapToObj( m_path::get )
         ).separator( m_separator );
     }
 

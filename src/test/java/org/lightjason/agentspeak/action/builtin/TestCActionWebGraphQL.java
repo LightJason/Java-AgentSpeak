@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,9 +77,9 @@ public final class TestCActionWebGraphQL extends IBaseTest
 
         final List<ITerm> l_return = new ArrayList<>();
         Assert.assertTrue(
-            new CQueryLiteral().execute(
+            execute(
+                new CQueryLiteral(),
                 false,
-                IContext.EMPTYPLAN,
                 Stream.of(
                     CRawTerm.of( "https://developer.deutschebahn.com/free1bahnql/graphql" ),
                     CLiteral.of(
@@ -92,7 +91,7 @@ public final class TestCActionWebGraphQL extends IBaseTest
                     CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );
@@ -111,16 +110,16 @@ public final class TestCActionWebGraphQL extends IBaseTest
 
         final List<ITerm> l_return = new ArrayList<>();
         Assert.assertTrue(
-            new CQueryNative().execute(
+            execute(
+                new CQueryNative(),
                 false,
-                IContext.EMPTYPLAN,
                 Stream.of(
                     CRawTerm.of( "https://developer.deutschebahn.com/free1bahnql/graphql" ),
                     CRawTerm.of( "{ stationWithEvaId(evaId: 8000105) { name location { latitude longitude } } }" ),
                     CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 1, l_return.size() );

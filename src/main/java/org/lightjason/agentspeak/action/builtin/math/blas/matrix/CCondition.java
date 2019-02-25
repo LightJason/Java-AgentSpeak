@@ -29,20 +29,21 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * returns the condition of a matrix.
  * Calculates for each input matrix the condition number
- * and returns the value, the action never fails
+ * and returns the value
  *
  * {@code [C1|C2] = .math/blas/matrix/condition(M1,M2);}
+ *
  * @see https://en.wikipedia.org/wiki/Condition_number
  */
 public final class CCondition extends IAlgebra
@@ -69,8 +70,9 @@ public final class CCondition extends IAlgebra
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // first argument must be a term with a matrix object
         // arguments are matrix objects
@@ -80,6 +82,6 @@ public final class CCondition extends IAlgebra
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

@@ -21,35 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
-import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
+package org.lightjason.agentspeak.language.fuzzy.set;
 
-import javax.annotation.Nonnull;
-import java.util.AbstractMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+
+import java.util.Locale;
 
 
 /**
- * boolean fuzzy bundle
+ * three element fuzzy with numerical representation
  */
-public final class CBundle extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean>> implements IFuzzyBundle<Boolean>
+public enum EThreeElement implements IFuzzySet<EThreeElement>
 {
-    /**
-     * serial id
-     */
-    private static final long serialVersionUID = 646232211237092457L;
+    LOW,
+    MEDIUM,
+    HIGH;
 
-    /**
-     * ctor
-     *
-     * @param p_key fuzzy operator
-     * @param p_value defuzzification
-     */
-    public CBundle( @Nonnull final IFuzzyOperator<Boolean> p_key, @Nonnull final IDefuzzification<Boolean> p_value )
+    @NonNull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
     {
-        super( p_key, p_value );
+        return (V) Integer.valueOf( this.ordinal() );
     }
 
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <U extends Enum<?>> U rawenum()
+    {
+        return (U) this;
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyValue<?> apply( @NonNull final Number p_number )
+    {
+        return CFuzzyValue.of( this, p_number );
+    }
+
+    @NonNull
+    @Override
+    public IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number )
+    {
+        return EThreeElement.valueOf( p_name.toUpperCase( Locale.ROOT ) ).apply( p_number );
+    }
 }

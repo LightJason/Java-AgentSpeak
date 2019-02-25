@@ -23,13 +23,14 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -62,21 +63,20 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
-        final IFuzzyValue<Boolean> l_result = Arrays.stream( m_value )
-                                                    .map( i -> i.execute( p_parallel, p_context, p_argument, l_return ) )
-                                                    .filter( i -> !i.value() )
-                                                    .findFirst()
-                                                    .orElse( CFuzzyValue.of( true ) );
-
-        if ( !l_result.value() )
-            return l_result;
+        final Pair<List<IFuzzyValue<?>>, Boolean> l_result = CCommon.executesequential( p_parallel, p_context, p_argument, l_return, Arrays.stream( m_value ) );
+        if ( !l_result.getValue() )
+            return p_context.agent().fuzzy().membership().fail();
 
         if ( l_return.size() == 0 || l_return.size() > 3 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 3 )
+            );
 
         if ( l_return.size() == 1 )
             p_return.add(
@@ -102,8 +102,7 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
                 )
             );
 
-
-        return l_result;
+        return l_result.getKey().stream();
     }
 
     @Override

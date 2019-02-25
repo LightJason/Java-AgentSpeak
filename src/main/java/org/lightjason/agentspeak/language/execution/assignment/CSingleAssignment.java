@@ -23,12 +23,12 @@
 
 package org.lightjason.agentspeak.language.execution.assignment;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -73,19 +73,29 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        final List<ITerm> l_return = CCommon.argumentlist();
+        final List<ITerm> l_result = CCommon.argumentlist();
 
-        final IFuzzyValue<Boolean> l_rightreturn = m_rhs.execute( p_parallel, p_context, Collections.emptyList(), l_return );
-        if ( !l_rightreturn.value() || l_return.size() != 1 )
-            return CFuzzyValue.of( false );
+        if ( !p_context.agent().fuzzy().defuzzification().success(
+                p_context.agent().fuzzy().defuzzification().apply( m_rhs.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ) )
+             )
+        )
+            return p_context.agent().fuzzy().membership().fail();
+
+
+        if ( l_result.size() != 1 )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "rhsincorrect" )
+            );
 
         final IVariable<Object> l_lhs = CCommon.replacebycontext( p_context, m_value ).term();
-        l_lhs.set( m_operator.apply( l_lhs, l_return.get( 0 ) ) );
+        l_lhs.set( m_operator.apply( l_lhs, l_result.get( 0 ) ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     @Override

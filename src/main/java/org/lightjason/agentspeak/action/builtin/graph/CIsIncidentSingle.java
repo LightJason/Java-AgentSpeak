@@ -34,8 +34,7 @@ import java.util.List;
 /**
  * checks if a vertex and an edge incident for each graph instance.
  * The actions checks for the first vertex argument and the second
- * egde argument if both are incident on each graph instance, the
- * action never fails
+ * egde argument if both are incident on each graph instance
  *
  * {@code [B1|B2] = .graph/isincidentsingle( Vertex, Edge, Graph1, Graph2 );}
  */
@@ -54,7 +53,8 @@ public final class CIsIncidentSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

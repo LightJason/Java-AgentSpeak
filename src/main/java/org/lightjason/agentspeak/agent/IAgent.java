@@ -34,9 +34,8 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
 
 import javax.annotation.Nonnegative;
@@ -81,9 +80,9 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
+        public Stream<IFuzzyValue<?>> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
         {
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
 
         @Nonnull
@@ -164,7 +163,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
 
         @Nonnull
         @Override
-        public IFuzzyBundle<Boolean> fuzzy()
+        public IFuzzyBundle fuzzy()
         {
             return IAgentGenerator.DEFAULTFUZZYBUNDLE;
         }
@@ -219,12 +218,12 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      *
      * @param p_trigger event trigger
      * @param p_immediately run element immediately
-     * @return execution finished correctly
+     * @return execution fuzzy value stream
      *
      * @note the trigger is ignored iif the agent is sleeping
      */
     @Nonnull
-    IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately );
+    Stream<IFuzzyValue<?>> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately );
 
     /**
      * returns the beliefbase
@@ -327,7 +326,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * @return operator
      */
     @Nonnull
-    IFuzzyBundle<Boolean> fuzzy();
+    IFuzzyBundle fuzzy();
 
     /**
      * returns the variable builder function

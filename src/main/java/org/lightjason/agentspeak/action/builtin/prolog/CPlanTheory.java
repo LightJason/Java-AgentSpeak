@@ -26,23 +26,23 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * creates theory objects with a plan literals.
  * The action create a theory object of the current
- * plan literals and fails on wrong internal syntax
- * structure
+ * plan literals
  *
  * {@code T = prolog/plantheory;}
  */
@@ -55,8 +55,9 @@ public final class CPlanTheory extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return )
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                 @Nonnull final List<ITerm> p_return
+    )
     {
         try
         {
@@ -76,12 +77,11 @@ public final class CPlanTheory extends IBuiltinAction
                 )
             );
 
-            return CFuzzyValue.of( true );
+            return Stream.of();
         }
         catch ( final InvalidTheoryException l_exception )
         {
-            LOGGER.warning( l_exception.getMessage() );
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
 }

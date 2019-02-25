@@ -21,76 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.operator.bool;
+package org.lightjason.agentspeak.language.fuzzy.set;
 
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValueMutable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.Locale;
 
 
 /**
- * fuzzy-boolean conjunction / intersection
+ * four element fuzzy with numerical representation
  */
-public final class CIntersection implements IFuzzyOperator<Boolean>
+public enum EFourElement implements IFuzzySet<EFourElement>
 {
+    LOW,
+    MEDIUMLOW,
+    MEDIUMHIGH,
+    HIGH;
 
+    @NonNull
     @Override
-    public Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    @SuppressWarnings( "unchecked" )
+    public <V> V raw()
     {
-        return CIntersection::factory;
-    }
-
-    @Override
-    public BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
-    {
-        return ( i, j ) -> i.fuzzy( Math.min( i.fuzzy(), j.fuzzy() ) ).value( i.value() && j.value() );
-    }
-
-    @Override
-    public BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
-    {
-        return ( i, j ) -> i.fuzzy( Math.min( i.fuzzy(), j.fuzzy() ) ).value( i.value() && j.value() );
+        return (V) Integer.valueOf( this.ordinal() );
     }
 
     @Override
-    public Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    @SuppressWarnings( "unchecked" )
+    public <U extends Enum<?>> U rawenum()
     {
-        return IFuzzyValueMutable::immutable;
+        return (U) this;
     }
 
+    @NonNull
     @Override
-    public Set<Characteristics> characteristics()
+    public IFuzzyValue<?> apply( @NonNull final Number p_number )
     {
-        return Collections.emptySet();
+        return CFuzzyValue.of( this, p_number );
     }
 
-    @SafeVarargs
-    @Nonnull
+    @NonNull
     @Override
-    @SuppressWarnings( "varargs" )
-    public final IFuzzyValue<Boolean> result( @Nonnull final IFuzzyValue<Boolean>... p_values )
+    public IFuzzyValue<?> apply( @NonNull final String p_name, @NonNull final Number p_number )
     {
-        return Arrays.stream( p_values ).collect( this );
+        return EFourElement.valueOf( p_name.toUpperCase( Locale.ROOT ) ).apply( p_number );
     }
-
-    /**
-     * factory of the initialize value
-     *
-     * @return fuzzy value
-     */
-    private static IFuzzyValueMutable<Boolean> factory()
-    {
-        return CFuzzyValueMutable.of( true, 1 );
-    }
-
 }

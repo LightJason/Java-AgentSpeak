@@ -56,6 +56,7 @@ public abstract class IBaseRest extends IBaseWeb
 
     /**
      * ctor
+     *
      * @param p_length length
      */
     protected IBaseRest( final int p_length )

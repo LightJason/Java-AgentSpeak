@@ -36,7 +36,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -47,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * arguments are strings with the name of the graph type ( SPARSE |
  * SPARSEMULTI | DIRECTEDSPARSE | DIRECTEDSPARSEMULTI | UNDIRECTEDSPARSE |
  * UNDIRECTEDSPARSEMULTI ) on a wrong name,
- * a sparse graph is created, the action never fails
+ * a sparse graph is created
  *
  * {@code [G1|G2] = .graph/create( "sparse", "directedsparse" );}
  *
@@ -77,8 +77,9 @@ public final class CCreate extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
@@ -87,7 +88,7 @@ public final class CCreate extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 

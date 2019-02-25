@@ -26,20 +26,19 @@ package org.lightjason.agentspeak.action.builtin.collection.list;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * adds an element to the list.
  * Sets an element in each list, the first
  * argument is the index in the liste, the
- * second is the value, all other are list objects,
- * the action fails never
+ * second is the value, all other are list objects
  *
  * {@code .collection/list/set( 2, "a string value", L1, L2, L3 );}
  */
@@ -67,15 +66,16 @@ public final class CSet extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_argument.stream()
                   .skip( 2 )
                   .map( ITerm::<List<Object>>raw )
                   .forEach( i -> i.set( p_argument.get( 0 ).<Number>raw().intValue(), p_argument.get( 1 ).raw() ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

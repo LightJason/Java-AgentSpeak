@@ -41,6 +41,7 @@ public enum EType
 
     /**
      * set with names
+     *
      * @warning name method cannot replaced by a static call
      */
     private static final Set<String> NAMES = Collections.unmodifiableSet( Arrays.stream( EType.values() ).map( i -> i.name() ).collect( Collectors.toSet() ) );

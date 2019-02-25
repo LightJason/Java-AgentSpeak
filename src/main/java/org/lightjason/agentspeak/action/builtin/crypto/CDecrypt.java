@@ -23,13 +23,15 @@
 
 package org.lightjason.agentspeak.action.builtin.crypto;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -42,6 +44,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -68,8 +71,9 @@ public final class CDecrypt extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final Key l_key = p_argument.get( 0 ).raw();
         final ECryptAlgorithm l_algorithm;
@@ -79,14 +83,13 @@ public final class CDecrypt extends IBuiltinAction
         }
         catch ( final IllegalArgumentException l_exception )
         {
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException( p_context, l_exception );
         }
 
-        return CFuzzyValue.of(
-                   CCommon.flatten( p_argument.stream().skip( 1 ) )
-                          .map( ITerm::<String>raw )
-                          .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
-        );
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::<String>raw )
+               .forEach( i -> decrypt( l_algorithm, l_key, i, p_return, p_context ) );
+        return Stream.of();
     }
 
     /**
@@ -96,10 +99,11 @@ public final class CDecrypt extends IBuiltinAction
      * @param p_key key
      * @param p_dataset base64 encoded dataset
      * @param p_return return argument
-     * @return successful execution
+     * @param p_context execution context
      */
-    private static boolean decrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
-                                    @Nonnull final String p_dataset, @Nonnull final List<ITerm> p_return )
+    private static void decrypt( @Nonnull final ECryptAlgorithm p_algorithm, @Nonnull final Key p_key,
+                                 @Nonnull final String p_dataset, @Nonnull final List<ITerm> p_return,
+                                 @NonNull final IContext p_context )
     {
         try
         {
@@ -112,12 +116,10 @@ public final class CDecrypt extends IBuiltinAction
                     )
                 )
             );
-
-            return true;
         }
         catch ( final IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException l_exception )
         {
-            return false;
+            throw new CExecutionIllegalStateException( p_context, l_exception );
         }
     }
 

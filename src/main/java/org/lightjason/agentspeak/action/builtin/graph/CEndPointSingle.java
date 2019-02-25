@@ -35,8 +35,7 @@ import java.util.List;
 /**
  * returns of an edge the vertices of each graph instance.
  * The actions returns for a single edge
- * the connected vertices of each graph instance,
- * the action never fails
+ * the connected vertices of each graph instance
  *
  * {@code [V1|V2|V3|V4] = .graph/endpointsingle( Edge, Graph1, Graph2 );}
  */
@@ -55,7 +54,8 @@ public final class CEndPointSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_graph.getEndpoints( p_window.get( 0 ).raw() )
                .stream()

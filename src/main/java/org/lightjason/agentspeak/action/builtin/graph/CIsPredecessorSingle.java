@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks if a vertex is predecessor of another vertex of each graph instance.
  * The action checks for the first vertex argument that the second vertex
- * argument is predecessor within the given graph instances, the action never fails
+ * argument is predecessor within the given graph instances
  *
  * {@code [B1|B2|B3] = .graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
@@ -53,7 +53,8 @@ public final class CIsPredecessorSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

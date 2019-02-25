@@ -48,12 +48,13 @@ public final class TestCUnary extends IBaseTest
         l_value.set( 5 );
 
         Assert.assertTrue(
-            new CDecrement( l_value ).execute(
+            execute(
+                new CDecrement( l_value ),
                 false,
-                new CLocalContext( l_value ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_value
+            )
         );
 
         Assert.assertEquals( 4, l_value.<Number>raw().intValue() );
@@ -69,12 +70,13 @@ public final class TestCUnary extends IBaseTest
         l_value.set( 7 );
 
         Assert.assertTrue(
-            new CIncrement( l_value ).execute(
+            execute(
+                new CIncrement( l_value ),
                 false,
-                new CLocalContext( l_value ),
                 Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+                Collections.emptyList(),
+                l_value
+            )
         );
 
         Assert.assertEquals( 8, l_value.<Number>raw().intValue() );

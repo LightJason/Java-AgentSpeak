@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -38,7 +37,14 @@ import java.util.function.Function;
  */
 public enum EUnaryOperator implements Function<ITerm, Object>
 {
-    NEGATION( "~", "not" );
+    NEGATION( "~", "not" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_term )
+        {
+            return !p_term.<Boolean>raw();
+        }
+    };
 
     /**
      * text name of the enum
@@ -60,19 +66,6 @@ public enum EUnaryOperator implements Function<ITerm, Object>
     public String toString()
     {
         return m_operator[0];
-    }
-
-    @Override
-    public Object apply( @Nonnull final ITerm p_term )
-    {
-        switch ( this )
-        {
-            case NEGATION:
-                return !p_term.<Boolean>raw();
-
-            default:
-                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-        }
     }
 
     /**

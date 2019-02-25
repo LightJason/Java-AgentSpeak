@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
  * The action runs the logical not-and operator, the first
  * argument is the bit vector, that is combined with
  * all other bit vectors, so \f$ v_i = v_i \text{ && not } v_1 \f$
- * is performed, the action never fails
+ * is performed
  *
  * {@code .math/bit/vector/nand( Vector, Vector1, Vector2 );}
  */

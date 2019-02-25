@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.agent;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -52,22 +51,23 @@ public final class CSleep extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return CFuzzyValue.of(
-            p_context.agent().sleep(
+        p_context.agent().sleep(
 
-                p_argument.size() > 0
-                ? p_argument.get( 0 ).<Number>raw().longValue()
-                : Long.MAX_VALUE,
+            p_argument.size() > 0
+            ? p_argument.get( 0 ).<Number>raw().longValue()
+            : Long.MAX_VALUE,
 
-                p_argument.size() > 1
-                ? p_argument.subList( 1, p_argument.size() ).stream()
-                : Stream.empty()
+            p_argument.size() > 1
+            ? p_argument.subList( 1, p_argument.size() ).stream()
+            : Stream.empty()
 
-            ).sleeping()
         );
+
+        return Stream.of();
     }
 
 }

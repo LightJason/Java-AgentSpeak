@@ -44,6 +44,7 @@ import org.lightjason.agentspeak.action.builtin.string.CReverse;
 import org.lightjason.agentspeak.action.builtin.string.CSize;
 import org.lightjason.agentspeak.action.builtin.string.CStartsWith;
 import org.lightjason.agentspeak.action.builtin.string.CUpper;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -90,19 +91,21 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_result = new ArrayList<>();
 
         Assert.assertTrue(
-            new CBase64Encode().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CBase64Encode(),
+                false,
                 p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertTrue(
-            new CBase64Decode().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CBase64Decode(),
+                false,
                 l_return,
                 l_result
-            ).value()
+            )
         );
 
         StreamUtils.zip(
@@ -118,17 +121,16 @@ public final class TestCActionString extends IBaseTest
      *
      * @throws UnsupportedEncodingException is thrown on test data encoding
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void base64decodeerror() throws UnsupportedEncodingException
     {
-        Assert.assertFalse(
-            new CBase64Decode().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
-                      .map( CRawTerm::of )
-                      .collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CBase64Decode().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
+              .map( CRawTerm::of )
+              .collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -145,11 +147,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CConcat().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CConcat(),
+                false,
                 p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals(
@@ -171,14 +174,15 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CContains().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CContains(),
+                false,
                 Stream.concat(
                     Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                     p_input.stream()
                 ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertTrue(
@@ -200,11 +204,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CLower().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CLower(),
+                false,
                 p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         StreamUtils.zip(
@@ -227,11 +232,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CReverse().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CReverse(),
+                false,
                 p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         StreamUtils.zip(
@@ -254,11 +260,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CSize().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CSize(),
+                false,
                 p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         StreamUtils.zip(
@@ -281,14 +288,15 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CRandom().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CRandom(),
+                false,
                 Stream.concat(
                     Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                     p_input.stream().mapToInt( String::length ).boxed()
                 ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         StreamUtils.zip(
@@ -311,11 +319,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CUpper().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CUpper(),
+                false,
                 p_input.stream().map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         StreamUtils.zip(
@@ -335,11 +344,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CStartsWith().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CStartsWith(),
+                false,
                 Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 3, l_return.size() );
@@ -358,11 +368,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CEndsWith().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CEndsWith(),
+                false,
                 Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 3, l_return.size() );
@@ -375,15 +386,14 @@ public final class TestCActionString extends IBaseTest
     /**
      * tets for levenshtein distance error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void levenshteinerror()
     {
-        Assert.assertFalse(
-            new CLevenshtein().execute(
-                false, IContext.EMPTYPLAN,
-                Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+        new CLevenshtein().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Collections.emptyList(),
+            Collections.emptyList()
         );
     }
 
@@ -397,11 +407,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CLevenshtein().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CLevenshtein(),
+                false,
                 Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 2, l_return.size() );
@@ -419,11 +430,12 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CNCD().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CNCD(),
+                false,
                 Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 3, l_return.size() );
@@ -432,11 +444,12 @@ public final class TestCActionString extends IBaseTest
         Assert.assertEquals( 0, l_return.get( 2 ).<Number>raw().doubleValue(), 0 );
 
         Assert.assertTrue(
-            new CNCD().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CNCD(),
+                false,
                 Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 6, l_return.size() );
@@ -449,15 +462,14 @@ public final class TestCActionString extends IBaseTest
     /**
      * test normalized compression distance error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void ncderror()
     {
-        Assert.assertFalse(
-            new CNCD().execute(
-                false, IContext.EMPTYPLAN,
-                Collections.emptyList(),
-                Collections.emptyList()
-            ).value()
+        new CNCD().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Collections.emptyList(),
+            Collections.emptyList()
         );
     }
 

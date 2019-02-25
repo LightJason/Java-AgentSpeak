@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * checks if a vertex and edge tuple is incident for a single graph instance.
  * The first argument is a graph instance and each tuple of vertex and edge
- * will be checked for incident, the action never fails
+ * will be checked for incident
  *
  * {@code [B1|B2] = .graph/isincidentmultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */
@@ -53,7 +53,8 @@ public final class CIsIncidentMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         p_return.add(
             CRawTerm.of(

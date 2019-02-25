@@ -40,7 +40,9 @@ import org.lightjason.agentspeak.action.builtin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.builtin.crypto.CHash;
 import org.lightjason.agentspeak.action.builtin.crypto.ECryptAlgorithm;
-import org.lightjason.agentspeak.error.context.CActionException;
+import org.lightjason.agentspeak.error.context.CExecutionException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -108,54 +110,52 @@ public final class TestCActionCrypto extends IBaseTest
      *
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void wrongalgorithm() throws NoSuchAlgorithmException
     {
         final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
 
-        Assert.assertFalse(
-            new CEncrypt().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CEncrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
-        Assert.assertFalse(
-            new CDecrypt().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CDecrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
     /**
-     * test decrypt execution array
+     * test decrypt execute array
      *
      * @throws NoSuchAlgorithmException is thrown on key generator error
      */
-    @Test
+    @Test( expected = CExecutionIllegalStateException.class )
     public void decryptexecutionerror() throws NoSuchAlgorithmException
     {
         final Pair<Key, Key> l_key = ECryptAlgorithm.RSA.generateKey();
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
-            new CEncrypt().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                l_return
-            ).value()
+
+        new CEncrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( 1, l_return.size() );
-        Assert.assertFalse(
-            new CDecrypt().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                l_return
-            ).value()
+
+        new CDecrypt().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
         );
     }
 
@@ -171,11 +171,12 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CHash().execute(
-                false, IContext.EMPTYPLAN,
+            execute(
+                new CHash(),
+                false,
                 Stream.of( CRawTerm.of( p_hash.getLeft() ), CRawTerm.of( "test string" ), CRawTerm.of( 1234 ) ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertArrayEquals( p_hash.getRight(), l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ) );
@@ -184,7 +185,7 @@ public final class TestCActionCrypto extends IBaseTest
     /**
      * test hash exception
      */
-    @Test( expected = CActionException.class )
+    @Test( expected = CExecutionException.class )
     public void hashexception()
     {
         new CHash().execute(
@@ -212,16 +213,14 @@ public final class TestCActionCrypto extends IBaseTest
     /**
      * test key generation on error call
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void createkeyError()
     {
-        Assert.assertFalse(
-
-            new CCreateKey().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CCreateKey().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( CRawTerm.of( "test" ) ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 

@@ -29,20 +29,21 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * inverts the matrix.
  * Inverts each input matrix and returns
- * it, the action never fails
+ * it
  *
  * {@code [I1|I2] = .math/blas/matrix/invert(M1,M2);}
+ *
  * @see https://en.wikipedia.org/wiki/Invertible_matrix
  */
 public final class CInvert extends IAlgebra
@@ -69,8 +70,9 @@ public final class CInvert extends IAlgebra
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // arguments are matrix objects
         CCommon.flatten( p_argument )
@@ -79,6 +81,6 @@ public final class CInvert extends IAlgebra
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * returns a list of incident vertices of each edge of a single graph instance.
  * The action returns for a single graph instance incident vertices of each
- * edge argument, the action never fails
+ * edge argument
  *
  * {@code [L1|L2] = .graph/incidentvertices( Graph, Edge1, Edge2 );}
  */
@@ -55,7 +55,8 @@ public final class CIncidentVerticesMultiple extends IApplyMultiple
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
 

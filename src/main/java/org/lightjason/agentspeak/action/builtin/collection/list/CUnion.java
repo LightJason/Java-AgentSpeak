@@ -28,7 +28,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -38,12 +37,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * creates the union between lists.
  * Creates the union of all arguemnts with removing nested
- * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$, the action fails never
+ * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$
  *
  * {@code U = .collection/list/union( L, [1,2], [3,4,[5,6]];}
  */
@@ -71,8 +71,9 @@ public final class CUnion extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // all arguments must be lists
         final List<Object> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
@@ -84,7 +85,7 @@ public final class CUnion extends IBuiltinAction
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

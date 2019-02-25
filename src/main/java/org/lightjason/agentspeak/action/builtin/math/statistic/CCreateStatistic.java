@@ -23,18 +23,17 @@
 
 package org.lightjason.agentspeak.action.builtin.math.statistic;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatistics;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -49,9 +48,10 @@ import java.util.stream.Stream;
  * The action creates statistic objects to collect data,
  * each argument must be a string with "summary" or "descriptive"
  * for a summary or descriptive statistic object, on no arguments
- * a summary statistic object is created, the action never fails
+ * a summary statistic object is created
  *
  * {@code [S1|S2] = .math/statistic/createstaistic("summary", ["descriptive"]);}
+ *
  * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public final class CCreateStatistic extends IBuiltinAction
@@ -71,8 +71,8 @@ public final class CCreateStatistic extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
 
         (
@@ -82,7 +82,7 @@ public final class CCreateStatistic extends IBuiltinAction
         ).map( i -> i.apply( p_parallel ) )
          .map( CRawTerm::of ).forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 
@@ -91,8 +91,30 @@ public final class CCreateStatistic extends IBuiltinAction
      */
     private enum EType implements Function<Boolean, StatisticalSummary>
     {
-        SUMMARY,
-        DESCRIPTIVE;
+        SUMMARY
+        {
+
+            @Override
+            public StatisticalSummary apply( @NonNull final Boolean p_parallel )
+            {
+                return p_parallel
+                        ? new SynchronizedSummaryStatistics()
+                        : new SummaryStatistics();
+            }
+
+        },
+        DESCRIPTIVE
+        {
+
+            @Override
+            public StatisticalSummary apply( @NonNull final Boolean p_parallel )
+            {
+                return p_parallel
+                        ? new SynchronizedDescriptiveStatistics()
+                        : new DescriptiveStatistics();
+            }
+
+        };
 
         /**
          * additional factory
@@ -104,26 +126,6 @@ public final class CCreateStatistic extends IBuiltinAction
         public static EType of( @Nonnull final String p_value )
         {
             return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
-        }
-
-        @Override
-        public StatisticalSummary apply( final Boolean p_parallel )
-        {
-            switch ( this )
-            {
-                case SUMMARY:
-                    return p_parallel
-                           ? new SynchronizedSummaryStatistics()
-                           : new SummaryStatistics();
-
-                case DESCRIPTIVE:
-                    return p_parallel
-                           ? new SynchronizedDescriptiveStatistics()
-                           : new DescriptiveStatistics();
-
-                default:
-                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-            }
         }
     }
 }

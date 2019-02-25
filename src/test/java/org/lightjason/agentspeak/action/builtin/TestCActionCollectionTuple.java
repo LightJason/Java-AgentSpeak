@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.collection.tuple.CCreate;
 import org.lightjason.agentspeak.action.builtin.collection.tuple.CFlat;
 import org.lightjason.agentspeak.action.builtin.collection.tuple.CSet;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -73,15 +74,14 @@ public final class TestCActionCollectionTuple extends IBaseTest
     /**
      * test tuple creating error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void createerror()
     {
-        Assert.assertFalse(
-            new CCreate().execute(
-                false, IContext.EMPTYPLAN,
-                Collections.emptyList(),
+        new CCreate().execute(
+                false,
+                IContext.EMPTYPLAN,
+                Stream.of( "x" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 Collections.emptyList()
-            ).value()
         );
     }
 

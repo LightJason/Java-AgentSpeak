@@ -72,16 +72,17 @@ public final class CTerm
     @SuppressWarnings( "unchecked" )
     public static ILiteral literal( @Nonnull final ParseTreeVisitor<?> p_visitor,
                                     @Nullable final TerminalNode p_at, @Nullable final TerminalNode p_strongnegation,
-                                    @Nonnull final TerminalNode p_atom, @Nullable final RuleContext p_termlist )
+                                    @Nonnull final TerminalNode p_atom, @Nullable final RuleContext p_termlist
+    )
     {
         return Objects.isNull( p_termlist )
-            ? CLiteral.of( Objects.nonNull( p_at ), Objects.nonNull( p_strongnegation ), CPath.of( p_atom.getText() ) )
-            : CLiteral.of(
-                Objects.nonNull( p_at ),
-                Objects.nonNull( p_strongnegation ),
-                CPath.of( p_atom.getText() ),
-                (Stream<ITerm>) p_visitor.visit( p_termlist )
-            );
+               ? CLiteral.of( Objects.nonNull( p_at ), Objects.nonNull( p_strongnegation ), CPath.of( p_atom.getText() ) )
+               : CLiteral.of(
+                   Objects.nonNull( p_at ),
+                   Objects.nonNull( p_strongnegation ),
+                   CPath.of( p_atom.getText() ),
+                   (Stream<ITerm>) p_visitor.visit( p_termlist )
+               );
     }
 
     /**
@@ -108,7 +109,9 @@ public final class CTerm
      * @return data object or null
      */
     @Nullable
-    public static Object termterminals( @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number, @Nullable final TerminalNode p_logicalvalue )
+    public static Object termterminals( @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
+                                        @Nullable final TerminalNode p_logicalvalue
+    )
     {
         if ( Objects.nonNull( p_string ) )
             return CRaw.stringvalue( p_string );
@@ -150,7 +153,8 @@ public final class CTerm
      */
     @Nullable
     public static Object termvalue( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final TerminalNode p_string, @Nullable final TerminalNode p_number,
-                                    @Nullable final TerminalNode p_logic )
+                                    @Nullable final TerminalNode p_logic
+    )
     {
         final Object l_terminal = termterminals( p_string, p_number, p_logic );
         return Objects.nonNull( l_terminal )
@@ -183,10 +187,10 @@ public final class CTerm
     public static Stream<ITerm> termlist( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final List<? extends RuleContext> p_termlist )
     {
         return Objects.isNull( p_termlist )
-            ? Stream.empty()
-            : p_termlist.stream()
-                          .map( p_visitor::visit )
-                          .filter( Objects::nonNull )
-                          .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) );
+               ? Stream.empty()
+               : p_termlist.stream()
+                           .map( p_visitor::visit )
+                           .filter( Objects::nonNull )
+                           .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.of( i ) );
     }
 }

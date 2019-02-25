@@ -30,13 +30,13 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,7 +44,7 @@ import java.util.stream.IntStream;
  * The action converts each bit matrix argument
  * into a bit vector with the size of the matrix,
  * the bit within the vector are row-wise copied
- * of the matrix and the action never fails
+ * of the matrix
  *
  * {@code [V1|V2] = .math/bit/matrix/tovector( Matrix1, Matrix2 );}
  */
@@ -64,8 +64,9 @@ public final class CToVector extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitMatrix>raw )
@@ -73,7 +74,7 @@ public final class CToVector extends IBuiltinAction
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

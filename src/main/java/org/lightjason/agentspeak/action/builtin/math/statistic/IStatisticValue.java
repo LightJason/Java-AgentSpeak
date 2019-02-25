@@ -21,31 +21,32 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.operator;
+package org.lightjason.agentspeak.action.builtin.math.statistic;
 
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import javax.annotation.Nonnull;
-import java.util.stream.Collector;
-
 
 /**
- * defines a fuzzy t-norm
- *
- * @tparam T fuzzy type
+ * statistic value
  */
-public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public interface IStatisticValue
 {
+    /**
+     * returns the statistic values
+     *
+     * @param p_statistic summary statistic
+     * @return value
+     */
+    double value( @Nonnull final SummaryStatistics p_statistic );
 
     /**
-     * calculates for a array of values the result
+     * returns the statistic values
      *
-     * @param p_values values
-     * @return result value
+     * @param p_statistic descriptive statistic
+     * @return value
      */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    IFuzzyValue<T> result( @Nonnull final IFuzzyValue<T>... p_values );
+    double value( @Nonnull final DescriptiveStatistics p_statistic );
 
 }

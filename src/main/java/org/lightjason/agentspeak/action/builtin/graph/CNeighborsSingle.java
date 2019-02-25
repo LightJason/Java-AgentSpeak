@@ -37,7 +37,7 @@ import java.util.List;
  * returns the neighbors of a vertex of each graph instance.
  * The actions returns a list of neighbors of a vertex for
  * each graph argument, the first argument is the vertex,
- * all other graphs, the action never fails
+ * all other graphs
  *
  * {@code [N1|N2] = .graph/neighborssingle( Vertex, Graph1, Graph2 );}
  */
@@ -56,7 +56,8 @@ public final class CNeighborsSingle extends IApplySingle
 
     @Override
     protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
-                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getNeighbors( p_window.get( 0 ).raw() ) );
 

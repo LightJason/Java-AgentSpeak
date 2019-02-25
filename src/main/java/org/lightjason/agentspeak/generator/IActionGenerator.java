@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.generator;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
@@ -40,14 +39,9 @@ public interface IActionGenerator extends Function<IPath, IAction>
     /**
      * empty generator
      */
-    IActionGenerator EMPTY = new IActionGenerator()
+    IActionGenerator EMPTY = p_path ->
     {
-        @Override
-        public IAction apply( @NonNull final IPath p_path )
-        {
-            throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
-        }
+        throw new CNoSuchElementException( CCommon.languagestring( IActionGenerator.class, "notfound", p_path ) );
     };
-
 
 }

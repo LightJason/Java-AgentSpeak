@@ -52,6 +52,7 @@ import org.lightjason.agentspeak.action.builtin.datetime.CSecondsBetween;
 import org.lightjason.agentspeak.action.builtin.datetime.CTime;
 import org.lightjason.agentspeak.action.builtin.datetime.CYearsBetween;
 import org.lightjason.agentspeak.action.builtin.datetime.CZoneid;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -209,15 +210,14 @@ public final class TestCActionDateTime extends IBaseTest
     /**
      * test create error
      */
-    @Test
+    @Test( expected = CExecutionIllegealArgumentException.class )
     public void createerror()
     {
-        Assert.assertFalse(
-            new CCreate().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
+        new CCreate().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of( "error" ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
     }
 
@@ -285,12 +285,13 @@ public final class TestCActionDateTime extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            "action execution error",
-            new CTime().execute(
-                false, IContext.EMPTYPLAN,
+            "action execute error",
+            execute(
+                new CTime(),
+                false,
                 Stream.of( "2007-12-03T10:15:30+03:00[Europe/Moscow]" ).map( CRawTerm::of ).collect( Collectors.toList() ),
                 l_return
-            ).value()
+            )
         );
 
         Assert.assertEquals( 4, l_return.size() );

@@ -23,17 +23,18 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -70,13 +71,15 @@ public final class CUnaryExpression implements IUnaryExpression
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                           @Nonnull final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
 
-        if ( !m_element.execute( p_parallel, p_context, p_argument, l_return ).value() || l_return.size() != 1 )
-            return CFuzzyValue.of( false );
+        final IFuzzyValue<?>[] l_result =  m_element.execute( p_parallel, p_context, p_argument, l_return ).toArray( IFuzzyValue[]::new );
+        if ( l_return.size() != 1 )
+            throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
 
         p_return.add(
             CRawTerm.of(
@@ -84,7 +87,7 @@ public final class CUnaryExpression implements IUnaryExpression
             )
         );
 
-        return CFuzzyValue.of( true );
+        return Arrays.stream( l_result );
     }
 
     @Nonnull

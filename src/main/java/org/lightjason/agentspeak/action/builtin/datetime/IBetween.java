@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -58,7 +57,8 @@ public abstract class IBetween extends IBuiltinAction
      * ctor
      */
     protected IBetween()
-    {}
+    {
+    }
 
     @Nonnegative
     @Override
@@ -69,15 +69,15 @@ public abstract class IBetween extends IBuiltinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         this.apply(
             StreamUtils.windowed(
                 CCommon.flatten( p_argument )
                        .map( ITerm::<ZonedDateTime>raw )
-                       .map( i ->  new DateTime( i.toInstant().toEpochMilli(), DateTimeZone.forTimeZone( TimeZone.getTimeZone( i.getZone() ) ) ) )
+                       .map( i -> new DateTime( i.toInstant().toEpochMilli(), DateTimeZone.forTimeZone( TimeZone.getTimeZone( i.getZone() ) ) ) )
                        .map( Instant::new ),
                 2,
                 2
@@ -86,7 +86,7 @@ public abstract class IBetween extends IBuiltinAction
             .map( CRawTerm::of )
             .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
     /**

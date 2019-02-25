@@ -29,11 +29,11 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -52,21 +52,21 @@ public final class CClearBeliefbase extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         p_context.agent()
                  .beliefbase()
                  .clear(
-                    p_argument.size() == 0
-                    ? null
-                    : CCommon.flatten( p_argument )
-                             .parallel()
-                             .map( i -> CPath.of( i.raw() ) )
-                             .toArray( IPath[]::new ) );
+                     p_argument.size() == 0
+                     ? null
+                     : CCommon.flatten( p_argument )
+                              .parallel()
+                              .map( i -> CPath.of( i.raw() ) )
+                              .toArray( IPath[]::new ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }

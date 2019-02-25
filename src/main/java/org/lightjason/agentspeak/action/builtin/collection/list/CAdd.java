@@ -26,18 +26,18 @@ package org.lightjason.agentspeak.action.builtin.collection.list;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * action to add elements to a list.
  * The action adds the first argument to all
- * other list arguments, the action never fails
+ * other list arguments
  *
  * {@code .collection/list/add( Value, L1, L2, L3 );}
  */
@@ -66,14 +66,15 @@ public final class CAdd extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_argument.stream()
                   .skip( 1 )
                   .map( ITerm::<List<Object>>raw )
                   .forEach( i -> i.add( p_argument.get( 0 ).raw() ) );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 }

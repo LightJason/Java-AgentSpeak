@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.action.builtin.collection.list;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -45,8 +46,7 @@ import java.util.stream.IntStream;
  * The action creates a list of integer values within the
  * range \f$ [\text{argument 1}, \text{argument 2}) \f$,
  * the action need a even number of arguments, for each
- * tuple a ranged list will be returned, the action fails on
- * a wrong number of arguments
+ * tuple a ranged list will be returned
  *
  * {@code [L1|L2] = .collection/list/create(0, 10, [2, 9]);}
  */
@@ -75,8 +75,9 @@ public final class CRange extends IBuiltinAction
 
     @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<Integer> l_arguments = CCommon.flatten( p_argument )
                                                  .map( ITerm::<Number>raw )
@@ -84,19 +85,22 @@ public final class CRange extends IBuiltinAction
                                                  .boxed()
                                                  .collect( Collectors.toList() );
         if ( l_arguments.isEmpty() || l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.of( false );
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this,  "argumentsnoteven" )
+            );
 
         StreamUtils.windowed(
             l_arguments.stream(),
             2,
             2
         )
-            .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
-            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
+                   .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
+                   .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+                   .map( CRawTerm::of )
+                   .forEach( p_return::add );
 
-        return CFuzzyValue.of( true );
+        return Stream.of();
     }
 
 }
