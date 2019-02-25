@@ -25,7 +25,9 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Theory;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,12 +48,23 @@ import java.util.stream.Stream;
  *
  * {@code T = prolog/plantheory;}
  */
-public final class CPlanTheory extends IBuiltinAction
+public final class CPlanTheory extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5754468981342810974L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "prolog/plantheory" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

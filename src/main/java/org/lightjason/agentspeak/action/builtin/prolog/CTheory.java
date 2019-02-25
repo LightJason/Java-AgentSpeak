@@ -25,7 +25,9 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Theory;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -45,14 +47,25 @@ import java.util.stream.Stream;
  * The action creates for each argument an item within the theory
  * and returns the theory input
  *
- * {@code T = .prolog/createtheory( "dosomethin(X) :- X is 5" );}
+ * {@code T = .prolog/theory( "dosomethin(X) :- X is 5" );}
  */
-public final class CTheory extends IBuiltinAction
+public final class CTheory extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -5362284489249927608L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "prolog/theory" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

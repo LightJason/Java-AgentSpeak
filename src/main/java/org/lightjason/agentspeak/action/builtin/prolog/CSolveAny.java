@@ -24,6 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.SolveInfo;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -48,6 +50,17 @@ public final class CSolveAny extends IBaseSolve
      * serial id
      */
     private static final long serialVersionUID = 7170142285182677094L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "prolog/solveany" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected boolean issuccess( @Nonnull final SolveInfo[] p_solveinfos )

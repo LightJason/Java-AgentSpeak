@@ -34,7 +34,7 @@ import alice.tuprolog.Term;
 import alice.tuprolog.TermVisitor;
 import alice.tuprolog.Theory;
 import alice.tuprolog.Var;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -61,7 +61,7 @@ import java.util.stream.Stream;
  * @todo replace string concatination on belief generating after a new version of the library is published
  * @see https://github.com/bolerio/hgdb/wiki/TuProlog
  */
-public abstract class IBaseSolve extends IBuiltinAction
+public abstract class IBaseSolve extends IBaseAction
 {
     /**
      * serial id
