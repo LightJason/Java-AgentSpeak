@@ -25,7 +25,9 @@ package org.lightjason.agentspeak.action.builtin.string;
 
 import org.apache.commons.text.CharacterPredicate;
 import org.apache.commons.text.RandomStringGenerator;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -45,12 +47,23 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C] = .string/random( "abdefgXYZUI", 5, 3, 6 );}
  */
-public final class CRandom extends IBuiltinAction
+public final class CRandom extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3114914702129124265L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/random" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,12 +46,23 @@ import java.util.stream.Stream;
  *
  * {@code [L1|L2] = .string/contains("this is a long string", "long", "string");}
  */
-public final class CContains extends IBuiltinAction
+public final class CContains extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 2528102985394099223L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/contains" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -50,12 +52,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Normalized_compression_distance
  */
-public final class CNCD extends IBuiltinAction
+public final class CNCD extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3828839577514827324L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/ncd" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

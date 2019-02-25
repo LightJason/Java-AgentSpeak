@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -45,12 +47,23 @@ import java.util.stream.Stream;
  *
  * {@code S = .string/concat("A", "B", "C");}
  */
-public final class CConcat extends IBuiltinAction
+public final class CConcat extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 4688132740901866985L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/concat" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

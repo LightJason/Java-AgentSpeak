@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -47,12 +49,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Regular_expression
  */
-public final class CReplace extends IBuiltinAction
+public final class CReplace extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -5445088831145525666L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/replace" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

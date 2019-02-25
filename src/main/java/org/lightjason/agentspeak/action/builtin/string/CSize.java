@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -42,12 +44,23 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C] = .string/size("A", ["CC", "XYZ"]);}
  */
-public final class CSize extends IBuiltinAction
+public final class CSize extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3545198567138617973L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/size" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

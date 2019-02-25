@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.string;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -43,12 +45,23 @@ import java.util.stream.Stream;
  *
  * {@code [L1|L2] = .string/startswith("this is a long string", "long string", "string");}
  */
-public final class CStartsWith extends IBuiltinAction
+public final class CStartsWith extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7937293371067474022L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "string/startswith" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
