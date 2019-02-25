@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -44,12 +46,23 @@ import java.util.stream.Stream;
  *
  * {@code .agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] );}
  */
-public final class CAddPlan extends IBuiltinAction
+public final class CAddPlan extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -1759245318551344596L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/addplan " );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

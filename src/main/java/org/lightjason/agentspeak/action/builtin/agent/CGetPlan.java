@@ -25,8 +25,10 @@ package org.lightjason.agentspeak.action.builtin.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -56,12 +58,23 @@ import java.util.stream.Stream;
  * {@code [L1|L2] = .agent/getplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
-public final class CGetPlan extends IBuiltinAction
+public final class CGetPlan extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 2674034436717184541L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/getplan" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

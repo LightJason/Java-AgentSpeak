@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -45,12 +47,23 @@ import java.util.stream.Stream;
  *
  * {@code L = .agent/planlist();}
  */
-public final class CPlanList extends IBuiltinAction
+public final class CPlanList extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 4584573308355332034L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/planlist" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

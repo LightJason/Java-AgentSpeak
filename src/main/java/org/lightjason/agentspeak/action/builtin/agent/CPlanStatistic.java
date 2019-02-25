@@ -23,8 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,13 +51,24 @@ import java.util.stream.Stream;
  *
  * {@code [Successful1|Fail1|Sum1|Successful2|Fail2|Sum2] = .agent/planstatistic( Plan1, Plan2 );}
  */
-public final class CPlanStatistic extends IBuiltinAction
+public final class CPlanStatistic extends IBaseAction
 {
 
     /**
      * serial id
      */
     private static final long serialVersionUID = 432941607230785685L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/planstatistic" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

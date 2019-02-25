@@ -25,7 +25,9 @@ package org.lightjason.agentspeak.action.builtin.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -50,13 +52,24 @@ import java.util.stream.Stream;
  * {@code .agent/removeplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
-public final class CRemovePlan extends IBuiltinAction
+public final class CRemovePlan extends IBaseAction
 {
 
     /**
      * serial id
      */
     private static final long serialVersionUID = -2509947123811973880L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/removeplan" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

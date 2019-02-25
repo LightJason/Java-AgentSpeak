@@ -23,8 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,12 +50,23 @@ import java.util.stream.Stream;
  *
  * {@code L = .agent/belieflist( true, "path/subpath/literalfunctor" );}
  */
-public final class CBeliefList extends IBuiltinAction
+public final class CBeliefList extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 6884092740048107959L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/belieflist" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

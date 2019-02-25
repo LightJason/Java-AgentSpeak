@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
@@ -43,12 +43,23 @@ import java.util.stream.Stream;
  *
  * {@code .agent/clearbeliefbase( "env", "foo" );}
  */
-public final class CClearBeliefbase extends IBuiltinAction
+public final class CClearBeliefbase extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5832369527494082158L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/clearbeliefbase" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

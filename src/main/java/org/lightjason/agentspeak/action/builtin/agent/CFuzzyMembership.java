@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -41,12 +43,23 @@ import java.util.stream.Stream;
  *
  * {@code .agent/fuzzymembership(5, "hello");}
  */
-public final class CFuzzyMembership extends IBuiltinAction
+public final class CFuzzyMembership extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7815588503920853463L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/fuzzymembership" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

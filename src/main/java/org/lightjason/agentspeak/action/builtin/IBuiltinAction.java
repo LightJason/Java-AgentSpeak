@@ -38,7 +38,9 @@ import java.util.stream.IntStream;
 /**
  * base class of build-in actions for setting name
  * by package/classname (without prefix character)
+ * @deprecated to reduce package size
  */
+@Deprecated
 public abstract class IBuiltinAction extends IBaseAction
 {
     /**

@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.agent;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -42,12 +44,23 @@ import java.util.stream.Stream;
  *
  * {@code .agent/sleep(3);}
  */
-public final class CSleep extends IBuiltinAction
+public final class CSleep extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8150278330935392034L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "agent/sleep " );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override
