@@ -23,9 +23,11 @@
 
 package org.lightjason.agentspeak.action.builtin.generic;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.CFormat1D;
 import org.lightjason.agentspeak.action.builtin.math.blas.CFormat2D;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -54,7 +56,7 @@ import java.util.stream.Stream;
  *
  * {@code .generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y);}
  */
-public final class CPrint extends IBuiltinAction
+public final class CPrint extends IBaseAction
 {
     /**
      * serial id
@@ -76,7 +78,17 @@ public final class CPrint extends IBuiltinAction
      * list mit individual format calls
      */
     private final Set<IFormatter<?>> m_formatter;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "generic/print" );
 
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     /**
      * ctor
@@ -111,7 +123,6 @@ public final class CPrint extends IBuiltinAction
     public CPrint( @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nonnull final String p_seperator, @Nullable final IFormatter<?>... p_formatter )
         throws Exception
     {
-        super( 2 );
         m_streamsupplier = p_streamsupplier;
         m_stream = m_streamsupplier.get();
         m_seperator = p_seperator;

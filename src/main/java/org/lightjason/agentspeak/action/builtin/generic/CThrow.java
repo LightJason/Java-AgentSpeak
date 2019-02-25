@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.generic;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -43,12 +45,23 @@ import java.util.stream.Stream;
  *
  * {@code .generic/throw( true, "a message" );}
  */
-public final class CThrow extends IBuiltinAction
+public final class CThrow extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3116022203002012617L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "generic/throw" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

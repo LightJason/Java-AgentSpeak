@@ -24,7 +24,9 @@
 package org.lightjason.agentspeak.action.builtin.crypto;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -51,12 +53,23 @@ import java.util.stream.Stream;
  * @see https://en.wikipedia.org/wiki/Data_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/RSA_(cryptosystem)
  */
-public final class CCreateKey extends IBuiltinAction
+public final class CCreateKey extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1156448289689463545L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "crypto/createkey" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

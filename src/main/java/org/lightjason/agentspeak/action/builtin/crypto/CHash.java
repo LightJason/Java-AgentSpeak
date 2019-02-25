@@ -26,7 +26,9 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 import org.apache.commons.lang3.SerializationUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -62,12 +64,23 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
  * @see https://github.com/google/guava/wiki/HashingExplained
  */
-public final class CHash extends IBuiltinAction
+public final class CHash extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 4638666396527392307L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "crypto/hash" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

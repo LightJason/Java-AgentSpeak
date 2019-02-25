@@ -25,7 +25,9 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.SerializationUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -56,12 +58,23 @@ import java.util.stream.Stream;
  *
  * {@code [Encypt1 | Encrypt2 | Encypt3] = .crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
-public final class CEncrypt extends IBuiltinAction
+public final class CEncrypt extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5791747611724910332L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "crypto/encrypt" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

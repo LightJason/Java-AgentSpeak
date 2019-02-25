@@ -24,7 +24,9 @@
 
 package org.lightjason.agentspeak.action.builtin.generic;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -44,13 +46,24 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  */
-public final class CUuid extends IBuiltinAction
+public final class CUuid extends IBaseAction
 {
 
     /**
      * serial id
      */
     private static final long serialVersionUID = 1089717493975288581L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "generic/uuid" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

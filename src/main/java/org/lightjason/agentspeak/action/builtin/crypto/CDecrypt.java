@@ -25,7 +25,9 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.SerializationUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -55,12 +57,23 @@ import java.util.stream.Stream;
  *
  * {@code [DecyptData1 | DecyptData2 | DecyptData3] = .crypto/decrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
-public final class CDecrypt extends IBuiltinAction
+public final class CDecrypt extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -1057273195012687348L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "crypto/decrypt" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
