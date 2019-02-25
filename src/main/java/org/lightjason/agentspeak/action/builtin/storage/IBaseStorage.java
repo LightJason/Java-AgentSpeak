@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * storage default definitions
  */
-public abstract class IStorage extends IBaseAction
+public abstract class IBaseStorage extends IBaseAction
 {
     /**
      * serial id
@@ -53,7 +53,7 @@ public abstract class IStorage extends IBaseAction
     /**
      * ctor
      */
-    protected IStorage()
+    protected IBaseStorage()
     {
         this( i -> false );
     }
@@ -64,7 +64,7 @@ public abstract class IStorage extends IBaseAction
      * @param p_resolver resolver of forbidden keys
      * @warning resolver will be triggered in parallel
      */
-    protected IStorage( @Nonnull final Function<String, Boolean> p_resolver )
+    protected IBaseStorage( @Nonnull final Function<String, Boolean> p_resolver )
     {
         m_resolver = p_resolver;
     }
@@ -74,7 +74,7 @@ public abstract class IStorage extends IBaseAction
      *
      * @param p_forbidden forbidden keys
      */
-    protected IStorage( @Nullable final String... p_forbidden )
+    protected IBaseStorage( @Nullable final String... p_forbidden )
     {
         this(
             ( Objects.isNull( p_forbidden ) ) || ( p_forbidden.length == 0 )
@@ -88,7 +88,7 @@ public abstract class IStorage extends IBaseAction
      *
      * @param p_fordbidden forbidden keys
      */
-    protected IStorage( @Nonnull final Stream<String> p_fordbidden )
+    protected IBaseStorage( @Nonnull final Stream<String> p_fordbidden )
     {
         final Set<String> l_names = p_fordbidden.collect( Collectors.toCollection( ConcurrentSkipListSet::new ) );
         m_resolver = l_names::contains;

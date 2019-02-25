@@ -63,6 +63,10 @@ public final class CPrint extends IBaseAction
      */
     private static final long serialVersionUID = -4271829260928469828L;
     /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "generic/print" );
+    /**
      * output stream
      */
     private transient PrintStream m_stream;
@@ -78,17 +82,6 @@ public final class CPrint extends IBaseAction
      * list mit individual format calls
      */
     private final Set<IFormatter<?>> m_formatter;
-    /**
-     * action name
-     */
-    private static final IPath NAME = CPath.of( "generic/print" );
-
-    @Nonnull
-    @Override
-    public IPath name()
-    {
-        return NAME;
-    }
 
     /**
      * ctor
@@ -127,6 +120,13 @@ public final class CPrint extends IBaseAction
         m_stream = m_streamsupplier.get();
         m_seperator = p_seperator;
         m_formatter = Objects.nonNull( p_formatter ) ? new HashSet<>( Arrays.asList( p_formatter ) ) : Collections.emptySet();
+    }
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
     }
 
     /**

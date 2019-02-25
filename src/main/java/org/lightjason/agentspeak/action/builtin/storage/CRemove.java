@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .storage/remove("foo", "bar");}
  */
-public final class CRemove extends IStorage
+public final class CRemove extends IBaseStorage
 {
     /**
      * serial id
@@ -58,13 +58,6 @@ public final class CRemove extends IStorage
      * action name
      */
     private static final IPath NAME = CPath.of( "storage/remove" );
-
-    @Nonnull
-    @Override
-    public IPath name()
-    {
-        return NAME;
-    }
 
     /**
      * ctor
@@ -102,6 +95,13 @@ public final class CRemove extends IStorage
     public CRemove( @Nonnull final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
+    }
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
     }
 
     @Nonnegative

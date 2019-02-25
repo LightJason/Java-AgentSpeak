@@ -46,7 +46,7 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .storage/exist( "foo", "bar" );}
  */
-public final class CExists extends IStorage
+public final class CExists extends IBaseStorage
 {
     /**
      * serial id
@@ -56,13 +56,6 @@ public final class CExists extends IStorage
      * action name
      */
     private static final IPath NAME = CPath.of( "storage/exist" );
-
-    @Nonnull
-    @Override
-    public IPath name()
-    {
-        return NAME;
-    }
 
     /**
      * ctor
@@ -100,6 +93,13 @@ public final class CExists extends IStorage
     public CExists( @Nonnull final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
+    }
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
     }
 
     @Nonnegative

@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  *
  * {@code .storage/clear;}
  */
-public final class CClear extends IStorage
+public final class CClear extends IBaseStorage
 {
     /**
      * serial id
@@ -53,13 +53,6 @@ public final class CClear extends IStorage
      * action name
      */
     private static final IPath NAME = CPath.of( "storage/clear" );
-
-    @Nonnull
-    @Override
-    public IPath name()
-    {
-        return NAME;
-    }
 
     /**
      * ctor
@@ -97,6 +90,13 @@ public final class CClear extends IStorage
     public CClear( @Nonnull final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
+    }
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
     }
 
     @Nonnull

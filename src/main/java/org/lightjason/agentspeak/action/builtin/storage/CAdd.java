@@ -46,7 +46,7 @@ import java.util.stream.Stream;
  *
  * {@code .storage/add( "foo", X, "bar", Y );}
  */
-public final class CAdd extends IStorage
+public final class CAdd extends IBaseStorage
 {
     /**
      * serial id
@@ -56,13 +56,6 @@ public final class CAdd extends IStorage
      * action name
      */
     private static final IPath NAME = CPath.of( "storage/add" );
-
-    @Nonnull
-    @Override
-    public IPath name()
-    {
-        return NAME;
-    }
 
     /**
      * ctor
@@ -100,6 +93,13 @@ public final class CAdd extends IStorage
     public CAdd( @Nonnull final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
+    }
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
     }
 
     @Nonnegative
