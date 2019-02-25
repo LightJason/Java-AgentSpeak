@@ -276,15 +276,16 @@ public final class TestCTermVariablesConstant extends IBaseTest
 
         Assert.assertEquals( l_variable.shallowcopysuffix().fqnfunctor(), CPath.of( "copy" ) );
         Assert.assertEquals( l_variable.shallowcopy( CPath.of( "xxx" ) ).fqnfunctor(), CPath.of( "xxx/prefix/copy" ) );
+        //noinspection RedundantTypeArguments
         Assert.assertEquals( l_variable.shallowcopysuffix().<Object>raw(), l_variable.<Object>raw() );
 
         final ITerm l_deep = l_variable.deepcopy( CPath.of( "foo" ) );
         Assert.assertEquals( l_deep.fqnfunctor(), CPath.of( "prefix/copy/foo" ) );
-        Assert.assertNotEquals( l_deep.<Object>raw(), l_variable.<Object>raw() );
+        Assert.assertNotEquals( l_deep.raw(), l_variable.raw() );
 
         final ITerm l_deepsuffix = l_variable.deepcopysuffix();
         Assert.assertEquals( l_deepsuffix.fqnfunctor(), CPath.of( "copy" ) );
-        Assert.assertNotEquals( l_deepsuffix.<Object>raw(), l_variable.<Object>raw() );
+        Assert.assertNotEquals( l_deepsuffix.raw(), l_variable.raw() );
     }
 
 
