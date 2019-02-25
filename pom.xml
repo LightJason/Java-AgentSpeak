@@ -315,11 +315,10 @@
                 </configuration>
             </plugin>
 
-            <!-- @bug runs out of memory
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>4.0.2</version>
+                <version>5.0.0-M1</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -328,7 +327,6 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-            -->
 
             <plugin>
                 <groupId>org.jacoco</groupId>
