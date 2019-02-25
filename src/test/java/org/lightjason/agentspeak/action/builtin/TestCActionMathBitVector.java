@@ -70,7 +70,6 @@ import java.util.stream.Stream;
 
 /**
  * test for bit vector actions
- * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBitVector extends IBaseTest
@@ -185,8 +184,8 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         Assert.assertArrayEquals(
                 p_input.getMiddle().toGenericString(),
-                l_return.stream().map( ITerm::raw ).toArray(),
-                p_input.getRight().toArray()
+                p_input.getRight().toArray(),
+                l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -204,9 +203,9 @@ public final class TestCActionMathBitVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
-        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 3 );
+        Assert.assertEquals( 3, l_return.get( 0 ).<BitVector>raw().size() );
     }
 
     /**
@@ -223,7 +222,7 @@ public final class TestCActionMathBitVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
+        Assert.assertEquals( false, l_return.get( 0 ).<Boolean>raw() );
     }
 
     /**
@@ -238,8 +237,8 @@ public final class TestCActionMathBitVector extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( VECTOR2.get( 0 ), true );
-        Assert.assertEquals( VECTOR2.get( 1 ), true );
+        Assert.assertTrue( VECTOR2.get( 0 ) );
+        Assert.assertTrue( VECTOR2.get( 1 ) );
     }
 
     /**
@@ -254,7 +253,7 @@ public final class TestCActionMathBitVector extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( VECTOR2.get( 0 ), false );
+        Assert.assertFalse( VECTOR2.get( 0 ) );
     }
 
     /**
@@ -271,8 +270,8 @@ public final class TestCActionMathBitVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw(), VECTOR2 );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( VECTOR2, l_return.get( 0 ).<BitVector>raw() );
     }
 
     /**
@@ -289,7 +288,7 @@ public final class TestCActionMathBitVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0D );
+        Assert.assertEquals( 0D, l_return.get( 0 ).<Number>raw() );
     }
 
     /**
@@ -306,9 +305,9 @@ public final class TestCActionMathBitVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 1D, 0D, 0D ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 1D, 0D, 0D ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
     }
 
     /**
@@ -327,7 +326,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), 0 );
+        Assert.assertArrayEquals( Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), 0 );
     }
 
 }
