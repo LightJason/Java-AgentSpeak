@@ -67,8 +67,8 @@ public final class CReplace extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final String l_search = p_argument.get( 0 ).<String>raw();
-        final String l_replace = p_argument.get( 1 ).<String>raw();
+        final String l_search = p_argument.get( 0 ).raw();
+        final String l_replace = p_argument.get( 1 ).raw();
 
         CCommon.flatten( p_argument )
                .skip( 2 )

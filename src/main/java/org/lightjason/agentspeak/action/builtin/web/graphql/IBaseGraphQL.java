@@ -114,7 +114,7 @@ public abstract class IBaseGraphQL extends IBaseWeb
                 ? CLiteral
                     .of( l_argument.get( l_argument.size() - 1 ).<String>raw(), sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) ) )
                 : IBaseRest.baseliteral(
-                    l_argument.stream().skip( 2 ).map( ITerm::<String>raw ),
+                    l_argument.stream().skip( 2 ).map( ITerm::raw ),
                     sendquery( l_argument.get( 0 ).raw(), this.query( l_argument.get( 1 ) ) )
                 )
             );

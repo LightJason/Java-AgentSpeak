@@ -42,8 +42,8 @@ public final class CDiscrete implements IMetric
     @Override
     public Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
-        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
-        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet::new ) );
+        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet::new ) );
 
         return ( l_first.containsAll( l_second ) ) && ( l_second.containsAll( l_first ) ) ? 0.0 : 1.0;
     }

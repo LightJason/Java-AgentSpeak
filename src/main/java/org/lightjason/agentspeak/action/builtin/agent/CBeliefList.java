@@ -66,8 +66,8 @@ public final class CBeliefList extends IBuiltinAction
             p_argument.isEmpty()
             ? p_context.agent().beliefbase().stream()
             : p_argument.size() == 1
-              ? p_context.agent().beliefbase().stream( CPath.of( p_argument.get( 0 ).<String>raw() ) )
-              : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.of( p_argument.get( 0 ).<String>raw() ) )
+              ? p_context.agent().beliefbase().stream( CPath.of( p_argument.get( 0 ).raw() ) )
+              : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.of( p_argument.get( 0 ).raw() ) )
         ).collect( Collectors.toList() );
 
         p_return.add(

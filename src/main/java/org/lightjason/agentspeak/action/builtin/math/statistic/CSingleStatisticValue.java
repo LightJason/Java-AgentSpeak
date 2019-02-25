@@ -79,7 +79,7 @@ public final class CSingleStatisticValue extends IBuiltinAction
     )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        final EStatisticValue l_value = EStatisticValue.of( l_arguments.get( 0 ).<String>raw() );
+        final EStatisticValue l_value = EStatisticValue.of( l_arguments.get( 0 ).raw() );
 
         l_arguments.stream()
                    .skip( 1 )

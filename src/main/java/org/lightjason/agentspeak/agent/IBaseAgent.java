@@ -345,7 +345,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public T call() throws Exception
     {
         // run beliefbase update, because environment can be changed and decrement sleeping value
-        m_beliefbase.update( (T) this );
+        m_beliefbase.update( this );
         if ( !this.active( false ) )
             // check wakup-event otherwise suspend
             return (T) this;

@@ -69,7 +69,7 @@ public final class CAnd extends IBuiltinAction
         p_return.add(
             CRawTerm.of(
                 CCommon.flatten( p_argument )
-                       .allMatch( ITerm::<Boolean>raw )
+                       .allMatch( ITerm::raw )
             )
         );
         return Stream.of();

@@ -73,7 +73,7 @@ public final class CCreateKey extends IBuiltinAction
     {
         try
         {
-            final Pair<Key, Key> l_key = ECryptAlgorithm.of( p_argument.get( 0 ).<String>raw() ).generateKey();
+            final Pair<Key, Key> l_key = ECryptAlgorithm.of( p_argument.get( 0 ).raw() ).generateKey();
 
             p_return.add( CRawTerm.of( l_key.getLeft() ) );
             if ( Objects.nonNull( l_key.getRight() ) )

@@ -77,7 +77,7 @@ public final class CRemove extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<Object> l_list = p_argument.get( 0 ).<List<Object>>raw();
+        final List<Object> l_list = p_argument.get( 0 ).raw();
         final Set<Integer> l_removed = new HashSet<>();
 
         CCommon.flatten( p_argument.stream().skip( 1 ) )

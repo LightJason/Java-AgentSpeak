@@ -43,6 +43,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
@@ -439,7 +440,7 @@ public final class CCommon
                 l_stream = l_connection.getInputStream();
             }
 
-            final ResourceBundle l_bundle = new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
+            final ResourceBundle l_bundle = new PropertyResourceBundle( new InputStreamReader( l_stream, StandardCharsets.UTF_8 ) );
             l_stream.close();
             return l_bundle;
         }

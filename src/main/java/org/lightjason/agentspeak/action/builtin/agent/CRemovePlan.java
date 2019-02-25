@@ -71,7 +71,7 @@ public final class CRemovePlan extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
-                          .allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context ) )
+                          .allMatch( i -> CRemovePlan.remove( ITrigger.EType.of( i.get( 0 ).raw() ), i.get( 1 ), p_context ) )
                ? Stream.of()
                : p_context.agent().fuzzy().membership().fail();
     }
@@ -91,8 +91,8 @@ public final class CRemovePlan extends IBuiltinAction
         {
 
             l_literal = CCommon.isssignableto( p_literal, ILiteral.class )
-                        ? p_literal.<ILiteral>raw()
-                        : CLiteral.parse( p_literal.<String>raw() );
+                        ? p_literal.raw()
+                        : CLiteral.parse( p_literal.raw() );
 
         }
         catch ( final Exception l_exception )

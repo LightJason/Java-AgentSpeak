@@ -77,7 +77,7 @@ public final class CGetPlan extends IBuiltinAction
     )
     {
         return StreamUtils.windowed( CCommon.flatten( p_argument ), 2, 2 )
-                          .allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
+                          .allMatch( i -> CGetPlan.query( ITrigger.EType.of( i.get( 0 ).raw() ), i.get( 1 ), p_context.agent(), p_return ) )
                ? Stream.of()
                : p_context.agent().fuzzy().membership().fail();
     }
@@ -99,8 +99,8 @@ public final class CGetPlan extends IBuiltinAction
         try
         {
             l_literal = CCommon.isssignableto( p_literal, ILiteral.class )
-                        ? p_literal.<ILiteral>raw()
-                        : CLiteral.parse( p_literal.<String>raw() );
+                        ? p_literal.raw()
+                        : CLiteral.parse( p_literal.raw() );
 
         }
         catch ( final Exception l_exception )

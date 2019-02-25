@@ -98,7 +98,7 @@ public final class CCreate extends IBuiltinAction
         final int l_datasize = ( l_arguments.size() - 1 ) / 2;
         p_return.add(
             CRawTerm.of(
-                EType.of( l_arguments.get( 0 ).<String>raw() )
+                EType.of( l_arguments.get( 0 ).raw() )
                      .get(
 
                          l_arguments.stream()

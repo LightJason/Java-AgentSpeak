@@ -36,8 +36,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -104,16 +103,9 @@ public final class CHash extends IBuiltinAction
      */
     private static byte[] serialize( @Nonnull final IContext p_context, @Nonnull final ITerm p_object )
     {
-        try
-        {
-            return CCommon.isssignableto( p_object, String.class )
-                   ? p_object.<String>raw().getBytes( "UTF-8" )
-                   : SerializationUtils.serialize( p_object.<Serializable>raw() );
-        }
-        catch ( final UnsupportedEncodingException l_exception )
-        {
-            throw new CExecutionException( p_context, l_exception );
-        }
+        return CCommon.isssignableto( p_object, String.class )
+               ? p_object.<String>raw().getBytes( StandardCharsets.UTF_8 )
+               : SerializationUtils.serialize( p_object.raw() );
     }
 
     /**

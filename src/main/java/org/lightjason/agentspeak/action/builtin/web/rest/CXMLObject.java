@@ -70,12 +70,12 @@ public final class CXMLObject extends IBaseRest
     {
         try
         {
-            final Map<String, ?> l_data = IBaseRest.xml( p_argument.get( 0 ).<String>raw() );
+            final Map<String, ?> l_data = IBaseRest.xml( p_argument.get( 0 ).raw() );
             p_return.add(
                 p_argument.size() == 2
                 ? CLiteral.of( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
                 : IBaseRest.baseliteral(
-                    p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
+                    p_argument.stream().skip( 1 ).map( ITerm::raw ),
                     flatterm( l_data )
                 )
             );

@@ -85,7 +85,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
 
         final Number l_defaultvalue = StreamUtils.windowed( l_arguments.stream(), 2 )
                                                  .filter( i -> CCommon.isssignableto( i.get( 0 ), String.class )
-                                                               && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
+                                                               && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).raw() )
                                                                && CCommon.isssignableto( i.get( 1 ), Number.class )
                                                  )
                                                  .findFirst()
@@ -96,7 +96,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
 
         final List<ITerm> l_vertices = StreamUtils.windowed( l_arguments.stream(), 2 )
                                                   .filter( i -> !( CCommon.isssignableto( i.get( 0 ), String.class )
-                                                                   && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).<String>raw() )
+                                                                   && DEFAULTWEIGHT.equalsIgnoreCase( i.get( 0 ).raw() )
                                                                    && CCommon.isssignableto( i.get( 1 ), Number.class ) )
                                                                    && !( CCommon.isssignableto( i.get( 0 ), Graph.class )
                                                                    || CCommon.isssignableto( i.get( 1 ), Graph.class ) )

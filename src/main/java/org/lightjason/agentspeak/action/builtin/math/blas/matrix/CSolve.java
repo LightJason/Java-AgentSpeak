@@ -90,7 +90,7 @@ public final class CSolve extends IAlgebra
     private static DoubleMatrix2D result( @Nonnull final ITerm p_term )
     {
         if ( CCommon.isssignableto( p_term, DoubleMatrix2D.class ) )
-            return p_term.<DoubleMatrix2D>raw();
+            return p_term.raw();
 
         final DoubleMatrix2D l_result = new DenseDoubleMatrix2D( Long.valueOf( p_term.<DoubleMatrix1D>raw().size() ).intValue(), 1 );
         l_result.viewColumn( 0 ).assign( p_term.<DoubleMatrix1D>raw() );

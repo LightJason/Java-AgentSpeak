@@ -112,7 +112,7 @@ public final class CEquationConstraint extends IConstraint
                      .doubleValue(),
 
                 // relation symbol
-                this.getRelation( l_rhs.get( 0 ).<String>raw() ),
+                this.getRelation( l_rhs.get( 0 ).raw() ),
 
                 // r_i values
                 l_rhs.stream()

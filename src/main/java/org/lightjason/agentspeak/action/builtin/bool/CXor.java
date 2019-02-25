@@ -69,9 +69,9 @@ public final class CXor extends IBuiltinAction
         p_return.add(
             CRawTerm.of(
                 CCommon.flatten( p_argument )
-                       .anyMatch( ITerm::<Boolean>raw )
+                       .anyMatch( ITerm::raw )
                 && !CCommon.flatten( p_argument )
-                           .allMatch( ITerm::<Boolean>raw )
+                           .allMatch( ITerm::raw )
             )
         );
         return Stream.of();

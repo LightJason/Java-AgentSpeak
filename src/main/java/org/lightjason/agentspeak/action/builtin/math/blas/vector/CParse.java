@@ -83,9 +83,9 @@ public final class CParse extends IBuiltinAction
         final int l_limit;
         final EType l_type;
         if ( CCommon.isssignableto( l_arguments.get( l_arguments.size() - 1 ), String.class )
-             && EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) )
+             && EType.exists( l_arguments.get( l_arguments.size() - 1 ).raw() ) )
         {
-            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_type = EType.of( l_arguments.get( l_arguments.size() - 1 ).raw() );
             l_limit = l_arguments.size() - 1;
         }
         else

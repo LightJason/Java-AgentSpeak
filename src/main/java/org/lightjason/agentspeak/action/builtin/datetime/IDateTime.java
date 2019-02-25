@@ -90,12 +90,12 @@ public abstract class IDateTime extends IBuiltinAction
     private boolean getdatetime( @Nonnull final IContext p_context, @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
     {
         if ( CCommon.isssignableto( p_value, ZonedDateTime.class ) )
-            return this.elements( p_value.<ZonedDateTime>raw(), p_return );
+            return this.elements( p_value.raw(), p_return );
 
         try
         {
             return this.elements(
-                ( p_value.<String>raw().isEmpty() ) || ( "now".equalsIgnoreCase( p_value.<String>raw() ) )
+                ( p_value.<String>raw().isEmpty() ) || ( "now".equalsIgnoreCase( p_value.raw() ) )
                 ? ZonedDateTime.now()
                 : ZonedDateTime.parse( p_value.<String>raw() ),
                 p_return

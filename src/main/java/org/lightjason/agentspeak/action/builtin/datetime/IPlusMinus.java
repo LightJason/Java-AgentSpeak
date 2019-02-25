@@ -81,7 +81,7 @@ public abstract class IPlusMinus extends IBuiltinAction
                 this.applyminus(
                     l_arguments.stream()
                                .skip( 2 )
-                               .map( ITerm::<ZonedDateTime>raw ),
+                               .map( ITerm::raw ),
                     l_arguments.get( 1 ).<Number>raw().longValue()
                 )
                     .map( CRawTerm::of )
@@ -94,7 +94,7 @@ public abstract class IPlusMinus extends IBuiltinAction
                 this.applyplus(
                     l_arguments.stream()
                                .skip( 2 )
-                               .map( ITerm::<ZonedDateTime>raw ),
+                               .map( ITerm::raw ),
                     l_arguments.get( 1 ).<Number>raw().longValue()
                 )
                     .map( CRawTerm::of )

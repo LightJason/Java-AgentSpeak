@@ -79,7 +79,7 @@ public final class CIs extends IBuiltinAction
         final Class<?> l_class;
         try
         {
-            l_class = Class.forName( l_arguments.get( 0 ).<String>raw() );
+            l_class = Class.forName( l_arguments.get( 0 ).raw() );
         }
         catch ( final ClassNotFoundException l_exception )
         {

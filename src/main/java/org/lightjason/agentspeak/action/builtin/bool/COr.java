@@ -69,7 +69,7 @@ public final class COr extends IBuiltinAction
         p_return.add(
             CRawTerm.of(
                 CCommon.flatten( p_argument )
-                       .anyMatch( ITerm::<Boolean>raw )
+                       .anyMatch( ITerm::raw )
             )
         );
         return Stream.of();

@@ -73,7 +73,7 @@ public final class CJsonList extends IBaseRest
         try
         {
             final List<?> l_data = IBaseRest.json(
-                p_argument.get( 0 ).<String>raw(),
+                p_argument.get( 0 ).raw(),
                 List.class
             );
 
@@ -84,7 +84,7 @@ public final class CJsonList extends IBaseRest
             else
                 p_return.add(
                     IBaseRest.baseliteral(
-                        p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
+                        p_argument.stream().skip( 1 ).map( ITerm::raw ),
                         l_data.stream()
                               .map( i -> CLiteral.of( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
                     )

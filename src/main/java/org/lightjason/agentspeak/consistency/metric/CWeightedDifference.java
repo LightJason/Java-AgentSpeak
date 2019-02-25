@@ -42,8 +42,8 @@ public final class CWeightedDifference implements IMetric
     @Override
     public Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
-        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
-        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet::new ) );
+        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet::new ) );
 
         // element aggregation
         final double l_union = Stream.concat( l_first.stream(), l_second.stream() ).count();

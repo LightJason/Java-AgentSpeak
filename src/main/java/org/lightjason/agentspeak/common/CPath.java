@@ -456,7 +456,7 @@ public final class CPath implements IPath
             @Override
             public Supplier<List<String>> supplier()
             {
-                return CopyOnWriteArrayList<String>::new;
+                return CopyOnWriteArrayList::new;
             }
 
             @Override

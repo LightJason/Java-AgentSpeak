@@ -85,7 +85,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     @Override
     public Collection<ILiteral> literal( @Nonnull final String p_key )
     {
-        return Collections.<ILiteral>emptySet();
+        return Collections.emptySet();
     }
 
     @Nonnull

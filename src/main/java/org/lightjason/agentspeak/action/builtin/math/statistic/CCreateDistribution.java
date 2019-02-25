@@ -187,7 +187,7 @@ public final class CCreateDistribution extends IBuiltinAction
                      if ( i.getKey() < l_arguments.size() - 1 && CCommon.isssignableto( l_arguments.get( i.getKey() + 1 ), String.class ) )
                      {
                          l_skip = 1;
-                         l_generator = EGenerator.of( l_arguments.get( i.getKey() + 1 ).<String>raw() );
+                         l_generator = EGenerator.of( l_arguments.get( i.getKey() + 1 ).raw() );
                      }
                      else
                      {

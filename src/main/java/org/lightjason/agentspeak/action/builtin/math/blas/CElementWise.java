@@ -140,7 +140,7 @@ public final class CElementWise extends IBuiltinAction
 
             if ( CCommon.isssignableto( p_right, DoubleMatrix2D.class ) )
             {
-                l_assign.assign( p_right.<DoubleMatrix2D>raw(), p_matrixfunction );
+                l_assign.assign( p_right.raw(), p_matrixfunction );
                 p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }
@@ -160,7 +160,7 @@ public final class CElementWise extends IBuiltinAction
 
             if ( CCommon.isssignableto( p_right, DoubleMatrix1D.class ) )
             {
-                l_assign.assign( p_right.<DoubleMatrix1D>raw(), p_matrixfunction );
+                l_assign.assign( p_right.raw(), p_matrixfunction );
                 p_return.add( CRawTerm.of( l_assign ) );
                 return true;
             }

@@ -79,9 +79,9 @@ public final class CFromList extends IBuiltinAction
         final int l_limit;
         final EType l_type;
         if ( CCommon.isssignableto( p_argument.get( p_argument.size() - 1 ), String.class )
-             && EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) )
+             && EType.exists( p_argument.get( p_argument.size() - 1 ).raw() ) )
         {
-            l_type = EType.of( p_argument.get( p_argument.size() - 1 ).<String>raw() );
+            l_type = EType.of( p_argument.get( p_argument.size() - 1 ).raw() );
             l_limit = p_argument.size() - 1;
         }
         else

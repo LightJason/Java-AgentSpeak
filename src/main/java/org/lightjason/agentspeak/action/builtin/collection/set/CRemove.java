@@ -72,7 +72,7 @@ public final class CRemove extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
+        final Set<Object> l_set = p_argument.get( 0 ).raw();
 
         CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )

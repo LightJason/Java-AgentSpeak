@@ -89,7 +89,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Map.class )
-                                        && equalmap( p_argument.get( 0 ).<Map<?, ?>>raw(), i.<Map<?, ?>>raw() )
+                                        && equalmap( p_argument.get( 0 ).raw(), i.raw() )
                           )
             );
 
@@ -100,7 +100,7 @@ public class CEqual extends IBuiltinAction
                           .skip( 1 )
                           .map( i -> p_argument.get( 0 ).equals( i )
                                      || CCommon.isssignableto( i, Multimap.class )
-                                        && equalmultimap( p_argument.get( 0 ).<Multimap<?, ?>>raw(), i.<Multimap<?, ?>>raw() )
+                                        && equalmultimap( p_argument.get( 0 ).raw(), i.raw() )
                           )
             );
 

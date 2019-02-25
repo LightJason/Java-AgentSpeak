@@ -238,7 +238,7 @@ public final class CCommon
             return new ImmutablePair<>( false, Collections.emptySet() );
 
         // unifier variables, source trigger literal must be copied
-        final Set<IVariable<?>> l_variables = p_unifier.unify( p_source.literal(), p_target.literal().deepcopy().<ILiteral>raw() );
+        final Set<IVariable<?>> l_variables = p_unifier.unify( p_source.literal(), p_target.literal().deepcopy().raw() );
 
         // check for completely unification (of all variables)
         return l_variables.size() == CCommon.variablefrequency( p_target.literal() ).size()

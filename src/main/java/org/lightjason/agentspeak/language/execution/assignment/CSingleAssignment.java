@@ -80,7 +80,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
         final List<ITerm> l_result = CCommon.argumentlist();
 
         if ( !p_context.agent().fuzzy().defuzzification().success(
-                p_context.agent().fuzzy().defuzzification().apply( m_rhs.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ) )
+                p_context.agent().fuzzy().defuzzification().apply( m_rhs.execute( p_parallel, p_context, Collections.emptyList(), l_result ) )
              )
         )
             return p_context.agent().fuzzy().membership().fail();
