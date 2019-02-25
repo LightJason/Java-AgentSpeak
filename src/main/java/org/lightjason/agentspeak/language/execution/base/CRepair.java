@@ -105,12 +105,13 @@ public final class CRepair extends IBaseExecution<IExecution[]>
         final List<ITerm> l_return = CCommon.argumentlist();
         final IFuzzyValue<?>[] l_fuzzyreturn = p_execution.execute( false, p_context, Collections.emptyList(), l_return ).toArray( IFuzzyValue[]::new );
 
-        // for failing / successfull execution the result must be checked on an empty array and a single boolean return it will replaced
-        if ( l_fuzzyreturn.length == 0 && l_return.size() == 1 && CCommon.isssignableto( l_return.get( 0 ), Boolean.class )  )
+        // if an return argument exist and it contains an boolean this value is used, ...
+        if ( l_return.size() == 1 && CCommon.isssignableto( l_return.get( 0 ), Boolean.class ) )
             return l_return.get( 0 ).<Boolean>raw()
                    ? p_context.agent().fuzzy().membership().success().toArray( IFuzzyValue[]::new )
                    : p_context.agent().fuzzy().membership().fail().toArray( IFuzzyValue[]::new );
 
+        // ... otherwise the fuzzy result is used
         return l_fuzzyreturn;
     }
 

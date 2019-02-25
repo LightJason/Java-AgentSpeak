@@ -146,7 +146,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         final IAgent<?> l_agent = new CAgentGenerator(
             "fibonacci(X, R)"
-            + " :- X <= 2;  R = 1 "
+            + " :- X <= 2;  R = 1"
             + " :- X > 2; TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B."
             + "+!fib(X) <- $fibonacci(X, R); .push/value(X, R).",
             new CActionStaticGenerator( Stream.of( l_values ) ),

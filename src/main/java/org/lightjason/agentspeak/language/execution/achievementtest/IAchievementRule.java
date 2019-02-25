@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -99,17 +100,17 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( p_literal, p_rule.identifier() );
 
-        //System.out.println(l_variables);
-        //System.out.println(p_rule);
-        //System.out.println();
+        final IFuzzyValue<?>[] l_result = p_rule.execute(
+            false,
+            p_rule.instantiate( p_context.agent(), l_variables.stream() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        ).toArray( IFuzzyValue[]::new );
 
         if ( p_context.agent().fuzzy().defuzzification().success(
-                p_context.agent().fuzzy().defuzzification().apply( p_rule.execute(
-                false,
-                    p_rule.instantiate( p_context.agent(), l_variables.stream() ),
-                    Collections.emptyList(),
-                    Collections.emptyList()
-                ) )
+                p_context.agent().fuzzy().defuzzification().apply(
+                    Arrays.stream( l_result )
+                )
             ) )
         {
             l_variables.parallelStream()
