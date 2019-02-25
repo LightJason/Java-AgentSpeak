@@ -73,7 +73,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test math bit matrix functions
- * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBitMatrix extends IBaseTest
@@ -198,8 +197,8 @@ public final class TestCActionMathBitMatrix extends IBaseTest
 
         Assert.assertArrayEquals(
                 p_input.getMiddle().toGenericString(),
-                l_return.stream().map( ITerm::raw ).toArray(),
-                p_input.getRight().toArray()
+                p_input.getRight().toArray(),
+                l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -217,11 +216,11 @@ public final class TestCActionMathBitMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         assertTrue( l_return.get( 0 ).raw() instanceof BitMatrix );
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().rows(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().columns(), 2 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<BitMatrix>raw().size() );
+        Assert.assertEquals( 2, l_return.get( 0 ).<BitMatrix>raw().rows() );
+        Assert.assertEquals( 2, l_return.get( 0 ).<BitMatrix>raw().columns() );
     }
 
     /**
@@ -244,10 +243,10 @@ public final class TestCActionMathBitMatrix extends IBaseTest
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_bitvector.get( 0 ), true );
-        Assert.assertEquals( l_bitvector.get( 1 ), true );
-        Assert.assertEquals( l_bitvector.get( 2 ), true );
-        Assert.assertEquals( l_bitvector.get( 3 ), false );
+        Assert.assertEquals( true, l_bitvector.get( 0 ) );
+        Assert.assertEquals( true, l_bitvector.get( 1 ) );
+        Assert.assertEquals( true, l_bitvector.get( 2 ) );
+        Assert.assertEquals( false, l_bitvector.get( 3 ) );
     }
 
     /**
@@ -270,8 +269,8 @@ public final class TestCActionMathBitMatrix extends IBaseTest
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_bitvector.get( 0 ), true );
-        Assert.assertEquals( l_bitvector.get( 1 ), true );
+        Assert.assertEquals( true, l_bitvector.get( 0 ) );
+        Assert.assertEquals( true, l_bitvector.get( 1 ) );
     }
 
     /**
@@ -294,8 +293,8 @@ public final class TestCActionMathBitMatrix extends IBaseTest
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_bitvector.get( 0 ), true );
-        Assert.assertEquals( l_bitvector.get( 1 ), true );
+        Assert.assertEquals( true, l_bitvector.get( 0 ) );
+        Assert.assertEquals( true, l_bitvector.get( 1 ) );
     }
 
     /**
@@ -312,7 +311,7 @@ public final class TestCActionMathBitMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0D );
+        Assert.assertEquals( 0D, l_return.get( 0 ).<Number>raw() );
     }
 
     /**
@@ -329,7 +328,7 @@ public final class TestCActionMathBitMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
+        Assert.assertEquals( false, l_return.get( 0 ).<Boolean>raw() );
     }
 
      /**
@@ -352,8 +351,8 @@ public final class TestCActionMathBitMatrix extends IBaseTest
 
         final DoubleMatrix2D l_blas = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_blas.size(), 4 );
-        Assert.assertArrayEquals( l_blas.toArray(), l_result );
+        Assert.assertEquals( 4, l_blas.size() );
+        Assert.assertArrayEquals( l_result, l_blas.toArray() );
     }
 
 }
