@@ -460,7 +460,7 @@ public final class TestCHanoiTowers extends IBaseTest
 
             try
             {
-                l_tower.push( p_argument.get( 1 ).<CSlice>raw() );
+                l_tower.push( p_argument.get( 1 ).raw() );
                 return p_context.agent().fuzzy().membership().success();
             }
             catch ( final IllegalStateException l_exception )

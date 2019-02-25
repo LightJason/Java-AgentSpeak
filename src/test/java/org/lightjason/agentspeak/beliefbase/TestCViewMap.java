@@ -256,7 +256,7 @@ public final class TestCViewMap extends IBaseTest
                 new ImmutablePair<>(
                     p_argument.get( 0 ).<Boolean>raw(),
                     p_argument.size() > 1
-                    ? p_argument.get( 1 ).<String>raw()
+                    ? p_argument.get( 1 ).raw()
                     : ""
                 )
             );

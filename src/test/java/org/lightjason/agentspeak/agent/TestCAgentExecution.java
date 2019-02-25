@@ -313,7 +313,7 @@ public final class TestCAgentExecution extends IBaseTest
         public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
+            m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).raw()  );
             return Stream.of();
         }
     }

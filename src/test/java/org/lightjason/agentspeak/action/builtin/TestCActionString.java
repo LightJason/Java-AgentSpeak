@@ -50,6 +50,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -127,7 +128,7 @@ public final class TestCActionString extends IBaseTest
         new CBase64Decode().execute(
             false,
             IContext.EMPTYPLAN,
-            Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
+            Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( StandardCharsets.UTF_16 ), StandardCharsets.UTF_16 ) )
               .map( CRawTerm::of )
               .collect( Collectors.toList() ),
             Collections.emptyList()
@@ -187,7 +188,7 @@ public final class TestCActionString extends IBaseTest
 
         Assert.assertTrue(
             l_return.stream()
-                    .allMatch( ITerm::<Boolean>raw )
+                    .allMatch( ITerm::raw )
         );
     }
 

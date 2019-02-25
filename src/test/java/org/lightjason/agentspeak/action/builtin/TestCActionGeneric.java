@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -101,13 +102,13 @@ public final class TestCActionGeneric extends IBaseTest
     {
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
-        new CPrint( () -> new PrintStream( l_output, false, "utf-8" ), "-" ).execute(
+        new CPrint( () -> new PrintStream( l_output, false, StandardCharsets.UTF_8 ), "-" ).execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( "foobar-1234-true\n", l_output.toString( "utf-8" ) );
+        Assert.assertEquals( "foobar-1234-true\n", l_output.toString( StandardCharsets.UTF_8 ) );
     }
 
     /**
@@ -125,7 +126,7 @@ public final class TestCActionGeneric extends IBaseTest
 
 
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
-        final CPrint l_print = new CPrint( () -> new PrintStream( l_output, false, "utf-8" ), "-" );
+        final CPrint l_print = new CPrint( () -> new PrintStream( l_output, false, StandardCharsets.UTF_8 ), "-" );
 
         l_print.formatter().add( l_format1 );
         l_print.formatter().add( l_format2 );
@@ -139,7 +140,7 @@ public final class TestCActionGeneric extends IBaseTest
             )
         );
 
-        Assert.assertEquals( "FOOBAR-1234-yes\n", l_output.toString( "utf-8" ) );
+        Assert.assertEquals( "FOOBAR-1234-yes\n", l_output.toString( StandardCharsets.UTF_8 ) );
     }
 
     /**

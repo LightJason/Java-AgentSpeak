@@ -303,7 +303,7 @@ public final class TestCActionStorage extends IBaseTest
         );
 
         Assert.assertEquals( 100, l_return.size() );
-        Assert.assertTrue( l_return.stream().allMatch( ITerm::<Boolean>raw ) );
+        Assert.assertTrue( l_return.stream().allMatch( ITerm::raw ) );
     }
 
 

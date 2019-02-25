@@ -500,6 +500,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         );
 
         //Checkstyle:OFF:SimplifyBooleanExpression
+        //noinspection ConstantConditions
         Assert.assertEquals( false || false && !( true && false ) ^ ( 2 < 3 ), l_result.raw() );
         //Checkstyle:ON:SimplifyBooleanExpression
     }

@@ -442,6 +442,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         );
 
         //Checkstyle:OFF:SimplifyBooleanExpression
+        //noinspection ConstantConditions
         Assert.assertEquals( true || false && ( true || false ) ^ !( 5 < 3 ), l_result.raw() );
         //Checkstyle:ON:SimplifyBooleanExpression
     }

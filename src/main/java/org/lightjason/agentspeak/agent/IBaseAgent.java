@@ -107,6 +107,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * map with all existing plans and successful / fail runs
      */
+    @SuppressWarnings( "RedundantTypeArguments" )
     protected final Multimap<ITrigger, IPlanStatistic> m_plans = Multimaps.synchronizedMultimap(
         TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
     /**
