@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -47,19 +49,22 @@ import java.util.stream.Stream;
  *
  * {@code .generic/type( "java.lang.String", X, Y, Z );}
  */
-public final class CIs extends IBuiltinAction
+public final class CIs extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8087218847441065975L;
-
     /**
-     * ctor
+     * action name
      */
-    public CIs()
+    private static final IPath NAME = CPath.of( "generic/type/is" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

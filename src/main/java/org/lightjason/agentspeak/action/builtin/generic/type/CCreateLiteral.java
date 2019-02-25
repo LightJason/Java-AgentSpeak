@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -45,19 +47,22 @@ import java.util.stream.Stream;
  *
  * {@code L = .generic/type/createliteral( "literal/functor/with/path", 123, "value" );}
  */
-public final class CCreateLiteral extends IBuiltinAction
+public final class CCreateLiteral extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8784389208725950355L;
-
     /**
-     * ctor
+     * action name
      */
-    public CCreateLiteral()
+    private static final IPath NAME = CPath.of( "generic/type/createliteral" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

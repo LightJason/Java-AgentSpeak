@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -43,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code .generic/type/isnumeric( X, 3.5 );}
  */
-public final class CIsNumeric extends IBuiltinAction
+public final class CIsNumeric extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 4229494833999704947L;
-
     /**
-     * ctor
+     * action name
      */
-    public CIsNumeric()
+    private static final IPath NAME = CPath.of( "generic/type/isnumeric" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

@@ -24,7 +24,9 @@
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -45,19 +47,22 @@ import java.util.stream.Stream;
  *
  * {@code .generic/type/fuzzyreturn( true, 0.4);}
  */
-public final class CFuzzyReturn extends IBuiltinAction
+public final class CFuzzyReturn extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8360611536281500599L;
-
     /**
-     * ctor
+     * action name
      */
-    public CFuzzyReturn()
+    private static final IPath NAME = CPath.of( "generic/type/fuzzyreturn" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

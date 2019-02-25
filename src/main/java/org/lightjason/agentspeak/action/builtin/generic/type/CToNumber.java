@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -43,6 +45,17 @@ public final class CToNumber extends ICast
      * serial id
      */
     private static final long serialVersionUID = -5468250343047542012L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "generic/type/tonumber" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )

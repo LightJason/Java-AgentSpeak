@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -43,6 +45,17 @@ public final class CToString extends ICast
      * serial id
      */
     private static final long serialVersionUID = 5084494896831207543L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "generic/type/tostring" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     /**
      * cast / translates value

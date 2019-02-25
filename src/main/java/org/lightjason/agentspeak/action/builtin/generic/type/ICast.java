@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,20 +44,12 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C] = generic/type/tostring( X, Y Z );}
  */
-public abstract class ICast extends IBuiltinAction
+public abstract class ICast extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5568282370454217665L;
-
-    /**
-     * ctor
-     */
-    protected ICast()
-    {
-        super( 3 );
-    }
 
     @Nonnegative
     @Override

@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -42,19 +44,22 @@ import java.util.stream.Stream;
  *
  * {@code [T1|T2] = .generic/type/type( A, B );}
  */
-public final class CType extends IBuiltinAction
+public final class CType extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 2771524436848359316L;
-
     /**
-     * ctor
+     * action name
      */
-    public CType()
+    private static final IPath NAME = CPath.of( "generic/type/type" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
