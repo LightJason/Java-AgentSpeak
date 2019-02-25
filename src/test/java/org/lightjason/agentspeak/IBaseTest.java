@@ -177,7 +177,7 @@ public abstract class IBaseTest
     protected boolean defuzzify( @Nonnull final Stream<IFuzzyValue<?>> p_values, @Nonnull final IAgent<?> p_agent, @Nullable final IVariable<?>... p_variables )
     {
         final IContext l_context = new CLocalContext( p_agent, p_variables );
-        return  l_context.agent().fuzzy().defuzzification().success(
+        return l_context.agent().fuzzy().defuzzification().success(
             l_context.agent().fuzzy().defuzzification().apply(
                 p_values
             )

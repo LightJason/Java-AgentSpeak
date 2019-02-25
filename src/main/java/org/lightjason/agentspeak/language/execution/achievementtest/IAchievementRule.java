@@ -83,9 +83,11 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
         // second step execute backtracking rules sequential
         return l_rules.stream()
                       .map( i -> executerule( p_context, l_allocate, i ) )
-                      .anyMatch( i -> !i )
-                      ? p_context.agent().fuzzy().membership().fail()
-                      : p_context.agent().fuzzy().membership().success();
+                      .filter( i -> i )
+                      .findFirst()
+                      .orElseGet( () -> false )
+                      ? p_context.agent().fuzzy().membership().success()
+                      : p_context.agent().fuzzy().membership().fail();
     }
 
     /**
@@ -116,6 +118,7 @@ public abstract class IAchievementRule<T> extends IBaseExecution<T>
             l_variables.parallelStream()
                        .filter( i -> i instanceof IRelocateVariable<?> )
                        .forEach( i -> i.<IRelocateVariable<?>>term().relocate() );
+
             return true;
         }
 
