@@ -295,6 +295,7 @@ public final class CCommon
             .filter( i ->
             {
                 l_success.set( p_context.agent().fuzzy().defuzzification().success( p_context.agent().fuzzy().defuzzification().apply( l_result.stream() ) ) );
+                System.out.println( l_result );
                 return !l_success.get();
             } )
             .findFirst()

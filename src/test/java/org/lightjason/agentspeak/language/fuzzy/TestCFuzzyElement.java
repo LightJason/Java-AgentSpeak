@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CCOG;
 import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CWOA;
 import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
@@ -110,6 +111,12 @@ public final class TestCFuzzyElement
                             default:
                                 return Stream.of();
                         }
+                    }
+
+                    @Override
+                    public Stream<IFuzzyValue<?>> modify( final Stream<ITerm> p_arguments )
+                    {
+                        return Stream.of();
                     }
 
                     @Override
