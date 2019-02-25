@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.bool;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,12 +48,23 @@ import java.util.stream.Stream;
  *
  * {@code AllEqual = .bool/allmatch( "this is the test", 123, "this is the test", ["hello", 234] );}
  */
-public final class CAllMatch extends IBuiltinAction
+public final class CAllMatch extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -5787849046607404490L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "bool/allmatch" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

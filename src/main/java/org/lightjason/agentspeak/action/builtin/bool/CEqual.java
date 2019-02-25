@@ -24,7 +24,9 @@
 package org.lightjason.agentspeak.action.builtin.bool;
 
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -51,12 +53,23 @@ import java.util.stream.Stream;
  *
  * {@code [E1|E2] = .bool/equal( "this is equal", "this is equal", [123, "test"] );}
  */
-public class CEqual extends IBuiltinAction
+public final class CEqual extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2953614515361905328L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "bool/equal" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

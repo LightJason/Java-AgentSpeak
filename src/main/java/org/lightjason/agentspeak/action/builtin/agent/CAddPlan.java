@@ -55,7 +55,7 @@ public final class CAddPlan extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/addplan " );
+    private static final IPath NAME = CPath.of( "agent/addplan" );
 
     @Nonnull
     @Override

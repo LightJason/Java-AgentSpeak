@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.bool;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,12 +48,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Logical_disjunction
  */
-public final class COr extends IBuiltinAction
+public final class COr extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3705444188004358159L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "bool/or" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
