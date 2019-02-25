@@ -133,9 +133,8 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
     /**
      * cast operation
      *
+     * @tparam T target type
      * @return fuzzy membership
-     *
-     * @rparam T target type
      */
     <T extends Enum<?>> IFuzzyMembership<T> raw();
 

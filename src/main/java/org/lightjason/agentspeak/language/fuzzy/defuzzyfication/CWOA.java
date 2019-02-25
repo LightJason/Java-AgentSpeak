@@ -43,10 +43,11 @@ public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
      * ctor
      *
      * @param p_class fuzzy set class
+     * @param p_membership membership function
      * @param p_default fuzzy enum type
      */
-    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership, @NonNull final IFuzzyValue<?> p_default
-    )
+    public CWOA( @NonNull final Class<? extends IFuzzySet<E>> p_class, @NonNull final IFuzzyMembership<E> p_membership,
+                 @NonNull final IFuzzyValue<?> p_default )
     {
         super( p_class, p_membership, p_default );
     }
