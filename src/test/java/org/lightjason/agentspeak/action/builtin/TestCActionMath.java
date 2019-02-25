@@ -89,7 +89,6 @@ import java.util.stream.Stream;
 
 /**
  * test math functions
- * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMath extends IBaseTest
@@ -268,8 +267,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), p_input.getRight().apply( p_input.getLeft().stream().map( ITerm::<Number>raw ) ) );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( p_input.getRight().apply( p_input.getLeft().stream().map( ITerm::raw ) ), l_return.get( 0 ).raw() );
     }
 
 
@@ -298,8 +297,8 @@ public final class TestCActionMath extends IBaseTest
 
         Assert.assertArrayEquals(
             p_input.getMiddle().toGenericString(),
-            l_return.stream().map( ITerm::raw ).toArray(),
-            p_input.getLeft().stream().map( ITerm::<Number>raw ).map( p_input.getRight() ).toArray()
+            p_input.getLeft().stream().map( ITerm::<Number>raw ).map( p_input.getRight() ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -318,8 +317,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 18851684897584L );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 6L );
+        Assert.assertEquals( 18851684897584L, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 6L, l_return.get( 1 ).<Number>raw() );
     }
 
 
@@ -337,11 +336,11 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 120L );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 1L );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 2L );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 6L );
-        Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 24L );
+        Assert.assertEquals( 120L, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 1L, l_return.get( 1 ).<Number>raw() );
+        Assert.assertEquals( 2L, l_return.get( 2 ).<Number>raw() );
+        Assert.assertEquals( 6L, l_return.get( 3 ).<Number>raw() );
+        Assert.assertEquals( 24L, l_return.get( 4 ).<Number>raw() );
     }
 
 
@@ -359,8 +358,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2D, 2D, 2D ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2D, 2D, 2D, 3D, 5D ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 2D, 2D, 2D ).toArray(), l_return.get( 0 ).<List<?>>raw().toArray() );
+        Assert.assertArrayEquals( Stream.of( 2D, 2D, 2D, 3D, 5D ).toArray(), l_return.get( 1 ).<List<?>>raw().toArray() );
     }
 
 
@@ -378,9 +377,9 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.9999546021312976 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.9999999979388463 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0.9999999999999065 );
+        Assert.assertEquals( 0.9999546021312976, l_return.get( 1 ).<Number>raw() );
+        Assert.assertEquals( 0.9999999979388463, l_return.get( 2 ).<Number>raw() );
+        Assert.assertEquals( 0.9999999999999065, l_return.get( 3 ).<Number>raw() );
     }
 
 
@@ -398,7 +397,7 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Number>raw ).toArray(), Stream.of( 3L, 966L ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 3L, 966L ).toArray(), l_return.stream().map( ITerm::<Number>raw ).toArray() );
     }
 
 
@@ -417,8 +416,8 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::raw ).toArray(),
-            Stream.of( 9.0, 16.0, 0.25 ).toArray()
+            Stream.of( 9.0, 16.0, 0.25 ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -437,8 +436,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1.0152139522031014 );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 1.0152139522031014, l_return.get( 0 ).<Number>raw() );
     }
 
 
@@ -456,8 +455,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 75.0 );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 75.0, l_return.get( 0 ).<Number>raw() );
     }
 
     /**
@@ -478,11 +477,11 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::<Number>raw ).toArray(),
             StreamUtils.windowed( l_input.stream(), 2, 2 )
                        .mapToDouble( i -> Math.hypot( i.get( 0 ), i.get( 1 ) ) )
                        .boxed()
-                       .toArray()
+                       .toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
         );
     }
 
@@ -501,8 +500,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2D );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 2D, l_return.get( 0 ).<Number>raw() );
     }
 
     /**
@@ -519,8 +518,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3D );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 3D, l_return.get( 0 ).<Number>raw() );
     }
 
 }

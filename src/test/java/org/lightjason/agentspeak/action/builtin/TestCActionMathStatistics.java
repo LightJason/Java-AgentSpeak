@@ -73,7 +73,6 @@ import java.util.stream.Stream;
 
 /**
  * test for statistics actions
- * @todo fix assert
  */
 public final class TestCActionMathStatistics extends IBaseTest
 {
@@ -123,7 +122,7 @@ public final class TestCActionMathStatistics extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof SummaryStatistics );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof DescriptiveStatistics );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof SummaryStatistics );
@@ -156,10 +155,10 @@ public final class TestCActionMathStatistics extends IBaseTest
         );
 
 
-        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertEquals( 4, l_return.size() );
         Assert.assertArrayEquals(
-            l_return.stream().map( i -> i.<Number>raw().doubleValue() ).toArray(),
-            Stream.of( 49.5, 495, 24.25, 74.75 ).mapToDouble( Number::doubleValue ).boxed().toArray()
+            Stream.of( 49.5, 495, 24.25, 74.75 ).mapToDouble( Number::doubleValue ).boxed().toArray(),
+            l_return.stream().map( i -> i.<Number>raw().doubleValue() ).toArray()
         );
     }
 
@@ -175,8 +174,8 @@ public final class TestCActionMathStatistics extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_summarystatistic.getSum(), 0, 0 );
-        Assert.assertEquals( m_descriptivestatistic.getSum(), 0, 0 );
+        Assert.assertEquals( 0, m_summarystatistic.getSum(), 0 );
+        Assert.assertEquals( 0, m_descriptivestatistic.getSum(), 0 );
     }
 
     /**
@@ -212,7 +211,7 @@ public final class TestCActionMathStatistics extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 18 );
+        Assert.assertEquals( 18, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof NormalDistribution );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof BetaDistribution );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof CauchyDistribution );
@@ -245,8 +244,8 @@ public final class TestCActionMathStatistics extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_descriptivestatistic.getN(), 6, 0 );
-        Assert.assertEquals( m_summarystatistic.getN(), 6 );
+        Assert.assertEquals( 6, m_descriptivestatistic.getN(), 0 );
+        Assert.assertEquals( 6, m_summarystatistic.getN() );
     }
 
     /**
@@ -270,7 +269,7 @@ public final class TestCActionMathStatistics extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 10 );
+        Assert.assertEquals( 10, l_return.size() );
         Assert.assertArrayEquals(
             Stream.of(
                 m_summarystatistic.getVariance(), m_summarystatistic.getMean(),
@@ -333,9 +332,9 @@ public final class TestCActionMathStatistics extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
-        Assert.assertEquals( l_return.get( 0 ).<List<Number>>raw().size(), 3 );
+        Assert.assertEquals( 3, l_return.get( 0 ).<List<Number>>raw().size() );
     }
 
     /**
@@ -352,9 +351,9 @@ public final class TestCActionMathStatistics extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
-        Assert.assertEquals( l_return.get( 0 ).<List<Number>>raw().size(), 5 );
+        Assert.assertEquals( 5, l_return.get( 0 ).<List<Number>>raw().size() );
     }
 
     /**
@@ -371,7 +370,7 @@ public final class TestCActionMathStatistics extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertEquals( m_summarystatistic.getMin(), l_return.get( 0 ).<Double>raw(), 0 );
         Assert.assertEquals( m_descriptivestatistic.getMin(), l_return.get( 1 ).<Double>raw(), 0 );
     }
@@ -396,14 +395,14 @@ public final class TestCActionMathStatistics extends IBaseTest
 
 
         Assert.assertEquals(
-            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "a" ) / l_return.size(),
             0.73,
+            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "a" ) / l_return.size(),
             0.05
         );
 
         Assert.assertEquals(
-            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "b" ) / l_return.size(),
             0.27,
+            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "b" ) / l_return.size(),
             0.05
         );
     }
@@ -429,14 +428,14 @@ public final class TestCActionMathStatistics extends IBaseTest
 
 
         Assert.assertEquals(
-            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "a" ) / l_return.size(),
             0.73,
+            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "a" ) / l_return.size(),
             0.2
         );
 
         Assert.assertEquals(
-            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "b" ) / l_return.size(),
             0.27,
+            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "b" ) / l_return.size(),
             0.2
         );
     }
@@ -460,14 +459,14 @@ public final class TestCActionMathStatistics extends IBaseTest
         ) );
 
         Assert.assertEquals(
-            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "c" ) / l_return.size(),
             0.3,
+            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "c" ) / l_return.size(),
             0.05
         );
 
         Assert.assertEquals(
-            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "d" ) / l_return.size(),
             0.7,
+            (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "d" ) / l_return.size(),
             0.05
         );
     }
