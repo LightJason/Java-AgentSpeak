@@ -47,7 +47,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test for math interpolate
- * @todo fix assert
  */
 public final class TestCActionMathInterpolate extends IBaseTest
 {
@@ -90,7 +89,7 @@ public final class TestCActionMathInterpolate extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 5 );
+        Assert.assertEquals( 5, l_return.size() );
         assertTrue( l_return.get( 0 ).raw() instanceof PolynomialSplineFunction );
         assertTrue( l_return.get( 1 ).raw() instanceof PolynomialFunctionNewtonForm );
         assertTrue( l_return.get( 2 ).raw() instanceof PolynomialFunctionLagrangeForm );
@@ -113,9 +112,9 @@ public final class TestCActionMathInterpolate extends IBaseTest
                 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 11.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 11.666666666666666 );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 11.0, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 11.666666666666666, l_return.get( 1 ).<Number>raw() );
     }
 
     /**
@@ -136,9 +135,9 @@ public final class TestCActionMathInterpolate extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 12.333333333333334 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 16.400000000000002 );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 12.333333333333334, l_return.get( 0 ).<Number>raw() );
+        Assert.assertEquals( 16.400000000000002, l_return.get( 1 ).<Number>raw() );
     }
 
 }

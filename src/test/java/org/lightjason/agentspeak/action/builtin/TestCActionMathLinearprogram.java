@@ -49,7 +49,6 @@ import java.util.stream.Stream;
 
 /**
  * test math linear program functions
- * @todo fix assert
  */
 public final class TestCActionMathLinearprogram extends IBaseTest
 {
@@ -84,7 +83,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertNotNull( l_return.get( 0 ).<ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getLeft() );
         Assert.assertTrue( l_return.get( 0 ).<ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().isEmpty() );
     }
@@ -101,7 +100,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
+        Assert.assertEquals( 1, m_linearprogram.getRight().size() );
         Assert.assertEquals( 11.0,  m_linearprogram.getRight().iterator().next().getValue(), 0 );
     }
 
@@ -124,15 +123,15 @@ public final class TestCActionMathLinearprogram extends IBaseTest
         Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
         Assert.assertArrayEquals(
             Stream.of(
-                l_result.getValue(),
-                l_result.getRelationship(),
-                l_result.getCoefficients()
-            ).toArray(),
-
-            Stream.of(
                 m_linearprogram.getRight().iterator().next().getValue(),
                 m_linearprogram.getRight().iterator().next().getRelationship(),
                 m_linearprogram.getRight().iterator().next().getCoefficients()
+            ).toArray(),
+
+            Stream.of(
+                l_result.getValue(),
+                l_result.getRelationship(),
+                l_result.getCoefficients()
             ).toArray()
         );
     }
@@ -162,8 +161,8 @@ public final class TestCActionMathLinearprogram extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::raw ).toArray(),
-            Stream.of( 12.333333333333332, 2, 2.4047619047619047, 1.0238095238095237 ).toArray()
+            Stream.of( 12.333333333333332, 2, 2.4047619047619047, 1.0238095238095237 ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -191,8 +190,8 @@ public final class TestCActionMathLinearprogram extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::raw ).toArray(),
-            Stream.of( 30.38235294117647, 2, 2.676470588235294, 2.3823529411764706 ).toArray()
+            Stream.of( 30.38235294117647, 2, 2.676470588235294, 2.3823529411764706 ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
