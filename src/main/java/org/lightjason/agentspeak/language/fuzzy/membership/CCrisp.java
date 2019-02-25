@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.fuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
@@ -110,6 +111,12 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
     public Stream<Number> range( @NonNull final E p_value )
     {
         return Stream.of( 1 );
+    }
+
+    @Override
+    public Stream<IFuzzyValue<?>> modify( final Stream<ITerm> p_arguments )
+    {
+        return Stream.of();
     }
 
     @Override

@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.fuzzy.membership;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IAgentUpdateable;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -74,6 +75,12 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
         }
 
         @Override
+        public Stream<IFuzzyValue<?>> modify( final Stream<ITerm> p_arguments )
+        {
+            return Stream.of();
+        }
+
+        @Override
         public Stream<IFuzzyValue<?>> apply( final Number p_number )
         {
             return Stream.of();
@@ -114,6 +121,14 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
      * @return stream of positions
      */
     Stream<Number> range( @NonNull E p_value );
+
+    /**
+     * modify method for action access
+     *
+     * @param p_arguments flatten input arguments
+     * @return action result
+     */
+    Stream<IFuzzyValue<?>> modify( final Stream<ITerm> p_arguments );
 
     /**
      * cast operation
