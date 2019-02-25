@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.storage;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * storage default definitions
  */
-public abstract class IStorage extends IBuiltinAction
+public abstract class IStorage extends IBaseAction
 {
     /**
      * serial id

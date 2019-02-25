@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.builtin.storage;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -50,6 +52,17 @@ public final class CAdd extends IStorage
      * serial id
      */
     private static final long serialVersionUID = 3102307419115604147L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "storage/add" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     /**
      * ctor

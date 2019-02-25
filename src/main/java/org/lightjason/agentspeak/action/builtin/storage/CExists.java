@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.storage;
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -50,6 +52,17 @@ public final class CExists extends IStorage
      * serial id
      */
     private static final long serialVersionUID = 8505190439682767260L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "storage/exist" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     /**
      * ctor

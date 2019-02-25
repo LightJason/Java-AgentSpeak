@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.storage;
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -39,7 +41,7 @@ import java.util.stream.Stream;
  * The action removes all elements of the storage
  * except the elements wich are forbidden
  *
- * {@code .storage/clear();}
+ * {@code .storage/clear;}
  */
 public final class CClear extends IStorage
 {
@@ -47,6 +49,17 @@ public final class CClear extends IStorage
      * serial id
      */
     private static final long serialVersionUID = -985959827654899897L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "storage/clear" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     /**
      * ctor
