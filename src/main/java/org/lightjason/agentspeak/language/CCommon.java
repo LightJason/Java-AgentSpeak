@@ -38,7 +38,7 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
+import org.lightjason.agentspeak.common.IIOFunction;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -694,7 +694,7 @@ public final class CCommon
 
         try (
             InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
-            OutputStream l_compress = p_compression.get( l_counting )
+            OutputStream l_compress = p_compression.apply( l_counting )
         )
         {
             IOUtils.copy( l_input, l_compress );
@@ -711,13 +711,48 @@ public final class CCommon
     /**
      * compression algorithm
      */
-    public enum ECompression
+    public enum ECompression implements IIOFunction<DataOutputStream, OutputStream>
     {
-        BZIP,
-        GZIP,
-        DEFLATE,
-        PACK200,
-        XZ;
+        BZIP
+        {
+            @Override
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            {
+                return new BZip2CompressorOutputStream( p_in );
+            }
+        },
+        GZIP
+        {
+            @Override
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            {
+                return new GzipCompressorOutputStream( p_in );
+            }
+        },
+        DEFLATE
+        {
+            @Override
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            {
+                return new DeflateCompressorOutputStream( p_in );
+            }
+        },
+        PACK200
+        {
+            @Override
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            {
+                return new Pack200CompressorOutputStream( p_in );
+            }
+        },
+        XZ
+        {
+            @Override
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            {
+                return new XZCompressorOutputStream( p_in );
+            }
+        };
 
         /**
          * enum names
@@ -727,39 +762,6 @@ public final class CCommon
                   .map( i -> i.name().toUpperCase( Locale.ROOT ) )
                   .collect( Collectors.toSet() )
         );
-
-        /**
-         * creates a compression stream
-         *
-         * @param p_datastream data-counting stream
-         * @return compression output stream
-         *
-         * @throws IOException throws on any io error
-         */
-        @Nonnull
-        public final OutputStream get( @Nonnull final DataOutputStream p_datastream ) throws IOException
-        {
-            switch ( this )
-            {
-                case BZIP:
-                    return new BZip2CompressorOutputStream( p_datastream );
-
-                case GZIP:
-                    return new GzipCompressorOutputStream( p_datastream );
-
-                case DEFLATE:
-                    return new DeflateCompressorOutputStream( p_datastream );
-
-                case PACK200:
-                    return new Pack200CompressorOutputStream( p_datastream );
-
-                case XZ:
-                    return new XZCompressorOutputStream( p_datastream );
-
-                default:
-                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-            }
-        }
 
         /**
          * returns a compression value
