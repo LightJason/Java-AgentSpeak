@@ -24,6 +24,12 @@
 package org.lightjason.agentspeak.action.builtin.bool;
 
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+
+import javax.annotation.Nonnull;
+
+
 /**
  * checks elements of inequality.
  * The actions checks the first argument
@@ -36,17 +42,28 @@ package org.lightjason.agentspeak.action.builtin.bool;
  *
  * {@code [NE1|NE2] = .bool/notequal( "this is equal", "this is equal", [123, "test"] );}
  */
-public final class CNotEqual extends CEqual
+public final class CNotEqual extends IBaseEqualiy
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3226848482113693419L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "bool/notequal" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected boolean apply( final boolean p_value )
     {
-        return !super.apply( p_value );
+        return !p_value;
     }
 
 }
