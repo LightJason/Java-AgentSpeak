@@ -62,7 +62,6 @@ import java.util.stream.Stream;
 
 /**
  * test math blas vector functions
- * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBlasVector extends IBaseTest
@@ -176,9 +175,9 @@ public final class TestCActionMathBlasVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().size(), 2 );
-        Assert.assertEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().size(), 4 );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( 2, l_return.get( 0 ).<DoubleMatrix1D>raw().size() );
+        Assert.assertEquals( 4, l_return.get( 1 ).<DoubleMatrix1D>raw().size() );
     }
 
     /**
@@ -195,7 +194,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_vector.get( 0 ), 6, 0 );
+        Assert.assertEquals( 6, l_vector.get( 0 ), 0 );
     }
 
     /**
@@ -216,7 +215,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
 
         final List<Number> l_tolist = l_return.get( 0 ).raw();
-        Assert.assertArrayEquals( l_tolist.toArray(), Stream.of( 2.0, 5.0, 3.0, 8.0 ).collect( Collectors.toList() ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 2.0, 5.0, 3.0, 8.0 ).collect( Collectors.toList() ).toArray(), l_tolist.toArray() );
     }
 
     /**
@@ -233,7 +232,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_vector.toArray(), Stream.of( 2, 2, 2, 2 ).mapToDouble( i -> i ).toArray(), 0 );
+        Assert.assertArrayEquals( Stream.of( 2, 2, 2, 2 ).mapToDouble( i -> i ).toArray(), l_vector.toArray(), 0 );
     }
 
     /**
@@ -250,7 +249,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_vector.toArray(), VECTOR2.toArray(), 0 );
+        Assert.assertArrayEquals( VECTOR2.toArray(), l_vector.toArray(), 0 );
     }
 
 
@@ -268,9 +267,9 @@ public final class TestCActionMathBlasVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Double );
-        Assert.assertEquals( l_return.get( 0 ).<Double>raw(), 2, 0 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<Double>raw(), 0 );
     }
 
     /**
@@ -287,8 +286,8 @@ public final class TestCActionMathBlasVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( VECTOR1, VECTOR2 ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( VECTOR1, VECTOR2 ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
     /**
@@ -312,8 +311,8 @@ public final class TestCActionMathBlasVector extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), new double[]{1, 2, 3}, 0 );
-        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{4, 3, 4}, 0 );
+        Assert.assertArrayEquals( new double[]{1, 2, 3}, l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{4, 3, 4}, l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), 0 );
     }
 
     /**
@@ -337,8 +336,8 @@ public final class TestCActionMathBlasVector extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), new double[]{1, 2, 3}, 0 );
-        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{4, 3, 4}, 0 );
+        Assert.assertArrayEquals( new double[]{1, 2, 3}, l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{4, 3, 4}, l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), 0 );
     }
 
 }

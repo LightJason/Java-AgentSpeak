@@ -92,7 +92,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * test math blas matrix functions
- * @todo fix assert
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCActionMathBlasMatrix extends IBaseTest
@@ -200,8 +199,8 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
 
         Assert.assertArrayEquals(
                 p_input.getMiddle().toGenericString(),
-                l_return.stream().map( ITerm::raw ).toArray(),
-                p_input.getRight().toArray()
+                p_input.getRight().toArray(),
+                l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -220,11 +219,11 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().rows(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().columns(), 2 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<DoubleMatrix2D>raw().size() );
+        Assert.assertEquals( 2, l_return.get( 0 ).<DoubleMatrix2D>raw().rows() );
+        Assert.assertEquals( 2, l_return.get( 0 ).<DoubleMatrix2D>raw().columns() );
     }
 
     /**
@@ -241,12 +240,12 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().size(), 2 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<DoubleMatrix1D>raw().size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().get( 0 ), 2, 0 );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().get( 1 ), 1, 0 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<DoubleMatrix1D>raw().get( 0 ), 0 );
+        Assert.assertEquals( 1, l_return.get( 0 ).<DoubleMatrix1D>raw().get( 1 ), 0 );
     }
 
     /**
@@ -263,12 +262,12 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().size(), 2 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<DoubleMatrix1D>raw().size() );
 
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().get( 0 ), 3, 0 );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().get( 1 ), 1, 0 );
+        Assert.assertEquals( 3, l_return.get( 0 ).<DoubleMatrix1D>raw().get( 0 ), 0 );
+        Assert.assertEquals( 1, l_return.get( 0 ).<DoubleMatrix1D>raw().get( 1 ), 0 );
     }
 
     /**
@@ -285,13 +284,13 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().size(), 4 );
+        Assert.assertEquals( 4, l_return.get( 0 ).<DoubleMatrix2D>raw().size() );
 
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{10.0, 6.0}, {9.0, 7.0}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{10.0, 6.0}, {9.0, 7.0}} ).toArray(),
+            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray()
         );
 
     }
@@ -308,7 +307,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertEquals( MATRIX1.get( 0, 1 ), 6, 0 );
+        Assert.assertEquals( 6, MATRIX1.get( 0, 1 ), 0 );
     }
 
     /**
@@ -325,12 +324,12 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
 
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<List<?>>raw().toArray(),
-            Stream.of( 2.0, 6.0, 3.0, 8.0 ).collect( Collectors.toList() ).toArray()
+            Stream.of( 2.0, 6.0, 3.0, 8.0 ).collect( Collectors.toList() ).toArray(),
+            l_return.get( 0 ).<List<?>>raw().toArray()
         );
     }
 
@@ -348,12 +347,12 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
 
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{2.0, 3.0}, {2.0, 1.0}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{2.0, 3.0}, {2.0, 1.0}} ).toArray(),
+            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -371,12 +370,12 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
 
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{2.0, 2.0}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{2.0, 2.0}} ).toArray(),
+            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -394,12 +393,12 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
 
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{1.0, -4.999999999999998}, {0.0, 1.9999999999999993}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{1.0, -4.999999999999998}, {0.0, 1.9999999999999993}} ).toArray(),
+            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -417,7 +416,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_matrix.toArray(), new double[][]{{2.0, 2.0}, {2.0, 2.0}} );
+        Assert.assertArrayEquals( new double[][]{{2.0, 2.0}, {2.0, 2.0}}, l_matrix.toArray() );
     }
 
     /**
@@ -434,7 +433,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( MATRIX2.toArray(), l_matrix.toArray() );
+        Assert.assertArrayEquals( l_matrix.toArray(), MATRIX2.toArray() );
     }
 
     /**
@@ -451,9 +450,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof Double );
-        Assert.assertEquals( l_return.get( 0 ).<Double>raw(), 2, 0 );
+        Assert.assertEquals( 2, l_return.get( 0 ).<Double>raw(), 0 );
     }
 
     /**
@@ -470,11 +469,11 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{1.0, 2.0}, {3.0, 4.0}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{1.0, 2.0}, {3.0, 4.0}} ).toArray(),
+            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -492,11 +491,11 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{-0.24999999999999994, 0.5}, {0.7499999999999999, -0.4999999999999999}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{-0.24999999999999994, 0.5}, {0.7499999999999999, -0.4999999999999999}} ).toArray(),
+            l_return.get( 0 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -514,14 +513,14 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( 2, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DenseDoubleMatrix1D );
         Assert.assertArrayEquals( l_return.get( 0 ).<DenseDoubleMatrix1D>raw().toArray(), Stream.of( 4, -1 ).mapToDouble( i -> i ).toArray(), 0 );
 
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
-            l_return.get( 1 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{0.7071067811865475, -0.565685424949238}, {0.7071067811865475, 0.8485281374238569}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{0.7071067811865475, -0.565685424949238}, {0.7071067811865475, 0.8485281374238569}} ).toArray(),
+            l_return.get( 1 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -539,21 +538,22 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( 3, l_return.size() );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DenseDoubleMatrix1D );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DenseDoubleMatrix1D>raw().toArray(),
-                Stream.of(  4.130648586880582, 0.9683709267122025 ).mapToDouble( i -> i ).toArray(), 0 );
+        Assert.assertArrayEquals(
+            l_return.get( 0 ).<DenseDoubleMatrix1D>raw().toArray(),
+            Stream.of(  4.130648586880582, 0.9683709267122025 ).mapToDouble( i -> i ).toArray(), 0 );
 
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
-            l_return.get( 1 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{-0.6618025632357403, -0.7496781758158657}, {-0.7496781758158659, 0.66180256323574}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{-0.6618025632357403, -0.7496781758158657}, {-0.7496781758158659, 0.66180256323574}} ).toArray(),
+            l_return.get( 1 ).<DoubleMatrix2D>raw().toArray()
         );
 
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
-            l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{-0.8649100931185951, 0.5019268181932333}, {-0.5019268181932333, -0.8649100931185951}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{-0.8649100931185951, 0.5019268181932333}, {-0.5019268181932333, -0.8649100931185951}} ).toArray(),
+            l_return.get( 2 ).<DoubleMatrix2D>raw().toArray()
         );
     }
 
@@ -571,8 +571,8 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( MATRIX1, MATRIX2 ).toArray() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( MATRIX1, MATRIX2 ).toArray(), l_return.stream().map( ITerm::raw ).toArray() );
     }
 
 
@@ -599,20 +599,20 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
 
         IntStream.range( 0, l_result.rows() )
                  .boxed()
                  .map( l_result::viewRow )
                  .mapToDouble( DoubleMatrix1D::zSum )
-                 .forEach( i -> Assert.assertEquals( i, 0, 0 ) );
+                 .forEach( i -> Assert.assertEquals( 0, i, 0 ) );
 
         IntStream.range( 0, l_result.columns() )
                  .boxed()
                  .map( l_result::viewColumn )
                  .mapToDouble( DoubleMatrix1D::zSum )
-                 .forEach( i -> Assert.assertEquals( i, 0, 0 ) );
+                 .forEach( i -> Assert.assertEquals( 0, i, 0 ) );
     }
 
 
@@ -639,15 +639,15 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
 
-        IntStream.range( 0, l_result.rows() ).boxed().forEach( i -> Assert.assertEquals( l_result.getQuick( i, i ), 1, 0 ) );
+        IntStream.range( 0, l_result.rows() ).boxed().forEach( i -> Assert.assertEquals( 1, l_result.getQuick( i, i ), 0 ) );
         IntStream.range( 0, l_result.rows() )
                  .boxed()
                  .map( l_result::viewRow )
                  .mapToDouble( DoubleMatrix1D::zSum )
-                 .forEach( i -> Assert.assertEquals( i, 0, 1e-10 ) );
+                 .forEach( i -> Assert.assertEquals( 0, i, 1e-10 ) );
     }
 
     /**
@@ -673,10 +673,10 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertArrayEquals(
-            Arrays.stream( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray() ).boxed().toArray(),
-            Stream.of( 1D, 3D, 6D, 10D, 15D, 0D ).toArray()
+            Stream.of( 1D, 3D, 6D, 10D, 15D, 0D ).toArray(),
+            Arrays.stream( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray() ).boxed().toArray()
         );
     }
 
@@ -704,10 +704,10 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         Assert.assertArrayEquals(
-            Arrays.stream( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray() ).boxed().toArray(),
-            Stream.of( 6D, 10D, 12D, 7D, 3D, -3D ).toArray()
+            Stream.of( 6D, 10D, 12D, 7D, 3D, -3D ).toArray(),
+            Arrays.stream( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray() ).boxed().toArray()
         );
     }
 
@@ -727,7 +727,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
 
         Assert.assertTrue(
@@ -759,21 +759,21 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( 1, l_return.size() );
         final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
 
         Assert.assertArrayEquals(
-            Arrays.stream( l_data ).boxed().toArray(),
             IntStream.range( 0, l_result.rows() )
                      .boxed()
                      .map( i -> l_result.getQuick( i, i ) )
-                     .toArray()
+                     .toArray(),
+            Arrays.stream( l_data ).boxed().toArray()
         );
 
         IntStream.range( 0, l_result.rows() )
                  .forEach( i -> IntStream.range( 0, l_result.columns() )
                                          .filter( j -> i != j )
-                                         .forEach( j -> Assert.assertEquals( l_result.getQuick( i, j ), 0, 0  ) ) );
+                                         .forEach( j -> Assert.assertEquals( 0, l_result.getQuick( i, j ), 0 ) ) );
     }
 
 }

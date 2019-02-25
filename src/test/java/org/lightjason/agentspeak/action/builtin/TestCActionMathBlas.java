@@ -45,7 +45,6 @@ import java.util.stream.Stream;
 
 /**
  * test math blas functions
- * @todo fix assert
  */
 public final class TestCActionMathBlas extends IBaseTest
 {
@@ -90,8 +89,8 @@ public final class TestCActionMathBlas extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4D );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertEquals( 4D, l_return.get( 0 ).<Number>raw() );
     }
 
     /**
@@ -108,11 +107,11 @@ public final class TestCActionMathBlas extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{22.0, 10.0}, {30.0, 14.0}} );
-        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{34.0, 46.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 10.0}, {10.0, 25.0}} );
-        Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix1D>raw().toArray(), new double[]{14.0, 11.0}, 0 );
+        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertArrayEquals( new double[][]{{22.0, 10.0}, {30.0, 14.0}}, l_return.get( 0 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[]{34.0, 46.0}, l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[][]{{4.0, 10.0}, {10.0, 25.0}}, l_return.get( 2 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[]{14.0, 11.0}, l_return.get( 3 ).<DoubleMatrix1D>raw().toArray(), 0 );
     }
 
     /**
@@ -139,16 +138,16 @@ public final class TestCActionMathBlas extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 9 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
-        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{7.0, 11.0}, {8.0, 13.0}} );
-        Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{-3.0, 1.0}, {-2.0, 3.0}} );
-        Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{10.0, 30.0}, {15.0, 40.0}} );
-        Assert.assertArrayEquals( l_return.get( 4 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{1.0, 3.0}, {1.5, 4.0}} );
-        Assert.assertArrayEquals( l_return.get( 5 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
-        Assert.assertArrayEquals( l_return.get( 6 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{0.0, 4.0}, {0.0, 7.0}} );
-        Assert.assertArrayEquals( l_return.get( 7 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 12.0}, {9.0, 8.0}} );
-        Assert.assertArrayEquals( l_return.get( 8 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{7.0, 3.0}, {6.0, 1.0}} );
+        Assert.assertEquals( 9, l_return.size() );
+        Assert.assertArrayEquals( new double[][]{{4.0, 8.0}, {6.0, 9.0}}, l_return.get( 0 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{7.0, 11.0}, {8.0, 13.0}}, l_return.get( 1 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{-3.0, 1.0}, {-2.0, 3.0}}, l_return.get( 2 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{10.0, 30.0}, {15.0, 40.0}}, l_return.get( 3 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{1.0, 3.0}, {1.5, 4.0}}, l_return.get( 4 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{4.0, 8.0}, {6.0, 9.0}}, l_return.get( 5 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{0.0, 4.0}, {0.0, 7.0}}, l_return.get( 6 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{4.0, 12.0}, {9.0, 8.0}}, l_return.get( 7 ).<DoubleMatrix2D>raw().toArray() );
+        Assert.assertArrayEquals( new double[][]{{7.0, 3.0}, {6.0, 1.0}}, l_return.get( 8 ).<DoubleMatrix2D>raw().toArray() );
 
     }
 
@@ -175,15 +174,15 @@ public final class TestCActionMathBlas extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.size(), 8 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), new double[]{4.0, 10.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{7.0, 10.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix1D>raw().toArray(), new double[]{-3.0, 0.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix1D>raw().toArray(), new double[]{10.0, 25.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 4 ).<DoubleMatrix1D>raw().toArray(), new double[]{1.0, 2.5}, 0 );
-        Assert.assertArrayEquals( l_return.get( 5 ).<DoubleMatrix1D>raw().toArray(), new double[]{0.0, 0.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 6 ).<DoubleMatrix1D>raw().toArray(), new double[]{4.0, 25.0}, 0 );
-        Assert.assertArrayEquals( l_return.get( 7 ).<DoubleMatrix1D>raw().toArray(), new double[]{3.0, 0.0}, 0 );
+        Assert.assertEquals( 8, l_return.size() );
+        Assert.assertArrayEquals( new double[]{4.0, 10.0}, l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{7.0, 10.0}, l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{-3.0, 0.0}, l_return.get( 2 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{10.0, 25.0}, l_return.get( 3 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{1.0, 2.5}, l_return.get( 4 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{0.0, 0.0}, l_return.get( 5 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{4.0, 25.0}, l_return.get( 6 ).<DoubleMatrix1D>raw().toArray(), 0 );
+        Assert.assertArrayEquals( new double[]{3.0, 0.0}, l_return.get( 7 ).<DoubleMatrix1D>raw().toArray(), 0 );
 
     }
 
