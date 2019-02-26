@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -47,13 +48,16 @@ public final class CQueryNative extends IBaseGraphQL
      * serial id
      */
     private static final long serialVersionUID = 569503639553301289L;
-
     /**
-     * ctor
+     * action name
      */
-    public CQueryNative()
+    private static final IPath NAME = namebyclass( CQueryNative.class, "web", "graphql" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Override

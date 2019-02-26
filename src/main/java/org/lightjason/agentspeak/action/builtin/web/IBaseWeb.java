@@ -29,7 +29,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.web.rest.IBaseRest;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -51,22 +51,12 @@ import java.util.stream.Stream;
 /**
  * web base action class
  */
-public abstract class IBaseWeb extends IBuiltinAction
+public abstract class IBaseWeb extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 4839156213009145751L;
-
-    /**
-     * ctor
-     *
-     * @param p_length length
-     */
-    protected IBaseWeb( final int p_length )
-    {
-        super( p_length );
-    }
 
     /**
      * returns a http-post connection

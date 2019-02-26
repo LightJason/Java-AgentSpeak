@@ -60,16 +60,6 @@ public abstract class IBaseGraphQL extends IBaseWeb
     private static final long serialVersionUID = -4140550516932255685L;
 
 
-    /**
-     * ctor
-     *
-     * @param p_length length
-     */
-    protected IBaseGraphQL( final int p_length )
-    {
-        super( p_length );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {

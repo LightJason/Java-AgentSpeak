@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web.rest;
 
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -54,13 +55,16 @@ public final class CJsonList extends IBaseRest
      * serial id
      */
     private static final long serialVersionUID = -5630882266708277403L;
-
     /**
-     * ctor
+     * action name
      */
-    public CJsonList()
+    private static final IPath NAME = namebyclass( CJsonList.class, "web", "rest" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnull

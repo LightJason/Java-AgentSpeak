@@ -54,16 +54,6 @@ public abstract class IBaseRest extends IBaseWeb
      */
     private static final XmlMapper XMLMAPPER = new XmlMapper();
 
-    /**
-     * ctor
-     *
-     * @param p_length length
-     */
-    protected IBaseRest( final int p_length )
-    {
-        super( p_length );
-    }
-
     @Nonnegative
     @Override
     public final int minimalArgumentNumber()

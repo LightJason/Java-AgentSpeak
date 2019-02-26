@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -52,14 +53,18 @@ public final class CQueryLiteral extends IBaseGraphQL
      * serial id
      */
     private static final long serialVersionUID = -6514047475694739845L;
-
     /**
-     * ctor
+     * action name
      */
-    public CQueryLiteral()
+    private static final IPath NAME = namebyclass( CQueryLiteral.class, "web", "graphql" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
+
 
     @Override
     protected String argumentquery( @Nonnull final ITerm p_argument )

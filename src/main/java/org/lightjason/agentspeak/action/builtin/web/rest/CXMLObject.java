@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.web.rest;
 
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -53,13 +54,16 @@ public final class CXMLObject extends IBaseRest
      * serial id
      */
     private static final long serialVersionUID = 8156192343303737293L;
-
     /**
-     * ctor
+     * action name
      */
-    public CXMLObject()
+    private static final IPath NAME = namebyclass( CXMLObject.class, "web", "rest" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnull
