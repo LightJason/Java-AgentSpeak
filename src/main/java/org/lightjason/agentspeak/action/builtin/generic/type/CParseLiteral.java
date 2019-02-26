@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -51,7 +50,7 @@ public final class CParseLiteral extends IParse
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "generic/type/parseliteral" );
+    private static final IPath NAME = namebyclass( CParseLiteral.class, "generic", "type" );
 
     @Nonnull
     @Override

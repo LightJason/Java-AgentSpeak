@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.agent;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -53,7 +52,7 @@ public final class CCycleTime extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/cycletime" );
+    private static final IPath NAME = namebyclass( CCycleTime.class, "agent" );
 
     @Nonnull
     @Override

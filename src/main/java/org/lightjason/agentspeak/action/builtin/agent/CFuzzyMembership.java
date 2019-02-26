@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.agent;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -52,7 +51,7 @@ public final class CFuzzyMembership extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/fuzzymembership" );
+    private static final IPath NAME = namebyclass( CFuzzyMembership.class, "agent" );
 
     @Nonnull
     @Override

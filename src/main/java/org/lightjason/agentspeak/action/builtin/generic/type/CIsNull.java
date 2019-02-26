@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -55,7 +54,7 @@ public final class CIsNull extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "generic/type/isnull" );
+    private static final IPath NAME = namebyclass( CIsNull.class, "generic", "type" );
 
     @Nonnull
     @Override

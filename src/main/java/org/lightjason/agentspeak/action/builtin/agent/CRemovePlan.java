@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.agent;
 import com.codepoetics.protonpack.StreamUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -62,7 +61,7 @@ public final class CRemovePlan extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/removeplan" );
+    private static final IPath NAME = namebyclass( CRemovePlan.class, "agent" );
 
     @Nonnull
     @Override

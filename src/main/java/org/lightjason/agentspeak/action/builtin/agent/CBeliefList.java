@@ -59,7 +59,7 @@ public final class CBeliefList extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/belieflist" );
+    private static final IPath NAME = namebyclass( CBeliefList.class, "agent" );
 
     @Nonnull
     @Override

@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.agent;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -53,7 +52,7 @@ public final class CSleep extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/sleep " );
+    private static final IPath NAME = namebyclass( CSleep.class, "agent" );
 
     @Nonnull
     @Override

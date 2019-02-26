@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.generic;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.CFormat1D;
 import org.lightjason.agentspeak.action.builtin.math.blas.CFormat2D;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -65,7 +64,7 @@ public final class CPrint extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "generic/print" );
+    private static final IPath NAME = namebyclass( CPrint.class, "generic" );
     /**
      * output stream
      */

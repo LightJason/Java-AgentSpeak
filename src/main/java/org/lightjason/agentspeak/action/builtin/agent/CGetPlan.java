@@ -27,7 +27,6 @@ import com.codepoetics.protonpack.StreamUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -67,7 +66,7 @@ public final class CGetPlan extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/getplan" );
+    private static final IPath NAME = namebyclass( CGetPlan.class, "agent" );
 
     @Nonnull
     @Override

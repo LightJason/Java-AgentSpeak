@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.crypto;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -62,7 +61,7 @@ public final class CCreateKey extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "crypto/createkey" );
+    private static final IPath NAME = namebyclass( CCreateKey.class, "crypto" );
 
     @Nonnull
     @Override

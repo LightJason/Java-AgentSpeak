@@ -52,7 +52,7 @@ public final class CClearBeliefbase extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/clearbeliefbase" );
+    private static final IPath NAME = namebyclass( CClearBeliefbase.class, "agent" );
 
     @Nonnull
     @Override

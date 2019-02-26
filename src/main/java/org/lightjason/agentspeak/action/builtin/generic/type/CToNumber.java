@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.builtin.generic.type;
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,7 +47,7 @@ public final class CToNumber extends ICast
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "generic/type/tonumber" );
+    private static final IPath NAME = namebyclass( CToNumber.class, "generic", "type" );
 
     @Nonnull
     @Override

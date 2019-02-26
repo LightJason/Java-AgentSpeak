@@ -27,7 +27,6 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -73,7 +72,7 @@ public final class CHash extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "crypto/hash" );
+    private static final IPath NAME = namebyclass( CHash.class, "crypto" );
 
     @Nonnull
     @Override

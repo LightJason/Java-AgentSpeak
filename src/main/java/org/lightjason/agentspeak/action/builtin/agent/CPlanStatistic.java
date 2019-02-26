@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.agent;
 
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -61,7 +60,7 @@ public final class CPlanStatistic extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "agent/planstatistic" );
+    private static final IPath NAME = namebyclass( CPlanStatistic.class, "agent" );
 
     @Nonnull
     @Override

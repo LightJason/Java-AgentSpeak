@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.generic.type;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -56,7 +55,7 @@ public final class CFuzzyReturn extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "generic/type/fuzzyreturn" );
+    private static final IPath NAME = namebyclass( CFuzzyReturn.class, "generic", "type" );
 
     @Nonnull
     @Override
