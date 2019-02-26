@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.datetime;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -41,19 +41,12 @@ import java.util.stream.Stream;
 /**
  * abstract class for date-time access
  */
-public abstract class IDateTime extends IBuiltinAction
+public abstract class IDateTime extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -5384242048535616689L;
-
-    /**
-     * ctor
-     */
-    protected IDateTime()
-    {
-    }
 
     @Nonnull
     @Override

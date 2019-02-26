@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.datetime;
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -46,6 +48,17 @@ public final class CDate extends IDateTime
      * serial id
      */
     private static final long serialVersionUID = 4490065527882057197L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "datetime/date" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )

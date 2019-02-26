@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.builtin.datetime;
 
 import org.joda.time.Instant;
 import org.joda.time.Months;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -48,6 +50,17 @@ public final class CMonthsBetween extends IBetween
      * serial id
      */
     private static final long serialVersionUID = 2944582586117925207L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "datetime/monthsbetween" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

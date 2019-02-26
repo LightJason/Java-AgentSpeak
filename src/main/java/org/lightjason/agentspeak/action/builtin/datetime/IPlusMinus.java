@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.datetime;
 
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -45,19 +45,12 @@ import java.util.stream.Stream;
  * abstract class to calculate
  * plus / minus on date-time objects
  */
-public abstract class IPlusMinus extends IBuiltinAction
+public abstract class IPlusMinus extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1831239783507142327L;
-
-    /**
-     * ctor
-     */
-    protected IPlusMinus()
-    {
-    }
 
     @Nonnegative
     @Override

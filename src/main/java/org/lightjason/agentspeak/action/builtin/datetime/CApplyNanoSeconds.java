@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.action.builtin.datetime;
 
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+
 import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
@@ -46,6 +49,17 @@ public final class CApplyNanoSeconds extends IPlusMinus
      * serial id
      */
     private static final long serialVersionUID = 6372470747556969039L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "datetime/applynanoseconds" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

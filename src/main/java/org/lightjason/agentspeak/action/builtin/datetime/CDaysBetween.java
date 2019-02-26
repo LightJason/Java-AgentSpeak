@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.builtin.datetime;
 
 import org.joda.time.Days;
 import org.joda.time.Instant;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -49,6 +51,17 @@ public final class CDaysBetween extends IBetween
      * serial id
      */
     private static final long serialVersionUID = 2204654538944733054L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = CPath.of( "datetime/daysbetween" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

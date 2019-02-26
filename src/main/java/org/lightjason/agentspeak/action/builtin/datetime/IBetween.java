@@ -27,7 +27,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Instant;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,19 +46,12 @@ import java.util.stream.Stream;
  * abstract class to calculate difference
  * between date-time elements
  */
-public abstract class IBetween extends IBuiltinAction
+public abstract class IBetween extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 2806678071531558364L;
-
-    /**
-     * ctor
-     */
-    protected IBetween()
-    {
-    }
 
     @Nonnegative
     @Override
