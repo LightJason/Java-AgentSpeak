@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.builtin.linearprogram;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -64,6 +65,17 @@ public final class CValueConstraint extends IConstraint
      * serial id
      */
     private static final long serialVersionUID = 2316665584839205362L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CValueConstraint.class, "math", "linearprogram" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

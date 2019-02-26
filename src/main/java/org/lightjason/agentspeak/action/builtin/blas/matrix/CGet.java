@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -47,19 +48,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .math/blas/matrix( Matrix, 3,4, [Row,Column] );}
  */
-public final class CGet extends IBuiltinAction
+public final class CGet extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -1991625055470044748L;
-
     /**
-     * ctor
+     * action name
      */
-    public CGet()
+    private static final IPath NAME = namebyclass( CGet.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

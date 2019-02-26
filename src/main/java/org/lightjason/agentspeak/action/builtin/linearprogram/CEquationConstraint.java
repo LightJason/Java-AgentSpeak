@@ -27,6 +27,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -64,7 +65,17 @@ public final class CEquationConstraint extends IConstraint
      * serial id
      */
     private static final long serialVersionUID = 3123101079239668634L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CEquationConstraint.class, "math", "linearprogram" );
 
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

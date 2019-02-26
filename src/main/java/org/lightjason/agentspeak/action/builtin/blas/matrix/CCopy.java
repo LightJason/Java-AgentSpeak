@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .math/blas/matrix/copy( Matrix1, Matrix2 );}
  */
-public final class CCopy extends IBuiltinAction
+public final class CCopy extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1209791226541819094L;
-
     /**
-     * ctor
+     * action name
      */
-    public CCopy()
+    private static final IPath NAME = namebyclass( CCopy.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

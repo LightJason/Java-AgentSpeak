@@ -28,7 +28,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -51,19 +52,22 @@ import java.util.stream.Stream;
  * the action fails on assigning problems
  * {@code [M1|M2|M3] = .math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]);}
  */
-public final class CElementWise extends IBuiltinAction
+public final class CElementWise extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2655464156364927632L;
-
     /**
-     * ctor
+     * action name
      */
-    public CElementWise()
+    private static final IPath NAME = namebyclass( CElementWise.class, "math", "blas" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

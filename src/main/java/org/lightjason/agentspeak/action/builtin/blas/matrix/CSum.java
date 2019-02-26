@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [S1|S2] = .math/blas/matrix/sum(M1,M2);}
  */
-public final class CSum extends IBuiltinAction
+public final class CSum extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7034413072871692441L;
-
     /**
-     * ctor
+     * action name
      */
-    public CSum()
+    private static final IPath NAME = namebyclass( CSum.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

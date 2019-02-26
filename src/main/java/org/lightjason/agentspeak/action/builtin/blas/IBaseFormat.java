@@ -23,41 +23,30 @@
 
 package org.lightjason.agentspeak.action.builtin.blas;
 
-import cern.colt.matrix.tdouble.algo.DenseDoubleAlgebra;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import cern.colt.matrix.tdouble.algo.DoubleFormatter;
+import org.lightjason.agentspeak.action.builtin.generic.CPrint;
 
 
 /**
- * blas algebra operations e.g. inverse, determinate
+ * base formatter of blas structures
  */
-public abstract class IAlgebra extends IBuiltinAction
+public abstract class IBaseFormat<T> extends CPrint.IFormatter<T>
 {
-
     /**
-     * dense algebra
+     * formatter definition
      */
-    public static final DenseDoubleAlgebra DENSEALGEBRA = DenseDoubleAlgebra.DEFAULT;
+    protected static final DoubleFormatter FORMATTER;
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8980414250195042661L;
+    private static final long serialVersionUID = -5600570343858338053L;
 
-    /**
-     * ctor
-     */
-    protected IAlgebra()
+    static
     {
-        super();
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_length length of package parts
-     */
-    protected IAlgebra( final int p_length )
-    {
-        super( p_length );
+        FORMATTER = new DoubleFormatter();
+        FORMATTER.setRowSeparator( "; " );
+        FORMATTER.setColumnSeparator( "," );
+        FORMATTER.setPrintShape( false );
     }
 
 }

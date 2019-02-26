@@ -28,7 +28,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -52,12 +53,23 @@ import java.util.stream.Stream;
  * [S1|S2] = .math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
  * }
  */
-public final class CRowSum extends IAlgebra
+public final class CRowSum extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -7454809931903398817L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CRowSum.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

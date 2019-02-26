@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,19 +47,22 @@ import java.util.stream.Stream;
  *
  * {@code [R1|R2] = .math/blas/matrix/row(2, Matrix1, [Matrix2]);}
  */
-public final class CRow extends IBuiltinAction
+public final class CRow extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5510317920300073839L;
-
     /**
-     * ctor
+     * action name
      */
-    public CRow()
+    private static final IPath NAME = namebyclass( CRow.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

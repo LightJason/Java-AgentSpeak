@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.blas.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -49,19 +50,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Dot_product
  */
-public final class CDotProduct extends IBuiltinAction
+public final class CDotProduct extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -953714393424081234L;
-
     /**
-     * ctor
+     * action name
      */
-    public CDotProduct()
+    private static final IPath NAME = namebyclass( CDotProduct.class, "math", "blas", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

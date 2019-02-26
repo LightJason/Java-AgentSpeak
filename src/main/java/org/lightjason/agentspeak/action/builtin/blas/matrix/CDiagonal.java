@@ -27,7 +27,8 @@ import cern.colt.matrix.tdouble.DoubleFactory2D;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -52,12 +53,23 @@ import java.util.stream.Stream;
  * [D3|D4] = .math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
  * }
  */
-public final class CDiagonal extends IAlgebra
+public final class CDiagonal extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3604474410543673614L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CDiagonal.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

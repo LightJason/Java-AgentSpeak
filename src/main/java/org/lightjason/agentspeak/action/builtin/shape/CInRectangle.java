@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.shape;
 
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  *
  * {@code [In1|In2] = .math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
  */
-public final class CInRectangle extends IBuiltinAction
+public final class CInRectangle extends IBaseAction
 {
     /**
      * serial id
@@ -61,12 +61,11 @@ public final class CInRectangle extends IBuiltinAction
      */
     private static final IPath NAME = namebyclass( CInRectangle.class, "math", "shape" );
 
-    /**
-     * ctor
-     */
-    public CInRectangle()
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

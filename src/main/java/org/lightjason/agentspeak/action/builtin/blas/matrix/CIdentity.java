@@ -26,7 +26,8 @@ package org.lightjason.agentspeak.action.builtin.blas.matrix;
 import cern.colt.matrix.tdouble.DoubleFactory2D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -51,12 +52,23 @@ import java.util.stream.Stream;
  * [E3|E4] = .math/blas/matrix/identity( 2, 3, "dense" );
  * }
  */
-public final class CIdentity extends IAlgebra
+public final class CIdentity extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -4774277157938945200L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CIdentity.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

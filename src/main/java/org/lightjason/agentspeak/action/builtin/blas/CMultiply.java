@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.builtin.blas;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -48,19 +49,22 @@ import java.util.stream.Stream;
  *
  * {@code [M1|M2|M3] = .math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] );}
  */
-public final class CMultiply extends IAlgebra
+public final class CMultiply extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7399930315943440254L;
-
     /**
-     * ctor
+     * action name
      */
-    public CMultiply()
+    private static final IPath NAME = namebyclass( CMultiply.class, "math", "blas" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

@@ -29,7 +29,8 @@ import org.apache.commons.math3.analysis.interpolation.DividedDifferenceInterpol
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.interpolation.LoessInterpolator;
 import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -63,19 +64,22 @@ import java.util.stream.Stream;
  * @see https://en.wikipedia.org/wiki/Local_regression
  * @see https://en.wikipedia.org/wiki/Neville%27s_algorithm
  */
-public final class CCreate extends IBuiltinAction
+public final class CCreate extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 8425815343500575790L;
-
     /**
-     * ctor
+     * action name
      */
-    public CCreate()
+    private static final IPath NAME = namebyclass( CCreate.class, "math", "interpolate" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

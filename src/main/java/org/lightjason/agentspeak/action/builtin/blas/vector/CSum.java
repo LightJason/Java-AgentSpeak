@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [S1|S2] = .math/blas/vector/sum(V1,V2);}
  */
-public final class CSum extends IBuiltinAction
+public final class CSum extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 295318713057549731L;
-
     /**
-     * ctor
+     * action name
      */
-    public CSum()
+    private static final IPath NAME = namebyclass( CSum.class, "math", "blas", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

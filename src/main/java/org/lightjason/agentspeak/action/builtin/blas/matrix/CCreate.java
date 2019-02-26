@@ -26,8 +26,9 @@ package org.lightjason.agentspeak.action.builtin.blas.matrix;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -50,19 +51,22 @@ import java.util.stream.Stream;
  *
  * {@code [M1|M2] = .math/blas/matrix/create(2,2, [3,2], "dense|sparse");}
  */
-public final class CCreate extends IBuiltinAction
+public final class CCreate extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 6354092233793492378L;
-
     /**
-     * ctor
+     * action name
      */
-    public CCreate()
+    private static final IPath NAME = namebyclass( CCreate.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

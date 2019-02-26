@@ -27,7 +27,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,12 +50,23 @@ import java.util.stream.Stream;
  *
  * {@code [R1|R2] = .math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
  */
-public final class CSolve extends IAlgebra
+public final class CSolve extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2024863045333250337L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CSolve.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

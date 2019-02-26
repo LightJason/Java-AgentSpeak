@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,19 +47,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
-public final class CTwoNorm extends IAlgebra
+public final class CTwoNorm extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3940757354861447054L;
-
     /**
-     * ctor
+     * action name
      */
-    public CTwoNorm()
+    private static final IPath NAME = namebyclass( CTwoNorm.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

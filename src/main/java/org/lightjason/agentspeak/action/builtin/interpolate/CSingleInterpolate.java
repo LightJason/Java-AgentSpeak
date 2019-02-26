@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.interpolate;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,19 +50,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
-public final class CSingleInterpolate extends IBuiltinAction
+public final class CSingleInterpolate extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -1357670764532839757L;
-
     /**
-     * ctor
+     * action name
      */
-    public CSingleInterpolate()
+    private static final IPath NAME = namebyclass( CSingleInterpolate.class, "math", "interpolate" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas;
 
 import cern.colt.matrix.AbstractMatrix;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -43,19 +44,22 @@ import java.util.stream.Stream;
  *
  * {@code [S1|S2|S3] = .math/blas/size( M1, [M2, M3] );}
  */
-public final class CSize extends IBuiltinAction
+public final class CSize extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 8903231116502757078L;
-
     /**
-     * ctor
+     * action name
      */
-    public CSize()
+    private static final IPath NAME = namebyclass( CSize.class, "math", "blas" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

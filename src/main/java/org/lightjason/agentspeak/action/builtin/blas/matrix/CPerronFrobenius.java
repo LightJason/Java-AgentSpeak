@@ -27,7 +27,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.jet.math.tdouble.DoubleMult;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -55,19 +56,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
  */
-public final class CPerronFrobenius extends IAlgebra
+public final class CPerronFrobenius extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -4686274043894517802L;
-
     /**
-     * ctor
+     * action name
      */
-    public CPerronFrobenius()
+    private static final IPath NAME = namebyclass( CPerronFrobenius.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

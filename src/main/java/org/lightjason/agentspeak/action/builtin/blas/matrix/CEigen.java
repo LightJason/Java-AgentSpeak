@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.algo.decomposition.DenseDoubleEigenvalueDecomposition;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,19 +49,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
  */
-public final class CEigen extends IBuiltinAction
+public final class CEigen extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -7954096441636610921L;
-
     /**
-     * ctor
+     * action name
      */
-    public CEigen()
+    private static final IPath NAME = namebyclass( CEigen.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

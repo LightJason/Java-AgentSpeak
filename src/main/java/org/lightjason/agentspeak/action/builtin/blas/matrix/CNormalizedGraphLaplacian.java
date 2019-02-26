@@ -26,7 +26,8 @@ package org.lightjason.agentspeak.action.builtin.blas.matrix;
 import cern.colt.matrix.tdouble.DoubleFactory2D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,19 +50,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Laplacian_matrix
  */
-public final class CNormalizedGraphLaplacian extends IAlgebra
+public final class CNormalizedGraphLaplacian extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3481859239102399848L;
-
     /**
-     * ctor
+     * action name
      */
-    public CNormalizedGraphLaplacian()
+    private static final IPath NAME = namebyclass( CNormalizedGraphLaplacian.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

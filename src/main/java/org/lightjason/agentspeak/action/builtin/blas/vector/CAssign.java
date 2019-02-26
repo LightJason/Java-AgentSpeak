@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,19 +49,22 @@ import java.util.stream.Stream;
  * .math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
  * }
  */
-public final class CAssign extends IBuiltinAction
+public final class CAssign extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1152654348119408050L;
-
     /**
-     * ctor
+     * action name
      */
-    public CAssign()
+    private static final IPath NAME = namebyclass( CAssign.class, "math", "blas", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

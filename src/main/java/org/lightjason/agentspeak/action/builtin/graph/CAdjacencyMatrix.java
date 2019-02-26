@@ -34,7 +34,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -195,7 +195,7 @@ public final class CAdjacencyMatrix extends IBaseAction
 
         // on undirected graphs, add the transposefor cost duplicating
         if ( p_graph instanceof UndirectedGraph<?, ?> )
-            l_matrix.assign( IAlgebra.DENSEALGEBRA.transpose( l_matrix ).copy(), DoubleFunctions.plus );
+            l_matrix.assign( IBaseAlgebra.DENSEALGEBRA.transpose( l_matrix ).copy(), DoubleFunctions.plus );
 
         return new ImmutablePair<>( l_matrix, new ArrayList<>( l_index.keySet() ) );
     }

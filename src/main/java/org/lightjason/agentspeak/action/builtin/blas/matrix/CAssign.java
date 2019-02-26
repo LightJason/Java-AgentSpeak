@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,19 +49,22 @@ import java.util.stream.Stream;
  * .math/blas/matrix/assign( AssignMatrix, Matrix1, [Matrix2, Matrix3] );
  * }
  */
-public final class CAssign extends IBuiltinAction
+public final class CAssign extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2048633347249242365L;
-
     /**
-     * ctor
+     * action name
      */
-    public CAssign()
+    private static final IPath NAME = namebyclass( CAssign.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

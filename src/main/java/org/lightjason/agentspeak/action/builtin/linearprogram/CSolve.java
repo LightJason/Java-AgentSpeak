@@ -33,7 +33,8 @@ import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.apache.commons.math3.optim.linear.NonNegativeConstraint;
 import org.apache.commons.math3.optim.linear.SimplexSolver;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -71,19 +72,22 @@ import java.util.stream.Stream;
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
-public final class CSolve extends IBuiltinAction
+public final class CSolve extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -9105794980077188037L;
-
     /**
-     * ctor
+     * action name
      */
-    public CSolve()
+    private static final IPath NAME = namebyclass( CSolve.class, "math", "linearprogram" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.blas.IAlgebra;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,19 +47,22 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Invertible_matrix
  */
-public final class CInvert extends IAlgebra
+public final class CInvert extends IBaseAlgebra
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 522614263052558397L;
-
     /**
-     * ctor
+     * action name
      */
-    public CInvert()
+    private static final IPath NAME = namebyclass( CInvert.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

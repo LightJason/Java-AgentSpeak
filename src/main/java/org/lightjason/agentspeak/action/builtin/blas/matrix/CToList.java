@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,19 +47,22 @@ import java.util.stream.Stream;
  *
  * {@code [L1|L2|L3] = .math/blas/matrix/tolist( Matrix1, [Matrix2, Matrix3] );}
  */
-public final class CToList extends IBuiltinAction
+public final class CToList extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1640513979460742860L;
-
     /**
-     * ctor
+     * action name
      */
-    public CToList()
+    private static final IPath NAME = namebyclass( CToList.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

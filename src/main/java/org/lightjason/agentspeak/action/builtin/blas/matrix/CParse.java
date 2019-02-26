@@ -25,8 +25,9 @@ package org.lightjason.agentspeak.action.builtin.blas.matrix;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -55,19 +56,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C] = .math/blas/matrix/parse("1,2;3,4", "5 6 7; 8 9 10", "dense|sparse" );}
  */
-public final class CParse extends IBuiltinAction
+public final class CParse extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1592787131411189781L;
-
     /**
-     * ctor
+     * action name
      */
-    public CParse()
+    private static final IPath NAME = namebyclass( CParse.class, "math", "blas", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

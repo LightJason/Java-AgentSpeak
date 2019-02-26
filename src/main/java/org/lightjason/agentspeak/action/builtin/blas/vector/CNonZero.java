@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.blas.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [NZ1|NZ2] = .math/blas/vector/nonzero(V1,V2);}
  */
-public final class CNonZero extends IBuiltinAction
+public final class CNonZero extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5912383596586629025L;
-
     /**
-     * ctor
+     * action name
      */
-    public CNonZero()
+    private static final IPath NAME = namebyclass( CNonZero.class, "math", "blas", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.linearprogram;
 
 import org.apache.commons.math3.optim.linear.Relationship;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 
 import javax.annotation.Nonnull;
@@ -34,20 +34,12 @@ import java.util.Locale;
 /**
  * abstract class for constraint actions
  */
-public abstract class IConstraint extends IBuiltinAction
+public abstract class IConstraint extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1078912058401537801L;
-
-    /**
-     * ctor
-     */
-    public IConstraint()
-    {
-        super( 3 );
-    }
 
     /**
      * returns the enum of a relationship by a string value

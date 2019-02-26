@@ -31,7 +31,7 @@ import java.text.MessageFormat;
 /**
  * formatter of 1D matrix
  */
-public final class CFormat1D extends IFormat<DoubleMatrix1D>
+public final class CFormat1D extends IBaseFormat<DoubleMatrix1D>
 {
     /**
      * serial id

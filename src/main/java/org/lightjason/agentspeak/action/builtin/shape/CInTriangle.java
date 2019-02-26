@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.shape;
 
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -50,7 +50,7 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
  */
-public final class CInTriangle extends IBuiltinAction
+public final class CInTriangle extends IBaseAction
 {
     /**
      * serial id
@@ -61,12 +61,11 @@ public final class CInTriangle extends IBuiltinAction
      */
     private static final IPath NAME = namebyclass( CInTriangle.class, "math", "shape" );
 
-    /**
-     * ctor
-     */
-    public CInTriangle()
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
