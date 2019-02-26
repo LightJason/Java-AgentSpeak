@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.bool;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -57,7 +56,7 @@ public final class COr extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "bool/or" );
+    private static final IPath NAME = namebyclass( COr.class, "bool" );
 
     @Nonnull
     @Override

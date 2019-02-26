@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.bool;
 
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
@@ -51,7 +50,7 @@ public final class CNotEqual extends IBaseEqualiy
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "bool/notequal" );
+    private static final IPath NAME = namebyclass( CNotEqual.class, "bool" );
 
     @Nonnull
     @Override

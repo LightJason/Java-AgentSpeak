@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -58,7 +57,7 @@ public final class CTheory extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "prolog/theory" );
+    private static final IPath NAME = namebyclass( CTheory.class, "prolog" );
 
     @Nonnull
     @Override

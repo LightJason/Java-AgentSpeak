@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.string;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -60,7 +59,7 @@ public final class CBase64Decode extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "string/base64decode" );
+    private static final IPath NAME = namebyclass( CBase64Decode.class, "string" );
 
     @Nonnull
     @Override

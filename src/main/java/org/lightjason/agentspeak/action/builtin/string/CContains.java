@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.string;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -55,7 +54,7 @@ public final class CContains extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "string/contains" );
+    private static final IPath NAME = namebyclass( CContains.class, "string" );
 
     @Nonnull
     @Override

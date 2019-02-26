@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.prolog;
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -57,7 +56,7 @@ public final class CPlanTheory extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "prolog/plantheory" );
+    private static final IPath NAME = namebyclass( CPlanTheory.class, "prolog" );
 
     @Nonnull
     @Override

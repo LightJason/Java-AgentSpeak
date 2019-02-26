@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.string;
 import org.apache.commons.text.CharacterPredicate;
 import org.apache.commons.text.RandomStringGenerator;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -56,7 +55,7 @@ public final class CRandom extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "string/random" );
+    private static final IPath NAME = namebyclass( CRandom.class, "string" );
 
     @Nonnull
     @Override
