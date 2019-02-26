@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -36,7 +37,7 @@ import java.util.List;
  * The action returns for each tuple of vertices the edge of a single
  * graph instance
  *
- * {@code [E1|E2|E3] = .graph/findedgesingle( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
+ * {@code [E1|E2|E3] = .graph/findedgemultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] );}
  */
 public final class CFindEdgeMultiple extends IApplyMultiple
 {
@@ -44,6 +45,17 @@ public final class CFindEdgeMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = -40723204307254306L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CFindEdgeMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

@@ -32,9 +32,10 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
 import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -75,12 +76,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
-public final class CAdjacencyMatrix extends IBuiltinAction
+public final class CAdjacencyMatrix extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2499068539684263946L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CAdjacencyMatrix.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

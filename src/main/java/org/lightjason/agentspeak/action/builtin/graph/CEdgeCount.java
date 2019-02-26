@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -45,12 +46,23 @@ import java.util.stream.Stream;
  *
  * {@code [E1|E2] = .graph/edgecount( Graph1, Graph2 );}
  */
-public final class CEdgeCount extends IBuiltinAction
+public final class CEdgeCount extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 9192290787721046055L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CEdgeCount.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

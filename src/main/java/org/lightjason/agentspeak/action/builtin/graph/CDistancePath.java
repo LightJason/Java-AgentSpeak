@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.builtin.graph;
 import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -54,6 +55,17 @@ public final class CDistancePath extends IApplyPathAlgorithm
      * serial id
      */
     private static final long serialVersionUID = 2146213818742863048L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CDistancePath.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,

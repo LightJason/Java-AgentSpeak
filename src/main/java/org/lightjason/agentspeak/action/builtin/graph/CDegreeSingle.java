@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -36,7 +37,7 @@ import java.util.List;
  * The action returns for a vertex as first
  * argument the degree on each graph argument
  *
- * {@code [D1|D2] = .graph/degree( Vertex, Graph1, Graph2 );}
+ * {@code [D1|D2] = .graph/degreesingle( Vertex, Graph1, Graph2 );}
  */
 public final class CDegreeSingle extends IApplySingle
 {
@@ -44,6 +45,17 @@ public final class CDegreeSingle extends IApplySingle
      * serial id
      */
     private static final long serialVersionUID = 8573746793581623682L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CDegreeSingle.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int skipsize()

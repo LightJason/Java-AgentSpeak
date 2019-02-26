@@ -21,54 +21,43 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.datetime;
+package org.lightjason.agentspeak.action.builtin;
 
-import org.joda.time.Instant;
-import org.joda.time.Minutes;
-import org.lightjason.agentspeak.common.IPath;
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.stream.Stream;
-
+import java.util.Locale;
 
 
 /**
- * returns the minutes between two dates.
- * The actions returns the number of minutes between
- * two date-time objects. A positive value will be returned iif the first
- * date-time item is before the second one, a negative value
- * will be returned iif the first date-time item is after the
- * second date-time item
- *
- * {@code [M1|M2] = .datetime/minutesbetween( DateTime1, DateTime2, DateTime3, DateTime4 );}
+ * action name tests
  */
-public final class CMinutesBetween extends IBetween
+public final class TestCActionNames
 {
-    /**
-     * serial id
-     */
-    private static final long serialVersionUID = 2915775037746512831L;
-    /**
-     * action name
-     */
-    private static final IPath NAME = namebyclass( CMinutesBetween.class, "datetime" );
 
-    @Nonnull
-    @Override
-    public IPath name()
+    /**
+     * run test
+     */
+    @Test
+    public void actionnames()
     {
-        return NAME;
+        CCommon.actionsFromPackage().parallel().forEach( TestCActionNames::checkname );
     }
 
-    @Nonnull
-    @Override
-    protected Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
+    /**
+     * check action name
+     *
+     * @param p_action action
+     */
+    private static void checkname( @Nonnull final IAction p_action )
     {
-        return p_datetime
-            .map( i -> Minutes.minutesBetween( i.get( 0 ), i.get( 1 ) ) )
-            .mapToDouble( Minutes::getMinutes )
-            .boxed();
+        Assert.assertTrue(
+            p_action.getClass().getCanonicalName(),
+            p_action.name().toString().contains( p_action.getClass().getSimpleName().substring( 1 ).toLowerCase( Locale.ROOT ) )
+        );
     }
 
 }

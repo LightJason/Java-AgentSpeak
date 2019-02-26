@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.datetime;
 
 import org.joda.time.Instant;
 import org.joda.time.Seconds;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
@@ -53,7 +52,7 @@ public final class CSecondsBetween extends IBetween
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "datetime/secondsbetween" );
+    private static final IPath NAME = namebyclass( CSecondsBetween.class, "datetime" );
 
     @Nonnull
     @Override

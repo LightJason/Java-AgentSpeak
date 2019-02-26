@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -43,6 +44,17 @@ public final class CRemoveVertexSingle extends IApplySingle
      * serial id
      */
     private static final long serialVersionUID = -4205919186813827537L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CRemoveVertexSingle.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int skipsize()

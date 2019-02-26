@@ -30,7 +30,8 @@ import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -61,12 +62,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
  */
-public final class CCreate extends IBuiltinAction
+public final class CCreate extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8220165218772387059L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CCreate.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

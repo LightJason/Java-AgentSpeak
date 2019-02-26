@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -47,12 +48,23 @@ import java.util.stream.Stream;
  *
  * {@code [B1|B2] = .graph/containsedge( Element, Graph1, Graph2 );}
  */
-public final class CContainsEdge extends IBuiltinAction
+public final class CContainsEdge extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -9220666349160219684L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CContainsEdge.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

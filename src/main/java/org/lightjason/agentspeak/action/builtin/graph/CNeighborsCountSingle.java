@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -45,6 +46,17 @@ public final class CNeighborsCountSingle extends IApplySingle
      * serial id
      */
     private static final long serialVersionUID = 6624208105722736095L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CNeighborsCountSingle.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int skipsize()

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.builtin.storage;
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -55,7 +54,7 @@ public final class CExists extends IBaseStorage
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "storage/exist" );
+    private static final IPath NAME = namebyclass( CExists.class, "storage" );
 
     /**
      * ctor

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.builtin.storage;
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -52,7 +51,7 @@ public final class CClear extends IBaseStorage
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "storage/clear" );
+    private static final IPath NAME = namebyclass( CClear.class, "storage" );
 
     /**
      * ctor

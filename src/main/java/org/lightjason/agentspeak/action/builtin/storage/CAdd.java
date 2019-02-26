@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.storage;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -55,7 +54,7 @@ public final class CAdd extends IBaseStorage
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "storage/add" );
+    private static final IPath NAME = namebyclass( CAdd.class, "storage" );
 
     /**
      * ctor

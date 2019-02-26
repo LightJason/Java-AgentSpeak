@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -44,6 +45,17 @@ public final class CEndPointMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = 8037926558399331691L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CEndPointMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

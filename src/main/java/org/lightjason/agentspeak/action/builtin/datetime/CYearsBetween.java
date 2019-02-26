@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.datetime;
 
 import org.joda.time.Instant;
 import org.joda.time.Years;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
@@ -53,7 +52,7 @@ public final class CYearsBetween extends IBetween
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "datetime/yearsbetween" );
+    private static final IPath NAME = namebyclass( CYearsBetween.class, "datetime" );
 
     @Nonnull
     @Override

@@ -27,7 +27,8 @@ import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.shortestpath.PrimMinimumSpanningTree;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -55,12 +56,23 @@ import java.util.stream.Stream;
  * [SP3|SP4] = .graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
  * }
  */
-public final class CSpanningTree extends IBuiltinAction
+public final class CSpanningTree extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -367284435336974616L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CSpanningTree.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

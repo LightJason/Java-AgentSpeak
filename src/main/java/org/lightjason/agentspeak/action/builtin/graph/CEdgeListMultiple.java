@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -39,7 +40,7 @@ import java.util.List;
  * of vertices, for each tuple a list of all edges between the vertices is
  * returned
  *
- * {@code [L1|L2] = .graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] );}
+ * {@code [L1|L2] = .graph/edgelistmultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] );}
  */
 public final class CEdgeListMultiple extends IApplyMultiple
 {
@@ -47,6 +48,17 @@ public final class CEdgeListMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = -175626399205967595L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CEdgeListMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

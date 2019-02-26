@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.builtin.datetime;
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -51,7 +50,7 @@ public final class CZoneid extends IDateTime
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "datetime/zoneid" );
+    private static final IPath NAME = namebyclass( CZoneid.class, "datetime" );
 
     @Nonnull
     @Override

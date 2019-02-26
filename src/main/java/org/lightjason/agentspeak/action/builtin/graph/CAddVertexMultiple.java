@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -43,6 +44,17 @@ public final class CAddVertexMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = -5025878705856964222L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CAddVertexMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

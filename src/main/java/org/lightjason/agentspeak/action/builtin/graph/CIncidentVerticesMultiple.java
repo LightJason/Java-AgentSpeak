@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -38,7 +39,7 @@ import java.util.List;
  * The action returns for a single graph instance incident vertices of each
  * edge argument
  *
- * {@code [L1|L2] = .graph/incidentvertices( Graph, Edge1, Edge2 );}
+ * {@code [L1|L2] = .graph/incidentverticesmultiple( Graph, Edge1, Edge2 );}
  */
 public final class CIncidentVerticesMultiple extends IApplyMultiple
 {
@@ -46,6 +47,17 @@ public final class CIncidentVerticesMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = -5237880583521289516L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CIncidentVerticesMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

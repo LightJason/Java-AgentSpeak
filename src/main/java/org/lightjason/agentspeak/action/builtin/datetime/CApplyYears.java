@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.datetime;
 
 
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
@@ -52,7 +51,7 @@ public final class CApplyYears extends IPlusMinus
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "datetime/applyyears" );
+    private static final IPath NAME = namebyclass( CApplyYears.class, "datetime" );
 
     @Nonnull
     @Override

@@ -25,6 +25,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -45,6 +46,17 @@ public final class CEndPointSingle extends IApplySingle
      * serial id
      */
     private static final long serialVersionUID = -8744180441364559959L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CEndPointSingle.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int skipsize()

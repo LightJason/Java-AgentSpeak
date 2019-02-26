@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -44,6 +45,17 @@ public final class CIsNeighborMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = 9069330248750589992L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CIsNeighborMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

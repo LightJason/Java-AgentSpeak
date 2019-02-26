@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -44,6 +45,17 @@ public final class CIsSuccessorSingle extends IApplySingle
      * serial id
      */
     private static final long serialVersionUID = 8387401377224824331L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CIsSuccessorSingle.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int skipsize()

@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -36,7 +37,7 @@ import java.util.List;
  * (edge identifier, start vertex, end vertex)
  * to all other arguments are graphs
  *
- * {@code .graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 );}
+ * {@code .graph/addedgesingle( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 );}
  */
 public final class CAddEdgeSingle extends IApplySingle
 {
@@ -44,6 +45,17 @@ public final class CAddEdgeSingle extends IApplySingle
      * serial id
      */
     private static final long serialVersionUID = -1893938682357853616L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CAddEdgeSingle.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int skipsize()

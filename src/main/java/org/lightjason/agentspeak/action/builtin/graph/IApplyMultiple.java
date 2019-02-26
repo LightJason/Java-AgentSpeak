@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.builtin.graph;
 
 import com.codepoetics.protonpack.StreamUtils;
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * apply class for a single graph with multiple elements
  */
-public abstract class IApplyMultiple extends IBuiltinAction
+public abstract class IApplyMultiple extends IBaseAction
 {
     /**
      * serial id

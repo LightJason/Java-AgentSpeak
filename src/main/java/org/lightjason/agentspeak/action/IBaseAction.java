@@ -23,7 +23,14 @@
 
 package org.lightjason.agentspeak.action;
 
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 
 /**
@@ -57,6 +64,18 @@ public abstract class IBaseAction implements IAction
     public final String toString()
     {
         return this.name().toString();
+    }
+
+    /**
+     * creates the action name on class
+     *
+     * @param p_class class
+     * @param p_prefix prefix
+     * @return path
+     */
+    protected static IPath namebyclass( @Nonnull final Class<?> p_class, @Nonnull final String... p_prefix )
+    {
+        return new CPath( Stream.concat( Arrays.stream( p_prefix ), Stream.of( p_class.getSimpleName().substring( 1 ).toLowerCase( Locale.ROOT ) ) ) );
     }
 
 }

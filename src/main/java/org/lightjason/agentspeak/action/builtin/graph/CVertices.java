@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -46,12 +47,23 @@ import java.util.stream.Stream;
  *
  * {@code [V1|V2] = .graph/vertices( Graph1, Graph2 );}
  */
-public final class CVertices extends IBuiltinAction
+public final class CVertices extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8910556163865955921L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CVertices.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

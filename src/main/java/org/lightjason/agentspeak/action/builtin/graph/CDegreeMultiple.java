@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -36,7 +37,7 @@ import java.util.List;
  * The action returns for each vertex the degree of the
  * graph reference within the first argument
  *
- * {@code [D1|D2] = .graph/degree( Graph, Vertex1, Vertex2 );}
+ * {@code [D1|D2] = .graph/degreemultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CDegreeMultiple extends IApplyMultiple
 {
@@ -44,6 +45,17 @@ public final class CDegreeMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = 4311346775363807891L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CDegreeMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

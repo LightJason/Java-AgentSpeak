@@ -27,7 +27,7 @@ package org.lightjason.agentspeak.action.builtin.graph;
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.base.Function;
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -48,7 +48,7 @@ import java.util.stream.Stream;
 /**
  * abstract class to define path / distance graph algorithms
  */
-public abstract class IApplyPathAlgorithm extends IBuiltinAction
+public abstract class IApplyPathAlgorithm extends IBaseAction
 {
     /**
      * serial id

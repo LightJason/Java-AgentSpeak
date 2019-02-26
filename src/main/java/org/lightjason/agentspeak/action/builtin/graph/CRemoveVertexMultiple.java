@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -42,6 +43,17 @@ public final class CRemoveVertexMultiple extends IApplyMultiple
      * serial id
      */
     private static final long serialVersionUID = -2553854674274649435L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CRemoveVertexMultiple.class, "graph" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected int windowsize()

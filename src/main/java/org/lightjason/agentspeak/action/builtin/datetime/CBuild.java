@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.datetime;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -59,7 +58,7 @@ public final class CBuild extends IBaseAction
     /**
      * action name
      */
-    private static final IPath NAME = CPath.of( "datetime/build" );
+    private static final IPath NAME = namebyclass( CBuild.class, "datetime" );
 
     @Nonnull
     @Override
