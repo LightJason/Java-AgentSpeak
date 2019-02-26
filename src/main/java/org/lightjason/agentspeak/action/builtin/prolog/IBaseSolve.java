@@ -60,6 +60,7 @@ import java.util.stream.Stream;
  *
  * @todo replace string concatination on belief generating after a new version of the library is published
  * @see https://github.com/bolerio/hgdb/wiki/TuProlog
+ * @see https://bitbucket.org/tuprologteam/tuprolog/issues/18/nullpointer-exception-on-theory-append
  */
 public abstract class IBaseSolve extends IBaseAction
 {
@@ -184,6 +185,7 @@ public abstract class IBaseSolve extends IBaseAction
      * @return prolog term
      *
      * @todo tuprolog cannot deal with java native objects
+     * @see https://bitbucket.org/tuprologteam/tuprolog/issues/14/object-passing
      */
     //Checkstyle:OFF:NPathComplexity
     protected static Term toprologterm( @Nonnull final ITerm p_term )
