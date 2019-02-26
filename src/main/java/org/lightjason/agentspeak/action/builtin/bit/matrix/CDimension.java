@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [Row1|Column1|Row2|Column2] = .math/bit/matrix/dimension(M1,M2);}
  */
-public final class CDimension extends IBuiltinAction
+public final class CDimension extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7384202150654075448L;
-
     /**
-     * ctor
+     * action name
      */
-    public CDimension()
+    private static final IPath NAME = namebyclass( CDimension.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

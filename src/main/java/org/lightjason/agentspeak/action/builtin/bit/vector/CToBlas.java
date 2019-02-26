@@ -26,8 +26,9 @@ package org.lightjason.agentspeak.action.builtin.bit.vector;
 import cern.colt.matrix.tbit.BitVector;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.builtin.blas.EType;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -52,19 +53,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .math/bit/vector/toblas( BitVector1, BitVector2, "dense | sparse" );}
  */
-public final class CToBlas extends IBuiltinAction
+public final class CToBlas extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -400958933428905695L;
-
     /**
-     * ctor
+     * action name
      */
-    public CToBlas()
+    private static final IPath NAME = namebyclass( CToBlas.class, "math", "bit", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

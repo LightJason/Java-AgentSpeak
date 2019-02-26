@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.bit.vector;
 
 import cern.colt.matrix.tbit.BitVector;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 
@@ -37,12 +38,23 @@ import javax.annotation.Nonnull;
  *
  * {@code .math/bit/vector/or( Vector, Vector1, Vector2 );}
  */
-public final class COr extends IOperator
+public final class COr extends IBaseOperator
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -6715779810485553911L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( COr.class, "math", "bit", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected void apply( @Nonnull final BitVector p_target, @Nonnull final BitVector p_source )

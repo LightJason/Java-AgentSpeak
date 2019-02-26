@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 
@@ -37,12 +38,23 @@ import javax.annotation.Nonnull;
  *
  * {@code .math/bit/matrix/nand( Matrix, Matrix1, Matrix2 );}
  */
-public final class CNAnd extends IOperator
+public final class CNAnd extends IBaseOperator
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -7249602421941027908L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CNAnd.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )

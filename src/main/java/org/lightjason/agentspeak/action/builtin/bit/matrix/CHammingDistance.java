@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -49,12 +50,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Hamming_distance
  */
-public final class CHammingDistance extends IBuiltinAction
+public final class CHammingDistance extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 8167680292117761543L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CHammingDistance.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

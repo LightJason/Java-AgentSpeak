@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.bit.vector;
+package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
-import cern.colt.matrix.tbit.BitVector;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import cern.colt.matrix.tbit.BitMatrix;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -38,22 +38,14 @@ import java.util.stream.Stream;
 
 
 /**
- * defines an abstract operator for bit vector
+ * defines an abstract operator for bit matrix
  */
-public abstract class IOperator extends IBuiltinAction
+public abstract class IBaseOperator extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8112058782234338444L;
-
-    /**
-     * ctor
-     */
-    public IOperator()
-    {
-        super( 4 );
-    }
+    private static final long serialVersionUID = 8050014065736376063L;
 
     @Nonnegative
     @Override
@@ -68,8 +60,8 @@ public abstract class IOperator extends IBuiltinAction
                                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<BitVector> l_arguments = CCommon.flatten( p_argument )
-                                                   .map( ITerm::<BitVector>raw )
+        final List<BitMatrix> l_arguments = CCommon.flatten( p_argument )
+                                                   .map( ITerm::<BitMatrix>raw )
                                                    .collect( Collectors.toList() );
 
         l_arguments.stream()
@@ -87,5 +79,5 @@ public abstract class IOperator extends IBuiltinAction
      * @param p_target bit vector which will modifed
      * @param p_source source of modification
      */
-    protected abstract void apply( @Nonnull final BitVector p_target, @Nonnull final BitVector p_source );
+    protected abstract void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source );
 }

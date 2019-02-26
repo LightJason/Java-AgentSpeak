@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
 import cern.colt.matrix.tbit.BitVector;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,12 +49,23 @@ import java.util.stream.Stream;
  *
  * {@code [V1|V2] = .math/bit/matrix/tovector( Matrix1, Matrix2 );}
  */
-public final class CToVector extends IBuiltinAction
+public final class CToVector extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8873596018924393696L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CToVector.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
 import cern.colt.matrix.tbit.BitVector;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
@@ -38,12 +39,23 @@ import java.util.stream.IntStream;
  *
  * {@code [V1|V2] = .math/bit/matrix/column(3, Matrix1, [Matrix2]);}
  */
-public final class CColumn extends IRowColumn
+public final class CColumn extends IBaseRowColumn
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -6865043145578397469L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CColumn.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnull
     @Override

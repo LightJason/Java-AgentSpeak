@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -48,19 +49,22 @@ import java.util.stream.Stream;
  *
  * {@code [B1|B2] = .math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] );}
  */
-public final class CBoolValue extends IBuiltinAction
+public final class CBoolValue extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7865182130575934167L;
-
     /**
-     * ctor
+     * action name
      */
-    public CBoolValue()
+    private static final IPath NAME = namebyclass( CBoolValue.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

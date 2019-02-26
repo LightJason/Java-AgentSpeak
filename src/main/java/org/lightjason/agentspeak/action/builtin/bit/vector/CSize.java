@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.bit.vector;
 
 import cern.colt.matrix.tbit.BitVector;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .math/bit/vector/size( Vector1, Vector2 );}
  */
-public final class CSize extends IBuiltinAction
+public final class CSize extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -1728749054110390648L;
-
     /**
-     * ctor
+     * action name
      */
-    public CSize()
+    private static final IPath NAME = namebyclass( CSize.class, "math", "bit", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

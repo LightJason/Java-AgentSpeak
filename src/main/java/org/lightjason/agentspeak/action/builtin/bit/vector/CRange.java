@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.bit.vector;
 
 import cern.colt.matrix.tbit.BitVector;
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -50,19 +51,22 @@ import java.util.stream.Stream;
  *
  * {@code [V1|V2] = .math/bit/vector/range( BitVector, 0, 1, [3, 5] );}
  */
-public final class CRange extends IBuiltinAction
+public final class CRange extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2022532423038334824L;
-
     /**
-     * ctor
+     * action name
      */
-    public CRange()
+    private static final IPath NAME = namebyclass( CRange.class, "math", "bit", "vector" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative

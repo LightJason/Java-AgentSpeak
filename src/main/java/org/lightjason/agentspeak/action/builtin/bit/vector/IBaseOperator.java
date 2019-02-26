@@ -21,13 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.bit.matrix;
+package org.lightjason.agentspeak.action.builtin.bit.vector;
 
-import cern.colt.matrix.tbit.BitMatrix;
 import cern.colt.matrix.tbit.BitVector;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -40,29 +38,20 @@ import java.util.stream.Stream;
 
 
 /**
- * abstract class for extracting row / columns
- * form a bit matrix
+ * defines an abstract operator for bit vector
  */
-public abstract class IRowColumn extends IBuiltinAction
+public abstract class IBaseOperator extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3535898342256886326L;
-
-    /**
-     * ctor
-     */
-    protected IRowColumn()
-    {
-        super( 4 );
-    }
+    private static final long serialVersionUID = 8112058782234338444L;
 
     @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -71,25 +60,24 @@ public abstract class IRowColumn extends IBuiltinAction
                                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        final List<BitVector> l_arguments = CCommon.flatten( p_argument )
+                                                   .map( ITerm::<BitVector>raw )
+                                                   .collect( Collectors.toList() );
 
         l_arguments.stream()
                    .skip( 1 )
-                   .map( ITerm::<BitMatrix>raw )
-                   .map( i -> this.extract( i, l_arguments.get( 0 ).<Number>raw().intValue() ) )
-                   .map( CRawTerm::of )
-                   .forEach( p_return::add );
+                   .parallel()
+                   .forEach( i -> this.apply( i, l_arguments.get( 0 ) ) );
 
         return Stream.of();
     }
 
+
     /**
-     * extracts the data into a bit vector
+     * apply method to apply operation
      *
-     * @param p_matrix matrix object
-     * @param p_index index value
-     * @return bit vector
+     * @param p_target bit vector which will modifed
+     * @param p_source source of modification
      */
-    @Nonnull
-    protected abstract BitVector extract( @Nonnull final BitMatrix p_matrix, final int p_index );
+    protected abstract void apply( @Nonnull final BitVector p_target, @Nonnull final BitVector p_source );
 }

@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.bit.matrix;
 
 import cern.colt.matrix.tbit.BitMatrix;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,19 +45,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .math/bit/matrix/falsecount( BitMatrix1, BitMatrix2 );}
  */
-public final class CFalseCount extends IBuiltinAction
+public final class CFalseCount extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -800453241611644937L;
-
     /**
-     * ctor
+     * action name
      */
-    public CFalseCount()
+    private static final IPath NAME = namebyclass( CFalseCount.class, "math", "bit", "matrix" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 4 );
+        return NAME;
     }
 
     @Nonnegative
