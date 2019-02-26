@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -46,12 +47,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Average
  */
-public final class CAverage extends IBuiltinAction
+public final class CAverage extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3122381293872618564L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CAverage.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

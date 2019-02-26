@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.math;
 
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -45,12 +46,23 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C] = .math/hypot( 1, [2, [3]], [4, 5]);}
  */
-public final class CHypot extends IBuiltinAction
+public final class CHypot extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3560235052118385438L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CHypot.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

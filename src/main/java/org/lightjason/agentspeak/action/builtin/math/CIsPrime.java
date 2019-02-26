@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.math;
 
 import org.apache.commons.math3.primes.Primes;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -47,12 +48,23 @@ import java.util.stream.Stream;
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */
-public final class CIsPrime extends IBuiltinAction
+public final class CIsPrime extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7062947098373880833L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CIsPrime.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

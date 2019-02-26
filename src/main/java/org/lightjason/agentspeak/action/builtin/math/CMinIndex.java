@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -46,12 +47,23 @@ import java.util.stream.Stream;
  *
  * {@code MinIndex = .math/minindex( 5, 6, [7,8, [1,2,3]] );}
  */
-public final class CMinIndex extends IBuiltinAction
+public final class CMinIndex extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8719414965491690822L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CMinIndex.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

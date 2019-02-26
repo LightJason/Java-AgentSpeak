@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.math;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,12 +50,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Stirling_number
  */
-public final class CStirling extends IBuiltinAction
+public final class CStirling extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -9056209645109382946L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CStirling.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

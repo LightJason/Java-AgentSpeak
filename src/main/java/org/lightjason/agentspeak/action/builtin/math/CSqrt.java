@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -43,12 +44,23 @@ import java.util.stream.Stream;
  *
  * {@code [S1|S2] = .math/sqrt(2, 3);}
  */
-public final class CSqrt extends IBuiltinAction
+public final class CSqrt extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -622334205517915453L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CSqrt.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

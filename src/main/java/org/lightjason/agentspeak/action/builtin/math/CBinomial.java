@@ -25,7 +25,8 @@ package org.lightjason.agentspeak.action.builtin.math;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,12 +49,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
-public final class CBinomial extends IBuiltinAction
+public final class CBinomial extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 7542134505799374485L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CBinomial.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

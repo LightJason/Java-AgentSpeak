@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -49,12 +50,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
-public final class CSigmoid extends IBuiltinAction
+public final class CSigmoid extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3824593010060693544L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CSigmoid.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,12 +45,23 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C] = .math/pow(2, -2, 2, 9);}
  */
-public final class CPow extends IBuiltinAction
+public final class CPow extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3364760887780453571L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CPow.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

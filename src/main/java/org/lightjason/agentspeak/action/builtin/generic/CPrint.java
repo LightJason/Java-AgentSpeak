@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.generic;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.action.builtin.math.blas.CFormat1D;
-import org.lightjason.agentspeak.action.builtin.math.blas.CFormat2D;
+import org.lightjason.agentspeak.action.builtin.blas.CFormat1D;
+import org.lightjason.agentspeak.action.builtin.blas.CFormat2D;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;

@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -45,12 +46,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Average
  */
-public final class CHarmonicMean extends IBuiltinAction
+public final class CHarmonicMean extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 512098153369001644L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CHarmonicMean.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

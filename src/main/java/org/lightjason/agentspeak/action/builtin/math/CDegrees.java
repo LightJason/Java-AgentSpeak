@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -45,12 +46,23 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/Radian
  */
-public final class CDegrees extends IBuiltinAction
+public final class CDegrees extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 1956551592217112401L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CDegrees.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

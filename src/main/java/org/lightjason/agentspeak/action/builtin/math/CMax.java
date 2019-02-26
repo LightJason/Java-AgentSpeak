@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -45,12 +46,23 @@ import java.util.stream.Stream;
  *
  * {@code Max = .math/max( 2, 5, 7, [3, 2] );}
  */
-public final class CMax extends IBuiltinAction
+public final class CMax extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -7784521124090034499L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CMax.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

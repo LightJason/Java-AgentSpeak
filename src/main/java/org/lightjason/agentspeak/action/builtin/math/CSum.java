@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -42,12 +43,23 @@ import java.util.stream.Stream;
  *
  * {@code S = .math/sum( 3, 4, [1, -5, [3, 4]], 10, 12);}
  */
-public final class CSum extends IBuiltinAction
+public final class CSum extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -5366419253936818150L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CSum.class, "math" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
