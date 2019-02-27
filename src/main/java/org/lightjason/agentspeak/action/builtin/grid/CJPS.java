@@ -37,8 +37,10 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -88,7 +90,7 @@ public final class CJPS extends IBaseAction
     }
 
 
-    private static void route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
+    private static List<DoubleMatrix1D> route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
         final TreeSet<CJumpPoint> l_open = Stream.of( new CJumpPoint( p_start ) ).collect( Collectors.toCollection( TreeSet::new ) );
         final List<DoubleMatrix1D> l_closed = new ArrayList<>()
@@ -102,12 +104,33 @@ public final class CJPS extends IBaseAction
             if ( l_current.coordinate().equals( p_end ) )
             {
                 l_path.add( p_end );
-                final CJumpPoint l_parent =
+                CJumpPoint l_parent = l_current.parent();
+                while ( !l_parent.coordinate().equals( p_start ) )
+                {
+                    l_path.add( l_parent.coordinate() );
+                    l_parent = l_parent.parent();
+                }
+                Collections.reverse( l_path );
+                return l_path;
             }
+
+            //Find the successors to current node (add them to the open list)
+            successors( p_grid, l_current, p_end, l_closed, l_open );
+
+            //Add the l_currentnode to the closed list (as to not open it again)
+            l_closed.add( l_current.coordinate() );
+
         }
 
+        return Collections.emptyList();
     }
 
+
+    private static void successors( final ObjectMatrix2D p_objects, final CJumpPoint p_curnode, final DoubleMatrix1D p_end,
+                                    final List<DoubleMatrix1D> p_closed, final Set<CJumpPoint> p_open )
+    {
+
+    }
 
 
     /**
