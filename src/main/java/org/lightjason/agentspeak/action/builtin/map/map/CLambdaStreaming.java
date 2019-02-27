@@ -21,67 +21,37 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
+import java.util.AbstractMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
 /**
- * abstract class for apply a single element to a multiple maps
- *
- * @tparam T map instance
+ * streaming of a map
  */
-public abstract class IMapApplySingle<T> extends IBuiltinAction
+public final class CLambdaStreaming extends IBaseLambdaStreaming<Map<?, ?>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 4069386763245022021L;
+    private static final long serialVersionUID = -8776927369080417712L;
 
-    /**
-     * ctor
-     */
-    protected IMapApplySingle()
-    {
-        super( 3 );
-    }
-
-    @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public Stream<?> apply( @Nonnull final Map<?, ?> p_map )
     {
-        return 1;
+        return p_map.entrySet().stream();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public Stream<Class<?>> assignable()
     {
-        CCommon.flatten( p_argument.stream().skip( 2 ) )
-               .forEach( i -> this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
-
-        return Stream.of();
+        return Stream.of( AbstractMap.class, Map.class );
     }
-
-    /**
-     * apply operation
-     *
-     * @param p_instance object instance
-     * @param p_key key
-     * @param p_value value
-     */
-    protected abstract void apply( @Nonnull final T p_instance, @Nonnull final Object p_key, @Nullable final Object p_value );
 }
-

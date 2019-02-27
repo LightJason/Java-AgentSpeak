@@ -21,79 +21,84 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection;
+package org.lightjason.agentspeak.action.builtin.map;
 
-import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
 /**
- * abstract class for apply multiple elements to a single maps
+ * checks a collection is empty.
+ * All arguments are collection elements and for each argument
+ * a boolean flag for empty is returned, on all non-collection
+ * types empty is always false
  *
- * @tparam T map instance
+ * {@code [A|B] = .collection/mapisempty( Map, MultiMap );}
  */
-public abstract class IMapApplyMultiple<T> extends IBuiltinAction
+public final class CMapIsEmpty extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7048059456586091660L;
-
+    private static final long serialVersionUID = -3479069391247895544L;
     /**
-     * ctor
+     * action name
      */
-    protected IMapApplyMultiple()
+    private static final IPath NAME = namebyclass( CMapIsEmpty.class, "collection" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
-        return 3;
+        return 1;
     }
 
     @Nonnull
     @Override
-    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-
-        final List<ITerm> l_list = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_list.size() % 2 == 0 )
-            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( IMapApplyMultiple.class, "argumentsnotodd" ) );
-
-        StreamUtils.windowed(
-            l_list.stream()
-                  .skip( 1 ),
-            2,
-            2
-        )
-                   .forEach( i -> this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+        p_argument.stream()
+                  .map( CMapIsEmpty::empty )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
 
         return Stream.of();
     }
 
+
     /**
-     * apply operation
+     * checks a collection is empty
      *
-     * @param p_instance object instance
-     * @param p_key key
-     * @param p_value value
+     * @param p_term term value
+     * @return empty flag
      */
-    protected abstract void apply( @Nonnull final T p_instance, @Nonnull final Object p_key, @Nullable final Object p_value );
+    private static boolean empty( @Nonnull final ITerm p_term )
+    {
+        if ( CCommon.isssignableto( p_term, Map.class ) )
+            return p_term.<Map<?, ?>>raw().isEmpty();
+
+        return CCommon.isssignableto( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
+
+    }
+
 }

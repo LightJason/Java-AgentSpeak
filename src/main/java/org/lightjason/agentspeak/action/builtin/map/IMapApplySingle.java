@@ -21,35 +21,59 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.multimap;
+package org.lightjason.agentspeak.action.builtin.map;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.collection.IMapApplySingle;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * adds an single element to multiple multimap arguments.
- * First argument is a key, second the value, all
- * other values are multimap references, the key-value pair
- * is added to all multimaps
+ * abstract class for apply a single element to a multiple maps
  *
- * {@code .collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
+ * @tparam T map instance
  */
-public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
+public abstract class IMapApplySingle<T> extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7300831158175726919L;
+    private static final long serialVersionUID = 4069386763245022021L;
 
+    @Nonnegative
     @Override
-    protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    public final int minimalArgumentNumber()
     {
-        if ( Objects.nonNull( p_value ) )
-            p_instance.put( p_key, p_value );
+        return 1;
     }
+
+    @Nonnull
+    @Override
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
+    {
+        CCommon.flatten( p_argument.stream().skip( 2 ) )
+               .forEach( i -> this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
+
+        return Stream.of();
+    }
+
+    /**
+     * apply operation
+     *
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_value value
+     */
+    protected abstract void apply( @Nonnull final T p_instance, @Nonnull final Object p_key, @Nullable final Object p_value );
 }
+

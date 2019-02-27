@@ -21,35 +21,54 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.multimap;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.collection.IMapApplyMultiple;
+import org.lightjason.agentspeak.action.builtin.map.IMapGetMultiple;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Objects;
+import java.util.List;
+import java.util.Map;
 
 
 /**
- * adds all elements to a single multimap argument.
- * First argument is a multimap and all other arguments
- * are key-value pairs
+ * returns a multiple element of a single map.
+ * The first argument is a map reference and all
+ * other arguments are key values, the action
+ * returns the value of each key
  *
- * {@code .collection/multimap/putmultiple( MultiMap, Key1, Value1, [Key2, Value2] );}
+ * {@code [V1|V2] = .collection/map/getmultiple( Map, "key1", "key2" );}
  */
-public final class CPutMultiple extends IMapApplyMultiple<Multimap<Object, Object>>
+public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7383684374847719178L;
+    private static final long serialVersionUID = -4100425217888323445L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CGetMultiple.class, "collection", "map" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
-    protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    )
     {
-        if ( Objects.nonNull( p_value ) )
-            p_instance.put( p_key, p_value );
+        p_return.add(
+            CRawTerm.of(
+                p_instance.get( p_key )
+            )
+        );
     }
 
 }

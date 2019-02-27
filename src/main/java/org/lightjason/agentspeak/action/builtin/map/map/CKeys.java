@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -45,19 +46,22 @@ import java.util.stream.Stream;
  *
  * {@code L = .collection/map/keys( Map1, Map2, Map3 );}
  */
-public final class CKeys extends IBuiltinAction
+public final class CKeys extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8840624356230583535L;
-
     /**
-     * ctor
+     * action name
      */
-    public CKeys()
+    private static final IPath NAME = namebyclass( CKeys.class, "collection", "map" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

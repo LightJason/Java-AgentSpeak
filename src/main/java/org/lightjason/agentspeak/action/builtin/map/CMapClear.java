@@ -21,38 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection;
+package org.lightjason.agentspeak.action.builtin.map;
 
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 
 /**
- * checks a collection is empty.
- * All arguments are collection elements and for each argument
- * a boolean flag for empty is returned, on all non-collection
- * types empty is always false
+ * clears all elements of the collection.
+ * The action removes all elements of each collection arguments
  *
- * {@code [A|B|C] = .collection/list/isempty(List, Map, MultiMap);}
+ * {@code .collection/mapclear( Map, MultiMap );}
  */
-public final class CIsEmpty extends IBuiltinAction
+public final class CMapClear extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3479069391247895544L;
+    private static final long serialVersionUID = -1749636918394412139L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CMapClear.class, "collection" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
@@ -64,33 +72,25 @@ public final class CIsEmpty extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        p_argument.stream()
-                  .map( CIsEmpty::empty )
-                  .map( CRawTerm::of )
-                  .forEach( p_return::add );
-
+        p_argument.parallelStream().forEach( CMapClear::clear );
         return Stream.of();
     }
 
-
     /**
-     * checks a collection is empty
+     * clears element
      *
-     * @param p_term term value
-     * @return empty flag
+     * @param p_term term
      */
-    private static boolean empty( @Nonnull final ITerm p_term )
+    private static void clear( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.isssignableto( p_term, Collection.class ) )
-            return p_term.<Collection<?>>raw().isEmpty();
 
         if ( CCommon.isssignableto( p_term, Map.class ) )
-            return p_term.<Map<?, ?>>raw().isEmpty();
+            p_term.<Map<?, ?>>raw().clear();
 
-        return CCommon.isssignableto( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
+        if ( CCommon.isssignableto( p_term, Multimap.class ) )
+            p_term.<Multimap<?, ?>>raw().clear();
 
     }
 

@@ -21,34 +21,61 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map;
 
-import org.lightjason.agentspeak.action.builtin.collection.IMapApplySingle;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * adds an single element to multiple map arguments.
- * First argument is a key, second the value, all
- * other values are map references, the key-value pair
- * is added to all maps
+ * abstract class to get a multiple elements of a single maps
  *
- * {@code .collection/map/putsingle( "key", "value", Map1, Map2 );}
+ * @tparam T
  */
-public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
+public abstract class IMapGetMultiple<T> extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 2571810828014437518L;
+    private static final long serialVersionUID = 4747498401722017900L;
 
+    @Nonnegative
     @Override
-    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    public final int minimalArgumentNumber()
     {
-        p_instance.put( p_key, p_value );
+        return 1;
     }
+
+    @Nonnull
+    @Override
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
+    {
+        CCommon.flatten( p_argument )
+               .skip( 1 )
+               .forEach( i -> this.apply( p_parallel, p_argument.get( 0 ).<T>raw(), i.raw(), p_return ) );
+
+        return Stream.of();
+    }
+
+
+    /**
+     * apply operation
+     *
+     * @param p_parallel parallel flag
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_return return list
+     */
+    protected abstract void apply( final boolean p_parallel, @Nonnull final T p_instance, @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return );
 
 }

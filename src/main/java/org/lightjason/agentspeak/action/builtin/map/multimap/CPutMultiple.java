@@ -21,66 +21,47 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.multimap;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.builtin.map.IMapApplyMultiple;
+import org.lightjason.agentspeak.common.IPath;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
- * removes elements of the map.
- * Removes of possible all arguments of the map,
- * first argument is the map reference all other
- * arguments are key values returns the arguments
- * (or null if not exists)
+ * adds all elements to a single multimap argument.
+ * First argument is a multimap and all other arguments
+ * are key-value pairs
  *
- * {@code [A|B|C] = .collection/map/remove( Map, "a", 12, "c");}
+ * {@code .collection/multimap/putmultiple( MultiMap, Key1, Value1, [Key2, Value2] );}
  */
-public final class CRemove extends IBuiltinAction
+public final class CPutMultiple extends IMapApplyMultiple<Multimap<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 5920128340334118503L;
-
+    private static final long serialVersionUID = 7383684374847719178L;
     /**
-     * ctor
+     * action name
      */
-    public CRemove()
-    {
-        super( 3 );
-    }
-
-    @Nonnegative
-    @Override
-    public int minimalArgumentNumber()
-    {
-        return 2;
-    }
+    private static final IPath NAME = namebyclass( CPutMultiple.class, "collection", "multimap" );
 
     @Nonnull
     @Override
-    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IPath name()
     {
-        CCommon.flatten( p_argument.stream().skip( 1 ) )
-               .map( ITerm::raw )
-               .map( i -> p_argument.get( 0 ).<Map<Object, Object>>raw().remove( i ) )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+        return NAME;
+    }
 
-        return Stream.of();
+    @Override
+    protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    {
+        if ( Objects.nonNull( p_value ) )
+            p_instance.put( p_key, p_value );
     }
 
 }

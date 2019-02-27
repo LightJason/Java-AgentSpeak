@@ -21,37 +21,47 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.multimap;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.builtin.map.IMapApplySingle;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
- * streaming of a map
+ * adds an single element to multiple multimap arguments.
+ * First argument is a key, second the value, all
+ * other values are multimap references, the key-value pair
+ * is added to all multimaps
+ *
+ * {@code .collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 );}
  */
-public final class CLambdaStreaming extends IBaseLambdaStreaming<Map<?, ?>>
+public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -8776927369080417712L;
+    private static final long serialVersionUID = 7300831158175726919L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CPutSingle.class, "collection", "multimap" );
 
+    @Nonnull
     @Override
-    public Stream<?> apply( @Nonnull final Map<?, ?> p_map )
+    public IPath name()
     {
-        return p_map.entrySet().stream();
+        return NAME;
     }
 
-    @NonNull
     @Override
-    public Stream<Class<?>> assignable()
+    protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
-        return Stream.of( AbstractMap.class, Map.class );
+        if ( Objects.nonNull( p_value ) )
+            p_instance.put( p_key, p_value );
     }
 }

@@ -37,10 +37,10 @@ import java.util.stream.Stream;
 
 
 /**
- * clears all elements of the collection.
+ * clears all elements a set or list.
  * The action removes all elements of each collection arguments
  *
- * {@code .collection/clear( Map, MultiMap, Set, List );}
+ * {@code .collection/listsetclear( Set, List );}
  */
 public final class CListSetClear extends IBaseAction
 {

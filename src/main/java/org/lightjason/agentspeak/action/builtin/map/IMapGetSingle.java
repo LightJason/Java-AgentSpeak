@@ -21,37 +21,61 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.multimap;
+package org.lightjason.agentspeak.action.builtin.map;
 
-import com.google.common.collect.Multimap;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.antlr.v4.runtime.misc.MultiMap;
-import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * streaming of a multimap
+ * abstract class to get a single elements of multiple maps
+ *
+ * @tparam T map instance
  */
-public final class CLambdaStreaming extends IBaseLambdaStreaming<Multimap<?, ?>>
+public abstract class IMapGetSingle<T> extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -9088776927360487769L;
+    private static final long serialVersionUID = -4038678976460899638L;
 
+    @Nonnegative
     @Override
-    public Stream<?> apply( @Nonnull final Multimap<?, ?> p_multimap )
+    public final int minimalArgumentNumber()
     {
-        return p_multimap.asMap().entrySet().stream();
+        return 1;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Stream<Class<?>> assignable()
+    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return Stream.of( MultiMap.class );
+        CCommon.flatten( p_argument )
+               .skip( 1 )
+               .forEach( i -> this.apply( p_parallel, i.<T>raw(), p_argument.get( 0 ).raw(), p_return ) );
+
+        return Stream.of();
     }
+
+
+    /**
+     * apply operation
+     *
+     * @param p_parallel parallel flag
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_return return list
+     */
+    protected abstract void apply( final boolean p_parallel, @Nonnull final T p_instance, @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return );
+
 }

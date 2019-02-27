@@ -21,70 +21,37 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection;
+package org.lightjason.agentspeak.action.builtin.map.multimap;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import com.google.common.collect.Multimap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.antlr.v4.runtime.misc.MultiMap;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * abstract class to get a multiple elements of a single maps
- *
- * @tparam T
+ * streaming of a multimap
  */
-public abstract class IMapGetMultiple<T> extends IBuiltinAction
+public final class CLambdaStreaming extends IBaseLambdaStreaming<Multimap<?, ?>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 4747498401722017900L;
+    private static final long serialVersionUID = -9088776927360487769L;
 
-    /**
-     * ctor
-     */
-    protected IMapGetMultiple()
-    {
-        super( 3 );
-    }
-
-
-    @Nonnegative
     @Override
-    public final int minimalArgumentNumber()
+    public Stream<?> apply( @Nonnull final Multimap<?, ?> p_multimap )
     {
-        return 1;
+        return p_multimap.asMap().entrySet().stream();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public final Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                 @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public Stream<Class<?>> assignable()
     {
-        CCommon.flatten( p_argument )
-               .skip( 1 )
-               .forEach( i -> this.apply( p_parallel, p_argument.get( 0 ).<T>raw(), i.raw(), p_return ) );
-
-        return Stream.of();
+        return Stream.of( MultiMap.class );
     }
-
-
-    /**
-     * apply operation
-     *
-     * @param p_parallel parallel flag
-     * @param p_instance object instance
-     * @param p_key key
-     * @param p_return return list
-     */
-    protected abstract void apply( final boolean p_parallel, @Nonnull final T p_instance, @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return );
-
 }

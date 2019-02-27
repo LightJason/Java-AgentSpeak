@@ -21,66 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.multimap;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.action.builtin.map.IMapApplySingle;
+import org.lightjason.agentspeak.common.IPath;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 
 /**
- * returns the multimap as map.
- * Actions translates multimap objects into map objects
+ * adds an single element to multiple map arguments.
+ * First argument is a key, second the value, all
+ * other values are map references, the key-value pair
+ * is added to all maps
  *
- * {@code
- * X = .collection/multimap/asmap( MultiMap );
- * [A|B] = .collection/multimap/asmap( MultiMap1, MultiMap2 );
- * }
+ * {@code .collection/map/putsingle( "key", "value", Map1, Map2 );}
  */
-public final class CAsMap extends IBuiltinAction
+public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6544612446767394569L;
-
+    private static final long serialVersionUID = 2571810828014437518L;
     /**
-     * ctor
+     * action name
      */
-    public CAsMap()
-    {
-        super( 3 );
-    }
-
-    @Nonnegative
-    @Override
-    public int minimalArgumentNumber()
-    {
-        return 1;
-    }
+    private static final IPath NAME = namebyclass( CPutSingle.class, "collection", "map" );
 
     @Nonnull
     @Override
-    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public IPath name()
     {
-        CCommon.flatten( p_argument )
-               .map( ITerm::<Multimap<?, ?>>raw )
-               .map( Multimap::asMap )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+        return NAME;
+    }
 
-        return Stream.of();
+    @Override
+    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    {
+        p_instance.put( p_key, p_value );
     }
 
 }

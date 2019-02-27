@@ -21,40 +21,44 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.listsettuple;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * checks a list or set is empty.
- * All arguments are collection elements and for each argument
- * a boolean flag for empty is returned, on all non-collection
- * types empty is always false
+ * creates a hashmap.
+ * Returns an empty hashmap (key-value pair) and
+ * optional arguments must be even and it will create a key-value structure
  *
- * {@code [A|B|C] = .collection/islistsetempty(List, Set);}
+ * {@code M = .collection/map/create();}
  */
-public final class CIsListSetEmpty extends IBaseAction
+public final class CCreate extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6534790593912478944L;
+    private static final long serialVersionUID = 6246832787713042203L;
     /**
      * action name
      */
-    private static final IPath NAME = namebyclass( CIsListSetEmpty.class, "collection" );
+    private static final IPath NAME = namebyclass( CCreate.class, "collection", "map" );
 
     @Nonnull
     @Override
@@ -63,23 +67,20 @@ public final class CIsListSetEmpty extends IBaseAction
         return NAME;
     }
 
-    @Nonnegative
-    @Override
-    public int minimalArgumentNumber()
-    {
-        return 1;
-    }
-
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        p_argument.stream()
-                  .map( i -> i.<Collection>raw().isEmpty() )
-                  .map( CRawTerm::of )
-                  .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" ) );
+
+        final Map<Object, Object> l_map = p_parallel ? new ConcurrentHashMap<>() : new HashMap<>();
+        StreamUtils.windowed( l_arguments.stream(), 2, 2 )
+                   .forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+        p_return.add( CRawTerm.of( l_map ) );
 
         return Stream.of();
     }

@@ -21,46 +21,74 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.multimap;
+package org.lightjason.agentspeak.action.builtin.map.multimap;
 
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.collection.IMapGetSingle;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
- * returns a single element of all multimap elements.
- * The first argument will be used as key and all
- * arguments are multimap references, the key will be
- * returned of each multimap
+ * returns all values of the multimap.
+ * Returns a list with all values of the argument
+ * multimaps
  *
- * {@code [A|B|C] = .collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 );}
+ * {@code L = .collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
  */
-public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
+public final class CValues extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 2277559384526092314L;
+    private static final long serialVersionUID = -2367547481201779686L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CValues.class, "collection", "multimap" );
 
+    @Nonnull
     @Override
-    protected void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
-                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    public IPath name()
+    {
+        return NAME;
+    }
+
+    @Nonnegative
+    @Override
+    public int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
+        // arguments are map references
+        final List<?> l_result = CCommon.flatten( p_argument )
+                                        .flatMap( i -> i.<Multimap<?, ?>>raw().values().stream() )
+                                        .collect( Collectors.toList() );
+
         p_return.add(
             CRawTerm.of(
-                p_parallel
-                ? Collections.synchronizedList( new ArrayList<>( p_instance.asMap().get( p_key ) ) )
-                : new ArrayList<>( p_instance.asMap().get( p_key ) )
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
+        return Stream.of();
     }
 
 }

@@ -21,10 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection;
+package org.lightjason.agentspeak.action.builtin.map;
 
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -33,7 +34,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -45,15 +45,26 @@ import java.util.stream.Stream;
  * the size of each collection.
  * On non-collection type the action returns a zero value
  *
- * {@code [A|B|C|D] = .collection/size( Collection, Map, MultiMap, Tupel );}
+ * {@code [A|B|C|D] = .collection/mapsize( Collection, Map, MultiMap, Tupel );}
  */
-public final class CSize extends IBuiltinAction
+public final class CMapSize extends IBaseAction
 {
 
     /**
      * serial id
      */
     private static final long serialVersionUID = -8185185045612045570L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CMapSize.class, "collection" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
@@ -70,7 +81,7 @@ public final class CSize extends IBuiltinAction
     {
         // any term type
         p_argument.stream()
-                  .map( CSize::size )
+                  .map( CMapSize::size )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 
@@ -86,17 +97,11 @@ public final class CSize extends IBuiltinAction
      */
     private static long size( @Nonnull final ITerm p_term )
     {
-        if ( CCommon.isssignableto( p_term, Collection.class ) )
-            return p_term.<Collection<?>>raw().size();
-
         if ( CCommon.isssignableto( p_term, Map.class ) )
             return p_term.<Map<?, ?>>raw().size();
 
         if ( CCommon.isssignableto( p_term, Multimap.class ) )
             return p_term.<Multimap<?, ?>>raw().size();
-
-        if ( CCommon.isssignableto( p_term, Map.Entry.class ) )
-            return 2;
 
         return 0;
     }

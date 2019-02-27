@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import org.lightjason.agentspeak.action.builtin.collection.IMapApplySingle;
+import org.lightjason.agentspeak.action.builtin.map.IMapApplyMultiple;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,24 +32,33 @@ import java.util.Map;
 
 
 /**
- * adds an single element pair to all map iif not exists.
- * First and second argument is a key-value pair, all
- * other values are map references, the key-value pair
- * is added to all maps iif not exists
+ * adds all elements to a single map argument.
+ * First argument is a map and all other arguments
+ * are key-value pairs
  *
- * {@code .collection/map/putsingleifabsent( "key", "value", Map1, Map2 );}
+ * {@code .collection/map/putmultiple( Map, Key1, Value1, [Key2, Value2] );}
  */
-public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object>>
+public final class CPutMultiple extends IMapApplyMultiple<Map<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6130981531762056381L;
+    private static final long serialVersionUID = -743395540550077344L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CPutMultiple.class, "collection", "map" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
     protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
-        p_instance.putIfAbsent( p_key, p_value );
+        p_instance.put( p_key, p_value );
     }
-
 }

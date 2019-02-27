@@ -35,9 +35,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.collection.CClear;
-import org.lightjason.agentspeak.action.builtin.collection.CIsEmpty;
-import org.lightjason.agentspeak.action.builtin.collection.CSize;
+import org.lightjason.agentspeak.action.builtin.listsettuple.CListSetIsEmpty;
+import org.lightjason.agentspeak.action.builtin.map.CMapClear;
+import org.lightjason.agentspeak.action.builtin.map.CMapIsEmpty;
+import org.lightjason.agentspeak.action.builtin.map.CMapSize;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -47,6 +48,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -132,7 +134,7 @@ public final class TestCActionCollection extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CSize().execute(
+        new CMapSize().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
@@ -147,48 +149,84 @@ public final class TestCActionCollection extends IBaseTest
 
 
     /**
-     * test empty
+     * test empty map
      */
     @Test
-    public void empty()
+    public void emptymap()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CIsEmpty().execute(
+        new CMapIsEmpty().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new ArrayList<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
+            Stream.of( new ArrayList<>(), new HashSet(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
                   .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( 5, l_return.size() );
-        Assert.assertArrayEquals( Stream.of( true, true, true, false, false ).toArray(), l_return.stream().map( ITerm::<Boolean>raw ).toArray() );
+        Assert.assertEquals( 6, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( false, false, true, true, false, false ).toArray(), l_return.stream().map( ITerm::<Boolean>raw ).toArray() );
+    }
+
+    /**
+     * test empty list set
+     */
+    @Test
+    public void emptylistset()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CListSetIsEmpty().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of( new ArrayList<>(), new HashSet(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
+                  .map( CRawTerm::of )
+                  .collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertEquals( 6, l_return.size() );
+        Assert.assertArrayEquals( Stream.of( true, true, false, false, false, false ).toArray(), l_return.stream().map( ITerm::<Boolean>raw ).toArray() );
     }
 
 
     /**
-     * test clear
+     * test clear map
      */
     @Test
-    public void clear()
+    public void clearmap()
     {
-        final List<Integer> l_list = IntStream.range( 0, 10 ).boxed().collect( Collectors.toList() );
-        final Set<Integer> l_set = IntStream.range( 10, 20 ).boxed().collect( Collectors.toSet() );
         final Map<Integer, Integer> l_map = StreamUtils.windowed( IntStream.range( 100, 120 ).boxed(), 2 )
                                                        .collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) );
         final Multimap<Integer, Integer> l_multimap = HashMultimap.create();
         IntStream.range( 0, 5 ).forEach( i -> IntStream.range( i, i + 5 ).forEach( j -> l_map.put( i, j ) ) );
 
-        new CClear().execute(
+        new CMapClear().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Stream.of( l_map, l_multimap ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue( l_map.isEmpty() );
+        Assert.assertTrue( l_multimap.isEmpty() );
+
+    }
+
+    /**
+     * test clear
+     */
+    @Test
+    public void clearlistset()
+    {
+        final List<Integer> l_list = IntStream.range( 0, 10 ).boxed().collect( Collectors.toList() );
+        final Set<Integer> l_set = IntStream.range( 10, 20 ).boxed().collect( Collectors.toSet() );
+
+        new CMapClear().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of( l_list, l_set ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
         Assert.assertTrue( l_list.isEmpty() );
         Assert.assertTrue( l_set.isEmpty() );
-        Assert.assertTrue( l_map.isEmpty() );
     }
-
 }

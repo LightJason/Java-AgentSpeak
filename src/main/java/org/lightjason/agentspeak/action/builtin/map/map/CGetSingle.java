@@ -21,32 +21,53 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import org.lightjason.agentspeak.action.builtin.collection.IMapApplyMultiple;
+import org.lightjason.agentspeak.action.builtin.map.IMapGetSingle;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 
 /**
- * adds multiple element to a single map iif not exists.
- * First argument is a map and all other arguments
- * are key-value pairs, all pars are added to the map
+ * returns a single element of all map elements.
+ * The first argument will be used as key and all
+ * arguments are map references, the key will be
+ * returned of each map
  *
- * {@code .collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]);}
+ * {@code [A|B|C] = .collection/map/getsingle( "key", Map1, Map2, Map3 );}
  */
-public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
+public final class CGetSingle extends IMapGetSingle<Map<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6020101779012749616L;
+    private static final long serialVersionUID = 5486345873377172889L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CGetSingle.class, "collection", "map" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
-    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
+    protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
+                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    )
     {
-        p_instance.putIfAbsent( p_key, p_value );
+        p_return.add(
+            CRawTerm.of(
+                p_instance.get( p_key )
+            )
+        );
     }
 }

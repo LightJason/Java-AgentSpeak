@@ -21,41 +21,70 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.multimap;
 
-import org.lightjason.agentspeak.action.builtin.collection.IMapGetSingle;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
- * returns a single element of all map elements.
- * The first argument will be used as key and all
- * arguments are map references, the key will be
- * returned of each map
+ * returns the multimap as map.
+ * Actions translates multimap objects into map objects
  *
- * {@code [A|B|C] = .collection/map/getsingle( "key", Map1, Map2, Map3 );}
+ * {@code
+ * X = .collection/multimap/asmap( MultiMap );
+ * [A|B] = .collection/multimap/asmap( MultiMap1, MultiMap2 );
+ * }
  */
-public final class CGetSingle extends IMapGetSingle<Map<Object, Object>>
+public final class CAsMap extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 5486345873377172889L;
+    private static final long serialVersionUID = 6544612446767394569L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CAsMap.class, "collection", "multimap" );
 
+    @Nonnull
     @Override
-    protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
-                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
+    public IPath name()
+    {
+        return NAME;
+    }
+
+    @Nonnegative
+    @Override
+    public int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        p_return.add(
-            CRawTerm.of(
-                p_instance.get( p_key )
-            )
-        );
+        CCommon.flatten( p_argument )
+               .map( ITerm::<Multimap<?, ?>>raw )
+               .map( Multimap::asMap )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
+
+        return Stream.of();
     }
+
 }

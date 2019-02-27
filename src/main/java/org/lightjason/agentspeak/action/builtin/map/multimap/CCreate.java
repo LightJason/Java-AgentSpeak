@@ -21,85 +21,72 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection;
+package org.lightjason.agentspeak.action.builtin.map.multimap;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import com.codepoetics.protonpack.StreamUtils;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimaps;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * clears all elements of the collection.
- * The action removes all elements of each collection arguments
+ * creates a multi-hashmap.
+ * The action creates a multi-hashmap object and returns the object,
+ * optional arguments must be even and it will create a key-value structure
  *
- * {@code .collection/clear( Map, MultiMap, Set, List );}
+ * {@code
+ * M1 = .collection/multimap/create();
+ * M2 = .collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
+ * }
  */
-public final class CClear extends IBuiltinAction
+public final class CCreate extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -1749636918394412139L;
+    private static final long serialVersionUID = 90451576459268398L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CCreate.class, "collection", "multimap" );
 
-    @Nonnegative
+    @Nonnull
     @Override
-    public int minimalArgumentNumber()
+    public IPath name()
     {
-        return 1;
+        return NAME;
     }
 
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        if ( !p_argument.parallelStream().allMatch( CClear::clear ) )
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumenterror" )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
             );
 
+        final HashMultimap<Object, Object> l_map = HashMultimap.create();
+        StreamUtils.windowed( l_arguments.stream(), 2 ).forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+        p_return.add( CRawTerm.of( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
+
         return Stream.of();
-    }
-
-    /**
-     * clears element
-     *
-     * @param p_term term
-     * @return clearing successful
-     */
-    private static boolean clear( @Nonnull final ITerm p_term )
-    {
-        if ( CCommon.isssignableto( p_term, Collection.class ) )
-        {
-            p_term.<Collection<?>>raw().clear();
-            return true;
-        }
-
-        if ( CCommon.isssignableto( p_term, Map.class ) )
-        {
-            p_term.<Map<?, ?>>raw().clear();
-            return true;
-        }
-
-        if ( CCommon.isssignableto( p_term, Multimap.class ) )
-        {
-            p_term.<Multimap<?, ?>>raw().clear();
-            return true;
-        }
-
-        return false;
     }
 
 }

@@ -21,42 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.map;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import org.lightjason.agentspeak.action.builtin.collection.IMapGetMultiple;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.action.builtin.map.IMapApplySingle;
+import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 
 /**
- * returns a multiple element of a single map.
- * The first argument is a map reference and all
- * other arguments are key values, the action
- * returns the value of each key
+ * adds an single element pair to all map iif not exists.
+ * First and second argument is a key-value pair, all
+ * other values are map references, the key-value pair
+ * is added to all maps iif not exists
  *
- * {@code [V1|V2] = .collection/map/getmultiple( Map, "key1", "key2" );}
+ * {@code .collection/map/putsingleifabsent( "key", "value", Map1, Map2 );}
  */
-public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
+public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -4100425217888323445L;
+    private static final long serialVersionUID = 6130981531762056381L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CPutSingleIfAbsent.class, "collection", "map" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Override
-    protected void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
-                          @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return
-    )
+    protected void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
-        p_return.add(
-            CRawTerm.of(
-                p_instance.get( p_key )
-            )
-        );
+        p_instance.putIfAbsent( p_key, p_value );
     }
 
 }

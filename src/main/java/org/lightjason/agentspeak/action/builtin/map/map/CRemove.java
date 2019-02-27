@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.multimap;
+package org.lightjason.agentspeak.action.builtin.map.map;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -33,39 +33,43 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
 /**
- * returns all values of the multimap.
- * Returns a list with all values of the argument
- * multimaps
+ * removes elements of the map.
+ * Removes of possible all arguments of the map,
+ * first argument is the map reference all other
+ * arguments are key values returns the arguments
+ * (or null if not exists)
  *
- * {@code L = .collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 );}
+ * {@code [A|B|C] = .collection/map/remove( Map, "a", 12, "c");}
  */
-public final class CValues extends IBuiltinAction
+public final class CRemove extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -2367547481201779686L;
-
+    private static final long serialVersionUID = 5920128340334118503L;
     /**
-     * ctor
+     * action name
      */
-    public CValues()
+    private static final IPath NAME = namebyclass( CRemove.class, "collection", "map" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -74,16 +78,12 @@ public final class CValues extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        // arguments are map references
-        final List<?> l_result = CCommon.flatten( p_argument )
-                                        .flatMap( i -> i.<Multimap<?, ?>>raw().values().stream() )
-                                        .collect( Collectors.toList() );
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::raw )
+               .map( i -> p_argument.get( 0 ).<Map<Object, Object>>raw().remove( i ) )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
 
-        p_return.add(
-            CRawTerm.of(
-                p_parallel ? Collections.synchronizedList( l_result ) : l_result
-            )
-        );
         return Stream.of();
     }
 
