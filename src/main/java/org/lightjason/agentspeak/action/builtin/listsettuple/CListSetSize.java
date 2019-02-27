@@ -79,7 +79,7 @@ public final class CListSetSize extends IBaseAction
     {
         // any term type
         p_argument.stream()
-                  .map( i -> CCommon.isssignableto( i, Collection.class ) ? i.<Collection>raw().size() : 0 )
+                  .map( i -> CCommon.isssignableto( i, Collection.class ) ? i.<Collection<?>>raw().size() : 0 )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 

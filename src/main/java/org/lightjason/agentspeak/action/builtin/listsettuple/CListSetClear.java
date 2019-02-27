@@ -73,7 +73,7 @@ public final class CListSetClear extends IBaseAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // any term type
-        p_argument.parallelStream().forEach( i -> i.<Collection>raw().clear() );
+        p_argument.parallelStream().forEach( i -> i.<Collection<?>>raw().clear() );
         return Stream.of();
     }
 

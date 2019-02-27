@@ -78,7 +78,7 @@ public final class CListSetIsEmpty extends IBaseAction
     )
     {
         p_argument.stream()
-                  .map( i -> CCommon.isssignableto( i, Collection.class ) && i.<Collection>raw().isEmpty() )
+                  .map( i -> CCommon.isssignableto( i, Collection.class ) && i.<Collection<?>>raw().isEmpty() )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 

@@ -45,6 +45,10 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseEqualiy extends IBaseAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4730062017961570138L;
 
     @Nonnegative
     @Override
