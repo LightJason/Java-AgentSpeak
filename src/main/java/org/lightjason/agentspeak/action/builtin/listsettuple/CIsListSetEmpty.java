@@ -21,12 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple;
 
-import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,36 +32,35 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
 /**
- * creates a list with a integer ranged list.
- * The action creates a list of integer values within the
- * range \f$ [\text{argument 1}, \text{argument 2}) \f$,
- * the action need a even number of arguments, for each
- * tuple a ranged list will be returned
+ * checks a list or set is empty.
+ * All arguments are collection elements and for each argument
+ * a boolean flag for empty is returned, on all non-collection
+ * types empty is always false
  *
- * {@code [L1|L2] = .collection/list/create(0, 10, [2, 9]);}
+ * {@code [A|B|C] = .collection/islistsetempty(List, Set);}
  */
-public final class CRange extends IBuiltinAction
+public final class CIsListSetEmpty extends IBaseAction
 {
-
     /**
      * serial id
      */
-    private static final long serialVersionUID = 4072747153980493017L;
-
+    private static final long serialVersionUID = 6534790593912478944L;
     /**
-     * ctor
+     * action name
      */
-    public CRange()
+    private static final IPath NAME = namebyclass( CIsListSetEmpty.class, "collection" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
@@ -79,26 +76,10 @@ public final class CRange extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<Integer> l_arguments = CCommon.flatten( p_argument )
-                                                 .map( ITerm::<Number>raw )
-                                                 .mapToInt( Number::intValue )
-                                                 .boxed()
-                                                 .collect( Collectors.toList() );
-        if ( l_arguments.isEmpty() || l_arguments.size() % 2 == 1 )
-            throw new CExecutionIllegealArgumentException(
-                p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this,  "argumentsnoteven" )
-            );
-
-        StreamUtils.windowed(
-            l_arguments.stream(),
-            2,
-            2
-        )
-                   .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
-                   .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-                   .map( CRawTerm::of )
-                   .forEach( p_return::add );
+        p_argument.stream()
+                  .map( i -> i.<Collection>raw().isEmpty() )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
 
         return Stream.of();
     }

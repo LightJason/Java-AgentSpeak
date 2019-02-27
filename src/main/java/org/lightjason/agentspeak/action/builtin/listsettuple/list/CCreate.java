@@ -21,19 +21,18 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,33 +40,32 @@ import java.util.stream.Stream;
 
 
 /**
- * returns a sublist within the index range.
- * Creates a sublist of an existing list by an index range,
- * first argument is the list object, all other arguments
- * are tuples of ranges \f$ [ \text{lower-bound}, \text{upper-bound} ) \f$
+ * creates a list.
+ * Creates a list of the arguments, so each argument of the action is put to the list,
+ * is the argument empty an empty-list object will be returned
  *
- * {@code [L1|L2] = .collection/list/get( L, 2, 5, [4, 6] );}
+ * {@code
+ * L1 = .collection/list/create("a", 1, ["b", 2]);
+ * L2 = .collection/list/create();
+ * }
  */
-public final class CSubList extends IBuiltinAction
+public final class CCreate extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 5029899221891965636L;
-
+    private static final long serialVersionUID = 4537731951256173941L;
     /**
-     * ctor
+     * action name
      */
-    public CSubList()
-    {
-        super( 3 );
-    }
+    private static final IPath NAME = namebyclass( CCreate.class, "collection", "list" );
 
-    @Nonnegative
+    @Nonnull
     @Override
-    public int minimalArgumentNumber()
+    public IPath name()
     {
-        return 1;
+        return NAME;
     }
 
     @Nonnull
@@ -76,27 +74,15 @@ public final class CSubList extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatten( p_argument.stream().skip( 1 ) ) )
-                                              .collect( Collectors.toList() );
+        final List<?> l_list = p_argument.isEmpty()
+                               ? new ArrayList<>()
+                               : CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
-        if ( l_arguments.size() % 2 == 0 || l_arguments.size() < 3 )
-            throw new CExecutionIllegealArgumentException(
-                p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnotoddandlessthan", 3 )
-            );
-
-        StreamUtils.windowed(
-            l_arguments.stream()
-                       .skip( 1 )
-                       .map( ITerm::<Number>raw )
-                       .map( Number::intValue ),
-            2,
-            2
-        )
-                   .map( i -> l_arguments.get( 0 ).<List<?>>raw().subList( i.get( 0 ), i.get( 1 ) ) )
-                   .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-                   .map( CRawTerm::of )
-                   .forEach( p_return::add );
+        p_return.add( CRawTerm.of(
+            p_parallel
+            ? Collections.synchronizedList( l_list )
+            : l_list
+        ) );
 
         return Stream.of();
     }

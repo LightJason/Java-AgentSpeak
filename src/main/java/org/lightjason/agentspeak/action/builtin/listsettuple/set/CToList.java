@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.set;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,30 +35,32 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * returns an unique list of the list.
- * All arguments are collections and the action removes nested
- * structures and returns a list with unique elements
+ * converts a set to a list.
+ * The action converts each set argument to a list
  *
- * {@code U = .collection/list/unique( L );}
+ * {@code [L1|L2] = .collection/set/tolist( Set1, Set2 );}
  */
-public final class CUnique extends IBuiltinAction
+public final class CToList extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7443341297726235773L;
-
+    private static final long serialVersionUID = 7123196333851031484L;
     /**
-     * ctor
+     * action name
      */
-    public CUnique()
+    private static final IPath NAME = namebyclass( CToList.class, "collection", "set" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
@@ -74,13 +76,13 @@ public final class CUnique extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<?> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
-
-        p_return.add( CRawTerm.of(
-            p_parallel ? Collections.synchronizedList( l_result ) : l_result
-        ) );
+        p_argument.stream()
+                  .map( ITerm::<Set<?>>raw )
+                  .map( ArrayList::new )
+                  .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
 
         return Stream.of();
     }
-
 }

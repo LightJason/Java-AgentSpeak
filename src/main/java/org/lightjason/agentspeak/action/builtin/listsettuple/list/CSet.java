@@ -21,12 +21,10 @@
  * @endcond
  */
 
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-package org.lightjason.agentspeak.action.builtin.collection.set;
-
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -34,37 +32,40 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * checks elements are containing in set.
- * The action checks the first argument, which is a set,
- * that all other arguments are contained
+ * adds an element to the list.
+ * Sets an element in each list, the first
+ * argument is the index in the liste, the
+ * second is the value, all other are list objects
  *
- * {@code [E1|E2|E3] = .collection/set/contains( Set, "1", [1, 2] );}
+ * {@code .collection/list/set( 2, "a string value", L1, L2, L3 );}
  */
-public final class CContains extends IBuiltinAction
+public final class CSet extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6055086280161100662L;
-
+    private static final long serialVersionUID = 7816622007281628228L;
     /**
-     * ctor
+     * action name
      */
-    public CContains()
+    private static final IPath NAME = namebyclass( CSet.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 1;
+        return 3;
     }
 
     @Nonnull
@@ -73,14 +74,12 @@ public final class CContains extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final Set<Object> l_set = p_argument.get( 0 ).raw();
-
-        CCommon.flatten( p_argument.stream().skip( 1 ) )
-               .map( ITerm::raw )
-               .map( l_set::contains )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+        p_argument.stream()
+                  .skip( 2 )
+                  .map( ITerm::<List<Object>>raw )
+                  .forEach( i -> i.set( p_argument.get( 0 ).<Number>raw().intValue(), p_argument.get( 1 ).raw() ) );
 
         return Stream.of();
     }
+
 }

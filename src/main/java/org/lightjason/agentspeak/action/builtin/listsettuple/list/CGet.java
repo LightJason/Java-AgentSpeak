@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,41 +33,42 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * creates the union between lists.
- * Creates the union of all arguemnts with removing nested
- * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$
+ * returns an element of the list by the index.
+ * The first argument is a list object and all other
+ * arguments are index values, so the action returns
+ * the elements
  *
- * {@code U = .collection/list/union( L, [1,2], [3,4,[5,6]];}
+ * {@code [V1|V2] = .collection/list/get( L, 2, 7 );}
  */
-public final class CUnion extends IBuiltinAction
+public final class CGet extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 4895043812750102520L;
-
+    private static final long serialVersionUID = 4512636248444139006L;
     /**
-     * ctor
+     * action name
      */
-    public CUnion()
+    private static final IPath NAME = namebyclass( CGet.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -75,15 +77,13 @@ public final class CUnion extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        // all arguments must be lists
-        final List<Object> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
-        l_result.sort( Comparator.comparing( Object::hashCode ) );
+        final List<?> l_list = p_argument.get( 0 ).raw();
 
-        p_return.add(
-            CRawTerm.of(
-                p_parallel ? Collections.synchronizedList( l_result ) : l_result
-            )
-        );
+        CCommon.flatten( p_argument.subList( 1, p_argument.size() ) )
+               .map( i -> i.<Number>raw().intValue() )
+               .map( l_list::get )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
 
         return Stream.of();
     }

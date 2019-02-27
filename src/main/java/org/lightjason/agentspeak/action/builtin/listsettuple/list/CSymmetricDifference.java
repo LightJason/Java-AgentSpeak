@@ -21,9 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.set;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multiset;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,38 +35,46 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * removes any argument of the set and returns it.
- * The action removes of the first set argument, all other arguments
- * and returns boolean values of the object could be removed
+ * creates the symmetric difference between lists (difference of union and intersection).
+ * Creates the symmetric difference of all arguments, so all arguments are collections and the action will return
+ * a list with the symmetric difference \f$ (\mathbb{X} \setminus \mathbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) \f$
  *
- * {@code [V1|V2] = .collection/set/remove( Set, [1, "foo"]);}
+ * {@code D = .collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
+ *
+ * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
-public final class CRemove extends IBuiltinAction
+public final class CSymmetricDifference extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = -393680746973906155L;
-
+    private static final long serialVersionUID = 7657032978898575726L;
     /**
-     * ctor
+     * action name
      */
-    public CRemove()
+    private static final IPath NAME = namebyclass( CSymmetricDifference.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -72,14 +83,25 @@ public final class CRemove extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final Set<Object> l_set = p_argument.get( 0 ).raw();
+        // create a multiset and counts the occurence of element -> on an odd number the element will be returned
+        final Multiset<Object> l_count = ConcurrentHashMultiset.create();
+        CCommon.flatten( p_argument ).parallel().map( ITerm::raw ).forEach( l_count::add );
+        final List<Object> l_result = l_count.entrySet()
+                                             .parallelStream()
+                                             .filter( i -> !( i.getCount() % 2 == 0 ) )
+                                             .map( Multiset.Entry::getElement )
+                                             .sorted( Comparator.comparing( Object::hashCode ) )
+                                             .collect( Collectors.toList() );
 
-        CCommon.flatten( p_argument.stream().skip( 1 ) )
-               .map( ITerm::raw )
-               .map( l_set::remove )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
+        p_return.add(
+            CRawTerm.of(
+                p_parallel
+                ? Collections.synchronizedList( l_result )
+                : l_result
+            )
+        );
 
         return Stream.of();
     }
+
 }

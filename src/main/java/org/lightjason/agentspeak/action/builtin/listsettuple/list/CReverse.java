@@ -21,9 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import com.google.common.collect.Lists;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,24 +34,34 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * unflats any list structure.
- * All action arguments are list values which
- * will be unflatten and all elements will be
- * returned in single instances
+ * reverses a list.
+ * All arguments of the action are lists and the action will remove
+ * nested structures and reverse all elements in a single list
  *
- * {@code [A|B|C] = .collections/list/flat( 1, [2,[3,4]] );}
+ * {@code R = .collection/list/reverse( L, [1,2], [3,4,[7,8]] );}
  */
-public final class CFlat extends IBuiltinAction
+public final class CReverse extends IBaseAction
 {
-
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8792941025876008933L;
+    private static final long serialVersionUID = 2744303113340038007L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CReverse.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
@@ -64,7 +76,9 @@ public final class CFlat extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatten( p_argument ).forEach( p_return::add );
+        // all arguments are list references
+        p_return.addAll( Lists.reverse( CCommon.flatten( p_argument ).collect( Collectors.toList() ) ) );
         return Stream.of();
     }
+
 }

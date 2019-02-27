@@ -21,45 +21,43 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.tuple;
+package org.lightjason.agentspeak.action.builtin.listsettuple;
 
-import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.AbstractMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * creates a tuple of two elements.
- * The action creates tuples of all unflatten input arguments
- * and fail sif the number if less than two unflatten arguments
+ * clears all elements of the collection.
+ * The action removes all elements of each collection arguments
  *
- * {@code [A|B] = .collection/tuple/create("A", "1", ["B", "2"]);}
+ * {@code .collection/clear( Map, MultiMap, Set, List );}
  */
-public final class CCreate extends IBuiltinAction
+public final class CListSetClear extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 3030084067378090112L;
-
+    private static final long serialVersionUID = -1496394139369412718L;
     /**
-     * ctor
+     * action name
      */
-    public CCreate()
+    private static final IPath NAME = namebyclass( CListSetClear.class, "collection" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
@@ -72,23 +70,10 @@ public final class CCreate extends IBuiltinAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 1 )
-            throw new CExecutionIllegealArgumentException(
-                p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
-            );
-
-
-        StreamUtils
-            .windowed( l_arguments.stream().map( ITerm::raw ), 2, 2 )
-            .map( i -> new AbstractMap.SimpleEntry<>( i.get( 0 ), i.get( 1 ) ) )
-            .map( CRawTerm::of )
-            .forEach( p_return::add );
-
+        // any term type
+        p_argument.parallelStream().forEach( i -> i.<Collection>raw().clear() );
         return Stream.of();
     }
 

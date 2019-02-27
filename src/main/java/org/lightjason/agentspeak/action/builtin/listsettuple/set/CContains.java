@@ -21,35 +21,48 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.tuple;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+package org.lightjason.agentspeak.action.builtin.listsettuple.set;
+
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.AbstractMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * sets a value within a tuple.
- * The action sets the value within the first argument
- * in each tuple argument, the action never fails
+ * checks elements are containing in set.
+ * The action checks the first argument, which is a set,
+ * that all other arguments are contained
  *
- * {@code .collection/tuple/set( "value", T1, T2, T3 );}
+ * {@code [E1|E2|E3] = .collection/set/contains( Set, "1", [1, 2] );}
  */
-public final class CSet extends IBuiltinAction
+public final class CContains extends IBaseAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -8109609646339064488L;
+    private static final long serialVersionUID = 6055086280161100662L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CContains.class, "collection", "set" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override
@@ -64,12 +77,13 @@ public final class CSet extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        final Set<Object> l_set = p_argument.get( 0 ).raw();
 
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<AbstractMap.Entry<Object, Object>>raw )
-                   .forEach( i -> i.setValue( l_arguments.get( 0 ).raw() ) );
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::raw )
+               .map( l_set::contains )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
 
         return Stream.of();
     }

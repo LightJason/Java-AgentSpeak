@@ -21,39 +21,38 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.set;
+package org.lightjason.agentspeak.action.builtin.listsettuple.tuple;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collections;
+import java.util.AbstractMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * action to create a set.
- * The action creates a set and put all given arguments
- * inside the set
+ * creates a tuple of two elements.
+ * The action creates tuples of all unflatten input arguments
+ * and fail sif the number if less than two unflatten arguments
  *
- * {@code
- * S = .collection/set/create( "1", [ 1, 2, 3] );
- * S = .collection/set/create();
- * }
+ * {@code [A|B] = .collection/tuple/create("A", "1", ["B", "2"]);}
  */
 public final class CCreate extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 6965219782366810100L;
+    private static final long serialVersionUID = 3030084067378090112L;
 
     /**
      * ctor
@@ -63,22 +62,34 @@ public final class CCreate extends IBuiltinAction
         super( 3 );
     }
 
+    @Nonnegative
+    @Override
+    public int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final Set<?> l_return = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
+            );
 
-        p_return.add(
-            CRawTerm.of(
-                p_parallel
-                ? Collections.synchronizedSet( l_return )
-                : l_return
-            )
-        );
+
+        StreamUtils
+            .windowed( l_arguments.stream().map( ITerm::raw ), 2, 2 )
+            .map( i -> new AbstractMap.SimpleEntry<>( i.get( 0 ), i.get( 1 ) ) )
+            .map( CRawTerm::of )
+            .forEach( p_return::add );
 
         return Stream.of();
     }
+
 }

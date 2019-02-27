@@ -21,11 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import com.google.common.collect.ConcurrentHashMultiset;
-import com.google.common.collect.Multiset;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -34,43 +35,44 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.AbstractMap;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * creates the symmetric difference between lists (difference of union and intersection).
- * Creates the symmetric difference of all arguments, so all arguments are collections and the action will return
- * a list with the symmetric difference \f$ (\mathbb{X} \setminus \mathbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) \f$
+ * creates a list of tuples with elements of two lists.
+ * Creates list of tupels of the first half arguments and the
+ * second half arguments with \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$
+ * and result \f$ \langle x_i, y_i \rangle \f$
  *
- * {@code D = .collection/list/symmetricdifference( [1,2,[3,4]], [7,8,9,4], [[1,2], [3]] );}
- *
- * @see https://en.wikipedia.org/wiki/Symmetric_difference
+ * {@code T = .collection/list/zip( [1,3,5,7], [2,4,6,8] );}
  */
-public final class CSymmetricDifference extends IBuiltinAction
+public final class CZip extends IBaseAction
 {
-
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7657032978898575726L;
-
+    private static final long serialVersionUID = 3280909344611567001L;
     /**
-     * ctor
+     * action name
      */
-    public CSymmetricDifference()
+    private static final IPath NAME = namebyclass( CZip.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Nonnull
@@ -79,21 +81,22 @@ public final class CSymmetricDifference extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        // create a multiset and counts the occurence of element -> on an odd number the element will be returned
-        final Multiset<Object> l_count = ConcurrentHashMultiset.create();
-        CCommon.flatten( p_argument ).parallel().map( ITerm::raw ).forEach( l_count::add );
-        final List<Object> l_result = l_count.entrySet()
-                                             .parallelStream()
-                                             .filter( i -> !( i.getCount() % 2 == 0 ) )
-                                             .map( Multiset.Entry::getElement )
-                                             .sorted( Comparator.comparing( Object::hashCode ) )
-                                             .collect( Collectors.toList() );
+        final List<?> l_arguments = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            throw new CExecutionIllegealArgumentException(
+                p_context,
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentsnoteven" )
+            );
+
+        final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
+            l_arguments.stream().limit( l_arguments.size() / 2 ),
+            l_arguments.stream().skip( l_arguments.size() / 2 ),
+            AbstractMap.SimpleEntry::new
+        ).collect( Collectors.toList() );
 
         p_return.add(
             CRawTerm.of(
-                p_parallel
-                ? Collections.synchronizedList( l_result )
-                : l_result
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
             )
         );
 

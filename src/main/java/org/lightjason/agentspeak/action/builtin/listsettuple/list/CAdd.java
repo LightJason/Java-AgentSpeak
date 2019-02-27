@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.set;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -32,36 +32,40 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * adds an element to the set.
- * The action adds all arguments to the set (overwrites existing)
+ * action to add elements to a list.
+ * The action adds the first argument to all
+ * other list arguments
  *
- * {@code .collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]);}
+ * {@code .collection/list/add( Value, L1, L2, L3 );}
  */
-public final class CAdd extends IBuiltinAction
+public final class CAdd extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = -2518410375938659779L;
-
+    private static final long serialVersionUID = 3958492487527967387L;
     /**
-     * ctor
+     * action name
      */
-    public CAdd()
+    private static final IPath NAME = namebyclass( CAdd.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -70,11 +74,10 @@ public final class CAdd extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final Set<Object> l_set = p_argument.get( 0 ).raw();
-
-        CCommon.flatten( p_argument.stream().skip( 1 ) )
-               .map( ITerm::raw )
-               .forEach( l_set::add );
+        p_argument.stream()
+                  .skip( 1 )
+                  .map( ITerm::<List<Object>>raw )
+                  .forEach( i -> i.add( p_argument.get( 0 ).raw() ) );
 
         return Stream.of();
     }

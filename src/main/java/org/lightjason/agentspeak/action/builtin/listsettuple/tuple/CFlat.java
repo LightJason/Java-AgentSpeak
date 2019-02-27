@@ -21,37 +21,63 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.tuple;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.AbstractList;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * streaming of list
+ * unflats the tuples into variables.
+ * All arguments are tupels and each tuple
+ * will be extract into two variables
+ *
+ * {@code [A|B|C|D] = .collection/tupel/flat( Tupel1, Tupel2 );}
  */
-public final class CLambdaStreaming implements ILambdaStreaming<List<?>>
+public final class CFlat extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7453430804177199062L;
+    private static final long serialVersionUID = 5546539971471669886L;
 
-    @Override
-    public Stream<?> apply( @Nonnull final List<?> p_objects )
+    /**
+     * ctor
+     */
+    public CFlat()
     {
-        return p_objects.stream();
+        super( 3 );
     }
 
-    @NonNull
+    @Nonnegative
     @Override
-    public Stream<Class<?>> assignable()
+    public int minimalArgumentNumber()
     {
-        return Stream.of( AbstractList.class, List.class );
+        return 1;
     }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
+    {
+        p_argument.stream()
+                  .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
+                  .flatMap( i -> Stream.of( i.getKey(), i.getValue() ) )
+                  .map( CRawTerm::of )
+                  .forEach( p_return::add );
+
+        return Stream.of();
+    }
+
 }

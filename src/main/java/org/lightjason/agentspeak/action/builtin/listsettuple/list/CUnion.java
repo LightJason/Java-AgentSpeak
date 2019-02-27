@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,33 +33,37 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * returns a flat concated list of any term data.
- * The arguments of this action are nested lists and the action transfer all nested structures
- * to a straight list
+ * creates the union between lists.
+ * Creates the union of all arguemnts with removing nested
+ * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$
  *
- * {@code L = .collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] );}
+ * {@code U = .collection/list/union( L, [1,2], [3,4,[5,6]];}
  */
-public final class CFlatConcat extends IBuiltinAction
+public final class CUnion extends IBaseAction
 {
-
     /**
      * serial id
      */
-    private static final long serialVersionUID = 5396377369001059763L;
-
+    private static final long serialVersionUID = 4895043812750102520L;
     /**
-     * ctor
+     * action name
      */
-    public CFlatConcat()
+    private static final IPath NAME = namebyclass( CUnion.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
@@ -74,8 +79,16 @@ public final class CFlatConcat extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<?> l_list = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
+        // all arguments must be lists
+        final List<Object> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
+        l_result.sort( Comparator.comparing( Object::hashCode ) );
+
+        p_return.add(
+            CRawTerm.of(
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            )
+        );
+
         return Stream.of();
     }
 

@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.set;
+package org.lightjason.agentspeak.action.builtin.listsettuple;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -31,32 +32,35 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * converts a set to a list.
- * The action converts each set argument to a list
+ * returns the size of a list or set.
+ * All arguments must be collections and the action returns
+ * the size of each collection.
  *
- * {@code [L1|L2] = .collection/set/tolist( Set1, Set2 );}
+ * {@code [A|B|C|D] = .collection/listsetsize( Set, List );}
  */
-public final class CToList extends IBuiltinAction
+public final class CListSetSize extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7123196333851031484L;
-
+    private static final long serialVersionUID = -8518502045185704561L;
     /**
-     * ctor
+     * action name
      */
-    public CToList()
+    private static final IPath NAME = namebyclass( CListSetSize.class, "collection" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
@@ -72,13 +76,13 @@ public final class CToList extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
+        // any term type
         p_argument.stream()
-                  .map( ITerm::<Set<?>>raw )
-                  .map( ArrayList::new )
-                  .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+                  .map( i -> i.<Collection>raw().size() )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 
         return Stream.of();
     }
+
 }

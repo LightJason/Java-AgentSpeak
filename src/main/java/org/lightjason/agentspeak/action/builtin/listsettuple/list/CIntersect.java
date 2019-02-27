@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -47,20 +48,23 @@ import java.util.stream.Stream;
  *
  * {@code I = .collection/list/intersect( [1,2,[3,4]], [3,4,[8,9]], [1,2,3,5] );}
  */
-public final class CIntersect extends IBuiltinAction
+public final class CIntersect extends IBaseAction
 {
 
     /**
      * serial id
      */
     private static final long serialVersionUID = 7453409804177199062L;
-
     /**
-     * ctor
+     * action name
      */
-    public CIntersect()
+    private static final IPath NAME = namebyclass( CIntersect.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

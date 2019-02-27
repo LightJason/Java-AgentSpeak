@@ -21,53 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.set;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * creates the complement between lists.
- * The action uses two input arguments \f$ \mathbb{A} \f$ and \f$ \mathbb{B} \f$ and returns a
- * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$
+ * adds an element to the set.
+ * The action adds all arguments to the set (overwrites existing)
  *
- * {@code L = .collection/list/complement( [1,2,3], [3,4,5] );}
- *
- * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
+ * {@code .collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]);}
  */
-public final class CComplement extends IBuiltinAction
+public final class CAdd extends IBaseAction
 {
-
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8021131769211400348L;
-
+    private static final long serialVersionUID = -2518410375938659779L;
     /**
-     * ctor
+     * action name
      */
-    public CComplement()
+    private static final IPath NAME = namebyclass( CAdd.class, "collection", "set" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Nonnull
@@ -76,15 +74,12 @@ public final class CComplement extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        if ( p_argument.get( 0 ).<List<?>>raw().isEmpty() && p_argument.get( 1 ).<List<?>>raw().isEmpty() )
-            return p_context.agent().fuzzy().membership().fail();
+        final Set<Object> l_set = p_argument.get( 0 ).raw();
 
-        // all arguments must be lists, first argument is the full list
-        final Collection<Object> l_result = new LinkedList<>( p_argument.get( 0 ).<Collection<Object>>raw() );
-        l_result.removeAll( p_argument.get( 1 ).<Collection<Object>>raw() );
-        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::raw )
+               .forEach( l_set::add );
 
         return Stream.of();
     }
-
 }

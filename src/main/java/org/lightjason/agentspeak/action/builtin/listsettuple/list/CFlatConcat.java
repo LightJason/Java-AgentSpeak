@@ -21,42 +21,48 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import com.google.common.collect.Lists;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * reverses a list.
- * All arguments of the action are lists and the action will remove
- * nested structures and reverse all elements in a single list
+ * returns a flat concated list of any term data.
+ * The arguments of this action are nested lists and the action transfer all nested structures
+ * to a straight list
  *
- * {@code R = .collection/list/reverse( L, [1,2], [3,4,[7,8]] );}
+ * {@code L = .collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] );}
  */
-public final class CReverse extends IBuiltinAction
+public final class CFlatConcat extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 2744303113340038007L;
-
+    private static final long serialVersionUID = 5396377369001059763L;
     /**
-     * ctor
+     * action name
      */
-    public CReverse()
+    private static final IPath NAME = namebyclass( CFlatConcat.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
@@ -72,8 +78,8 @@ public final class CReverse extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        // all arguments are list references
-        p_return.addAll( Lists.reverse( CCommon.flatten( p_argument ).collect( Collectors.toList() ) ) );
+        final List<?> l_list = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        p_return.add( CRawTerm.of( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
         return Stream.of();
     }
 

@@ -21,9 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.tuple;
+package org.lightjason.agentspeak.action.builtin.listsettuple.list;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -31,38 +33,46 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.AbstractMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
 /**
- * unflats the tuples into variables.
- * All arguments are tupels and each tuple
- * will be extract into two variables
+ * removes an element of the list by the index.
+ * Removes an element by the list index, the first argument is the
+ * list object, all other element indices which should removed, the
+ * action returns the removed arguments
  *
- * {@code [A|B|C|D] = .collection/tupel/flat( Tupel1, Tupel2 );}
+ * {@code [A|B|C] = .collection/list/remove( L, 3, [4, [5]] );}
  */
-public final class CFlat extends IBuiltinAction
+public final class CRemove extends IBaseAction
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 5546539971471669886L;
-
+    private static final long serialVersionUID = -4708243571656002435L;
     /**
-     * ctor
+     * action name
      */
-    public CFlat()
+    private static final IPath NAME = namebyclass( CRemove.class, "collection", "list" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -71,11 +81,29 @@ public final class CFlat extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        p_argument.stream()
-                  .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
-                  .flatMap( i -> Stream.of( i.getKey(), i.getValue() ) )
-                  .map( CRawTerm::of )
-                  .forEach( p_return::add );
+        final List<Object> l_list = p_argument.get( 0 ).raw();
+        final Set<Integer> l_removed = new HashSet<>();
+
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
+               .map( ITerm::<Number>raw )
+               .map( Number::intValue )
+               .map( i ->
+               {
+                   l_removed.add( i );
+                   return l_list.get( i );
+               } )
+               .map( CRawTerm::of )
+               .forEach( p_return::add );
+
+        final List<Object> l_result = IntStream.range( 0, l_list.size() )
+                                               .boxed()
+                                               .parallel()
+                                               .filter( i -> !l_removed.contains( i ) )
+                                               .map( l_list::get )
+                                               .collect( Collectors.toList() );
+
+        l_list.clear();
+        l_list.addAll( l_result );
 
         return Stream.of();
     }

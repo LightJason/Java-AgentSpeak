@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.set;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,43 +33,41 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
 /**
- * removes an element of the list by the index.
- * Removes an element by the list index, the first argument is the
- * list object, all other element indices which should removed, the
- * action returns the removed arguments
+ * removes any argument of the set and returns it.
+ * The action removes of the first set argument, all other arguments
+ * and returns boolean values of the object could be removed
  *
- * {@code [A|B|C] = .collection/list/remove( L, 3, [4, [5]] );}
+ * {@code [V1|V2] = .collection/set/remove( Set, [1, "foo"]);}
  */
-public final class CRemove extends IBuiltinAction
+public final class CRemove extends IBaseAction
 {
-
     /**
      * serial id
      */
-    private static final long serialVersionUID = -4708243571656002435L;
-
+    private static final long serialVersionUID = -393680746973906155L;
     /**
-     * ctor
+     * action name
      */
-    public CRemove()
+    private static final IPath NAME = namebyclass( CRemove.class, "collection", "set" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Nonnull
@@ -77,31 +76,14 @@ public final class CRemove extends IBuiltinAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<Object> l_list = p_argument.get( 0 ).raw();
-        final Set<Integer> l_removed = new HashSet<>();
+        final Set<Object> l_set = p_argument.get( 0 ).raw();
 
         CCommon.flatten( p_argument.stream().skip( 1 ) )
-               .map( ITerm::<Number>raw )
-               .map( Number::intValue )
-               .map( i ->
-               {
-                   l_removed.add( i );
-                   return l_list.get( i );
-               } )
+               .map( ITerm::raw )
+               .map( l_set::remove )
                .map( CRawTerm::of )
                .forEach( p_return::add );
 
-        final List<Object> l_result = IntStream.range( 0, l_list.size() )
-                                               .boxed()
-                                               .parallel()
-                                               .filter( i -> !l_removed.contains( i ) )
-                                               .map( l_list::get )
-                                               .collect( Collectors.toList() );
-
-        l_list.clear();
-        l_list.addAll( l_result );
-
         return Stream.of();
     }
-
 }

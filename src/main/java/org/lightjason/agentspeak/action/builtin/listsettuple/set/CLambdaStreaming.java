@@ -21,61 +21,36 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.list;
+package org.lightjason.agentspeak.action.builtin.listsettuple.set;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.AbstractSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * adds an element to the list.
- * Sets an element in each list, the first
- * argument is the index in the liste, the
- * second is the value, all other are list objects
- *
- * {@code .collection/list/set( 2, "a string value", L1, L2, L3 );}
+ * stream of a set
  */
-public final class CSet extends IBuiltinAction
+public final class CLambdaStreaming extends IBaseLambdaStreaming<Set<?>>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7816622007281628228L;
+    private static final long serialVersionUID = 7698873604877279069L;
 
-    /**
-     * ctor
-     */
-    public CSet()
-    {
-        super( 3 );
-    }
-
-    @Nonnegative
     @Override
-    public int minimalArgumentNumber()
+    public Stream<?> apply( final Set<?> p_objects )
     {
-        return 3;
+        return p_objects.stream();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public Stream<Class<?>> assignable()
     {
-        p_argument.stream()
-                  .skip( 2 )
-                  .map( ITerm::<List<Object>>raw )
-                  .forEach( i -> i.set( p_argument.get( 0 ).<Number>raw().intValue(), p_argument.get( 1 ).raw() ) );
-
-        return Stream.of();
+        return Stream.of( AbstractSet.class, Set.class );
     }
-
 }

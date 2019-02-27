@@ -21,36 +21,56 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.collection.set;
+package org.lightjason.agentspeak.action.builtin.listsettuple.tuple;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.IBaseLambdaStreaming;
+import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import java.util.AbstractSet;
-import java.util.Set;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * stream of a set
+ * sets a value within a tuple.
+ * The action sets the value within the first argument
+ * in each tuple argument, the action never fails
+ *
+ * {@code .collection/tuple/set( "value", T1, T2, T3 );}
  */
-public final class CLambdaStreaming extends IBaseLambdaStreaming<Set<?>>
+public final class CSet extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7698873604877279069L;
+    private static final long serialVersionUID = -8109609646339064488L;
 
+    @Nonnegative
     @Override
-    public Stream<?> apply( final Set<?> p_objects )
+    public int minimalArgumentNumber()
     {
-        return p_objects.stream();
+        return 1;
     }
 
-    @NonNull
+    @Nonnull
     @Override
-    public Stream<Class<?>> assignable()
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return Stream.of( AbstractSet.class, Set.class );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<AbstractMap.Entry<Object, Object>>raw )
+                   .forEach( i -> i.setValue( l_arguments.get( 0 ).raw() ) );
+
+        return Stream.of();
     }
 }
