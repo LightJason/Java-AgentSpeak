@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.listsettuple.tuple;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -44,12 +45,23 @@ import java.util.stream.Stream;
  *
  * {@code .collection/tuple/set( "value", T1, T2, T3 );}
  */
-public final class CSet extends IBuiltinAction
+public final class CSet extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -8109609646339064488L;
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CSet.class, "collection", "tuple" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
 
     @Nonnegative
     @Override

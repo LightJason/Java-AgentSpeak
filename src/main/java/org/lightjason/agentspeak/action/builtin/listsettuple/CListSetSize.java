@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.listsettuple;
 
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -78,7 +79,7 @@ public final class CListSetSize extends IBaseAction
     {
         // any term type
         p_argument.stream()
-                  .map( i -> i.<Collection>raw().size() )
+                  .map( i -> CCommon.isssignableto( i, Collection.class ) ? i.<Collection>raw().size() : 0 )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );
 

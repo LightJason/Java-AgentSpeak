@@ -35,10 +35,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.builtin.listsettuple.CListSetClear;
 import org.lightjason.agentspeak.action.builtin.listsettuple.CListSetIsEmpty;
+import org.lightjason.agentspeak.action.builtin.listsettuple.CListSetSize;
 import org.lightjason.agentspeak.action.builtin.map.CMapClear;
 import org.lightjason.agentspeak.action.builtin.map.CMapIsEmpty;
-import org.lightjason.agentspeak.action.builtin.map.CMapSize;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -90,7 +91,7 @@ public final class TestCActionCollection extends IBaseTest
 
             new ImmutablePair<>(
                 Stream.of( CRawTerm.of( new AbstractMap.SimpleEntry<>( "a", 1 ) ) ).collect( Collectors.toList() ),
-                new int[]{2}
+                new int[]{0}
             ),
 
             new ImmutablePair<>(
@@ -110,14 +111,14 @@ public final class TestCActionCollection extends IBaseTest
                 Stream.of( CRawTerm.of(
                     StreamUtils.windowed( Stream.of( 1, 2, 3, 4 ), 2 ).collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) )
                 ) ).collect( Collectors.toList() ),
-                new int[]{3}
+                new int[]{0}
             ),
 
             new ImmutablePair<>(
                 Stream.of( CRawTerm.of(
                     StreamUtils.windowed( Stream.of( 1, 2, 3, 4 ), 2 ).collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) )
                 ) ).collect( Collectors.toList() ),
-                new int[]{3}
+                new int[]{0}
             )
 
         ).toArray();
@@ -134,7 +135,7 @@ public final class TestCActionCollection extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CMapSize().execute(
+        new CListSetSize().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
@@ -158,7 +159,7 @@ public final class TestCActionCollection extends IBaseTest
 
         new CMapIsEmpty().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new ArrayList<>(), new HashSet(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
+            Stream.of( new ArrayList<>(), new HashSet<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
                   .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
@@ -178,7 +179,7 @@ public final class TestCActionCollection extends IBaseTest
 
         new CListSetIsEmpty().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new ArrayList<>(), new HashSet(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
+            Stream.of( new ArrayList<>(), new HashSet<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
                   .map( CRawTerm::of )
                   .collect( Collectors.toList() ),
             l_return
@@ -220,7 +221,7 @@ public final class TestCActionCollection extends IBaseTest
         final List<Integer> l_list = IntStream.range( 0, 10 ).boxed().collect( Collectors.toList() );
         final Set<Integer> l_set = IntStream.range( 10, 20 ).boxed().collect( Collectors.toSet() );
 
-        new CMapClear().execute(
+        new CListSetClear().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( l_list, l_set ).map( CRawTerm::of ).collect( Collectors.toList() ),
             Collections.emptyList()

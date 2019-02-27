@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.listsettuple.tuple;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -43,19 +44,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B|C|D] = .collection/tupel/flat( Tupel1, Tupel2 );}
  */
-public final class CFlat extends IBuiltinAction
+public final class CFlat extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 5546539971471669886L;
-
     /**
-     * ctor
+     * action name
      */
-    public CFlat()
+    private static final IPath NAME = namebyclass( CFlat.class, "collection", "tuple" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative

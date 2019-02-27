@@ -24,7 +24,8 @@
 package org.lightjason.agentspeak.action.builtin.listsettuple.tuple;
 
 import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -47,19 +48,22 @@ import java.util.stream.Stream;
  *
  * {@code [A|B] = .collection/tuple/create("A", "1", ["B", "2"]);}
  */
-public final class CCreate extends IBuiltinAction
+public final class CCreate extends IBaseAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = 3030084067378090112L;
-
     /**
-     * ctor
+     * action name
      */
-    public CCreate()
+    private static final IPath NAME = namebyclass( CCreate.class, "collection", "tuple" );
+
+    @Nonnull
+    @Override
+    public IPath name()
     {
-        super( 3 );
+        return NAME;
     }
 
     @Nonnegative
