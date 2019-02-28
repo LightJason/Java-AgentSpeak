@@ -111,6 +111,7 @@ public final class CJPS extends IBaseAction
         // https://github.com/kevinsheehan/jps/blob/master/src/org/ksdev/jps/JPS.java
         // https://github.com/unrealgamer/Java-JPS/blob/master/JavaJPS/src/com/unreal/jps/Program.java
         // https://harablog.wordpress.com/2011/09/07/jump-point-search/
+        // https://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/download/12336/11660
 
         return Stream.of();
     }
@@ -140,10 +141,10 @@ public final class CJPS extends IBaseAction
                 return l_path;
             }
 
-            //Find the successors to current node (add them to the open list)
+            // find the successors to current node (add them to the open list)
             successors( p_grid, l_current, p_end, l_closed, l_open );
 
-            //Add the l_currentnode to the closed list (as to not open it again)
+            // add the current node to the closed list (as to not open it again)
             l_closed.add( l_current.coordinate() );
 
         }
