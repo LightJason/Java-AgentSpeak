@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.grid.CDenseGrid;
 import org.lightjason.agentspeak.action.builtin.grid.CIsEmpty;
+import org.lightjason.agentspeak.action.builtin.grid.CRemove;
 import org.lightjason.agentspeak.action.builtin.grid.CSet;
 import org.lightjason.agentspeak.action.builtin.grid.CSparseGrid;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -164,5 +165,49 @@ public final class TestCActionGrid extends IBaseTest
         Assert.assertFalse( Objects.nonNull( l_grid.getQuick( 1, 1 ) ) );
     }
 
+    /**
+     * test remove action
+     */
+    @Test
+    public void remove()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 3, 3 );
+        l_grid.setQuick( 1, 1,  999 );
+
+        execute(
+            new CRemove(),
+            false,
+            Stream.of( l_grid, 1, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertTrue( Objects.isNull( l_grid.getQuick( 1, 1 ) ) );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof Number );
+        Assert.assertEquals( 999, l_return.get( 0 ).<Number>raw() );
+    }
+
+    /**
+     * test remove action with check
+     */
+    @Test
+    public void removewithcheck()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 3, 3 );
+        l_grid.setQuick( 1, 1,  777 );
+
+        execute(
+            new CRemove( ( g, r, c ) -> r.intValue() == 1 && c.intValue() == 1 ),
+            false,
+            Stream.of( l_grid, 1, 1, 2, 2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertTrue( Objects.nonNull( l_grid.getQuick( 1, 1 ) ) );
+        Assert.assertTrue( Objects.isNull( l_return.get( 0 ).raw() ) );
+    }
 
 }
