@@ -24,46 +24,55 @@
 package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.jet.math.tdouble.DoubleFunctions;
+import cern.colt.matrix.tobject.ObjectMatrix2D;
+import com.codepoetics.protonpack.functions.TriFunction;
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 
 /**
- * distance algorithms
+ * neighbour generator
  */
-public enum EDistance implements IDistance
+public final class CNeighbour implements INeighbour
 {
-    MANHATTAN
+    /**
+     * diagonal obstacle avoiding
+     */
+    private final EDiagonal m_diagonal;
+    /**
+     * walkable function
+     */
+    private final TriFunction<ObjectMatrix2D, Number, Number, Boolean> m_walkable;
+
+    /**
+     * ctor
+     */
+    public CNeighbour()
     {
+        this(
+            EDiagonal.NEVER,
+            ( g, r, c ) -> r.intValue() >= 0 && r.intValue() < g.rows()
+                           && c.intValue() >= 0 && c.intValue() < g.columns()
+                           && Objects.nonNull( g.getQuick( r.intValue(), c.intValue() ) ) );
+    }
 
-        @Override
-        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
-        {
-            return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.abs ).zSum();
-        }
-
-    },
-
-    EUCLIDEAN
+    /**
+     * ctor
+     *
+     * @param p_walkable walkable function
+     */
+    public CNeighbour( @NonNull final EDiagonal p_diagonal, @NonNull final TriFunction<ObjectMatrix2D, Number, Number, Boolean> p_walkable )
     {
+        m_diagonal = p_diagonal;
+        m_walkable = p_walkable;
+    }
 
-        @Override
-        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
-        {
-            return Math.sqrt( p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.pow( 2 ) ).zSum() );
-        }
-
-    },
-
-    CHEBYSHEV
+    @Override
+    public Stream<DoubleMatrix1D> apply( @NonNull final ObjectMatrix2D p_grid, @NonNull final DoubleMatrix1D p_current )
     {
-
-        @Override
-        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
-        {
-            return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).getMaxLocation()[0];
-        }
-
+        return null;
     }
 
 }

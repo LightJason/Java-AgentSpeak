@@ -21,49 +21,30 @@
  * @endcond
  */
 
+
 package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.jet.math.tdouble.DoubleFunctions;
-import edu.umd.cs.findbugs.annotations.NonNull;
+import cern.colt.matrix.tobject.ObjectMatrix2D;
+
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 
 /**
- * distance algorithms
+ * interface of neighbour calculation
  */
-public enum EDistance implements IDistance
+public interface INeighbour extends BiFunction<ObjectMatrix2D, DoubleMatrix1D, Stream<DoubleMatrix1D>>
 {
-    MANHATTAN
+
+    /**
+     * enum for obstacle avoiding
+     */
+    enum EDiagonal
     {
-
-        @Override
-        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
-        {
-            return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.abs ).zSum();
-        }
-
-    },
-
-    EUCLIDEAN
-    {
-
-        @Override
-        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
-        {
-            return Math.sqrt( p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.pow( 2 ) ).zSum() );
-        }
-
-    },
-
-    CHEBYSHEV
-    {
-
-        @Override
-        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
-        {
-            return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).getMaxLocation()[0];
-        }
-
+        ALWAYS,
+        NOOBSTACLES,
+        ONEOBSTACLE,
+        NEVER
     }
-
 }
