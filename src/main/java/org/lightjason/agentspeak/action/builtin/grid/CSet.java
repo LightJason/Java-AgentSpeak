@@ -59,24 +59,24 @@ public final class CSet extends IBaseAction
     /**
      * checker function
      */
-    private final TriFunction<Object, Number, Number, Boolean> m_checker;
+    private final TriFunction<ObjectMatrix2D, Number, Number, Boolean> m_avoid;
 
     /**
      * ctor
      */
     public CSet()
     {
-        this( ( i, j, p ) -> true );
+        this( ( g, r, c ) -> false );
     }
 
     /**
      * ctor
      *
-     * @param p_checker checker function if the object can removed
+     * @param p_avoid function to execute action on grid parameters
      */
-    public CSet( @NonNull final TriFunction<Object, Number, Number, Boolean> p_checker )
+    public CSet( @NonNull final TriFunction<ObjectMatrix2D, Number, Number, Boolean> p_avoid )
     {
-        m_checker = p_checker;
+        m_avoid = p_avoid;
     }
 
     @Nonnull
@@ -108,10 +108,11 @@ public final class CSet extends IBaseAction
         {
             final Number l_row = i.get( 0 ).raw();
             final Number l_col = i.get( 1 ).raw();
+            final ObjectMatrix2D l_grid = l_arguments.get( 0 ).raw();
 
-            if ( m_checker.apply( l_arguments.get( 0 ).<ObjectMatrix2D>raw(), l_row, l_col ) )
+            if ( !m_avoid.apply( l_grid, l_row, l_col ) )
             {
-                l_arguments.get( 0 ).<ObjectMatrix2D>raw().setQuick( l_row.intValue(), l_col.intValue(), i.get( 2 ) );
+                l_grid.setQuick( l_row.intValue(), l_col.intValue(), i.get( 2 ) );
                 return Stream.of();
             }
 

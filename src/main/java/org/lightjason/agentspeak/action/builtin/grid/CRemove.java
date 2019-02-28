@@ -61,26 +61,26 @@ public final class CRemove extends IBaseAction
      */
     private static final IPath NAME = namebyclass( CRemove.class, "grid" );
     /**
-     * checker function
+     * void function
      */
-    private final TriFunction<Object, Number, Number, Boolean> m_checker;
+    private final TriFunction<ObjectMatrix2D, Number, Number, Boolean> m_avoid;
 
     /**
      * ctor
      */
     public CRemove()
     {
-        this( ( i, j, p ) -> true );
+        this( ( g, r, c ) -> false );
     }
 
     /**
      * ctor
      *
-     * @param p_checker checker function if the object can removed
+     * @param p_avoid function to execute action on grid parameters
      */
-    public CRemove( @NonNull final TriFunction<Object, Number, Number, Boolean> p_checker )
+    public CRemove( @NonNull final TriFunction<ObjectMatrix2D, Number, Number, Boolean> p_avoid )
     {
-        m_checker = p_checker;
+        m_avoid = p_avoid;
     }
 
     @Nonnull
@@ -112,11 +112,12 @@ public final class CRemove extends IBaseAction
         {
             final Number l_row = i.get( 0 ).raw();
             final Number l_col = i.get( 1 ).raw();
+            final ObjectMatrix2D l_grid = l_arguments.get( 0 ).raw();
 
-            if ( m_checker.apply( l_arguments.get( 0 ).<ObjectMatrix2D>raw(), l_row, l_col ) )
+            if ( !m_avoid.apply( l_grid, l_row, l_col ) )
             {
-                p_return.add( CRawTerm.of( l_arguments.get( 0 ).<ObjectMatrix2D>raw().getQuick( l_row.intValue(), l_col.intValue() ) ) );
-                l_arguments.get( 0 ).<ObjectMatrix2D>raw().setQuick( l_row.intValue(), l_col.intValue(), null );
+                p_return.add( CRawTerm.of( l_grid.getQuick( l_row.intValue(), l_col.intValue() ) ) );
+                l_grid.setQuick( l_row.intValue(), l_col.intValue(), null );
                 return Stream.of();
             }
 

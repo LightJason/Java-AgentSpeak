@@ -145,7 +145,8 @@ public final class TestCActionGraph extends IBaseTest
                  .boxed()
                  .forEach( i ->
                                new CAddVertexSingle().execute(
-                                   false, IContext.EMPTYPLAN,
+                                   false,
+                                   IContext.EMPTYPLAN,
                                    Stream.of( i, l_graph1, l_graph2 ).map( CRawTerm::of ).collect( Collectors.toList() ),
                                    Collections.emptyList()
                                ) );
