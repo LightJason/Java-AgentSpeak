@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.builtin.grid;
 
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
+import com.codepoetics.protonpack.functions.TriFunction;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
@@ -39,12 +41,43 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * sets an object within the grid.
+ * The action sets an object on the given positions and
+ * fails iif the object cannot be set
+ */
 public final class CSet extends IBaseAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2540547833565366171L;
+    /**
      * action name
      */
-    private static final IPath NAME = namebyclass( CRemove.class, "grid" );
+    private static final IPath NAME = namebyclass( CSet.class, "grid" );
+    /**
+     * checker function
+     */
+    private final TriFunction<Object, Number, Number, Boolean> m_checker;
+
+    /**
+     * ctor
+     */
+    public CSet()
+    {
+        this( ( i, j, p ) -> true );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_checker checker function if the object can removed
+     */
+    public CSet( @NonNull final TriFunction<Object, Number, Number, Boolean> p_checker )
+    {
+        m_checker = p_checker;
+    }
 
     @Nonnull
     @Override
@@ -67,16 +100,22 @@ public final class CSet extends IBaseAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        StreamUtils.windowed(
+        return StreamUtils.windowed(
             l_arguments.stream().skip( 1 ),
             3,
             3
-        ).forEach( i -> l_arguments.get( 0 ).<ObjectMatrix2D>raw().setQuick(
-            i.get( 0 ).<Number>raw().intValue(),
-            i.get( 1 ).<Number>raw().intValue(),
-            i.get( 2 ).raw() )
-        );
+        ).flatMap( i ->
+        {
+            final Number l_row = i.get( 0 ).raw();
+            final Number l_col = i.get( 1 ).raw();
 
-        return Stream.of();
+            if ( m_checker.apply( l_arguments.get( 0 ).<ObjectMatrix2D>raw(), l_row, l_col ) )
+            {
+                l_arguments.get( 0 ).<ObjectMatrix2D>raw().setQuick( l_row.intValue(), l_col.intValue(), i.get( 2 ) );
+                return Stream.of();
+            }
+
+            return p_context.agent().fuzzy().membership().fail();
+        } );
     }
 }

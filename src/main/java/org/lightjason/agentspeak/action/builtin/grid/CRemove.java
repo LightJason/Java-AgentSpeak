@@ -25,9 +25,12 @@ package org.lightjason.agentspeak.action.builtin.grid;
 
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
+import com.codepoetics.protonpack.functions.TriFunction;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -39,12 +42,46 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * removes an object of the grid.
+ * The action removes an object of the grid and
+ * fails iif the object cannot remove and returns the given
+ * objects
+ *
+ * {@code [A|B|C] = .grid/remove(Grid, 3,3, [1,1, 8,7])}
+ */
 public final class CRemove extends IBaseAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5843417421687002640L;
     /**
      * action name
      */
     private static final IPath NAME = namebyclass( CRemove.class, "grid" );
+    /**
+     * checker function
+     */
+    private final TriFunction<Object, Number, Number, Boolean> m_checker;
+
+    /**
+     * ctor
+     */
+    public CRemove()
+    {
+        this( ( i, j, p ) -> true );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_checker checker function if the object can removed
+     */
+    public CRemove( @NonNull final TriFunction<Object, Number, Number, Boolean> p_checker )
+    {
+        m_checker = p_checker;
+    }
 
     @Nonnull
     @Override
@@ -67,16 +104,23 @@ public final class CRemove extends IBaseAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
-        StreamUtils.windowed(
+        return StreamUtils.windowed(
             l_arguments.stream().skip( 1 ),
             2,
             2
-        ).forEach( i -> l_arguments.get( 0 ).<ObjectMatrix2D>raw().setQuick(
-            i.get( 0 ).<Number>raw().intValue(),
-            i.get( 1 ).<Number>raw().intValue(),
-            null )
-        );
+        ).flatMap( i ->
+        {
+            final Number l_row = i.get( 0 ).raw();
+            final Number l_col = i.get( 1 ).raw();
 
-        return Stream.of();
+            if ( m_checker.apply( l_arguments.get( 0 ).<ObjectMatrix2D>raw(), l_row, l_col ) )
+            {
+                p_return.add( CRawTerm.of( l_arguments.get( 0 ).<ObjectMatrix2D>raw().getQuick( l_row.intValue(), l_col.intValue() ) ) );
+                l_arguments.get( 0 ).<ObjectMatrix2D>raw().setQuick( l_row.intValue(), l_col.intValue(), null );
+                return Stream.of();
+            }
+
+            return p_context.agent().fuzzy().membership().fail();
+        } );
     }
 }

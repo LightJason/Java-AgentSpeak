@@ -42,8 +42,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+
+/**
+ * check if a position within the grid is empty.
+ * The action checkes the position of the gid if it is empty.
+ *
+ * {@code [A|B|C] = .grid/isempty(3,3, [1,1, 8,7])}
+ */
 public final class CIsEmpty extends IBaseAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2759701589082999846L;
     /**
      * action name
      */

@@ -39,8 +39,19 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
+/**
+ * create sparse grid environment.
+ * The action creates sparse grid environments based
+ * on the given size.
+ *
+ * {@code [A|B] .grid/sparsegrid(5,5, [3,3, 20,20])}
+ */
 public final class CSparseGrid extends IBaseAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 439413645728201490L;
     /**
      * action name
      */

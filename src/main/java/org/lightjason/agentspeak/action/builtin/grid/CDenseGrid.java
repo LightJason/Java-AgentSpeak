@@ -39,12 +39,24 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
+/**
+ * create a dense grid environment.
+ * The action creates dense grid environments based
+ * on the given size.
+ *
+ * {@code [A|B] .grid/densegrid(5,5, [3,3, 20,20])}
+ */
 public final class CDenseGrid extends IBaseAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8717252683328350141L;
     /**
      * action name
      */
     private static final IPath NAME = namebyclass( CDenseGrid.class, "grid" );
+
 
     @Nonnull
     @Override

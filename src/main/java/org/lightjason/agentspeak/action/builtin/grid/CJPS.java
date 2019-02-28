@@ -47,18 +47,44 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * calculte route via JPS+ algorithm.
+ * Routing algorithm for gird environment, first argument
+ * must be the grid and pairs of positions of the intermediate goal or
+ * target goal. The action returns alist of numeric tuples which present
+ * the landmarks
+ *
+ * @see https://www.gdcvault.com/play/1022094/JPS-Over-100x-Faster-than
+ * @see https://github.com/SteveRabin/JPSPlusWithGoalBounding/tree/master/JPSPlusGoalBounding
+ *
+ * {@code L = .grid/print(Grid, [1,2, 8,9, 20,20]);}
+ */
 public final class CJPS extends IBaseAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4482586078227767194L;
+
+    /**
      * action name
      */
-    private static final IPath NAME = namebyclass( CRemove.class, "grid" );
-
-    private static final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> ISOCCUPIED = ( g, p ) -> Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) );
-    private static final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> ISNOTINSIDE = ( g, p ) -> p.getQuick( 0 ) < 0 || p.getQuick( 1 ) < 0 || p.getQuick( 0 ) >= g.rows() || p.getQuick( 1 ) >= g.columns();
-    private static final TriFunction<ObjectMatrix2D, DoubleMatrix1D, List<DoubleMatrix1D>, Boolean> ISNOTNEIGhBOUR = ( g, p, l ) -> ISNOTINSIDE.apply( g, p ) || l.contains( p );
-
-
+    private static final IPath NAME = namebyclass( CJPS.class, "grid" );
+    /**
+     * occupied checking
+     */
+    private static final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> ISOCCUPIED = ( g, p ) ->
+        Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) );
+    /**
+     * inside checking
+     */
+    private static final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> ISNOTINSIDE = ( g, p ) ->
+        p.getQuick( 0 ) < 0 || p.getQuick( 1 ) < 0 || p.getQuick( 0 ) >= g.rows() || p.getQuick( 1 ) >= g.columns();
+    /**
+     * not-neighbourhood checking
+     */
+    private static final TriFunction<ObjectMatrix2D, DoubleMatrix1D, List<DoubleMatrix1D>, Boolean> ISNOTNEIGHBOUR = ( g, p, l ) ->
+        ISNOTINSIDE.apply( g, p ) || l.contains( p );
 
     @Nonnull
     @Override
@@ -93,10 +119,10 @@ public final class CJPS extends IBaseAction
     private static List<DoubleMatrix1D> route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
         final TreeSet<CJumpPoint> l_open = Stream.of( new CJumpPoint( p_start ) ).collect( Collectors.toCollection( TreeSet::new ) );
-        final List<DoubleMatrix1D> l_closed = new ArrayList<>()
+        final List<DoubleMatrix1D> l_closed = new ArrayList<>();
         final List<DoubleMatrix1D> l_path = new ArrayList<>();
 
-        while (!l_open.isEmpty())
+        while ( !l_open.isEmpty() )
         {
             final CJumpPoint l_current = l_open.pollFirst();
 
@@ -179,7 +205,7 @@ public final class CJPS extends IBaseAction
          */
         CJumpPoint( final DoubleMatrix1D p_coordinate )
         {
-            this( p_coordinate, null )
+            this( p_coordinate, null );
         }
 
         /**
