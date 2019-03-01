@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 
 /**
  * lambda-streaming static generator
+ * @todo enable / disable cache
  */
 public final class CLambdaStreamingStaticGenerator implements ILambdaStreamingGenerator
 {

@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 
 /**
  * action lazy-loader generator
+ * @todo enable / disable cache
  */
 public final class CActionGenerator implements IActionGenerator
 {
