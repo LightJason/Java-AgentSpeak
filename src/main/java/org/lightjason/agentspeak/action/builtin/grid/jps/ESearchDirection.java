@@ -21,21 +21,18 @@
  * @endcond
  */
 
-
 package org.lightjason.agentspeak.action.builtin.grid.jps;
 
-import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tobject.ObjectMatrix2D;
-
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 
 /**
- * interface of neighbour calculation
+ * searching direction
  */
-public interface INeighbour extends BiFunction<ObjectMatrix2D, DoubleMatrix1D, Stream<DoubleMatrix1D>>
+public enum ESearchDirection
 {
-
+    ALWAYS,
+    NOOBSTACLES,
+    ONEOBSTACLE,
+    NEVER
 }
