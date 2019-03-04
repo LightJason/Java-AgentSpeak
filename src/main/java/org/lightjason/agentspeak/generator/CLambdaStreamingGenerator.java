@@ -50,7 +50,19 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
      * Java package for searching
      */
     private final Set<String> m_packages;
+    /**
+     * use cache
+     */
+    private final boolean m_usecache;
 
+
+    /**
+     * ctor
+     */
+    public CLambdaStreamingGenerator()
+    {
+        this( Stream.of(), true );
+    }
 
     /**
      * ctor
@@ -59,39 +71,53 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
      */
     public CLambdaStreamingGenerator( @NonNull final Stream<String> p_packages )
     {
+        this( p_packages, true );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_packages stream of package names for searching
+     * @param p_usecache cache using
+     */
+    public CLambdaStreamingGenerator( @NonNull final Stream<String> p_packages, boolean p_usecache )
+    {
+        m_usecache = p_usecache;
         m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
     }
 
     @Override
     public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
     {
-        // get lambda from cache
-        final Optional<? extends ILambdaStreaming<?>> l_cache = CCommon.classhierarchie( p_class )
-                                                                       .map( m_lambdas::get )
-                                                                       .filter( Objects::nonNull )
-                                                                       .findFirst();
-
-        if ( l_cache.isPresent() )
-            return l_cache.get();
-
-
-        // search lambda object
         final Set<Class<?>> l_hierarchie = CCommon.classhierarchie( p_class ).collect( Collectors.toSet() );
-        final Optional<? extends ILambdaStreaming<?>> l_search = m_packages.parallelStream()
-                                                                           .flatMap( i -> org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage(
-                                                                               m_packages.toArray( String[]::new
-                                                                               ) ) )
-                                                                           .filter( i -> i.assignable().anyMatch( l_hierarchie::contains ) )
-                                                                           .findFirst();
 
-        if ( l_search.isPresent() )
+        if ( !m_usecache )
+            return org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage( m_packages.toArray( String[]::new ) )
+                                                           .parallel()
+                                                           .filter( i -> i.assignable().anyMatch( l_hierarchie::contains ) )
+                                                           .peek( i -> m_lambdas.putIfAbsent( p_class, i ) )
+                                                           .findFirst()
+                                                           .orElse( ILambdaStreaming.EMPTY );
+        else
         {
-            l_search.get().assignable().forEach( i -> m_lambdas.putIfAbsent( i, l_search.get() ) );
-            return l_search.get();
+            // get lambda from cache
+            final Optional<? extends ILambdaStreaming<?>> l_cache = l_hierarchie.stream()
+                                                                                .map( m_lambdas::get )
+                                                                                .filter( Objects::nonNull )
+                                                                                .findFirst();
+
+            if ( l_cache.isPresent() )
+                return l_cache.get();
+
+
+            // search lambda object
+            return org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage( m_packages.toArray( String[]::new ) )
+                                                           .parallel()
+                                                           .filter( i -> i.assignable().anyMatch( l_hierarchie::contains ) )
+                                                           .peek( i -> m_lambdas.putIfAbsent( p_class, i ) )
+                                                           .findFirst()
+                                                           .orElse( ILambdaStreaming.EMPTY );
         }
-
-
-        return ILambdaStreaming.EMPTY;
     }
 
 }
