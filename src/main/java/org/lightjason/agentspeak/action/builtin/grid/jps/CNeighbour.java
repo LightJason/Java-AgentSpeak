@@ -38,9 +38,9 @@ import java.util.stream.Stream;
 public final class CNeighbour implements INeighbour
 {
     /**
-     * diagonal obstacle avoiding
+     * search direction
      */
-    private final ESearchDirection m_diagonal;
+    private final ESearchDirection m_searchdirection;
     /**
      * walkable function
      */
@@ -59,12 +59,13 @@ public final class CNeighbour implements INeighbour
     /**
      * ctor
      *
+     * @param p_searchdirection search direction
      * @param p_walkable walkable function
      */
-    public CNeighbour( @NonNull final ESearchDirection p_diagonal, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+    public CNeighbour( @NonNull final ESearchDirection p_searchdirection, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
-        m_diagonal = p_diagonal;
         m_walkable = p_walkable;
+        m_searchdirection = p_searchdirection;
     }
 
     @Override
