@@ -28,7 +28,6 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 

@@ -35,35 +35,29 @@ public enum EDistance implements IDistance
 {
     MANHATTAN
     {
-
         @Override
         public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
             return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.abs ).zSum();
         }
-
     },
 
     EUCLIDEAN
     {
-
         @Override
         public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
             return Math.sqrt( p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.pow( 2 ) ).zSum() );
         }
-
     },
 
     CHEBYSHEV
     {
-
         @Override
         public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
             return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).getMaxLocation()[0];
         }
-
     }
 
 }
