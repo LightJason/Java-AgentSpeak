@@ -42,8 +42,8 @@ public enum ESearchDirection implements ISearchDirection
     NEVER
     {
         @Override
-        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                      @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             return Stream.of(
                 walkable( p_grid, p_current, EDirection.NORTH, p_walkable ),
@@ -56,8 +56,8 @@ public enum ESearchDirection implements ISearchDirection
     ALWAYS
     {
         @Override
-        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                      @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             return Stream.of(
                 walkable( p_grid, p_current, EDirection.NORTH, p_walkable ),
@@ -74,8 +74,8 @@ public enum ESearchDirection implements ISearchDirection
     NOOBSTACLES
     {
         @Override
-        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                      @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             final Pair<Boolean, DoubleMatrix1D> l_north = walkable( p_grid, p_current, EDirection.NORTH, p_walkable );
             final Pair<Boolean, DoubleMatrix1D> l_east = walkable( p_grid, p_current, EDirection.EAST, p_walkable );
@@ -94,8 +94,8 @@ public enum ESearchDirection implements ISearchDirection
     ONEOBSTACLE
     {
         @Override
-        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                      @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             final Pair<Boolean, DoubleMatrix1D> l_north = walkable( p_grid, p_current, EDirection.NORTH, p_walkable );
             final Pair<Boolean, DoubleMatrix1D> l_east = walkable( p_grid, p_current, EDirection.EAST, p_walkable );

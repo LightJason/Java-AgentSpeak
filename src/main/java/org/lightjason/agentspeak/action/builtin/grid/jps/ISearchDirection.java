@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
+import com.codepoetics.protonpack.functions.TriFunction;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
@@ -35,9 +36,10 @@ import java.util.stream.Stream;
  * search direction interface
  */
 public interface ISearchDirection
+    //extends TriFunction<ObjectMatrix2D, DoubleMatrix1D, BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean>, Stream<DoubleMatrix1D>>
 {
 
-    Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                          @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable );
+    Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                           @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable );
 
 }
