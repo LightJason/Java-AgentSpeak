@@ -25,13 +25,11 @@ package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 
-import java.util.function.Function;
-
 
 /**
  * direction definition
  */
-public enum EDirection implements Function<DoubleMatrix1D, DoubleMatrix1D>
+public enum EDirection implements IDirection
 {
     NORTH
     {

@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
-import com.codepoetics.protonpack.functions.TriFunction;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.language.CCommon;
@@ -38,13 +37,13 @@ import java.util.stream.Stream;
 /**
  * searching direction
  */
-public enum ESearchDirection implements TriFunction<ObjectMatrix2D, DoubleMatrix1D, BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean>, Stream<DoubleMatrix1D>>
+public enum ESearchDirection implements ISearchDirection
 {
     NEVER
     {
         @Override
-        public Stream<DoubleMatrix1D> apply( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                             @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             return Stream.of(
                 walkable( p_grid, p_current, EDirection.NORTH, p_walkable ),
@@ -57,8 +56,8 @@ public enum ESearchDirection implements TriFunction<ObjectMatrix2D, DoubleMatrix
     ALWAYS
     {
         @Override
-        public Stream<DoubleMatrix1D> apply( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                             @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             return Stream.of(
                 walkable( p_grid, p_current, EDirection.NORTH, p_walkable ),
@@ -75,8 +74,8 @@ public enum ESearchDirection implements TriFunction<ObjectMatrix2D, DoubleMatrix
     NOOBSTACLES
     {
         @Override
-        public Stream<DoubleMatrix1D> apply( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                             @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             final Pair<Boolean, DoubleMatrix1D> l_north = walkable( p_grid, p_current, EDirection.NORTH, p_walkable );
             final Pair<Boolean, DoubleMatrix1D> l_east = walkable( p_grid, p_current, EDirection.EAST, p_walkable );
@@ -95,8 +94,8 @@ public enum ESearchDirection implements TriFunction<ObjectMatrix2D, DoubleMatrix
     ONEOBSTACLE
     {
         @Override
-        public Stream<DoubleMatrix1D> apply( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                             @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+        public Stream<DoubleMatrix1D> neighbourhood( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                     @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             final Pair<Boolean, DoubleMatrix1D> l_north = walkable( p_grid, p_current, EDirection.NORTH, p_walkable );
             final Pair<Boolean, DoubleMatrix1D> l_east = walkable( p_grid, p_current, EDirection.EAST, p_walkable );
