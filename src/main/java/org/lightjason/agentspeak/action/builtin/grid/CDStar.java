@@ -23,6 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.grid;
 
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tobject.ObjectMatrix2D;
+import org.apache.commons.collections.BinaryHeap;
+import org.apache.commons.collections.buffer.PriorityBuffer;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
@@ -31,6 +35,8 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -79,5 +85,13 @@ public final class CDStar extends IBaseAction
         // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/DStarLite.java
 
         return Stream.of();
+    }
+
+
+    private static List<DoubleMatrix1D> route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
+    {
+        final PriorityBuffer l_heap = new PriorityBuffer();
+
+        return Collections.emptyList();
     }
 }
