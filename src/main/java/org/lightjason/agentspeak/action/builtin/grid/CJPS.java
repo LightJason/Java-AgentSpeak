@@ -38,11 +38,15 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -113,17 +117,47 @@ public final class CJPS extends IBaseAction
         // estimate to end
         final Map<INode, Double> l_hscore = new ConcurrentHashMap<>();
 
+        // we want the nodes with the lowest projected F value to be checked first
+        final Queue<INode> l_open = new PriorityBlockingQueue<>(
+            (int) p_grid.size() / 4,
+            Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
+        );
 
+        final Set<INode> l_goals = Collections.synchronizedSet( new HashSet<>() );
+        final Set<INode> l_closed = Collections.synchronizedSet( new HashSet<>() );
+        final Map<INode, INode> l_parent = new ConcurrentHashMap<>();
+
+        // adjaceny stop
+
+        if ( l_goals.isEmpty() )
+            return Collections.emptyList();
+
+        l_open.add( new CJumpPoint( p_start ) );
+        while ( !l_goals.isEmpty() )
+        {
+            final INode l_node = l_open.poll();
+            l_closed.add( l_node );
+
+            if ( l_goals.contains( l_node ) )
+                return backtrace();
+
+            successors( p_grid, l_node, p_end, l_closed, l_open );
+        }
 
 
         return Collections.emptyList();
     }
 
 
-    private static void successors( final ObjectMatrix2D p_objects, final INode p_curnode, final DoubleMatrix1D p_end,
-                                    final List<DoubleMatrix1D> p_closed, final Set<INode> p_open )
+    private static void successors( final ObjectMatrix2D p_objects, final INode p_current, final DoubleMatrix1D p_end,
+                                    final Set<INode> p_closed, final Queue<INode> p_open )
     {
 
+    }
+
+    private static List<DoubleMatrix1D> backtrace()
+    {
+        return Collections.emptyList();
     }
 
 }
