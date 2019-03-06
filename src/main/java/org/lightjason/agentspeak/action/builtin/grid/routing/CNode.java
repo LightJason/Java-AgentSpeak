@@ -21,16 +21,37 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-
-import java.util.function.BiFunction;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 
 /**
- * distance algorithm interface of jps routing
+ * jump-point
  */
-public interface IDistance extends BiFunction<DoubleMatrix1D, DoubleMatrix1D, Number>
+public final class CNode implements INode
 {
+    /**
+     * position
+     */
+    private final DoubleMatrix1D m_position;
+
+    /**
+     * ctor
+     *
+     * @param p_position position
+     */
+    public CNode( @NonNull final DoubleMatrix1D p_position )
+    {
+        m_position = p_position;
+    }
+
+    @NonNull
+    @Override
+    public DoubleMatrix1D position()
+    {
+        return m_position;
+    }
+
 }

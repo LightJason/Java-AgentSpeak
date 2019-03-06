@@ -21,32 +21,31 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
+
+import javax.annotation.Nonnull;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 
 /**
- * interface of a node
+ * search direction interface
  */
-public interface INode
+public interface ISearchDirection
+    //extends TriFunction<ObjectMatrix2D, DoubleMatrix1D, BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean>, Stream<DoubleMatrix1D>>
 {
-    /**
-     * getter of position
-     *
-     * @return position
-     */
-    @NonNull
-    DoubleMatrix1D position();
 
-    /**
-     * getter for parent
-     *
-     * @return parent
-     */
-    @Nullable
-    INode parent();
+    Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+                                           @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable );
+
+    Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                                       @NonNull final Map<INode, INode> p_map );
 
 }

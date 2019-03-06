@@ -21,16 +21,16 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 
 /**
- * direction interface for calculating directions
+ * distance algorithm interface of jps routing
  */
-public interface IDirection extends Function<DoubleMatrix1D, DoubleMatrix1D>
+public interface IDistance extends BiFunction<DoubleMatrix1D, DoubleMatrix1D, Number>
 {
 }

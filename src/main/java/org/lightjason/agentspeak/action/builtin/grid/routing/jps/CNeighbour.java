@@ -21,59 +21,57 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 
 /**
- * jump-point
+ * neighbour generator
  */
-public final class CJumpPoint implements INode
+public final class CNeighbour implements INeighbour
 {
     /**
-     * position
+     * search direction
      */
-    private final DoubleMatrix1D m_position;
+    private final ESearchDirection m_searchdirection;
     /**
-     * parent node
+     * walkable function
      */
-    private final INode m_parent;
+    private final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> m_walkable;
+
+    /**
+     * ctor
+     */
+    public CNeighbour()
+    {
+        this(
+            ESearchDirection.NEVER,
+            ( g, p ) -> Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
+    }
 
     /**
      * ctor
      *
-     * @param p_position position
+     * @param p_searchdirection search direction
+     * @param p_walkable walkable function
      */
-    public CJumpPoint( @NonNull final DoubleMatrix1D p_position )
+    public CNeighbour( @NonNull final ESearchDirection p_searchdirection, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
-        this( p_position, null );
-    }
-    /**
-     * ctor
-     *
-     * @param p_parent parent node
-     */
-    public CJumpPoint( @NonNull final DoubleMatrix1D p_position, @Nullable final INode p_parent )
-    {
-        m_parent = p_parent;
-        m_position = p_position;
+        m_walkable = p_walkable;
+        m_searchdirection = p_searchdirection;
     }
 
-    @NonNull
     @Override
-    public DoubleMatrix1D position()
+    public Stream<DoubleMatrix1D> apply( @NonNull final ObjectMatrix2D p_grid, @NonNull final DoubleMatrix1D p_current )
     {
-        return m_position;
-    }
-
-    @Nullable
-    @Override
-    public INode parent()
-    {
-        return m_parent;
+        return Stream.of();
     }
 
 }

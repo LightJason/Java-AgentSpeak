@@ -21,20 +21,63 @@
  * @endcond
  */
 
+package org.lightjason.agentspeak.action.builtin.grid;
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
-import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tobject.ObjectMatrix2D;
-
-import java.util.function.BiFunction;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * interface of neighbour calculation
+ * d-star routing algorithm
+ *
+ * @see https://en.wikipedia.org/wiki/D*
  */
-public interface INeighbour extends BiFunction<ObjectMatrix2D, DoubleMatrix1D, Stream<DoubleMatrix1D>>
+public final class CDStar extends IBaseAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8891474164119338807L;
 
+    /**
+     * action name
+     */
+    private static final IPath NAME = namebyclass( CDStar.class, "grid" );
+
+    @Nonnull
+    @Override
+    public IPath name()
+    {
+        return NAME;
+    }
+
+    @Nonnegative
+    @Override
+    public int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    {
+        // https://github.com/pshafer/dstar
+        // https://github.com/daniel-beard/DStarLiteJava
+
+        // https://github.com/shu8i/AStar_DStarLite
+
+        // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/DStarLite.java
+
+        return Stream.of();
+    }
 }

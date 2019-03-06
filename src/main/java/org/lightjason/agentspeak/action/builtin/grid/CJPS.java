@@ -26,8 +26,8 @@ package org.lightjason.agentspeak.action.builtin.grid;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.action.builtin.grid.jps.CJumpPoint;
-import org.lightjason.agentspeak.action.builtin.grid.jps.INode;
+import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
+import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,7 +36,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -44,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.Collectors;
@@ -61,7 +59,7 @@ import java.util.stream.Stream;
  * @see https://www.gdcvault.com/play/1022094/JPS-Over-100x-Faster-than
  * @see https://github.com/SteveRabin/JPSPlusWithGoalBounding/tree/master/JPSPlusGoalBounding
  *
- * {@code L = .grid/print(Grid, [1,2, 8,9, 20,20]);}
+ * {@code L = .grid/jps(Grid, [1,2, 8,9, 20,20]);}
  */
 public final class CJPS extends IBaseAction
 {
@@ -104,8 +102,6 @@ public final class CJPS extends IBaseAction
 
         // https://github.com/jonasnick/A-star/blob/master/astar/AStar.java
 
-        // https://github.com/pshafer/dstar
-
         return Stream.of();
     }
 
@@ -134,7 +130,7 @@ public final class CJPS extends IBaseAction
         if ( l_goals.isEmpty() )
             return Collections.emptyList();
 
-        l_open.add( new CJumpPoint( p_start ) );
+        l_open.add( new CNode( p_start ) );
         while ( !l_goals.isEmpty() )
         {
             final INode l_node = l_open.poll();

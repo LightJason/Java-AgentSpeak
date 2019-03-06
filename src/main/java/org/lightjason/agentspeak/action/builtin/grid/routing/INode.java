@@ -21,57 +21,23 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-
-import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 
 /**
- * neighbour generator
+ * interface of a node
  */
-public final class CNeighbour implements INeighbour
+public interface INode
 {
     /**
-     * search direction
-     */
-    private final ESearchDirection m_searchdirection;
-    /**
-     * walkable function
-     */
-    private final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> m_walkable;
-
-    /**
-     * ctor
-     */
-    public CNeighbour()
-    {
-        this(
-            ESearchDirection.NEVER,
-            ( g, p ) -> Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
-    }
-
-    /**
-     * ctor
+     * getter of position
      *
-     * @param p_searchdirection search direction
-     * @param p_walkable walkable function
+     * @return position
      */
-    public CNeighbour( @NonNull final ESearchDirection p_searchdirection, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
-    {
-        m_walkable = p_walkable;
-        m_searchdirection = p_searchdirection;
-    }
-
-    @Override
-    public Stream<DoubleMatrix1D> apply( @NonNull final ObjectMatrix2D p_grid, @NonNull final DoubleMatrix1D p_current )
-    {
-        return Stream.of();
-    }
+    @NonNull
+    DoubleMatrix1D position();
 
 }

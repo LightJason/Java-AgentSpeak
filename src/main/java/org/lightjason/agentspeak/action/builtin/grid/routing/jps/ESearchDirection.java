@@ -21,13 +21,15 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
+import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
 import org.lightjason.agentspeak.language.CCommon;
 
 import javax.annotation.Nonnull;
