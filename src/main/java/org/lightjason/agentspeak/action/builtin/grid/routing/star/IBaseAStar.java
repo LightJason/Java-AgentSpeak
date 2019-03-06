@@ -3,6 +3,7 @@ package org.lightjason.agentspeak.action.builtin.grid.routing.star;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.collections.buffer.PriorityBuffer;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 
 public abstract class IBaseAStar extends IBaseRouting
 {
-
+    protected final PriorityBuffer m_heap = new PriorityBuffer();
 
     protected IBaseAStar()
     {
