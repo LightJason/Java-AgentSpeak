@@ -24,10 +24,10 @@
 package org.lightjason.agentspeak.action.builtin.grid;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
-import com.codepoetics.protonpack.functions.TriFunction;
 import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.action.builtin.grid.jps.CJumpPoint;
+import org.lightjason.agentspeak.action.builtin.grid.jps.INode;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -39,10 +39,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,21 +68,6 @@ public final class CJPS extends IBaseAction
      * action name
      */
     private static final IPath NAME = namebyclass( CJPS.class, "grid" );
-    /**
-     * occupied checking
-     */
-    private static final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> ISOCCUPIED = ( g, p ) ->
-        Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) );
-    /**
-     * inside checking
-     */
-    private static final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> ISNOTINSIDE = ( g, p ) ->
-        p.getQuick( 0 ) < 0 || p.getQuick( 1 ) < 0 || p.getQuick( 0 ) >= g.rows() || p.getQuick( 1 ) >= g.columns();
-    /**
-     * not-neighbourhood checking
-     */
-    private static final TriFunction<ObjectMatrix2D, DoubleMatrix1D, List<DoubleMatrix1D>, Boolean> ISNOTNEIGHBOUR = ( g, p, l ) ->
-        ISNOTINSIDE.apply( g, p ) || l.contains( p );
 
     @Nonnull
     @Override
@@ -113,28 +96,30 @@ public final class CJPS extends IBaseAction
         // https://harablog.wordpress.com/2011/09/07/jump-point-search/
         // https://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/download/12336/11660
 
+        // https://github.com/jonasnick/A-star/blob/master/astar/AStar.java
+
         return Stream.of();
     }
 
 
     private static List<DoubleMatrix1D> route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
-        final TreeSet<CJumpPoint> l_open = Stream.of( new CJumpPoint( p_start ) ).collect( Collectors.toCollection( TreeSet::new ) );
+        final TreeSet<INode> l_open = Stream.of( new CJumpPoint( p_start ) ).collect( Collectors.toCollection( TreeSet::new ) );
         final List<DoubleMatrix1D> l_closed = new ArrayList<>();
         final List<DoubleMatrix1D> l_path = new ArrayList<>();
 
         while ( !l_open.isEmpty() )
         {
-            final CJumpPoint l_current = l_open.pollFirst();
+            final INode l_current = l_open.pollFirst();
 
             // final position is reached
-            if ( l_current.coordinate().equals( p_end ) )
+            if ( l_current.position().equals( p_end ) )
             {
                 l_path.add( p_end );
-                CJumpPoint l_parent = l_current.parent();
-                while ( !l_parent.coordinate().equals( p_start ) )
+                INode l_parent = l_current.parent();
+                while ( !l_parent.position().equals( p_start ) )
                 {
-                    l_path.add( l_parent.coordinate() );
+                    l_path.add( l_parent.position() );
                     l_parent = l_parent.parent();
                 }
                 Collections.reverse( l_path );
@@ -145,7 +130,7 @@ public final class CJPS extends IBaseAction
             successors( p_grid, l_current, p_end, l_closed, l_open );
 
             // add the current node to the closed list (as to not open it again)
-            l_closed.add( l_current.coordinate() );
+            l_closed.add( l_current.position() );
 
         }
 
@@ -153,141 +138,10 @@ public final class CJPS extends IBaseAction
     }
 
 
-    private static void successors( final ObjectMatrix2D p_objects, final CJumpPoint p_curnode, final DoubleMatrix1D p_end,
-                                    final List<DoubleMatrix1D> p_closed, final Set<CJumpPoint> p_open )
+    private static void successors( final ObjectMatrix2D p_objects, final INode p_curnode, final DoubleMatrix1D p_end,
+                                    final List<DoubleMatrix1D> p_closed, final Set<INode> p_open )
     {
 
     }
 
-
-    /**
-     * jump-point with a static class
-     * "static" means that the class can exists without the CJPSPlus object
-     * "final" no inheritance can be create
-     */
-    private static final class CJumpPoint implements Comparable<CJumpPoint>
-    {
-        /**
-         * for avoid zero-jump-points we create exactly one
-         */
-        public static final CJumpPoint ZERO = new CJumpPoint();
-
-        /**
-         * jump-point g-score value
-         */
-        private double m_gscore;
-
-        /**
-         * jump-point h-score value
-         */
-        private double m_hscore;
-
-        /**
-         * parent node of current JumpPoint
-         */
-        private CJumpPoint m_parent;
-        /**
-         * position
-         */
-        private final DoubleMatrix1D m_coordinate;
-
-        /**
-         * ctor
-         */
-        private CJumpPoint()
-        {
-            this( new DenseDoubleMatrix1D( 0 ), null );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_coordinate postion value
-         */
-        CJumpPoint( final DoubleMatrix1D p_coordinate )
-        {
-            this( p_coordinate, null );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_coordinate postion value
-         * @param p_parent parent of the current jump point
-         */
-        CJumpPoint( final DoubleMatrix1D p_coordinate, final CJumpPoint p_parent )
-        {
-            m_coordinate = p_coordinate;
-            m_parent = p_parent;
-        }
-
-        @Override
-        public int compareTo( final CJumpPoint p_jumppoint )
-        {
-            return this.fscore() > p_jumppoint.fscore() ?  1 : -1;
-        }
-
-        /**
-         * getter for coordinate
-         *
-         * @return coordinate
-         */
-        final DoubleMatrix1D coordinate()
-        {
-            return m_coordinate;
-        }
-
-        /**
-         * getter for g-score
-         *
-         * @return g-score
-         */
-        final double gscore()
-        {
-            return m_gscore;
-        }
-
-        /**
-         * getter for f_score
-         *
-         * @return f-score
-         */
-        final double fscore()
-        {
-            return m_hscore + m_gscore;
-        }
-
-        /**
-         * getter for parent
-         *
-         * @return parent
-         */
-        final CJumpPoint parent()
-        {
-            return m_parent;
-        }
-
-        /**
-         * setter for g_score
-         *
-         * @return CJumpPoint
-         */
-        final CJumpPoint gscore( final double p_gscore )
-        {
-            m_gscore = p_gscore;
-            return this;
-        }
-
-        /**
-         * setter for h_score
-         *
-         * @return CJumpPoint
-         */
-        final CJumpPoint hscore( final double p_hscore )
-        {
-            m_hscore = p_hscore;
-            return this;
-        }
-
-    }
 }

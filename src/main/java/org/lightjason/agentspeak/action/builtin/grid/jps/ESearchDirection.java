@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -67,9 +66,9 @@ public enum ESearchDirection implements ISearchDirection
                 return this.searchposition( p_grid, p_current, p_walkable );
 
             final Number l_dx = ( p_current.position().getQuick( 1 ) - l_parent.position().getQuick( 1 ) )
-                                / Math.max( Math.abs( p_current.position().getQuick( 1 ) - l_parent.position().getQuick( 1 )), 1);
-            final Number l_dy = (p_current.position().getQuick( 0 ) - l_parent.position().getQuick( 0 ))
-                                / Math.max(Math.abs(p_current.position().getQuick( 0 ) - l_parent.position().getQuick( 0 )), 1);
+                                / Math.max( Math.abs( p_current.position().getQuick( 1 ) - l_parent.position().getQuick( 1 ) ), 1 );
+            final Number l_dy = ( p_current.position().getQuick( 0 ) - l_parent.position().getQuick( 0 ) )
+                                / Math.max( Math.abs( p_current.position().getQuick( 0 ) - l_parent.position().getQuick( 0 ) ), 1 );
 
             /*
             if ( l_dx.intValue() != 0 )

@@ -29,38 +29,92 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 
 /**
- * interface of a node
+ * jump-point
  */
-public interface INode extends Comparable<INode>
+public final class CJumpPoint implements INode
 {
     /**
-     * getter of position
-     *
-     * @return position
+     * position
      */
+    private final DoubleMatrix1D m_position;
+    /**
+     * g-score
+     */
+    private final Number m_gscore;
+    /**
+     * h-score
+     */
+    private final Number m_hscore;
+    /**
+     * parent node
+     */
+    private final INode m_parent;
+
+    /**
+     * ctor
+     *
+     * @param p_position position
+     */
+    public CJumpPoint( @NonNull final DoubleMatrix1D p_position )
+    {
+        this( p_position, 0, 0, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_gscore g-score
+     * @param p_hscore h-score
+     */
+    public CJumpPoint( @NonNull final DoubleMatrix1D p_position, final double p_gscore, final double p_hscore )
+    {
+        this( p_position, p_gscore, p_hscore, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_gscore g-score
+     * @param p_hscore h-score
+     * @param p_parent parent node
+     */
+    public CJumpPoint( @NonNull final DoubleMatrix1D p_position, final double p_gscore, final double p_hscore, @Nullable final INode p_parent )
+    {
+        m_gscore = p_gscore;
+        m_hscore = p_hscore;
+        m_parent = p_parent;
+        m_position = p_position;
+    }
+
     @NonNull
-    DoubleMatrix1D position();
+    @Override
+    public DoubleMatrix1D position()
+    {
+        return m_position;
+    }
 
-    /**
-     * getter for g-score
-     *
-     * @return g-score
-     */
-    Number gscore();
+    @Override
+    public Number gscore()
+    {
+        return m_gscore;
+    }
 
-    /**
-     * getter for f_score
-     *
-     * @return f-score
-     */
-    Number fscore();
+    @Override
+    public Number fscore()
+    {
+        return m_gscore.doubleValue() + m_hscore.doubleValue();
+    }
 
-    /**
-     * getter for parent
-     *
-     * @return parent
-     */
     @Nullable
-    INode parent();
+    @Override
+    public INode parent()
+    {
+        return m_parent;
+    }
 
+    @Override
+    public int compareTo( @NonNull final INode p_node )
+    {
+        return this.fscore().doubleValue() > p_node.fscore().doubleValue() ?  1 : -1;
+    }
 }
