@@ -31,7 +31,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 /**
  * interface of a node
  */
-public interface INode extends Comparable<INode>
+public interface INode
 {
     /**
      * getter of position
@@ -40,20 +40,6 @@ public interface INode extends Comparable<INode>
      */
     @NonNull
     DoubleMatrix1D position();
-
-    /**
-     * getter for g-score
-     *
-     * @return g-score
-     */
-    Number gscore();
-
-    /**
-     * getter for f_score
-     *
-     * @return f-score
-     */
-    Number fscore();
 
     /**
      * getter for parent

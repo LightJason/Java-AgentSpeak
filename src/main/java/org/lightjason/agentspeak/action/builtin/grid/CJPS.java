@@ -39,8 +39,10 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -104,35 +106,15 @@ public final class CJPS extends IBaseAction
 
     private static List<DoubleMatrix1D> route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
-        final TreeSet<INode> l_open = Stream.of( new CJumpPoint( p_start ) ).collect( Collectors.toCollection( TreeSet::new ) );
-        final List<DoubleMatrix1D> l_closed = new ArrayList<>();
-        final List<DoubleMatrix1D> l_path = new ArrayList<>();
+        // distance to start + estimate to end
+        final Map<INode, Double> l_fscore = new ConcurrentHashMap<>();
+        // distance to start (parent's g-score + distance from parent)
+        final Map<INode, Double> l_gscore = new ConcurrentHashMap<>();
+        // estimate to end
+        final Map<INode, Double> l_hscore = new ConcurrentHashMap<>();
 
-        while ( !l_open.isEmpty() )
-        {
-            final INode l_current = l_open.pollFirst();
 
-            // final position is reached
-            if ( l_current.position().equals( p_end ) )
-            {
-                l_path.add( p_end );
-                INode l_parent = l_current.parent();
-                while ( !l_parent.position().equals( p_start ) )
-                {
-                    l_path.add( l_parent.position() );
-                    l_parent = l_parent.parent();
-                }
-                Collections.reverse( l_path );
-                return l_path;
-            }
 
-            // find the successors to current node (add them to the open list)
-            successors( p_grid, l_current, p_end, l_closed, l_open );
-
-            // add the current node to the closed list (as to not open it again)
-            l_closed.add( l_current.position() );
-
-        }
 
         return Collections.emptyList();
     }

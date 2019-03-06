@@ -38,14 +38,6 @@ public final class CJumpPoint implements INode
      */
     private final DoubleMatrix1D m_position;
     /**
-     * g-score
-     */
-    private final Number m_gscore;
-    /**
-     * h-score
-     */
-    private final Number m_hscore;
-    /**
      * parent node
      */
     private final INode m_parent;
@@ -57,31 +49,15 @@ public final class CJumpPoint implements INode
      */
     public CJumpPoint( @NonNull final DoubleMatrix1D p_position )
     {
-        this( p_position, 0, 0, null );
+        this( p_position, null );
     }
-
     /**
      * ctor
      *
-     * @param p_gscore g-score
-     * @param p_hscore h-score
-     */
-    public CJumpPoint( @NonNull final DoubleMatrix1D p_position, final double p_gscore, final double p_hscore )
-    {
-        this( p_position, p_gscore, p_hscore, null );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_gscore g-score
-     * @param p_hscore h-score
      * @param p_parent parent node
      */
-    public CJumpPoint( @NonNull final DoubleMatrix1D p_position, final double p_gscore, final double p_hscore, @Nullable final INode p_parent )
+    public CJumpPoint( @NonNull final DoubleMatrix1D p_position, @Nullable final INode p_parent )
     {
-        m_gscore = p_gscore;
-        m_hscore = p_hscore;
         m_parent = p_parent;
         m_position = p_position;
     }
@@ -93,18 +69,6 @@ public final class CJumpPoint implements INode
         return m_position;
     }
 
-    @Override
-    public Number gscore()
-    {
-        return m_gscore;
-    }
-
-    @Override
-    public Number fscore()
-    {
-        return m_gscore.doubleValue() + m_hscore.doubleValue();
-    }
-
     @Nullable
     @Override
     public INode parent()
@@ -112,9 +76,4 @@ public final class CJumpPoint implements INode
         return m_parent;
     }
 
-    @Override
-    public int compareTo( @NonNull final INode p_node )
-    {
-        return this.fscore().doubleValue() > p_node.fscore().doubleValue() ?  1 : -1;
-    }
 }
