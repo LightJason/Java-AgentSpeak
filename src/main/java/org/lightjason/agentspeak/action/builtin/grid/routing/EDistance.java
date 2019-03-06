@@ -58,6 +58,23 @@ public enum EDistance implements IDistance
         {
             return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).getMaxLocation()[0];
         }
-    }
+    },
+
+    OCTILE
+    {
+        @Override
+        public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
+        {
+            final DoubleMatrix1D l_dxy = p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.abs );
+            return l_dxy.getQuick( 1 ) < l_dxy.getQuick( 0 )
+                   ? F * l_dxy.getQuick( 1 ) + l_dxy.getQuick( 0 )
+                   : F * l_dxy.getQuick( 0 ) + l_dxy.getQuick( 1 );
+        }
+    };
+
+    /**
+     * octile constant
+     */
+    private static final double F = Math.sqrt( 2 ) - 1;
 
 }
