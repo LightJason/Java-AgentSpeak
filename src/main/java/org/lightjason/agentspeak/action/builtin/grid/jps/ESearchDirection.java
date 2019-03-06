@@ -24,12 +24,15 @@
 package org.lightjason.agentspeak.action.builtin.grid.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.language.CCommon;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -42,7 +45,7 @@ public enum ESearchDirection implements ISearchDirection
     NEVER
     {
         @Override
-        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
                                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             return Stream.of(
@@ -52,11 +55,37 @@ public enum ESearchDirection implements ISearchDirection
                 walkable( p_grid, p_current, EDirection.WEST, p_walkable )
             ).filter( Pair::getKey ).map( Pair::getValue );
         }
+
+        @Override
+        public Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+                                                  @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                                                  @NonNull final Map<INode, INode> p_map )
+        {
+            final INode l_parent = p_map.get( p_current );
+
+            if ( !p_map.containsKey( p_current ) )
+                return this.searchposition( p_grid, p_current, p_walkable );
+
+            final Number l_dx = ( p_current.position().getQuick( 1 ) - l_parent.position().getQuick( 1 ) )
+                                / Math.max( Math.abs( p_current.position().getQuick( 1 ) - l_parent.position().getQuick( 1 )), 1);
+            final Number l_dy = (p_current.position().getQuick( 0 ) - l_parent.position().getQuick( 0 ))
+                                / Math.max(Math.abs(p_current.position().getQuick( 0 ) - l_parent.position().getQuick( 0 )), 1);
+
+            /*
+            if ( l_dx.intValue() != 0 )
+                return CCommon.streamconcat(
+                    p_walkable.apply( p_grid, p_current.position().copy().assign( new double[]{0,0} ) ) ? Stream.of( new DenseDoubleMatrix1D( 0 ) ) : Stream.of(),
+                    Stream.of()
+                );
+            */
+
+            return Stream.of();
+        }
     },
     ALWAYS
     {
         @Override
-        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
                                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             return Stream.of(
@@ -70,11 +99,19 @@ public enum ESearchDirection implements ISearchDirection
                 walkable( p_grid, p_current, EDirection.SOUTHWEST, p_walkable )
             ).filter( Pair::getKey ).map( Pair::getValue );
         }
+
+        @Override
+        public Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+                                                  @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                                                  @NonNull final Map<INode, INode> p_map )
+        {
+            return Stream.of();
+        }
     },
     NOOBSTACLES
     {
         @Override
-        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
                                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             final Pair<Boolean, DoubleMatrix1D> l_north = walkable( p_grid, p_current, EDirection.NORTH, p_walkable );
@@ -90,11 +127,19 @@ public enum ESearchDirection implements ISearchDirection
                 l_south.getKey() && l_west.getKey() ? Stream.of( walkable( p_grid, p_current, EDirection.SOUTHWEST, p_walkable ) ) : Stream.of()
             ).filter( Pair::getKey ).map( Pair::getValue );
         }
+
+        @Override
+        public Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+                                                  @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                                                  @NonNull final Map<INode, INode> p_map )
+        {
+            return Stream.of();
+        }
     },
     ONEOBSTACLE
     {
         @Override
-        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+        public Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
                                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
         {
             final Pair<Boolean, DoubleMatrix1D> l_north = walkable( p_grid, p_current, EDirection.NORTH, p_walkable );
@@ -110,6 +155,14 @@ public enum ESearchDirection implements ISearchDirection
                 l_south.getKey() || l_west.getKey() ? Stream.of( walkable( p_grid, p_current, EDirection.SOUTHWEST, p_walkable ) ) : Stream.of()
             ).filter( Pair::getKey ).map( Pair::getValue );
         }
+
+        @Override
+        public Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+                                                  @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                                                  @NonNull final Map<INode, INode> p_map )
+        {
+            return Stream.of();
+        }
     };
 
 
@@ -122,11 +175,11 @@ public enum ESearchDirection implements ISearchDirection
      * @param p_walkable walkable filter function
      * @return pair of walkable and position vector
      */
-    private static Pair<Boolean, DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+    private static Pair<Boolean, DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
                                                            @Nonnull final EDirection p_direction,
                                                            @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
-        final DoubleMatrix1D l_position = p_direction.apply( p_current );
+        final DoubleMatrix1D l_position = p_direction.apply( p_current.position() );
         return new ImmutablePair<>(
             l_position.getQuick( 0 ) >= 0 && l_position.getQuick( 0 ) < p_grid.rows()
             && l_position.getQuick( 1 ) >= 0 && l_position.getQuick( 1 ) < p_grid.columns()
