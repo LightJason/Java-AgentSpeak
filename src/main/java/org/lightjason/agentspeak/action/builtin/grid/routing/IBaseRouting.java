@@ -26,7 +26,10 @@ package org.lightjason.agentspeak.action.builtin.grid.routing;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
@@ -59,5 +62,24 @@ public abstract class IBaseRouting implements IRouting
         m_walkable = p_walkable;
     }
 
+    /**
+     * check walkable position e.g. by grid size
+     *
+     * @param p_grid grid
+     * @param p_current current position
+     * @param p_direction walkable direction
+     * @return pair of walkable and position vector
+     */
+    protected final Pair<Boolean, DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                                            @Nonnull final EDirection p_direction )
+    {
+        final DoubleMatrix1D l_position = p_direction.apply( p_current );
+        return new ImmutablePair<>(
+            l_position.getQuick( 0 ) >= 0 && l_position.getQuick( 0 ) < p_grid.rows()
+            && l_position.getQuick( 1 ) >= 0 && l_position.getQuick( 1 ) < p_grid.columns()
+            && m_walkable.apply( p_grid, l_position ),
+            l_position
+        );
+    }
 
 }

@@ -25,11 +25,8 @@ package org.lightjason.agentspeak.action.builtin.grid.routing.jps;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -41,11 +38,10 @@ public interface ISearchDirection
     //extends TriFunction<ObjectMatrix2D, DoubleMatrix1D, BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean>, Stream<DoubleMatrix1D>>
 {
 
-    Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
+    Stream<DoubleMatrix1D> searchposition( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
                                            @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable );
 
-    Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current,
-                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
-                                       @NonNull final Map<INode, INode> p_map );
+    Stream<DoubleMatrix1D> neighbours( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
+                                       @Nonnull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable );
 
 }

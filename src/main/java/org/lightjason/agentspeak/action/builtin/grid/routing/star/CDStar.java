@@ -1,15 +1,23 @@
-package org.lightjason.agentspeak.action.builtin.grid.routing.dstar;
+package org.lightjason.agentspeak.action.builtin.grid.routing.star;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
 
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
-public final class CDStar extends IBaseRouting
+public final class CDStar extends IBaseAStar
 {
     public CDStar()
+    {
+        super();
+    }
+
+    public CDStar( @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable
+    )
     {
         super( p_walkable );
     }
