@@ -26,8 +26,6 @@ package org.lightjason.agentspeak.action.builtin.grid;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
-import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -109,31 +107,31 @@ public final class CJPS extends IBaseAction
     private static List<DoubleMatrix1D> route( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
         // distance to start + estimate to end
-        final Map<INode, Double> l_fscore = new ConcurrentHashMap<>();
+        final Map<DoubleMatrix1D, Double> l_fscore = new ConcurrentHashMap<>();
         // distance to start (parent's g-score + distance from parent)
-        final Map<INode, Double> l_gscore = new ConcurrentHashMap<>();
+        final Map<DoubleMatrix1D, Double> l_gscore = new ConcurrentHashMap<>();
         // estimate to end
-        final Map<INode, Double> l_hscore = new ConcurrentHashMap<>();
+        final Map<DoubleMatrix1D, Double> l_hscore = new ConcurrentHashMap<>();
 
         // we want the nodes with the lowest projected F value to be checked first
-        final Queue<INode> l_open = new PriorityBlockingQueue<>(
+        final Queue<DoubleMatrix1D> l_open = new PriorityBlockingQueue<>(
             (int) p_grid.size() / 4,
             Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
         );
 
-        final Set<INode> l_goals = Collections.synchronizedSet( new HashSet<>() );
-        final Set<INode> l_closed = Collections.synchronizedSet( new HashSet<>() );
-        final Map<INode, INode> l_parent = new ConcurrentHashMap<>();
+        final Set<DoubleMatrix1D> l_goals = Collections.synchronizedSet( new HashSet<>() );
+        final Set<DoubleMatrix1D> l_closed = Collections.synchronizedSet( new HashSet<>() );
+        //final Map<INode, INode> l_parent = new ConcurrentHashMap<>();
 
         // adjaceny stop
 
         if ( l_goals.isEmpty() )
             return Collections.emptyList();
 
-        l_open.add( new CNode( p_start ) );
+        l_open.add( p_start );
         while ( !l_goals.isEmpty() )
         {
-            final INode l_node = l_open.poll();
+            final DoubleMatrix1D l_node = l_open.poll();
             l_closed.add( l_node );
 
             if ( l_goals.contains( l_node ) )
@@ -147,8 +145,8 @@ public final class CJPS extends IBaseAction
     }
 
 
-    private static void successors( final ObjectMatrix2D p_objects, final INode p_current, final DoubleMatrix1D p_end,
-                                    final Set<INode> p_closed, final Queue<INode> p_open )
+    private static void successors( final ObjectMatrix2D p_objects, final DoubleMatrix1D p_current, final DoubleMatrix1D p_end,
+                                    final Set<DoubleMatrix1D> p_closed, final Queue<DoubleMatrix1D> p_open )
     {
 
     }

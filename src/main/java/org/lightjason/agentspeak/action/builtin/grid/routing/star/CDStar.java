@@ -3,7 +3,6 @@ package org.lightjason.agentspeak.action.builtin.grid.routing.star;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
 
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
