@@ -35,4 +35,8 @@ import java.util.stream.Stream;
  */
 public interface IRouting extends TriFunction<ObjectMatrix2D, DoubleMatrix1D, DoubleMatrix1D, Stream<DoubleMatrix1D>>
 {
+
+    // https://qiao.github.io/PathFinding.js/visual/
+    // https://github.com/qiao/PathFinding.js/blob/master/src/finders/JPFAlwaysMoveDiagonally.js
+
 }
