@@ -21,8 +21,9 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
-public abstract class IBaseAStar extends IBaseRouting
+public final class CAStar extends IBaseRouting
 {
+
     protected final PriorityBuffer m_heap = new PriorityBuffer();
 
     // https://github.com/jonasnick/A-star/blob/master/astar/AStar.java
@@ -30,12 +31,14 @@ public abstract class IBaseAStar extends IBaseRouting
     // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AStar.java
     // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AdaptiveAStar.java
 
-    protected IBaseAStar()
+
+
+    public CAStar()
     {
         super();
     }
 
-    protected IBaseAStar( @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+    public CAStar( @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
         super( p_walkable );
     }
@@ -72,12 +75,12 @@ public abstract class IBaseAStar extends IBaseRouting
     }
 
 
-    protected final void expandnode( final DoubleMatrix1D p_current )
+    private final void expandnode( final DoubleMatrix1D p_current )
     {
 
     }
 
-    protected final Stream<DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current )
+    private final Stream<DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current )
     {
         return Stream.of(
             walkable( p_grid, p_current, EDirection.NORTH ),
@@ -86,5 +89,6 @@ public abstract class IBaseAStar extends IBaseRouting
             walkable( p_grid, p_current, EDirection.WEST )
         ).filter( Pair::getKey ).map( Pair::getValue );
     }
+
 
 }
