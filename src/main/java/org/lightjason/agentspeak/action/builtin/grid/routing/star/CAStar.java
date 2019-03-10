@@ -1,3 +1,26 @@
+/*
+ * @cond LICENSE
+ * ######################################################################################
+ * # LGPL License                                                                       #
+ * #                                                                                    #
+ * # This file is part of the LightJason AgentSpeak(L++)                                #
+ * # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU Lesser General Public License as                     #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU Lesser General Public License for more details.                                #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU Lesser General Public License           #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
 package org.lightjason.agentspeak.action.builtin.grid.routing.star;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
@@ -24,6 +47,11 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
+/**
+ * a-star algorithm
+ *
+ * @see https://en.wikipedia.org/wiki/A*_search_algorithm
+ */
 public final class CAStar extends IBaseRouting
 {
 
@@ -53,6 +81,8 @@ public final class CAStar extends IBaseRouting
         final Map<INode, Double> l_fscore = new ConcurrentHashMap<>();
         // distance to start (parent's g-score + distance from parent)
         final Map<INode, Double> l_gscore = new ConcurrentHashMap<>();
+        // heuristic distance between nodes
+        final Map<INode, Double> l_hscore = new ConcurrentHashMap<>();
 
         // closed list
         final Set<INode> l_closedlist = Collections.synchronizedSet( new HashSet<>() );
@@ -67,36 +97,55 @@ public final class CAStar extends IBaseRouting
         {
             final INode l_current = l_openlist.remove();
             if ( l_current.position().equals( p_end ) )
-                return this.constructpath( l_openlist, l_closedlist );
+                return constructpath( l_current );
 
             l_closedlist.add( l_current );
-            this.expandnode( p_grid, l_current, l_openlist, l_gscore, l_fscore );
+            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_gscore, l_hscore, l_fscore, 10 ) );
         }
 
 
         return Stream.of();
     }
 
-
-    private Stream<DoubleMatrix1D> constructpath( @Nonnull Queue<INode> p_openlist, @Nonnull Set<INode> p_closedlist )
+    /**
+     * calculates the score and updates the openlist
+     *
+     * @param p_grid grid
+     * @param p_current current node
+     * @param p_other neighbour nodes
+     * @param p_openlist openlist
+     * @param p_gscore g-score map
+     * @param p_hscore h-score map
+     * @param p_fscore f-score map
+     * @param p_weight weight
+     */
+    private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_other,
+                        @Nonnull final Queue<INode> p_openlist, @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_hscore,
+                        @Nonnull final Map<INode, Double> p_fscore, final @Nonnull Number p_weight )
     {
-        return Stream.of();
+        final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_other.position() ).doubleValue();
+
+        if ( p_openlist.contains( p_other ) && l_gscore >= p_gscore.getOrDefault( p_other, 0D ) )
+            return;
+
+        final double l_hscore = p_weight.doubleValue() + m_distance.heuristic( p_current.position(), p_other.position() ).doubleValue();
+
+        p_gscore.put( p_other, l_gscore );
+        p_hscore.put( p_other, l_hscore );
+        p_fscore.put( p_other, l_gscore + l_hscore );
+
+        p_other.accept( p_current );
+        p_openlist.add( p_other );
     }
 
-    private void expandnode( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull Queue<DoubleMatrix1D> p_openlist,
-                             @Nonnull Map<DoubleMatrix1D, Double> p_gscore, @Nonnull Map<DoubleMatrix1D, Double> p_fscore )
-    {
-        final double l_gscore = p_gscore.getOrDefault( p_current, 0D );
-
-        this.walkable( p_grid, p_current )
-            .parallel()
-            .filter( i -> !p_openlist.contains( i ) || l_)
-            .forEach( i -> p_gscore.put( i, l_gscore + m_distance.apply( i, p_current ).doubleValue() ) );
-
-
-    }
-
-    private Stream<INode> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current )
+    /**
+     * neighbour calculation
+     *
+     * @param p_grid grid
+     * @param p_current current node
+     * @return neighbour stream
+     */
+    private Stream<INode> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current )
     {
         return Stream.of(
             walkable( p_grid, p_current.position(), EDirection.NORTH ),

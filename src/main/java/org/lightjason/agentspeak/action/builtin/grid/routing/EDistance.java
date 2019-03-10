@@ -85,8 +85,8 @@ public enum EDistance implements IDistance
         {
             final DoubleMatrix1D l_dxy = p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.abs );
             return l_dxy.getQuick( 1 ) < l_dxy.getQuick( 0 )
-                   ? F * l_dxy.getQuick( 1 ) + l_dxy.getQuick( 0 )
-                   : F * l_dxy.getQuick( 0 ) + l_dxy.getQuick( 1 );
+                   ? FVALUE * l_dxy.getQuick( 1 ) + l_dxy.getQuick( 0 )
+                   : FVALUE * l_dxy.getQuick( 0 ) + l_dxy.getQuick( 1 );
         }
 
         @Override
@@ -99,6 +99,6 @@ public enum EDistance implements IDistance
     /**
      * octile constant
      */
-    private static final double F = Math.sqrt( 2 ) - 1;
+    private static final double FVALUE = Math.sqrt( 2 ) - 1;
 
 }

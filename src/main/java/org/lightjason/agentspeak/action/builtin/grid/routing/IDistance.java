@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.grid.routing;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
 
 

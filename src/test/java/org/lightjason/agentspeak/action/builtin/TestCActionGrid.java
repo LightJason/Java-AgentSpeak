@@ -211,10 +211,10 @@ public final class TestCActionGrid extends IBaseTest
     }
 
     /**
-     * test jps algorithm
+     * test a-star test
      */
     @Test
-    public void jps()
+    public void astar()
     {
 
     }

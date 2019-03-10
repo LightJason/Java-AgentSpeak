@@ -30,8 +30,11 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -72,6 +75,31 @@ public abstract class IBaseRouting implements IRouting
     }
 
     /**
+     * builds the path recursive on the node structure
+     *
+     * @param p_end final node (target position)
+     * @return position stream
+     */
+    protected static Stream<DoubleMatrix1D> constructpath( @Nonnull final INode p_end )
+    {
+        return constructpath( p_end, Stream.of() );
+    }
+
+    /**
+     * builds the path recursive on the node structure
+     *
+     * @param p_node node
+     * @param p_stream current node stream
+     * @return position stream
+     */
+    private static Stream<DoubleMatrix1D> constructpath( @Nonnull final INode p_node, @Nonnull final Stream<DoubleMatrix1D> p_stream )
+    {
+        return Objects.isNull( p_node.get() )
+               ? Stream.concat( Stream.of( p_node.position() ), p_stream )
+               : constructpath( p_node.get(), Stream.of( p_node.position() ) );
+    }
+
+    /**
      * check walkable position e.g. by grid size
      *
      * @param p_grid grid
@@ -89,6 +117,17 @@ public abstract class IBaseRouting implements IRouting
             && m_walkable.apply( p_grid, l_position ),
             l_position
         );
+    }
+
+    /**
+     * build path
+     *
+     * @param p_nodes node stream
+     * @return build list
+     */
+    protected final List<DoubleMatrix1D> build( @Nonnull final Stream<INode> p_nodes )
+    {
+        return p_nodes.map( INode::position ).collect( Collectors.toList() );
     }
 
 }
