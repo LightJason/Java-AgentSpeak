@@ -5,8 +5,11 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.collections.buffer.PriorityBuffer;
 import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
+import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
+import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -33,41 +36,41 @@ public final class CAStar extends IBaseRouting
 
 
 
-    public CAStar()
+    public CAStar( @Nonnull final EDistance p_distance )
     {
-        super();
+        super( p_distance );
     }
 
-    public CAStar( @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+    public CAStar( @Nonnull final EDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
-        super( p_walkable );
+        super( p_distance, p_walkable );
     }
 
     @Override
-    public Stream<DoubleMatrix1D> apply( final ObjectMatrix2D p_grid, final DoubleMatrix1D p_start, final DoubleMatrix1D p_end )
+    public Stream<DoubleMatrix1D> apply( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
         // distance to start + estimate to end
-        final Map<DoubleMatrix1D, Double> l_fscore = new ConcurrentHashMap<>();
+        final Map<INode, Double> l_fscore = new ConcurrentHashMap<>();
         // distance to start (parent's g-score + distance from parent)
-        final Map<DoubleMatrix1D, Double> l_gscore = new ConcurrentHashMap<>();
+        final Map<INode, Double> l_gscore = new ConcurrentHashMap<>();
 
         // closed list
-        final Set<DoubleMatrix1D> l_closedlist = Collections.synchronizedSet( new HashSet<>() );
+        final Set<INode> l_closedlist = Collections.synchronizedSet( new HashSet<>() );
         // we want the nodes with the lowest projected f value to be checked first
-        final Queue<DoubleMatrix1D> l_openlist = new PriorityBlockingQueue<>(
+        final Queue<INode> l_openlist = new PriorityBlockingQueue<>(
             (int) p_grid.size() / 4,
             Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
         );
 
-        l_openlist.add( p_start );
+        l_openlist.add( new CNode( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
-            final DoubleMatrix1D l_current = l_openlist.remove();
-            if ( l_current.equals( p_end ) )
-                return Stream.of();
+            final INode l_current = l_openlist.remove();
+            if ( l_current.position().equals( p_end ) )
+                return this.constructpath( l_openlist, l_closedlist );
 
             l_closedlist.add( l_current );
-            this.expandnode( l_current );
+            this.expandnode( p_grid, l_current, l_openlist, l_gscore, l_fscore );
         }
 
 
@@ -75,19 +78,32 @@ public final class CAStar extends IBaseRouting
     }
 
 
-    private final void expandnode( final DoubleMatrix1D p_current )
+    private Stream<DoubleMatrix1D> constructpath( @Nonnull Queue<INode> p_openlist, @Nonnull Set<INode> p_closedlist )
     {
+        return Stream.of();
+    }
+
+    private void expandnode( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull Queue<DoubleMatrix1D> p_openlist,
+                             @Nonnull Map<DoubleMatrix1D, Double> p_gscore, @Nonnull Map<DoubleMatrix1D, Double> p_fscore )
+    {
+        final double l_gscore = p_gscore.getOrDefault( p_current, 0D );
+
+        this.walkable( p_grid, p_current )
+            .parallel()
+            .filter( i -> !p_openlist.contains( i ) || l_)
+            .forEach( i -> p_gscore.put( i, l_gscore + m_distance.apply( i, p_current ).doubleValue() ) );
+
 
     }
 
-    private final Stream<DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current )
+    private Stream<INode> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current )
     {
         return Stream.of(
-            walkable( p_grid, p_current, EDirection.NORTH ),
-            walkable( p_grid, p_current, EDirection.EAST ),
-            walkable( p_grid, p_current, EDirection.SOUTH ),
-            walkable( p_grid, p_current, EDirection.WEST )
-        ).filter( Pair::getKey ).map( Pair::getValue );
+            walkable( p_grid, p_current.position(), EDirection.NORTH ),
+            walkable( p_grid, p_current.position(), EDirection.EAST ),
+            walkable( p_grid, p_current.position(), EDirection.SOUTH ),
+            walkable( p_grid, p_current.position(), EDirection.WEST )
+        ).filter( Pair::getKey ).map( Pair::getValue ).map( CNode::new );
     }
 
 

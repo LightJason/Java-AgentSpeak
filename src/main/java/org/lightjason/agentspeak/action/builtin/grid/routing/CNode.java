@@ -24,25 +24,63 @@
 package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
-import java.util.function.BiFunction;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
- * distance and heuristic algorithm interface of routing distances
+ * route node
  */
-public interface IDistance extends BiFunction<DoubleMatrix1D, DoubleMatrix1D, Number>
+public final class CNode implements INode
 {
+    /**
+     * position
+     */
+    private final DoubleMatrix1D m_position;
+    /**
+     * parent node
+     */
+    private final AtomicReference<INode> m_parent = new AtomicReference<>();
+
 
     /**
-     * heurisitc distance approximation
-     *
-     * @param p_value1 first value
-     * @param p_value2 second value
-     * @return distance
+     * ctor
+     * @param p_position node position
      */
-    Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 );
+    public CNode( @Nonnull final DoubleMatrix1D p_position )
+    {
+        m_position = p_position;
+    }
 
+
+    @Override
+    public DoubleMatrix1D position()
+    {
+        return m_position;
+    }
+
+    @Override
+    public INode get()
+    {
+        return m_parent.get();
+    }
+
+    @Override
+    public void accept( final INode p_parent )
+    {
+        m_parent.set( p_parent );
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return m_position.hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return p_object instanceof INode && p_object.hashCode() == this.hashCode();
+    }
 }

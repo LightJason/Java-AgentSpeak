@@ -32,12 +32,12 @@ public abstract class IBaseAStar extends IBaseRouting
 
     protected IBaseAStar()
     {
-        super();
+        super( p_distance );
     }
 
     protected IBaseAStar( @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
-        super( p_walkable );
+        super( p_distance, p_walkable );
     }
 
     @Override

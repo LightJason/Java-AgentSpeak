@@ -40,25 +40,34 @@ import java.util.function.BiFunction;
 public abstract class IBaseRouting implements IRouting
 {
     /**
+     * distance
+     */
+    protected final EDistance m_distance;
+    /**
      * walkable function
      */
     protected final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> m_walkable;
 
     /**
      * ctor
+     * @param p_distance distance
      */
-    protected IBaseRouting()
+    protected IBaseRouting( @Nonnull final EDistance p_distance )
     {
-        this( ( g, p ) -> Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
+        this( p_distance, ( g, p ) -> Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
     }
 
     /**
      * ctor
      *
+     * @param p_distance distance
      * @param p_walkable walkable function
      */
-    protected IBaseRouting( @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+    protected IBaseRouting( @Nonnull final EDistance p_distance,
+                            @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable
+    )
     {
+        m_distance = p_distance;
         m_walkable = p_walkable;
     }
 

@@ -24,25 +24,21 @@
 package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
 /**
- * distance and heuristic algorithm interface of routing distances
+ * node of the route (thread-safe)
  */
-public interface IDistance extends BiFunction<DoubleMatrix1D, DoubleMatrix1D, Number>
+public interface INode extends Supplier<INode>, Consumer<INode>
 {
-
     /**
-     * heurisitc distance approximation
+     * returns the positioin of the node
      *
-     * @param p_value1 first value
-     * @param p_value2 second value
-     * @return distance
+     * @return position
      */
-    Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 );
+    DoubleMatrix1D position();
 
 }

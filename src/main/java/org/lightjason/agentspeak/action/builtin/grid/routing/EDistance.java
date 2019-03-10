@@ -40,6 +40,12 @@ public enum EDistance implements IDistance
         {
             return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.abs ).zSum();
         }
+
+        @Override
+        public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
+        {
+            return this.apply( p_value1, p_value2 );
+        }
     },
 
     EUCLIDEAN
@@ -49,6 +55,12 @@ public enum EDistance implements IDistance
         {
             return Math.sqrt( p_value1.copy().assign( p_value2, DoubleFunctions.minus ).assign( DoubleFunctions.pow( 2 ) ).zSum() );
         }
+
+        @Override
+        public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
+        {
+            return this.apply( p_value1, p_value2 );
+        }
     },
 
     CHEBYSHEV
@@ -57,6 +69,12 @@ public enum EDistance implements IDistance
         public Number apply( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
             return p_value1.copy().assign( p_value2, DoubleFunctions.minus ).getMaxLocation()[0];
+        }
+
+        @Override
+        public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
+        {
+            return this.apply( p_value1, p_value2 );
         }
     },
 
@@ -69,6 +87,12 @@ public enum EDistance implements IDistance
             return l_dxy.getQuick( 1 ) < l_dxy.getQuick( 0 )
                    ? F * l_dxy.getQuick( 1 ) + l_dxy.getQuick( 0 )
                    : F * l_dxy.getQuick( 0 ) + l_dxy.getQuick( 1 );
+        }
+
+        @Override
+        public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
+        {
+            return this.apply( p_value1, p_value2 );
         }
     };
 
