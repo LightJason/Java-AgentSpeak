@@ -92,15 +92,22 @@ public final class CAStar extends IBaseRouting
             Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
         );
 
+        int c=0;
         l_openlist.add( new CNode( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
+            System.out.println( l_openlist );
+
             final INode l_current = l_openlist.remove();
             if ( l_current.position().equals( p_end ) )
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
             this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_gscore, l_hscore, l_fscore, 10 ) );
+
+            c++;
+            if ( c > 20 )
+                break;
         }
 
 

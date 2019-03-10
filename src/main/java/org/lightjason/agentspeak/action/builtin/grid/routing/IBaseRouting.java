@@ -57,7 +57,7 @@ public abstract class IBaseRouting implements IRouting
      */
     protected IBaseRouting( @Nonnull final EDistance p_distance )
     {
-        this( p_distance, ( g, p ) -> Objects.nonNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
+        this( p_distance, ( g, p ) -> Objects.isNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
     }
 
     /**

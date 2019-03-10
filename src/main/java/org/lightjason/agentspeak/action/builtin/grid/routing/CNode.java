@@ -24,8 +24,11 @@
 package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.algo.DoubleFormatter;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -34,6 +37,19 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class CNode implements INode
 {
+    /**
+     * formatter definition
+     */
+    private static final DoubleFormatter FORMATTER;
+
+    static
+    {
+        FORMATTER = new DoubleFormatter();
+        FORMATTER.setRowSeparator( "; " );
+        FORMATTER.setColumnSeparator( "," );
+        FORMATTER.setPrintShape( false );
+    }
+
     /**
      * position
      */
@@ -82,5 +98,12 @@ public final class CNode implements INode
     public boolean equals( final Object p_object )
     {
         return p_object instanceof INode && p_object.hashCode() == this.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        final INode l_parent = m_parent.get();
+        return MessageFormat.format( "({0})[{1}]", FORMATTER.toString( m_position ), Objects.nonNull( l_parent ) ? l_parent : "" );
     }
 }

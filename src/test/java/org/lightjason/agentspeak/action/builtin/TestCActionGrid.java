@@ -24,6 +24,7 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.impl.DenseObjectMatrix2D;
 import cern.colt.matrix.tobject.impl.SparseObjectMatrix2D;
@@ -35,6 +36,8 @@ import org.lightjason.agentspeak.action.builtin.grid.CIsEmpty;
 import org.lightjason.agentspeak.action.builtin.grid.CRemove;
 import org.lightjason.agentspeak.action.builtin.grid.CSet;
 import org.lightjason.agentspeak.action.builtin.grid.CSparseGrid;
+import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
+import org.lightjason.agentspeak.action.builtin.grid.routing.star.CAStar;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -216,7 +219,24 @@ public final class TestCActionGrid extends IBaseTest
     @Test
     public void astar()
     {
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 10, 10 );
+        /*
+        l_grid.setQuick( 4, 4, new Object() );
 
+        l_grid.setQuick( 5, 3, new Object() );
+        l_grid.setQuick( 6, 2, new Object() );
+
+        l_grid.setQuick( 3, 5, new Object() );
+        l_grid.setQuick( 2, 6, new Object() );
+        */
+
+        System.out.println(
+            new CAStar( EDistance.MANHATTAN ).apply(
+                l_grid,
+                new DenseDoubleMatrix1D( new double[]{ 0, 0 } ),
+                new DenseDoubleMatrix1D( new double[]{ 9, 9 } )
+            ).collect( Collectors.toList() )
+        );
     }
 
 }
