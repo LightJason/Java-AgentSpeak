@@ -90,6 +90,8 @@ public final class CAStar extends IBaseRouting
             Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
         );
 
+        // https://www.redblobgames.com/pathfinding/a-star/implementation.html
+
         int c=0;
         l_openlist.add( new CNode( p_start ) );
         while ( !l_openlist.isEmpty() )
@@ -101,7 +103,7 @@ public final class CAStar extends IBaseRouting
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
-            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_gscore, l_fscore, 10 ) );
+            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_closedlist, l_gscore, l_fscore, 10 ) );
 
             c++;
             if ( c > 100 )
@@ -119,24 +121,26 @@ public final class CAStar extends IBaseRouting
      * @param p_current current node
      * @param p_other neighbour nodes
      * @param p_openlist openlist
+     * @param p_closedlist closed list
      * @param p_gscore g-score map
      * @param p_fscore f-score map
      * @param p_weight weight
      */
     private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_other,
-                        @Nonnull final Queue<INode> p_openlist, @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore,
-                        @Nonnull final Number p_weight )
+                        @Nonnull final Queue<INode> p_openlist, @Nonnull final Set<INode> p_closedlist,
+                        @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore, @Nonnull final Number p_weight )
     {
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_other.position() ).doubleValue();
 
         if ( p_openlist.contains( p_other ) && l_gscore >= p_gscore.getOrDefault( p_other, 0D ) )
             return;
 
+        p_other.accept( p_current );
         p_gscore.put( p_other, l_gscore );
         p_fscore.put( p_other, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_current.position(), p_other.position() ).doubleValue() );
 
-        p_other.accept( p_current );
-        p_openlist.add( p_other );
+        if ( !p_closedlist.contains( p_other ) )
+            p_openlist.add( p_other );
     }
 
     /**

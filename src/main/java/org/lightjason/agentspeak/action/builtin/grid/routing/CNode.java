@@ -104,6 +104,7 @@ public final class CNode implements INode
     public String toString()
     {
         final INode l_parent = m_parent.get();
-        return MessageFormat.format( "({0})[{1}]", FORMATTER.toString( m_position ), Objects.nonNull( l_parent ) ? l_parent : "" );
+        //return MessageFormat.format( "({0})[{1}]", FORMATTER.toString( m_position ), Objects.nonNull( l_parent ) ? l_parent : "" );
+        return "(" + FORMATTER.toString( m_position ) + ")";
     }
 }
