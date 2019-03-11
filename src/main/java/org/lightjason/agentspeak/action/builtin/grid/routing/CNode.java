@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.algo.DoubleFormatter;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
@@ -106,5 +107,16 @@ public final class CNode implements INode
         final INode l_parent = m_parent.get();
         //return MessageFormat.format( "({0})[{1}]", FORMATTER.toString( m_position ), Objects.nonNull( l_parent ) ? l_parent : "" );
         return "(" + FORMATTER.toString( m_position ) + ")";
+    }
+
+    /**
+     * factory
+     *
+     * @param p_position position
+     * @return node
+     */
+    public static INode of( @NonNull final DoubleMatrix1D p_position )
+    {
+        return new CNode( p_position );
     }
 }

@@ -93,13 +93,15 @@ public final class CAStar extends IBaseRouting
         // https://www.redblobgames.com/pathfinding/a-star/implementation.html
 
         int c=0;
-        l_openlist.add( new CNode( p_start ) );
+        l_openlist.add( CNode.of( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
+            /*
             System.out.println( l_openlist );
-            System.out.println( l_gscore );
             System.out.println( l_fscore );
+            System.out.println( l_gscore );
             System.out.println();
+            */
 
             final INode l_current = l_openlist.remove();
             if ( l_current.position().equals( p_end ) )
@@ -109,7 +111,7 @@ public final class CAStar extends IBaseRouting
             this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_closedlist, l_gscore, l_fscore, 10 ) );
 
             c++;
-            if ( c > 1 )
+            if ( c > 0 )
             {
                 System.out.println( "break" );
                 break;
@@ -142,6 +144,8 @@ public final class CAStar extends IBaseRouting
 
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_neigbour.position() ).doubleValue();
 
+        System.out.println( p_neigbour + "   " + l_gscore + "   " + p_fscore.getOrDefault(  p_neigbour, 0D ) );
+
         if ( !p_openlist.contains( p_neigbour ) || l_gscore < p_gscore.getOrDefault( p_neigbour, 0D ) )
         {
             p_neigbour.accept( p_current );
@@ -158,7 +162,7 @@ public final class CAStar extends IBaseRouting
      * @param p_grid grid
      * @param p_current current node
      * @return neighbour stream
-     * @todo move to own data structure
+     * @todo move to own data structure ("never")
      */
     private Stream<INode> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current )
     {
@@ -167,7 +171,7 @@ public final class CAStar extends IBaseRouting
             walkable( p_grid, p_current.position(), EDirection.EAST ),
             walkable( p_grid, p_current.position(), EDirection.SOUTH ),
             walkable( p_grid, p_current.position(), EDirection.WEST )
-        ).filter( Pair::getKey ).map( Pair::getValue ).map( CNode::new );
+        ).filter( Pair::getKey ).map( Pair::getValue ).map( CNode::of );
     }
 
 

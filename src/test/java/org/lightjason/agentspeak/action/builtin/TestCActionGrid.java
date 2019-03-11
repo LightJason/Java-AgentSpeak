@@ -275,6 +275,21 @@ public final class TestCActionGrid extends IBaseTest
     }
 
     /**
+     * distance algorithms
+     */
+    @Test
+    public void distance()
+    {
+        final DoubleMatrix1D l_value1 = new DenseDoubleMatrix1D( new double[]{3,4} );
+        final DoubleMatrix1D l_value2 = new DenseDoubleMatrix1D( new double[]{7,2} );
+
+        Assert.assertEquals( 6D, EDistance.MANHATTAN.apply( l_value1, l_value2 ) );
+        Assert.assertEquals( 4.47213595499958, EDistance.EUCLIDEAN.apply( l_value1, l_value2 ) );
+        Assert.assertEquals( 4D, EDistance.CHEBYSHEV.apply( l_value1, l_value2 ) );
+        Assert.assertEquals( 4.82842712474619, EDistance.OCTILE.apply( l_value1, l_value2 ) );
+    }
+
+    /**
      * test a-star test
      */
     @Test
@@ -299,9 +314,6 @@ public final class TestCActionGrid extends IBaseTest
             new DenseDoubleMatrix1D( new double[]{ 2, 1 } ),
             new DenseDoubleMatrix1D( new double[]{ 2, 4 } )
         ).map( l_formatter::toString ).forEach( System.out::println );
-
-
-
     }
 
 }
