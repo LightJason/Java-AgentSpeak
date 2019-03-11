@@ -94,6 +94,7 @@ public final class CAStar extends IBaseRouting
         // https://www.redblobgames.com/pathfinding/a-star/implementation.html
 
         int c=0;
+        final INode l_end = CNode.of( p_end );
         l_openlist.add( CNode.of( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
@@ -109,7 +110,7 @@ public final class CAStar extends IBaseRouting
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
-            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_closedlist, l_gscore, l_fscore, 10 ) );
+            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, l_end, i, l_openlist, l_closedlist, l_gscore, l_fscore, 1 ) );
 
             c++;
             if ( c > 0 )
@@ -128,6 +129,7 @@ public final class CAStar extends IBaseRouting
      *
      * @param p_grid grid
      * @param p_current current node
+     * @param p_end end node
      * @param p_neigbour neighbour nodes
      * @param p_openlist openlist
      * @param p_closedlist closed list
@@ -135,7 +137,7 @@ public final class CAStar extends IBaseRouting
      * @param p_fscore f-score map
      * @param p_weight weight
      */
-    private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_neigbour,
+    private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_neigbour, final INode p_end,
                         @Nonnull final Queue<INode> p_openlist, @Nonnull final Set<INode> p_closedlist,
                         @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore, @Nonnull final Number p_weight )
     {
@@ -145,16 +147,16 @@ public final class CAStar extends IBaseRouting
 
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_neigbour.position() ).doubleValue();
 
-        System.out.println( p_neigbour + "   " + l_gscore + "   " + p_fscore.getOrDefault(  p_neigbour, 0D ) );
-
         if ( !p_openlist.contains( p_neigbour ) || l_gscore < p_gscore.getOrDefault( p_neigbour, 0D ) )
         {
             p_neigbour.accept( p_current );
             p_gscore.put( p_neigbour, l_gscore );
-            p_fscore.put( p_neigbour, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_current.position(), p_neigbour.position() ).doubleValue() );
+            p_fscore.put( p_neigbour, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
 
             p_openlist.add( p_neigbour );
         }
+
+        System.out.println( p_neigbour + "   " + l_gscore + "   " + p_fscore.getOrDefault(  p_neigbour, 0D ) );
     }
 
     /**

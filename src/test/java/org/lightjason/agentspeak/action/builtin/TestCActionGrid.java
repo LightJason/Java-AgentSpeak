@@ -309,7 +309,7 @@ public final class TestCActionGrid extends IBaseTest
 
 
 
-        new CAStar( EDistance.MANHATTAN ).apply(
+        new CAStar( EDistance.EUCLIDEAN ).apply(
             l_grid,
             new DenseDoubleMatrix1D( new double[]{ 2, 1 } ),
             new DenseDoubleMatrix1D( new double[]{ 2, 4 } )

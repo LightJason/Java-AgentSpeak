@@ -59,7 +59,7 @@ public enum EDistance implements IDistance
         @Override
         public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
-            return this.apply( p_value1, p_value2 );
+            return EDistance.MANHATTAN.heuristic( p_value1, p_value2 );
         }
     },
 
@@ -74,7 +74,7 @@ public enum EDistance implements IDistance
         @Override
         public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
-            return this.apply( p_value1, p_value2 );
+            return EDistance.MANHATTAN.heuristic( p_value1, p_value2 );
         }
     },
 
@@ -92,7 +92,7 @@ public enum EDistance implements IDistance
         @Override
         public Number heuristic( @NonNull final DoubleMatrix1D p_value1, @NonNull final DoubleMatrix1D p_value2 )
         {
-            return this.apply( p_value1, p_value2 );
+            return EDistance.MANHATTAN.heuristic( p_value1, p_value2 );
         }
     };
 
