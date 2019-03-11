@@ -107,7 +107,10 @@ public final class CAStar extends IBaseRouting
 
             c++;
             if ( c > 100 )
+            {
+                System.out.println( "break" );
                 break;
+            }
         }
 
 
@@ -119,28 +122,31 @@ public final class CAStar extends IBaseRouting
      *
      * @param p_grid grid
      * @param p_current current node
-     * @param p_other neighbour nodes
+     * @param p_neigbour neighbour nodes
      * @param p_openlist openlist
      * @param p_closedlist closed list
      * @param p_gscore g-score map
      * @param p_fscore f-score map
      * @param p_weight weight
      */
-    private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_other,
+    private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_neigbour,
                         @Nonnull final Queue<INode> p_openlist, @Nonnull final Set<INode> p_closedlist,
                         @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore, @Nonnull final Number p_weight )
     {
-        final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_other.position() ).doubleValue();
-
-        if ( p_openlist.contains( p_other ) && l_gscore >= p_gscore.getOrDefault( p_other, 0D ) )
+        if ( p_closedlist.contains( p_neigbour ) )
             return;
 
-        p_other.accept( p_current );
-        p_gscore.put( p_other, l_gscore );
-        p_fscore.put( p_other, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_current.position(), p_other.position() ).doubleValue() );
 
-        if ( !p_closedlist.contains( p_other ) )
-            p_openlist.add( p_other );
+        final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_neigbour.position() ).doubleValue();
+
+        if ( !p_openlist.contains( p_neigbour ) || l_gscore < p_gscore.getOrDefault( p_neigbour, 0D ) )
+        {
+            p_neigbour.accept( p_current );
+            p_gscore.put( p_neigbour, l_gscore );
+            p_fscore.put( p_neigbour, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_current.position(), p_neigbour.position() ).doubleValue() );
+
+            p_openlist.add( p_neigbour );
+        }
     }
 
     /**
@@ -149,6 +155,7 @@ public final class CAStar extends IBaseRouting
      * @param p_grid grid
      * @param p_current current node
      * @return neighbour stream
+     * @todo move to own data structure
      */
     private Stream<INode> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current )
     {

@@ -228,21 +228,18 @@ public final class TestCActionGrid extends IBaseTest
         l_formatter.setPrintShape( false );
 
 
-        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 5, 5 );
-        /*
-        l_grid.setQuick( 4, 4, new Object() );
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 3, 5 );
+        l_grid.setQuick( 0, 3, new Object() );
+        l_grid.setQuick( 1, 0, new Object() );
+        l_grid.setQuick( 1, 4, new Object() );
+        l_grid.setQuick( 2, 2, new Object() );
 
-        l_grid.setQuick( 5, 3, new Object() );
-        l_grid.setQuick( 6, 2, new Object() );
 
-        l_grid.setQuick( 3, 5, new Object() );
-        l_grid.setQuick( 2, 6, new Object() );
-        */
 
         new CAStar( EDistance.MANHATTAN ).apply(
             l_grid,
-            new DenseDoubleMatrix1D( new double[]{ 0, 0 } ),
-            new DenseDoubleMatrix1D( new double[]{ 3, 3 } )
+            new DenseDoubleMatrix1D( new double[]{ 2, 1 } ),
+            new DenseDoubleMatrix1D( new double[]{ 2, 4 } )
         ).map( l_formatter::toString ).forEach( System.out::println );
 
 
