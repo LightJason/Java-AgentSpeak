@@ -81,8 +81,6 @@ public final class CAStar extends IBaseRouting
         final Map<INode, Double> l_fscore = new ConcurrentHashMap<>();
         // distance to start (parent's g-score + distance from parent)
         final Map<INode, Double> l_gscore = new ConcurrentHashMap<>();
-        // heuristic distance between nodes
-        final Map<INode, Double> l_hscore = new ConcurrentHashMap<>();
 
         // closed list
         final Set<INode> l_closedlist = Collections.synchronizedSet( new HashSet<>() );
@@ -96,17 +94,17 @@ public final class CAStar extends IBaseRouting
         l_openlist.add( new CNode( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
-            System.out.println( l_openlist );
+            //System.out.println( l_openlist );
 
             final INode l_current = l_openlist.remove();
             if ( l_current.position().equals( p_end ) )
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
-            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_gscore, l_hscore, l_fscore, 10 ) );
+            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_gscore, l_fscore, 10 ) );
 
             c++;
-            if ( c > 20 )
+            if ( c > 100 )
                 break;
         }
 
@@ -122,24 +120,20 @@ public final class CAStar extends IBaseRouting
      * @param p_other neighbour nodes
      * @param p_openlist openlist
      * @param p_gscore g-score map
-     * @param p_hscore h-score map
      * @param p_fscore f-score map
      * @param p_weight weight
      */
     private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_other,
-                        @Nonnull final Queue<INode> p_openlist, @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_hscore,
-                        @Nonnull final Map<INode, Double> p_fscore, final @Nonnull Number p_weight )
+                        @Nonnull final Queue<INode> p_openlist, @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore,
+                        @Nonnull final Number p_weight )
     {
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_other.position() ).doubleValue();
 
         if ( p_openlist.contains( p_other ) && l_gscore >= p_gscore.getOrDefault( p_other, 0D ) )
             return;
 
-        final double l_hscore = p_weight.doubleValue() + m_distance.heuristic( p_current.position(), p_other.position() ).doubleValue();
-
         p_gscore.put( p_other, l_gscore );
-        p_hscore.put( p_other, l_hscore );
-        p_fscore.put( p_other, l_gscore + l_hscore );
+        p_fscore.put( p_other, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_current.position(), p_other.position() ).doubleValue() );
 
         p_other.accept( p_current );
         p_openlist.add( p_other );
