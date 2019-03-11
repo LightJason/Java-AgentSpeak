@@ -45,7 +45,7 @@ public abstract class IBaseRouting implements IRouting
     /**
      * distance
      */
-    protected final EDistance m_distance;
+    protected final IDistance m_distance;
     /**
      * walkable function
      */
@@ -55,7 +55,7 @@ public abstract class IBaseRouting implements IRouting
      * ctor
      * @param p_distance distance
      */
-    protected IBaseRouting( @Nonnull final EDistance p_distance )
+    protected IBaseRouting( @Nonnull final IDistance p_distance )
     {
         this( p_distance, ( g, p ) -> Objects.isNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
     }
@@ -66,7 +66,7 @@ public abstract class IBaseRouting implements IRouting
      * @param p_distance distance
      * @param p_walkable walkable function
      */
-    protected IBaseRouting( @Nonnull final EDistance p_distance,
+    protected IBaseRouting( @Nonnull final IDistance p_distance,
                             @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable
     )
     {
@@ -108,7 +108,7 @@ public abstract class IBaseRouting implements IRouting
      * @return pair of walkable and position vector
      */
     protected final Pair<Boolean, DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                                            @Nonnull final EDirection p_direction )
+                                                            @Nonnull final IDirection p_direction )
     {
         final DoubleMatrix1D l_position = p_direction.apply( p_current );
         return new ImmutablePair<>(

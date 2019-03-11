@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
+import org.lightjason.agentspeak.action.builtin.grid.routing.IDistance;
 import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
 
 import javax.annotation.Nonnull;
@@ -64,12 +65,12 @@ public final class CAStar extends IBaseRouting
 
 
 
-    public CAStar( @Nonnull final EDistance p_distance )
+    public CAStar( @Nonnull final IDistance p_distance )
     {
         super( p_distance );
     }
 
-    public CAStar( @Nonnull final EDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+    public CAStar( @Nonnull final IDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
     {
         super( p_distance, p_walkable );
     }
