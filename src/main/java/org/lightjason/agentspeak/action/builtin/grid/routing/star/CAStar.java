@@ -98,8 +98,8 @@ public final class CAStar extends IBaseRouting
         l_openlist.add( CNode.of( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
+            //System.out.println( l_openlist + "   " + l_openlist.size() );
             /*
-            System.out.println( l_openlist );
             System.out.println( l_fscore );
             System.out.println( l_gscore );
             System.out.println();
@@ -112,12 +112,16 @@ public final class CAStar extends IBaseRouting
             l_closedlist.add( l_current );
             this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore, 1 ) );
 
+            //System.out.println();
+
+            /*
             c++;
-            if ( c > 0 )
+            if ( c > 100 )
             {
                 System.out.println( "break" );
                 break;
             }
+            */
         }
 
 
@@ -146,17 +150,17 @@ public final class CAStar extends IBaseRouting
 
 
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_neigbour.position() ).doubleValue();
+        if ( p_openlist.contains( p_neigbour ) && l_gscore >= p_gscore.getOrDefault( p_neigbour, 0D ) )
+            return;
 
-        if ( !p_openlist.contains( p_neigbour ) || l_gscore < p_gscore.getOrDefault( p_neigbour, 0D ) )
-        {
-            p_neigbour.accept( p_current );
-            p_gscore.put( p_neigbour, l_gscore );
-            p_fscore.put( p_neigbour, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
 
-            p_openlist.add( p_neigbour );
-        }
+        p_neigbour.accept( p_current );
+        p_gscore.put( p_neigbour, l_gscore );
+        p_fscore.put( p_neigbour, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
 
-        System.out.println( p_neigbour + "   " + l_gscore + "   " + p_fscore.getOrDefault(  p_neigbour, 0D ) );
+        p_openlist.add( p_neigbour );
+
+        //System.out.println( p_neigbour + "   " + l_gscore + "   " + p_fscore.getOrDefault(  p_neigbour, 0D ) );
     }
 
     /**
