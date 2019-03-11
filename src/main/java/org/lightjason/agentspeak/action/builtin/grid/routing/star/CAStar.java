@@ -96,7 +96,10 @@ public final class CAStar extends IBaseRouting
         l_openlist.add( new CNode( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
-            //System.out.println( l_openlist );
+            System.out.println( l_openlist );
+            System.out.println( l_gscore );
+            System.out.println( l_fscore );
+            System.out.println();
 
             final INode l_current = l_openlist.remove();
             if ( l_current.position().equals( p_end ) )
@@ -106,7 +109,7 @@ public final class CAStar extends IBaseRouting
             this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_openlist, l_closedlist, l_gscore, l_fscore, 10 ) );
 
             c++;
-            if ( c > 100 )
+            if ( c > 1 )
             {
                 System.out.println( "break" );
                 break;

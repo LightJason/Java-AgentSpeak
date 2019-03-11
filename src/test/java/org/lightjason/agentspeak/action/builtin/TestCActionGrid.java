@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.action.builtin.grid.CIsEmpty;
 import org.lightjason.agentspeak.action.builtin.grid.CRemove;
 import org.lightjason.agentspeak.action.builtin.grid.CSet;
 import org.lightjason.agentspeak.action.builtin.grid.CSparseGrid;
+import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
 import org.lightjason.agentspeak.action.builtin.grid.routing.star.CAStar;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -214,6 +215,63 @@ public final class TestCActionGrid extends IBaseTest
         Assert.assertEquals( 1, l_return.size() );
         Assert.assertTrue( Objects.nonNull( l_grid.getQuick( 1, 1 ) ) );
         Assert.assertTrue( Objects.isNull( l_return.get( 0 ).raw() ) );
+    }
+
+    /**
+     * test directions
+     */
+    @Test
+    public void direction()
+    {
+        final DoubleMatrix1D l_position = new DenseDoubleMatrix1D( 2 );
+
+        Assert.assertArrayEquals(
+            EDirection.NORTH.apply( l_position ).toArray(),
+            new double[]{ -1, 0 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.EAST.apply( l_position ).toArray(),
+            new double[]{ 0, 1 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.SOUTH.apply( l_position ).toArray(),
+            new double[]{ 1, 0 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.WEST.apply( l_position ).toArray(),
+            new double[]{ 0, -1 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.NORTHEAST.apply( l_position ).toArray(),
+            new double[]{ -1, 1 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.NORTHWEST.apply( l_position ).toArray(),
+            new double[]{ -1, -1 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.SOUTHEAST.apply( l_position ).toArray(),
+            new double[]{ 1, 1 },
+            0
+        );
+
+        Assert.assertArrayEquals(
+            EDirection.SOUTHWEST.apply( l_position ).toArray(),
+            new double[]{ 1, -1 },
+            0
+        );
     }
 
     /**

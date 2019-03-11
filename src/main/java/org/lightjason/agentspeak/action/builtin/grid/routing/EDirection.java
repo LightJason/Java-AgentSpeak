@@ -46,7 +46,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ) - 1, p_current.get( 0 )} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ) - 1, p_current.get( 1 )} );
         }
     },
     EAST
@@ -54,7 +54,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ), p_current.get( 0 ) + 1} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ), p_current.get( 1 ) + 1} );
         }
     },
     SOUTH
@@ -62,7 +62,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ) + 1, p_current.get( 0 )} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ) + 1, p_current.get( 1 )} );
         }
     },
     WEST
@@ -70,7 +70,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ), p_current.get( 0 ) - 1} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ), p_current.get( 1 ) - 1} );
         }
     },
     NORTHEAST
@@ -78,7 +78,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ) - 1, p_current.get( 0 ) + 1} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ) - 1, p_current.get( 1 ) + 1} );
         }
     },
     NORTHWEST
@@ -94,7 +94,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ) + 1, p_current.get( 0 ) + 1} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ) + 1, p_current.get( 0 ) + 1} );
         }
     },
     SOUTHWEST
@@ -102,7 +102,7 @@ public enum EDirection implements IDirection
         @Override
         public DoubleMatrix1D apply( @Nonnull final DoubleMatrix1D p_current )
         {
-            return p_current.copy().assign( new double[]{p_current.get( 1 ) + 1, p_current.get( 0 ) - 1} );
+            return p_current.copy().assign( new double[]{p_current.get( 0 ) + 1, p_current.get( 0 ) - 1} );
         }
     }
 }
