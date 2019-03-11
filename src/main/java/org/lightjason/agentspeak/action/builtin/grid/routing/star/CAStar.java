@@ -120,7 +120,7 @@ public final class CAStar extends IBaseRouting
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
-            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore, 1 ) );
+            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
 
             //System.out.println();
 
