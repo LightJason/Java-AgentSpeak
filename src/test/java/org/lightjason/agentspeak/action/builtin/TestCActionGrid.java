@@ -24,6 +24,8 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.algo.DoubleFormatter;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.impl.DenseObjectMatrix2D;
@@ -31,6 +33,7 @@ import cern.colt.matrix.tobject.impl.SparseObjectMatrix2D;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.builtin.blas.IBaseFormat;
 import org.lightjason.agentspeak.action.builtin.grid.CDenseGrid;
 import org.lightjason.agentspeak.action.builtin.grid.CIsEmpty;
 import org.lightjason.agentspeak.action.builtin.grid.CRemove;
@@ -219,7 +222,13 @@ public final class TestCActionGrid extends IBaseTest
     @Test
     public void astar()
     {
-        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 10, 10 );
+        final DoubleFormatter l_formatter = new DoubleFormatter();
+        l_formatter.setRowSeparator( "; " );
+        l_formatter.setColumnSeparator( "," );
+        l_formatter.setPrintShape( false );
+
+
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 3, 3 );
         /*
         l_grid.setQuick( 4, 4, new Object() );
 
@@ -230,13 +239,14 @@ public final class TestCActionGrid extends IBaseTest
         l_grid.setQuick( 2, 6, new Object() );
         */
 
-        System.out.println(
-            new CAStar( EDistance.MANHATTAN ).apply(
-                l_grid,
-                new DenseDoubleMatrix1D( new double[]{ 0, 0 } ),
-                new DenseDoubleMatrix1D( new double[]{ 9, 9 } )
-            ).collect( Collectors.toList() )
-        );
+        new CAStar( EDistance.MANHATTAN ).apply(
+            l_grid,
+            new DenseDoubleMatrix1D( new double[]{ 0, 0 } ),
+            new DenseDoubleMatrix1D( new double[]{ 2, 2 } )
+        ).map( l_formatter::toString ).forEach( System.out::println );
+
+
+
     }
 
 }

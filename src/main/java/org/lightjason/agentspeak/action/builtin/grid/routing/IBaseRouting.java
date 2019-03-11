@@ -82,7 +82,7 @@ public abstract class IBaseRouting implements IRouting
      */
     protected static Stream<DoubleMatrix1D> constructpath( @Nonnull final INode p_end )
     {
-        return constructpath( p_end, Stream.of() );
+        return Stream.concat( constructpath( p_end, Stream.of() ), Stream.of( p_end.position() ) );
     }
 
     /**
