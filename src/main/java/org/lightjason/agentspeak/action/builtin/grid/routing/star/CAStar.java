@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.grid.routing.star;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.collections.buffer.PriorityBuffer;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
@@ -55,24 +54,35 @@ import java.util.stream.Stream;
  */
 public final class CAStar extends IBaseRouting
 {
-
-    protected final PriorityBuffer m_heap = new PriorityBuffer();
+    private final Number m_weight;
 
     // https://github.com/jonasnick/A-star/blob/master/astar/AStar.java
     // https://github.com/pshafer/dstar
     // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AStar.java
     // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AdaptiveAStar.java
 
-
+    public CAStar()
+    {
+        this( EDistance.EUCLIDEAN, 1 );
+    }
 
     public CAStar( @Nonnull final IDistance p_distance )
     {
-        super( p_distance );
+        this( p_distance, 1 );
     }
 
-    public CAStar( @Nonnull final IDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable )
+
+    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final Number p_weight )
+    {
+        super( p_distance );
+        m_weight = p_weight;
+    }
+
+    public CAStar( @Nonnull final IDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                   @Nonnull final Number p_weight )
     {
         super( p_distance, p_walkable );
+        m_weight = p_weight;
     }
 
     @Override
@@ -98,7 +108,7 @@ public final class CAStar extends IBaseRouting
         l_openlist.add( CNode.of( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
-            //System.out.println( l_openlist + "   " + l_openlist.size() );
+            System.out.println( l_openlist + "   " + l_openlist.size() );
             /*
             System.out.println( l_fscore );
             System.out.println( l_gscore );
@@ -139,15 +149,13 @@ public final class CAStar extends IBaseRouting
      * @param p_closedlist closed list
      * @param p_gscore g-score map
      * @param p_fscore f-score map
-     * @param p_weight weight
      */
     private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_neigbour, final INode p_end,
                         @Nonnull final Queue<INode> p_openlist, @Nonnull final Set<INode> p_closedlist,
-                        @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore, @Nonnull final Number p_weight )
+                        @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore)
     {
         if ( p_closedlist.contains( p_neigbour ) )
             return;
-
 
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_neigbour.position() ).doubleValue();
         if ( p_openlist.contains( p_neigbour ) && l_gscore >= p_gscore.getOrDefault( p_neigbour, 0D ) )
@@ -156,7 +164,7 @@ public final class CAStar extends IBaseRouting
 
         p_neigbour.accept( p_current );
         p_gscore.put( p_neigbour, l_gscore );
-        p_fscore.put( p_neigbour, l_gscore + p_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
+        p_fscore.put( p_neigbour, l_gscore + m_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
 
         p_openlist.add( p_neigbour );
 
