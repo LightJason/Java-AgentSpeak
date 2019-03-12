@@ -26,8 +26,8 @@ package org.lightjason.agentspeak.action.builtin.grid.routing.star;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
+import org.lightjason.agentspeak.action.builtin.grid.routing.IDistance;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
@@ -45,7 +45,7 @@ public final class CDStar extends IBaseRouting
      *
      * @param p_distance distance function
      */
-    public CDStar( @Nonnull final EDistance p_distance )
+    public CDStar( @Nonnull final IDistance p_distance )
     {
         super( p_distance );
     }
@@ -56,7 +56,7 @@ public final class CDStar extends IBaseRouting
      * @param p_distance distance function
      * @param p_walkable walkable function
      */
-    public CDStar( @Nonnull final EDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable
+    public CDStar( @Nonnull final IDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable
     )
     {
         super( p_distance, p_walkable );
