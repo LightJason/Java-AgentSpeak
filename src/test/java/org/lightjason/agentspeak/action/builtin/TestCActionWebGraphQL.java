@@ -59,7 +59,7 @@ public final class TestCActionWebGraphQL extends IBaseTest
     {
         try
         {
-            m_result = CLiteral.parse( "graphql( data( stationWithEvaId( name( 'Frankfurt (Main) Hbf' ), location( latitude( 50.107145 ), longitude( 8.663789 ) ) ) ) ) )" );
+            m_result = CLiteral.parse( "graphql( data( country ( code( 'DE' ), phone( '49' ), name( 'Germany' ), currency( 'EUR' ) ) ) )");
         }
         catch ( final Exception l_exception )
         {
@@ -81,12 +81,14 @@ public final class TestCActionWebGraphQL extends IBaseTest
                 new CQueryLiteral(),
                 false,
                 Stream.of(
-                    CRawTerm.of( "https://developer.deutschebahn.com/free1bahnql/graphql" ),
+                    CRawTerm.of( "https://countries.trevorblades.com/" ),
                     CLiteral.of(
-                        "stationWithEvaId",
-                        CLiteral.of( "evaId", CRawTerm.of( 8000105 ) ),
+                        "country",
+                        CLiteral.of( "code", CRawTerm.of( "DE" ) ),
+                        CLiteral.of( "code" ),
+                        CLiteral.of( "currency" ),
                         CLiteral.of( "name" ),
-                        CLiteral.of( "location", CLiteral.of( "latitude" ), CLiteral.of( "longitude" ) )
+                        CLiteral.of( "phone" )
                     ),
                     CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
@@ -114,8 +116,8 @@ public final class TestCActionWebGraphQL extends IBaseTest
                 new CQueryNative(),
                 false,
                 Stream.of(
-                    CRawTerm.of( "https://developer.deutschebahn.com/free1bahnql/graphql" ),
-                    CRawTerm.of( "{ stationWithEvaId(evaId: 8000105) { name location { latitude longitude } } }" ),
+                    CRawTerm.of( "https://countries.trevorblades.com/" ),
+                    CRawTerm.of( "{ country(code: \"DE\") { code, phone, name, currency } }" ),
                     CRawTerm.of( "graphql" )
                 ).collect( Collectors.toList() ),
                 l_return

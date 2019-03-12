@@ -71,7 +71,7 @@
  * @see http://apis.guru/graphql-apis/
  **/
 +!testgraphqlliteral <-
-    GQ = .web/graphql/queryliteral( "https://developer.deutschebahn.com/free1bahnql/graphql", search( searchTerm( "Frankfurt Flughafen" ), operationLocations( name, id ) ), "graphql" );
+    GQ = .web/graphql/queryliteral( "https://countries.trevorblades.com/", country( code("DE"), code, phone, name, curreny ) , "graphql" );
     +graphql-fake-literal(GQ)
 .
 
@@ -79,7 +79,7 @@
  * test graphql service with native string query
  **/
 +!testgraphqlnative <-
-    GQ = .web/graphql/querynative( "https://developer.deutschebahn.com/free1bahnql/graphql", "{ stationWithEvaId(evaId: 8000105) { name location { latitude longitude } picture { url } } }", "graphql" );
+    GQ = .web/graphql/querynative( "https://countries.trevorblades.com/", '{ country(code: "DE") { code, phone, name, currency } }', "graphql" );
     +graphql-fake-native(GQ)
 .
 
@@ -104,7 +104,7 @@
     M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
-    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "search" ) ) )
+    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "country" ) ) )
 .
 
 /**
@@ -118,5 +118,5 @@
     M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
-    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "stationWithEvaId" ) ) )
+    .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "country" ) ) )
 .
