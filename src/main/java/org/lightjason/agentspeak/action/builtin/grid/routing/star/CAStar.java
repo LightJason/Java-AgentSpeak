@@ -103,18 +103,11 @@ public final class CAStar extends IBaseRouting
 
         // https://www.redblobgames.com/pathfinding/a-star/implementation.html
 
-        int c=0;
+        int c = 0;
         final INode l_end = CNode.of( p_end );
         l_openlist.add( CNode.of( p_start ) );
         while ( !l_openlist.isEmpty() )
         {
-            System.out.println( l_openlist + "   " + l_openlist.size() );
-            /*
-            System.out.println( l_fscore );
-            System.out.println( l_gscore );
-            System.out.println();
-            */
-
             final INode l_current = l_openlist.remove();
             if ( l_current.position().equals( p_end ) )
                 return constructpath( l_current );
@@ -122,16 +115,15 @@ public final class CAStar extends IBaseRouting
             l_closedlist.add( l_current );
             this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
 
+            System.out.println( l_openlist );
             //System.out.println();
 
-            /*
             c++;
-            if ( c > 100 )
+            if ( c > 1 )
             {
                 System.out.println( "break" );
                 break;
             }
-            */
         }
 
 
