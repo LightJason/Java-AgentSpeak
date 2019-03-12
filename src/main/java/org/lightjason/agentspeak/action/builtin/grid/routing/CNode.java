@@ -28,6 +28,7 @@ import cern.colt.matrix.tdouble.algo.DoubleFormatter;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -90,7 +91,7 @@ public final class CNode implements INode
     @Override
     public int hashCode()
     {
-        return m_position.hashCode();
+        return Arrays.hashCode( m_position.toArray() );
     }
 
     @Override

@@ -50,6 +50,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -299,14 +300,13 @@ public final class TestCActionGrid extends IBaseTest
         l_formatter.setColumnSeparator( "," );
         l_formatter.setPrintShape( false );
 
+        final int[][] l_matrix = new int[][]{{0, 0, 0, 1, 0}, {1, 0, 0, 0, 1}, {0, 0, 1, 0, 0}};
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( l_matrix.length, l_matrix[0].length );
 
-        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( 3, 5 );
-        l_grid.setQuick( 0, 3, new Object() );
-        l_grid.setQuick( 1, 0, new Object() );
-        l_grid.setQuick( 1, 4, new Object() );
-        l_grid.setQuick( 2, 2, new Object() );
-
-
+        IntStream.range( 0, l_matrix.length )
+                 .forEach( r -> IntStream.range( 0, l_matrix[r].length )
+                                         .filter( c -> l_matrix[r][c] == 1 )
+                                         .forEach( c -> l_grid.set( r, c, new Object() ) ) );
 
         new CAStar().apply(
             l_grid,
