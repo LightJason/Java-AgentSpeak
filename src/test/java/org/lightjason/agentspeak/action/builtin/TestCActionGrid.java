@@ -33,7 +33,6 @@ import cern.colt.matrix.tobject.impl.SparseObjectMatrix2D;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.blas.IBaseFormat;
 import org.lightjason.agentspeak.action.builtin.grid.CDenseGrid;
 import org.lightjason.agentspeak.action.builtin.grid.CIsEmpty;
 import org.lightjason.agentspeak.action.builtin.grid.CRemove;
@@ -227,49 +226,49 @@ public final class TestCActionGrid extends IBaseTest
 
         Assert.assertArrayEquals(
             EDirection.NORTH.apply( l_position ).toArray(),
-            new double[]{ -1, 0 },
+            new double[]{-1, 0},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.EAST.apply( l_position ).toArray(),
-            new double[]{ 0, 1 },
+            new double[]{0, 1},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.SOUTH.apply( l_position ).toArray(),
-            new double[]{ 1, 0 },
+            new double[]{1, 0},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.WEST.apply( l_position ).toArray(),
-            new double[]{ 0, -1 },
+            new double[]{0, -1},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.NORTHEAST.apply( l_position ).toArray(),
-            new double[]{ -1, 1 },
+            new double[]{-1, 1},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.NORTHWEST.apply( l_position ).toArray(),
-            new double[]{ -1, -1 },
+            new double[]{-1, -1},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.SOUTHEAST.apply( l_position ).toArray(),
-            new double[]{ 1, 1 },
+            new double[]{1, 1},
             0
         );
 
         Assert.assertArrayEquals(
             EDirection.SOUTHWEST.apply( l_position ).toArray(),
-            new double[]{ 1, -1 },
+            new double[]{1, -1},
             0
         );
     }
@@ -280,8 +279,8 @@ public final class TestCActionGrid extends IBaseTest
     @Test
     public void distance()
     {
-        final DoubleMatrix1D l_value1 = new DenseDoubleMatrix1D( new double[]{3,4} );
-        final DoubleMatrix1D l_value2 = new DenseDoubleMatrix1D( new double[]{7,2} );
+        final DoubleMatrix1D l_value1 = new DenseDoubleMatrix1D( new double[]{3, 4} );
+        final DoubleMatrix1D l_value2 = new DenseDoubleMatrix1D( new double[]{7, 2} );
 
         Assert.assertEquals( 6D, EDistance.MANHATTAN.apply( l_value1, l_value2 ) );
         Assert.assertEquals( 4.47213595499958, EDistance.EUCLIDEAN.apply( l_value1, l_value2 ) );
@@ -311,8 +310,8 @@ public final class TestCActionGrid extends IBaseTest
 
         new CAStar().apply(
             l_grid,
-            new DenseDoubleMatrix1D( new double[]{ 2, 1 } ),
-            new DenseDoubleMatrix1D( new double[]{ 2, 4 } )
+            new DenseDoubleMatrix1D( new double[]{2, 1} ),
+            new DenseDoubleMatrix1D( new double[]{2, 4} )
         ).map( l_formatter::toString ).forEach( System.out::println );
     }
 

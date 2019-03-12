@@ -61,23 +61,43 @@ public final class CAStar extends IBaseRouting
     // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AStar.java
     // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AdaptiveAStar.java
 
+    /**
+     * ctor
+     */
     public CAStar()
     {
         this( EDistance.EUCLIDEAN, 1 );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_distance distance
+     */
     public CAStar( @Nonnull final IDistance p_distance )
     {
         this( p_distance, 1 );
     }
 
-
+    /**
+     * ctor
+     *
+     * @param p_distance distance
+     * @param p_weight approximation weight
+     */
     public CAStar( @Nonnull final IDistance p_distance, @Nonnull final Number p_weight )
     {
         super( p_distance );
         m_weight = p_weight;
     }
 
+    /**
+     * ctor
+     *
+     * @param p_distance distance
+     * @param p_walkable walkable check
+     * @param p_weight approximation weight
+     */
     public CAStar( @Nonnull final IDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
                    @Nonnull final Number p_weight )
     {
@@ -103,7 +123,7 @@ public final class CAStar extends IBaseRouting
 
         // https://www.redblobgames.com/pathfinding/a-star/implementation.html
 
-        int c=0;
+        int l_count = 0;
         final INode l_end = CNode.of( p_end );
         l_openlist.add( CNode.of( p_start ) );
         while ( !l_openlist.isEmpty() )
@@ -124,14 +144,12 @@ public final class CAStar extends IBaseRouting
 
             //System.out.println();
 
-            /*
-            c++;
-            if ( c > 100 )
+            l_count++;
+            if ( l_count > 100 )
             {
                 System.out.println( "break" );
                 break;
             }
-            */
         }
 
 
@@ -152,7 +170,7 @@ public final class CAStar extends IBaseRouting
      */
     private void score( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current, @Nonnull final INode p_neigbour, final INode p_end,
                         @Nonnull final Queue<INode> p_openlist, @Nonnull final Set<INode> p_closedlist,
-                        @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore)
+                        @Nonnull final Map<INode, Double> p_gscore, @Nonnull final Map<INode, Double> p_fscore )
     {
         if ( p_closedlist.contains( p_neigbour ) )
             return;
