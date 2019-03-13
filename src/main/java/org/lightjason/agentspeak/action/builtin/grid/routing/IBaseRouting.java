@@ -82,21 +82,12 @@ public abstract class IBaseRouting implements IRouting
      */
     protected static Stream<DoubleMatrix1D> constructpath( @Nonnull final INode p_end )
     {
-        return Stream.concat( constructpath( p_end, Stream.of() ), Stream.of( p_end.position() ) );
-    }
-
-    /**
-     * builds the path recursive on the node structure
-     *
-     * @param p_node node
-     * @param p_stream current node stream
-     * @return position stream
-     */
-    private static Stream<DoubleMatrix1D> constructpath( @Nonnull final INode p_node, @Nonnull final Stream<DoubleMatrix1D> p_stream )
-    {
-        return Objects.isNull( p_node.get() )
-               ? Stream.concat( Stream.of( p_node.position() ), p_stream )
-               : constructpath( p_node.get(), Stream.of( p_node.position() ) );
+        return Stream.concat(
+            Objects.isNull( p_end.get() )
+            ? Stream.of()
+            : constructpath( p_end.get() ),
+            Stream.of( p_end.position() )
+        );
     }
 
     /**

@@ -121,23 +121,13 @@ public final class CAStar extends IBaseRouting
         final Queue<INode> l_openlist = new PriorityBlockingQueue<>(
             (int) p_grid.size() / 4,
             new CComparator( l_fscore )
-            //Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
         );
-
-        // https://www.redblobgames.com/pathfinding/a-star/implementation.html
-
-        int l_count = 0;
 
         l_openlist.add( CNode.of( p_start ) );
         final INode l_end = CNode.of( p_end );
 
         while ( !l_openlist.isEmpty() )
         {
-            System.out.println( l_openlist );
-            System.out.println( l_gscore );
-            System.out.println( l_fscore );
-            System.out.println();
-
             final INode l_current = l_openlist.remove();
             if ( l_current.equals( l_end ) )
                 return constructpath( l_current );
@@ -149,13 +139,6 @@ public final class CAStar extends IBaseRouting
             final List<INode> l_nodes = l_openlist.parallelStream().collect( Collectors.toList() );
             l_openlist.clear();
             l_openlist.addAll( l_nodes );
-
-            l_count++;
-            if ( l_count > 100 )
-            {
-                System.out.println( "break" );
-                break;
-            }
         }
 
 
@@ -184,7 +167,6 @@ public final class CAStar extends IBaseRouting
         final double l_gscore = p_gscore.getOrDefault( p_current, 0D ) + m_distance.apply( p_current.position(), p_neigbour.position() ).doubleValue();
         if ( p_openlist.contains( p_neigbour ) && l_gscore >= p_gscore.getOrDefault( p_neigbour, 0D ) )
             return;
-
 
         p_neigbour.accept( p_current );
         p_gscore.put( p_neigbour, l_gscore );
