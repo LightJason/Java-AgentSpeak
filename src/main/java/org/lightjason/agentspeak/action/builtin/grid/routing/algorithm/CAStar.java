@@ -21,18 +21,18 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.routing.star;
+package org.lightjason.agentspeak.action.builtin.grid.routing.algorithm;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
-import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
+import org.lightjason.agentspeak.action.builtin.grid.routing.ESearchDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
 import org.lightjason.agentspeak.action.builtin.grid.routing.IDistance;
 import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
+import org.lightjason.agentspeak.action.builtin.grid.routing.ISearchDirection;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -56,6 +56,13 @@ import java.util.stream.Stream;
  */
 public final class CAStar extends IBaseRouting
 {
+    /**
+     * default approximation weight
+     */
+    private static final double APROXIMATIONWEIGHT = 1;
+    /**
+     * approximation weight
+     */
     private final Number m_weight;
 
     // https://github.com/jonasnick/A-star/blob/master/astar/AStar.java
@@ -68,7 +75,7 @@ public final class CAStar extends IBaseRouting
      */
     public CAStar()
     {
-        this( EDistance.MANHATTAN, 1 );
+        this( EDistance.MANHATTAN, ESearchDirection.NEVER, APROXIMATIONWEIGHT );
     }
 
     /**
@@ -78,18 +85,30 @@ public final class CAStar extends IBaseRouting
      */
     public CAStar( @Nonnull final IDistance p_distance )
     {
-        this( p_distance, 1 );
+        this( p_distance, ESearchDirection.NEVER, APROXIMATIONWEIGHT );
     }
 
     /**
      * ctor
      *
      * @param p_distance distance
+     * @param p_searchdirection search direction
+     */
+    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection )
+    {
+        this( p_distance, p_searchdirection, APROXIMATIONWEIGHT );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_distance distance
+     * @param p_searchdirection search direction
      * @param p_weight approximation weight
      */
-    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final Number p_weight )
+    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection, @Nonnull final Number p_weight )
     {
-        super( p_distance );
+        super( p_distance, p_searchdirection );
         m_weight = p_weight;
     }
 
@@ -97,13 +116,15 @@ public final class CAStar extends IBaseRouting
      * ctor
      *
      * @param p_distance distance
+     * @param p_searchdirection search direction
      * @param p_walkable walkable check
      * @param p_weight approximation weight
      */
-    public CAStar( @Nonnull final IDistance p_distance, @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection,
+                   @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
                    @Nonnull final Number p_weight )
     {
-        super( p_distance, p_walkable );
+        super( p_distance, p_searchdirection, p_walkable );
         m_weight = p_weight;
     }
 
@@ -133,7 +154,9 @@ public final class CAStar extends IBaseRouting
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
-            this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
+            this.neighbour( p_grid, l_current.position() )
+                .map( CNode::of )
+                .forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
 
             // reorganize queue
             final List<INode> l_nodes = l_openlist.parallelStream().collect( Collectors.toList() );
@@ -174,25 +197,6 @@ public final class CAStar extends IBaseRouting
 
         p_openlist.add( p_neigbour );
     }
-
-    /**
-     * neighbour calculation
-     *
-     * @param p_grid grid
-     * @param p_current current node
-     * @return neighbour stream
-     * @todo move to own data structure ("never")
-     */
-    private Stream<INode> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final INode p_current )
-    {
-        return Stream.of(
-            walkable( p_grid, p_current.position(), EDirection.NORTH ),
-            walkable( p_grid, p_current.position(), EDirection.EAST ),
-            walkable( p_grid, p_current.position(), EDirection.SOUTH ),
-            walkable( p_grid, p_current.position(), EDirection.WEST )
-        ).filter( Pair::getKey ).map( Pair::getValue ).map( CNode::of );
-    }
-
 
     /**
      * comparator for f-score

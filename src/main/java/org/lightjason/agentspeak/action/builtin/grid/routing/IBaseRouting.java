@@ -26,14 +26,10 @@ package org.lightjason.agentspeak.action.builtin.grid.routing;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -47,31 +43,37 @@ public abstract class IBaseRouting implements IRouting
      */
     protected final IDistance m_distance;
     /**
+     * search direction
+     */
+    private final ISearchDirection m_searchdirection;
+    /**
      * walkable function
      */
-    protected final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> m_walkable;
+    private final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> m_walkable;
 
     /**
      * ctor
      * @param p_distance distance
+     * @param p_searchdirection search direction
      */
-    protected IBaseRouting( @Nonnull final IDistance p_distance )
+    protected IBaseRouting( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection )
     {
-        this( p_distance, ( g, p ) -> Objects.isNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
+        this( p_distance, p_searchdirection, ( g, p ) -> Objects.isNull( g.getQuick( (int) p.getQuick( 0 ), (int) p.getQuick( 1 ) ) ) );
     }
 
     /**
      * ctor
-     *
-     * @param p_distance distance
+     *  @param p_distance distance
+     * @param p_searchdirection search direction
      * @param p_walkable walkable function
      */
-    protected IBaseRouting( @Nonnull final IDistance p_distance,
+    protected IBaseRouting( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection,
                             @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable
     )
     {
         m_distance = p_distance;
         m_walkable = p_walkable;
+        m_searchdirection = p_searchdirection;
     }
 
     /**
@@ -91,34 +93,15 @@ public abstract class IBaseRouting implements IRouting
     }
 
     /**
-     * check walkable position e.g. by grid size
+     * returns a stream of neighbour positions
      *
      * @param p_grid grid
      * @param p_current current position
-     * @param p_direction walkable direction
-     * @return pair of walkable and position vector
+     * @return position stream
      */
-    protected final Pair<Boolean, DoubleMatrix1D> walkable( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current,
-                                                            @Nonnull final IDirection p_direction )
+    protected final Stream<DoubleMatrix1D> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current )
     {
-        final DoubleMatrix1D l_position = p_direction.apply( p_current );
-        return new ImmutablePair<>(
-            l_position.getQuick( 0 ) >= 0 && l_position.getQuick( 0 ) < p_grid.rows()
-            && l_position.getQuick( 1 ) >= 0 && l_position.getQuick( 1 ) < p_grid.columns()
-            && m_walkable.apply( p_grid, l_position ),
-            l_position
-        );
-    }
-
-    /**
-     * build path
-     *
-     * @param p_nodes node stream
-     * @return build list
-     */
-    protected final List<DoubleMatrix1D> build( @Nonnull final Stream<INode> p_nodes )
-    {
-        return p_nodes.map( INode::position ).collect( Collectors.toList() );
+        return m_searchdirection.apply( p_grid, p_current, m_walkable );
     }
 
 }

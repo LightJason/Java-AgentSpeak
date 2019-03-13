@@ -21,20 +21,19 @@
  * @endcond
  */
 
-
-package org.lightjason.agentspeak.action.builtin.grid.routing.jps;
+package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
+import com.codepoetics.protonpack.functions.TriFunction;
 
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
 /**
- * interface of neighbour calculation
+ * search direction interface
  */
-public interface INeighbour extends BiFunction<ObjectMatrix2D, DoubleMatrix1D, Stream<DoubleMatrix1D>>
+public interface ISearchDirection extends TriFunction<ObjectMatrix2D, DoubleMatrix1D, BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean>, Stream<DoubleMatrix1D>>
 {
-
 }

@@ -40,12 +40,13 @@ import org.lightjason.agentspeak.action.builtin.grid.CSet;
 import org.lightjason.agentspeak.action.builtin.grid.CSparseGrid;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
-import org.lightjason.agentspeak.action.builtin.grid.routing.star.CAStar;
+import org.lightjason.agentspeak.action.builtin.grid.routing.algorithm.CAStar;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -308,11 +309,14 @@ public final class TestCActionGrid extends IBaseTest
                                          .filter( c -> l_matrix[r][c] == 1 )
                                          .forEach( c -> l_grid.set( r, c, new Object() ) ) );
 
-        new CAStar().apply(
-            l_grid,
-            new DenseDoubleMatrix1D( new double[]{2, 1} ),
-            new DenseDoubleMatrix1D( new double[]{2, 4} )
-        ).map( l_formatter::toString ).forEach( System.out::println );
+        Assert.assertArrayEquals(
+            new Double[]{2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 3.0, 2.0, 3.0, 2.0, 4.0},
+            new CAStar().apply(
+                l_grid,
+                new DenseDoubleMatrix1D( new double[]{2, 1} ),
+                new DenseDoubleMatrix1D( new double[]{2, 4} )
+            ).flatMap( i -> Arrays.stream( i.toArray() ).boxed() ).toArray()
+        );
     }
 
 }
