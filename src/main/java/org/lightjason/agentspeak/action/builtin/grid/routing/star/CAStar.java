@@ -235,7 +235,7 @@ public final class CAStar extends IBaseRouting
         @Override
         public int compare( @Nonnull final INode p_value1, @Nonnull final INode p_value2 )
         {
-            return m_fscore.getOrDefault( p_value1, 0D ).doubleValue() <= m_fscore.getOrDefault( p_value2, 0D ).doubleValue()
+            return m_fscore.getOrDefault( p_value1, 0D ).doubleValue() < m_fscore.getOrDefault( p_value2, 0D ).doubleValue()
                    ? -1
                    : 1;
         }
