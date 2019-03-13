@@ -38,12 +38,14 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -66,7 +68,7 @@ public final class CAStar extends IBaseRouting
      */
     public CAStar()
     {
-        this( EDistance.EUCLIDEAN, 1 );
+        this( EDistance.MANHATTAN, 1 );
     }
 
     /**
@@ -118,7 +120,8 @@ public final class CAStar extends IBaseRouting
         // we want the nodes with the lowest projected f value to be checked first
         final Queue<INode> l_openlist = new PriorityBlockingQueue<>(
             (int) p_grid.size() / 4,
-            Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
+            new CComparator( l_fscore )
+            //Comparator.comparingDouble( i -> l_fscore.getOrDefault( i, 0d ) )
         );
 
         // https://www.redblobgames.com/pathfinding/a-star/implementation.html
@@ -130,14 +133,22 @@ public final class CAStar extends IBaseRouting
 
         while ( !l_openlist.isEmpty() )
         {
-            final INode l_current = l_openlist.poll();
+            System.out.println( l_openlist );
+            System.out.println( l_gscore );
+            System.out.println( l_fscore );
+            System.out.println();
+
+            final INode l_current = l_openlist.remove();
             if ( l_current.equals( l_end ) )
                 return constructpath( l_current );
 
             l_closedlist.add( l_current );
             this.neighbour( p_grid, l_current ).forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
 
-            //System.out.println();
+            // reorganize queue
+            final List<INode> l_nodes = l_openlist.parallelStream().collect( Collectors.toList() );
+            l_openlist.clear();
+            l_openlist.addAll( l_nodes );
 
             l_count++;
             if ( l_count > 100 )
@@ -180,8 +191,6 @@ public final class CAStar extends IBaseRouting
         p_fscore.put( p_neigbour, l_gscore + m_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
 
         p_openlist.add( p_neigbour );
-
-        //System.out.println( p_neigbour + "   " + l_gscore + "   " + p_fscore.getOrDefault(  p_neigbour, 0D ) );
     }
 
     /**
@@ -202,5 +211,34 @@ public final class CAStar extends IBaseRouting
         ).filter( Pair::getKey ).map( Pair::getValue ).map( CNode::of );
     }
 
+
+    /**
+     * comparator for f-score
+     */
+    private static final class CComparator implements Comparator<INode>
+    {
+        /**
+         * f-score map
+         */
+        private final Map<INode, Double> m_fscore;
+
+        /**
+         * ctor
+         *
+         * @param p_fscore f-score map
+         */
+        CComparator( @Nonnull final Map<INode, Double> p_fscore )
+        {
+            m_fscore = p_fscore;
+        }
+
+        @Override
+        public int compare( @Nonnull final INode p_value1, @Nonnull final INode p_value2 )
+        {
+            return m_fscore.getOrDefault( p_value1, 0D ).doubleValue() <= m_fscore.getOrDefault( p_value2, 0D ).doubleValue()
+                   ? -1
+                   : 1;
+        }
+    }
 
 }

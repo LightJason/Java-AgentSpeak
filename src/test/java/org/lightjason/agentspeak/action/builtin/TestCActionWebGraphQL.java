@@ -59,7 +59,7 @@ public final class TestCActionWebGraphQL extends IBaseTest
     {
         try
         {
-            m_result = CLiteral.parse( "graphql( data( country ( code( 'DE' ), phone( '49' ), name( 'Germany' ), currency( 'EUR' ) ) ) )");
+            m_result = CLiteral.parse( "graphql( data( country ( code( 'DE' ), phone( '49' ), name( 'Germany' ), currency( 'EUR' ) ) ) )" );
         }
         catch ( final Exception l_exception )
         {
