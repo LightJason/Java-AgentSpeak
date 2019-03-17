@@ -21,18 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.grid.routing.algorithm;
+package org.lightjason.agentspeak.action.builtin.grid.routing;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.builtin.grid.routing.CNode;
-import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
-import org.lightjason.agentspeak.action.builtin.grid.routing.ESearchDirection;
-import org.lightjason.agentspeak.action.builtin.grid.routing.IBaseRouting;
-import org.lightjason.agentspeak.action.builtin.grid.routing.IDistance;
-import org.lightjason.agentspeak.action.builtin.grid.routing.INode;
-import org.lightjason.agentspeak.action.builtin.grid.routing.ISearchDirection;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -54,7 +47,7 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/A*_search_algorithm
  */
-public final class CAStar extends IBaseRouting
+public final class CRoutingAStar extends IBaseRouting
 {
     /**
      * default approximation weight
@@ -73,7 +66,7 @@ public final class CAStar extends IBaseRouting
     /**
      * ctor
      */
-    public CAStar()
+    public CRoutingAStar()
     {
         this( EDistance.MANHATTAN, ESearchDirection.NEVER, APROXIMATIONWEIGHT );
     }
@@ -83,7 +76,7 @@ public final class CAStar extends IBaseRouting
      *
      * @param p_distance distance
      */
-    public CAStar( @Nonnull final IDistance p_distance )
+    public CRoutingAStar( @Nonnull final IDistance p_distance )
     {
         this( p_distance, ESearchDirection.NEVER, APROXIMATIONWEIGHT );
     }
@@ -94,7 +87,7 @@ public final class CAStar extends IBaseRouting
      * @param p_distance distance
      * @param p_searchdirection search direction
      */
-    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection )
+    public CRoutingAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection )
     {
         this( p_distance, p_searchdirection, APROXIMATIONWEIGHT );
     }
@@ -106,7 +99,7 @@ public final class CAStar extends IBaseRouting
      * @param p_searchdirection search direction
      * @param p_weight approximation weight
      */
-    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection, @Nonnull final Number p_weight )
+    public CRoutingAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection, @Nonnull final Number p_weight )
     {
         super( p_distance, p_searchdirection );
         m_weight = p_weight;
@@ -120,9 +113,9 @@ public final class CAStar extends IBaseRouting
      * @param p_walkable walkable check
      * @param p_weight approximation weight
      */
-    public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection,
-                   @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
-                   @Nonnull final Number p_weight )
+    public CRoutingAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection,
+                          @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
+                          @Nonnull final Number p_weight )
     {
         super( p_distance, p_searchdirection, p_walkable );
         m_weight = p_weight;
