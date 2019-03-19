@@ -123,7 +123,7 @@ public abstract class IBaseRouting implements IRouting
 
 
     /**
-     * comparator for f-score
+     * comparator for score
      */
     protected static final class CScoreComparator implements Comparator<INode>
     {
