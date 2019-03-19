@@ -28,10 +28,11 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -113,9 +114,9 @@ public abstract class IBaseRouting implements IRouting
      */
     protected static void reorganizequeue( @Nonnull final Queue<INode> p_queue )
     {
-        final INode[] l_nodes = p_queue.toArray( INode[]::new );
+        final List<INode> l_nodes = p_queue.parallelStream().collect( Collectors.toList() );
         p_queue.clear();
-        p_queue.addAll( Arrays.asList( l_nodes ) );
+        p_queue.addAll( l_nodes );
     }
 
 }
