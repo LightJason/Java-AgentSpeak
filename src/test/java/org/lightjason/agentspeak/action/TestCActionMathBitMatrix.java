@@ -37,7 +37,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.bit.matrix.CAnd;
 import org.lightjason.agentspeak.action.bit.matrix.CBoolValue;
 import org.lightjason.agentspeak.action.bit.matrix.CColumn;

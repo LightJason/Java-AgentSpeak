@@ -38,7 +38,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.blas.matrix.CAssign;
 import org.lightjason.agentspeak.action.blas.matrix.CColumn;
 import org.lightjason.agentspeak.action.blas.matrix.CColumnSum;

@@ -33,7 +33,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.bool.CAllMatch;
 import org.lightjason.agentspeak.action.bool.CAnd;
 import org.lightjason.agentspeak.action.bool.CAnyMatch;

@@ -34,7 +34,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.datetime.CApplyDays;
 import org.lightjason.agentspeak.action.datetime.CApplyHours;
 import org.lightjason.agentspeak.action.datetime.CApplyMinutes;

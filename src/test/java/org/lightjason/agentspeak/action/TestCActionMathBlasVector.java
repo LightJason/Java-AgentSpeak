@@ -35,7 +35,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.blas.vector.CAssign;
 import org.lightjason.agentspeak.action.blas.vector.CCopy;
 import org.lightjason.agentspeak.action.blas.vector.CCreate;

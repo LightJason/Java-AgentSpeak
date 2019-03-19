@@ -34,7 +34,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.math.CACos;
 import org.lightjason.agentspeak.action.math.CASin;
 import org.lightjason.agentspeak.action.math.CATan;
