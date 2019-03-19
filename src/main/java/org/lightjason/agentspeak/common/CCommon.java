@@ -328,7 +328,7 @@ public final class CCommon
     private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nullable final String... p_package )
     {
         return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
-                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
+                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action" ) )
                  : Arrays.stream( p_package ) )
             .flatMap( j -> new Reflections( j ).getSubTypesOf( p_class )
                                                .parallelStream()
