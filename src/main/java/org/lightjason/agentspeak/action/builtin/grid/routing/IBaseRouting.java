@@ -28,7 +28,9 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -77,6 +79,18 @@ public abstract class IBaseRouting implements IRouting
     }
 
     /**
+     * returns a stream of neighbour positions
+     *
+     * @param p_grid grid
+     * @param p_current current position
+     * @return position stream
+     */
+    protected final Stream<DoubleMatrix1D> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current )
+    {
+        return m_searchdirection.apply( p_grid, p_current, m_walkable );
+    }
+
+    /**
      * builds the path recursive on the node structure
      *
      * @param p_end final node (target position)
@@ -93,15 +107,15 @@ public abstract class IBaseRouting implements IRouting
     }
 
     /**
-     * returns a stream of neighbour positions
+     * reorganize a priority queue
      *
-     * @param p_grid grid
-     * @param p_current current position
-     * @return position stream
+     * @param p_queue queue
      */
-    protected final Stream<DoubleMatrix1D> neighbour( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_current )
+    protected static void reorganizequeue( @Nonnull final Queue<INode> p_queue )
     {
-        return m_searchdirection.apply( p_grid, p_current, m_walkable );
+        final INode[] l_nodes = p_queue.toArray( INode[]::new );
+        p_queue.clear();
+        p_queue.addAll( Arrays.asList( l_nodes ) );
     }
 
 }

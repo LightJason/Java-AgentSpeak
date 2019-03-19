@@ -26,19 +26,19 @@ package org.lightjason.agentspeak.action.builtin.grid.routing;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -57,11 +57,6 @@ public final class CRoutingAStar extends IBaseRouting
      * approximation weight
      */
     private final Number m_weight;
-
-    // https://github.com/jonasnick/A-star/blob/master/astar/AStar.java
-    // https://github.com/pshafer/dstar
-    // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AStar.java
-    // https://github.com/shu8i/AStar_DStarLite/blob/master/src/cs440/assignment1/control/AdaptiveAStar.java
 
     /**
      * ctor
@@ -103,6 +98,9 @@ public final class CRoutingAStar extends IBaseRouting
     {
         super( p_distance, p_searchdirection );
         m_weight = p_weight;
+
+        if ( p_distance == EDistance.MANHATTAN && p_searchdirection != ESearchDirection.NEVER )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "manhattendigitalmovement" ) );
     }
 
     /**
@@ -148,13 +146,11 @@ public final class CRoutingAStar extends IBaseRouting
 
             l_closedlist.add( l_current );
             this.neighbour( p_grid, l_current.position() )
+                .parallel()
                 .map( CNode::of )
                 .forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
 
-            // reorganize queue
-            final List<INode> l_nodes = l_openlist.parallelStream().collect( Collectors.toList() );
-            l_openlist.clear();
-            l_openlist.addAll( l_nodes );
+            reorganizequeue( l_openlist );
         }
 
 

@@ -71,7 +71,7 @@
  * @see http://apis.guru/graphql-apis/
  **/
 +!testgraphqlliteral <-
-    GQ = .web/graphql/queryliteral( "https://countries.trevorblades.com/", country( code("DE"), code, phone, name, curreny ) , "graphql" );
+    GQ = .web/graphql/queryliteral( "https://countries.trevorblades.com/", country( code("DE"), code, phone, name, currency ) , "graphql" );
     +graphql-fake-literal(GQ)
 .
 
@@ -91,6 +91,7 @@
     D = .collection/list/get(D, 0);
     [N] =.. D;
 
+    .generic/print( "rest-service", X );
     .test/result( .bool/or( .bool/equal( N, "elements" ), .bool/equal( N, "schemaLocation" ), .bool/equal( N, "location" ) ) )
 .
 
@@ -104,6 +105,7 @@
     M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
+    .generic/print( "graphql-literal", X );
     .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "country" ) ) )
 .
 
@@ -118,5 +120,6 @@
     M = .collection/list/get(M, 0);
     [L|_] =.. M;
 
+    .generic/print( "graphql-native", X );
     .test/result( .bool/and( .bool/equal( N, "data" ), .bool/equal( L, "country" ) ) )
 .
