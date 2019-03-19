@@ -28,7 +28,9 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.function.BiFunction;
@@ -119,4 +121,33 @@ public abstract class IBaseRouting implements IRouting
         p_queue.addAll( l_nodes );
     }
 
+
+    /**
+     * comparator for f-score
+     */
+    protected static final class CScoreComparator implements Comparator<INode>
+    {
+        /**
+         * score map
+         */
+        private final Map<INode, Double> m_score;
+
+        /**
+         * ctor
+         *
+         * @param p_score score map
+         */
+        CScoreComparator( @Nonnull final Map<INode, Double> p_score )
+        {
+            m_score = p_score;
+        }
+
+        @Override
+        public int compare( @Nonnull final INode p_value1, @Nonnull final INode p_value2 )
+        {
+            return m_score.getOrDefault( p_value1, 0D ).doubleValue() < m_score.getOrDefault( p_value2, 0D ).doubleValue()
+                   ? -1
+                   : 1;
+        }
+    }
 }

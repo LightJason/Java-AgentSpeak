@@ -291,7 +291,7 @@ public final class TestCActionGrid extends IBaseTest
     }
 
     /**
-     * test a-star test
+     * test a-star
      */
     @Test
     public void astar()
@@ -317,6 +317,15 @@ public final class TestCActionGrid extends IBaseTest
                 new DenseDoubleMatrix1D( new double[]{2, 4} )
             ).flatMap( i -> Arrays.stream( i.toArray() ).boxed() ).toArray()
         );
+    }
+
+    /**
+     * test jps
+     */
+    @Test
+    public void jps()
+    {
+
     }
 
 }

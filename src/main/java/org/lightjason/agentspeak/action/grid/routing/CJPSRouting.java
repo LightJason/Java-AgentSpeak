@@ -29,6 +29,13 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.Stream;
 
 
@@ -96,6 +103,40 @@ public final class CJPSRouting extends IBaseRouting
     @Override
     public Stream<DoubleMatrix1D> apply( @Nonnull final ObjectMatrix2D p_grid, @Nonnull final DoubleMatrix1D p_start, @Nonnull final DoubleMatrix1D p_end )
     {
+        // distance to start + estimate to end
+        final Map<INode, Double> l_fscore = new ConcurrentHashMap<>();
+        // distance to start (parent's g-score + distance from parent)
+        final Map<INode, Double> l_gscore = new ConcurrentHashMap<>();
+
+        // closed list
+        final Set<INode> l_closedlist = Collections.synchronizedSet( new HashSet<>() );
+        // we want the nodes with the lowest projected f value to be checked first
+        final Queue<INode> l_openlist = new PriorityBlockingQueue<>(
+            (int) p_grid.size() / 4,
+            new CScoreComparator( l_fscore )
+        );
+
+        l_openlist.add( CNode.of( p_start ) );
+        final INode l_end = CNode.of( p_end );
+
+        while ( !l_openlist.isEmpty() )
+        {
+            final INode l_current = l_openlist.remove();
+            if ( l_current.equals( l_end ) )
+                return constructpath( l_current );
+
+            l_closedlist.add( l_current );
+            /*
+            this.neighbour( p_grid, l_current.position() )
+                .parallel()
+                .map( CNode::of )
+                .forEach( i -> this.score( p_grid, l_current, i, l_end, l_openlist, l_closedlist, l_gscore, l_fscore ) );
+            */
+
+            reorganizequeue( l_openlist );
+        }
+
+
         return Stream.of();
     }
 }

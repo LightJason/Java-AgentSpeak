@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
@@ -132,7 +131,7 @@ public final class CAStarRouting extends IBaseRouting
         // we want the nodes with the lowest projected f value to be checked first
         final Queue<INode> l_openlist = new PriorityBlockingQueue<>(
             (int) p_grid.size() / 4,
-            new CComparator( l_fscore )
+            new CScoreComparator( l_fscore )
         );
 
         l_openlist.add( CNode.of( p_start ) );
@@ -185,35 +184,6 @@ public final class CAStarRouting extends IBaseRouting
         p_fscore.put( p_neigbour, l_gscore + m_weight.doubleValue() * m_distance.heuristic( p_neigbour.position(), p_end.position() ).doubleValue() );
 
         p_openlist.add( p_neigbour );
-    }
-
-    /**
-     * comparator for f-score
-     */
-    private static final class CComparator implements Comparator<INode>
-    {
-        /**
-         * f-score map
-         */
-        private final Map<INode, Double> m_fscore;
-
-        /**
-         * ctor
-         *
-         * @param p_fscore f-score map
-         */
-        CComparator( @Nonnull final Map<INode, Double> p_fscore )
-        {
-            m_fscore = p_fscore;
-        }
-
-        @Override
-        public int compare( @Nonnull final INode p_value1, @Nonnull final INode p_value2 )
-        {
-            return m_fscore.getOrDefault( p_value1, 0D ).doubleValue() < m_fscore.getOrDefault( p_value2, 0D ).doubleValue()
-                   ? -1
-                   : 1;
-        }
     }
 
 }
