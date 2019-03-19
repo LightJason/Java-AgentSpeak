@@ -40,7 +40,7 @@ import org.lightjason.agentspeak.action.builtin.grid.CSet;
 import org.lightjason.agentspeak.action.builtin.grid.CSparseGrid;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDirection;
 import org.lightjason.agentspeak.action.builtin.grid.routing.EDistance;
-import org.lightjason.agentspeak.action.builtin.grid.routing.CRoutingAStar;
+import org.lightjason.agentspeak.action.builtin.grid.routing.CAStarRouting;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -311,7 +311,7 @@ public final class TestCActionGrid extends IBaseTest
 
         Assert.assertArrayEquals(
             new Double[]{2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 3.0, 2.0, 3.0, 2.0, 4.0},
-            new CRoutingAStar().apply(
+            new CAStarRouting().apply(
                 l_grid,
                 new DenseDoubleMatrix1D( new double[]{2, 1} ),
                 new DenseDoubleMatrix1D( new double[]{2, 4} )

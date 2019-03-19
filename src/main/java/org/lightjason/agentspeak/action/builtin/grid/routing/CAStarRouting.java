@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/A*_search_algorithm
  */
-public final class CRoutingAStar extends IBaseRouting
+public final class CAStarRouting extends IBaseRouting
 {
     /**
      * default approximation weight
@@ -61,7 +61,7 @@ public final class CRoutingAStar extends IBaseRouting
     /**
      * ctor
      */
-    public CRoutingAStar()
+    public CAStarRouting()
     {
         this( EDistance.MANHATTAN, ESearchDirection.NEVER, APROXIMATIONWEIGHT );
     }
@@ -71,7 +71,7 @@ public final class CRoutingAStar extends IBaseRouting
      *
      * @param p_distance distance
      */
-    public CRoutingAStar( @Nonnull final IDistance p_distance )
+    public CAStarRouting( @Nonnull final IDistance p_distance )
     {
         this( p_distance, ESearchDirection.NEVER, APROXIMATIONWEIGHT );
     }
@@ -82,7 +82,7 @@ public final class CRoutingAStar extends IBaseRouting
      * @param p_distance distance
      * @param p_searchdirection search direction
      */
-    public CRoutingAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection )
+    public CAStarRouting( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection )
     {
         this( p_distance, p_searchdirection, APROXIMATIONWEIGHT );
     }
@@ -94,7 +94,7 @@ public final class CRoutingAStar extends IBaseRouting
      * @param p_searchdirection search direction
      * @param p_weight approximation weight
      */
-    public CRoutingAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection, @Nonnull final Number p_weight )
+    public CAStarRouting( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection, @Nonnull final Number p_weight )
     {
         super( p_distance, p_searchdirection );
         m_weight = p_weight;
@@ -111,7 +111,7 @@ public final class CRoutingAStar extends IBaseRouting
      * @param p_walkable walkable check
      * @param p_weight approximation weight
      */
-    public CRoutingAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection,
+    public CAStarRouting( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection,
                           @NonNull final BiFunction<ObjectMatrix2D, DoubleMatrix1D, Boolean> p_walkable,
                           @Nonnull final Number p_weight )
     {
