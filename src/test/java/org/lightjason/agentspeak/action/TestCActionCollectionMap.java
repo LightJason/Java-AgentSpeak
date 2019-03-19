@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin;
+package org.lightjason.agentspeak.action;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;

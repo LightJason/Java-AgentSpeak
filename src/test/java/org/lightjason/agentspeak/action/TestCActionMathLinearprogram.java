@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin;
+package org.lightjason.agentspeak.action;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;

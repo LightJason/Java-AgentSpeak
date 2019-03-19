@@ -22,7 +22,7 @@
  */
 
 
-package org.lightjason.agentspeak.action.builtin;
+package org.lightjason.agentspeak.action;
 
 import org.junit.Assert;
 import org.junit.Assume;

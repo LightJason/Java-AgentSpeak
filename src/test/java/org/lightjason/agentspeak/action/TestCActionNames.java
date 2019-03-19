@@ -21,11 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin;
+package org.lightjason.agentspeak.action;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;

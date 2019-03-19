@@ -21,110 +21,84 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin;
+package org.lightjason.agentspeak.action;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.listsettuple.tuple.CCreate;
-import org.lightjason.agentspeak.action.listsettuple.tuple.CFlat;
-import org.lightjason.agentspeak.action.listsettuple.tuple.CSet;
-import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
+import org.lightjason.agentspeak.action.shape.CInCircle;
+import org.lightjason.agentspeak.action.shape.CInRectangle;
+import org.lightjason.agentspeak.action.shape.CInTriangle;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 /**
- * test collection tuple
+ * test math shape functions
  */
-public final class TestCActionCollectionTuple extends IBaseTest
+public final class TestCActionMathShape extends IBaseTest
 {
 
     /**
-     * test tuple creating
+     * test in circle
      */
     @Test
-    public void create()
+    public void incircle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CCreate().execute(
+        new CInCircle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
         Assert.assertEquals( 2, l_return.size() );
-
-        Assert.assertEquals( "abcd", l_return.get( 0 ).<AbstractMap.Entry<String, ?>>raw().getKey() );
-        Assert.assertEquals( 123, l_return.get( 0 ).<AbstractMap.Entry<?, Number>>raw().getValue() );
-
-        Assert.assertEquals( "foobar", l_return.get( 1 ).<AbstractMap.Entry<String, ?>>raw().getKey() );
-        Assert.assertTrue( l_return.get( 1 ).<AbstractMap.Entry<?, Boolean>>raw().getValue() );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }
 
     /**
-     * test tuple creating error
-     */
-    @Test( expected = CExecutionIllegealArgumentException.class )
-    public void createerror()
-    {
-        new CCreate().execute(
-                false,
-                IContext.EMPTYPLAN,
-                Stream.of( "x" ).map( CRawTerm::of ).collect( Collectors.toList() ),
-                Collections.emptyList()
-        );
-    }
-
-
-    /**
-     * test tuple set
+     * test in rechtangle
      */
     @Test
-    public void set()
-    {
-        final AbstractMap.Entry<String, String> l_data = new AbstractMap.SimpleEntry<>( "foo", "bar" );
-
-        new CSet().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "blubblub", l_data ).map( CRawTerm::of ).collect( Collectors.toList() ),
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( "blubblub", l_data.getValue() );
-    }
-
-
-    /**
-     * test tuple flat
-     */
-    @Test
-    public void flat()
+    public void inrechtangle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CFlat().execute(
+        new CInRectangle().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::of ).collect( Collectors.toList() ),
             l_return
         );
 
-        Assert.assertEquals( 4, l_return.size() );
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
+    }
 
-        Assert.assertEquals( "foo", l_return.get( 0 ).raw() );
-        Assert.assertEquals( "bar", l_return.get( 1 ).raw() );
+    /**
+     * test in triangle
+     */
+    @Test
+    public void intriangle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertEquals( 1, l_return.get( 2 ).<Number>raw() );
-        Assert.assertEquals( 2, l_return.get( 3 ).<Number>raw() );
+        new CInTriangle().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
     }
 
 }

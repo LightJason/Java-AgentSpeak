@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin;
+package org.lightjason.agentspeak.action;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
