@@ -43,6 +43,10 @@ import java.util.stream.Stream;
 public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerator
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7363854226211845413L;
+    /**
      * loaded lambdas
      */
     private final Map<Class<?>, ILambdaStreaming<?>> m_lambdas = new ConcurrentHashMap<>();
@@ -54,7 +58,6 @@ public final class CLambdaStreamingGenerator implements ILambdaStreamingGenerato
      * use cache
      */
     private final boolean m_usecache;
-
 
     /**
      * ctor

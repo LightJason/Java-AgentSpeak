@@ -21,28 +21,17 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.generator;
+package org.lightjason.agentspeak.common;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.common.IFunction;
-import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
+
+import java.io.Serializable;
+import java.util.function.Function;
 
 
 /**
- * lambda-streaming generator / loader for lazy-loading
+ * serializable function
  */
-public interface ILambdaStreamingGenerator extends IFunction<Class<?>, ILambdaStreaming<?>>
+@FunctionalInterface
+public interface IFunction<T, R> extends Serializable, Function<T, R>
 {
-    /**
-     * empty lambda-streaming generator
-     */
-    ILambdaStreamingGenerator EMPTY = new ILambdaStreamingGenerator()
-    {
-        @Override
-        public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
-        {
-            return ILambdaStreaming.EMPTY;
-        }
-    };
-
 }

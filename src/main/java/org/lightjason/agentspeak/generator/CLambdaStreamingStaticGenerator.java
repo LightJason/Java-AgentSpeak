@@ -41,6 +41,10 @@ import java.util.stream.Stream;
 public final class CLambdaStreamingStaticGenerator implements ILambdaStreamingGenerator
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3751613362348384867L;
+    /**
      * loaded lambdas
      */
     private final Map<Class<?>, ILambdaStreaming<?>> m_lambdas;

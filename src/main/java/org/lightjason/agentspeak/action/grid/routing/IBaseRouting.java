@@ -130,7 +130,7 @@ public abstract class IBaseRouting implements IRouting, Serializable
     /**
      * comparator for score
      */
-    protected static final class CScoreComparator implements Comparator<INode>
+    protected static final class CScoreComparator implements Serializable, Comparator<INode>
     {
         /**
          * serial id

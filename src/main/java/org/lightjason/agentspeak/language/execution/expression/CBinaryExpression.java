@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.lightjason.agentspeak.common.IBiFunction;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -36,7 +37,6 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -64,7 +64,7 @@ public final class CBinaryExpression implements IBinaryExpression
     /**
      * left-hand-side strict-bind
      */
-    private final BiFunction<ITerm, List<ITerm>, Boolean> m_lhsbind;
+    private final IBiFunction<ITerm, List<ITerm>, Boolean> m_lhsbind;
 
     /**
      * ctor
