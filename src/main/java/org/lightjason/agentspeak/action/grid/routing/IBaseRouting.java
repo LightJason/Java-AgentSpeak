@@ -28,6 +28,7 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +42,12 @@ import java.util.stream.Stream;
 /**
  * base routing structure
  */
-public abstract class IBaseRouting implements IRouting
+public abstract class IBaseRouting implements IRouting, Serializable
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7599848829150929706L;
     /**
      * distance
      */

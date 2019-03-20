@@ -34,7 +34,6 @@ import java.util.function.BiFunction;
  */
 public interface IDistance extends BiFunction<DoubleMatrix1D, DoubleMatrix1D, Number>
 {
-
     /**
      * heurisitc distance approximation
      *

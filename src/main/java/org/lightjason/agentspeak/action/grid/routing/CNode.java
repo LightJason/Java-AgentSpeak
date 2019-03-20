@@ -28,15 +28,22 @@ import cern.colt.matrix.tdouble.algo.DoubleFormatter;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
  * route node
  */
-public final class CNode implements INode
+public final class CNode implements INode, Serializable
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8929701508299987546L;
     /**
      * formatter definition
      */
@@ -104,8 +111,7 @@ public final class CNode implements INode
     public String toString()
     {
         final INode l_parent = m_parent.get();
-        //return MessageFormat.format( "({0})[{1}]", FORMATTER.toString( m_position ), Objects.nonNull( l_parent ) ? l_parent : "" );
-        return "(" + FORMATTER.toString( m_position ) + ")";
+        return MessageFormat.format( "({0})[{1}]", FORMATTER.toString( m_position ), Objects.nonNull( l_parent ) ? l_parent : "" );
     }
 
     /**

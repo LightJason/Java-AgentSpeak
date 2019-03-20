@@ -50,6 +50,10 @@ import java.util.stream.Stream;
 public final class CAStarRouting extends IBaseRouting
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 415349293168335140L;
+    /**
      * default approximation weight
      */
     private static final double APROXIMATIONWEIGHT = 1;
