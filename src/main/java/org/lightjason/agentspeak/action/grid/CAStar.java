@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.action.grid.routing.IDistance;
 import org.lightjason.agentspeak.action.grid.routing.IRouting;
 import org.lightjason.agentspeak.action.grid.routing.ISearchDirection;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
