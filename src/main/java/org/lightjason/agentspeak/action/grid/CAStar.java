@@ -23,6 +23,9 @@
 
 package org.lightjason.agentspeak.action.grid;
 
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import com.codepoetics.protonpack.StreamUtils;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.grid.routing.CAStarRouting;
 import org.lightjason.agentspeak.action.grid.routing.EDistance;
@@ -112,7 +115,6 @@ public final class CAStar extends IBaseAction
         m_routing = new CAStarRouting( p_distance, p_searchdirection, p_weight );
     }
 
-
     @Nonnull
     @Override
     public IPath name()
@@ -133,9 +135,20 @@ public final class CAStar extends IBaseAction
                                            @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-
+        final List<DoubleMatrix1D> l_points = StreamUtils.windowed( l_arguments.stream().skip( 1 ), 2 )
+                                                         .flatMap( i -> matrix( i.get( 0 ), i.get( 1 ) ) )
+                                                         .collect( Collectors.toList() );
 
 
         return Stream.of();
     }
+
+
+    private static Stream<DoubleMatrix1D> matrix( @NonNull final ITerm p_term1, @Nonnull final ITerm p_term2 )
+    {
+
+
+        return Stream.of();
+    }
+
 }
