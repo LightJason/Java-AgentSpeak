@@ -133,6 +133,10 @@ public abstract class IBaseRouting implements IRouting, Serializable
     protected static final class CScoreComparator implements Comparator<INode>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = -7298299975848106509L;
+        /**
          * score map
          */
         private final Map<INode, Double> m_score;

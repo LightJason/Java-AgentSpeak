@@ -194,7 +194,6 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
      * @param p_value2 term value
      * @return equality flag
      */
-    @SuppressWarnings( "unchecked" )
     private static boolean checkequal( @Nonnull final ITerm p_value1, @Nonnull final ITerm p_value2 )
     {
         return ( p_value1.raw() instanceof Number ) && ( p_value2.raw() instanceof Number )
