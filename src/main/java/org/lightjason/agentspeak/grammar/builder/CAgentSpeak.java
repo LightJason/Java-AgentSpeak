@@ -326,7 +326,6 @@ public final class CAgentSpeak
     @SuppressWarnings( "unchecked" )
     public static Stream<IExecution> repair( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nonnull final List<? extends RuleContext> p_chain )
     {
-        // @todo check to direct passing if argument is equal to 1 & pass value to plan execution
         return p_chain.stream().map( i -> (IExecution) p_visitor.visit( i ) );
     }
 
@@ -354,12 +353,11 @@ public final class CAgentSpeak
      */
     @Nonnull
     public static Object blockformular( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                        @Nullable final RuleContext p_repairformula, @Nullable final RuleContext p_block
-    )
+                                        @Nullable final RuleContext p_repairformula, @Nullable final RuleContext p_block )
     {
         return Objects.nonNull( p_repairformula )
                ? Stream.of( p_visitor.visit( p_repairformula ) )
-               : (Stream<?>) p_visitor.visitChildren( p_block );
+               : Stream.of( p_visitor.visitChildren( p_block ) );
     }
 
 

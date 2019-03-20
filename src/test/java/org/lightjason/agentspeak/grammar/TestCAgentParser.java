@@ -768,10 +768,9 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * test lambda expression
      *
      * @throws Exception thrown on stream and parser error
-     * @todo add lambda block-command test
      */
     @Test
-    public void lambda() throws Exception
+    public void lambdasingle() throws Exception
     {
         final CCollectValues l_values = new CCollectValues();
 
@@ -798,6 +797,41 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assert.assertArrayEquals( Stream.of( 1, 2, 3, 4 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
     }
+
+    /**
+     * test lambda expression
+     *
+     * @throws Exception thrown on stream and parser error
+     */
+    @Test
+    public void lambdablock() throws Exception
+    {
+        final CCollectValues l_values = new CCollectValues();
+
+        final IPlan l_plan = parsesingleplan(
+            new CParserAgent(
+                new CActionStaticGenerator( Stream.of( l_values ) ),
+                new CLambdaStreamingStaticGenerator( org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage() )
+            ),
+            "+!lambda <- (L) -> I : { I *= 10; .push/value(I) }."
+        );
+
+        final IVariable<?> l_var = new CVariable<>( "L" ).set( Stream.of( 1, 2, 3, 4 ).collect( Collectors.toList() ) );
+
+        Assert.assertTrue(
+            l_plan.toString(),
+            execute(
+                l_plan,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_var
+            )
+        );
+
+        Assert.assertArrayEquals( Stream.of( 10, 20, 30, 40 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
+    }
+
 
     /**
      * test of inner action execute
