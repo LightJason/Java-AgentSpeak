@@ -829,7 +829,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
             )
         );
 
-        Assert.assertArrayEquals( Stream.of( 10, 20, 30, 40 ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
+        Assert.assertArrayEquals( Stream.of( 10D, 20D, 30D, 40D ).toArray(), l_values.value().stream().map( ITerm::raw ).toArray() );
     }
 
 

@@ -357,7 +357,7 @@ public final class CAgentSpeak
     {
         return Objects.nonNull( p_repairformula )
                ? Stream.of( p_visitor.visit( p_repairformula ) )
-               : Stream.of( p_visitor.visitChildren( p_block ) );
+               : p_visitor.visit( p_block );
     }
 
 
