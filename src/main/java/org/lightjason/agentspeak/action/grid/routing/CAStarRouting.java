@@ -45,6 +45,7 @@ import java.util.stream.Stream;
  * a-star algorithm
  *
  * @see https://en.wikipedia.org/wiki/A*_search_algorithm
+ * @see https://github.com/qiao/PathFinding.js
  */
 public final class CAStarRouting extends IBaseRouting
 {
