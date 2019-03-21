@@ -72,6 +72,9 @@ import static org.junit.Assume.assumeTrue;
  */
 public final class TestCLanguageLabels extends IBaseTest
 {
+    /**
+     * classpath separator
+     */
     private static final String CLASSSEPARATOR = ".";
     /**
      * search path
