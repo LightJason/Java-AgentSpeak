@@ -681,7 +681,7 @@
                                             <limit>
                                                 <counter>LINE</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>65%</minimum>
+                                                <minimum>85%</minimum>
                                             </limit>
                                         </limits>
                                     </rule>
@@ -691,7 +691,7 @@
                                             <limit>
                                                 <counter>LINE</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>75%</minimum>
+                                                <minimum>50%</minimum>
                                             </limit>
                                         </limits>
                                     </rule>
@@ -702,7 +702,6 @@
                     -->
                 </executions>
             </plugin>
-
 
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
