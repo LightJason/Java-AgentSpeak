@@ -25,7 +25,6 @@
 package org.lightjason.agentspeak.action;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tdouble.algo.DoubleFormatter;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.impl.DenseObjectMatrix2D;
@@ -33,6 +32,7 @@ import cern.colt.matrix.tobject.impl.SparseObjectMatrix2D;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.grid.CAStar;
 import org.lightjason.agentspeak.action.grid.CDenseGrid;
 import org.lightjason.agentspeak.action.grid.CIsEmpty;
 import org.lightjason.agentspeak.action.grid.CRemove;
@@ -45,6 +45,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -296,23 +297,10 @@ public final class TestCActionGrid extends IBaseTest
     @Test
     public void astar()
     {
-        final DoubleFormatter l_formatter = new DoubleFormatter();
-        l_formatter.setRowSeparator( "; " );
-        l_formatter.setColumnSeparator( "," );
-        l_formatter.setPrintShape( false );
-
-        final int[][] l_matrix = new int[][]{{0, 0, 0, 1, 0}, {1, 0, 0, 0, 1}, {0, 0, 1, 0, 0}};
-        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( l_matrix.length, l_matrix[0].length );
-
-        IntStream.range( 0, l_matrix.length )
-                 .forEach( r -> IntStream.range( 0, l_matrix[r].length )
-                                         .filter( c -> l_matrix[r][c] == 1 )
-                                         .forEach( c -> l_grid.set( r, c, new Object() ) ) );
-
         Assert.assertArrayEquals(
             new Double[]{2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 3.0, 2.0, 3.0, 2.0, 4.0},
             new CAStarRouting().apply(
-                l_grid,
+                buildgrid( new int[][]{{0, 0, 0, 1, 0}, {1, 0, 0, 0, 1}, {0, 0, 1, 0, 0}} ),
                 new DenseDoubleMatrix1D( new double[]{2, 1} ),
                 new DenseDoubleMatrix1D( new double[]{2, 4} )
             ).flatMap( i -> Arrays.stream( i.toArray() ).boxed() ).toArray()
@@ -320,12 +308,41 @@ public final class TestCActionGrid extends IBaseTest
     }
 
     /**
-     * test jps
+     * test a-star action
      */
     @Test
-    public void jps()
+    public void astaraction()
     {
+        final List<ITerm> l_return = new ArrayList<>();
 
+        new CAStar().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of(
+                buildgrid( new int[][]{{0, 0, 0, 1, 0}, {1, 0, 0, 0, 1}, {0, 0, 1, 0, 0}} ),
+                new DenseDoubleMatrix1D( new double[]{2, 1} ),
+                2, 4
+            ).map( CRawTerm::of ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        System.out.println( l_return );
+    }
+
+    /**
+     * buld grid
+     * @param p_grid grid int definition (1 not-walkable)
+     * @return object matrix grid
+     */
+    private ObjectMatrix2D buildgrid( @Nonnull final int[][] p_grid )
+    {
+        final ObjectMatrix2D l_grid = new SparseObjectMatrix2D( p_grid.length, p_grid[0].length );
+
+        IntStream.range( 0, p_grid.length )
+                 .forEach( r -> IntStream.range( 0, p_grid[r].length )
+                                         .filter( c -> p_grid[r][c] == 1 )
+                                         .forEach( c -> l_grid.set( r, c, new Object() ) ) );
+
+        return l_grid;
     }
 
 }

@@ -23,27 +23,15 @@
 
 package org.lightjason.agentspeak.action.grid;
 
-import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import com.codepoetics.protonpack.StreamUtils;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.grid.routing.CAStarRouting;
 import org.lightjason.agentspeak.action.grid.routing.EDistance;
 import org.lightjason.agentspeak.action.grid.routing.ESearchDirection;
 import org.lightjason.agentspeak.action.grid.routing.IDistance;
-import org.lightjason.agentspeak.action.grid.routing.IRouting;
 import org.lightjason.agentspeak.action.grid.routing.ISearchDirection;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -58,7 +46,7 @@ import java.util.stream.Stream;
  *
  * @see https://en.wikipedia.org/wiki/A*_search_algorithm
  */
-public final class CAStar extends IBaseAction
+public final class CAStar extends IBaseRoutingAction
 {
     /**
      * serial id
@@ -68,10 +56,6 @@ public final class CAStar extends IBaseAction
      * action name
      */
     private static final IPath NAME = namebyclass( CAStar.class, "grid" );
-    /**
-     * routing algorithm
-     */
-    private final IRouting m_routing;
 
     /**
      * ctor
@@ -112,7 +96,7 @@ public final class CAStar extends IBaseAction
      */
     public CAStar( @Nonnull final IDistance p_distance, @Nonnull final ISearchDirection p_searchdirection, @Nonnull final Number p_weight )
     {
-        m_routing = new CAStarRouting( p_distance, p_searchdirection, p_weight );
+        super( new CAStarRouting( p_distance, p_searchdirection, p_weight ) );
     }
 
     @Nonnull
@@ -127,28 +111,6 @@ public final class CAStar extends IBaseAction
     public int minimalArgumentNumber()
     {
         return 1;
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-    {
-        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        final List<DoubleMatrix1D> l_points = StreamUtils.windowed( l_arguments.stream().skip( 1 ), 2 )
-                                                         .flatMap( i -> matrix( i.get( 0 ), i.get( 1 ) ) )
-                                                         .collect( Collectors.toList() );
-
-
-        return Stream.of();
-    }
-
-
-    private static Stream<DoubleMatrix1D> matrix( @NonNull final ITerm p_term1, @Nonnull final ITerm p_term2 )
-    {
-
-
-        return Stream.of();
     }
 
 }
