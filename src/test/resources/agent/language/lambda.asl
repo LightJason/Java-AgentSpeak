@@ -39,12 +39,12 @@
     @(L) -> Y | R : R = Y+1;
     .generic/print("lambda return", R);
 
-    BL = .agent/belieflist( "hallo" );
-    (BL) -> Y : .generic/print( "lambda belief items", Y);
+    //BL = .agent/belieflist( "hallo" );
+    //(BL) -> Y : .generic/print( "lambda belief items", Y);
 
 
-    PL = .agent/planlist;
-    (PL) -> Y : .generic/print( "lambda plan items", Y);
+    //PL = .agent/planlist;
+    //(PL) -> Y : .generic/print( "lambda plan items", Y);
 
     .test/result( success );
     .generic/print("lambda executed completly")
