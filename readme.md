@@ -5,22 +5,6 @@
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini a Java 9 implementation has been build-up with parallel execution calls. The version defines an additional [AgentSpeak(L)](https://en.wikipedia.org/wiki/AgentSpeak) grammar based on [AntLR](http://www.antlr.org/) for simulating a [multi-agent system](https://en.wikipedia.org/wiki/Multi-agent_system) with a fuzzy-based logical calculus and grammar features like lambda expressions. Agent execution based on a mathematical structure to describe an optimizing process by a [finite-state-machine](https://en.wikipedia.org/wiki/Finite-state_machine)
 
-## Requirements
-
-* [JRE 1.9](http://www.java.com/)
-
-### Development
-
-* [JDK 1.9](http://www.oracle.com/technetwork/java/javase/downloads/)
-* [Maven 3 or higher](http://maven.apache.org/)
-* [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
-* [Source code documentation](http://lightjason.github.io/AgentSpeak/)
-* [Docker-Hub](https://hub.docker.com/r/lightjason/agentspeak/)
-* [Open Hub Code Statistic](https://www.openhub.net/p/LightJason-AgentSpeak)
-* [Coveralls.io Statistic](https://coveralls.io/github/LightJason/AgentSpeak)
-* [Libraries.io Statistic](https://libraries.io/github/LightJason/AgentSpeak)
-
-
 
 ## Base Definitions
 
