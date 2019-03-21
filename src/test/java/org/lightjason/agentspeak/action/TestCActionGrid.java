@@ -325,7 +325,11 @@ public final class TestCActionGrid extends IBaseTest
             l_return
         );
 
-        System.out.println( l_return );
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertArrayEquals(
+            new Double[]{2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 3.0, 2.0, 3.0, 2.0, 4.0},
+            l_return.get( 0 ).<List<DoubleMatrix1D>>raw().stream().flatMap( i -> Arrays.stream( i.toArray() ).boxed() ).toArray()
+        );
     }
 
     /**

@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.action.grid.routing.IRouting;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -73,6 +74,7 @@ public abstract class IBaseRoutingAction extends IBaseAction
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
+        // build route (unpack input data to 1d-matrices
         final AtomicInteger l_group = new AtomicInteger();
         final List<DoubleMatrix1D> l_route = StreamUtils.windowed(
             StreamUtils.windowed(
@@ -85,7 +87,13 @@ public abstract class IBaseRoutingAction extends IBaseAction
             2
         ).flatMap( i -> m_routing.apply( l_arguments.get( 0 ).raw(), i.get( 0 ), i.get( 1 ) ) ).collect( Collectors.toList() );
 
-        return null;
+        // on empty route action fails
+        if ( !l_route.isEmpty() )
+        {
+            p_return.add( CRawTerm.of( l_route ) );
+            return Stream.of();
+        }
+        return p_context.agent().fuzzy().membership().fail();
     }
 
     /**
