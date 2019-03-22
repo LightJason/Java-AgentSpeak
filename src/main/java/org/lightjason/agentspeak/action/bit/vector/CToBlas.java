@@ -27,7 +27,7 @@ import cern.colt.matrix.tbit.BitVector;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.action.blas.EType;
+import org.lightjason.agentspeak.action.bit.EBlasType;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -85,10 +85,10 @@ public final class CToBlas extends IBaseAction
     )
     {
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        final EType l_type = l_arguments.parallelStream()
-                                        .filter( i -> CCommon.isssignableto( i, String.class ) )
-                                        .findFirst().map( i -> EType.of( i.<String>raw() ) )
-                                        .orElse( EType.SPARSE );
+        final EBlasType l_type = l_arguments.parallelStream()
+                                            .filter( i -> CCommon.isssignableto( i, String.class ) )
+                                            .findFirst().map( i -> EBlasType.of( i.<String>raw() ) )
+                                            .orElse( EBlasType.SPARSE );
 
         switch ( l_type )
         {

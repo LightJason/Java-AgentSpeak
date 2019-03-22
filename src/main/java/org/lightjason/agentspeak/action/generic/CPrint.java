@@ -24,8 +24,6 @@
 package org.lightjason.agentspeak.action.generic;
 
 import org.lightjason.agentspeak.action.IBaseAction;
-import org.lightjason.agentspeak.action.blas.CFormat1D;
-import org.lightjason.agentspeak.action.blas.CFormat2D;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -90,7 +88,7 @@ public final class CPrint extends IBaseAction
      */
     public CPrint() throws Exception
     {
-        this( () -> System.out, "   ", new CFormat2D(), new CFormat1D() );
+        this( () -> System.out, "   " );
     }
 
     /**
@@ -101,7 +99,7 @@ public final class CPrint extends IBaseAction
      */
     public CPrint( @Nonnull final ISupplier<PrintStream> p_streamsupplier ) throws Exception
     {
-        this( p_streamsupplier, "   ", new CFormat2D(), new CFormat1D() );
+        this( p_streamsupplier, "   " );
     }
 
     /**

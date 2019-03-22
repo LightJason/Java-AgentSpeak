@@ -21,25 +21,52 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.blas;
+package org.lightjason.agentspeak.action.bit;
 
-import cern.colt.matrix.tdouble.algo.DenseDoubleAlgebra;
-import org.lightjason.agentspeak.action.IBaseAction;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
- * blas algebra operations e.g. inverse, determinate
+ * blas types
  */
-public abstract class IBaseAlgebra extends IBaseAction
+public enum EBlasType
 {
+    SPARSE,
+    DENSE;
 
     /**
-     * dense algebra
+     * set with names
+     *
+     * @warning name method cannot replaced by a static call
      */
-    public static final DenseDoubleAlgebra DENSEALGEBRA = DenseDoubleAlgebra.DEFAULT;
+    private static final Set<String> NAMES = Collections.unmodifiableSet( Arrays.stream( EBlasType.values() ).map( i -> i.name() ).collect( Collectors.toSet() ) );
+
     /**
-     * serial id
+     * additional factory
+     *
+     * @param p_name name as string
+     * @return enum
      */
-    private static final long serialVersionUID = 8980414250195042661L;
+    public static EBlasType of( final String p_name )
+    {
+        return EBlasType.valueOf( p_name.trim().toUpperCase( Locale.ROOT ) );
+    }
+
+    /**
+     * check method to check if a enum value with a name exists
+     *
+     * @param p_name name as string
+     * @return boolean if enum value exists
+     */
+    public static boolean exists( final String p_name )
+    {
+        return NAMES.contains( p_name.trim().toUpperCase( Locale.ROOT ) );
+    }
 
 }
+

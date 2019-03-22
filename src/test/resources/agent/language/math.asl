@@ -59,6 +59,7 @@
  * test blas
  */
 +!testblas <-
+         /*
          M = .math/blas/matrix/create(2,2);
          .math/blas/matrix/set(0,0, 1, M);
          .math/blas/matrix/set(0,1, 2, M);
@@ -68,7 +69,7 @@
          Det = .math/blas/matrix/determinant(M);
          [EVal|EVec] = .math/blas/matrix/eigen(M);
          .generic/print("blas matrix", M,Det,EVal,EVec);
-
+         */
          .test/result( success )
 .
 
