@@ -28,8 +28,6 @@ import java.util.function.BiFunction;
 
 /**
  * interface for generating non-existing beliefbases views
- *
- * @tparam T agent type
  */
 public interface IViewGenerator extends BiFunction<String, IView, IView>
 {
