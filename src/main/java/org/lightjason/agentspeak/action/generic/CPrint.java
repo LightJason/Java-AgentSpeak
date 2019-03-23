@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.generic;
 
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.common.ISupplier;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -33,7 +34,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
-import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -176,96 +176,17 @@ public final class CPrint extends IBaseAction
                                  return "";
 
                              final IFormatter<?> l_formatter = m_formatter.parallelStream()
-                                                                          .filter( j -> j.isAssignableTo( i.getClass() ) )
+                                                                          .filter( j -> j.get().isAssignableFrom( i.getClass() ) )
                                                                           .limit( 1 )
                                                                           .findFirst()
                                                                           .orElse( null );
 
-                             return Objects.isNull( l_formatter ) ? i.toString() : l_formatter.toString( i );
+                             return Objects.isNull( l_formatter )
+                                    ? i.toString()
+                                    : l_formatter.apply( i );
                          } )
                          .collect( Collectors.joining( m_seperator ) );
     }
 
-    /**
-     * interface of a serializable supplier
-     *
-     * @tparam T supplier type
-     */
-    @FunctionalInterface
-    public interface ISupplier<T> extends Serializable
-    {
-        /**
-         * supplier exception
-         *
-         * @return item
-         *
-         * @throws Exception is thrown on any error
-         */
-        T get() throws Exception;
-    }
-
-
-    /**
-     * formating class
-     *
-     * @tparam any type
-     */
-    public abstract static class IFormatter<T> implements Serializable
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = -4997526550642055213L;
-
-        /**
-         * checks if a type is assigneable
-         *
-         * @param p_class assignable class
-         * @return assignable flag
-         */
-        public final boolean isAssignableTo( final Class<?> p_class )
-        {
-            return this.getType().isAssignableFrom( p_class );
-        }
-
-        @Override
-        public final int hashCode()
-        {
-            return this.getType().hashCode();
-        }
-
-        @Override
-        public final boolean equals( final Object p_object )
-        {
-            return p_object instanceof IFormatter<?> && this.hashCode() == p_object.hashCode();
-        }
-
-        /**
-         * to string
-         *
-         * @param p_data object type
-         * @return output string
-         */
-        @SuppressWarnings( "unchecked" )
-        public final String toString( final Object p_data )
-        {
-            return this.format( (T) p_data );
-        }
-
-        /**
-         * returns type to match the formatter
-         *
-         * @return class type
-         */
-        protected abstract Class<?> getType();
-
-        /**
-         * formatter call
-         *
-         * @param p_data object type
-         * @return formatted string
-         */
-        protected abstract String format( final T p_data );
-    }
 
 }

@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.generic.CPrint;
 import org.lightjason.agentspeak.action.generic.CThrow;
 import org.lightjason.agentspeak.action.generic.CUuid;
+import org.lightjason.agentspeak.action.generic.IBaseFormatter;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -119,17 +120,11 @@ public final class TestCActionGeneric extends IBaseTest
     @Test
     public void printformatter() throws Exception
     {
-        final CPrint.IFormatter<?> l_format1 = new CStringFormatter();
-        final CPrint.IFormatter<?> l_format2 = new CBooleanFormatter();
-
-        Assert.assertFalse( l_format1.equals( l_format2 ) );
-
-
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
         final CPrint l_print = new CPrint( () -> new PrintStream( l_output, false, StandardCharsets.UTF_8 ), "-" );
 
-        l_print.formatter().add( l_format1 );
-        l_print.formatter().add( l_format2 );
+        l_print.formatter().add( new CStringFormatter() );
+        l_print.formatter().add( new CBooleanFormatter() );
 
         Assert.assertTrue(
             execute(
@@ -167,7 +162,7 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test formatter for strings (translate each string to an upper-case string)
      */
-    private static final class CStringFormatter extends CPrint.IFormatter<String>
+    private static final class CStringFormatter extends IBaseFormatter<String>
     {
         /**
          * serial id
@@ -175,7 +170,7 @@ public final class TestCActionGeneric extends IBaseTest
         private static final long serialVersionUID = -8753365775971744734L;
 
         @Override
-        protected final Class<?> getType()
+        public Class<?> get()
         {
             return String.class;
         }
@@ -190,7 +185,7 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test formatter for boolean (translate each boolean to an yes/no string)
      */
-    private static final class CBooleanFormatter extends CPrint.IFormatter<Boolean>
+    private static final class CBooleanFormatter extends IBaseFormatter<Boolean>
     {
         /**
          * serial id
@@ -198,7 +193,7 @@ public final class TestCActionGeneric extends IBaseTest
         private static final long serialVersionUID = -1447139962315061035L;
 
         @Override
-        protected final Class<?> getType()
+        public Class<?> get()
         {
             return Boolean.class;
         }
