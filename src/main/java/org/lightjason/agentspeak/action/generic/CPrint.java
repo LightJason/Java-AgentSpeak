@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,7 +79,7 @@ public final class CPrint extends IBaseAction
     /**
      * list mit individual format calls
      */
-    private final Set<IFormatter<?>> m_formatter;
+    private final Set<IFormatter> m_formatter;
 
     /**
      * ctor
@@ -110,7 +111,7 @@ public final class CPrint extends IBaseAction
      * @param p_formatter formatter elements
      * @throws Exception is thrown on supplierer error
      */
-    public CPrint( @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nonnull final String p_seperator, @Nullable final IFormatter<?>... p_formatter )
+    public CPrint( @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nonnull final String p_seperator, @Nullable final IFormatter... p_formatter )
         throws Exception
     {
         m_streamsupplier = p_streamsupplier;
@@ -144,7 +145,7 @@ public final class CPrint extends IBaseAction
      *
      * @return formatter set
      */
-    public Set<IFormatter<?>> formatter()
+    public Set<IFormatter> formatter()
     {
         return m_formatter;
     }
@@ -175,15 +176,14 @@ public final class CPrint extends IBaseAction
                              if ( Objects.isNull( i ) )
                                  return "";
 
-                             final IFormatter<?> l_formatter = m_formatter.parallelStream()
-                                                                          .filter( j -> j.get().isAssignableFrom( i.getClass() ) )
-                                                                          .limit( 1 )
-                                                                          .findFirst()
-                                                                          .orElse( null );
+                             final Optional<IFormatter> l_formatter = m_formatter.parallelStream()
+                                                                                 .filter( j -> j.get().isAssignableFrom( i.getClass() ) )
+                                                                                 .limit( 1 )
+                                                                                 .findFirst();
 
-                             return Objects.isNull( l_formatter )
-                                    ? i.toString()
-                                    : l_formatter.apply( i );
+                             return l_formatter.isPresent()
+                                    ? l_formatter.get().apply( i )
+                                    : i.toString();
                          } )
                          .collect( Collectors.joining( m_seperator ) );
     }

@@ -32,6 +32,6 @@ import java.util.function.Supplier;
  *
  * @tparam T class type
  */
-public interface IFormatter<T> extends Supplier<Class<?>>, Function<Object, String>
+public interface IFormatter extends Supplier<Class<?>>, Function<Object, String>
 {
 }

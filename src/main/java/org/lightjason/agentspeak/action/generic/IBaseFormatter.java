@@ -31,7 +31,7 @@ import java.io.Serializable;
  *
  * @tparam any type
  */
-public abstract class IBaseFormatter<T> implements Serializable, IFormatter<T>
+public abstract class IBaseFormatter<T> implements Serializable, IFormatter
 {
     /**
      * serial id
@@ -47,15 +47,9 @@ public abstract class IBaseFormatter<T> implements Serializable, IFormatter<T>
     @Override
     public final boolean equals( final Object p_object )
     {
-        return p_object instanceof IBaseFormatter<?> && this.hashCode() == p_object.hashCode();
+        return p_object instanceof IFormatter && this.hashCode() == p_object.hashCode();
     }
 
-    /**
-     * to string
-     *
-     * @param p_data object type
-     * @return output string
-     */
     @Override
     @SuppressWarnings( "unchecked" )
     public final String apply( final Object p_data )
