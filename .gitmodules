@@ -1,3 +1,6 @@
 [submodule "src/main/antlr4"]
 	path = src/main/antlr4
 	url = git@github.com:LightJason/AgentSpeak.git
+[submodule "src/codestyle"]
+	path = src/codestyle
+	url = git@github.com:LightJason/AgentSpeak-Java-CodeStyle.git

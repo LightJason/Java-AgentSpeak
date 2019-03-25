@@ -267,7 +267,7 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>3.1.11</version>
                 <configuration>
-                    <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
+                    <includeFilterFile>src/codestyle/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
                     <maxRank>20</maxRank>
@@ -472,10 +472,10 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <header>src/analysis/license/licensetemplate.txt</header>
+                    <header>src/codestyle/license/licensetemplate.txt</header>
                     <useDefaultExcludes>true</useDefaultExcludes>
                     <headerDefinitions>
-                        <headerDefinition>src/analysis/license/style.xml</headerDefinition>
+                        <headerDefinition>src/codestyle/license/style.xml</headerDefinition>
                     </headerDefinitions>
                     <excludes>
                         <exclude>.dockerignore</exclude>
@@ -624,7 +624,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configLocation>src/analysis/checkstyle/style.xml</configLocation>
+                    <configLocation>src/codestyle/checkstyle/style.xml</configLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
