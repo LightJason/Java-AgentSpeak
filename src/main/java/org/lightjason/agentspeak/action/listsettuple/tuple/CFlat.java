@@ -32,8 +32,8 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -76,7 +76,7 @@ public final class CFlat extends IBaseAction
     )
     {
         p_argument.stream()
-                  .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
+                  .map( ITerm::<Map.Entry<?, ?>>raw )
                   .flatMap( i -> Stream.of( i.getKey(), i.getValue() ) )
                   .map( CRawTerm::of )
                   .forEach( p_return::add );

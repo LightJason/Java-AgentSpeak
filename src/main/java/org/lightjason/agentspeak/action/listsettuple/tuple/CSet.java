@@ -32,8 +32,8 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -80,7 +80,7 @@ public final class CSet extends IBaseAction
 
         l_arguments.stream()
                    .skip( 1 )
-                   .map( ITerm::<AbstractMap.Entry<Object, Object>>raw )
+                   .map( ITerm::<Map.Entry<Object, Object>>raw )
                    .forEach( i -> i.setValue( l_arguments.get( 0 ).raw() ) );
 
         return Stream.of();
