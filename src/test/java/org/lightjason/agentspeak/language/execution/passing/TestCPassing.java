@@ -25,10 +25,10 @@ package org.lightjason.agentspeak.language.execution.passing;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.ArrayList;
 import java.util.Collections;

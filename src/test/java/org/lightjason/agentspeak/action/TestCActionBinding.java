@@ -25,12 +25,12 @@ package org.lightjason.agentspeak.action;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.stream.Stream;
 

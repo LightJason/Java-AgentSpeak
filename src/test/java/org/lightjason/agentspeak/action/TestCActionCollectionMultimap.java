@@ -30,7 +30,6 @@ import com.google.common.collect.Multimaps;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.map.multimap.CAsMap;
 import org.lightjason.agentspeak.action.map.multimap.CCreate;
 import org.lightjason.agentspeak.action.map.multimap.CGetMultiple;
@@ -43,6 +42,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.ArrayList;
 import java.util.Collections;

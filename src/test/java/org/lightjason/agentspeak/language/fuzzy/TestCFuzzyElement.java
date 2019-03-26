@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CWOA;
 import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.fuzzy.set.EFourElement;
 import org.lightjason.agentspeak.language.fuzzy.set.EThreeElement;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
@@ -41,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * test fuzzy structure
  */
-public final class TestCFuzzyElement
+public final class TestCFuzzyElement extends IBaseTest
 {
 
     /**

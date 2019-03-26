@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language;
 import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.error.CTypeNotAssignable;
 import org.lightjason.agentspeak.language.variable.CConstant;
@@ -35,6 +34,7 @@ import org.lightjason.agentspeak.language.variable.CRelocateMutexVariable;
 import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;

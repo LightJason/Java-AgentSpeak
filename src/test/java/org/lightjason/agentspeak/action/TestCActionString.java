@@ -30,7 +30,6 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.string.CBase64Decode;
 import org.lightjason.agentspeak.action.string.CBase64Encode;
 import org.lightjason.agentspeak.action.string.CConcat;
@@ -48,6 +47,7 @@ import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentExcepti
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

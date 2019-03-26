@@ -27,13 +27,13 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.web.graphql.CQueryLiteral;
 import org.lightjason.agentspeak.action.web.graphql.CQueryNative;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.ArrayList;
 import java.util.List;

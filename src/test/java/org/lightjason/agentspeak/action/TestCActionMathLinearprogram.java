@@ -30,7 +30,6 @@ import org.apache.commons.math3.optim.linear.Relationship;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.linearprogram.CCreate;
 import org.lightjason.agentspeak.action.linearprogram.CEquationConstraint;
 import org.lightjason.agentspeak.action.linearprogram.CSolve;
@@ -38,6 +37,7 @@ import org.lightjason.agentspeak.action.linearprogram.CValueConstraint;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.ArrayList;
 import java.util.Collection;

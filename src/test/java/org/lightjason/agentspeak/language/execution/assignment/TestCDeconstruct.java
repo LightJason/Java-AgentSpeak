@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.language.execution.assignment;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collections;
 import java.util.List;

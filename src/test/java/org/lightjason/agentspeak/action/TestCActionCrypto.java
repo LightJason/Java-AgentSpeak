@@ -34,7 +34,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.crypto.CCreateKey;
 import org.lightjason.agentspeak.action.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.crypto.CEncrypt;
@@ -46,6 +45,7 @@ import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentExcepti
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.crypto.KeyGenerator;
 import java.security.Key;

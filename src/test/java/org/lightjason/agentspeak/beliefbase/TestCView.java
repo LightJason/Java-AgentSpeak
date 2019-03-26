@@ -26,12 +26,12 @@ package org.lightjason.agentspeak.beliefbase;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.stream.IntStream;
 

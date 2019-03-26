@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.listsettuple.tuple.CCreate;
 import org.lightjason.agentspeak.action.listsettuple.tuple.CFlat;
 import org.lightjason.agentspeak.action.listsettuple.tuple.CSet;
@@ -33,6 +32,7 @@ import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentExcepti
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

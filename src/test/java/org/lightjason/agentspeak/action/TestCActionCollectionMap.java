@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action;
 import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.map.map.CCreate;
 import org.lightjason.agentspeak.action.map.map.CGetMultiple;
 import org.lightjason.agentspeak.action.map.map.CGetSingle;
@@ -40,6 +39,7 @@ import org.lightjason.agentspeak.action.map.map.CValues;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

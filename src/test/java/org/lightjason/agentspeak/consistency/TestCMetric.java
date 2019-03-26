@@ -27,7 +27,6 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefbase;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
@@ -40,6 +39,7 @@ import org.lightjason.agentspeak.consistency.metric.CWeightedDifference;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collection;
 import java.util.Set;

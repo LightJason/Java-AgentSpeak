@@ -32,7 +32,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.bool.CAllMatch;
 import org.lightjason.agentspeak.action.bool.CAnd;
 import org.lightjason.agentspeak.action.bool.CAnyMatch;
@@ -46,6 +45,7 @@ import org.lightjason.agentspeak.action.bool.CXor;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

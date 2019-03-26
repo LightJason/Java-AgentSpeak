@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.listsettuple.list.CAdd;
 import org.lightjason.agentspeak.action.listsettuple.list.CComplement;
 import org.lightjason.agentspeak.action.listsettuple.list.CCreate;
@@ -47,6 +46,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

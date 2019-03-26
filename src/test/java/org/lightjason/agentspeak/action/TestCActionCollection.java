@@ -34,7 +34,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.listsettuple.CListSetClear;
 import org.lightjason.agentspeak.action.listsettuple.CListSetIsEmpty;
 import org.lightjason.agentspeak.action.listsettuple.CListSetSize;
@@ -43,6 +42,7 @@ import org.lightjason.agentspeak.action.map.CMapIsEmpty;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.text.MessageFormat;
 import java.util.AbstractMap;

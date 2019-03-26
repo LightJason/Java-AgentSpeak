@@ -46,7 +46,6 @@ import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.statistic.CAddStatisticValue;
 import org.lightjason.agentspeak.action.statistic.CClearStatistic;
 import org.lightjason.agentspeak.action.statistic.CCreateDistribution;
@@ -62,6 +61,7 @@ import org.lightjason.agentspeak.action.statistic.CSingleStatisticValue;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.ArrayList;
 import java.util.Collections;

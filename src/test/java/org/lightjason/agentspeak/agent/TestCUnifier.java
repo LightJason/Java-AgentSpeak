@@ -25,11 +25,11 @@ package org.lightjason.agentspeak.agent;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.text.MessageFormat;
 import java.util.Arrays;

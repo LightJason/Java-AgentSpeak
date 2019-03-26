@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.junit.Assert;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;

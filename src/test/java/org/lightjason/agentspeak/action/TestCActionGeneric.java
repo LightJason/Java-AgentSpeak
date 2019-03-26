@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.generic.CPrint;
 import org.lightjason.agentspeak.action.generic.CThrow;
 import org.lightjason.agentspeak.action.generic.CUuid;
@@ -34,6 +33,7 @@ import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
