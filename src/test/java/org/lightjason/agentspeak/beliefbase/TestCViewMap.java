@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import com.codepoetics.protonpack.StreamUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -60,6 +59,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -107,10 +107,18 @@ public final class TestCViewMap extends IBaseTest
     public void initialize() throws IOException
     {
         m_testlog = Collections.synchronizedList( new ArrayList<>() );
-        m_data = new ObjectMapper().readValue(
-            "{ \"val\" : 123, \"str\" : \"text value\", \"logic\" : true, \"obj\" : { \"name\" : \"abcdef\", \"val\" : 357 }, \"ar\" : [1, 3, 5] }",
-            Map.class
-        );
+
+        m_data = new HashMap<>();
+        m_data.put( "val", 123 );
+        m_data.put( "str", "text value" );
+        m_data.put( "logic", true );
+
+        final Map<String, Object> l_data = new HashMap<>();
+        m_data.put( "obj", l_data );
+
+        l_data.put( "name", "abcdef" );
+        l_data.put( "val", 357 );
+        l_data.put( "ar", Stream.of( 1, 3, 5 ).collect( Collectors.toList() ) );
     }
 
     /**
