@@ -31,7 +31,7 @@
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L++)</name>
     <description>AgentSpeak(L++) is a logical programming language of a multi-agent BDI system with a fuzzy-based logical calculus, lambda expressions and parallelization</description>
-    <url>https://github.com/LightJason/AgentSpeak-Java</url>
+    <url>https://github.com/LightJason/Java-AgentSpeak</url>
 
     <organization>
         <name>LightJason</name>
@@ -47,13 +47,13 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/LightJason/AgentSpeak/issues</url>
+        <url>https://github.com/LightJason/Java-AgentSpeak/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/LightJason/AgentSpeak</url>
-        <connection>scm:git:git://github.com:LightJason/AgentSpeak.git</connection>
-        <developerConnection>scm:git:git@github.com:LightJason/AgentSpeak.git</developerConnection>
+        <url>https://github.com/LightJason/Java-AgentSpeak</url>
+        <connection>scm:git:git://github.com:LightJason/Java-AgentSpeak.git</connection>
+        <developerConnection>scm:git:git@github.com:LightJason/Java-AgentSpeak.git</developerConnection>
         <tag>v0.0.1</tag>
     </scm>
 
