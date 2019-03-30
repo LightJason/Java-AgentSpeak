@@ -1,6 +1,6 @@
 # LightJason - AgentSpeak(L++)
 
-![Circle CI](https://img.shields.io/circleci/project/github/LightJason/AgentSpeak-Java.svg) ![Coverage Status](https://img.shields.io/coveralls/github/LightJason/AgentSpeak-Java.svg) ![Maven Central](https://img.shields.io/maven-central/v/org.lightjason/agentspeak.svg)
+![Circle CI](https://img.shields.io/circleci/project/github/LightJason/Java-AgentSpeak.svg) ![Coverage Status](https://img.shields.io/coveralls/github/LightJason/AgentSpeak-Java.svg) ![Maven Central](https://img.shields.io/maven-central/v/org.lightjason/agentspeak.svg)
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini an implementation has been build-up with parallel execution calls. The version defines an additional [AgentSpeak(L)](https://en.wikipedia.org/wiki/AgentSpeak) grammar based on [AntLR](http://www.antlr.org/) for simulating a [multi-agent system](https://en.wikipedia.org/wiki/Multi-agent_system) with a fuzzy-based logical calculus and grammar features like lambda expressions. Agent execution based on a mathematical structure to describe an optimizing process by a [finite-state-machine](https://en.wikipedia.org/wiki/Finite-state_machine)
 
