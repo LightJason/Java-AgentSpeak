@@ -3,7 +3,7 @@
 	url = git@github.com:LightJason/AgentSpeak.git
 [submodule "src/codestyle"]
 	path = src/codestyle
-	url = git@github.com:LightJason/AgentSpeak-Java-CodeStyle.git
+	url = git@github.com:LightJason/Java-CodeStyle.git
 [submodule "src/test/java/org/lightjason/agentspeak/testing"]
 	path = src/test/java/org/lightjason/agentspeak/testing
-	url = git@github.com:LightJason/AgentSpeak-Java-Testing.git
+	url = git@github.com:LightJason/Java-Testing.git
