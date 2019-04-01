@@ -68,7 +68,7 @@ import java.util.stream.Stream;
  * If a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCAgent extends IBaseTest
+public final class TestAsl extends IBaseTest
 {
     /**
      * tag of iteration
@@ -116,11 +116,7 @@ public final class TestCAgent extends IBaseTest
         try
         (
             final Stream<Path> l_walk = Files.walk(
-                Paths.get(
-                        TestCAgent.class.getClassLoader().getResource( "" ).getPath(),
-                        "agent",
-                        "language"
-                )
+                Paths.get( TestAsl.class.getClassLoader().getResource( "" ).getPath(), "asl" )
             )
         )
         {

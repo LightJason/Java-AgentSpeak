@@ -117,7 +117,7 @@ public final class TestCHanoiTowers extends IBaseTest
     {
         this.setup(
             1, 3, 3,
-            "src/test/resources/agent/hanoi.asl", Stream.of() );
+            this.getClass().getClassLoader().getResource( "hanoi.asl" ).getPath(), Stream.of() );
     }
 
 

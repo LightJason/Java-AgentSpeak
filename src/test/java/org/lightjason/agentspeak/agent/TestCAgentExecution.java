@@ -71,7 +71,7 @@ public final class TestCAgentExecution extends IBaseTest
     /**
      * asl source
      */
-    private static final String ASL = "src/test/resources/agent/execution.asl";
+    private static final String ASL = TestCAgentExecution.class.getClassLoader().getResource( "execution.asl" ).getPath();
     /**
      * agent reference
      */
@@ -86,6 +86,7 @@ public final class TestCAgentExecution extends IBaseTest
     private final Multimap<Long, String> m_log = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
      * log results
+     *
      */
     private final Multimap<Long, String> m_result = HashMultimap.create();
 
