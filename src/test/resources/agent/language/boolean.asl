@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing boolean calls
+// @iteration 2
+// @testcount 3
 // -----
 
 // initial-goal

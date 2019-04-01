@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing crypto actions
+// @iteration 2
+// @testcount 9
 // -----
 
 // initial-goal

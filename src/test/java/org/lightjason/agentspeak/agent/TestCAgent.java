@@ -26,8 +26,7 @@ package org.lightjason.agentspeak.agent;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -48,11 +47,18 @@ import org.lightjason.agentspeak.testing.IBaseTest;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.LogManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -64,6 +70,25 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
 {
+    /**
+     * tag of iteration
+     */
+    private static final String ITERATIONNTAG = "@iteration";
+    /**
+     * regex for iteration
+     */
+    private static final Pattern ITERATION = Pattern.compile( ITERATIONNTAG + "\\s+\\d+" );
+    /**
+     * tag of test results
+     */
+    private static final String TESTCOUNTTAG = "@testcount";
+    /**
+     * regex for iteration
+     */
+    private static final Pattern TESTCOUNT = Pattern.compile( TESTCOUNTTAG + "\\s+\\d+" );
+    /**
+     * iteration counter
+     */
     private AtomicInteger m_count;
 
     static
@@ -88,42 +113,65 @@ public final class TestCAgent extends IBaseTest
     @DataProvider
     public static Object[] generate()
     {
-        return Stream.of(
-            new ImmutableTriple<>( "src/test/resources/agent/language/crypto.asl", 2, 9 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/math.asl", 2, 10 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/collection.asl", 2, 5 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/deconstruct.asl", 2, 5 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/lambda.asl", 2, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/datetime.asl", 2, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/boolean.asl", 2, 3 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/string.asl", 2, 5 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/unification.asl", 2, 10 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 3 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/trigger.asl", 3, 21 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/execution.asl", 3, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 5 )
-        ).toArray();
+        try
+        (
+            final Stream<Path> l_walk = Files.walk(
+                Paths.get(
+                        TestCAgent.class.getClassLoader().getResource( "" ).getPath(),
+                        "agent",
+                        "language"
+                )
+            )
+        )
+        {
+            return l_walk.filter( Files::isRegularFile )
+                         .map( Path::toString )
+                         .filter( i -> i.endsWith( ".asl" ) )
+                         .toArray();
+
+        }
+        catch ( final IOException l_exception )
+        {
+            l_exception.printStackTrace();
+            Assert.fail();
+            return Stream.of().toArray();
+        }
     }
 
 
     /**
      * test for default generators and configuration
      *
-     * @param p_asl tripel of asl code, cycles and expected success calls
+     * @param p_file tripel of asl code, cycles and expected success calls
      * @throws Exception on any error
      * @todo must restructured with asl calls and action packages
      */
     @Test
     @Ignore
     @UseDataProvider( "generate" )
-    public void testASLDefault( final Triple<String, Number, Number> p_asl ) throws Exception
+    public void testASLDefault( @Nonnull final String p_file ) throws Exception
     {
         final IAgent<?> l_agent;
+        final int l_iteration;
+        final int l_testcount;
+
         try
         (
-            final InputStream l_stream = new FileInputStream( p_asl.getLeft() )
+            final InputStream l_stream = new FileInputStream( p_file )
         )
         {
+            final String l_source = IOUtils.toString( l_stream, Charset.defaultCharset() );
+
+            final Matcher l_iterationmatch = ITERATION.matcher( l_source );
+            l_iteration = l_iterationmatch.find()
+                          ? Integer.parseInt( l_iterationmatch.group( 0 ).replace( ITERATIONNTAG, "" ).trim() )
+                          : 1;
+
+            final Matcher l_testcountmatcher = TESTCOUNT.matcher( l_source );
+            l_testcount = l_testcountmatcher.find()
+                          ? Integer.parseInt( l_testcountmatcher.group( 0 ).replace( TESTCOUNTTAG, "" ).trim() )
+                          : 0;
+
             l_agent = new CAgentGenerator(
                 l_stream,
 
@@ -147,16 +195,16 @@ public final class TestCAgent extends IBaseTest
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
-            Assert.fail( p_asl.getLeft() );
+            Assert.fail( p_file );
             return;
         }
 
-        IntStream.range( 0, p_asl.getMiddle().intValue() )
+        IntStream.range( 0, l_iteration )
                  .forEach( i -> agentcycle( l_agent ) );
 
         Assert.assertEquals(
-            MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ),
-            p_asl.getRight().longValue(),
+            MessageFormat.format( "{0} {1}", "number of tests", p_file ),
+            l_testcount,
             m_count.get()
         );
 

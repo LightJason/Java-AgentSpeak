@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing webservices actions
+// @iteration 4
+// @testcount 5
 // -----
 
 // initial-goal

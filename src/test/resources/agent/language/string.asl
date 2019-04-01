@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing string calls
+// @iteration 2
+// @testcount 5
 // -----
 
 // initial-goal

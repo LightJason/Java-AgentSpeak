@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing expression execution
+// @iteration 3
+// @testcount 4
 // -----
 
 // initial-goal

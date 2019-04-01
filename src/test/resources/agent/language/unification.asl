@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing generic structures and actions
+// @iteration 2
+// @testcount 10
 // -----
 
 

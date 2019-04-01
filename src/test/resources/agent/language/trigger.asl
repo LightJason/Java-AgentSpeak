@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing trigger execution
+// @iteration 2
+// @testcount 21
 // -----
 
 // initial-goal

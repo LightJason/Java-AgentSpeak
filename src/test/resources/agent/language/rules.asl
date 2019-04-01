@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing rules
+// @iteration 2
+// @testcount 3
 // -----
 
 // initial-goal

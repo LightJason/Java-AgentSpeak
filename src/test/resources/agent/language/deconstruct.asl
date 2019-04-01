@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing deconstruct operator
+// @iteration 2
+// @testcount 5
 // -----
 
 // initial-goal

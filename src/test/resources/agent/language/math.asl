@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing math actions
+// @iteration 2
+// @testcount 10
 // -----
 
 // initial-goal

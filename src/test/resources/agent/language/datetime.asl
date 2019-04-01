@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing datetime calls
+// @iteration 2
+// @testcount 1
 // -----
 
 // initial-goal

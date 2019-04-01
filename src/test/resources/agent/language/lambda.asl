@@ -23,6 +23,8 @@
 
 // -----
 // agent for testing lambda expression
+// @iteration 2
+// @testcount 1
 // -----
 
 // initial-goal
