@@ -54,17 +54,13 @@ public final class CActionGenerator implements IActionGenerator
      * agent classes with action
      */
     private final Set<Class<?>> m_classes;
-    /**
-     * use caching
-     */
-    private final boolean m_usecache;
 
     /**
      * ctor
      */
     public CActionGenerator()
     {
-        this( Stream.of(), Stream.of(), true );
+        this( Stream.of(), Stream.of() );
     }
 
     /**
@@ -74,18 +70,7 @@ public final class CActionGenerator implements IActionGenerator
      */
     public CActionGenerator( @NonNull final Stream<String> p_packages )
     {
-        this( p_packages, Stream.of(), true );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_packages list of packages
-     * @param p_usecache caching results
-     */
-    public CActionGenerator( @NonNull final Stream<String> p_packages, final boolean p_usecache )
-    {
-        this( p_packages, Stream.of(), p_usecache );
+        this( p_packages, Stream.of() );
     }
 
     /**
@@ -93,11 +78,9 @@ public final class CActionGenerator implements IActionGenerator
      *
      * @param p_packages list of packages
      * @param p_class list of agent classes
-     * @param p_usecache caching results
      */
-    public CActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_class, boolean p_usecache )
+    public CActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_class )
     {
-        m_usecache = p_usecache;
         m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
         m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
     }
@@ -106,28 +89,18 @@ public final class CActionGenerator implements IActionGenerator
     @Override
     public IAction apply( @NonNull final IPath p_path )
     {
-        if ( !m_usecache )
-            return Stream.concat(
-                CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) ),
-                CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
-            ).filter( i -> i.name().equals( p_path ) )
-            .findFirst()
-            .orElseThrow( () -> new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) ) );
-        else
-        {
-            // get action from cache
-            if ( m_actions.containsKey( p_path ) )
-                return m_actions.get( p_path );
+        // get action from cache
+        if ( m_actions.containsKey( p_path ) )
+            return m_actions.get( p_path );
 
-            final Optional<IAction> l_action = Stream.concat(
-                CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) ),
-                CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
-            ).filter( i -> i.name().equals( p_path ) ).peek( i -> m_actions.putIfAbsent( i.name(), i ) ).findFirst();
+        final Optional<IAction> l_action = Stream.concat(
+            CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) ),
+            CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
+        ).filter( i -> i.name().equals( p_path ) ).peek( i -> m_actions.putIfAbsent( i.name(), i ) ).findFirst();
 
-            if ( l_action.isEmpty() )
-                throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
+        if ( l_action.isEmpty() )
+            throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
 
-            return l_action.get();
-        }
+        return l_action.get();
     }
 }
