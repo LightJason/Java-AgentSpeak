@@ -60,48 +60,48 @@ foo(blub(1),hello("test")).
 +!testunification <-
         // unify default
         >>hello( UN1 );
-        .generic/print( "first unification", UN1 );
-        .test/result( .bool/equal( UN1, 123 ), "first unification has been failed" );
+        .test/print( "first unification", UN1 );
+        .test/result( .test/equal( UN1, 123 ), "first unification has been failed" );
 
         // unify subitem
         >>foo( blub(1), hello( UN2 ) );
-        .generic/print( "second unification", UN2 );
-        .test/result( .bool/equal( UN2, "test" ), "second unification has been failed" );
+        .test/print( "second unification", UN2 );
+        .test/result( .test/equal( UN2, "test" ), "second unification has been failed" );
 
         // unify two items
         >>foo( blub( UN3a ), hello( UN3b ) );
-        .generic/print( "third unification", UN3a, UN3b );
-        .test/result( .bool/equal( UN3a, 1 ), "third unification first part has been failed" );
-        .test/result( .bool/equal( UN3b, "test" ), "third unification second part has been failed" );
+        .test/print( "third unification", UN3a, UN3b );
+        .test/result( .test/equal( UN3a, 1 ), "third unification first part has been failed" );
+        .test/result( .test/equal( UN3b, "test" ), "third unification second part has been failed" );
 
         // unify by parsing literal
         Literal = foo(12345);
         >>( foo(UN4), Literal );
-        .generic/print( "forth unification", UN4 );
-        .test/result( .bool/equal( UN4, 12345 ), "forth unification has been failed" );
+        .test/print( "forth unification", UN4 );
+        .test/result( .test/equal( UN4, 12345 ), "forth unification has been failed" );
 
         // recursive unification
         >>foo( UN5a, UN5b );
-        .generic/print( "fifth unification", UN5a, UN5b );
-        .test/result( .bool/equal( .generic/type/tostring(UN5a), "blub[1.0]" ), "fifth unification first part has been failed" );
-        .test/result( .bool/equal( .generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
+        .test/print( "fifth unification", UN5a, UN5b );
+        .test/result( .test/equal( .test/tostring(UN5a), "blub[1.0]" ), "fifth unification first part has been failed" );
+        .test/result( .test/equal( .test/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
 
         // unify with expression
-        >>( hello( UN6 ), .generic/type/isstring(UN6) );
-        .generic/print( "sixth unification", UN6 );
-        .test/result( .bool/equal( UN6, "foo" ), "sixth unification has been failed" );
+        >>( hello( UN6 ), .test/is( "java.lang.String", UN6) );
+        .test/print( "sixth unification", UN6 );
+        .test/result( .test/equal( UN6, "foo" ), "sixth unification has been failed" );
 
         // parallel unfiy with expression
-        @>>( hello( UN7 ), .generic/type/isnumeric(UN7) && UN7 > 1000 );
-        .generic/print( "seventh unification", UN7 );
-        .test/result( .bool/equal( UN7, 1111 ), "seventh unification has been failed" );
+        @>>( hello( UN7 ), .test/is( "java.lang.Number", UN7) && UN7 > 1000 );
+        .test/print( "seventh unification", UN7 );
+        .test/result( .test/equal( UN7, 1111 ), "seventh unification has been failed" );
 
         // failing unify
         >>notexist( UN8 ) << true;
-        .generic/type/isnull( UN8 );
-        .generic/print( "eighth unification successful" );
+        .test/is( "null", UN8 );
+        .test/print( "eighth unification successful" );
         .test/result( success, "eighth unification has been failed" );
-        .generic/print("unification executed completly")
+        .test/print("unification executed completly")
 .
 
 
@@ -110,12 +110,12 @@ foo(blub(1),hello("test")).
  */
 +!testunifyany
     : >>hello(X) <-
-        .generic/print( "first unifyany:", X );
-        .test/result( .bool/equal( X, 123 ), "first unifyany failed" )
-        .generic/print("unify any first executed completly")
+        .test/print( "first unifyany:", X );
+        .test/result( .test/equal( X, 123 ), "first unifyany failed" )
+        .test/print("unify any first executed completly")
 
     : ~>>foobar( _ ) <-
-        .generic/print( "second unifyany" );
+        .test/print( "second unifyany" );
         .test/result( success );
-        .generic/print("unify any second executed completly")
+        .test/print("unify any second executed completly")
 .

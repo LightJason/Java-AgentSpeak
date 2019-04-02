@@ -88,7 +88,7 @@
  * add belief trigger
  **/
 +delbelief(X) <-
-    .test/result( .bool/equal( X, "test" ) );
+    .test/result( .test/equal( X, "test" ) );
     -delbelief(X)
 .
 
@@ -96,7 +96,7 @@
  * delete belief
  **/
 -delbelief(X) <-
-    .test/result( .bool/equal( X, "test" ) )
+    .test/result( .test/equal( X, "test" ) )
 .
 
 
@@ -127,15 +127,15 @@
  * goal with one parameter
  **/
 +!goaloneparameter(X) <-
-    .test/result( .bool/equal(X, 1) )
+    .test/result( .test/equal(X, 1) )
 .
 
 /**
  * goal with two parameter
  **/
 +!goaltwoparameter(X, Y) <-
-    .test/result( .bool/equal(X, 1) );
-    .test/result( .bool/equal(Y, 2) )
+    .test/result( .test/equal(X, 1) );
+    .test/result( .test/equal(Y, 2) )
 .
 
 /**
@@ -146,15 +146,15 @@
 .
 
 -!goaltwoparametererror(X, Y) <-
-    .test/result( .bool/equal(X, 2) );
-    .test/result( .bool/equal(Y, 3) )
+    .test/result( .test/equal(X, 2) );
+    .test/result( .test/equal(Y, 3) )
 .
 
 /**
  * goal with condition
  **/
 +!goalconditionone(X)
-    : X < 10 <- .test/result( .bool/equal(X, 5) )
+    : X < 10 <- .test/result( .test/equal(X, 5) )
 .
 
 /**
@@ -162,18 +162,18 @@
  **/
 +!goalconditiontwo(X, Y)
     : X < Y <-
-        .test/result( .bool/equal(X, 8) );
-        .test/result( .bool/equal(Y, 9) )
+        .test/result( .test/equal(X, 8) );
+        .test/result( .test/equal(Y, 9) )
 .
 
 /**
  * goal with euqal name
  **/
 +!equalname( X ) <-
-    .test/result( .bool/equal(X, "foobar") )
+    .test/result( .test/equal(X, "foobar") )
 .
 
 +!equalname( X, Y ) <-
-    .test/result( .bool/equal(X, "foo") );
-    .test/result( .bool/equal(Y, "bar") )
+    .test/result( .test/equal(X, "foo") );
+    .test/result( .test/equal(Y, "bar") )
 .

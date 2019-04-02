@@ -36,20 +36,20 @@
  */
 +!test <-
         [O|P] =.. foo( blub(1), blah(3) );
-        .generic/print("first deconstruct", O, P);
-        .test/result( .bool/equal( O, "foo" ), "first deconstruct has been failed" );
+        .test/print("first deconstruct", O, P);
+        .test/result( .test/equal( O, "foo" ), "first deconstruct has been failed" );
 
         [H|I] = P;
         [A|C] =.. H;
         [B|D] =.. I;
 
-        .generic/print("second deconstruct", H, I, A, C, B, D);
+        .test/print("second deconstruct", H, I, A, C, B, D);
 
-        .test/result( .bool/equal( A, "blub" ), "second deconstruct has been failed" );
-        .test/result( .bool/equal( B, "blah" ), "third deconstruct has been failed" );
+        .test/result( .test/equal( A, "blub" ), "second deconstruct has been failed" );
+        .test/result( .test/equal( B, "blah" ), "third deconstruct has been failed" );
 
-        .test/result( .bool/equal( .collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
-        .test/result( .bool/equal( .collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
+        .test/result( .test/equal( .collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
+        .test/result( .test/equal( .collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
 
-        .generic/print("deconstruct executed completly")
+        .test/print("deconstruct executed completly")
 .

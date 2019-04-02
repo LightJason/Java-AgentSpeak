@@ -51,7 +51,7 @@ factorial(N,R)
     :- N--; $factorial(N,O); R = R * O
 .
 
-myfunction(X) :- .generic/print("my logical rule", X).
+myfunction(X) :- .test/print("my logical rule", X).
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ myfunction(X) :- .generic/print("my logical rule", X).
     $fibonacci(8, FIB);
     R = FIB == 21.0;
     .test/result( R, "rule direct call has been failed" );
-    .generic/print("rule execution (fibonacci)", FIB )
+    .test/print("rule execution (fibonacci)", FIB )
 .
 
 
@@ -95,5 +95,5 @@ myfunction(X) :- .generic/print("my logical rule", X).
     $.RULE(8,FIB);
     R = FIB == 21.0;
     .test/result( R, "rule variable call has been failed" );
-    .generic/print("rule execution (fibonacci)", FIB )
+    .test/print("rule execution (fibonacci)", FIB )
 .

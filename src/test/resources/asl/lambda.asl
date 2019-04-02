@@ -36,18 +36,18 @@
  */
 +!test <-
     L = .collection/list/range(1, 20);
-    (L) -> Y : .generic/print( "lambda value", Y);
+    (L) -> Y : .test/print( "lambda value", Y);
 
     @(L) -> Y | R : R = Y+1;
-    .generic/print("lambda return", R);
+    .test/print("lambda return", R);
 
     //BL = .agent/belieflist( "hallo" );
-    //(BL) -> Y : .generic/print( "lambda belief items", Y);
+    //(BL) -> Y : .test/print( "lambda belief items", Y);
 
 
     //PL = .agent/planlist;
-    //(PL) -> Y : .generic/print( "lambda plan items", Y);
+    //(PL) -> Y : .test/print( "lambda plan items", Y);
 
     .test/result( success );
-    .generic/print("lambda executed completly")
+    .test/print("lambda executed completly")
 .
