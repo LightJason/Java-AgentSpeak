@@ -66,9 +66,9 @@ nexttower(T) :-
     : .tower/size(TowerMaxIndex) != SliceCount
         <-
             // try to get a slice from tower
-            .generic/print( "agent", MyID, "tries to take slice from tower", T );
+            .test/print( "agent", MyID, "tries to take slice from tower", T );
             S = .tower/pop( T );
-            .generic/print( "agent", MyID, "gets", S, "from tower", T );
+            .test/print( "agent", MyID, "gets", S, "from tower", T );
 
             // move the slice clockwise and push it if possible
             $nexttower( T );
@@ -78,7 +78,7 @@ nexttower(T) :-
     // all slices are moved so stop execution
     : .tower/size(TowerMaxIndex) == SliceCount
         <-
-            .generic/print( "everything done" );
+            .test/print( "everything done" );
             .stop
 .
 
@@ -90,7 +90,7 @@ nexttower(T) :-
  **/
 -!slice/take( T )
     <-
-        .generic/print( "agent", MyID, "cannot take slice from tower", T );
+        .test/print( "agent", MyID, "cannot take slice from tower", T );
         $nexttower( T );
         !slice/take( T )
 .
@@ -105,9 +105,9 @@ nexttower(T) :-
 +!slice/push( T, S )
     <-
         // try to push the slice on tower
-        .generic/print( "agent", MyID, "tries to push on tower", T, S );
+        .test/print( "agent", MyID, "tries to push on tower", T, S );
         .tower/push( T, S );
-        .generic/print( "agent", MyID, "pushs on tower", T, S, "successfully" );
+        .test/print( "agent", MyID, "pushs on tower", T, S, "successfully" );
 
         // pushing is successful, just go to the next tower clockwise
         $nexttower( T );
@@ -123,7 +123,7 @@ nexttower(T) :-
  **/
 -!slice/push( T, S )
     <-
-        .generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
+        .test/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
 
         // just try next tower counter
         $nexttower( T );

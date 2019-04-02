@@ -45,6 +45,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
+import org.lightjason.agentspeak.testing.action.CTestPrint;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -267,12 +268,10 @@ public final class TestCHanoiTowers extends IBaseTest
                                 new CTowerPush( FAILPROBABILITY ),
                                 new CTowerPop(),
                                 new CTowerSize(),
-                                new CStop()
+                                new CStop(),
+                                new CTestPrint( PRINTENABLE )
                             ),
-                            Stream.concat(
-                                p_action,
-                                PRINTENABLE ? Stream.of() : Stream.of( new CEmptyPrint() )
-                            )
+                            p_action
                         ),
                         CCommon.actionsFromPackage()
                     )
@@ -300,39 +299,6 @@ public final class TestCHanoiTowers extends IBaseTest
         public CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration, (int) p_data[0] );
-        }
-    }
-
-    /**
-     * empty print action
-     */
-    private static final class CEmptyPrint extends IBaseAction
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 3623170719805419082L;
-
-        @Nonnull
-        @Override
-        public IPath name()
-        {
-            return CPath.of( "generic/print" );
-        }
-
-        @Nonnegative
-        @Override
-        public int minimalArgumentNumber()
-        {
-            return 0;
-        }
-
-        @Nonnull
-        @Override
-        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-        {
-            return Stream.of();
         }
     }
 

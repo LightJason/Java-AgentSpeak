@@ -299,7 +299,7 @@ public final class TestCAgentExecution extends IBaseTest
         @Override
         public IPath name()
         {
-            return CPath.of( "log" );
+            return CPath.of( "test/log" );
         }
 
         @Nonnegative
