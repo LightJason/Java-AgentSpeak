@@ -35,7 +35,7 @@
  * base test for staring executions
  */
 +!test <-
-    .log( "main" );
+    .test/log( "main" );
 
     !doublecall;
     !doublecall;
@@ -55,14 +55,14 @@
  * double plan call but single execution
  */
 +!doublecall <-
-    .log("single run")
+    .test/log("single run")
 .
 
 /**
  * called mutiple times
  */
 +!multiple(X) <-
-    .log(X);
+    .test/log(X);
     !single
 .
 
@@ -70,7 +70,7 @@
  * called single times
  */
 +!single <-
-    .log("single");
+    .test/log("single");
     .stop
 .
 
@@ -78,19 +78,19 @@
  * test plan
  */
 +!twovaluesequaltype(X,Y) <-
-    .log("twovalues equal type")
+    .test/log("twovalues equal type")
 .
 
 /**
  * test plan
  */
 +!twovaluesdiffenttype(N,M) <-
-    .log("twovalues different type")
+    .test/log("twovalues different type")
 .
 
 /**
  * test plan
  */
 +!twovaluesliteral(X, foo(Y)) <-
-    .log("twovalues with literal")
+    .test/log("twovalues with literal")
 .
