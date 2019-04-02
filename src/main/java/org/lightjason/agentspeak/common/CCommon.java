@@ -53,6 +53,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -402,8 +403,9 @@ public final class CCommon
     @Nonnull
     private static String languagelabel( final Class<?> p_class, final String p_label )
     {
-        return ( p_class.getCanonicalName().toLowerCase( Locale.ROOT ) + "." + p_label.toLowerCase( Locale.ROOT ) ).replaceAll( "[^a-zA-Z0-9_.]+", "" ).replace(
-            PACKAGEROOT + ".", "" );
+        return ( p_class.getCanonicalName().toLowerCase( Locale.ROOT ) + "." + p_label.toLowerCase( Locale.ROOT ) )
+            .replaceAll( "[^a-zA-Z0-9_.]+", "" )
+            .replace( PACKAGEROOT + ".", "" );
     }
 
     // --- resource utf-8 encoding -----------------------------------------------------------------------------------------------------------------------------
