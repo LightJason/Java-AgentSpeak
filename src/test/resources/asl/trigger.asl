@@ -23,7 +23,7 @@
 
 // -----
 // agent for testing trigger execution
-// @iteration 2
+// @iteration 3
 // @testcount 21
 // -----
 

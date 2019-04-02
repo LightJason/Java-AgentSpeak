@@ -48,8 +48,8 @@
         .test/result( .test/equal( A, "blub" ), "second deconstruct has been failed" );
         .test/result( .test/equal( B, "blah" ), "third deconstruct has been failed" );
 
-        .test/result( .test/equal( .collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
-        .test/result( .test/equal( .collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
+        .test/result( .test/equal( .test/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
+        .test/result( .test/equal( .test/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
 
         .test/print("deconstruct executed completly")
 .
