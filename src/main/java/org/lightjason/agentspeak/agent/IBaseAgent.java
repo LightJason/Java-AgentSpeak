@@ -395,6 +395,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @param p_trigger trigger stream
      * @return collection with excutable plans, instantiated execution context and plan statistic
+     * @todo after plan instantiation and condition failing a new hierarchal plan must be tried
      */
     @Nonnull
     private Collection<Pair<IPlanStatistic, IContext>> generateexecution( @Nonnull final Stream<ITrigger> p_trigger )
