@@ -54,7 +54,6 @@ public abstract class IBaseVariable<T> implements IVariable<T>
      */
     private final boolean m_any;
 
-
     /**
      * ctor
      *
@@ -103,6 +102,12 @@ public abstract class IBaseVariable<T> implements IVariable<T>
     public final boolean any()
     {
         return m_any;
+    }
+
+    @Override
+    public final boolean hasShallowcopywithoutsuffix()
+    {
+        return m_functor.size() > 1;
     }
 
     @Nonnull

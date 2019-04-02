@@ -56,4 +56,21 @@ public interface IShallowCopy<T> extends ICopy
     @Nonnull
     T shallowcopysuffix();
 
+    /**
+     * clones the object (shallow-copy)
+     * without suffix
+     *
+     * @return new instance of the object without suffix
+     */
+    @Nonnull
+    T shallowcopywithoutsuffix();
+
+    /**
+     * checks if a shallow-copy with
+     * suffix removement possible
+     *
+     * @return flag if a copy without suffix is possible
+     */
+    boolean hasShallowcopywithoutsuffix();
+
 }

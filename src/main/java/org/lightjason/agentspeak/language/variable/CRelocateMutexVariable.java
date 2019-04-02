@@ -140,6 +140,13 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
 
     @Nonnull
     @Override
+    public IVariable<T> shallowcopywithoutsuffix()
+    {
+        return new CRelocateMutexVariable<>( m_functor.remove( m_functor.size() - 1 ), m_relocate, m_value.get() );
+    }
+
+    @Nonnull
+    @Override
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CRelocateMutexVariable<>(

@@ -145,6 +145,19 @@ public final class CTrigger implements ITrigger
         return new CTrigger( m_event, m_literal.shallowcopysuffix() );
     }
 
+    @Nonnull
+    @Override
+    public ITrigger shallowcopywithoutsuffix()
+    {
+        return new CTrigger( m_event, m_literal.shallowcopywithoutsuffix() );
+    }
+
+    @Override
+    public boolean hasShallowcopywithoutsuffix()
+    {
+        return m_literal.hasShallowcopywithoutsuffix();
+    }
+
     @Override
     public int compareTo( @Nonnull final ITrigger p_other )
     {

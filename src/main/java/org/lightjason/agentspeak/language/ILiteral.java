@@ -163,6 +163,19 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
             return this;
         }
 
+        @Nonnull
+        @Override
+        public ILiteral shallowcopywithoutsuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public boolean hasShallowcopywithoutsuffix()
+        {
+            return false;
+        }
+
         @Override
         public int structurehash()
         {

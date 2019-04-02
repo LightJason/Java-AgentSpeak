@@ -401,7 +401,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         return p_trigger
             // get all possible plans
-            .flatMap( i -> m_plans.get( i ).stream().map( j -> new ImmutablePair<>( i, j ) ) )
+            .flatMap( i -> this.hierarchicalplan( i ).map( j -> new ImmutablePair<>( i, j ) ) )
             .parallel()
             // tries to unifier trigger literal and filter of valid unification (returns set of unified variables)
             .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, i.getLeft(), i.getRight().plan().trigger() ) ) )
@@ -414,6 +414,22 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // collectors-call must be toList not toSet because plan-execution can be have equal elements
             // so a set avoid multiple plan-execution
             .collect( Collectors.toList() );
+    }
+
+    /**
+     * creates a hierarchical plan structure
+     *
+     * @param p_trigger trigger
+     * @return stream of matching plans
+     */
+    private Stream<IPlanStatistic> hierarchicalplan( @Nonnull final ITrigger p_trigger )
+    {
+        if ( m_plans.containsKey( p_trigger ) )
+            return m_plans.get( p_trigger ).stream();
+
+        return p_trigger.hasShallowcopywithoutsuffix()
+               ? this.hierarchicalplan( p_trigger.shallowcopywithoutsuffix() )
+               : Stream.of();
     }
 
     /**

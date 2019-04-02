@@ -394,16 +394,8 @@ public final class CLiteral implements ILiteral
     public ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
-
-               ? new CLiteral(
-            m_at, m_negated, m_functor,
-            m_values.values()
-        )
-
-               : new CLiteral(
-                   m_at, m_negated, p_prefix[0].append( m_functor ),
-                   m_values.values()
-               );
+               ? new CLiteral( m_at, m_negated, m_functor, m_values.values() )
+               : new CLiteral( m_at, m_negated, p_prefix[0].append( m_functor ), m_values.values() );
     }
 
     @Nonnull
@@ -414,6 +406,19 @@ public final class CLiteral implements ILiteral
             m_at, m_negated, CPath.of( m_functor.suffix() ),
             m_values.values()
         );
+    }
+
+    @Nonnull
+    @Override
+    public ILiteral shallowcopywithoutsuffix()
+    {
+        return new CLiteral( m_at, m_negated, m_functor.remove( m_functor.size() - 1 ), m_orderedvalues );
+    }
+
+    @Override
+    public boolean hasShallowcopywithoutsuffix()
+    {
+        return m_functor.size() > 1;
     }
 
     @Override
@@ -433,28 +438,15 @@ public final class CLiteral implements ILiteral
     public synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
-
-               ?
-               new CLiteral(
-                   m_at, m_negated, m_functor,
-                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
-               )
-
-               :
-               new CLiteral(
-                   m_at, m_negated, p_prefix[0].append( m_functor ),
-                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
-               );
+               ? new CLiteral( m_at, m_negated, m_functor, m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ) )
+               : new CLiteral( m_at, m_negated, p_prefix[0].append( m_functor ), m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ) );
     }
 
     @Nonnull
     @Override
     public synchronized ITerm deepcopysuffix()
     {
-        return new CLiteral(
-            m_at, m_negated, CPath.of( m_functor.suffix() ),
-            m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
-        );
+        return new CLiteral( m_at, m_negated, CPath.of( m_functor.suffix() ), m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ) );
     }
 
 

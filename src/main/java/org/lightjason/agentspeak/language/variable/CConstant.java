@@ -92,6 +92,13 @@ public final class CConstant<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
+    public IVariable<T> shallowcopywithoutsuffix()
+    {
+        return new CConstant<>( m_functor.remove( m_functor.size() - 1 ), m_value );
+    }
+
+    @Nonnull
+    @Override
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CConstant<>(

@@ -118,6 +118,13 @@ public final class CMutexVariable<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
+    public IVariable<T> shallowcopywithoutsuffix()
+    {
+        return new CMutexVariable<>( m_functor.remove( m_functor.size() - 1 ), m_value.get() );
+    }
+
+    @Nonnull
+    @Override
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CMutexVariable<>(

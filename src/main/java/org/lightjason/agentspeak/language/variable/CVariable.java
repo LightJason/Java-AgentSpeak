@@ -116,6 +116,13 @@ public final class CVariable<T> extends IBaseVariable<T>
 
     @Nonnull
     @Override
+    public IVariable<T> shallowcopywithoutsuffix()
+    {
+        return new CVariable<>( m_functor.remove( m_functor.size() - 1 ), m_value );
+    }
+
+    @Nonnull
+    @Override
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CVariable<>(

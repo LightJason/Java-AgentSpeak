@@ -141,6 +141,13 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
 
     @Nonnull
     @Override
+    public IVariable<T> shallowcopywithoutsuffix()
+    {
+        return new CRelocateVariable<>( m_functor.remove( m_functor.size() - 1 ), m_relocate, m_value );
+    }
+
+    @Nonnull
+    @Override
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CRelocateVariable<>(

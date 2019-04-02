@@ -75,6 +75,19 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
             return this;
         }
 
+        @Nonnull
+        @Override
+        public ITrigger shallowcopywithoutsuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public boolean hasShallowcopywithoutsuffix()
+        {
+            return false;
+        }
+
         @Override
         public int compareTo( @Nonnull final ITrigger p_trigger )
         {

@@ -105,6 +105,19 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
 
         @Nonnull
         @Override
+        public IVariable<Object> shallowcopywithoutsuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public boolean hasShallowcopywithoutsuffix()
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
         public String functor()
         {
             return "";
