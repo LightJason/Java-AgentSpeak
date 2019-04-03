@@ -169,19 +169,6 @@
         </dependency>
 
 
-        <!-- math structures -->
-        <dependency>
-            <groupId>net.sourceforge.parallelcolt</groupId>
-            <artifactId>parallelcolt</artifactId>
-            <version>0.10.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6.1</version>
-        </dependency>
-
         <!-- checking -->
         <dependency>
             <groupId>com.github.spotbugs</groupId>
