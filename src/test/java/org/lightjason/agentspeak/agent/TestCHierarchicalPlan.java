@@ -99,7 +99,43 @@ public final class TestCHierarchicalPlan extends IBaseTest
     }
 
     /**
-     * generates a single agnet
+     * test plan on condition fail
+     *
+     * @throws Exception on parsing error
+     */
+    @Test
+    public void hierarchicalfail() throws Exception
+    {
+        final List<Object> l_log = new ArrayList<>();
+        final IAgent<?> l_agent = agent( "+!foo <- .test/log(1). +!foo/bar : false <- .test/log(2).", l_log );
+
+        l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar" ) ), true ).forEach( i ->
+        {
+        } );
+
+        Assert.assertArrayEquals( Stream.of( 1D ).toArray(), l_log.toArray() );
+    }
+
+    /**
+     * test plan on condition fail
+     *
+     * @throws Exception on parsing error
+     */
+    @Test
+    public void multiplehierarchicalfail() throws Exception
+    {
+        final List<Object> l_log = new ArrayList<>();
+        final IAgent<?> l_agent = agent( "+!foo <- .test/log(1). +!foo/bar : false <- .test/log(2) <- .test/log(3).", l_log );
+
+        l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar" ) ), true ).forEach( i ->
+        {
+        } );
+
+        Assert.assertArrayEquals( Stream.of( 1D, 3D ).toArray(), l_log.toArray() );
+    }
+
+    /**
+     * generates a single agent
      *
      * @param p_asl asl
      * @param p_log log structure

@@ -31,7 +31,6 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
@@ -51,6 +50,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.bundle.IFuzzyBundle;
 import org.lightjason.agentspeak.language.unifier.IUnifier;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -330,7 +330,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // run plan immediatly and return
         if ( Objects.nonNull( p_immediately ) && p_immediately.length > 0 && p_immediately[0] )
-            return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
+            return this.executing( this.generateexecution( Stream.of( p_trigger ) ) );
 
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
         synchronized ( this )
@@ -355,7 +355,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         m_fuzzy.update( this );
 
         // clear running plan- and trigger list and execute elements
-        this.execute( this.generateexecutionlist() )
+        this.executing( this.generateexecutionlist() )
             .forEach( i ->
             {
             } );
@@ -395,42 +395,51 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @param p_trigger trigger stream
      * @return collection with excutable plans, instantiated execution context and plan statistic
-     * @todo after plan instantiation and condition failing a new hierarchal plan must be tried
      */
     @Nonnull
     private Collection<Pair<IPlanStatistic, IContext>> generateexecution( @Nonnull final Stream<ITrigger> p_trigger )
     {
-        return p_trigger
-            // get all possible plans
-            .flatMap( i -> this.hierarchicalplan( i ).map( j -> new ImmutablePair<>( i, j ) ) )
-            .parallel()
-            // tries to unifier trigger literal and filter of valid unification (returns set of unified variables)
-            .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, i.getLeft(), i.getRight().plan().trigger() ) ) )
-            // check if unification was possible
-            .filter( i -> i.getRight().getLeft() )
-            // create execution context
-            .map( i -> CCommon.instantiateplan( i.getLeft().getRight(), this, i.getRight().getRight() ) )
-            // check plan-condition
-            .filter( i -> i.getLeft().plan().condition( i.getRight() ) )
-            // collectors-call must be toList not toSet because plan-execution can be have equal elements
-            // so a set avoid multiple plan-execution
-            .collect( Collectors.toList() );
+        return p_trigger.flatMap( this::planfinder ).collect( Collectors.toList() );
     }
 
     /**
-     * creates a hierarchical plan structure
+     * searchs a plan based on the given trigger, if no plan is found
+     * reduce the trigger literal (suffix will be removed) and try to
+     * find plan again, if a plan is found rin instantiation
      *
      * @param p_trigger trigger
      * @return stream of matching plans
      */
-    private Stream<IPlanStatistic> hierarchicalplan( @Nonnull final ITrigger p_trigger )
+    private Stream<Pair<IPlanStatistic, IContext>> planfinder( @Nonnull final ITrigger p_trigger )
     {
         if ( m_plans.containsKey( p_trigger ) )
-            return m_plans.get( p_trigger ).stream();
+            return m_plans.get( p_trigger ).stream().flatMap( i -> this.planinstantiation( p_trigger, i ) );
 
         return p_trigger.hasShallowcopywithoutsuffix()
-               ? this.hierarchicalplan( p_trigger.shallowcopywithoutsuffix() )
+               ? this.planfinder( p_trigger.shallowcopywithoutsuffix() )
                : Stream.of();
+    }
+
+    /**
+     * instantiate a plan and check the plan condition
+     * if the condition fails the trigger literal is reduced
+     * (suffix will be removed) and a plan will be searched
+     *
+     * @param p_trigger trigger
+     * @param p_planstatistic plan for instantiation
+     * @return instantiated plans with execution context
+     */
+    private Stream<Pair<IPlanStatistic, IContext>> planinstantiation( @Nonnull final ITrigger p_trigger, @Nonnull final IPlanStatistic p_planstatistic )
+    {
+        final Pair<Boolean, Set<IVariable<?>>> l_result = CCommon.unifytrigger( m_unifier, p_trigger, p_planstatistic.plan().trigger() );
+        if ( !l_result.getLeft() )
+            return Stream.of();
+
+        final Pair<IPlanStatistic, IContext> l_instantiate = CCommon.instantiateplan( p_planstatistic, this, l_result.getRight() );
+        if ( l_instantiate.getLeft().plan().condition( l_instantiate.getRight() ) )
+            return Stream.of( l_instantiate );
+
+        return this.planfinder( p_trigger.shallowcopywithoutsuffix() );
     }
 
     /**
@@ -440,7 +449,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @return fuzzy result for each executaed plan
      */
     @Nonnull
-    private Stream<IFuzzyValue<?>> execute( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
+    private Stream<IFuzzyValue<?>> executing( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
@@ -448,31 +457,38 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             i.getLeft().plan().trigger().literal().allocate( i.getRight() )
         ) );
 
-        // execute plan and return values and return execution result
-        return p_execution.parallelStream()
-                          .flatMap( i ->
-                          {
-                              // execute plan
-                              final Number l_result = i.getRight().agent().fuzzy().defuzzification().apply(
-                                  i.getLeft().plan().execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() )
-                              );
+        // execute plan parallel and return values and return execution result
+        return p_execution.parallelStream().flatMap( this::executeplan );
+    }
 
-                              // check strict execution result
-                              if ( i.getRight().agent().fuzzy().defuzzification().success( l_result ) )
-                              {
-                                  i.getLeft().incrementsuccessful();
-                                  return i.getRight().agent().fuzzy().membership().success();
-                              }
-                              else
-                              {
-                                  i.getLeft().incrementfail();
-                                  i.getRight().agent().trigger(
-                                      ITrigger.EType.DELETEGOAL.builddefault( i.getLeft().plan().literal().allocate( i.getRight() ) )
-                                  );
-                                  return i.getRight().agent().fuzzy().membership().fail();
-                              }
+    /**
+     * executes a single plan with given context
+     *
+     * @param p_plan pair of plan-statistic and context
+     * @return fuzzy result
+     */
+    @Nonnull
+    private Stream<IFuzzyValue<?>> executeplan( @Nonnull final Pair<IPlanStatistic, IContext> p_plan )
+    {
+        // execute plan
+        final Number l_result = p_plan.getRight().agent().fuzzy().defuzzification().apply(
+            p_plan.getLeft().plan().execute( false, p_plan.getRight(), Collections.emptyList(), Collections.emptyList() )
+        );
 
-                          } );
+        // check strict execution result
+        if ( p_plan.getRight().agent().fuzzy().defuzzification().success( l_result ) )
+        {
+            p_plan.getLeft().incrementsuccessful();
+            return p_plan.getRight().agent().fuzzy().membership().success();
+        }
+        else
+        {
+            p_plan.getLeft().incrementfail();
+            p_plan.getRight().agent().trigger(
+                ITrigger.EType.DELETEGOAL.builddefault( p_plan.getLeft().plan().literal().allocate( p_plan.getRight() ) )
+            );
+            return p_plan.getRight().agent().fuzzy().membership().fail();
+        }
     }
 
     /**
