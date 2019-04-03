@@ -31,9 +31,11 @@ import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -74,6 +76,8 @@ public final class TestCView extends IBaseTest
 
                     .generate( l_gen, CPath.of( "first" ) )
                     .add( CLiteral.of( "first/sub1" ) )
+                    .add( CLiteral.of( "first/sub1", CRawTerm.of( 1 ) ) )
+                    .add( CLiteral.of( "first/sub1", CRawTerm.of( 2 ) ) )
                     .add( CLiteral.of( "first/sub2" ) )
 
                     .generate( l_gen, CPath.of( "second/sub" ) )
@@ -83,7 +87,18 @@ public final class TestCView extends IBaseTest
                     .add( CLiteral.of( "second/sub/sub5" ) );
 
 
-        Assert.assertEquals( "number of beliefs is incorrect", 6, l_beliefbase.size() );
+        Assert.assertEquals( "number of beliefs is incorrect", 8, l_beliefbase.size() );
+
+        Assert.assertArrayEquals(
+            Stream.of( "toplevel[]", "first/sub1[]", "first/sub1[1]", "first/sub1[2]",
+                       "first/sub2[]", "second/sub3[]", "second/sub4[]", "second/second/sub/sub5[]" ).toArray(),
+            l_beliefbase.stream().map( Object::toString ).toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.of( "sub1[]", "sub1[1]", "sub1[2]" ).toArray(),
+            l_beliefbase.stream( CPath.of( "first/sub1" ) ).map( Object::toString ).toArray()
+        );
     }
 
 
