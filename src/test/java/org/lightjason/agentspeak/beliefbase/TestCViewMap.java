@@ -30,7 +30,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
@@ -51,6 +50,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.testing.IBaseTest;
+import org.lightjason.agentspeak.testing.action.CTestEqual;
+import org.lightjason.agentspeak.testing.action.CTestPrint;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -77,9 +78,7 @@ public final class TestCViewMap extends IBaseTest
      * actions
      */
     private final Set<IAction> m_actions = Stream.concat(
-        PRINTENABLE
-        ? Stream.of( new CTestResult() )
-        : Stream.of( new CTestResult(), new CEmptyPrint() ),
+        Stream.of( new CTestResult(), new CTestPrint( PRINTENABLE ), new CTestEqual() ),
         CCommon.actionsFromPackage()
     ).collect( Collectors.toSet() );
     /**
@@ -175,9 +174,7 @@ public final class TestCViewMap extends IBaseTest
      * test in-agent definition
      *
      * @throws Exception is thrown on execute error
-     * @todo must be enabled with bool-action
      */
-    @Ignore
     @Test
     public void inagent() throws Exception
     {
@@ -186,8 +183,8 @@ public final class TestCViewMap extends IBaseTest
         final IAgent<?> l_agent = new CAgent.CAgentGenerator(
             "!main. +!main <- "
             + ">>map/str(X); "
-            + ".generic/print('string-value:', X); "
-            + ".test/result( .bool/equal(X, 'text value'), 'unified value incorrect' ). "
+            + ".test/print('string-value:', X); "
+            + ".test/result( .test/equal(X, 'text value'), 'unified value incorrect' ). "
             + "-!main <- .test/result( fail, 'unification wrong').",
             m_data,
             m_actions
@@ -200,39 +197,6 @@ public final class TestCViewMap extends IBaseTest
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * empty print action
-     */
-    private static final class CEmptyPrint extends IBaseAction
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = 8344720639088993942L;
-
-        @Nonnull
-        @Override
-        public IPath name()
-        {
-            return CPath.of( "generic/print" );
-        }
-
-        @Nonnegative
-        @Override
-        public int minimalArgumentNumber()
-        {
-            return 0;
-        }
-
-        @Nonnull
-        @Override
-        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
-        {
-            return Stream.of();
-        }
-    }
 
     /**
      * test action

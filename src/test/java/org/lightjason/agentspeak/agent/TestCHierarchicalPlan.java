@@ -43,14 +43,15 @@ import org.lightjason.agentspeak.testing.action.CTestPrint;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
 import java.util.stream.Stream;
 
 
 /**
  * test hierarchical plan structure
+ * @note plan results needs sorting, because plan execution is run in parallel
  */
 public final class TestCHierarchicalPlan extends IBaseTest
 {
@@ -62,7 +63,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
     @Test
     public void matchstrict() throws Exception
     {
-        final List<Object> l_log = new ArrayList<>();
+        final List<Object> l_log = new Vector<>();
         final IAgent<?> l_agent = agent( "+!foo <- .test/log(1). +!foo/bar <- .test/log(2).", l_log );
 
         l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar" ) ), true ).forEach( i ->
@@ -75,7 +76,8 @@ public final class TestCHierarchicalPlan extends IBaseTest
         {
         } );
 
-        Assert.assertArrayEquals( Stream.of( 2D, 1D ).toArray(), l_log.toArray() );
+        l_log.sort( Comparator.comparingInt( Object::hashCode ) );
+        Assert.assertArrayEquals( Stream.of( 1D, 2D ).toArray(), l_log.toArray() );
     }
 
     /**
@@ -86,7 +88,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
     @Test
     public void matchhierarchical() throws Exception
     {
-        final List<Object> l_log = new ArrayList<>();
+        final List<Object> l_log = new Vector<>();
         final IAgent<?> l_agent = agent( "+!foo <- .test/log(1). +!foo/bar <- .test/log(2).", l_log );
 
 
@@ -97,6 +99,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         {
         } );
 
+        l_log.sort( Comparator.comparingInt( Object::hashCode ) );
         Assert.assertArrayEquals( Stream.of( 1D, 2D ).toArray(), l_log.toArray() );
     }
 
@@ -108,13 +111,14 @@ public final class TestCHierarchicalPlan extends IBaseTest
     @Test
     public void hierarchicalfail() throws Exception
     {
-        final List<Object> l_log = new ArrayList<>();
+        final List<Object> l_log = new Vector<>();
         final IAgent<?> l_agent = agent( "+!foo <- .test/log(1). +!foo/bar : false <- .test/log(2).", l_log );
 
         l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar" ) ), true ).forEach( i ->
         {
         } );
 
+        l_log.sort( Comparator.comparingInt( Object::hashCode ) );
         Assert.assertArrayEquals( Stream.of( 1D ).toArray(), l_log.toArray() );
     }
 
@@ -126,13 +130,14 @@ public final class TestCHierarchicalPlan extends IBaseTest
     @Test
     public void multiplehierarchicalfail() throws Exception
     {
-        final List<Object> l_log = new ArrayList<>();
+        final List<Object> l_log = new Vector<>();
         final IAgent<?> l_agent = agent( "+!foo <- .test/log(1). +!foo/bar : false <- .test/log(2) <- .test/log(3).", l_log );
 
         l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar" ) ), true ).forEach( i ->
         {
         } );
 
+        l_log.sort( Comparator.comparingInt( Object::hashCode ) );
         Assert.assertArrayEquals( Stream.of( 1D, 3D ).toArray(), l_log.toArray() );
     }
 
@@ -144,9 +149,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
     @Test
     public void multiplehierarchicalfailparameter() throws Exception
     {
-        // needs sorting, because plan execution is run in parallel
-
-        final List<Object> l_log = new ArrayList<>();
+        final List<Object> l_log = new Vector<>();
         final IAgent<?> l_agent = agent( "+!foo(X) <- .test/log(X). +!foo/bar(X) : X > 3 <- X *= 10; .test/log(X) : X <= 3 <- X *= 100; .test/log(X).", l_log );
 
         l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar", CRawTerm.of( 5D ) ) ), true ).forEach( i ->
