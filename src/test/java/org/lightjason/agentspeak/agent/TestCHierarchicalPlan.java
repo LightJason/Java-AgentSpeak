@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
 import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
@@ -43,6 +44,7 @@ import org.lightjason.agentspeak.testing.action.CTestPrint;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -133,6 +135,37 @@ public final class TestCHierarchicalPlan extends IBaseTest
 
         Assert.assertArrayEquals( Stream.of( 1D, 3D ).toArray(), l_log.toArray() );
     }
+
+    /**
+     * test plan on condition fail
+     *
+     * @throws Exception on parsing error
+     */
+    @Test
+    public void multiplehierarchicalfailparameter() throws Exception
+    {
+        // needs sorting, because plan execution is run in parallel
+
+        final List<Object> l_log = new ArrayList<>();
+        final IAgent<?> l_agent = agent( "+!foo(X) <- .test/log(X). +!foo/bar(X) : X > 3 <- X *= 10; .test/log(X) : X <= 3 <- X *= 100; .test/log(X).", l_log );
+
+        l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar", CRawTerm.of( 5D ) ) ), true ).forEach( i ->
+        {
+        } );
+
+        l_log.sort( Comparator.comparingInt( Object::hashCode ) );
+        Assert.assertArrayEquals( Stream.of( 5D, 50D ).toArray(), l_log.toArray() );
+
+
+        l_log.clear();
+        l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foo/bar", CRawTerm.of( 2D ) ) ), true ).forEach( i ->
+        {
+        } );
+
+        l_log.sort( Comparator.comparingInt( Object::hashCode ) );
+        Assert.assertArrayEquals( Stream.of( 2D, 200D ).toArray(), l_log.toArray() );
+    }
+
 
     /**
      * generates a single agent
