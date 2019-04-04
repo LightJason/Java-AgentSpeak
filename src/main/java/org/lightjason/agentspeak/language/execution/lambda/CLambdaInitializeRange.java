@@ -78,29 +78,39 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
                 org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 3 )
             );
 
-        if ( l_return.size() == 1 )
-            p_return.add(
-                CRawTerm.of(
-                    LongStream.range( 0, l_return.get( 0 ).<Number>raw().longValue() ).boxed()
-                )
-            );
+        switch ( l_return.size() )
+        {
+            case 1:
+                p_return.add(
+                    CRawTerm.of(
+                        LongStream.range( 0, l_return.get( 0 ).<Number>raw().longValue() ).boxed()
+                    )
+                );
+                break;
 
-        if ( l_return.size() == 2 )
-            p_return.add(
-                CRawTerm.of(
-                    LongStream.range( l_return.get( 0 ).<Number>raw().longValue(), l_return.get( 1 ).<Number>raw().longValue() ).boxed()
-                )
-            );
+            case 2:
+                p_return.add(
+                    CRawTerm.of(
+                        LongStream.range( l_return.get( 0 ).<Number>raw().longValue(), l_return.get( 1 ).<Number>raw().longValue() ).boxed()
+                    )
+                );
+                break;
 
-        if ( l_return.size() == 3 )
-            p_return.add(
-                CRawTerm.of(
-                    LongStream.range(
-                        l_return.get( 0 ).<Number>raw().longValue(),
-                        l_return.get( 1 ).<Number>raw().longValue() / l_return.get( 2 ).<Number>raw().longValue()
-                    ).map( i -> i * l_return.get( 2 ).<Number>raw().longValue() ).boxed()
-                )
-            );
+            case 3:
+                p_return.add(
+                    CRawTerm.of(
+                        LongStream.range(
+                            l_return.get( 0 ).<Number>raw().longValue(),
+                            l_return.get( 1 ).<Number>raw().longValue() / l_return.get( 2 ).<Number>raw().longValue()
+                        ).map( i -> i * l_return.get( 2 ).<Number>raw().longValue() ).boxed()
+                    )
+                );
+                break;
+
+            default:
+        }
+
+
 
         return l_result.getKey().stream();
     }

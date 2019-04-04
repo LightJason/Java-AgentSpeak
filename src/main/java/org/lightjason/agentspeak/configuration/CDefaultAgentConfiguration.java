@@ -204,9 +204,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     {
         final String l_elements = StringUtils.join(
             Stream.of(
-                Objects.isNull( m_variablebuilder ) ? "" : m_variablebuilder,
+                Objects.toString( m_variablebuilder, "" ),
                 m_initialbeliefs.isEmpty() ? "" : m_initialbeliefs,
-                Objects.isNull( m_initialgoal ) ? "" : m_initialgoal,
+                Objects.toString( m_initialgoal, "" ),
                 m_plans.isEmpty() ? "" : m_plans,
                 m_rules.isEmpty() ? "" : m_rules
             ).filter( i -> !i.toString().trim().isEmpty() ).toArray(),
