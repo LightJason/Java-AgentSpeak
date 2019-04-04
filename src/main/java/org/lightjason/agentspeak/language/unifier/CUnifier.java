@@ -52,18 +52,18 @@ public final class CUnifier implements IUnifier
     /**
      * hash-based unifier algorithm
      */
-    private final IAlgorithm m_hashbased;
+    private final IUnifyAlgorithm m_hashbased;
     /**
      * recursive unifier algorithm
      */
-    private final IAlgorithm m_recursive;
+    private final IUnifyAlgorithm m_recursive;
 
     /**
      * ctor
      */
     public CUnifier()
     {
-        this( new CHash(), new CRecursive() );
+        this( new CHashUnifyAlgorithm(), new CRecursiveUnifyAlgorithm() );
     }
 
     /**
@@ -72,7 +72,7 @@ public final class CUnifier implements IUnifier
      * @param p_hashbased hash-based unification algorithm
      * @param p_recursive recursive-based unification algorithm
      */
-    public CUnifier( @Nonnull final IUnifier.IAlgorithm p_hashbased, @Nonnull final IUnifier.IAlgorithm p_recursive )
+    public CUnifier( @Nonnull final IUnifyAlgorithm p_hashbased, @Nonnull final IUnifyAlgorithm p_recursive )
     {
         m_hashbased = p_hashbased;
         m_recursive = p_recursive;

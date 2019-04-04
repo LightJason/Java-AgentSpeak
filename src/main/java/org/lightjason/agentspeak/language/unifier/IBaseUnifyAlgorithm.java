@@ -23,51 +23,64 @@
 
 package org.lightjason.agentspeak.language.unifier;
 
-import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.variable.CRelocateMutexVariable;
 import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
-import java.util.stream.Stream;
 
 
 /**
- * unifier on at hash-based quality
+ * abstract unify algorithm with base algorithm
  */
-public final class CHash implements IUnifier.IAlgorithm
+public abstract class IBaseUnifyAlgorithm implements IUnifyAlgorithm
 {
 
-    @Override
-    public <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
+    /**
+     * check if both terms are variables
+     *
+     * @param p_variables output variables
+     * @param p_source source term
+     * @param p_target target term
+     * @tparam T term type
+     * @return execution boolean
+     */
+    protected static <T extends ITerm> boolean bothvariables( @Nonnull final Set<IVariable<?>> p_variables,
+                                                              @Nonnull final T p_source, @Nonnull final T p_target )
     {
-        return StreamUtils.zip(
-            p_source,
-            p_target,
-            ( s, t ) ->
-            {
-                // if s and t are variable create a realocated variable for backtracking
-                if ( t instanceof IVariable<?> && s instanceof IVariable<?> )
-                {
-                    p_variables.add(
-                        ( (IVariable<?>) t ).mutex()
-                        ? new CRelocateMutexVariable<>( t.fqnfunctor(), s.term() )
-                        : new CRelocateVariable<>( t.fqnfunctor(), s.term() )
-                    );
-                    return true;
-                }
+        // if s and t are variable create a realocated variable for backtracking
+        if ( !( p_target instanceof IVariable<?> && p_source instanceof IVariable<?> ) )
+            return false;
 
-                // if target type is a variable set the value
-                if ( t instanceof IVariable<?> )
-                {
-                    p_variables.add( t.<IVariable<Object>>term().set( s ) );
-                    return true;
-                }
+        p_variables.add(
+            ( (IVariable<?>) p_target ).mutex()
+            ? new CRelocateMutexVariable<>( p_target.fqnfunctor(), p_source.term() )
+            : new CRelocateVariable<>( p_target.fqnfunctor(), p_source.term() )
+        );
 
-                // otherwise check equality
-                return s.equals( t );
-            }
-        ).allMatch( i -> i );
+        return true;
     }
+
+
+    /**
+     * check if the target variable will be set
+     *
+     * @param p_variables output variables
+     * @param p_source source term
+     * @param p_target target term
+     * @tparam T term type
+     * @return execution boolean
+     */
+    protected static <T extends ITerm> boolean variables( @Nonnull final Set<IVariable<?>> p_variables,
+                                                          @Nonnull final T p_source, @Nonnull final T p_target )
+    {
+        if ( !( p_target instanceof IVariable<?> ) )
+            return false;
+
+        p_variables.add( p_target.<IVariable<Object>>term().set( p_source ) );
+        return true;
+    }
+
 }

@@ -27,10 +27,9 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.variable.CRelocateMutexVariable;
-import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,14 +38,12 @@ import java.util.stream.Stream;
 
 /**
  * recursive unifier
- *
- * @todo reduce npath complexity
  */
-public final class CRecursive implements IUnifier.IAlgorithm
+public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
 {
 
     @Override
-    public <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
+    public <T extends ITerm> boolean unify( @Nonnull final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
         final List<T> l_target = p_target.collect( Collectors.toList() );
         final List<T> l_source = p_source.collect( Collectors.toList() );
@@ -62,45 +59,39 @@ public final class CRecursive implements IUnifier.IAlgorithm
             l_target.stream(),
             ( s, t ) ->
             {
-
-                // if s and t are variable create a realocated variable for backtracking
-                if ( t instanceof IVariable<?> && s instanceof IVariable<?> )
-                {
-                    p_variables.add(
-                        ( (IVariable<?>) t ).mutex()
-                        ? new CRelocateMutexVariable<>( t.fqnfunctor(), (IVariable<?>) s )
-                        : new CRelocateVariable<>( t.fqnfunctor(), (IVariable<?>) s )
-                    );
+                if ( Stream.of( bothvariables( p_variables, s, t ), variables( p_variables, s, t ) ).filter( i -> i ).findFirst().orElse( false ) )
                     return true;
-                }
-
-                // if target type is a variable set the value
-                if ( t instanceof IVariable<?> )
-                {
-                    p_variables.add( t.<IVariable<Object>>term().set( s ) );
-                    return true;
-                }
 
                 // if both raw values -> equality check
                 if ( s instanceof IRawTerm<?> || t instanceof IRawTerm<?> )
                     return s.equals( t );
 
-                // if a literal exists -> source and target literal must be equal with the functor -> recursive descent
-                if ( s instanceof ILiteral && t instanceof ILiteral )
-                {
-                    final ILiteral l_sourceliteral = (ILiteral) s;
-                    final ILiteral l_targetliteral = (ILiteral) t;
-
-                    if ( !l_sourceliteral.fqnfunctor().equals( l_targetliteral.fqnfunctor() ) )
-                        return false;
-
-                    return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
-                }
-
-                // otherwise false
-                return false;
+                return this.recursion( p_variables, s, t );
             }
         ).allMatch( i -> i );
+    }
+
+    /**
+     * recursive descent on literal
+     *
+     * @param p_variables variables
+     * @param p_source source term
+     * @param p_target target term
+     * @tparam T term type
+     * @return unification literal
+     */
+    private <T extends ITerm> boolean recursion( @Nonnull final Set<IVariable<?>> p_variables, @Nonnull final T p_source, @Nonnull final T p_target )
+    {
+        if ( !( p_source instanceof ILiteral && p_target instanceof ILiteral ) )
+            return false;
+
+        final ILiteral l_sourceliteral = (ILiteral) p_source;
+        final ILiteral l_targetliteral = (ILiteral) p_target;
+
+        if ( !l_sourceliteral.fqnfunctor().equals( l_targetliteral.fqnfunctor() ) )
+            return false;
+
+        return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
     }
 
 }
