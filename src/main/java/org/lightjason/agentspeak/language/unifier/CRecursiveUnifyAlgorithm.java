@@ -45,8 +45,8 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
     @Override
     public <T extends ITerm> boolean unify( @Nonnull final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
-        final List<T> l_target = p_target.collect( Collectors.toList() );
         final List<T> l_source = p_source.collect( Collectors.toList() );
+        final List<T> l_target = p_target.collect( Collectors.toList() );
 
         if ( l_target.isEmpty() || l_source.isEmpty() )
             return true;
@@ -54,9 +54,23 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
         if ( l_target.size() != l_source.size() )
             return false;
 
+        return this.process( p_variables, l_source, l_target );
+    }
+
+    /**
+     * process term structure
+     *
+     * @param p_variables variables
+     * @param p_source source terms
+     * @param p_target target terms
+     * @tparam T term type
+     * @return boolean on unification
+     */
+    private <T extends ITerm> boolean process( @Nonnull final Set<IVariable<?>> p_variables, @Nonnull final List<T> p_source, @Nonnull final List<T> p_target )
+    {
         return StreamUtils.zip(
-            l_source.stream(),
-            l_target.stream(),
+            p_source.stream(),
+            p_target.stream(),
             ( s, t ) ->
             {
                 if ( Stream.of( bothvariables( p_variables, s, t ), variables( p_variables, s, t ) ).filter( i -> i ).findFirst().orElse( false ) )
