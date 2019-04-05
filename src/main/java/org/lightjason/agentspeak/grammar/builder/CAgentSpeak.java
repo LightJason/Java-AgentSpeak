@@ -637,28 +637,63 @@ public final class CAgentSpeak
     public static IExecution expression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext p_term,
                                          @Nullable final RuleContext p_unification, @Nullable final TerminalNode p_unaryoperator,
                                          @Nullable final RuleContext p_expression, @Nullable final Token p_binaryoperator,
-                                         @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs
-    )
+                                         @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
     {
-        final IExecution l_term = termexecution( p_visitor, p_unification, p_term );
-        if ( Objects.nonNull( l_term ) )
-            return l_term;
-
-        if ( Objects.nonNull( p_unaryoperator ) && Objects.nonNull( p_expression ) )
-            return new CUnaryExpression( EUnaryOperator.of( p_unaryoperator.getText() ), (IExecution) p_visitor.visit( p_expression ) );
-
-        if ( Objects.nonNull( p_expression ) )
-            return (IExecution) p_visitor.visit( p_expression );
-
-        if ( Objects.nonNull( p_binaryoperator ) && Objects.nonNull( p_lhs ) && Objects.nonNull( p_rhs ) )
-            return new CBinaryExpression(
-                EBinaryOperator.of( p_binaryoperator.getText() ),
-                (IExecution) p_visitor.visit( p_lhs ),
-                (IExecution) p_visitor.visit( p_rhs )
-            );
-
-        throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) );
+        return Stream.of(
+            termexecution( p_visitor, p_unification, p_term ),
+            unaryexpression( p_visitor, p_unaryoperator, p_expression ),
+            nativeexpression( p_visitor, p_expression ),
+            binaryexpression( p_visitor, p_binaryoperator, p_lhs, p_rhs )
+        ).filter( Objects::nonNull ).findFirst().orElseThrow( () -> new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownexpression" ) ) );
     }
+
+    /**
+     * build binary epxression
+     *
+     * @param p_visitor visitor
+     * @param p_binaryoperator binary operator
+     * @param p_lhs left-hand-side
+     * @param p_rhs right-hand-side
+     * @return null or execution
+     */
+    private static IExecution binaryexpression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final Token p_binaryoperator,
+                                                @Nullable final RuleContext p_lhs, @Nullable final RuleContext p_rhs )
+    {
+        return Objects.nonNull( p_binaryoperator ) && Objects.nonNull( p_lhs ) && Objects.nonNull( p_rhs )
+               ? new CBinaryExpression( EBinaryOperator.of( p_binaryoperator.getText() ), (IExecution) p_visitor.visit( p_lhs ), (IExecution) p_visitor.visit( p_rhs ) )
+               : null;
+    }
+
+    /**
+     * build native expression
+     *
+     * @param p_visitor visitor
+     * @param p_expression expression
+     * @return null or expression
+     */
+    private static IExecution nativeexpression( @Nonnull final ParseTreeVisitor<?> p_visitor, @Nullable final RuleContext p_expression )
+    {
+        return Objects.nonNull( p_expression )
+               ? (IExecution) p_visitor.visit( p_expression )
+               : null;
+    }
+
+    /**
+     * build unary expression
+     *
+     * @param p_visitor visitor
+     * @param p_unaryoperator unary operator
+     * @param p_expression expression
+     * @return null or expression
+     */
+    private static IExecution unaryexpression( @Nonnull final ParseTreeVisitor<?> p_visitor,
+                                               @Nullable final TerminalNode p_unaryoperator, @Nullable final RuleContext p_expression )
+    {
+        return Objects.nonNull( p_unaryoperator ) && Objects.nonNull( p_expression )
+               ? new CUnaryExpression( EUnaryOperator.of( p_unaryoperator.getText() ), (IExecution) p_visitor.visit( p_expression ) )
+               : null;
+    }
+
 
     /**
      * build an execution term
