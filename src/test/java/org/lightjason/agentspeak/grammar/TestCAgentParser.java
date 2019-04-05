@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.grammar;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.action.CTestMax;
@@ -46,6 +47,7 @@ import org.lightjason.agentspeak.testing.action.CTestMin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -771,10 +773,8 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * test lambda expression
      *
      * @throws Exception thrown on stream and parser error
-     * @todo needs list lambda stream
      */
     @Test
-    @Ignore
     public void lambdasingle() throws Exception
     {
         final CCollectValues l_values = new CCollectValues();
@@ -782,7 +782,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         final IPlan l_plan = parsesingleplan(
             new CParserAgent(
                 new CActionStaticGenerator( Stream.of( l_values ) ),
-                new CLambdaStreamingStaticGenerator( org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage() )
+                new CLambdaStreamingStaticGenerator( Stream.of( new CTestLambdaStreaming() ) )
             ),
             "+!lambda <- (L) -> I : .push/value(I)."
         );
@@ -807,10 +807,8 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * test lambda expression
      *
      * @throws Exception thrown on stream and parser error
-     * @todo needs list lambda stream
      */
     @Test
-    @Ignore
     public void lambdablock() throws Exception
     {
         final CCollectValues l_values = new CCollectValues();
@@ -818,7 +816,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         final IPlan l_plan = parsesingleplan(
             new CParserAgent(
                 new CActionStaticGenerator( Stream.of( l_values ) ),
-                new CLambdaStreamingStaticGenerator( org.lightjason.agentspeak.common.CCommon.lambdastreamingFromPackage() )
+                new CLambdaStreamingStaticGenerator( Stream.of( new CTestLambdaStreaming() ) )
             ),
             "+!lambda <- (L) -> I : { I *= 10; .push/value(I) }."
         );
@@ -867,5 +865,29 @@ public final class TestCAgentParser extends IBaseGrammarTest
         );
 
         Assert.assertEquals( 1.0, l_var.<Number>raw() );
+    }
+
+    /**
+     * lambda streaming
+     */
+    private static final class CTestLambdaStreaming implements ILambdaStreaming<Collection<?>>
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8718134128784899343L;
+
+        @NonNull
+        @Override
+        public Stream<Class<?>> assignable()
+        {
+            return Stream.of( Collection.class );
+        }
+
+        @Override
+        public Stream<?> apply( final Collection<?> p_objects )
+        {
+            return p_objects.stream();
+        }
     }
 }

@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
 import java.util.Collection;
@@ -83,10 +84,11 @@ public final class CLambdaStreamingStaticGenerator implements ILambdaStreamingGe
     @Override
     public ILambdaStreaming<?> apply( @NonNull final Class<?> p_class )
     {
-        final Optional<? extends ILambdaStreaming<?>> l_lambda = org.lightjason.agentspeak.language.CCommon.classhierarchie( p_class )
-                                                                                                           .map( m_lambdas::get )
-                                                                                                           .filter( Objects::nonNull )
-                                                                                                           .findFirst();
+        final Optional<? extends ILambdaStreaming<?>> l_lambda = CCommon.classhierarchie( p_class )
+                                                                        .parallel()
+                                                                        .map( m_lambdas::get )
+                                                                        .filter( Objects::nonNull )
+                                                                        .findFirst();
 
         return l_lambda.isPresent() ? l_lambda.get() : ILambdaStreaming.EMPTY;
     }
