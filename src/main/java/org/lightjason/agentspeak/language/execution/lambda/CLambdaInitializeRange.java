@@ -64,26 +64,37 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_return = CCommon.argumentlist();
-        final Pair<List<IFuzzyValue<?>>, Boolean> l_result = CCommon.executesequential( p_parallel, p_context, p_argument, l_return, Arrays.stream( m_value ) );
+        final List<ITerm> l_range = CCommon.argumentlist();
+        final Pair<List<IFuzzyValue<?>>, Boolean> l_result = CCommon.executesequential( p_parallel, p_context, p_argument, l_range, Arrays.stream( m_value ) );
         if ( !l_result.getValue() )
             return p_context.agent().fuzzy().membership().fail();
 
-        if ( l_return.size() == 0 || l_return.size() > 3 )
+        if ( l_range.size() == 0 || l_range.size() > 3 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
                 org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 3 )
             );
 
-        switch ( l_return.size() )
+        generate( l_range, p_return );
+        return l_result.getKey().stream();
+    }
+
+    /**
+     * generate streams
+     *
+     * @param p_range range definition
+     * @param p_return return arguments
+     */
+    private static void generate( @Nonnull final List<ITerm> p_range, @Nonnull final List<ITerm> p_return )
+    {
+        switch ( p_range.size() )
         {
             case 1:
                 p_return.add(
                     CRawTerm.of(
-                        LongStream.range( 0, l_return.get( 0 ).<Number>raw().longValue() ).boxed()
+                        LongStream.range( 0, p_range.get( 0 ).<Number>raw().longValue() ).boxed()
                     )
                 );
                 break;
@@ -91,7 +102,7 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
             case 2:
                 p_return.add(
                     CRawTerm.of(
-                        LongStream.range( l_return.get( 0 ).<Number>raw().longValue(), l_return.get( 1 ).<Number>raw().longValue() ).boxed()
+                        LongStream.range( p_range.get( 0 ).<Number>raw().longValue(), p_range.get( 1 ).<Number>raw().longValue() ).boxed()
                     )
                 );
                 break;
@@ -100,19 +111,15 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
                 p_return.add(
                     CRawTerm.of(
                         LongStream.range(
-                            l_return.get( 0 ).<Number>raw().longValue(),
-                            l_return.get( 1 ).<Number>raw().longValue() / l_return.get( 2 ).<Number>raw().longValue()
-                        ).map( i -> i * l_return.get( 2 ).<Number>raw().longValue() ).boxed()
+                            p_range.get( 0 ).<Number>raw().longValue(),
+                            p_range.get( 1 ).<Number>raw().longValue() / p_range.get( 2 ).<Number>raw().longValue()
+                        ).map( i -> i * p_range.get( 2 ).<Number>raw().longValue() ).boxed()
                     )
                 );
                 break;
 
             default:
         }
-
-
-
-        return l_result.getKey().stream();
     }
 
     @Override
