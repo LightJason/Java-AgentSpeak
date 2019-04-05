@@ -41,6 +41,8 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.IT
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.action.CTestMax;
+import org.lightjason.agentspeak.testing.action.CTestMin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -842,15 +844,13 @@ public final class TestCAgentParser extends IBaseGrammarTest
      * test of inner action execute
      *
      * @throws Exception thrown on stream and parser error
-     * @todo check actions
      */
     @Test
-    @Ignore
     public void inneraction() throws Exception
     {
         final IPlan l_plan = parsesingleplan(
-            new CParserAgent( new CActionStaticGenerator( org.lightjason.agentspeak.common.CCommon.actionsFromPackage() ), ILambdaStreamingGenerator.EMPTY ),
-            "+!inner <- L = .math/max( .math/min( 3, 4, 1 ), -8, -6 ) ."
+            new CParserAgent( new CActionStaticGenerator( Stream.of( new CTestMax(), new CTestMin() ) ), ILambdaStreamingGenerator.EMPTY ),
+            "+!inner <- L = .test/max( .test/min( 3, 4, 1 ), -8, -6 ) ."
         );
 
         final IVariable<?> l_var = new CVariable<>( "L" );
