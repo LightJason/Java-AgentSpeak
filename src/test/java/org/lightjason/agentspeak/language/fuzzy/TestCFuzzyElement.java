@@ -202,5 +202,7 @@ public final class TestCFuzzyElement extends IBaseTest
     {
         Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 0 ).count() );
         Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 1 ).count() );
+        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.fail().count() );
+        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.success().count() );
     }
 }
