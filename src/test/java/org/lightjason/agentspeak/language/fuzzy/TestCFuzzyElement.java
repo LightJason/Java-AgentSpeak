@@ -30,7 +30,9 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CCOG;
 import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CWOA;
+import org.lightjason.agentspeak.language.fuzzy.membership.CCrisp;
 import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
 import org.lightjason.agentspeak.language.fuzzy.set.EFourElement;
 import org.lightjason.agentspeak.language.fuzzy.set.EThreeElement;
 import org.lightjason.agentspeak.testing.IBaseTest;
@@ -46,10 +48,10 @@ public final class TestCFuzzyElement extends IBaseTest
 {
 
     /**
-     * test of center-of-area
+     * test of weighted-average-method
      */
     @Test
-    public void coa()
+    public void cwoa()
     {
         Assert.assertEquals(
             1.0,
@@ -156,4 +158,49 @@ public final class TestCFuzzyElement extends IBaseTest
 
     }
 
+    /**
+     * test crip membership
+     */
+    @Test
+    public void membership()
+    {
+        Assert.assertArrayEquals(
+            Stream.of( CFuzzyValue.of( ECrisp.FALSE, 1 ), CFuzzyValue.of( ECrisp.TRUE, 0 ) ).toArray(),
+            new CCrisp<>( ECrisp.class ).apply( 0 ).toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.of( CFuzzyValue.of( ECrisp.FALSE, 0 ), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).toArray(),
+            new CCrisp<>( ECrisp.class ).apply( 1 ).toArray()
+        );
+
+
+        Assert.assertArrayEquals(
+            Stream.of(
+                CFuzzyValue.of( EThreeElement.LOW, 1 ),
+                CFuzzyValue.of( EThreeElement.MEDIUM, 0.5 ),
+                CFuzzyValue.of( EThreeElement.HIGH, 0 )
+            ).toArray(),
+            new CCrisp<>( EThreeElement.class ).apply( 0 ).toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.of(
+                CFuzzyValue.of( EThreeElement.LOW, 0 ),
+                CFuzzyValue.of( EThreeElement.MEDIUM, 0.5 ),
+                CFuzzyValue.of( EThreeElement.HIGH, 1 )
+            ).toArray(),
+            new CCrisp<>( EThreeElement.class ).apply( 1 ).toArray()
+        );
+    }
+
+    /**
+     * test empty mempership
+     */
+    @Test
+    public void membershipempty()
+    {
+        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 0 ).count() );
+        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 1 ).count() );
+    }
 }

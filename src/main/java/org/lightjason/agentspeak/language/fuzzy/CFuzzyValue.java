@@ -80,6 +80,18 @@ public final class CFuzzyValue<E extends Enum<?>> implements IFuzzyValue<E>
         return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }
 
+    @Override
+    public int hashCode()
+    {
+        return m_value.hashCode() ^ m_fuzzy.hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return p_object instanceof IFuzzyValue<?> && p_object.hashCode() == this.hashCode();
+    }
+
     /**
      * factory
      *

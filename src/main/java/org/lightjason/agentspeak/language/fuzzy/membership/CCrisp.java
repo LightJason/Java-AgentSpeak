@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.fuzzy.membership;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -80,10 +81,11 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
                    IntStream.range( m_splitindex, m_class.getEnumConstants().length )
                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) )
                  )
-               : Stream.concat(
-                    IntStream.rangeClosed( 0, m_splitindex )
+               : CCommon.streamconcatstrict(
+                    IntStream.range( 0, m_splitindex )
                              .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) ),
-                    IntStream.range( m_splitindex, m_class.getEnumConstants().length )
+                    Stream.of( CFuzzyValue.of( m_class.getEnumConstants()[m_splitindex].rawenum(), 0.5 ) ),
+                    IntStream.range( m_splitindex + 1, m_class.getEnumConstants().length )
                              .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) )
                  );
     }
@@ -99,11 +101,12 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
                     IntStream.range( m_splitindex, m_class.getEnumConstants().length )
                              .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) )
                 )
-               : Stream.concat(
+               : CCommon.streamconcatstrict(
                     IntStream.range( 0, m_splitindex )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) ),
-                    IntStream.rangeClosed( m_splitindex, m_class.getEnumConstants().length )
-                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 1 ) ),
+                    Stream.of( CFuzzyValue.of( m_class.getEnumConstants()[m_splitindex].rawenum(), 0.5 ) ),
+                    IntStream.range( m_splitindex + 1, m_class.getEnumConstants().length )
+                             .mapToObj( i -> CFuzzyValue.of( m_class.getEnumConstants()[i].rawenum(), 0 ) )
                 );
     }
 
