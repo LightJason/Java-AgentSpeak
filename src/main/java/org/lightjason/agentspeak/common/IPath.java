@@ -248,6 +248,12 @@ public interface IPath extends Serializable, Comparable<IPath>
             return p_object instanceof IPath && this.hashCode() == p_object.hashCode()
                    || p_object instanceof String && this.path().hashCode() == p_object.hashCode();
         }
+
+        @Override
+        public String toString()
+        {
+            return "";
+        }
     };
 
     /**

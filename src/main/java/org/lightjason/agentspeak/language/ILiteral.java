@@ -104,7 +104,7 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
         @Override
         public String functor()
         {
-            return "";
+            return IPath.EMPTY.toString();
         }
 
         @Nonnull

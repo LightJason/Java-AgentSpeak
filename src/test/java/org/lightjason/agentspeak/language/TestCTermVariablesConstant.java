@@ -27,7 +27,10 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.error.CTypeNotAssignable;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
 import org.lightjason.agentspeak.language.variable.CRelocateMutexVariable;
@@ -376,5 +379,38 @@ public final class TestCTermVariablesConstant extends IBaseTest
                 CRawTerm.of( 3D )
             ).<Collection<?>>raw().toArray()
         );
+    }
+
+    /**
+     * test empty raw term
+     */
+    @Test( expected = CNoSuchElementException.class )
+    public void rawtermempty()
+    {
+        final IRawTerm<?> l_term = new CRawTerm<>();
+
+        Assert.assertFalse( l_term.allocated() );
+        Assert.assertEquals( IPath.EMPTY, l_term.fqnfunctor() );
+        Assert.assertTrue( l_term.functor().isEmpty() );
+
+        l_term.thrownotallocated();
+    }
+
+    /**
+     * test empty literal
+     */
+    @Test
+    public void emptyliteral()
+    {
+        Assert.assertFalse( ILiteral.EMPTY.negated() );
+        Assert.assertFalse( ILiteral.EMPTY.hasAt() );
+        Assert.assertFalse( ILiteral.EMPTY.hasVariable() );
+
+        Assert.assertEquals( 0, ILiteral.EMPTY.values().count() );
+        Assert.assertEquals( 0, ILiteral.EMPTY.orderedvalues().count() );
+
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.raw() );
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.allocate( IContext.EMPTYPLAN ) );
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.bind( IContext.EMPTYPLAN ) );
     }
 }
