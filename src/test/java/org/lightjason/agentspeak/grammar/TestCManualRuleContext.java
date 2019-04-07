@@ -34,7 +34,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.testing.IBaseTest;
-import org.mockito.Mockito;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -120,9 +119,7 @@ public final class TestCManualRuleContext extends IBaseTest
                 p_rule.getLeft()
             ).invoke(
                     l_visitor,
-                    Mockito.mock(
-                        p_rule.getLeft()
-                    )
+                    new Object[]{null}
             )
         );
     }
