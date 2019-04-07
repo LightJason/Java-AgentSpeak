@@ -48,11 +48,6 @@ import java.util.stream.Stream;
 public final class TestCManualRuleContext extends IBaseTest
 {
     /**
-     * manual visitor
-     */
-    private final ManualVisitor<Object> m_visitor = new CASTVisitorManual();
-
-    /**
      * classes for null-returning rules
      *
      * @return pair of rule-context class and rule method name
@@ -104,7 +99,7 @@ public final class TestCManualRuleContext extends IBaseTest
     }
 
     /**
-     * test literal
+     * test rules which return null
      *
      * @param p_rule pair of rule class and string name
      *
@@ -114,14 +109,17 @@ public final class TestCManualRuleContext extends IBaseTest
      */
     @Test
     @UseDataProvider( "nullrules" )
-    public void literal( @Nonnull final Pair<Class<?>, String> p_rule ) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
+    public void nullreturnrules( @Nonnull final Pair<Class<?>, String> p_rule ) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
     {
+        final ManualVisitor<Object> l_visitor = new CASTVisitorManual();
+
         Assert.assertNull(
-            m_visitor.getClass().getMethod(
+            p_rule.getLeft().toString(),
+            l_visitor.getClass().getMethod(
                 p_rule.getRight(),
                 p_rule.getLeft()
             ).invoke(
-                    m_visitor,
+                    l_visitor,
                     Mockito.mock(
                         p_rule.getLeft()
                     )
