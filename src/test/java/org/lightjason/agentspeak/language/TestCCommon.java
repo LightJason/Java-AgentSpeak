@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 
 /**
@@ -52,4 +53,36 @@ public final class TestCCommon extends IBaseTest
         );
     }
 
+    /**
+     * test levenshtein-distance
+     */
+    @Test
+    public void levenshtein()
+    {
+        Assert.assertEquals( 0.0, CCommon.levenshtein( "kitten", "kitten", 1, 10, 100 ), 0 );
+        Assert.assertEquals( 17.0, CCommon.levenshtein( "kitten", "sitting", 2, 20, 200 ), 0 );
+        Assert.assertEquals( 23.0, CCommon.levenshtein( "kitten", "singing", 3, 30, 300 ), 0 );
+    }
+
+    /**
+     * test normalized-compression-distance
+     */
+    @Test
+    public void ncd()
+    {
+        Assert.assertArrayEquals(
+            Stream.of( 0.0, 0.0, 0.0, 0.0, 0.0 ).toArray(),
+            Arrays.stream( CCommon.ECompression.values() )
+                  .map( i ->  CCommon.ncd( i, "xxx", "xxx" ) )
+                  .toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.of( 0.05, 0.13043478260869565, 0.2727272727272727, Double.NaN, 0.0 ).toArray(),
+            Arrays.stream( CCommon.ECompression.values() )
+                  .map( i ->  CCommon.ncd( i, "bar", "box" ) )
+                  .toArray()
+        );
+
+    }
 }

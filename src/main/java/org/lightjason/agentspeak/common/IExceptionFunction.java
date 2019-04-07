@@ -23,9 +23,6 @@
 
 package org.lightjason.agentspeak.common;
 
-import java.io.IOException;
-
-
 /**
  * function interface fro throwing io exception
  *
@@ -33,15 +30,15 @@ import java.io.IOException;
  * @tparam R return type
  */
 @FunctionalInterface
-public interface IIOFunction<T, R>
+public interface IExceptionFunction<T, R, E extends Exception>
 {
     /**
      * apply function
      *
      * @param p_in input argument
      * @return return
-     * @throws IOException on an error
+     * @throws Exception on an error
      */
-    R apply( T p_in ) throws IOException;
+    R apply( T p_in ) throws E;
 
 }

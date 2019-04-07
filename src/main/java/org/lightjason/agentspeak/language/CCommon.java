@@ -28,17 +28,14 @@ import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.rits.cloning.Cloner;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
-import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
-import org.apache.commons.compress.compressors.pack200.Pack200CompressorOutputStream;
-import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.IIOFunction;
+import org.lightjason.agentspeak.common.IExceptionFunction;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -707,7 +704,7 @@ public final class CCommon
         {
             IOUtils.copy( l_input, l_compress );
         }
-        catch ( final IOException l_exception )
+        catch ( final CompressorException | IOException l_exception )
         {
             return 0;
         }
@@ -719,46 +716,46 @@ public final class CCommon
     /**
      * compression algorithm
      */
-    public enum ECompression implements IIOFunction<DataOutputStream, OutputStream>
+    public enum ECompression implements IExceptionFunction<DataOutputStream, OutputStream, CompressorException>
     {
         BZIP
         {
             @Override
-            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
             {
-                return new BZip2CompressorOutputStream( p_in );
+                return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.BZIP2, p_in );
             }
         },
         GZIP
         {
             @Override
-            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
             {
-                return new GzipCompressorOutputStream( p_in );
+                return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.GZIP, p_in );
             }
         },
         DEFLATE
         {
             @Override
-            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
             {
-                return new DeflateCompressorOutputStream( p_in );
+                return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.DEFLATE, p_in );
+            }
+        },
+        DEFLATE64
+        {
+            @Override
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
+            {
+                return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.DEFLATE64, p_in );
             }
         },
         PACK200
         {
             @Override
-            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
+            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
             {
-                return new Pack200CompressorOutputStream( p_in );
-            }
-        },
-        XZ
-        {
-            @Override
-            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws IOException
-            {
-                return new XZCompressorOutputStream( p_in );
+                return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.PACK200, p_in );
             }
         };
 
