@@ -61,7 +61,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
      */
     public CRelocateMutexVariable( final IVariable<?> p_variable )
     {
-        super( p_variable.functor() );
+        super( p_variable.fqnfunctor() );
         this.setvalue( p_variable.raw() );
         m_relocate = p_variable;
     }
@@ -152,7 +152,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
         return new CRelocateMutexVariable<>(
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
-            : m_functor.append( p_prefix[0] ),
+            : p_prefix[0].append( m_functor ),
             m_relocate,
             CCommon.deepclone( m_value.get() )
         );

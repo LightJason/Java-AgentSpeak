@@ -60,7 +60,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
      */
     public CRelocateVariable( final IVariable<?> p_variable )
     {
-        super( p_variable.functor() );
+        super( p_variable.fqnfunctor() );
         this.setvalue( p_variable.raw() );
         m_relocate = p_variable;
     }
@@ -143,7 +143,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
     @Override
     public IVariable<T> shallowcopywithoutsuffix()
     {
-        return new CRelocateVariable<>( m_functor.remove( m_functor.size() - 1 ), m_relocate, m_value );
+        return new CRelocateVariable<>( m_functor.suffix(), m_relocate, m_value );
     }
 
     @Nonnull
@@ -153,7 +153,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
         return new CRelocateVariable<>(
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
-            : m_functor.append( p_prefix[0] ),
+            : p_prefix[0].append( m_functor ),
             m_relocate, CCommon.deepclone( m_value )
         );
     }

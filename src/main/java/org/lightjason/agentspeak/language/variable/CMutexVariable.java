@@ -130,7 +130,7 @@ public final class CMutexVariable<T> extends IBaseVariable<T>
         return new CMutexVariable<>(
             ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
-            : m_functor.append( p_prefix[0] ),
+            : p_prefix[0].append( m_functor ),
             CCommon.deepclone( m_value.get() )
         );
     }
