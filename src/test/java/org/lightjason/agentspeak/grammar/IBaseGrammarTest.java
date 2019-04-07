@@ -149,12 +149,5 @@ public abstract class IBaseGrammarTest extends IBaseTest
                : p_mvalue.intValue() == 0
                  ? ackermann( p_nvalue.intValue() - 1, 1 )
                  : ackermann( p_nvalue.intValue() - 1, ackermann( p_nvalue, p_mvalue.intValue() - 1 ) );
-        /*
-        ackermann(N, M, R)
-            :- N == 0; R = M+1
-            :- M == 0; TN = N-1; $ackermann(TN, 1, R);
-            :- TM = M-1; $ackermann(N, TM, RI); TN = N-1; $ackermann(TN, RI, R).
-        */
-
     }
 }
