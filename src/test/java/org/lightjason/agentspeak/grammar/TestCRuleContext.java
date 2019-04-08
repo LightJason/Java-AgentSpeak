@@ -159,6 +159,23 @@ public final class TestCRuleContext extends IBaseGrammarTest
     }
 
     /**
+     * test plan-bundle bodyformula rules
+     */
+    @Test
+    public void planbundlebodyformular()
+    {
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( null, null );
+
+        final Object l_unify = l_visitor.visitBodyformula( new CPlanBundleRuleParser().parser( ">>foo(X)" ).bodyformula() );
+        Assert.assertTrue( l_unify instanceof IExecution );
+        Assert.assertEquals( ">>foo[X()]", l_unify.toString() );
+
+        final Object l_ternary = l_visitor.visitBodyformula( new CPlanBundleRuleParser().parser( "X = Y > 3 ? 'foo' : 'bar'" ).bodyformula() );
+        Assert.assertTrue( l_ternary instanceof IExecution );
+        Assert.assertEquals( "X() = ( Y() > 3.0 ) ? foo : bar", l_ternary.toString() );
+    }
+
+    /**
      * test agent test-action rule
      */
     @Test
