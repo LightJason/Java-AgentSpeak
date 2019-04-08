@@ -609,12 +609,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.3</version>
-                <configuration>
-                    <includes>
-                        <include>**/C*.class</include>
-                        <include>**/I*.class</include>
-                    </includes>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>

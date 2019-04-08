@@ -34,6 +34,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.IExecution;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +45,7 @@ import java.util.stream.Stream;
  * test agent parser rule context
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCManualRuleContext extends IBaseGrammarTest
+public final class TestCRuleContext extends IBaseGrammarTest
 {
     /**
      * classes for null-returning rules
@@ -52,7 +53,7 @@ public final class TestCManualRuleContext extends IBaseGrammarTest
      * @return pair of rule-context class and rule method name
      */
     @DataProvider
-    public static Object[] nullrules()
+    public static Object[] manualnullrules()
     {
         return Stream.of(
             generaterule( ManualParser.BeliefContext.class, "visitBelief" ),
@@ -102,7 +103,7 @@ public final class TestCManualRuleContext extends IBaseGrammarTest
     }
 
     /**
-     * test rules which return null
+     * test manual rules which return null
      *
      * @param p_rule pair of rule class and string name
      *
@@ -111,8 +112,8 @@ public final class TestCManualRuleContext extends IBaseGrammarTest
      * @throws IllegalAccessException access error
      */
     @Test
-    @UseDataProvider( "nullrules" )
-    public void nullreturnrules( @Nonnull final Pair<Class<?>, String> p_rule ) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
+    @UseDataProvider( "manualnullrules" )
+    public void manualnullreturnrules( @Nonnull final Pair<Class<?>, String> p_rule ) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
     {
         final ManualVisitor<Object> l_visitor = new CASTVisitorManual();
 
@@ -129,20 +130,48 @@ public final class TestCManualRuleContext extends IBaseGrammarTest
     }
 
     /**
-     * test literal rule
+     * test manual literal rule
      */
     @Test
-    public void literal()
+    public void manualliteral()
     {
-        final Object l_literal = new CASTVisitorManual().visitLiteral( new CRuleParser().parser( "foo" ).literal() );
+        final Object l_literal = new CASTVisitorManual().visitLiteral( new CManualRuleParser().parser( "foo" ).literal() );
         Assert.assertTrue( l_literal instanceof ILiteral );
         Assert.assertEquals( "foo[]", l_literal.toString() );
     }
 
     /**
-     * abstract class for rule testing
+     * test agent bodyformula rules
      */
-    private static final class CRuleParser extends ITestParser<IASTVisitorManual, ManualLexer, ManualParser>
+    @Test
+    public void agentbodyformular()
+    {
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( null, null );
+
+        final Object l_unify = l_visitor.visitBodyformula( new CAgentRuleParser().parser( ">>foo(X)" ).bodyformula() );
+        Assert.assertTrue( l_unify instanceof IExecution );
+        Assert.assertEquals( ">>foo[X()]", l_unify.toString() );
+
+        final Object l_ternary = l_visitor.visitBodyformula( new CAgentRuleParser().parser( "X = Y > 3 ? 'foo' : 'bar'" ).bodyformula() );
+        Assert.assertTrue( l_ternary instanceof IExecution );
+        Assert.assertEquals( "X() = ( Y() > 3.0 ) ? foo : bar", l_ternary.toString() );
+    }
+
+    /**
+     * test agent test-action rule
+     */
+    @Test
+    public void agenttestaction()
+    {
+        final Object l_testaction = new CASTVisitorAgent( null, null ).visitTestaction( new CAgentRuleParser().parser( "?foo" ).testaction() );
+        Assert.assertTrue( l_testaction instanceof IExecution );
+        Assert.assertEquals( "?foo", l_testaction.toString() );
+    }
+
+    /**
+     * manual rule testing parser
+     */
+    private static final class CManualRuleParser extends ITestParser<IASTVisitorManual, ManualLexer, ManualParser>
     {
         @Override
         protected Class<ManualLexer> lexerclass()
@@ -154,6 +183,25 @@ public final class TestCManualRuleContext extends IBaseGrammarTest
         protected Class<ManualParser> parserclass()
         {
             return ManualParser.class;
+        }
+    }
+
+    /**
+     * agent rule testing parser
+     */
+    private static final class CAgentRuleParser extends ITestParser<IASTVisitorAgent, AgentLexer, AgentParser>
+    {
+
+        @Override
+        protected Class<AgentLexer> lexerclass()
+        {
+            return AgentLexer.class;
+        }
+
+        @Override
+        protected Class<AgentParser> parserclass()
+        {
+            return AgentParser.class;
         }
     }
 }
