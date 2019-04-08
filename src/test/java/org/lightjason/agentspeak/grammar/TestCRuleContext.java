@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -163,10 +164,52 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @Test
     public void agenttestaction()
     {
-        final Object l_testaction = new CASTVisitorAgent( null, null ).visitTestaction( new CAgentRuleParser().parser( "?foo" ).testaction() );
+        final Object l_testaction = new CASTVisitorAgent( null, null )
+                                    .visitTestaction( new CAgentRuleParser().parser( "?foo" ).testaction() );
         Assert.assertTrue( l_testaction instanceof IExecution );
         Assert.assertEquals( "?foo", l_testaction.toString() );
     }
+
+    /**
+     * test plan-bundle test-action rule
+     */
+    @Test
+    public void planbundletestaction()
+    {
+        final Object l_testaction = new CASTVisitorPlanBundle( null, null )
+                                    .visitTestaction( new CPlanBundleRuleParser().parser( "?foo" ).testaction() );
+        Assert.assertTrue( l_testaction instanceof IExecution );
+        Assert.assertEquals( "?foo", l_testaction.toString() );
+    }
+
+    /**
+     * test plan-bundle variable list rule
+     */
+    @Test
+    @SuppressWarnings( "unchecked" )
+    public void planbundlevariablelist()
+    {
+        final Stream<IVariable<?>> l_list = (Stream<IVariable<?>>)new CASTVisitorPlanBundle( null, null )
+                                            .visitVariablelist( new CPlanBundleRuleParser().parser( "[X|Y|Z]" ).variablelist() );
+        Assert.assertNotNull( l_list );
+        Assert.assertArrayEquals(
+            Stream.of( "X()", "Y()", "Z()" ).toArray(),
+            l_list.map( Object::toString ).toArray()
+        );
+    }
+
+    /**
+     * test plan-bundle unification rule
+     */
+    @Test
+    public void planbundleunification()
+    {
+        final Object l_unify = new CASTVisitorPlanBundle( null, null )
+                               .visitUnification( new CPlanBundleRuleParser().parser( ">>bar(X)" ).unification() );
+        Assert.assertTrue( l_unify instanceof IExecution );
+        Assert.assertEquals( ">>bar[X()]", l_unify.toString() );
+    }
+
 
     /**
      * manual rule testing parser
@@ -202,6 +245,25 @@ public final class TestCRuleContext extends IBaseGrammarTest
         protected Class<AgentParser> parserclass()
         {
             return AgentParser.class;
+        }
+    }
+
+    /**
+     * plan-bundle rule testing parser
+     */
+    private static final class CPlanBundleRuleParser extends ITestParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+    {
+
+        @Override
+        protected Class<PlanBundleLexer> lexerclass()
+        {
+            return PlanBundleLexer.class;
+        }
+
+        @Override
+        protected Class<PlanBundleParser> parserclass()
+        {
+            return PlanBundleParser.class;
         }
     }
 }
