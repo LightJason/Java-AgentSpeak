@@ -33,7 +33,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lightjason.agentspeak.testing.IBaseTest;
+import org.lightjason.agentspeak.language.ILiteral;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +44,7 @@ import java.util.stream.Stream;
  * test agent parser rule context
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCManualRuleContext extends IBaseTest
+public final class TestCManualRuleContext extends IBaseGrammarTest
 {
     /**
      * classes for null-returning rules
@@ -81,7 +81,11 @@ public final class TestCManualRuleContext extends IBaseTest
             generaterule( ManualParser.LambdaContext.class, "visitLambda" ),
             generaterule( ManualParser.LambdastreamContext.class, "visitLambdastream" ),
             generaterule( ManualParser.LambdaelementContext.class, "visitLambdaelement" ),
-            generaterule( ManualParser.LambdareturnContext.class, "visitLambdareturn" )
+            generaterule( ManualParser.LambdareturnContext.class, "visitLambdareturn" ),
+            generaterule( ManualParser.ExecuteruleContext.class, "visitExecuterule" ),
+            generaterule( ManualParser.ExecutevariableContext.class, "visitExecutevariable" ),
+            generaterule( ManualParser.ExecuteactionContext.class, "visitExecuteaction" )
+
         ).toArray();
     }
 
@@ -124,4 +128,32 @@ public final class TestCManualRuleContext extends IBaseTest
         );
     }
 
+    /**
+     * test literal rule
+     */
+    @Test
+    public void literal()
+    {
+        final Object l_literal = new CASTVisitorManual().visitLiteral( new CRuleParser().parser( "foo" ).literal() );
+        Assert.assertTrue( l_literal instanceof ILiteral );
+        Assert.assertEquals( "foo[]", l_literal.toString() );
+    }
+
+    /**
+     * abstract class for rule testing
+     */
+    private static final class CRuleParser extends ITestParser<IASTVisitorManual, ManualLexer, ManualParser>
+    {
+        @Override
+        protected Class<ManualLexer> lexerclass()
+        {
+            return ManualLexer.class;
+        }
+
+        @Override
+        protected Class<ManualParser> parserclass()
+        {
+            return ManualParser.class;
+        }
+    }
 }

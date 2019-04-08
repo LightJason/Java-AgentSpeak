@@ -23,6 +23,13 @@
 
 package org.lightjason.agentspeak.grammar;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.TokenStream;
 import org.junit.Assert;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
@@ -30,6 +37,12 @@ import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
 
@@ -149,5 +162,92 @@ public abstract class IBaseGrammarTest extends IBaseTest
                : p_mvalue.intValue() == 0
                  ? ackermann( p_nvalue.intValue() - 1, 1 )
                  : ackermann( p_nvalue.intValue() - 1, ackermann( p_nvalue, p_mvalue.intValue() - 1 ) );
+    }
+
+
+    /**
+     * generic default parser
+     */
+    protected abstract static class ITestParser<T extends IASTVisitor, L extends Lexer, P extends Parser>
+    {
+        /**
+         * ctor lexer reference
+         */
+        private final Constructor<L> m_ctorlexer;
+        /**
+         * ctor parser reference
+         */
+        private final Constructor<P> m_ctorparser;
+
+
+        /**
+         * ctor
+         */
+        public ITestParser()
+        {
+
+            try
+            {
+                m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );
+                m_ctorparser = this.parserclass().getConstructor( TokenStream.class );
+            }
+            catch ( final NoSuchMethodException l_exception )
+            {
+                throw new RuntimeException( l_exception );
+            }
+        }
+
+        /**
+         * returns a parser component
+         *
+         * @param p_content content string
+         * @return parser (for using in visitor interface)
+         */
+        public final P parser( @Nonnull final String p_content )
+        {
+            return this.parser( new ByteArrayInputStream( p_content.getBytes( Charset.forName( "UTF-8" ) ) ) );
+        }
+
+        /**
+         * returns a parser component
+         *
+         * @param p_stream input stream
+         * @return parser (for using in visitor interface)
+         */
+        public final P parser( @Nonnull final InputStream p_stream )
+        {
+            final ANTLRErrorListener l_errorlistener = new CErrorListener();
+
+            try
+            {
+                final L l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );
+                l_lexer.removeErrorListeners();
+                l_lexer.addErrorListener( l_errorlistener );
+
+                final P l_parser = m_ctorparser.newInstance( new CommonTokenStream( l_lexer ) );
+                l_parser.removeErrorListeners();
+                l_parser.addErrorListener( l_errorlistener );
+
+                return l_parser;
+            }
+            catch ( final IllegalAccessException | InstantiationException | InvocationTargetException | IOException l_exception )
+            {
+                throw new RuntimeException( l_exception );
+            }
+        }
+
+        /**
+         * returns the lexer class reference
+         *
+         * @return class of lexer
+         */
+        protected abstract Class<L> lexerclass();
+
+        /**
+         * returns the parser class reference
+         *
+         * @return class of parser
+         */
+        protected abstract Class<P> parserclass();
     }
 }

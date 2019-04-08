@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.grammar.builder.CAgentSpeak;
 import org.lightjason.agentspeak.grammar.builder.CTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -118,30 +117,28 @@ public final class CASTVisitorManual extends AbstractParseTreeVisitor<Object> im
         return CAgentSpeak.variablelist( this, p_context.variable() );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+    // --- non used rules --------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Object visitExecuteaction( final ManualParser.ExecuteactionContext p_context )
     {
-        return CAgentSpeak.executeaction( this, p_context.literal(), IActionGenerator.EMPTY );
+        return null;
     }
 
     @Override
     public Object visitExecuterule( final ManualParser.ExecuteruleContext p_context )
     {
-        return CAgentSpeak.executerule( this, p_context.literal(), p_context.executevariable() );
+        return null;
     }
 
     @Override
     public Object visitExecutevariable( final ManualParser.ExecutevariableContext p_context )
     {
-        return CAgentSpeak.passvaribaleliteral( this, p_context.variable(), p_context.termlist() );
+        return null;
     }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- non used rules --------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Object visitBelief( final ManualParser.BeliefContext p_context )
