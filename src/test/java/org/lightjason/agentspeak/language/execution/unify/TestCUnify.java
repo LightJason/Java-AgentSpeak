@@ -21,31 +21,30 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.unifier;
+package org.lightjason.agentspeak.language.execution.unify;
 
-import org.lightjason.agentspeak.language.ITerm;
+import org.junit.Test;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 
 /**
- * unifier algorithm
+ * test unification
  */
-interface IUnifyAlgorithm
+public final class TestCUnify extends IBaseTest
 {
-
     /**
-     * unifier algorithm
-     *
-     * @param p_variables unified variables
-     * @param p_source source stream of terms
-     * @param p_target target stream of terms with variables (must be a deep-copy)
-     * @return boolean of unifier success
-     *
-     * @tparam T term type
+     * hash unification
      */
-    boolean unify( final Set<IVariable<?>> p_variables, final Stream<? extends ITerm> p_source, final Stream<? extends ITerm> p_target );
+    @Test
+    public void hash()
+    {
+        final Set<IVariable<?>> l_variables = new HashSet<>();
+
+        //new CHashUnifyAlgorithm( l_variables, Stream.of( new CVariable<>( "foo", 1 ) ), Stream.of( new CVariable<>( "foo" ) ) );
+    }
 
 }

@@ -43,10 +43,11 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
 {
 
     @Override
-    public <T extends ITerm> boolean unify( @Nonnull final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
+    public boolean unify( @Nonnull final Set<IVariable<?>> p_variables,
+                          @Nonnull final Stream<? extends ITerm> p_source, final Stream<? extends ITerm> p_target )
     {
-        final List<T> l_source = p_source.collect( Collectors.toList() );
-        final List<T> l_target = p_target.collect( Collectors.toList() );
+        final List<ITerm> l_source = p_source.collect( Collectors.toList() );
+        final List<ITerm> l_target = p_target.collect( Collectors.toList() );
 
         if ( l_target.isEmpty() || l_source.isEmpty() )
             return true;
@@ -63,10 +64,9 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
      * @param p_variables variables
      * @param p_source source terms
      * @param p_target target terms
-     * @tparam T term type
      * @return boolean on unification
      */
-    private <T extends ITerm> boolean process( @Nonnull final Set<IVariable<?>> p_variables, @Nonnull final List<T> p_source, @Nonnull final List<T> p_target )
+    private boolean process( @Nonnull final Set<IVariable<?>> p_variables, @Nonnull final List<ITerm> p_source, @Nonnull final List<ITerm> p_target )
     {
         return StreamUtils.zip(
             p_source.stream(),
@@ -91,10 +91,9 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
      * @param p_variables variables
      * @param p_source source term
      * @param p_target target term
-     * @tparam T term type
      * @return unification literal
      */
-    private <T extends ITerm> boolean recursion( @Nonnull final Set<IVariable<?>> p_variables, @Nonnull final T p_source, @Nonnull final T p_target )
+    private boolean recursion( @Nonnull final Set<IVariable<?>> p_variables, @Nonnull final ITerm p_source, @Nonnull final ITerm p_target )
     {
         if ( !( p_source instanceof ILiteral && p_target instanceof ILiteral ) )
             return false;

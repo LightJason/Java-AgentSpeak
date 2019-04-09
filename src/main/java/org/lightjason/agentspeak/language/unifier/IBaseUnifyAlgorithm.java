@@ -44,11 +44,10 @@ public abstract class IBaseUnifyAlgorithm implements IUnifyAlgorithm
      * @param p_variables output variables
      * @param p_source source term
      * @param p_target target term
-     * @tparam T term type
      * @return execution boolean
      */
-    protected static <T extends ITerm> boolean bothvariables( @Nonnull final Set<IVariable<?>> p_variables,
-                                                              @Nonnull final T p_source, @Nonnull final T p_target )
+    protected static boolean bothvariables( @Nonnull final Set<IVariable<?>> p_variables,
+                                            @Nonnull final ITerm p_source, @Nonnull final ITerm p_target )
     {
         // if s and t are variable create a realocated variable for backtracking
         if ( !( p_target instanceof IVariable<?> && p_source instanceof IVariable<?> ) )
@@ -70,11 +69,10 @@ public abstract class IBaseUnifyAlgorithm implements IUnifyAlgorithm
      * @param p_variables output variables
      * @param p_source source term
      * @param p_target target term
-     * @tparam T term type
      * @return execution boolean
      */
-    protected static <T extends ITerm> boolean variables( @Nonnull final Set<IVariable<?>> p_variables,
-                                                          @Nonnull final T p_source, @Nonnull final T p_target )
+    protected static boolean variables( @Nonnull final Set<IVariable<?>> p_variables,
+                                        @Nonnull final ITerm p_source, @Nonnull final ITerm p_target )
     {
         if ( !( p_target instanceof IVariable<?> ) )
             return false;
