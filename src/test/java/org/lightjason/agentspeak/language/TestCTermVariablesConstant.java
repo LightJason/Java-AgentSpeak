@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -290,23 +291,63 @@ public final class TestCTermVariablesConstant extends IBaseTest
             l_relocatemutexvariable
         ).forEach( i ->
         {
-            Assert.assertEquals( CPath.of( "copy" ), i.shallowcopysuffix().fqnfunctor() );
-            Assert.assertEquals( i.<Object>raw(), i.shallowcopysuffix().raw() );
+            final IVariable<?> l_copy = i.shallowcopywithoutsuffix();
+            Assert.assertEquals(
+                MessageFormat.format( "shallow-copy-withoutsuffix-fqnfunctor: {0}", i.getClass() ),
+                CPath.of( "prefix" ), l_copy.fqnfunctor()
+            );
+            Assert.assertEquals( i.<Object>raw(), l_copy.raw() );
 
-            Assert.assertEquals( i.getClass().toString(), CPath.of( "prefix/copy" ), i.shallowcopy().fqnfunctor() );
-            Assert.assertEquals( i.getClass().toString(), CPath.of( "zzz/prefix/copy" ), i.shallowcopy( CPath.of( "zzz" ) ).fqnfunctor() );
+
+            Assert.assertEquals(
+                MessageFormat.format( "shallow-copy-suffix-fqnfunctor: {0}", i.getClass() ),
+                CPath.of( "copy" ), i.shallowcopysuffix().fqnfunctor()
+            );
+            Assert.assertEquals(
+                MessageFormat.format( "shallow-copy-raw: {0}", i.getClass() ),
+                i.<Object>raw(), i.shallowcopysuffix().raw()
+            );
+
+            Assert.assertEquals(
+                i.getClass().toString(),
+                CPath.of( "prefix/copy" ), i.shallowcopy().fqnfunctor()
+            );
+            Assert.assertEquals(
+                MessageFormat.format( "shallow-copy-fqnfunctor: {0}", i.getClass() ),
+                CPath.of( "zzz/prefix/copy" ), i.shallowcopy( CPath.of( "zzz" ) ).fqnfunctor()
+            );
+
 
             final ITerm l_deepsuffix = i.deepcopysuffix();
-            Assert.assertEquals( i.getClass().toString(), CPath.of( "copy" ), l_deepsuffix.fqnfunctor() );
-            Assert.assertNotEquals( i.getClass().toString(), i.raw(), l_deepsuffix.raw() );
+            Assert.assertEquals(
+                MessageFormat.format( "deep-copy-suffix-fqnfunctor: {0}", i.getClass() ),
+                CPath.of( "copy" ), l_deepsuffix.fqnfunctor()
+            );
+            Assert.assertNotEquals(
+                MessageFormat.format( "deep-copy-suffix-notequal: {0}", i.getClass() ),
+                i.raw(), l_deepsuffix.raw()
+            );
+
 
             final ITerm l_deepcopy = i.deepcopy();
-            Assert.assertEquals( i.getClass().toString(), CPath.of( "prefix/copy" ), l_deepcopy.fqnfunctor() );
-            Assert.assertNotEquals( i.getClass().toString(), i.raw(), l_deepcopy.raw() );
+            Assert.assertEquals(
+                MessageFormat.format( "deep-copy-fqnfunctor 1: {0}", i.getClass() ),
+                CPath.of( "prefix/copy" ), l_deepcopy.fqnfunctor()
+            );
+            Assert.assertNotEquals(
+                MessageFormat.format( "deep-copy-notequal 1: {0}", i.getClass() ),
+                i.raw(), l_deepcopy.raw()
+            );
 
             final ITerm l_deepcopypath = i.deepcopy( CPath.of( "yyy" ) );
-            Assert.assertEquals( i.getClass().toString(), CPath.of( "yyy/prefix/copy" ), l_deepcopypath.fqnfunctor() );
-            Assert.assertNotEquals( i.getClass().toString(), i.raw(), l_deepcopypath.raw() );
+            Assert.assertEquals(
+                MessageFormat.format( "deep-copy-fqnfunctor 2: {0}", i.getClass() ),
+                CPath.of( "yyy/prefix/copy" ), l_deepcopypath.fqnfunctor()
+            );
+            Assert.assertNotEquals(
+                MessageFormat.format( "deep-copy-notequal 2: {0}", i.getClass() ),
+                i.raw(), l_deepcopypath.raw()
+            );
         } );
     }
 

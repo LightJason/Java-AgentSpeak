@@ -143,7 +143,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
     @Override
     public IVariable<T> shallowcopywithoutsuffix()
     {
-        return new CRelocateVariable<>( m_functor.suffix(), m_relocate, m_value );
+        return new CRelocateVariable<>( m_functor.subpath( 0, m_functor.size() - 1 ), m_relocate, m_value );
     }
 
     @Nonnull

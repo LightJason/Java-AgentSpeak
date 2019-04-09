@@ -118,7 +118,7 @@ public final class CVariable<T> extends IBaseVariable<T>
     @Override
     public IVariable<T> shallowcopywithoutsuffix()
     {
-        return new CVariable<>( m_functor.remove( m_functor.size() - 1 ), m_value );
+        return new CVariable<>( m_functor.subpath( 0, m_functor.size() - 1 ), m_value );
     }
 
     @Nonnull
