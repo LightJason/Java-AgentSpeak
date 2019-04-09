@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.language.variable;
 
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.IRawStructure;
 import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.ITerm;
@@ -73,6 +75,9 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
         @Override
         public IVariable<Object> thrownotallocated() throws IllegalStateException
         {
+            if ( !this.allocated() )
+                throw new CNoSuchElementException( CCommon.languagestring( IVariable.class, "notallocated", "EMPTY" ) );
+
             return this;
         }
 
@@ -120,7 +125,7 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
         @Override
         public String functor()
         {
-            return "";
+            return IPath.EMPTY.toString();
         }
 
         @Nonnull

@@ -271,17 +271,19 @@ public final class TestCTermVariablesConstant extends IBaseTest
     }
 
     /**
-     * test variable shallow-copy
+     * test variable shallow- and deep-copy
      */
     @Test
     public void variablecopy()
     {
+        final IVariable<?> l_constant = new CConstant<>( "prefix/copy", new Object() );
         final IVariable<?> l_variable = new CVariable<>( "prefix/copy", new Object()  );
         final IVariable<?> l_variablemutex = new CMutexVariable<Object>( "prefix/copy", new Object() );
         final IVariable<?> l_relocatevariable = new CRelocateVariable<>( l_variable );
         final IVariable<?> l_relocatemutexvariable = new CRelocateMutexVariable<>( l_variablemutex );
 
         Stream.of(
+            l_constant,
             l_variable,
             l_variablemutex,
             l_relocatevariable,
@@ -440,4 +442,26 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.allocate( IContext.EMPTYPLAN ) );
         Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.bind( IContext.EMPTYPLAN ) );
     }
+
+    /**
+     * test empty variable
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void emptyvariable()
+    {
+        Assert.assertFalse( IVariable.EMPTY.mutex() );
+        Assert.assertTrue( IVariable.EMPTY.any() );
+        Assert.assertFalse( IVariable.EMPTY.allocated() );
+        Assert.assertFalse( IVariable.EMPTY.hasVariable() );
+
+        Assert.assertNull( IVariable.EMPTY.raw() );
+        Assert.assertEquals( IVariable.EMPTY, IVariable.EMPTY.shallowcopysuffix() );
+        Assert.assertEquals( 0, IVariable.EMPTY.structurehash() );
+        Assert.assertEquals( CPath.EMPTY.toString(), IVariable.EMPTY.functor() );
+        Assert.assertEquals( CPath.EMPTY, IVariable.EMPTY.fqnfunctor() );
+        Assert.assertEquals( CPath.EMPTY, IVariable.EMPTY.functorpath() );
+
+        IVariable.EMPTY.thrownotallocated();
+    }
+
 }
