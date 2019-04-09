@@ -89,12 +89,12 @@ public final class CUnifier implements IUnifier
         // try to unifier exact or if not possible by recursive on the value set
         if ( !(
             p_target.structurehash() == p_source.structurehash()
-            ? m_hashbased.unify(
+            ? m_hashbased.apply(
                 l_result,
                 CCommon.flattenrecursive( p_source.orderedvalues() ),
                 CCommon.flattenrecursive( p_target.orderedvalues() )
             )
-            : m_recursive.unify(
+            : m_recursive.apply(
                 l_result,
                 p_source.orderedvalues(),
                 p_target.orderedvalues()

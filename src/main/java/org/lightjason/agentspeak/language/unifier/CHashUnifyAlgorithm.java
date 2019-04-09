@@ -39,8 +39,8 @@ public final class CHashUnifyAlgorithm extends IBaseUnifyAlgorithm
 {
 
     @Override
-    public boolean unify( @Nonnull final Set<IVariable<?>> p_variables,
-                          @Nonnull final Stream<? extends ITerm> p_source, @Nonnull final Stream<? extends ITerm> p_target )
+    public Boolean apply( @Nonnull final Set<IVariable<?>> p_variables,
+                          @Nonnull final Stream<ITerm> p_source, @Nonnull final Stream<ITerm> p_target )
     {
         return StreamUtils.zip(
             p_source,

@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.unifier;
 
+import com.codepoetics.protonpack.functions.TriFunction;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -33,19 +34,6 @@ import java.util.stream.Stream;
 /**
  * unifier algorithm
  */
-interface IUnifyAlgorithm
+interface IUnifyAlgorithm extends TriFunction<Set<IVariable<?>>, Stream<ITerm>, Stream<ITerm>, Boolean>
 {
-
-    /**
-     * unifier algorithm
-     *
-     * @param p_variables unified variables
-     * @param p_source source stream of terms
-     * @param p_target target stream of terms with variables (must be a deep-copy)
-     * @return boolean of unifier success
-     *
-     * @tparam T term type
-     */
-    boolean unify( final Set<IVariable<?>> p_variables, final Stream<? extends ITerm> p_source, final Stream<? extends ITerm> p_target );
-
 }

@@ -43,8 +43,8 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
 {
 
     @Override
-    public boolean unify( @Nonnull final Set<IVariable<?>> p_variables,
-                          @Nonnull final Stream<? extends ITerm> p_source, final Stream<? extends ITerm> p_target )
+    public Boolean apply( @Nonnull final Set<IVariable<?>> p_variables,
+                          @Nonnull final Stream<ITerm> p_source, final Stream<ITerm> p_target )
     {
         final List<ITerm> l_source = p_source.collect( Collectors.toList() );
         final List<ITerm> l_target = p_target.collect( Collectors.toList() );
@@ -104,7 +104,7 @@ public final class CRecursiveUnifyAlgorithm extends IBaseUnifyAlgorithm
         if ( !l_sourceliteral.fqnfunctor().equals( l_targetliteral.fqnfunctor() ) )
             return false;
 
-        return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
+        return this.apply( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
     }
 
 }
