@@ -54,7 +54,7 @@ public abstract class IBaseUnifyAlgorithm implements IUnifyAlgorithm
             return false;
 
         p_variables.add(
-            ( (IVariable<?>) p_target ).mutex()
+            p_target.<IVariable<?>>term().mutex()
             ? new CRelocateMutexVariable<>( p_target.fqnfunctor(), p_source.term() )
             : new CRelocateVariable<>( p_target.fqnfunctor(), p_source.term() )
         );

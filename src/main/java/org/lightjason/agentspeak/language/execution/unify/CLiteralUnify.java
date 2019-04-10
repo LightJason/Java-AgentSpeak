@@ -72,16 +72,12 @@ public final class CLiteralUnify extends CDefaultUnify
 
     @Nonnull
     @Override
-    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return
-    )
+    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
-                                                       .unify(
-                                                           CCommon.replacebycontext( p_context, m_source ).raw(),
-                                                           CCommon.replacebycontext( p_context, m_value ).raw()
-                                                       );
+                                                       .unify( m_source.bind( p_context ), CCommon.replacebycontext( p_context, m_value ).raw() );
 
         if ( l_variables.size() != m_variablenumber )
             return p_context.agent().fuzzy().membership().fail();

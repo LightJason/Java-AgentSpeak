@@ -107,8 +107,7 @@ public final class CUnifier implements IUnifier
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
-                                         @Nonnull final IExecution p_expression, final boolean p_parallel
-    )
+                                         @Nonnull final IExecution p_expression, final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
