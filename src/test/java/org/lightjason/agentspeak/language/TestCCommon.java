@@ -25,9 +25,15 @@ package org.lightjason.agentspeak.language;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -85,4 +91,43 @@ public final class TestCCommon extends IBaseTest
         );
 
     }
+
+    /**
+     * test replace context
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void replaceconntext()
+    {
+        final IVariable<?> l_variable = new CVariable<>( "F", 5 );
+
+        Assert.assertEquals(
+            CCommon.replacebycontext(
+                new CLocalContext(
+                    IAgent.EMPTY,
+                    l_variable
+                ),
+                new CVariable<>( "F" )
+            ),
+            l_variable
+        );
+
+        CCommon.replacebycontext( IContext.EMPTYPLAN, new CVariable<>( "F" ) );
+    }
+
+    /**
+     * test flatten stream
+     */
+    @Test
+    public void flattenstream()
+    {
+        Assert.assertArrayEquals(
+            Stream.of( "stream", 1, 1, 2 ).toArray(),
+            CCommon.flatten( Stream.of(
+                CRawTerm.of( "stream" ),
+                CRawTerm.of( 1 ),
+                CRawTerm.of( Stream.of( 1, 2 ).collect( Collectors.toList() ) )
+            ) ).map( ITerm::raw ).toArray()
+        );
+    }
+
 }
