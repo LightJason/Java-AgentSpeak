@@ -70,11 +70,18 @@ public final class TestCPassing extends IBaseTest
         final IVariable<?> l_number = new CVariable<>( "bar" ).set( 5 );
 
         execute(
-            new CPassVariable( l_string, l_number ),
+            new CPassVariable( l_string ),
             false,
             Collections.emptyList(),
             l_return,
-            l_string,
+            l_string
+        );
+
+        execute(
+            new CPassVariable( l_number ),
+            false,
+            Collections.emptyList(),
+            l_return,
             l_number
         );
 

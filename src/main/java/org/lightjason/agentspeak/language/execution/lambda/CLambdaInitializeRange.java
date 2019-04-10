@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -120,6 +121,13 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
 
             default:
         }
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IVariable<?>> variables()
+    {
+        return Arrays.stream( m_value ).flatMap( IExecution::variables );
     }
 
     @Override

@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.passing;
 
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,16 +31,14 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
  * pass variable data into the return structure
  */
-public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
+public final class CPassVariable extends IBaseExecution<IVariable<?>>
 {
     /**
      * serial id
@@ -54,7 +51,7 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
      *
      * @param p_value data
      */
-    public CPassVariable( @Nonnull final IVariable<?>... p_value )
+    public CPassVariable( @Nonnull final IVariable<?> p_value )
     {
         super( p_value );
     }
@@ -62,14 +59,11 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                           @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_return )
     {
-        CCommon.replacebycontext( p_context, Arrays.stream( m_value ) )
-               .map( ITerm::raw )
-               .map( CRawTerm::of )
-               .forEach( p_return::add );
-
+        p_return.add(
+            CCommon.replacebycontext( p_context, m_value )
+        );
         return Stream.of();
     }
 
@@ -77,12 +71,12 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>[]>
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Arrays.stream( m_value );
+        return Stream.of( m_value );
     }
 
     @Override
     public String toString()
     {
-        return Arrays.stream( m_value ).map( Object::toString ).collect( Collectors.joining( " " ) );
+        return  m_value.toString();
     }
 }

@@ -44,10 +44,13 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -279,6 +282,70 @@ public final class TestCRuleContext extends IBaseGrammarTest
         new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
             .visitExecuteaction( new CAgentRuleParser().parser( ".bar(123)" ).executeaction() );
     }
+
+    /**
+     * test agent unification constraint
+     */
+    @Test
+    public void agentunificationconstraint()
+    {
+        final Object l_unifyexpression = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
+            .visitUnificationconstraint( new CAgentRuleParser().parser( ">>(foo(X), X > 1000)" ).unificationconstraint() );
+
+        Assert.assertTrue( l_unifyexpression instanceof IExecution );
+
+        final Object l_unifyliteral = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
+            .visitUnificationconstraint( new CAgentRuleParser().parser( ">>( foo(X), foo(bar(5)) )" ).unificationconstraint() );
+
+        Assert.assertTrue( l_unifyliteral instanceof IExecution );
+    }
+
+    /**
+     * test agent lambda-element with range
+     */
+    @Test
+    public void agentlambdaelementrange()
+    {
+        final IExecution l_range = (IExecution) new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
+            .visitLambdastream( new CAgentRuleParser().parser( "(#1,5)" ).lambdastream() );
+
+        final List<ITerm> l_return = new ArrayList<>();
+        l_range.execute( false, IContext.EMPTYPLAN, Collections.emptyList(), l_return )
+               .forEach( i ->
+               {
+               } );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertArrayEquals(
+            Stream.of( 1L, 2L, 3L, 4L ).toArray(),
+            l_return.get( 0 ).<Stream<?>>raw().toArray()
+        );
+    }
+
+    /**
+     * test agent lambda-element with range variable
+     */
+    @Test
+    public void agentlambdaelementvariable()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        execute(
+            (IExecution) new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
+                .visitLambdastream( new CAgentRuleParser().parser( "(#A,B)" ).lambdastream() ),
+            false,
+            Collections.emptyList(),
+            l_return,
+            new CVariable<>( "A", 5 ),
+            new CVariable<>( "B", 10 )
+        );
+
+        Assert.assertEquals( 1, l_return.size() );
+        Assert.assertArrayEquals(
+            Stream.of( 5L, 6L, 7L, 8L, 9L ).toArray(),
+            l_return.get( 0 ).<Stream<?>>raw().toArray()
+        );
+    }
+
 
 
     /**

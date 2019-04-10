@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.language.execution;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -49,10 +48,18 @@ public abstract class IBaseExecution<T> implements IExecution
 
     /**
      * ctor
+     */
+    protected IBaseExecution()
+    {
+        m_value = null;
+    }
+
+    /**
+     * ctor
      *
      * @param p_value data
      */
-    protected IBaseExecution( @Nullable final T p_value )
+    protected IBaseExecution( @Nonnull final T p_value )
     {
         m_value = p_value;
     }

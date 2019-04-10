@@ -980,14 +980,13 @@ public final class CAgentSpeak
     @Nonnull
     @SuppressWarnings( "unchecked" )
     public static IExecution lambdaelement( @Nonnull final ParseTreeVisitor<?> p_visitor,
-                                            @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable
-    )
+                                            @Nullable final TerminalNode p_number, @Nullable final RuleContext p_variable )
     {
         if ( Objects.nonNull( p_number ) )
             return passdata( CRaw.numbervalue( p_number ) );
 
         if ( Objects.nonNull( p_variable ) )
-            return passvariable( (IVariable<?>) p_visitor.visitChildren( p_variable ) );
+            return passvariable( (IVariable<?>) p_visitor.visit( p_variable ) );
 
         throw new CParserSyntaxException( CCommon.languagestring( CAgentSpeak.class, "unknownlambdaelement" ) );
     }
