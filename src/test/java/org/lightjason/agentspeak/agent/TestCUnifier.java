@@ -87,16 +87,21 @@ public final class TestCUnifier extends IBaseTest
         final ILiteral l_literal = CLiteral.of( "toplevel", Stream.concat(
             Arrays.stream( l_test ),
             Stream.of(
-                CLiteral.parse( "second/sub(1)" ),
-                CLiteral.parse( "second/sub(2)" ),
-                CLiteral.parse( "second/sub(3)" )
+                CLiteral.parse( "second/sub(val(1))" ),
+                CLiteral.parse( "second/sub(val(2))" ),
+                CLiteral.parse( "second/sub(val(3))" )
             )
         ).collect( Collectors.toList() ) );
 
         Assert.assertArrayEquals(
             MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
-            l_test,
+            Arrays.stream( l_test ).flatMap( i -> i.orderedvalues() ).toArray(),
             l_literal.orderedvalues( CPath.of( "first" ) ).toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.of( CLiteral.parse( "val(1)" ), CLiteral.parse( "val(2)" ), CLiteral.parse( "val(3)" ) ).toArray(),
+            l_literal.orderedvalues( CPath.of( "second/sub" ) ).toArray()
         );
     }
 

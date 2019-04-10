@@ -266,11 +266,7 @@ public final class CLiteral implements ILiteral
     {
         return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_values.values().stream()
-               : p_path.length == 1
-                 ? m_values.asMap().get( p_path[0] ).stream()
-                 : m_values.asMap().get( p_path[0] ).stream()
-                           .filter( i -> i instanceof ILiteral )
-                           .flatMap( i -> ( (ILiteral) i ).values( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
+               : valuefilter( m_values.asMap().getOrDefault( p_path[0], Collections.emptyList() ).stream(), p_path );
     }
 
     @Nonnull
@@ -278,16 +274,22 @@ public final class CLiteral implements ILiteral
     public Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
         return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
-               ? m_orderedvalues.stream().sequential()
-               : p_path.length == 1
-                 ? m_orderedvalues.stream()
-                                  .filter( i -> i.fqnfunctor().equals( p_path[0] ) ).sequential()
-                 : m_orderedvalues.stream()
-                                  .filter( i -> i.fqnfunctor().equals( p_path[0] ) )
-                                  .filter( i -> i instanceof ILiteral )
-                                  .map( ITerm::<ILiteral>raw )
-                                  .filter( Objects::nonNull )
-                                  .flatMap( i -> i.orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
+               ? m_orderedvalues.stream()
+               : valuefilter( m_orderedvalues.stream().filter( i -> i.fqnfunctor().equals( p_path[0] ) ), p_path );
+    }
+
+    /**
+     * recursive streaming ordered values
+     *
+     * @param p_values values
+     * @param p_path path definition
+     * @return result stream
+     */
+    private static Stream<ITerm> valuefilter( @Nonnull final Stream<ITerm> p_values, @Nonnull final IPath... p_path )
+    {
+        return p_values.filter( i -> i instanceof ILiteral )
+                       .map( ITerm::<ILiteral>term )
+                       .flatMap( i -> i.values( Arrays.stream( p_path ).skip( 1 ).toArray( IPath[]::new ) ) );
     }
 
     @Override
