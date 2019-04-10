@@ -277,7 +277,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
      * test agent action-execution rule
      */
     @Test( expected = NoSuchElementException.class )
-    public void agentexecuteactionnotexists()
+    public void agentexecuteactionnotexist()
     {
         new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
             .visitExecuteaction( new CAgentRuleParser().parser( ".bar(123)" ).executeaction() );

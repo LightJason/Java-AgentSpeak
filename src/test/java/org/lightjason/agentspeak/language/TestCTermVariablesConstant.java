@@ -42,6 +42,7 @@ import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
@@ -129,23 +130,6 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertTrue( CCommon.isssignableto( l_constant, Number.class ) );
         Assert.assertTrue( CCommon.isssignableto( l_constant, Double.class ) );
         Assert.assertEquals( "constant number value", l_value, l_constant.raw(), 0 );
-    }
-
-    /**
-     * test constant copy
-     */
-    @Test
-    public void constantcopy()
-    {
-        Assert.assertEquals(
-            "value",
-            new CConstant<>( "const/value", "test" ).shallowcopysuffix().functor()
-        );
-
-        Assert.assertEquals(
-            "xxx/const/value",
-            new CConstant<>( "const/value", "test" ).shallowcopy( CPath.of( "xxx" ) ).fqnfunctor().toString()
-        );
     }
 
     /**
@@ -272,14 +256,16 @@ public final class TestCTermVariablesConstant extends IBaseTest
     }
 
     /**
-     * test variable shallow- and deep-copy
+     * test shallow- and deep-copy
      */
     @Test
-    public void variablecopy()
+    public void copy()
     {
-        final IVariable<?> l_constant = new CConstant<>( "prefix/copy", new Object() );
-        final IVariable<?> l_variable = new CVariable<>( "prefix/copy", new Object()  );
-        final IVariable<?> l_variablemutex = new CMutexVariable<Object>( "prefix/copy", new Object() );
+        final IPath l_base = CPath.of( "prefix/copy" );
+
+        final IVariable<?> l_constant = new CConstant<>( l_base, new Object() );
+        final IVariable<?> l_variable = new CVariable<>( l_base, new Object()  );
+        final IVariable<?> l_variablemutex = new CMutexVariable<>( l_base, new Object() );
         final IVariable<?> l_relocatevariable = new CRelocateVariable<>( l_variable );
         final IVariable<?> l_relocatemutexvariable = new CRelocateMutexVariable<>( l_variablemutex );
 
@@ -349,6 +335,15 @@ public final class TestCTermVariablesConstant extends IBaseTest
                 i.raw(), l_deepcopypath.raw()
             );
         } );
+
+
+        final ILiteral l_literal = CLiteral.of( "prefix/copy" );
+        Assert.assertEquals( CPath.of( "copy" ), l_literal.shallowcopysuffix().fqnfunctor() );
+        Assert.assertEquals( l_base, l_literal.shallowcopy().fqnfunctor() );
+        Assert.assertEquals( CPath.of( "zzz/prefix/copy" ), l_literal.shallowcopy( CPath.of( "zzz" ) ).fqnfunctor() );
+        Assert.assertEquals( CPath.of( "copy" ), l_literal.deepcopysuffix().fqnfunctor() );
+        Assert.assertEquals( l_base, l_literal.deepcopy().fqnfunctor() );
+        Assert.assertEquals( CPath.of( "yyy/prefix/copy" ), l_literal.deepcopy( CPath.of( "yyy" ) ).fqnfunctor() );
     }
 
 
@@ -464,6 +459,24 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertTrue( l_term.functor().isEmpty() );
 
         l_term.thrownotallocated();
+    }
+
+    /**
+     * test termlist-copy
+     */
+    @Test
+    @SuppressWarnings( "unchecked" )
+    public void rawtermcopy()
+    {
+        final IRawTerm<?> l_list = CRawTermList.of( CRawTerm.of( "list" ), CRawTerm.of( 8 ), CRawTerm.of( 12L ), CRawTerm.of( 99D ) );
+
+        Assert.assertTrue( l_list.allocated() );
+        Assert.assertFalse( l_list.hasVariable() );
+        Assert.assertTrue( l_list.valueassignableto( List.class ) );
+        Assert.assertArrayEquals(
+            Stream.of( "list", 8, 12L, 99D ).toArray(),
+            l_list.<List<?>>raw().toArray()
+        );
     }
 
     /**

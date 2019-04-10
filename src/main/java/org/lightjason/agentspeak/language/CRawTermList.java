@@ -26,13 +26,11 @@ package org.lightjason.agentspeak.language;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,10 +75,8 @@ public final class CRawTermList implements IRawTerm<List<?>>
      *
      * @param p_value any value
      * @return raw term
-     *
-     * @tparam N type
      */
-    public static CRawTermList of( @Nonnull final Stream<ITerm> p_value )
+    public static IRawTerm<?> of( @Nonnull final Stream<ITerm> p_value )
     {
         return new CRawTermList( p_value );
     }
@@ -90,10 +86,8 @@ public final class CRawTermList implements IRawTerm<List<?>>
      *
      * @param p_value any value
      * @return raw term
-     *
-     * @tparam N type
      */
-    public static CRawTermList of( @Nonnull final ITerm... p_value )
+    public static IRawTerm<?> of( @Nonnull final ITerm... p_value )
     {
         return new CRawTermList( p_value );
     }
@@ -108,16 +102,13 @@ public final class CRawTermList implements IRawTerm<List<?>>
     @Override
     public IRawTerm<List<?>> thrownotallocated() throws IllegalStateException
     {
-        if ( !this.allocated() )
-            throw new CNoSuchElementException( CCommon.languagestring( this, "notallocated" ) );
-
         return this;
     }
 
     @Override
     public boolean valueassignableto( @Nonnull final Class<?> p_class )
     {
-        return Objects.isNull( m_value ) || p_class.isAssignableFrom( m_value.getClass() );
+        return p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Nullable
@@ -169,14 +160,14 @@ public final class CRawTermList implements IRawTerm<List<?>>
     @Override
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
-        return this;
+        return this.deepcopysuffix();
     }
 
     @Nonnull
     @Override
     public ITerm deepcopysuffix()
     {
-        return this;
+        return org.lightjason.agentspeak.language.CCommon.deepclone( this );
     }
 
     @Override
