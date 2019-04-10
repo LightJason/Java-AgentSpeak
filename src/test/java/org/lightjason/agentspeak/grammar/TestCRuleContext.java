@@ -33,12 +33,23 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.IActionGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 
@@ -147,7 +158,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @Test
     public void agentbodyformular()
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( null, null );
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
 
         final Object l_unify = l_visitor.visitBodyformula( new CAgentRuleParser().parser( ">>foo(X)" ).bodyformula() );
         Assert.assertTrue( l_unify instanceof IExecution );
@@ -164,7 +175,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @Test
     public void planbundlebodyformular()
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( null, null );
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
 
         final Object l_unify = l_visitor.visitBodyformula( new CPlanBundleRuleParser().parser( ">>foo(X)" ).bodyformula() );
         Assert.assertTrue( l_unify instanceof IExecution );
@@ -181,7 +192,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @Test
     public void agenttestaction()
     {
-        final Object l_testaction = new CASTVisitorAgent( null, null )
+        final Object l_testaction = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                     .visitTestaction( new CAgentRuleParser().parser( "?foo" ).testaction() );
         Assert.assertTrue( l_testaction instanceof IExecution );
         Assert.assertEquals( "?foo", l_testaction.toString() );
@@ -193,7 +204,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @Test
     public void planbundletestaction()
     {
-        final Object l_testaction = new CASTVisitorPlanBundle( null, null )
+        final Object l_testaction = new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                     .visitTestaction( new CPlanBundleRuleParser().parser( "?foo" ).testaction() );
         Assert.assertTrue( l_testaction instanceof IExecution );
         Assert.assertEquals( "?foo", l_testaction.toString() );
@@ -206,7 +217,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @SuppressWarnings( "unchecked" )
     public void planbundlevariablelist()
     {
-        final Stream<IVariable<?>> l_list = (Stream<IVariable<?>>)new CASTVisitorPlanBundle( null, null )
+        final Stream<IVariable<?>> l_list = (Stream<IVariable<?>>)new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                             .visitVariablelist( new CPlanBundleRuleParser().parser( "[X|Y|Z]" ).variablelist() );
         Assert.assertNotNull( l_list );
         Assert.assertArrayEquals(
@@ -221,10 +232,52 @@ public final class TestCRuleContext extends IBaseGrammarTest
     @Test
     public void planbundleunification()
     {
-        final Object l_unify = new CASTVisitorPlanBundle( null, null )
+        final Object l_unify = new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                .visitUnification( new CPlanBundleRuleParser().parser( ">>bar(X)" ).unification() );
         Assert.assertTrue( l_unify instanceof IExecution );
         Assert.assertEquals( ">>bar[X()]", l_unify.toString() );
+    }
+
+    /**
+     * test agent action-execution rule
+     */
+    @Test( expected = IllegalArgumentException.class )
+    public void agentexecutionactionwrongarguments()
+    {
+        new CASTVisitorAgent( new CActionStaticGenerator( Stream.of( new IAction()
+        {
+            @Override
+            public int minimalArgumentNumber()
+            {
+                return 5;
+            }
+
+            @Nonnull
+            @Override
+            public IPath name()
+            {
+                return CPath.of( "bar" );
+            }
+
+            @Nonnull
+            @Override
+            public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                   @Nonnull final List<ITerm> p_return
+            )
+            {
+                return Stream.of();
+            }
+        } ) ), ILambdaStreamingGenerator.EMPTY ).visitExecuteaction( new CAgentRuleParser().parser( ".bar" ).executeaction() );
+    }
+
+    /**
+     * test agent action-execution rule
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void agentexecuteactionnotexists()
+    {
+        new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
+            .visitExecuteaction( new CAgentRuleParser().parser( ".bar(123)" ).executeaction() );
     }
 
 
