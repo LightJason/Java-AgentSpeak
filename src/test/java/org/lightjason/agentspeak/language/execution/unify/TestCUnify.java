@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.execution.unify;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -33,6 +34,8 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -107,5 +110,26 @@ public final class TestCUnify extends IBaseTest
             ">>(zzz[Z()], abc[123.0])",
             new CLiteralUnify( false, CLiteral.parse( "abc(123)" ), CLiteral.parse( "zzz(Z)" ) ).toString()
         );
+    }
+
+    /**
+     * test literal variables
+     *
+     * @throws Exception on literal parsing error
+     */
+    @Test
+    public void variables() throws Exception
+    {
+        final List<IVariable<?>> l_variables = new CLiteralUnify(
+            false,
+            CLiteral.parse( "foobar(X)" ),
+            CLiteral.parse( "foobar(Y)" )
+        ).variables().collect( Collectors.toList() );
+
+        Assert.assertEquals( 2, l_variables.size() );
+        Assert.assertEquals( CPath.of( "X" ), l_variables.get( 0 ).fqnfunctor() );
+        Assert.assertEquals( CPath.of( "Y" ), l_variables.get( 1 ).fqnfunctor() );
+        Assert.assertFalse( l_variables.get( 0 ).allocated() );
+        Assert.assertFalse( l_variables.get( 1 ).allocated() );
     }
 }
