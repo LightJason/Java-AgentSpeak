@@ -77,7 +77,7 @@ public final class CLiteralUnify extends CDefaultUnify
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
-                                                       .unify( m_source.bind( p_context ), CCommon.replacebycontext( p_context, m_value ).raw() );
+                                                       .unify( m_source.bind( p_context ), m_value );
 
         if ( l_variables.size() != m_variablenumber )
             return p_context.agent().fuzzy().membership().fail();
