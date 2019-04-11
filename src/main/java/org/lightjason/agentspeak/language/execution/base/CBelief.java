@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.language.execution.base;
 
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
+import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IBaseExecution;
@@ -35,7 +35,6 @@ import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
@@ -87,8 +86,23 @@ public final class CBelief extends IBaseExecution<ILiteral>
      */
     public enum EAction implements BiConsumer<IContext, ILiteral>
     {
-        ADD( "+" ),
-        DELETE( "-" );
+        ADD( "+" )
+        {
+            @Override
+            public void accept( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal )
+            {
+                p_context.agent().beliefbase().add( p_literal.allocate( p_context ) );
+            }
+        },
+        DELETE( "-" )
+        {
+            @Override
+            public void accept( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal )
+            {
+                p_context.agent().beliefbase().remove( p_literal.allocate( p_context ) );
+            }
+        };
+
         /**
          * name
          */
@@ -110,24 +124,6 @@ public final class CBelief extends IBaseExecution<ILiteral>
             return m_operator;
         }
 
-        @Override
-        public void accept( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal )
-        {
-            switch ( this )
-            {
-                case ADD:
-                    p_context.agent().beliefbase().add( p_literal.allocate( p_context ) );
-                    break;
-
-                case DELETE:
-                    p_context.agent().beliefbase().remove( p_literal.allocate( p_context ) );
-                    break;
-
-                default:
-                    throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-            }
-        }
-
         /**
          * builds a action by a string
          *
@@ -140,7 +136,7 @@ public final class CBelief extends IBaseExecution<ILiteral>
             return Arrays.stream( EAction.values() )
                          .filter( i -> i.m_operator.equals( p_value ) )
                          .findFirst()
-                         .orElseThrow( () -> new NoSuchElementException( CCommon.languagestring( EAction.class, "unknownoperator", p_value ) ) );
+                         .orElseThrow( () -> new CNoSuchElementException( CCommon.languagestring( EAction.class, "unknownoperator", p_value ) ) );
         }
     }
 }

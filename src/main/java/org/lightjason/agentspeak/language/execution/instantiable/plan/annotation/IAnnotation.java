@@ -168,7 +168,7 @@ public interface IAnnotation<T> extends IAssignable<T>
             return Arrays.stream( EType.values() )
                          .filter( i -> ( !i.m_name.isEmpty() ) && ( p_value.startsWith( i.m_name ) ) )
                          .findFirst()
-                         .orElseGet( () -> EMPTY );
+                         .orElse( EMPTY );
         }
     }
 
