@@ -29,6 +29,9 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
@@ -80,5 +83,21 @@ public final class TestCInstantiable extends IBaseTest
             Collections.emptyList(),
             Collections.emptyList()
         );
+    }
+
+    /**
+     * test plan statistic
+     */
+    @Test
+    public void statistic()
+    {
+        final IPlanStatistic l_statistic = CPlanStatistic.of( IPlan.EMPTY );
+
+        Assert.assertTrue( l_statistic.toString().startsWith( "successful [0], fail [0]:" ) );
+        Assert.assertEquals( 0L, l_statistic.count() );
+        Assert.assertEquals( 0L, l_statistic.fail() );
+        Assert.assertEquals( 0L, l_statistic.successful() );
+        Assert.assertEquals( l_statistic, l_statistic );
+        Assert.assertEquals( l_statistic, IPlan.EMPTY );
     }
 }
