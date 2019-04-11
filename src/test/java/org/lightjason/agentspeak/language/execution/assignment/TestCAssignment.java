@@ -227,24 +227,7 @@ public final class TestCAssignment extends IBaseTest
             new CSingleAssignment(
                 EAssignOperator.ASSIGN,
                 new CVariable<>( "X" ),
-                new IExecution()
-                {
-                    @Nonnull
-                    @Override
-                    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                           @Nonnull final List<ITerm> p_return
-                    )
-                    {
-                        return Stream.of();
-                    }
-
-                    @Nonnull
-                    @Override
-                    public Stream<IVariable<?>> variables()
-                    {
-                        return Stream.of();
-                    }
-                }
+                IExecution.EMPTY
             ),
             false,
             Collections.emptyList(),
@@ -296,24 +279,7 @@ public final class TestCAssignment extends IBaseTest
         execute(
             new CMultiAssignment(
                 Stream.of(),
-                new IExecution()
-                {
-                    @Nonnull
-                    @Override
-                    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                           @Nonnull final List<ITerm> p_return
-                    )
-                    {
-                        return Stream.of();
-                    }
-
-                    @Nonnull
-                    @Override
-                    public Stream<IVariable<?>> variables()
-                    {
-                        return Stream.of();
-                    }
-                }
+                IExecution.EMPTY
             ),
             false,
             Collections.emptyList(),
@@ -364,5 +330,41 @@ public final class TestCAssignment extends IBaseTest
 
         Assert.assertEquals( Integer.valueOf( 1 ), l_xvariable.raw() );
         Assert.assertArrayEquals( Stream.of( 2, 3 ).toArray(), l_yvariable.<Collection<?>>raw().toArray() );
+    }
+
+    /**
+     * test hashcode and equals
+     */
+    @Test
+    public void hashcodeeqauls()
+    {
+        Assert.assertEquals(
+            new CSingleAssignment( EAssignOperator.ASSIGN, IVariable.EMPTY, IExecution.EMPTY ),
+            new CSingleAssignment( EAssignOperator.ASSIGN, IVariable.EMPTY, IExecution.EMPTY )
+        );
+        Assert.assertNotEquals(
+            new CSingleAssignment( EAssignOperator.ASSIGN, IVariable.EMPTY, IExecution.EMPTY ),
+            new CSingleAssignment( EAssignOperator.INCREMENT, IVariable.EMPTY, IExecution.EMPTY )
+        );
+
+
+        Assert.assertEquals(
+            new CMultiAssignment( Stream.of(), IExecution.EMPTY ),
+            new CMultiAssignment( Stream.of(), IExecution.EMPTY )
+        );
+        Assert.assertNotEquals(
+            new CMultiAssignment( Stream.of(), IExecution.EMPTY ),
+            new CMultiAssignment( Stream.of( new CVariable<>( "V" ) ), IExecution.EMPTY )
+        );
+
+
+        Assert.assertEquals(
+            new CDeconstruct( Stream.of(), ITerm.EMPTYTERM ),
+            new CDeconstruct( Stream.of(), ITerm.EMPTYTERM )
+        );
+        Assert.assertNotEquals(
+            new CDeconstruct( Stream.of(), ITerm.EMPTYTERM ),
+            new CDeconstruct( Stream.of(), IVariable.EMPTY )
+        );
     }
 }

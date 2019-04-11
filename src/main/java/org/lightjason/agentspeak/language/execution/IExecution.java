@@ -38,6 +38,27 @@ import java.util.stream.Stream;
  */
 public interface IExecution extends Serializable
 {
+    /**
+     * empty execution
+     */
+    IExecution EMPTY = new IExecution()
+    {
+        @Nonnull
+        @Override
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
+        {
+            return Stream.of();
+        }
+
+        @Nonnull
+        @Override
+        public Stream<IVariable<?>> variables()
+        {
+            return Stream.of();
+        }
+    };
+
 
     /**
      * defines a plan-body operation

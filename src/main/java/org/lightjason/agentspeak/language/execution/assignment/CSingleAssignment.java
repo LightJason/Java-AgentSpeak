@@ -101,7 +101,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
     @Override
     public int hashCode()
     {
-        return super.hashCode() ^ m_rhs.hashCode();
+        return super.hashCode() ^ m_operator.hashCode() ^ m_rhs.hashCode();
     }
 
     @Override
