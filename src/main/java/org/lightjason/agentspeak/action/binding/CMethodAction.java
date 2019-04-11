@@ -101,12 +101,12 @@ public final class CMethodAction extends IBaseAction
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
-        p_stream.defaultWriteObject();
-
         // serialize method handle
         p_stream.writeObject( m_method.getDeclaringClass() );
         p_stream.writeUTF( m_method.getName() );
         p_stream.writeObject( m_method.getParameterTypes() );
+
+        p_stream.defaultWriteObject();
     }
 
     /**
@@ -121,11 +121,16 @@ public final class CMethodAction extends IBaseAction
     @SuppressWarnings( "unchecked" )
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException
     {
-        p_stream.defaultReadObject();
-
         // deserialize method handle
-        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[]) p_stream.readObject() );
-        m_methodhandle = MethodHandles.lookup().unreflect( m_method );
+        final Class<?> l_class = (Class<?>) p_stream.readObject();
+        final String l_name = p_stream.readUTF();
+        final Class<?>[] l_types = (Class<?>[])p_stream.readObject();
+
+        final Method l_method = l_class.getDeclaredMethod( l_name, l_types );
+        l_method.setAccessible( true );
+        m_methodhandle = MethodHandles.lookup().unreflect( l_method );
+
+        p_stream.defaultReadObject();
     }
 
     @Nonnull
@@ -145,13 +150,11 @@ public final class CMethodAction extends IBaseAction
     @Nonnull
     @Override
     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                           @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         try
         {
             return m_arguments == 0
-
                    ? CMethodAction.returnvalues( m_methodhandle.invoke( p_context.agent() ), p_return )
                    : CMethodAction.returnvalues(
                        m_methodhandle.invokeWithArguments(

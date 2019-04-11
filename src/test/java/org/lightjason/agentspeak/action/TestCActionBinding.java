@@ -23,15 +23,29 @@
 
 package org.lightjason.agentspeak.action;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
+import org.lightjason.agentspeak.action.binding.IAgentActionName;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IActionGenerator;
+import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import javax.annotation.Nullable;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -48,14 +62,13 @@ public final class TestCActionBinding extends IBaseTest
     public void classbinding()
     {
         Assert.assertArrayEquals(
-
             CCommon.actionsFromAgentClass(
                 CClassBindingDefault.class,
                 CClassBindingBlacklist.class,
                 CClassBindingWhitelist.class
-            ).map( i -> i.name().path() ).toArray(),
+            ).map( i -> i.name().toString() ).toArray(),
 
-            Stream.of( "methodwhitelist" ).toArray()
+            Stream.of( "methodwhitelist", "methodpass", "methodbyname", "methodfail" ).toArray()
         );
     }
 
@@ -67,7 +80,7 @@ public final class TestCActionBinding extends IBaseTest
     public void methoddefault()
     {
         Assert.assertArrayEquals(
-            CCommon.actionsFromAgentClass( CMethodBindingDefault.class ).map( i -> i.name().path() ).toArray(),
+            CCommon.actionsFromAgentClass( CMethodBindingDefault.class ).map( i -> i.name().toString() ).toArray(),
             Stream.of( "methodannotate" ).toArray()
         );
     }
@@ -80,7 +93,7 @@ public final class TestCActionBinding extends IBaseTest
     public void methodblacklist()
     {
         Assert.assertArrayEquals(
-            CCommon.actionsFromAgentClass( CMethodBindingBlacklist.class ).map( i -> i.name().path() ).toArray(),
+            CCommon.actionsFromAgentClass( CMethodBindingBlacklist.class ).map( i -> i.name().toString() ).toArray(),
             Stream.of( "methodannotate" ).toArray()
         );
     }
@@ -93,9 +106,113 @@ public final class TestCActionBinding extends IBaseTest
     public void methodwhitelist()
     {
         Assert.assertArrayEquals(
-            CCommon.actionsFromAgentClass( CMethodBindingWhitelist.class ).map( i -> i.name().path() ).toArray(),
+            CCommon.actionsFromAgentClass( CMethodBindingWhitelist.class ).map( i -> i.name().toString() ).toArray(),
             Stream.of( "methodnotannotate" ).toArray()
         );
+    }
+
+    /**
+     * test binding methods calls
+     *
+     * @throws Exception on agent instantiation
+     */
+    @Test
+    public void methodcalls() throws Exception
+    {
+        final IAgent<?> l_agent = new CClassBindingWhiteListGenerator().generatesingle();
+        final List<IAction> l_actions = CCommon.actionsFromAgentClass( CClassBindingWhitelist.class )
+                                               .collect( Collectors.toList() );
+
+        Assert.assertEquals( 4, l_actions.size() );
+
+        final List<ITerm> l_return = new ArrayList<>();
+
+        Assert.assertEquals( 0, l_actions.get( 0 ).minimalArgumentNumber() );
+        Assert.assertTrue(
+            execute(
+                l_actions.get( 0 ),
+                false,
+                Collections.emptyList(),
+                l_return,
+                l_agent
+            )
+        );
+
+        Assert.assertEquals( 1, l_actions.get( 1 ).minimalArgumentNumber() );
+        Assert.assertTrue(
+            execute(
+                l_actions.get( 1 ),
+                false,
+                Stream.of( 111 ).map( CRawTerm::of ).collect( Collectors.toList() ),
+                l_return,
+                l_agent
+            )
+        );
+
+        Assert.assertEquals( 0, l_actions.get( 2 ).minimalArgumentNumber() );
+        Assert.assertTrue(
+            execute(
+                l_actions.get( 2 ),
+                false,
+                Collections.emptyList(),
+                l_return,
+                l_agent
+            )
+        );
+
+        Assert.assertEquals( 0, l_actions.get( 3 ).minimalArgumentNumber() );
+        Assert.assertFalse(
+            execute(
+                l_actions.get( 3 ),
+                false,
+                Collections.emptyList(),
+                l_return,
+                l_agent
+            )
+        );
+
+        Assert.assertArrayEquals(
+            Stream.of( 2, 111, 3 ).toArray(),
+            l_return.stream().map( ITerm::raw ).toArray()
+        );
+    }
+
+    /**
+     * test serializable action
+     *
+     * @throws Exception on serialize or agent error
+     */
+    @Test
+    public void serialize() throws Exception
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        final IAgent<?> l_agent = new CClassBindingWhiteListGenerator().generatesingle();
+        final IAction l_origin = CCommon.actionsFromAgentClass( CClassBindingWhitelist.class ).findFirst().get();
+        final IAction l_copy = SerializationUtils.clone( l_origin );
+
+        Assert.assertEquals( l_origin, l_copy );
+        Assert.assertTrue(
+            execute(
+                l_origin,
+                false,
+                Collections.emptyList(),
+                l_return,
+                l_agent
+            )
+        );
+        Assert.assertTrue(
+            execute(
+                l_copy,
+                false,
+                Collections.emptyList(),
+                l_return,
+                l_agent
+            )
+        );
+
+        Assert.assertEquals( 2, l_return.size() );
+        Assert.assertEquals( l_return.get( 0 ), l_return.get( 1 ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -124,9 +241,13 @@ public final class TestCActionBinding extends IBaseTest
 
         /**
          * test binding method
+         *
+         * @return int value
          */
-        private void methoddefault()
-        {}
+        private int methoddefault()
+        {
+            return 0;
+        }
     }
 
     /**
@@ -152,9 +273,32 @@ public final class TestCActionBinding extends IBaseTest
 
         /**
          * test binding method
+         *
+         * @return int value
          */
-        private void methodblacklist()
-        {}
+        private int methodblacklist()
+        {
+            return 1;
+        }
+    }
+
+    /**
+     * test class whitelist agent generator
+     */
+    private static class CClassBindingWhiteListGenerator extends IBaseAgentGenerator<CClassBindingWhitelist>
+    {
+
+        CClassBindingWhiteListGenerator() throws Exception
+        {
+            super( InputStream.nullInputStream(), IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
+        }
+
+        @Nullable
+        @Override
+        public CClassBindingWhitelist generatesingle( @Nullable final Object... p_data )
+        {
+            return new CClassBindingWhitelist( m_configuration );
+        }
     }
 
     /**
@@ -180,9 +324,43 @@ public final class TestCActionBinding extends IBaseTest
 
         /**
          * test binding method
+         *
+         * @return int value
          */
-        private void methodwhitelist()
-        {}
+        private int methodwhitelist()
+        {
+            return 2;
+        }
+
+        /**
+         * test binding method with name
+         *
+         * @return int value
+         */
+        @IAgentActionName( name = "methodbyname" )
+        private int methodbyname()
+        {
+            return 3;
+        }
+
+        /**
+         * test binding method with parameter
+         *
+         * @param p_value input value
+         * @return int value
+         */
+        private int methodpass( final int p_value )
+        {
+            return p_value;
+        }
+
+        /**
+         * test binding method failing
+         */
+        private void methodfail()
+        {
+            throw new RuntimeException();
+        }
     }
 
 
@@ -209,16 +387,24 @@ public final class TestCActionBinding extends IBaseTest
 
         /**
          * test binding method with annotation
+         *
+         * @return int value
          */
         @IAgentActionFilter
-        private void methodannotate()
-        {}
+        private int methodannotate()
+        {
+            return 4;
+        }
 
         /**
          * test binding method without annotation
+         *
+         * @return int value
          */
-        private void methodnotannotate()
-        {}
+        private int methodnotannotate()
+        {
+            return 5;
+        }
     }
 
     /**
@@ -244,16 +430,24 @@ public final class TestCActionBinding extends IBaseTest
 
         /**
          * test binding method with annotation
+         *
+         * @return int value
          */
         @IAgentActionFilter
-        private void methodannotate()
-        {}
+        private int methodannotate()
+        {
+            return 6;
+        }
 
         /**
          * test binding method without annotation
+         *
+         * @return int value
          */
-        private void methodnotannotate()
-        {}
+        private int methodnotannotate()
+        {
+            return 7;
+        }
     }
 
 
@@ -280,16 +474,24 @@ public final class TestCActionBinding extends IBaseTest
 
         /**
          * test binding method with annotation
+         *
+         * @return int value
          */
         @IAgentActionFilter
-        private void methodannotate()
-        {}
+        private int methodannotate()
+        {
+            return 8;
+        }
 
         /**
          * test binding method without annotation
+         *
+         * @return int value
          */
-        private void methodnotannotate()
-        {}
+        private int methodnotannotate()
+        {
+            return 9;
+        }
     }
 
 
