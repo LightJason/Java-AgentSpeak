@@ -25,11 +25,17 @@ package org.lightjason.agentspeak.language.execution.instantiable;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.testing.IBaseTest;
+
+import java.util.Collections;
+import java.util.stream.Stream;
 
 
 /**
@@ -55,4 +61,24 @@ public final class TestCInstantiable extends IBaseTest
         Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopywithoutsuffix() );
     }
 
+    /**
+     * test empty rule
+     */
+    @Test
+    public void emptyrule()
+    {
+        Assert.assertEquals( ILiteral.EMPTY, IRule.EMPTY.identifier() );
+        Assert.assertEquals( ILiteral.EMPTY, IRule.EMPTY.literal() );
+        Assert.assertTrue( IRule.EMPTY.description().isEmpty() );
+        Assert.assertEquals( IContext.EMPTYRULE, IRule.EMPTY.instantiate( IAgent.EMPTY, Stream.of() ) );
+        Assert.assertEquals( 0, IRule.EMPTY.variables().count() );
+        Assert.assertEquals( 0, IRule.EMPTY.variabledescription().count() );
+        Assert.assertEquals( 0, IRule.EMPTY.tags().count() );
+        execute(
+            IRule.EMPTY,
+            false,
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+    }
 }

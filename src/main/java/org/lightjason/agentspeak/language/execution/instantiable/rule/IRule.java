@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.instantiable.rule;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -56,7 +55,7 @@ public interface IRule extends IInstantiable
         @Override
         public ILiteral identifier()
         {
-            return CLiteral.of( "empty" );
+            return ILiteral.EMPTY;
         }
 
         @Override
@@ -96,8 +95,7 @@ public interface IRule extends IInstantiable
         @Nonnull
         @Override
         public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-        )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             return Stream.of();
         }
