@@ -103,8 +103,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
             l_assign.get( l_assign.size() - 1 )
                     .<IVariable<Object>>term()
                     .set(
-                        l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() )
-                                    .stream()
+                        l_flatresult.stream().skip( l_assign.size() - 1 )
                                     .map( ITerm::raw )
                                     .collect( Collectors.toList() )
                     );
