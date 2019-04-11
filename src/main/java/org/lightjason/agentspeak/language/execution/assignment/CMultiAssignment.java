@@ -100,7 +100,14 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
 
         // tail matching
         if ( l_assign.size() < l_flatresult.size() )
-            l_assign.get( l_assign.size() - 1 ).<IVariable<Object>>term().set( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) );
+            l_assign.get( l_assign.size() - 1 )
+                    .<IVariable<Object>>term()
+                    .set(
+                        l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() )
+                                    .stream()
+                                    .map( ITerm::raw )
+                                    .collect( Collectors.toList() )
+                    );
 
         return Stream.of();
     }

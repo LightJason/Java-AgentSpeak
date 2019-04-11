@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.assignment;
 
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CEnumConstantNotPresentException;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -38,16 +37,65 @@ import java.util.function.BiFunction;
  */
 public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
 {
-    INCREMENT( "+=" ),
-    DECREMENT( "-=" ),
+    INCREMENT( "+=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    DECREMENT( "-=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
+        }
+    },
 
-    MULTIPLY( "*=" ),
-    DIVIDE( "/=" ),
-    MODULO( "%=" ),
+    MULTIPLY( "*=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    DIVIDE( "/=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
+        }
+    },
+    MODULO( "%=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return org.lightjason.agentspeak.language.CCommon.modulo( p_lhs.raw(), p_rhs.raw() );
+        }
+    },
 
-    POWER( "^=" ),
+    POWER( "^=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
+        }
+    },
 
-    ASSIGN( "=" );
+    ASSIGN( "=" )
+    {
+        @Override
+        public Object apply( @Nonnull final ITerm p_lhs, @Nonnull final ITerm p_rhs )
+        {
+            return p_rhs.raw();
+        }
+    };
 
     /**
      * operator
@@ -62,37 +110,6 @@ public enum EAssignOperator implements BiFunction<ITerm, ITerm, Object>
     EAssignOperator( final String p_operator )
     {
         m_operator = p_operator;
-    }
-
-    @Override
-    public Object apply( final ITerm p_lhs, final ITerm p_rhs )
-    {
-        switch ( this )
-        {
-            case INCREMENT:
-                return p_lhs.<Number>raw().doubleValue() + p_rhs.<Number>raw().doubleValue();
-
-            case DECREMENT:
-                return p_lhs.<Number>raw().doubleValue() - p_rhs.<Number>raw().doubleValue();
-
-            case MULTIPLY:
-                return p_lhs.<Number>raw().doubleValue() * p_rhs.<Number>raw().doubleValue();
-
-            case DIVIDE:
-                return p_lhs.<Number>raw().doubleValue() / p_rhs.<Number>raw().doubleValue();
-
-            case MODULO:
-                return org.lightjason.agentspeak.language.CCommon.modulo( p_lhs.raw(), p_rhs.raw() );
-
-            case POWER:
-                return Math.pow( p_lhs.<Number>raw().doubleValue(), p_rhs.<Number>raw().doubleValue() );
-
-            case ASSIGN:
-                return p_rhs.raw();
-
-            default:
-                throw new CEnumConstantNotPresentException( this.getClass(), this.toString() );
-        }
     }
 
     @Override
