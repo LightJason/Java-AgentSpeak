@@ -21,30 +21,31 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.bundle;
+package org.lightjason.agentspeak.language.fuzzy;
 
-import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CWOA;
-import org.lightjason.agentspeak.language.fuzzy.membership.CCrisp;
-import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.language.fuzzy.bundle.EFuzzyBundleFactory;
 import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
+import org.lightjason.agentspeak.testing.IBaseTest;
+
 
 /**
- * fuzzy bundles factory
+ * test fuzzy bundle
  */
-public enum EFuzzyBundleFactory implements IFuzzyBundleFactory
+public final class TestCFuzzyBundle extends IBaseTest
 {
-    CRISP
+
+    /**
+     * test fuzzy bundle
+     */
+    @Test
+    public void bundle()
     {
-        @Override
-        public IFuzzyBundle get()
-        {
-            final IFuzzyMembership<ECrisp> l_membership = new CCrisp<>( ECrisp.class );
-            return new CFuzzyBundle(
-                ECrisp.class,
-                l_membership,
-                new CWOA<>( ECrisp.class, l_membership, ECrisp.TRUE.apply( 1 ) )
-            );
-        }
-    };
+        Assert.assertEquals(
+            new CFuzzyValue<>( ECrisp.TRUE, 0.75 ),
+            EFuzzyBundleFactory.CRISP.get().set().apply( "true", 0.75 )
+        );
+    }
 
 }

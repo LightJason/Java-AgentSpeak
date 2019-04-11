@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.instantiable.plan.trigger;
 
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 
 import javax.annotation.Nonnull;
@@ -40,10 +39,6 @@ public final class CTrigger implements ITrigger
      * serial id
      */
     private static final long serialVersionUID = -4216265954626567558L;
-    /**
-     * variable number
-     */
-    private final int m_variables;
     /**
      * literal with unified variables
      */
@@ -72,7 +67,6 @@ public final class CTrigger implements ITrigger
     {
         m_event = p_event;
         m_literal = p_literal;
-        m_variables = CCommon.variablefrequency( p_literal ).size();
         m_hashcode = m_event.hashCode() ^ m_literal.hashCode();
         m_structurehash = m_event.hashCode() ^ m_literal.structurehash();
     }
@@ -117,12 +111,6 @@ public final class CTrigger implements ITrigger
     public ILiteral literal()
     {
         return m_literal;
-    }
-
-    @Override
-    public int variablesize()
-    {
-        return m_variables;
     }
 
     @Override

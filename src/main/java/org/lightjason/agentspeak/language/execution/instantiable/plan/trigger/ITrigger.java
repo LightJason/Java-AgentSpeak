@@ -107,12 +107,6 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
         }
 
         @Override
-        public int variablesize()
-        {
-            return 0;
-        }
-
-        @Override
         public int hashCode()
         {
             return 0;
@@ -138,14 +132,6 @@ public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITr
      * @return literal
      */
     ILiteral literal();
-
-    /**
-     * returns variable number
-     *
-     * @return number
-     */
-    int variablesize();
-
 
 
     /**

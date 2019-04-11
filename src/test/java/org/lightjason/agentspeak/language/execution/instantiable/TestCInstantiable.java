@@ -21,30 +21,38 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy.bundle;
+package org.lightjason.agentspeak.language.execution.instantiable;
 
-import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CWOA;
-import org.lightjason.agentspeak.language.fuzzy.membership.CCrisp;
-import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
-import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.testing.IBaseTest;
+
 
 /**
- * fuzzy bundles factory
+ * test all instantiable structure
  */
-public enum EFuzzyBundleFactory implements IFuzzyBundleFactory
+public final class TestCInstantiable extends IBaseTest
 {
-    CRISP
+    /**
+     * test empty trigger
+     */
+    @Test
+    public void emptytrigger()
     {
-        @Override
-        public IFuzzyBundle get()
-        {
-            final IFuzzyMembership<ECrisp> l_membership = new CCrisp<>( ECrisp.class );
-            return new CFuzzyBundle(
-                ECrisp.class,
-                l_membership,
-                new CWOA<>( ECrisp.class, l_membership, ECrisp.TRUE.apply( 1 ) )
-            );
-        }
-    };
+        Assert.assertEquals( 0, ITrigger.EMPTY.compareTo( ITrigger.EMPTY ) );
+        Assert.assertEquals( -1, ITrigger.EMPTY.compareTo( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "xxx" ) ) ) );
+        Assert.assertEquals( 0, ITrigger.EMPTY.structurehash() );
+        Assert.assertFalse( ITrigger.EMPTY.hasShallowcopywithoutsuffix() );
+        Assert.assertTrue( ITrigger.EMPTY.type().sequence().isEmpty() );
+        Assert.assertEquals( ITrigger.EType.EMPTY, ITrigger.EMPTY.type() );
+        Assert.assertEquals( ILiteral.EMPTY, ITrigger.EMPTY.literal() );
+        Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopy() );
+        Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopysuffix() );
+        Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopywithoutsuffix() );
+    }
 
 }
