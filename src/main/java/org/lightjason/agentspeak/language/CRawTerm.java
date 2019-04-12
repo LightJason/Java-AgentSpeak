@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 
@@ -150,7 +151,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public IRawTerm<T> thrownotallocated() throws IllegalStateException
+    public IRawTerm<T> thrownotallocated() throws NoSuchElementException
     {
         if ( !this.allocated() )
             throw new CNoSuchElementException( CCommon.languagestring( this, "notallocated" ) );
@@ -166,7 +167,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
+    public IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws TypeNotPresentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CTypeNotAssignable( p_class );

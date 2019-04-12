@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -73,7 +74,7 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
 
         @Nonnull
         @Override
-        public IVariable<Object> thrownotallocated() throws IllegalStateException
+        public IVariable<Object> thrownotallocated() throws NoSuchElementException
         {
             if ( !this.allocated() )
                 throw new CNoSuchElementException( CCommon.languagestring( IVariable.class, "notallocated", "EMPTY" ) );
@@ -89,7 +90,7 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
 
         @Nullable
         @Override
-        public IVariable<Object> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
+        public IVariable<Object> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws TypeNotPresentException
         {
             return this;
         }

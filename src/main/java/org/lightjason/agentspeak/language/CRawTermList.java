@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,7 +101,7 @@ public final class CRawTermList implements IRawTerm<List<?>>
 
     @Nonnull
     @Override
-    public IRawTerm<List<?>> thrownotallocated() throws IllegalStateException
+    public IRawTerm<List<?>> thrownotallocated() throws NoSuchElementException
     {
         return this;
     }
@@ -113,7 +114,7 @@ public final class CRawTermList implements IRawTerm<List<?>>
 
     @Nullable
     @Override
-    public IRawTerm<List<?>> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
+    public IRawTerm<List<?>> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws TypeNotPresentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalStateException( CCommon.languagestring( this, "notassignable", p_class ) );

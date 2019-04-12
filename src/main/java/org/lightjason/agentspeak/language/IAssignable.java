@@ -49,9 +49,9 @@ public interface IAssignable<T>
      * @param p_class assignable class
      * @return object itself
      *
-     * @throws IllegalStateException on assignable error
+     * @throws TypeNotPresentException on assignable error
      */
     @Nullable
-    T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException;
+    T throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws TypeNotPresentException;
 
 }

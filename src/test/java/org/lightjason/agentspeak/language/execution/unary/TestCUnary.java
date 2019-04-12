@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -80,5 +81,97 @@ public final class TestCUnary extends IBaseTest
         );
 
         Assert.assertEquals( 8, l_value.<Number>raw().intValue() );
+    }
+
+    /**
+     * test increment not-allocated
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void incrementnotallocated()
+    {
+        final IVariable<Object> l_value = new CVariable<>( "Not" );
+
+        execute(
+            new CIncrement( l_value ),
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            l_value
+        );
+    }
+
+    /**
+     * test decrement not-allocated
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void decrementnotallocated()
+    {
+        final IVariable<Object> l_value = new CVariable<>( "Not" );
+
+        execute(
+            new CDecrement( l_value ),
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            l_value
+        );
+    }
+
+    /**
+     * test increment wrong type
+     */
+    @Test( expected = TypeNotPresentException.class )
+    public void incrementwrongtype()
+    {
+        final IVariable<Object> l_value = new CVariable<>( "Type" );
+        l_value.set( "v" );
+
+        execute(
+            new CIncrement( l_value ),
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            l_value
+        );
+    }
+
+    /**
+     * test decrement wrong type
+     */
+    @Test( expected = TypeNotPresentException.class )
+    public void decrementwrongtype()
+    {
+        final IVariable<Object> l_value = new CVariable<>( "Type" );
+        l_value.set( "v" );
+
+        execute(
+            new CDecrement( l_value ),
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            l_value
+        );
+    }
+
+    /**
+     * test tostring
+     */
+    @Test
+    public void unarytostring()
+    {
+        Assert.assertEquals( "X()++", new CIncrement( new CVariable<>( "X" ) ).toString() );
+        Assert.assertEquals( "Y()--", new CDecrement( new CVariable<>( "Y" ) ).toString() );
+    }
+
+    /**
+     * test stream
+     */
+    @Test
+    public void stream()
+    {
+        final IVariable<?> l_var = new CVariable<>( "A" );
+
+        Assert.assertEquals( l_var, new CIncrement( l_var ).variables().findFirst().get() );
+        Assert.assertEquals( l_var, new CDecrement( l_var ).variables().findFirst().get() );
     }
 }

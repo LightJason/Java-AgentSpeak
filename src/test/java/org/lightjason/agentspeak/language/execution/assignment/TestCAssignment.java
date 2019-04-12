@@ -339,7 +339,7 @@ public final class TestCAssignment extends IBaseTest
     public void multiassignmentless()
     {
         final IVariable<?> l_xvariable = new CVariable<>( "X" );
-        final IVariable<?> l_yvariable = new CVariable<>( "Y" );
+        final IVariable<?> l_yvariable = new CVariable<>( "Y", "xyz" );
 
         Assert.assertTrue(
             execute(
@@ -374,7 +374,7 @@ public final class TestCAssignment extends IBaseTest
         );
 
         Assert.assertEquals( Integer.valueOf( 1 ), l_xvariable.raw() );
-        Assert.assertFalse( l_yvariable.allocated() );
+        Assert.assertEquals( "xyz", l_yvariable.raw() );
     }
 
     /**

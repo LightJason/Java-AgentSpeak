@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 
@@ -140,7 +141,7 @@ public abstract class IBaseVariable<T> implements IVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> thrownotallocated() throws IllegalStateException
+    public final IVariable<T> thrownotallocated() throws NoSuchElementException
     {
         if ( !this.allocated() )
             throw new CNoSuchElementException( CCommon.languagestring( IBaseVariable.class, "notallocated", m_functor ) );
@@ -156,7 +157,7 @@ public abstract class IBaseVariable<T> implements IVariable<T>
 
     @Nonnull
     @Override
-    public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
+    public final IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws TypeNotPresentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CTypeNotAssignable( p_class );

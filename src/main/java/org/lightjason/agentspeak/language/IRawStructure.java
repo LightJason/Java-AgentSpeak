@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language;
 
 import javax.annotation.Nonnull;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -44,9 +45,9 @@ public interface IRawStructure<T> extends IAssignable<T>
      *
      * @return object itself
      *
-     * @throws IllegalStateException on non-allocated
+     * @throws NoSuchElementException on non-allocated
      */
     @Nonnull
-    T thrownotallocated() throws IllegalStateException;
+    T thrownotallocated() throws NoSuchElementException;
 
 }
