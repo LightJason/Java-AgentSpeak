@@ -81,12 +81,6 @@ public interface IPath extends Serializable, Comparable<IPath>
         }
 
         @Override
-        public boolean endswith( @Nonnull final IPath p_path )
-        {
-            return false;
-        }
-
-        @Override
         public boolean empty()
         {
             return true;
@@ -211,6 +205,18 @@ public interface IPath extends Serializable, Comparable<IPath>
         }
 
         @Override
+        public boolean endswith( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public boolean endswith( @Nonnull final String p_path )
+        {
+            return false;
+        }
+
+        @Override
         public boolean startswith( final IPath p_path )
         {
             return false;
@@ -292,14 +298,6 @@ public interface IPath extends Serializable, Comparable<IPath>
      */
     @Nonnull
     IPath remove( final int p_start, final int p_end );
-
-    /**
-     * check of a path ends with another path
-     *
-     * @param p_path path
-     * @return boolean
-     */
-    boolean endswith( @Nonnull final IPath p_path );
 
     /**
      * check if the path is empty
@@ -468,6 +466,22 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return boolean
      */
     boolean startswith( final String p_path );
+
+    /**
+     * check of a path ends with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    boolean endswith( @Nonnull final IPath p_path );
+
+    /**
+     * check of a path ends with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    boolean endswith( @Nonnull final String p_path );
 
     /**
      * stream over elements

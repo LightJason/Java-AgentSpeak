@@ -27,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 
@@ -67,4 +68,58 @@ public final class TestCPath extends IBaseTest
         Assert.assertNotEquals( CPath.of( "foo/bar" ), CPath.of( "bar/foo" ) );
     }
 
+    /**
+     * test ctor
+     */
+    @Test
+    public void ctor()
+    {
+        Assert.assertTrue( new CPath().empty() );
+        Assert.assertEquals( "a/b/c", new CPath( "a", "b", "c" ).toString() );
+    }
+
+    /**
+     * test starts- and ends-with
+     */
+    @Test
+    public void startsendswith()
+    {
+        Assert.assertTrue( CPath.of( "x/y/z" ).startswith( "x/y" ) );
+        Assert.assertTrue( CPath.of( "x/y/z" ).endswith( "y/z" ) );
+    }
+
+    /**
+     * test lower and upper
+     */
+    @Test
+    public void lowerupper()
+    {
+        final IPath l_path = CPath.of( "A/b/C/d" );
+
+        Assert.assertEquals( "a/b/c/d", l_path.lower().toString() );
+        Assert.assertEquals( "a/b/c/d", l_path.toString() );
+        Assert.assertEquals( "A/B/C/D", l_path.upper().toString() );
+        Assert.assertEquals( "A/B/C/D", l_path.toString() );
+    }
+
+    /**
+     * test empty separator
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void noseparator()
+    {
+        CPath.of( "a/b" ).separator( "" );
+    }
+
+    /**
+     * test remove from path
+     */
+    @Test
+    public void remove()
+    {
+        final IPath l_path = CPath.of( "x/y/z/a/b/c" );
+
+        Assert.assertEquals( "x/y/z/a/b/c", l_path.toString() );
+        Assert.assertEquals( "x/y/z", l_path.remove( 3, 6 ).toString() );
+    }
 }

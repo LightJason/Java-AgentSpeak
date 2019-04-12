@@ -202,10 +202,22 @@ public final class CPath implements IPath
     }
 
     @Override
+    public boolean endswith( @Nonnull final String p_path )
+    {
+        return this.endswith( new CPath( p_path ) );
+    }
+
+    @Override
     public synchronized boolean endswith( @Nonnull final IPath p_path )
     {
         return p_path.size() <= this.size()
                && IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -> this.get( i - p_path.size() ).equals( p_path.get( i ) ) );
+    }
+
+    @Override
+    public boolean startswith( final String p_path )
+    {
+        return this.startswith( new CPath( p_path ) );
     }
 
     @Override
@@ -393,12 +405,6 @@ public final class CPath implements IPath
     public int size()
     {
         return m_path.size();
-    }
-
-    @Override
-    public boolean startswith( final String p_path )
-    {
-        return this.startswith( new CPath( p_path ) );
     }
 
     @Nonnull
