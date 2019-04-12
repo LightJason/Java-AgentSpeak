@@ -42,7 +42,7 @@ public final class CStringAnnotation extends IBaseAnnotation<String>
      * @param p_annotation annotation type
      * @param p_value data
      */
-    public CStringAnnotation( @Nonnull final EType p_annotation, @Nonnull final String p_value )
+    public CStringAnnotation( @Nonnull final EAnnotation p_annotation, @Nonnull final String p_value )
     {
         super( p_annotation, p_value );
     }

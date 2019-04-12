@@ -48,7 +48,7 @@ public final class CConstantAnnotation<T> extends IBaseAnnotation<T>
      * @param p_name name of the annotation
      * @param p_data number
      */
-    public CConstantAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
+    public CConstantAnnotation( @Nonnull final EAnnotation p_type, @Nonnull final String p_name, @Nonnull final T p_data )
     {
         super( p_type, p_data );
         m_name = p_name;

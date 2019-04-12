@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.EAnnotation;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -116,31 +117,31 @@ public abstract class IBaseInstantiable implements IInstantiable
 
         m_description = Arrays.stream( p_annotation )
                               .parallel()
-                              .filter( i -> IAnnotation.EType.DESCRIPTION.equals( i.id() ) )
+                              .filter( i -> EAnnotation.DESCRIPTION.equals( i.id() ) )
                               .findFirst()
                               .map( i -> i.value().toString() )
                               .orElse( "" );
 
         m_constant = Arrays.stream( p_annotation )
                            .parallel()
-                           .filter( i -> IAnnotation.EType.CONSTANT.equals( i.id() ) )
+                           .filter( i -> EAnnotation.CONSTANT.equals( i.id() ) )
                            .flatMap( IAnnotation::variables )
                            .toArray( IVariable<?>[]::new );
 
         m_tags = Arrays.stream( p_annotation )
                        .parallel()
-                       .filter( i -> IAnnotation.EType.TAG.equals( i.id() ) )
+                       .filter( i -> EAnnotation.TAG.equals( i.id() ) )
                        .map( i -> i.value().toString() )
                        .toArray( String[]::new );
 
         m_variabledescription = Arrays.stream( p_annotation )
                                       .parallel()
-                                      .filter( i -> IAnnotation.EType.VARIABLE.equals( i.id() ) )
+                                      .filter( i -> EAnnotation.VARIABLE.equals( i.id() ) )
                                       .flatMap( i -> i.variables() )
                                       .toArray( IVariable<?>[]::new );
 
-        m_parallel = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.PARALLEL.equals( i.id() ) );
-        m_atomic = Arrays.stream( p_annotation ).parallel().anyMatch( i -> IAnnotation.EType.ATOMIC.equals( i.id() ) );
+        m_parallel = Arrays.stream( p_annotation ).parallel().anyMatch( i -> EAnnotation.PARALLEL.equals( i.id() ) );
+        m_atomic = Arrays.stream( p_annotation ).parallel().anyMatch( i -> EAnnotation.ATOMIC.equals( i.id() ) );
     }
 
     @Nonnull
@@ -223,17 +224,17 @@ public abstract class IBaseInstantiable implements IInstantiable
         return MessageFormat.format(
             "{0} {1} {2} {3} {4}",
 
-            m_parallel ? IAnnotation.EType.PARALLEL : "",
+            m_parallel ? EAnnotation.PARALLEL : "",
 
-            m_atomic ? IAnnotation.EType.ATOMIC : "",
+            m_atomic ? EAnnotation.ATOMIC : "",
 
             Arrays.stream( m_constant )
-                  .map( i -> MessageFormat.format( "{0}({1},{2})", IAnnotation.EType.CONSTANT, i.functor(), i.raw() ) )
+                  .map( i -> MessageFormat.format( "{0}({1},{2})", EAnnotation.CONSTANT, i.functor(), i.raw() ) )
                   .collect( Collectors.joining( " " ) ),
 
-            this.tags().map( i -> MessageFormat.format( "{0}({1})", IAnnotation.EType.TAG, i ) ).collect( Collectors.joining( " " ) ),
+            this.tags().map( i -> MessageFormat.format( "{0}({1})", EAnnotation.TAG, i ) ).collect( Collectors.joining( " " ) ),
 
-            m_description.isEmpty() ? "" : MessageFormat.format( "{0}({1})", IAnnotation.EType.DESCRIPTION, this.description() )
+            m_description.isEmpty() ? "" : MessageFormat.format( "{0}({1})", EAnnotation.DESCRIPTION, this.description() )
         );
     }
 }

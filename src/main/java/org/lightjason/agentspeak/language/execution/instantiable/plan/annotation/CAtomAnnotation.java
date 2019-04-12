@@ -41,7 +41,7 @@ public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
      *
      * @param p_type type
      */
-    public CAtomAnnotation( @Nonnull final EType p_type )
+    public CAtomAnnotation( @Nonnull final EAnnotation p_type )
     {
         super( p_type, null );
     }

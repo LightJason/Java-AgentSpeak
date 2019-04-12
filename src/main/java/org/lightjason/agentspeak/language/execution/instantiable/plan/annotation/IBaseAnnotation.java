@@ -44,7 +44,7 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     /**
      * annotation type
      */
-    protected final EType m_type;
+    protected final EAnnotation m_type;
 
     /**
      * ctor
@@ -52,7 +52,7 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
      * @param p_type type
      * @param p_value data
      */
-    protected IBaseAnnotation( @Nonnull final EType p_type, @Nullable final T p_value )
+    protected IBaseAnnotation( @Nonnull final EAnnotation p_type, @Nullable final T p_value )
     {
         m_value = p_value;
         m_type = p_type;
@@ -60,7 +60,7 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
 
     @Nonnull
     @Override
-    public final EType id()
+    public final EAnnotation id()
     {
         return m_type;
     }

@@ -23,102 +23,105 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable.plan.annotation;
 
-
-import org.lightjason.agentspeak.language.IAssignable;
-import org.lightjason.agentspeak.language.variable.IVariable;
-
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.function.BiFunction;
 
 
 /**
- * annotation interface
- *
- * @tparam T annotation data type
+ * annotation types
  */
-public interface IAnnotation<T> extends IAssignable<T>
+public enum EAnnotation implements BiFunction<String, Object, IAnnotation<?>>
 {
-    /**
-     * empty annotation
-     */
-    IAnnotation<?> EMPTY = new IAnnotation<>()
+    ATOMIC( "@atomic" )
     {
-        @Nonnull
         @Override
-        public EAnnotation id()
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return EAnnotation.EMPTY;
+            return new CAtomAnnotation<>( this );
         }
-
-        @Nullable
+    },
+    CONSTANT( "@constant" )
+    {
         @Override
-        public <N> N value()
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return null;
+            return new CConstantAnnotation<>( this, p_text, p_value );
         }
-
-        @Nonnull
+    },
+    DESCRIPTION( "@description" )
+    {
         @Override
-        public Stream<IVariable<?>> variables()
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return Stream.empty();
+            return new CStringAnnotation( this, p_text );
         }
-
+    },
+    EMPTY( "" )
+    {
         @Override
-        public boolean valueassignableto( @Nonnull final Class<?> p_class )
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return true;
+            return IAnnotation.EMPTY;
         }
-
-        @Nullable
+    },
+    PARALLEL( "@parallel" )
+    {
         @Override
-        public Object throwvaluenotassignableto( @Nonnull final Class<?> p_class ) throws IllegalStateException
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return null;
+            return new CAtomAnnotation<>( this );
         }
-
+    },
+    TAG( "@tag" )
+    {
         @Override
-        public String toString()
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return this.id().toString();
+            return new CStringAnnotation( this, p_text );
         }
-
+    },
+    VARIABLE( "@variable" )
+    {
         @Override
-        public int hashCode()
+        public IAnnotation<?> apply( final String p_text, final Object p_value )
         {
-            return this.id().hashCode();
-        }
-
-        @Override
-        public boolean equals( final Object p_object )
-        {
-            return p_object instanceof IAnnotation<?> && this.hashCode() == p_object.hashCode();
+            return new CConstantAnnotation<>( this, p_text, p_value );
         }
     };
 
     /**
-     * returns the type of the annotation
+     * text name of the enum
+     */
+    private final String m_name;
+
+    /**
+     * ctor
      *
+     * @param p_name text name
+     */
+    EAnnotation( final String p_name )
+    {
+        m_name = p_name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return m_name;
+    }
+
+    /**
+     * returns enum value by string
+     *
+     * @param p_value string value
      * @return type
      */
-    @Nonnull
-    EAnnotation id();
-
-    /**
-     * returns the data of the annotation if exists
-     *
-     * @return data or null
-     */
-    @Nullable
-    <N> N value();
-
-    /**
-     * returns a stream of variables
-     *
-     * @return variabel stream
-     */
-    @Nonnull
-    Stream<IVariable<?>> variables();
-
+    public static EAnnotation of( @Nonnull final String p_value )
+    {
+        return Arrays.stream( EAnnotation.values() )
+                     .filter( i -> ( !i.m_name.isEmpty() ) && ( p_value.startsWith( i.m_name ) ) )
+                     .findFirst()
+                     .orElse( EMPTY );
+    }
 }
