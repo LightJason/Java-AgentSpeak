@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.assignment;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,7 +39,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -93,10 +93,13 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
         final List<ITerm> l_flatresult = CCommon.flatten( l_result ).collect( Collectors.toList() );
         final List<ITerm> l_assign = CCommon.replacebycontext( p_context, m_value.stream() ).collect( Collectors.toList() );
 
-        IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )
-                 .boxed()
-                 .forEach( i -> l_assign.get( i ).<IVariable<Object>>term().set( l_flatresult.get( i ).raw() ) );
-
+        StreamUtils.zip(
+            l_assign.stream(),
+            l_flatresult.stream().limit( Math.min( l_assign.size(), l_flatresult.size() ) ),
+            ( i, j ) -> i.<IVariable<Object>>term().set( j.raw() )
+        ).forEach( i ->
+        {
+        } );
 
         // tail matching
         if ( l_assign.size() < l_flatresult.size() )
