@@ -29,7 +29,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
+import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collections;
@@ -96,4 +99,29 @@ public final class TestCTestRule extends IBaseTest
         Assert.assertEquals( "?$foobar", new CTestRule( CPath.of( "foobar" ) ).toString() );
     }
 
+    /**
+     * test equal and hashcode
+     */
+    @Test
+    public void equalshashcode()
+    {
+        Assert.assertEquals(
+            new CAchievementRuleLiteral( CLiteral.of( "bar" ) ),
+            new CAchievementRuleLiteral( CLiteral.of( "bar" ) )
+        );
+        Assert.assertNotEquals(
+            new CAchievementRuleLiteral( CLiteral.of( "bar" ) ),
+            new CAchievementRuleLiteral( CLiteral.of( "foo" ) )
+        );
+
+
+        Assert.assertEquals(
+            new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "FOO" ) ) ),
+            new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "FOO" ) ) )
+        );
+        Assert.assertNotEquals(
+            new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "FOO" ) ) ),
+            new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "BAR" ) ) )
+        );
+    }
 }
