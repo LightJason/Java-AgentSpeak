@@ -29,18 +29,27 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IInspector;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariableLiteral;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -175,6 +184,106 @@ public final class TestCTestGoal extends IBaseTest
                 Assert.assertEquals( "bar", p_value.findFirst().get().literal().functor() );
             }
         } );
+    }
+
+    /**
+     * tets test-goal
+     *
+     * @throws Exception on agent execution
+     */
+    @Test
+    public void testgoal() throws Exception
+    {
+        Assume.assumeNotNull( m_agent );
+
+        final ITrigger l_trigger = CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foobar" ) );
+        m_agent.plans().put( l_trigger, CPlanStatistic.of( new IPlan()
+        {
+            @Nonnull
+            @Override
+            public ITrigger trigger()
+            {
+                return l_trigger;
+            }
+
+            @Override
+            public boolean condition( @Nonnull final IContext p_context )
+            {
+                return true;
+            }
+
+            @Override
+            public ILiteral literal()
+            {
+                return l_trigger.literal();
+            }
+
+            @Nonnull
+            @Override
+            public IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+            {
+                return CCommon.instantiate( this, p_agent, p_variable );
+            }
+
+            @Nonnull
+            @Override
+            public String description()
+            {
+                return "";
+            }
+
+            @Nonnull
+            @Override
+            public Stream<String> tags()
+            {
+                return Stream.of();
+            }
+
+            @Nonnull
+            @Override
+            public Stream<IVariable<?>> variabledescription()
+            {
+                return Stream.of();
+            }
+
+            @Nonnull
+            @Override
+            public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                   @Nonnull final List<ITerm> p_return )
+            {
+                return Stream.of();
+            }
+
+            @Nonnull
+            @Override
+            public Stream<IVariable<?>> variables()
+            {
+                return Stream.of();
+            }
+        } ) );
+        m_agent.trigger( l_trigger );
+        m_agent.call();
+
+
+        Assert.assertTrue(
+            execute(
+                new CTestGoal( l_trigger.literal().fqnfunctor() ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                m_agent
+            )
+        );
+
+        Assert.assertFalse(
+            execute(
+                new CTestGoal( CPath.of( "xxx" ) ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                m_agent
+            )
+        );
     }
 
 }
