@@ -27,14 +27,18 @@ import org.checkerframework.checker.index.qual.NonNegative;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.IAgentGenerator;
 import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
@@ -44,6 +48,7 @@ import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -52,7 +57,7 @@ import java.util.stream.Stream;
 /**
  * test agent method calls
  */
-public final class TestCAgentMethods extends IBaseTest
+public final class TestCAgentStructure extends IBaseTest
 {
 
     /**
@@ -226,6 +231,149 @@ public final class TestCAgentMethods extends IBaseTest
         } );
     }
 
+    /**
+     * test wake-up
+     *
+     * @throws IOException on stream error
+     */
+    @Test
+    public void sleepwakeup() throws IOException
+    {
+        final IAgent<?> l_agent = new CAgentGenerator( "+!wakeup <- success." ).generatesingle();
+
+        Assert.assertFalse( l_agent.sleeping() );
+        l_agent.sleep( Long.MAX_VALUE );
+        Assert.assertTrue( l_agent.sleeping() );
+
+        Assert.assertFalse( l_agent.wakeup().sleeping() );
+        agentcycle( l_agent );
+
+        l_agent.inspect( new IInspector()
+        {
+            @Override
+            public void inspectsleeping( final long p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectcycletime( final long p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectbelief( final Stream<ILiteral> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value
+            )
+            {
+
+            }
+
+            @Override
+            public void inspectrules( @Nonnull final Stream<IRule> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            {
+                Assert.assertEquals( CLiteral.of( "wakeup" ), p_value.findFirst().get() );
+            }
+
+            @Override
+            public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            {
+            }
+        } );
+    }
+
+    /**
+     * test plan bundle
+     */
+    @Test
+    public void defaultplanbundle()
+    {
+        final IPlanBundle l_bundle = new CDefaultPlanBundle(
+            new CDefaultPlanBundleConfiguration(
+                Collections.emptySet(),
+                Collections.emptySet(),
+                Collections.emptySet()
+            )
+        );
+
+        Assert.assertEquals( Collections.emptySet(), l_bundle.initialbeliefs() );
+        Assert.assertEquals( Collections.emptySet(), l_bundle.plans() );
+        Assert.assertEquals( Collections.emptySet(), l_bundle.rules() );
+    }
+
+    /**
+     * test empty agent
+     */
+    @Test
+    public void emptyagent()
+    {
+        Assert.assertEquals( 0, IAgent.EMPTY.trigger( ITrigger.EMPTY ).count() );
+
+        Assert.assertEquals( IView.EMPTY, IAgent.EMPTY.beliefbase() );
+
+        Assert.assertTrue( IAgent.EMPTY.rules().isEmpty() );
+        Assert.assertTrue( IAgent.EMPTY.plans().isEmpty() );
+        Assert.assertTrue( IAgent.EMPTY.runningplans().isEmpty() );
+        Assert.assertTrue( IAgent.EMPTY.storage().isEmpty() );
+
+        IAgent.EMPTY.sleep( 10 );
+        Assert.assertFalse( IAgent.EMPTY.sleeping() );
+
+        Assert.assertEquals( 0, IAgent.EMPTY.cycletime() );
+
+        Assert.assertEquals( IAgentGenerator.DEFAULTFUZZYBUNDLE, IAgent.EMPTY.fuzzy() );
+
+        Assert.assertEquals( IVariableBuilder.EMPTY, IAgent.EMPTY.variablebuilder() );
+
+        Assert.assertEquals( 0, IAgent.EMPTY.hashCode() );
+
+        Assert.assertEquals( IAgent.EMPTY, IAgent.EMPTY.raw() );
+        try
+        {
+            Assert.assertEquals( IAgent.EMPTY, IAgent.EMPTY.call() );
+        }
+        catch ( final Exception l_exception )
+        {
+            l_exception.printStackTrace();
+            Assert.fail();
+        }
+
+        Assert.assertEquals( IAgent.EMPTY, IAgent.EMPTY.inspect( IInspector.EMPTY ) );
+    }
+
+    /**
+     * test empty inspector
+     */
+    @Test
+    public void emptyinspector()
+    {
+        IInspector.EMPTY.inspectbelief( Stream.of() );
+        IInspector.EMPTY.inspectcycletime( 0 );
+        IInspector.EMPTY.inspectpendingtrigger( Stream.of() );
+        IInspector.EMPTY.inspectplans( Stream.of() );
+        IInspector.EMPTY.inspectrules( Stream.of() );
+        IInspector.EMPTY.inspectrunningplans( Stream.of() );
+        IInspector.EMPTY.inspectsleeping( 0 );
+        IInspector.EMPTY.inspectstorage( Stream.of() );
+    }
 
     /**
      * test action for sleeping
