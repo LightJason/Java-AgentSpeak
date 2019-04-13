@@ -246,11 +246,9 @@ public final class TestCUnify extends IBaseTest
 
     /**
      * recurive unification with literal
-     *
-     * @throws Exception on parsing erro
      */
     @Test
-    public void recursionliteral() throws Exception
+    public void recursionliteral()
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 

@@ -23,7 +23,13 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Test;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 
@@ -46,5 +52,28 @@ public final class TestCAgentMethods extends IBaseTest
     public void initialize() throws Exception
     {
         m_agent = new CAgentGenerator().generatesingle();
+    }
+
+    /**
+     * test agent tostring
+     */
+    @Test
+    public void agenttostring()
+    {
+        Assume.assumeNotNull( m_agent );
+
+        Assert.assertTrue( m_agent.toString().startsWith( "org.lightjason.agentspeak.testing.IBaseTest$CAgent@" ) );
+        Assert.assertTrue( m_agent.toString().endsWith( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase (org.lightjason.agentspeak.beliefbase.view.CView@4ae24171): [] )" ) );
+    }
+
+    /**
+     * test trigger variable error
+     */
+    @Test( expected = IllegalArgumentException.class )
+    public void triggervariableerror()
+    {
+        Assume.assumeNotNull( m_agent );
+
+        m_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.parse( "foo(X)" ) ) );
     }
 }

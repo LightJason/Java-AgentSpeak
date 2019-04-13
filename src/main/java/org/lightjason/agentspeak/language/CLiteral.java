@@ -251,11 +251,9 @@ public final class CLiteral implements ILiteral
      *
      * @param p_literal literal string
      * @return literal
-     *
-     * @throws Exception parsing and stream exception
      */
     @Nonnull
-    public static ILiteral parse( @Nonnull final String p_literal ) throws Exception
+    public static ILiteral parse( @Nonnull final String p_literal )
     {
         return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).literal();
     }

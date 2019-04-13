@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,11 +46,9 @@ public final class TestCUnify extends IBaseTest
 {
     /**
      * test literal unify
-     *
-     * @throws Exception on literal parsing error
      */
     @Test
-    public void literalunify() throws Exception
+    public void literalunify() throws IOException
     {
         final ILiteral l_source = CLiteral.parse( "foobar(X)" );
         final ILiteral l_target = CLiteral.parse( "foobar(Y)" );
@@ -82,11 +81,9 @@ public final class TestCUnify extends IBaseTest
 
     /**
      * test literal unify fail
-     *
-     * @throws Exception on literal parsing error
      */
     @Test
-    public void failunify() throws Exception
+    public void failunify()
     {
         Assert.assertFalse(
             execute(
@@ -100,11 +97,9 @@ public final class TestCUnify extends IBaseTest
 
     /**
      * test unify tostring
-     *
-     * @throws Exception on literal parsing error
      */
     @Test
-    public void unifystring() throws Exception
+    public void unifystring()
     {
         Assert.assertEquals(
             ">>(zzz[Z()], abc[123.0])",
@@ -114,11 +109,9 @@ public final class TestCUnify extends IBaseTest
 
     /**
      * test literal variables
-     *
-     * @throws Exception on literal parsing error
      */
     @Test
-    public void variables() throws Exception
+    public void variables()
     {
         final List<IVariable<?>> l_variables = new CLiteralUnify(
             false,

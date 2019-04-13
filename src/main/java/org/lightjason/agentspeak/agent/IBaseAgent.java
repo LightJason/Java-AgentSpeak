@@ -35,7 +35,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -326,7 +326,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // check if literal does not store any variables
         if ( p_trigger.literal().hasVariable() )
-            throw new CNoSuchElementException( org.lightjason.agentspeak.common.CCommon.languagestring( IBaseAgent.class, "literalvariable", p_trigger ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( IBaseAgent.class, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
         if ( Objects.nonNull( p_immediately ) && p_immediately.length > 0 && p_immediately[0] )
