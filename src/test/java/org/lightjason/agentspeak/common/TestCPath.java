@@ -122,4 +122,97 @@ public final class TestCPath extends IBaseTest
         Assert.assertEquals( "x/y/z/a/b/c", l_path.toString() );
         Assert.assertEquals( "x/y/z", l_path.remove( 3, 6 ).toString() );
     }
+
+    /**
+     * test path remove suoofix
+     */
+    @Test
+    public void suffix()
+    {
+        final IPath l_path = CPath.of( "u/v" );
+        Assert.assertEquals( "v", l_path.removesuffix() );
+        Assert.assertEquals( "u", l_path.toString() );
+    }
+
+    /**
+     * test normalize
+     */
+    @Test
+    public void normalize()
+    {
+        Assert.assertEquals( "a/b/c", CPath.of( "a/b/./c" ).toString() );
+        Assert.assertEquals( "c", CPath.of( "a/b/../../c" ).toString() );
+        Assert.assertEquals( "c", CPath.of( "a/b/../../../c" ).toString() );
+    }
+
+    /**
+     * test push calls
+     */
+    @Test
+    public void push()
+    {
+        final IPath l_path = CPath.of( "a/b" );
+
+        Assert.assertEquals( "a/b", l_path.toString() );
+        l_path.pushfront( "x/y" );
+        Assert.assertEquals( "x/y/a/b", l_path.toString() );
+        l_path.pushback( "u/v" );
+        Assert.assertEquals( "x/y/a/b/u/v", l_path.toString() );
+    }
+
+    /**
+     * test empty path
+     */
+    @Test
+    public void emptypath()
+    {
+        Assert.assertTrue( IPath.EMPTY.empty() );
+
+        Assert.assertEquals( "", IPath.EMPTY.toString() );
+
+        Assert.assertEquals( IPath.EMPTY, new CPath() );
+
+        Assert.assertEquals( 0, IPath.EMPTY.size() );
+
+        Assert.assertEquals( 0, IPath.EMPTY.compareTo( new CPath() ) );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.append( "a" ) );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.remove( 1 ) );
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.remove( 1, 5 ) );
+
+        Assert.assertEquals( "", IPath.EMPTY.get( 3 ) );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.lower() );
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.upper() );
+
+        Assert.assertEquals( "", IPath.EMPTY.suffix() );
+        Assert.assertEquals( "", IPath.EMPTY.removesuffix() );
+
+        Assert.assertEquals( 0, IPath.EMPTY.stream().count() );
+
+        Assert.assertFalse( IPath.EMPTY.startswith( "" ) );
+        Assert.assertFalse( IPath.EMPTY.endswith( "" ) );
+        Assert.assertFalse( IPath.EMPTY.startswith( CPath.of( "t" ) ) );
+        Assert.assertFalse( IPath.EMPTY.endswith( CPath.of( "t" ) ) );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.reverse() );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.pushback( "i" ) );
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.pushfront( "j" ) );
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.pushback( CPath.of( "i" ) ) );
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.pushfront( CPath.of( "j" ) ) );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.separator( ":" ) );
+        Assert.assertEquals( "", IPath.EMPTY.separator() );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.append( CPath.of( "a" ) ) );
+
+        Assert.assertEquals( "", IPath.EMPTY.path( ":" ) );
+        Assert.assertEquals( "", IPath.EMPTY.path() );
+
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.subpath( 5 ) );
+        Assert.assertEquals( IPath.EMPTY, IPath.EMPTY.subpath( 5, 7 ) );
+
+    }
 }

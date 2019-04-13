@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.stream.Stream;
 
+import org.lightjason.agentspeak.language.CCommon;
+
 
 /**
  * interface of a path
@@ -244,7 +246,7 @@ public interface IPath extends Serializable, Comparable<IPath>
         @Override
         public int hashCode()
         {
-            return 0;
+            return CCommon.termhashing().hash().hashCode();
         }
 
         @Override

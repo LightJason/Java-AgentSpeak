@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.error.CNoSuchElementException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -428,25 +430,27 @@ public final class CPath implements IPath
         if ( m_path.isEmpty() )
             return;
 
-        // create path-copy and nomalize (remove dot, double-dot and empty values)
-        final List<String> l_dotremove = m_path.stream()
-                                               .filter( i -> Objects.nonNull( i ) && !i.isEmpty() && !".".equals( i ) )
-                                               .collect( Collectors.toList() );
-        if ( l_dotremove.isEmpty() )
-            return;
-
-        final String l_last = l_dotremove.get( l_dotremove.size() - 1 );
-        final List<String> l_backremove = IntStream.range( 0, l_dotremove.size() - 1 )
-                                                   .boxed()
-                                                   .filter( i -> !l_dotremove.get( i + 1 ).equals( ".." ) )
-                                                   .map( l_dotremove::get )
-                                                   .collect( Collectors.toList() );
-        if ( !"..".equals( l_last ) )
-            l_backremove.add( l_last );
+        // normalize path
+        final List<String> l_cleared = new ArrayList<>();
+        Paths.get( m_path.get( 0 ), m_path.stream().skip( 1 ).toArray( String[]::new ) ).normalize().forEach( i -> cleared( l_cleared, i.toString().trim() ) );
 
         // clear internal path and add optimized path
         m_path.clear();
-        m_path.addAll( l_backremove );
+        m_path.addAll( l_cleared );
+    }
+
+    /**
+     * cleared data
+     *
+     * @param p_list cleared list
+     * @param p_value string value
+     */
+    private static void cleared( @Nonnull final List<String> p_list, @Nonnull final String p_value )
+    {
+        if ( p_value.isEmpty() || p_value.isBlank() || ".".equals( p_value ) || "..".equals( p_value ) )
+            return;
+
+        p_list.add( p_value );
     }
 
     /**
@@ -457,7 +461,7 @@ public final class CPath implements IPath
     @Nonnull
     private static Collector<String, List<String>, List<String>> collectorfactory()
     {
-        return new Collector<String, List<String>, List<String>>()
+        return new Collector<>()
         {
             @Override
             public Supplier<List<String>> supplier()
