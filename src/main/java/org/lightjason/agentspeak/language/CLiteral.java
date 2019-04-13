@@ -460,17 +460,15 @@ public final class CLiteral implements ILiteral
 
         /**
          * ctor
-         *
-         * @throws NoSuchMethodException on ctor-method call
          */
-        CParser() throws NoSuchMethodException
+        CParser()
         {
             super( new CErrorListener() );
         }
 
         @Nonnull
         @Override
-        public IASTVisitorManual parse( @Nonnull final InputStream p_stream ) throws Exception
+        public IASTVisitorManual parse( @Nonnull final InputStream p_stream )
         {
             final IASTVisitorManual l_visitor = new CASTVisitorManual();
             l_visitor.visit( this.parser( p_stream ).root_literal() );

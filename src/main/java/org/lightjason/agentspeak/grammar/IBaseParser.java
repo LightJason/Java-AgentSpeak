@@ -30,6 +30,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.TokenStream;
+import org.lightjason.agentspeak.error.parser.CParserInitializationError;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -61,13 +62,20 @@ public abstract class IBaseParser<T extends IASTVisitor, L extends Lexer, P exte
      * ctor
      *
      * @param p_errorlistener listener instance
-     * @throws NoSuchMethodException on ctor-method call
      */
-    protected IBaseParser( @Nonnull final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
+    protected IBaseParser( @Nonnull final ANTLRErrorListener p_errorlistener )
     {
         m_errorlistener = p_errorlistener;
-        m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );
-        m_ctorparser = this.parserclass().getConstructor( TokenStream.class );
+        try
+        {
+            m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );
+            m_ctorparser = this.parserclass().getConstructor( TokenStream.class );
+        }
+        catch ( final NoSuchMethodException l_exception )
+        {
+            throw new CParserInitializationError( l_exception );
+        }
+
     }
 
     /**
@@ -75,24 +83,26 @@ public abstract class IBaseParser<T extends IASTVisitor, L extends Lexer, P exte
      *
      * @param p_stream input stream
      * @return parser (for using in visitor interface)
-     *
-     * @throws IOException on io-stream errors
-     * @throws IllegalAccessException on lexer / parser method access error
-     * @throws InvocationTargetException on lexer / parser invocation error
-     * @throws InstantiationException on lexer / parser instantiation error
      */
     protected final P parser( @Nonnull final InputStream p_stream )
-        throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
-        final L l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );
-        l_lexer.removeErrorListeners();
-        l_lexer.addErrorListener( m_errorlistener );
+        final L l_lexer;
+        try
+        {
+            l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );
+            l_lexer.removeErrorListeners();
+            l_lexer.addErrorListener( m_errorlistener );
 
-        final P l_parser = m_ctorparser.newInstance( new CommonTokenStream( l_lexer ) );
-        l_parser.removeErrorListeners();
-        l_parser.addErrorListener( m_errorlistener );
+            final P l_parser = m_ctorparser.newInstance( new CommonTokenStream( l_lexer ) );
+            l_parser.removeErrorListeners();
+            l_parser.addErrorListener( m_errorlistener );
 
-        return l_parser;
+            return l_parser;
+        }
+        catch ( final InstantiationException | IllegalAccessException | InvocationTargetException | IOException l_exception )
+        {
+            throw new CParserInitializationError( l_exception );
+        }
     }
 
     /**

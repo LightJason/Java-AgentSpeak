@@ -49,9 +49,8 @@ public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, 
      *
      * @param p_actions action generator
      * @param p_lambda lambda generator
-     * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserPlanBundle( @Nonnull final IActionGenerator p_actions, @Nonnull final ILambdaStreamingGenerator p_lambda ) throws NoSuchMethodException
+    public CParserPlanBundle( @Nonnull final IActionGenerator p_actions, @Nonnull final ILambdaStreamingGenerator p_lambda )
     {
         super( new CErrorListener() );
         m_lambda = p_lambda;
@@ -60,7 +59,7 @@ public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, 
 
     @Nonnull
     @Override
-    public IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
+    public IASTVisitorPlanBundle parse( final InputStream p_stream )
     {
         final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, m_lambda );
         l_visitor.visit( this.parser( p_stream ).planbundle() );

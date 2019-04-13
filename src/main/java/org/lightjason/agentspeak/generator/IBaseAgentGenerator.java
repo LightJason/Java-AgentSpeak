@@ -69,12 +69,10 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_stream input stream
      * @param p_actions action generator
      * @param p_lambda lambda generator
-     * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                @Nonnull final ILambdaStreamingGenerator p_lambda
-    ) throws Exception
+                                @Nonnull final ILambdaStreamingGenerator p_lambda )
     {
         this( p_stream, p_actions, p_lambda, Collections.emptySet(), IVariableBuilder.EMPTY );
     }
@@ -86,11 +84,9 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_actions action generator
      * @param p_lambda lambda generator
      * @param p_variablebuilder variable builder (can be set to null)
-     * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder
-    ) throws Exception
+                                @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final IVariableBuilder p_variablebuilder )
     {
         this( p_stream, p_actions, p_lambda, Collections.emptySet(), p_variablebuilder );
     }
@@ -103,12 +99,10 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_lambda lambda generator
      * @param p_planbundle set with planbundles
      * @param p_variablebuilder variable builder (can be set to null)
-     * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
                                 @Nonnull final ILambdaStreamingGenerator p_lambda, @Nonnull final Set<IPlanBundle> p_planbundle,
-                                @Nonnull final IVariableBuilder p_variablebuilder
-    ) throws Exception
+                                @Nonnull final IVariableBuilder p_variablebuilder )
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions, p_lambda ).parse( p_stream );
         m_configuration = this.configuration(

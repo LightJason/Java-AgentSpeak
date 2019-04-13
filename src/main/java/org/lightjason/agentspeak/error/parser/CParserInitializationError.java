@@ -21,61 +21,58 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
-
-import org.lightjason.agentspeak.generator.IActionGenerator;
-import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
+package org.lightjason.agentspeak.error.parser;
 
 import javax.annotation.Nonnull;
-import java.io.InputStream;
 
 
 /**
- * default agent parser
+ * parser initialization exception
  */
-public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer, AgentParser>
+public final class CParserInitializationError extends RuntimeException implements IParserException
 {
     /**
-     * action generator
+     * serial id
      */
-    private final IActionGenerator m_actions;
+    private static final long serialVersionUID = -7834327699522051867L;
+
     /**
-     * lambda generator
+     * ctor
      */
-    private final ILambdaStreamingGenerator m_lambda;
+    public CParserInitializationError()
+    {
+        super();
+    }
 
     /**
      * ctor
      *
-     * @param p_actions action generator
-     * @param p_lambda lambda generator
+     * @param p_message error string
      */
-    public CParserAgent( @Nonnull final IActionGenerator p_actions, @Nonnull final ILambdaStreamingGenerator p_lambda )
+    public CParserInitializationError( @Nonnull final String p_message )
     {
-        super( new CErrorListener() );
-        m_lambda = p_lambda;
-        m_actions = p_actions;
+        super( p_message );
     }
 
-    @Nonnull
-    @Override
-    public IASTVisitorAgent parse( final InputStream p_stream )
+    /**
+     * ctor
+     *
+     * @param p_message error string
+     * @param p_cause throwable
+     */
+    public CParserInitializationError( @Nonnull final String p_message, @Nonnull final Throwable p_cause )
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, m_lambda );
-        l_visitor.visit( this.parser( p_stream ).agent() );
-        return l_visitor;
+        super( p_message, p_cause );
     }
 
-    @Override
-    protected Class<AgentLexer> lexerclass()
+    /**
+     * ctor
+     *
+     * @param p_cause throwable
+     */
+    public CParserInitializationError( @Nonnull final Throwable p_cause )
     {
-        return AgentLexer.class;
-    }
-
-    @Override
-    protected Class<AgentParser> parserclass()
-    {
-        return AgentParser.class;
+        super( p_cause );
     }
 
 }

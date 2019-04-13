@@ -21,61 +21,30 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.grammar;
+package org.lightjason.agentspeak.agent;
 
-import org.lightjason.agentspeak.generator.IActionGenerator;
-import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
-
-import javax.annotation.Nonnull;
-import java.io.InputStream;
+import org.junit.Before;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 
 /**
- * default agent parser
+ * test agent method calls
  */
-public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer, AgentParser>
+public final class TestCAgentMethods extends IBaseTest
 {
     /**
-     * action generator
+     * agent
      */
-    private final IActionGenerator m_actions;
-    /**
-     * lambda generator
-     */
-    private final ILambdaStreamingGenerator m_lambda;
+    private IAgent<?> m_agent;
 
     /**
-     * ctor
+     * initialize
      *
-     * @param p_actions action generator
-     * @param p_lambda lambda generator
+     * @throws Exception agent exception
      */
-    public CParserAgent( @Nonnull final IActionGenerator p_actions, @Nonnull final ILambdaStreamingGenerator p_lambda )
+    @Before
+    public void initialize() throws Exception
     {
-        super( new CErrorListener() );
-        m_lambda = p_lambda;
-        m_actions = p_actions;
+        m_agent = new CAgentGenerator().generatesingle();
     }
-
-    @Nonnull
-    @Override
-    public IASTVisitorAgent parse( final InputStream p_stream )
-    {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, m_lambda );
-        l_visitor.visit( this.parser( p_stream ).agent() );
-        return l_visitor;
-    }
-
-    @Override
-    protected Class<AgentLexer> lexerclass()
-    {
-        return AgentLexer.class;
-    }
-
-    @Override
-    protected Class<AgentParser> parserclass()
-    {
-        return AgentParser.class;
-    }
-
 }
