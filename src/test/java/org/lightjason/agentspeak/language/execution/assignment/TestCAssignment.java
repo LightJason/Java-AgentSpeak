@@ -333,6 +333,48 @@ public final class TestCAssignment extends IBaseTest
     }
 
     /**
+     * test multi-assignment single assignment
+     */
+    @Test
+    public void multiassignmentsingle()
+    {
+        final IVariable<?> l_variable = new CVariable<>( "Z" );
+
+        Assert.assertTrue(
+            execute(
+                new CMultiAssignment(
+                    Stream.of( l_variable ),
+                    new IExecution()
+                    {
+                        @Nonnull
+                        @Override
+                        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                               @Nonnull final List<ITerm> p_return
+                        )
+                        {
+                            Stream.of( 1, 2, 3 ).map( CRawTerm::of ).forEach( p_return::add );
+                            return Stream.of();
+                        }
+
+                        @Nonnull
+                        @Override
+                        public Stream<IVariable<?>> variables()
+                        {
+                            return Stream.of();
+                        }
+                    }
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_variable
+            )
+        );
+
+        Assert.assertArrayEquals( Stream.of( 1, 2, 3 ).toArray(), l_variable.<Collection<?>>raw().toArray() );
+    }
+
+    /**
      * test multi-assignment less variables
      */
     @Test
