@@ -32,6 +32,8 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CT
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.io.IOException;
+
 
 /**
  * test agent method calls
@@ -46,10 +48,10 @@ public final class TestCAgentMethods extends IBaseTest
     /**
      * initialize
      *
-     * @throws Exception agent exception
+     * @throws IOException on parse error
      */
     @Before
-    public void initialize() throws Exception
+    public void initialize() throws IOException
     {
         m_agent = new CAgentGenerator().generatesingle();
     }
@@ -63,7 +65,7 @@ public final class TestCAgentMethods extends IBaseTest
         Assume.assumeNotNull( m_agent );
 
         Assert.assertTrue( m_agent.toString().startsWith( "org.lightjason.agentspeak.testing.IBaseTest$CAgent@" ) );
-        Assert.assertTrue( m_agent.toString().endsWith( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase (org.lightjason.agentspeak.beliefbase.view.CView@4ae24171): [] )" ) );
+        Assert.assertTrue( m_agent.toString().contains( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase" ) );
     }
 
     /**

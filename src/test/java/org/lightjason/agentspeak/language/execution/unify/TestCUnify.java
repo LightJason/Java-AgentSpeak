@@ -46,6 +46,8 @@ public final class TestCUnify extends IBaseTest
 {
     /**
      * test literal unify
+     *
+     * @throws IOException on stream error
      */
     @Test
     public void literalunify() throws IOException
