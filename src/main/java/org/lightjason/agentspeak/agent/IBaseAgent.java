@@ -345,6 +345,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @SuppressWarnings( "unchecked" )
     public T call() throws Exception
     {
+        m_cycletime.set( System.nanoTime() );
+
         // run beliefbase update, because environment can be changed and decrement sleeping value
         m_beliefbase.update( this );
         if ( !this.active( false ) )
@@ -360,10 +362,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             {
             } );
 
-
-        // set the cycle time
-        m_cycletime.set( System.nanoTime() );
-
+        m_cycletime.getAndUpdate( i -> System.nanoTime() - i );
         return (T) this;
     }
 

@@ -304,8 +304,8 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
     IUnifier unifier();
 
     /**
-     * returns the time in nano
-     * seconds at the last cycle
+     * returns the duration in nano
+     * seconds of the last cycle
      *
      * @return nano seconds
      */

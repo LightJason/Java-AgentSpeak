@@ -23,16 +23,26 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.Test;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.generator.CActionStaticGenerator;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -40,42 +50,100 @@ import java.io.IOException;
  */
 public final class TestCAgentMethods extends IBaseTest
 {
-    /**
-     * agent
-     */
-    private IAgent<?> m_agent;
-
-    /**
-     * initialize
-     *
-     * @throws IOException on parse error
-     */
-    @Before
-    public void initialize() throws IOException
-    {
-        m_agent = new CAgentGenerator().generatesingle();
-    }
 
     /**
      * test agent tostring
+     *
+     * @throws IOException parsing error
      */
     @Test
-    public void agenttostring()
+    public void agenttostring() throws IOException
     {
-        Assume.assumeNotNull( m_agent );
+        final IAgent<?> l_agent = new CAgentGenerator().generatesingle();
 
-        Assert.assertTrue( m_agent.toString().startsWith( "org.lightjason.agentspeak.testing.IBaseTest$CAgent@" ) );
-        Assert.assertTrue( m_agent.toString().contains( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase" ) );
+        Assert.assertTrue( l_agent.toString().startsWith( "org.lightjason.agentspeak.testing.IBaseTest$CAgent@" ) );
+        Assert.assertTrue( l_agent.toString().contains( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase" ) );
     }
 
     /**
      * test trigger variable error
+     *
+     * @throws IOException parsing error
      */
     @Test( expected = IllegalArgumentException.class )
-    public void triggervariableerror()
+    public void triggervariableerror() throws IOException
     {
-        Assume.assumeNotNull( m_agent );
+        final IAgent<?> l_agent = new CAgentGenerator().generatesingle();
+        l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.parse( "foo(X)" ) ) );
+    }
 
-        m_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.parse( "foo(X)" ) ) );
+    /**
+     * test agent cycle time
+     *
+     * @throws IOException parsing error
+     */
+    @Test
+    public void cycletime() throws IOException
+    {
+        final long l_sleepingtime = 500;
+
+        final IAgent<?> l_agent = new CAgentGenerator(
+            "!do. +!do <- .test/sleep.",
+            new CActionStaticGenerator( Stream.of( new CTestSleep( l_sleepingtime ) ) ),
+            ILambdaStreamingGenerator.EMPTY
+        ).generatesingle();
+
+        Assert.assertTrue( agentcycle( l_agent ) );
+        Assert.assertTrue( l_agent.cycletime() / 1000000 >= l_sleepingtime );
+    }
+
+
+
+    /**
+     * test action for sleeping
+     */
+    private static final class CTestSleep extends IBaseAction
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -2459743760331515477L;
+        /**
+         * sleeping time
+         */
+        private final long m_time;
+
+        /**
+         * ctor
+         *
+         * @param p_time sleeping time
+         */
+        CTestSleep( @NonNegative final long p_time )
+        {
+            m_time = p_time;
+        }
+
+        @Nonnull
+        @Override
+        public IPath name()
+        {
+            return CPath.of( "test/sleep" );
+        }
+
+        @Nonnull
+        @Override
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
+        {
+            try
+            {
+                Thread.sleep( m_time );
+                return Stream.of();
+            }
+            catch ( final InterruptedException l_exception )
+            {
+                return p_context.agent().fuzzy().membership().fail();
+            }
+        }
     }
 }

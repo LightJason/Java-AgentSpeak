@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.grammar;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
@@ -37,12 +36,10 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 
@@ -55,10 +52,6 @@ import java.util.stream.Stream;
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
 public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle
 {
-    /**
-     * logger
-     */
-    private static final Logger LOGGER = CCommon.logger( IASTVisitorAgent.class );
     /**
      * set with initial beliefs
      */
@@ -90,7 +83,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     {
         m_lambda = p_lambda;
         m_actions = p_actions;
-        LOGGER.info( MessageFormat.format( "create parser with action generator : {0}", m_actions ) );
     }
 
 
