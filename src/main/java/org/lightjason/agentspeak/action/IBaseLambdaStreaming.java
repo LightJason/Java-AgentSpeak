@@ -49,7 +49,7 @@ public abstract class IBaseLambdaStreaming<T> implements ILambdaStreaming<T>
     @Override
     public final int hashCode()
     {
-        return this.getClass().getCanonicalName().hashCode();
+        return this.assignable().mapToInt( Object::hashCode ).reduce( 0, ( i, j ) -> i ^ j );
     }
 
     @Override
