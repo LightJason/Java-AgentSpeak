@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.error;
 
 import org.junit.Test;
 import org.lightjason.agentspeak.error.parser.CParserCharacterException;
+import org.lightjason.agentspeak.error.parser.CParserInitializationError;
 import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
 
 
@@ -106,5 +107,43 @@ public final class TestCParserException
     public void parsercharactersyntaxexceptionstringexception()
     {
         throw new CParserCharacterException( "char", new RuntimeException() );
+    }
+
+
+
+    /**
+     * test parser-initialization exception
+     */
+    @Test( expected = RuntimeException.class )
+    public void parserinitialization()
+    {
+        throw new CParserInitializationError();
+    }
+
+    /**
+     * test parser-initialization exception
+     */
+    @Test( expected = RuntimeException.class )
+    public void parserinitializationstring()
+    {
+        throw new CParserInitializationError( "init" );
+    }
+
+    /**
+     * test parser-initialization exception
+     */
+    @Test( expected = RuntimeException.class )
+    public void parserinitializationexception()
+    {
+        throw new CParserInitializationError( new RuntimeException() );
+    }
+
+    /**
+     * test parser-initialization exception
+     */
+    @Test( expected = RuntimeException.class )
+    public void parserinitializationstringexception()
+    {
+        throw new CParserInitializationError( "init", new RuntimeException() );
     }
 }

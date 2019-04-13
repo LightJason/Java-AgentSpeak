@@ -23,70 +23,48 @@
 
 package org.lightjason.agentspeak.generator;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.agent.CDefaultPlanBundle;
 import org.lightjason.agentspeak.agent.IPlanBundle;
-import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
-import org.lightjason.agentspeak.grammar.CParserPlanBundle;
-import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.InputStream;
-import java.util.Objects;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
 /**
- * plan bundle generator
+ * default plan-bundle generator
  */
-@SuppressFBWarnings( "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" )
-public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
+public final class CDefaultPlanBundleGenerator extends IBasePlanBundleGenerator
 {
-    /**
-     * configuration
-     */
-    protected final IPlanBundleConfiguration m_configuration;
-
-
     /**
      * ctor
      *
      * @param p_stream input stream
      * @param p_actions action generator
-     * @param p_lambda lambda generator
+     * @param p_lambda lambda streaming generator
      */
-    public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final IActionGenerator p_actions,
-                                     @Nonnull final ILambdaStreamingGenerator p_lambda )
+    public CDefaultPlanBundleGenerator( @Nonnull final InputStream p_stream,
+                                        @Nonnull final IActionGenerator p_actions,
+                                        @Nonnull final ILambdaStreamingGenerator p_lambda )
     {
-        final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions, p_lambda ).parse( p_stream );
-
-        m_configuration = new CDefaultPlanBundleConfiguration(
-            l_visitor.plans(),
-            l_visitor.rules(),
-            l_visitor.initialbeliefs()
-        );
+        super( p_stream, p_actions, p_lambda );
     }
 
     /**
      * ctor
      *
-     * @param p_configuration configuration
+     * @param p_configuration plan-bundle configuration
      */
-    protected IBasePlanBundleGenerator( @Nonnull final IPlanBundleConfiguration p_configuration )
+    public CDefaultPlanBundleGenerator( @Nonnull final IPlanBundleConfiguration p_configuration )
     {
-        m_configuration = p_configuration;
+        super( p_configuration );
     }
 
-    @Nonnull
+    @Nullable
     @Override
-    public final Stream<IPlanBundle> generatemultiple( final int p_number, @Nullable final Object... p_data )
+    public IPlanBundle generatesingle( @Nullable final Object... p_data )
     {
-        return IntStream.range( 0, p_number )
-                        .parallel()
-                        .mapToObj( i -> this.generatesingle( p_data ) )
-                        .filter( Objects::nonNull );
+        return new CDefaultPlanBundle( m_configuration );
     }
-
 }
