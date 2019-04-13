@@ -32,16 +32,20 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
 import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -97,6 +101,130 @@ public final class TestCAgentMethods extends IBaseTest
         Assert.assertTrue( l_agent.cycletime() / 1000000 >= l_sleepingtime );
     }
 
+    /**
+     * test sleep default behaviour
+     *
+     * @throws IOException parsing error
+     */
+    @Test
+    public void sleepdefault() throws IOException
+    {
+        final IAgent<?> l_agent = new CAgentGenerator( "+!wakeup <- success." ).generatesingle();
+
+        Assert.assertFalse( l_agent.sleeping() );
+        l_agent.sleep( 2 );
+        Assert.assertTrue( l_agent.sleeping() );
+        agentcycle( l_agent );
+        Assert.assertTrue( l_agent.sleeping() );
+        agentcycle( l_agent );
+        Assert.assertFalse( l_agent.sleeping() );
+
+        l_agent.inspect( new IInspector()
+        {
+            @Override
+            public void inspectsleeping( final long p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectcycletime( final long p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectbelief( final Stream<ILiteral> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value
+            )
+            {
+
+            }
+
+            @Override
+            public void inspectrules( @Nonnull final Stream<IRule> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            {
+                Assert.assertEquals( CLiteral.of( "wakeup" ), p_value.findFirst().get() );
+            }
+
+            @Override
+            public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            {
+            }
+        } );
+
+        agentcycle( l_agent );
+        Assert.assertFalse( l_agent.sleeping() );
+
+        l_agent.inspect( new IInspector()
+        {
+            @Override
+            public void inspectsleeping( final long p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectcycletime( final long p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectbelief( final Stream<ILiteral> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value
+            )
+            {
+
+            }
+
+            @Override
+            public void inspectrules( @Nonnull final Stream<IRule> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+            {
+                Assert.assertEquals( 0, p_value.count() );
+            }
+
+            @Override
+            public void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+            {
+
+            }
+
+            @Override
+            public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
+            {
+                Assert.assertEquals( 0, p_value.count() );
+            }
+        } );
+    }
 
 
     /**

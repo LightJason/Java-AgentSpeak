@@ -32,6 +32,7 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.checkerframework.checker.index.qual.Positive;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -117,8 +118,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * number of sleeping cycles
      *
-     * @note values >= 0 defines the sleeping time, Long.MAX_VALUE is infinity sleeping
-     * negative values defines the activity
+     * @note values > 0 defines the sleeping time, Long.MAX_VALUE is infinity sleeping
+     * zero and negative values defines the activity
      */
     private final AtomicLong m_sleepingcycles = new AtomicLong( Long.MIN_VALUE );
     /**
@@ -204,7 +205,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IAgent<T> sleep( final long p_cycles, final ITerm... p_term )
+    public final IAgent<T> sleep( @Positive final long p_cycles, final ITerm... p_term )
     {
         return this.sleep(
             p_cycles,
@@ -216,7 +217,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IAgent<T> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_literal )
+    public final IAgent<T> sleep( @Positive final long p_cycles, @Nonnull final Stream<ITerm> p_literal )
     {
         m_sleepingcycles.set( p_cycles );
         p_literal.filter( i -> !i.hasVariable() ).forEach( m_sleepingterm::add );
@@ -498,28 +499,29 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     private boolean active( final boolean p_immediatly )
     {
-        // if the sleeping time ends or the agent will wakedup by a hard call,
-        // create the trigger and reset the time value
-        if ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) || p_immediatly )
-        {
-            (
-                m_sleepingterm.isEmpty()
+        if ( !p_immediatly && m_sleepingcycles.get() == Long.MAX_VALUE )
+            return false;
 
-                ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup" ) ) )
+        final long l_value = m_sleepingcycles.updateAndGet( i -> i > 0 ? i - 1 : i );
+        if ( p_immediatly || l_value == 0 )
+            this.wakuptrigger();
 
-                : m_sleepingterm.parallelStream()
-                                .map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup", i ) ) )
+        return l_value <= 0;
+    }
 
-            ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
+    /**
+     * build wake-up trigger
+     */
+    private void wakuptrigger()
+    {
+        (
+            m_sleepingterm.isEmpty()
+            ? Stream.of( ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup" ) ) )
+            : m_sleepingterm.stream().map( i -> ITrigger.EType.ADDGOAL.builddefault( CLiteral.of( "wakeup", i ) ) )
+        ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
 
-            m_sleepingterm.clear();
-        }
-
-        // if the sleeping time is not infinity decrese the counter
-        if ( m_sleepingcycles.get() > 0 && m_sleepingcycles.get() != Long.MAX_VALUE )
-            m_sleepingcycles.decrementAndGet();
-
-        return m_sleepingcycles.get() <= 0;
+        m_sleepingterm.clear();
+        m_sleepingcycles.set( Long.MIN_VALUE );
     }
 
 }

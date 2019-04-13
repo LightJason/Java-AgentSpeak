@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.agent;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import org.checkerframework.checker.index.qual.Positive;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.generator.IAgentGenerator;
@@ -107,14 +108,14 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
 
         @Nonnull
         @Override
-        public IAgent<IAgent<?>> sleep( final long p_cycles, @Nullable final ITerm... p_term )
+        public IAgent<IAgent<?>> sleep( @Positive final long p_cycles, @Nullable final ITerm... p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public IAgent<IAgent<?>> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term )
+        public IAgent<IAgent<?>> sleep( @Positive final long p_cycles, @Nonnull final Stream<ITerm> p_term )
         {
             return this;
         }
@@ -256,7 +257,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> sleep( final long p_cycles, @Nullable final ITerm... p_term );
+    IAgent<T> sleep( @Positive final long p_cycles, @Nullable final ITerm... p_term );
 
     /**
      * pushs the agent into sleeping state
@@ -266,7 +267,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term );
+    IAgent<T> sleep( @Positive final long p_cycles, @Nonnull final Stream<ITerm> p_term );
 
     /**
      * wake-up the agent by generating wakeup-goal
