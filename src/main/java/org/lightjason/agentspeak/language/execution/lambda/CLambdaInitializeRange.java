@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import com.codepoetics.protonpack.Indexed;
+import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -75,7 +77,7 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
         if ( l_range.size() == 0 || l_range.size() > 3 )
             throw new CExecutionIllegealArgumentException(
                 p_context,
-                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 3 )
+                org.lightjason.agentspeak.common.CCommon.languagestring( this, "wrongargumentnumber", 1, 3 )
             );
 
         generate( l_range, p_return );
@@ -111,10 +113,9 @@ public final class CLambdaInitializeRange extends IBaseExecution<IExecution[]>
             case 3:
                 p_return.add(
                     CRawTerm.of(
-                        LongStream.range(
-                            p_range.get( 0 ).<Number>raw().longValue(),
-                            p_range.get( 1 ).<Number>raw().longValue() / p_range.get( 2 ).<Number>raw().longValue()
-                        ).map( i -> i * p_range.get( 2 ).<Number>raw().longValue() ).boxed()
+                        StreamUtils.zipWithIndex(
+                            LongStream.range( p_range.get( 0 ).<Number>raw().longValue(), p_range.get( 1 ).<Number>raw().longValue() ).boxed()
+                        ).filter( i -> i.getIndex() % p_range.get( 2 ).<Number>raw().longValue() == 0 ).map( Indexed::getValue )
                     )
                 );
                 break;

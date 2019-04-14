@@ -60,15 +60,14 @@ public final class TestCActionLambda extends IBaseTest
     @Test
     public void lambdaobject()
     {
-        final ILambdaStreaming<Object> l_stream = new CTestLambdaObject();
         final Object l_object = new Object();
 
         Assert.assertArrayEquals(
             Stream.of( 1, 2L, 3D, "foo", l_object ).toArray(),
-            Stream.of( 1, 2L, 3D, "foo", l_object ).flatMap( l_stream::apply ).toArray()
+            Stream.of( 1, 2L, 3D, "foo", l_object ).flatMap( ILambdaStreaming.EMPTY::apply ).toArray()
         );
 
-        Assert.assertTrue( l_stream.assignable().collect( Collectors.toSet() ).contains( Object.class ) );
+        Assert.assertTrue( ILambdaStreaming.EMPTY.assignable().collect( Collectors.toSet() ).contains( Object.class ) );
     }
 
     /**
@@ -92,9 +91,9 @@ public final class TestCActionLambda extends IBaseTest
     @Test
     public void lambdaequal()
     {
-        Assert.assertEquals( new CTestLambdaObject(), new CTestLambdaObject() );
+        Assert.assertEquals( ILambdaStreaming.EMPTY, ILambdaStreaming.EMPTY );
         Assert.assertEquals( new CTestLambdaNumber(), new CTestLambdaNumber() );
-        Assert.assertNotEquals( new CTestLambdaObject(), new CTestLambdaNumber() );
+        Assert.assertNotEquals( ILambdaStreaming.EMPTY, new CTestLambdaNumber() );
     }
 
     /**
@@ -124,34 +123,14 @@ public final class TestCActionLambda extends IBaseTest
     }
 
     /**
-     * test lambda-streamining
-     */
-    private static final class CTestLambdaObject extends IBaseLambdaStreaming<Object>
-    {
-        /**
-         * serial id
-         */
-        private static final long serialVersionUID = -1099766429334122489L;
-
-        @NonNull
-        @Override
-        public Stream<Class<?>> assignable()
-        {
-            return Stream.of( Object.class );
-        }
-
-        @Override
-        public Stream<?> apply( final Object p_value )
-        {
-            return Stream.of( p_value );
-        }
-    }
-
-    /**
      * test number stream lambda
      */
     private static final class CTestLambdaNumber extends IBaseLambdaStreaming<Number>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 1114943250673664117L;
 
         @NonNull
         @Override

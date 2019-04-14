@@ -41,7 +41,7 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
     /**
      * empty streaming
      */
-    ILambdaStreaming<?> EMPTY = new ILambdaStreaming<>()
+    ILambdaStreaming<Object> EMPTY = new ILambdaStreaming<>()
     {
         @Nonnull
         @Override
@@ -54,6 +54,18 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
         public Stream<?> apply( final Object p_value )
         {
             return Stream.of( p_value );
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return this.assignable().mapToInt( Object::hashCode ).reduce( 0, ( i, j ) -> i ^ j );
+        }
+
+        @Override
+        public boolean equals( final Object p_object )
+        {
+            return p_object instanceof ILambdaStreaming<?> && p_object.hashCode() == this.hashCode();
         }
     };
 
