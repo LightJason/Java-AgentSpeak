@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.execution.lambda;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -128,27 +129,7 @@ public final class TestCLambda extends IBaseTest
     public void initializerangeerror()
     {
         execute(
-            new CLambdaInitializeRange(
-                Stream.of(
-                    new IExecution()
-                        {
-                            @Nonnull
-                            @Override
-                            public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-                            {
-                                return Stream.of();
-                            }
-
-                            @Nonnull
-                            @Override
-                            public Stream<IVariable<?>> variables()
-                            {
-                                return Stream.of();
-                            }
-                        }
-                )
-            ),
+            new CLambdaInitializeRange( Stream.of( new CEmptyExecution() ) ),
             false,
             Collections.emptyList(),
             Collections.emptyList()
@@ -163,27 +144,7 @@ public final class TestCLambda extends IBaseTest
     {
         Assert.assertFalse(
             execute(
-                new CLambdaInitializeRange(
-                    Stream.of(
-                        new IExecution()
-                        {
-                            @Nonnull
-                            @Override
-                            public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-                            {
-                                return p_context.agent().fuzzy().membership().fail();
-                            }
-
-                            @Nonnull
-                            @Override
-                            public Stream<IVariable<?>> variables()
-                            {
-                                return Stream.of();
-                            }
-                        }
-                    )
-                ),
+                new CLambdaInitializeRange( Stream.of( new CFailExecution() ) ),
                 false,
                 Collections.emptyList(),
                 Collections.emptyList()
@@ -199,5 +160,130 @@ public final class TestCLambda extends IBaseTest
     {
         final IVariable<?> l_variable = new CVariable<>( "X" );
         Assert.assertEquals( l_variable, new CLambdaInitializeRange( Stream.of( new CPassVariable( l_variable ) ) ).variables().findFirst().get() );
+    }
+
+    /**
+     * lambda initialize stream error
+     */
+    @Test( expected = IllegalArgumentException.class )
+    public void initializestreamerror()
+    {
+        execute(
+            new CLambdaInitializeStream( Stream.of( new CEmptyExecution() ), ILambdaStreamingGenerator.EMPTY ),
+            false,
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+    }
+
+    /**
+     * test lambda stream fail
+     */
+    @Test
+    public void initializestreamfail()
+    {
+        Assert.assertFalse(
+            execute(
+                new CLambdaInitializeStream( Stream.of( new CFailExecution() ), ILambdaStreamingGenerator.EMPTY ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
+        );
+    }
+
+    /**
+     * test lambda execution fail
+     */
+    @Test( expected = IllegalStateException.class )
+    public void lambdafail()
+    {
+        execute(
+            new CLambda(
+                false,
+                new CLambdaInitializeStream( Stream.of( new CFailExecution() ), ILambdaStreamingGenerator.EMPTY ),
+                IVariable.EMPTY,
+                Stream.of(),
+                IVariable.EMPTY
+            ),
+            false,
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+    }
+
+    /**
+     * lambda variables
+     */
+    @Test
+    public void lambdavariables()
+    {
+        final IVariable<?> l_ivariable = new CVariable<>( "I" );
+        final IVariable<?> l_vvariable = new CVariable<>( "V" );
+        final IVariable<?> l_rvariable = new CVariable<>( "R" );
+        final IVariable<?> l_pvariable = new CVariable<>( "P" );
+
+        Assert.assertArrayEquals(
+            Stream.of( l_vvariable, l_rvariable ).toArray(),
+            new CLambda(
+                false,
+                new CLambdaInitializeRange( Stream.of( new CPassVariable( l_vvariable ) ) ),
+                l_ivariable,
+                Stream.of( new CPassVariable( l_pvariable ) ),
+                l_rvariable
+              ).variables().toArray()
+        );
+    }
+
+    /**
+     * fail execution
+     */
+    private static final class CFailExecution implements IExecution
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 2802928476873652270L;
+
+        @Nonnull
+        @Override
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
+        {
+            return p_context.agent().fuzzy().membership().fail();
+        }
+
+        @Nonnull
+        @Override
+        public Stream<IVariable<?>> variables()
+        {
+            return Stream.of();
+        }
+    }
+
+    /**
+     * empty execution
+     */
+    private static final class CEmptyExecution implements IExecution
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -749465299840536928L;
+
+        @Nonnull
+        @Override
+        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
+        {
+            return Stream.of();
+        }
+
+        @Nonnull
+        @Override
+        public Stream<IVariable<?>> variables()
+        {
+            return Stream.of();
+        }
     }
 }
