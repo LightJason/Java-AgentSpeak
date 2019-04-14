@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -157,7 +158,8 @@ public final class CLambda extends IBaseExecution<IExecution[]>
                                  Arrays.stream( m_value ).flatMap( IExecution::variables )
                              )
                          ) )
-                         .allMatch( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ).getValue() )
+                         .map( i -> CCommon.executesequential( i, Arrays.stream( m_value ) ) )
+                         .allMatch( Pair::getValue )
                          ? p_context.agent().fuzzy().membership().success()
                          : p_context.agent().fuzzy().membership().fail();
     }

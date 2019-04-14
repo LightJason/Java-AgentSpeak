@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.execution.base.CRepair;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -234,6 +235,79 @@ public final class TestCLambda extends IBaseTest
               ).variables().toArray()
         );
     }
+
+    /**
+     * test lambda sequential execution fail
+     */
+    @Test
+    public void lambdasequentialfail()
+    {
+        final IVariable<?> l_variable = new CVariable<>( "I" );
+
+        Assert.assertFalse(
+            execute(
+                new CLambda(
+                    false,
+                    new CLambdaInitializeRange( Stream.of( new CPassRaw<>( 3 ) ) ),
+                    l_variable,
+                    Stream.of( new CFailExecution() ),
+                    IVariable.EMPTY
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
+        );
+    }
+
+    /**
+     * test lambda parallel successful executon
+     */
+    @Test
+    public void lambdaparallel()
+    {
+        final IVariable<?> l_variable = new CVariable<>( "I" );
+
+        Assert.assertTrue(
+            execute(
+                new CLambda(
+                    true,
+                    new CLambdaInitializeRange( Stream.of( new CPassRaw<>( 3 ) ) ),
+                    l_variable,
+                    Stream.of( new CRepair( Stream.of( new CPassRaw<>( true ) ) ) ),
+                    IVariable.EMPTY
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
+        );
+    }
+
+    /**
+     * test lambda parallel fail executon
+     */
+    @Test
+    public void lambdaparallelfail()
+    {
+        final IVariable<?> l_variable = new CVariable<>( "I" );
+
+        Assert.assertFalse(
+            execute(
+                new CLambda(
+                    true,
+                    new CLambdaInitializeRange( Stream.of( new CPassRaw<>( 3 ) ) ),
+                    l_variable,
+                    Stream.of( new CRepair( Stream.of( new CPassRaw<>( false ) ) ) ),
+                    IVariable.EMPTY
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
+        );
+    }
+
 
     /**
      * fail execution
