@@ -154,6 +154,17 @@ public final class CCommon
      */
     public static Stream<ILambdaStreaming<?>> lambdastreamingFromPackage( @Nullable final String... p_package )
     {
+        return CCommon.classfrompackage( ILambdaStreaming.class, packagenames( p_package ) );
+    }
+
+    /**
+     * read lambda-streaming class of package
+     *
+     * @param p_package stream with full-qualified package name
+     * @return lambda-streaming stream
+     */
+    public static Stream<ILambdaStreaming<?>> lambdastreamingFromPackage( @Nonnull final Stream<String> p_package )
+    {
         return CCommon.classfrompackage( ILambdaStreaming.class, p_package );
     }
 
@@ -169,9 +180,35 @@ public final class CCommon
     @Nonnull
     public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
+        return CCommon.<IAction>classfrompackage( IAction.class, packagenames( p_package ) ).filter( CCommon::actionusable );
+    }
+
+    /**
+     * get all classes within an Java package as action
+     *
+     * @param p_package stream with full-qualified package name
+     * @return action stream
+     */
+    @Nonnull
+    public static Stream<IAction> actionsFromPackage( @Nonnull final Stream<String> p_package )
+    {
         return CCommon.<IAction>classfrompackage( IAction.class, p_package ).filter( CCommon::actionusable );
     }
 
+    /**
+     * returns actions by a class
+     *
+     * @param p_class class list
+     * @return action stream
+     *
+     * @note class must be an inheritance of the IAgent interface
+     */
+    @Nonnull
+    @SafeVarargs
+    public static Stream<IAction> actionsFromAgentClass( @Nonnull final Class<? extends IAgent<?>>... p_class )
+    {
+        return p_class.length == 0 ? Stream.empty() : actionsFromAgentClass( Arrays.stream( p_class ) );
+    }
 
     /**
      * returns actions by a class
@@ -183,30 +220,39 @@ public final class CCommon
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static Stream<IAction> actionsFromAgentClass( @Nonnull final Class<?>... p_class )
+    public static Stream<IAction> actionsFromAgentClass( @Nonnull final Stream<Class<? extends IAgent<?>>> p_class )
     {
-        return p_class.length == 0
-               ? Stream.empty()
-               : Arrays.stream( p_class )
-                       .parallel()
-                       .filter( IAgent.class::isAssignableFrom )
-                       .flatMap( CCommon::methods )
-                       .map( i ->
-                       {
-                           try
-                           {
-                               return (IAction) new CMethodAction( i );
-                           }
-                           catch ( final IllegalAccessException l_exception )
-                           {
-                               LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
-                               return null;
-                           }
-                       } )
-                       // action can be instantiate
-                       .filter( Objects::nonNull )
-                       // check usable action name
-                       .filter( CCommon::actionusable );
+        return p_class.parallel()
+                      .flatMap( CCommon::methods )
+                      .map( i ->
+                      {
+                          try
+                          {
+                              return (IAction) new CMethodAction( i );
+                          }
+                          catch ( final IllegalAccessException l_exception )
+                          {
+                              LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
+                              return null;
+                          }
+                      } )
+                      // action can be instantiate
+                      .filter( Objects::nonNull )
+                      // check usable action name
+                      .filter( CCommon::actionusable );
+    }
+
+    /**
+     * build package name structure
+     *
+     * @param p_package package names
+     * @return package stream or defualt package name
+     */
+    private static Stream<String> packagenames( @Nullable final String... p_package )
+    {
+        return Objects.isNull( p_package ) || p_package.length == 0
+               ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action" ) )
+               : Arrays.stream( p_package );
     }
 
     /**
@@ -324,32 +370,27 @@ public final class CCommon
      *
      * @tparam T class type
      */
-    @SuppressWarnings( "unchecked" )
-    private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nullable final String... p_package )
+    private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nonnull final Stream<String> p_package )
     {
-        return ( ( Objects.isNull( p_package ) ) || ( p_package.length == 0 )
-                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action" ) )
-                 : Arrays.stream( p_package ) )
-            .flatMap( j -> new Reflections( j ).getSubTypesOf( p_class )
-                                               .parallelStream()
-                                               .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
-                                               .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
-                                               .filter( i -> Modifier.isPublic( i.getModifiers() ) )
-                                               .map( i ->
-                                               {
-                                                   try
-                                                   {
-                                                       return (T) i.getConstructor().newInstance();
-                                                   }
-                                                   catch ( final NoSuchMethodException | InvocationTargetException
-                                                       | IllegalAccessException | InstantiationException l_exception )
-                                                   {
-                                                       LOGGER.warning( CCommon.languagestring( CCommon.class, "classinstantiateerror", i, l_exception ) );
-                                                       return null;
-                                                   }
-                                               } )
-                                               .filter( Objects::nonNull )
-            );
+        return p_package.flatMap( j -> new Reflections( j ).getSubTypesOf( p_class )
+                                                           .parallelStream()
+                                                           .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
+                                                           .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
+                                                           .filter( i -> Modifier.isPublic( i.getModifiers() ) )
+                                                           .map( i ->
+                                                           {
+                                                               try
+                                                               {
+                                                                   return (T) i.getConstructor().newInstance();
+                                                               }
+                                                               catch ( final NoSuchMethodException | InvocationTargetException
+                                                                   | IllegalAccessException | InstantiationException l_exception )
+                                                               {
+                                                                   LOGGER.warning( CCommon.languagestring( CCommon.class, "classinstantiateerror", i, l_exception ) );
+                                                                   return null;
+                                                               }
+                                                           } )
+                                                           .filter( Objects::nonNull ) );
     }
 
 

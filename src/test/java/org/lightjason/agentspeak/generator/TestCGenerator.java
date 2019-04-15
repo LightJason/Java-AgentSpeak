@@ -27,9 +27,13 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.action.binding.CMethodAction;
+import org.lightjason.agentspeak.action.binding.IAgentAction;
+import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -37,7 +41,9 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CT
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.testing.IBaseTest;
+import org.lightjason.agentspeak.testing.action.CTestIs;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -176,6 +182,42 @@ public final class TestCGenerator extends IBaseTest
     }
 
     /**
+     * test action generator by package
+     */
+    @Test
+    public void actiongeneratorpackages()
+    {
+        final IActionGenerator l_generator = new CActionGenerator( Stream.of( "org.lightjason.agentspeak.testing" ) );
+
+        Assert.assertEquals( new CTestIs(), l_generator.apply( CPath.of( "test/is" ) ) );
+        Assert.assertEquals( new CTestIs(), l_generator.apply( CPath.of( "test/is" ) ) );
+    }
+
+    /**
+     * test action generator by class
+     */
+    @Test
+    public void actiongeneratorclass()
+    {
+        final IActionGenerator l_generator = new CActionGenerator( Stream.empty(), Stream.of( CTestAgent.class ) );
+
+        Assert.assertTrue( l_generator.apply( CPath.of( "agenttest" ) ) instanceof CMethodAction );
+        Assert.assertEquals( "agenttest", l_generator.apply( CPath.of( "agenttest" ) ).toString() );
+        Assert.assertEquals( 0, l_generator.apply( CPath.of( "agenttest" ) ).minimalArgumentNumber() );
+    }
+
+    /**
+     * test action generator error
+     */
+    @Test( expected = NoSuchElementException.class )
+    public void actiongeneratorfail()
+    {
+        new CActionGenerator( Stream.empty() ).apply( CPath.of( "bar" ) );
+    }
+
+
+
+    /**
      * test lambda streaming class
      */
     public static final class CTestLambda implements ILambdaStreaming<Number>
@@ -196,6 +238,37 @@ public final class TestCGenerator extends IBaseTest
         public Stream<?> apply( final Number p_object )
         {
             return Stream.of( p_object.intValue() );
+        }
+    }
+
+
+    /**
+     * test agent
+     */
+    @IAgentAction( access = IAgentAction.EAccess.WHITELIST )
+    public static final class CTestAgent extends IBaseAgent<CTestAgent>
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 3414997241586446077L;
+
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         */
+        public CTestAgent( @Nonnull final IAgentConfiguration<CTestAgent> p_configuration )
+        {
+            super( p_configuration );
+        }
+
+        /**
+         * test method
+         */
+        private void agenttest()
+        {
+
         }
     }
 }

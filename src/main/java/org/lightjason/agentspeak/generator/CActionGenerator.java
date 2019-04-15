@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
@@ -53,7 +54,7 @@ public final class CActionGenerator implements IActionGenerator
     /**
      * agent classes with action
      */
-    private final Set<Class<?>> m_classes;
+    private final Set<Class<? extends IAgent<?>>> m_classes;
 
     /**
      * ctor
@@ -71,7 +72,7 @@ public final class CActionGenerator implements IActionGenerator
      * @param p_packages list of packages
      * @param p_class list of agent classes
      */
-    public CActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<?>> p_class )
+    public CActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<? extends IAgent<?>>> p_class )
     {
         m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
         m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
@@ -86,8 +87,8 @@ public final class CActionGenerator implements IActionGenerator
             return m_actions.get( p_path );
 
         final Optional<IAction> l_action = Stream.concat(
-            CCommon.actionsFromPackage( m_packages.isEmpty() ? null : m_packages.toArray( String[]::new ) ),
-            CCommon.actionsFromAgentClass( m_classes.toArray( Class<?>[]::new ) )
+            CCommon.actionsFromPackage( m_packages.stream() ),
+            CCommon.actionsFromAgentClass( m_classes.stream() )
         ).filter( i -> i.name().equals( p_path ) ).peek( i -> m_actions.putIfAbsent( i.name(), i ) ).findFirst();
 
         if ( l_action.isEmpty() )
