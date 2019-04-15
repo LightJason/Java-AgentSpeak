@@ -24,12 +24,11 @@
 package org.lightjason.agentspeak.common;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.language.CCommon;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.stream.Stream;
-
-import org.lightjason.agentspeak.language.CCommon;
 
 
 /**

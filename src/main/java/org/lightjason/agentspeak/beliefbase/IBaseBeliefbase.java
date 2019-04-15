@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.beliefbase;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.CView;
 import org.lightjason.agentspeak.beliefbase.view.IView;
@@ -53,7 +52,6 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
-@SuppressFBWarnings( "RI_REDUNDANT_INTERFACES" )
 public abstract class IBaseBeliefbase implements IBeliefbase
 {
 

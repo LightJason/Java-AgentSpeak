@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.generator;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
@@ -41,7 +40,6 @@ import java.util.stream.Stream;
 /**
  * plan bundle generator
  */
-@SuppressFBWarnings( "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" )
 public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
 {
     /**

@@ -24,12 +24,17 @@
 package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
@@ -116,6 +121,58 @@ public final class TestCGenerator extends IBaseTest
 
         Assert.assertEquals( l_object.<Number>raw().intValue(), l_generator.apply( l_object.raw().getClass() ).apply( l_object.raw() ).findFirst().get() );
         Assert.assertEquals( l_object.<Number>raw().intValue(), l_generator.apply( l_object.raw().getClass() ).apply( l_object.raw() ).findFirst().get() );
+    }
+
+    /**
+     * test plan-bundle generator
+     *
+     * @throws IOException on input stream error
+     */
+    @Test
+    public void planbundlegenerator() throws IOException
+    {
+        final IPlanBundle l_bundle = new CDefaultPlanBundleGenerator(
+            IOUtils.toInputStream( "foobar. bar :- success. +!do <- success.", "UTF-8" ),
+            IActionGenerator.EMPTY,
+            ILambdaStreamingGenerator.EMPTY
+        ).generatesingle();
+
+        Assert.assertArrayEquals( Stream.of( CLiteral.of( "foobar" ) ).toArray(), l_bundle.initialbeliefs().toArray() );
+        Assert.assertEquals( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "do" ) ), l_bundle.plans().stream().findFirst().get().trigger() );
+        Assert.assertEquals( CLiteral.of( "bar" ), l_bundle.rules().stream().findFirst().get().identifier() );
+    }
+
+    /**
+     * test plan-bundle generator multiple
+     *
+     * @throws IOException on input stream error
+     */
+    @Test
+    public void planbundlemultiply() throws IOException
+    {
+        final IPlanBundleGenerator l_generator = new CDefaultPlanBundleGenerator(
+            IOUtils.toInputStream( "foobar. bar :- success. +!do <- success.", "UTF-8" ),
+            IActionGenerator.EMPTY,
+            ILambdaStreamingGenerator.EMPTY
+        );
+
+        final IPlanBundle l_bundle = l_generator.generatesingle();
+
+        Assert.assertArrayEquals(
+            Stream.concat( l_bundle.initialbeliefs().stream(), l_bundle.initialbeliefs().stream() ).toArray(),
+            l_generator.generatemultiple( 2 ).flatMap( i -> i.initialbeliefs().stream() ).toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.concat( l_bundle.plans().stream(), l_bundle.plans().stream() ).toArray(),
+            l_generator.generatemultiple( 2 ).flatMap( i -> i.plans().stream() ).toArray()
+        );
+
+        Assert.assertArrayEquals(
+            Stream.concat( l_bundle.rules().stream(), l_bundle.rules().stream() ).toArray(),
+            l_generator.generatemultiple( 2 ).flatMap( i -> i.rules().stream() ).toArray()
+        );
+
     }
 
     /**

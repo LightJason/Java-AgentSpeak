@@ -57,14 +57,6 @@ public final class CActionGenerator implements IActionGenerator
 
     /**
      * ctor
-     */
-    public CActionGenerator()
-    {
-        this( Stream.of(), Stream.of() );
-    }
-
-    /**
-     * ctor
      *
      * @param p_packages list of packages
      */
