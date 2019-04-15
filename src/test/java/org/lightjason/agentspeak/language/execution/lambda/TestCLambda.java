@@ -204,7 +204,7 @@ public final class TestCLambda extends IBaseTest
                 false,
                 new CLambdaInitializeStream( Stream.of( new CFailExecution() ), ILambdaStreamingGenerator.EMPTY ),
                 IVariable.EMPTY,
-                Stream.of(),
+                Stream.empty(),
                 IVariable.EMPTY
             ),
             false,
@@ -331,7 +331,7 @@ public final class TestCLambda extends IBaseTest
         @Override
         public Stream<IVariable<?>> variables()
         {
-            return Stream.of();
+            return Stream.empty();
         }
     }
 
@@ -357,7 +357,7 @@ public final class TestCLambda extends IBaseTest
         @Override
         public Stream<IVariable<?>> variables()
         {
-            return Stream.of();
+            return Stream.empty();
         }
     }
 }

@@ -232,7 +232,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             p_argument.stream().map( ITerm::raw ).forEach( m_log::add );
-            return Stream.of();
+            return Stream.empty();
         }
     }
 }

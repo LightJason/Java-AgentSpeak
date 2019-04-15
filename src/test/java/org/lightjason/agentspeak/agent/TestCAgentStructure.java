@@ -365,14 +365,14 @@ public final class TestCAgentStructure extends IBaseTest
     @Test
     public void emptyinspector()
     {
-        IInspector.EMPTY.inspectbelief( Stream.of() );
+        IInspector.EMPTY.inspectbelief( Stream.empty() );
         IInspector.EMPTY.inspectcycletime( 0 );
-        IInspector.EMPTY.inspectpendingtrigger( Stream.of() );
-        IInspector.EMPTY.inspectplans( Stream.of() );
-        IInspector.EMPTY.inspectrules( Stream.of() );
-        IInspector.EMPTY.inspectrunningplans( Stream.of() );
+        IInspector.EMPTY.inspectpendingtrigger( Stream.empty() );
+        IInspector.EMPTY.inspectplans( Stream.empty() );
+        IInspector.EMPTY.inspectrules( Stream.empty() );
+        IInspector.EMPTY.inspectrunningplans( Stream.empty() );
         IInspector.EMPTY.inspectsleeping( 0 );
-        IInspector.EMPTY.inspectstorage( Stream.of() );
+        IInspector.EMPTY.inspectstorage( Stream.empty() );
     }
 
     /**
@@ -414,7 +414,7 @@ public final class TestCAgentStructure extends IBaseTest
             try
             {
                 Thread.sleep( m_time );
-                return Stream.of();
+                return Stream.empty();
             }
             catch ( final InterruptedException l_exception )
             {

@@ -223,8 +223,8 @@ public final class TestCUnify extends IBaseTest
         Assert.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 Collections.emptySet(),
-                Stream.of(),
-                Stream.of()
+                Stream.empty(),
+                Stream.empty()
             )
         );
     }
@@ -239,7 +239,7 @@ public final class TestCUnify extends IBaseTest
             new CRecursiveUnifyAlgorithm().apply(
                 Collections.emptySet(),
                 Stream.of( CRawTerm.of( new Object() ) ),
-                Stream.of()
+                Stream.empty()
             )
         );
     }

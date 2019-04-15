@@ -67,7 +67,7 @@ public final class TestCBase extends IBaseTest
                     @Override
                     public Stream<IVariable<?>> variables()
                     {
-                        return Stream.of();
+                        return Stream.empty();
                     }
                 },
                 new IExecution()
@@ -78,14 +78,14 @@ public final class TestCBase extends IBaseTest
                                                            @Nonnull final List<ITerm> p_return )
                     {
                         Assert.fail();
-                        return Stream.of();
+                        return Stream.empty();
                     }
 
                     @Nonnull
                     @Override
                     public Stream<IVariable<?>> variables()
                     {
-                        return Stream.of();
+                        return Stream.empty();
                     }
                 },
                 new IExecution()
@@ -96,14 +96,14 @@ public final class TestCBase extends IBaseTest
                                                            @Nonnull final List<ITerm> p_return )
                     {
                         Assert.assertTrue( true );
-                        return Stream.of();
+                        return Stream.empty();
                     }
 
                     @Nonnull
                     @Override
                     public Stream<IVariable<?>> variables()
                     {
-                        return Stream.of();
+                        return Stream.empty();
                     }
                 }
             ),
@@ -135,7 +135,7 @@ public final class TestCBase extends IBaseTest
                     @Override
                     public Stream<IVariable<?>> variables()
                     {
-                        return Stream.of();
+                        return Stream.empty();
                     }
                 },
                 new IExecution()
@@ -146,14 +146,14 @@ public final class TestCBase extends IBaseTest
                                                            @Nonnull final List<ITerm> p_return )
                     {
                         Assert.fail();
-                        return Stream.of();
+                        return Stream.empty();
                     }
 
                     @Nonnull
                     @Override
                     public Stream<IVariable<?>> variables()
                     {
-                        return Stream.of();
+                        return Stream.empty();
                     }
                 },
                 new IExecution()
@@ -164,14 +164,14 @@ public final class TestCBase extends IBaseTest
                                                            @Nonnull final List<ITerm> p_return )
                     {
                         Assert.fail();
-                        return Stream.of();
+                        return Stream.empty();
                     }
 
                     @Nonnull
                     @Override
                     public Stream<IVariable<?>> variables()
                     {
-                        return Stream.of();
+                        return Stream.empty();
                     }
                 }
             ),

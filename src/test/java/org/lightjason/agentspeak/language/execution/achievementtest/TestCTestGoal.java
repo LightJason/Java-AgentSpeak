@@ -236,14 +236,14 @@ public final class TestCTestGoal extends IBaseTest
             @Override
             public Stream<String> tags()
             {
-                return Stream.of();
+                return Stream.empty();
             }
 
             @Nonnull
             @Override
             public Stream<IVariable<?>> variabledescription()
             {
-                return Stream.of();
+                return Stream.empty();
             }
 
             @Nonnull
@@ -251,14 +251,14 @@ public final class TestCTestGoal extends IBaseTest
             public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                    @Nonnull final List<ITerm> p_return )
             {
-                return Stream.of();
+                return Stream.empty();
             }
 
             @Nonnull
             @Override
             public Stream<IVariable<?>> variables()
             {
-                return Stream.of();
+                return Stream.empty();
             }
         } ) );
         m_agent.trigger( l_trigger );

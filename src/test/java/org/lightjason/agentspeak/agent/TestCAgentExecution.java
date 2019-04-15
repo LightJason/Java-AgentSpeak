@@ -281,7 +281,7 @@ public final class TestCAgentExecution extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
-            return Stream.of();
+            return Stream.empty();
         }
     }
 
@@ -315,7 +315,7 @@ public final class TestCAgentExecution extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).raw()  );
-            return Stream.of();
+            return Stream.empty();
         }
     }
 }

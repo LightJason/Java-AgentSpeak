@@ -69,8 +69,8 @@ public final class TestCExecution extends IBaseTest
         Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate() );
         Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate() );
 
-        Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate( Stream.of() ) );
-        Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate( Stream.of() ) );
+        Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate( Stream.empty() ) );
+        Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate( Stream.empty() ) );
     }
 
     /**

@@ -268,7 +268,7 @@ public final class TestCRuleContext extends IBaseGrammarTest
                                                    @Nonnull final List<ITerm> p_return
             )
             {
-                return Stream.of();
+                return Stream.empty();
             }
         } ) ), ILambdaStreamingGenerator.EMPTY ).visitExecuteaction( new CAgentRuleParser().parser( ".bar" ).executeaction() );
     }

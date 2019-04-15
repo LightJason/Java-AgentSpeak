@@ -118,7 +118,7 @@ public final class TestCHanoiTowers extends IBaseTest
     {
         this.setup(
             1, 3, 3,
-            this.getClass().getClassLoader().getResource( "hanoi.asl" ).getPath(), Stream.of() );
+            this.getClass().getClassLoader().getResource( "hanoi.asl" ).getPath(), Stream.empty() );
     }
 
 
@@ -333,7 +333,7 @@ public final class TestCHanoiTowers extends IBaseTest
         )
         {
             m_running.set( false );
-            return Stream.of();
+            return Stream.empty();
         }
     }
 

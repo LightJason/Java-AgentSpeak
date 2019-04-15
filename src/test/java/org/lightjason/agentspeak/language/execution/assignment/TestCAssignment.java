@@ -243,7 +243,7 @@ public final class TestCAssignment extends IBaseTest
         Assert.assertFalse(
             execute(
                 new CMultiAssignment(
-                    Stream.of(),
+                    Stream.empty(),
                     new IExecution()
                     {
                         @Nonnull
@@ -259,7 +259,7 @@ public final class TestCAssignment extends IBaseTest
                         @Override
                         public Stream<IVariable<?>> variables()
                         {
-                            return Stream.of();
+                            return Stream.empty();
                         }
                     }
                 ),
@@ -278,7 +278,7 @@ public final class TestCAssignment extends IBaseTest
     {
         execute(
             new CMultiAssignment(
-                Stream.of(),
+                Stream.empty(),
                 IExecution.EMPTY
             ),
             false,
@@ -309,14 +309,14 @@ public final class TestCAssignment extends IBaseTest
                         )
                         {
                             Stream.of( 1, 2, 3 ).map( CRawTerm::of ).forEach( p_return::add );
-                            return Stream.of();
+                            return Stream.empty();
                         }
 
                         @Nonnull
                         @Override
                         public Stream<IVariable<?>> variables()
                         {
-                            return Stream.of();
+                            return Stream.empty();
                         }
                     }
                 ),
@@ -353,14 +353,14 @@ public final class TestCAssignment extends IBaseTest
                         )
                         {
                             Stream.of( 1, 2, 3 ).map( CRawTerm::of ).forEach( p_return::add );
-                            return Stream.of();
+                            return Stream.empty();
                         }
 
                         @Nonnull
                         @Override
                         public Stream<IVariable<?>> variables()
                         {
-                            return Stream.of();
+                            return Stream.empty();
                         }
                     }
                 ),
@@ -396,14 +396,14 @@ public final class TestCAssignment extends IBaseTest
                         )
                         {
                             Stream.of( 1 ).map( CRawTerm::of ).forEach( p_return::add );
-                            return Stream.of();
+                            return Stream.empty();
                         }
 
                         @Nonnull
                         @Override
                         public Stream<IVariable<?>> variables()
                         {
-                            return Stream.of();
+                            return Stream.empty();
                         }
                     }
                 ),
@@ -436,22 +436,22 @@ public final class TestCAssignment extends IBaseTest
 
 
         Assert.assertEquals(
-            new CMultiAssignment( Stream.of(), IExecution.EMPTY ),
-            new CMultiAssignment( Stream.of(), IExecution.EMPTY )
+            new CMultiAssignment( Stream.empty(), IExecution.EMPTY ),
+            new CMultiAssignment( Stream.empty(), IExecution.EMPTY )
         );
         Assert.assertNotEquals(
-            new CMultiAssignment( Stream.of(), IExecution.EMPTY ),
+            new CMultiAssignment( Stream.empty(), IExecution.EMPTY ),
             new CMultiAssignment( Stream.of( new CVariable<>( "V" ) ), IExecution.EMPTY )
         );
 
 
         Assert.assertEquals(
-            new CDeconstruct( Stream.of(), ITerm.EMPTYTERM ),
-            new CDeconstruct( Stream.of(), ITerm.EMPTYTERM )
+            new CDeconstruct( Stream.empty(), ITerm.EMPTYTERM ),
+            new CDeconstruct( Stream.empty(), ITerm.EMPTYTERM )
         );
         Assert.assertNotEquals(
-            new CDeconstruct( Stream.of(), ITerm.EMPTYTERM ),
-            new CDeconstruct( Stream.of(), IVariable.EMPTY )
+            new CDeconstruct( Stream.empty(), ITerm.EMPTYTERM ),
+            new CDeconstruct( Stream.empty(), IVariable.EMPTY )
         );
     }
 }

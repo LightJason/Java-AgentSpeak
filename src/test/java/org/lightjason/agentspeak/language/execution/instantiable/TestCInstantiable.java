@@ -73,7 +73,7 @@ public final class TestCInstantiable extends IBaseTest
         Assert.assertEquals( ILiteral.EMPTY, IRule.EMPTY.identifier() );
         Assert.assertEquals( ILiteral.EMPTY, IRule.EMPTY.literal() );
         Assert.assertTrue( IRule.EMPTY.description().isEmpty() );
-        Assert.assertEquals( IContext.EMPTYRULE, IRule.EMPTY.instantiate( IAgent.EMPTY, Stream.of() ) );
+        Assert.assertEquals( IContext.EMPTYRULE, IRule.EMPTY.instantiate( IAgent.EMPTY, Stream.empty() ) );
         Assert.assertEquals( 0, IRule.EMPTY.variables().count() );
         Assert.assertEquals( 0, IRule.EMPTY.variabledescription().count() );
         Assert.assertEquals( 0, IRule.EMPTY.tags().count() );
