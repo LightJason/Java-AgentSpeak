@@ -23,61 +23,50 @@
 
 package org.lightjason.agentspeak.language.execution;
 
-import org.lightjason.agentspeak.language.variable.IVariable;
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
-import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
 /**
- * test goal action
- *
- * @tparam T value type
+ * test execution parts
  */
-public abstract class IBaseExecution<T> implements IExecution
+public final class TestCExecution extends IBaseTest
 {
     /**
-     * serial id
+     * test empty context
      */
-    private static final long serialVersionUID = 2572294057575105363L;
+    @Test
+    public void emptycontext()
+    {
+        Assert.assertEquals( IAgent.EMPTY, IContext.EMPTYPLAN.agent() );
+        Assert.assertEquals( IAgent.EMPTY, IContext.EMPTYRULE.agent() );
+
+        Assert.assertEquals( IRule.EMPTY, IContext.EMPTYRULE.instance() );
+        Assert.assertEquals( IPlan.EMPTY, IContext.EMPTYPLAN.instance() );
+
+        Assert.assertTrue( IContext.EMPTYPLAN.instancevariables().isEmpty() );
+        Assert.assertTrue( IContext.EMPTYRULE.instancevariables().isEmpty() );
+
+        Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate() );
+        Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate() );
+
+        Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate( Stream.of() ) );
+        Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate( Stream.of() ) );
+    }
+
     /**
-     * data
+     * test execution variables
      */
-    protected final T m_value;
-
-    /**
-     * ctor
-     *
-     * @param p_value data
-     */
-    protected IBaseExecution( @Nonnull final T p_value )
+    @Test
+    public void execution()
     {
-        m_value = p_value;
-    }
-
-    @Nonnull
-    @Override
-    public Stream<IVariable<?>> variables()
-    {
-        return Stream.empty();
-    }
-
-    @Override
-    public String toString()
-    {
-        return m_value.toString();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return m_value.hashCode();
-    }
-
-    @Override
-    public boolean equals( final Object p_object )
-    {
-        return p_object instanceof IExecution && this.hashCode() == p_object.hashCode();
+        Assert.assertEquals( 0, IExecution.EMPTY.variables().count() );
     }
 
 }
