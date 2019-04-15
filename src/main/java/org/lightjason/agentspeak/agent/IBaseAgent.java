@@ -210,7 +210,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return this.sleep(
             p_cycles,
             ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
-            ? Stream.of()
+            ? Stream.empty()
             : Arrays.stream( p_term )
         );
     }
@@ -230,7 +230,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         return this.wakeup(
             ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
-            ? Stream.of()
+            ? Stream.empty()
             : Arrays.stream( p_term )
         );
     }
@@ -417,7 +417,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         return p_trigger.hasShallowcopywithoutsuffix()
                ? this.planfinder( p_trigger.shallowcopywithoutsuffix() )
-               : Stream.of();
+               : Stream.empty();
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         final Pair<Boolean, Set<IVariable<?>>> l_result = CCommon.unifytrigger( m_unifier, p_trigger, p_planstatistic.plan().trigger() );
         if ( !l_result.getLeft() )
-            return Stream.of();
+            return Stream.empty();
 
         final Pair<IPlanStatistic, IContext> l_instantiate = CCommon.instantiateplan( p_planstatistic, this, l_result.getRight() );
         if ( l_instantiate.getLeft().plan().condition( l_instantiate.getRight() ) )

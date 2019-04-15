@@ -73,7 +73,7 @@ public final class CDecrement implements IUnary
     {
         final IVariable<Number> l_variable = CCommon.replacebycontext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         l_variable.set( l_variable.throwvaluenotassignableto( Number.class ).<Number>raw().doubleValue() - 1 );
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Nonnull

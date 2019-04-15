@@ -58,7 +58,7 @@ public interface IUnifier
                                            @Nonnull final IExecution p_expression, final boolean p_parallel
         )
         {
-            return Stream.of();
+            return Stream.empty();
         }
     };
 

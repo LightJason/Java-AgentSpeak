@@ -89,7 +89,7 @@ public final class CLambdaInitializeStream extends IBaseExecution<IExecution[]>
         p_return.add(
             CRawTerm.of(
                 l_return.stream()
-                        .flatMap( i -> Objects.isNull( i.raw() ) ? Stream.of() : m_lambda.apply( i.raw().getClass() ).apply( i.raw() ) )
+                        .flatMap( i -> Objects.isNull( i.raw() ) ? Stream.empty() : m_lambda.apply( i.raw().getClass() ).apply( i.raw() ) )
             )
         );
 

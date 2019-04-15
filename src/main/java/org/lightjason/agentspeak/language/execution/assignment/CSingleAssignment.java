@@ -95,7 +95,7 @@ public final class CSingleAssignment extends IBaseExecution<IVariable<?>>
         final IVariable<Object> l_lhs = CCommon.replacebycontext( p_context, m_value ).term();
         l_lhs.set( m_operator.apply( l_lhs, l_result.get( 0 ) ) );
 
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

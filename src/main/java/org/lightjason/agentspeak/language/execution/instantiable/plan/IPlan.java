@@ -105,7 +105,7 @@ public interface IPlan extends IInstantiable
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
-            return Stream.of();
+            return Stream.empty();
         }
 
         @Nonnull

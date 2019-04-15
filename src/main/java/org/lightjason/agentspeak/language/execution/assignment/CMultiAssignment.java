@@ -111,7 +111,7 @@ public final class CMultiAssignment extends IBaseExecution<List<IVariable<?>>>
                                     .collect( Collectors.toList() )
                     );
 
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

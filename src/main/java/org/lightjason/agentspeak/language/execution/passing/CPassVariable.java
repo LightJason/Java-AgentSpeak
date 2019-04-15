@@ -64,7 +64,7 @@ public final class CPassVariable extends IBaseExecution<IVariable<?>>
         p_return.add(
             CCommon.replacebycontext( p_context, m_value )
         );
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Nonnull

@@ -88,7 +88,7 @@ public final class CVariableUnify extends CDefaultUnify
             return p_context.agent().fuzzy().membership().fail();
 
         CCommon.updatecontext( p_context, l_variables.stream() );
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Nonnull

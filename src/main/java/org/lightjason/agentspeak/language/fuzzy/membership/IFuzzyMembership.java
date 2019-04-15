@@ -51,14 +51,14 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
         @Override
         public Stream<IFuzzyValue<?>> success()
         {
-            return Stream.of();
+            return Stream.empty();
         }
 
         @NonNull
         @Override
         public Stream<IFuzzyValue<?>> fail()
         {
-            return Stream.of();
+            return Stream.empty();
         }
 
         @Override
@@ -71,19 +71,19 @@ public interface IFuzzyMembership<E extends Enum<?>> extends IAgentUpdateable, F
         @Override
         public Stream<Number> range( @NonNull final Enum<?> p_value )
         {
-            return Stream.of();
+            return Stream.empty();
         }
 
         @Override
         public Stream<IFuzzyValue<?>> modify( final Stream<ITerm> p_arguments )
         {
-            return Stream.of();
+            return Stream.empty();
         }
 
         @Override
         public Stream<IFuzzyValue<?>> apply( final Number p_number )
         {
-            return Stream.of();
+            return Stream.empty();
         }
 
         @Nonnull

@@ -78,7 +78,7 @@ public final class CBelief extends IBaseExecution<ILiteral>
     )
     {
         m_action.accept( p_context, m_value );
-        return Stream.of();
+        return Stream.empty();
     }
 
     /**

@@ -353,17 +353,17 @@ public final class CCommon
     public static Stream<Class<?>> classhierarchie( @NonNull final Class<?> p_class )
     {
         if ( Object.class.equals( p_class ) )
-            return Stream.of();
+            return Stream.empty();
 
         return CCommon.streamconcatstrict(
             Stream.of( p_class ),
 
             Objects.isNull( p_class.getSuperclass() )
-            ? Stream.of()
+            ? Stream.empty()
             : classhierarchie( p_class.getSuperclass() ),
 
             Objects.isNull( p_class.getInterfaces() )
-            ? Stream.of()
+            ? Stream.empty()
             : Arrays.stream( p_class.getInterfaces() ).parallel().flatMap( CCommon::classhierarchie )
         );
     }

@@ -119,7 +119,7 @@ public final class CCrisp<E extends Enum<?>> implements IFuzzyMembership<E>
     @Override
     public Stream<IFuzzyValue<?>> modify( final Stream<ITerm> p_arguments )
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

@@ -120,7 +120,7 @@ public final class CBinaryExpression implements IBinaryExpression
 
         // additional check for left-hand-arguments
         if ( m_lhsbind.apply( l_return.get( 0 ), p_return ) )
-            return Stream.of();
+            return Stream.empty();
 
         // right-hand-side execution
         final IFuzzyValue<?>[] l_right = execute( m_rhs, p_parallel, p_context, p_argument, l_return );

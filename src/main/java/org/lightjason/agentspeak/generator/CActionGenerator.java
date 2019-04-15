@@ -62,7 +62,7 @@ public final class CActionGenerator implements IActionGenerator
      */
     public CActionGenerator( @NonNull final Stream<String> p_packages )
     {
-        this( p_packages, Stream.of() );
+        this( p_packages, Stream.empty() );
     }
 
     /**

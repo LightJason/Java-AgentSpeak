@@ -75,7 +75,7 @@ public final class CDeconstruct extends IBaseExecution<IVariable<?>[]>
     {
         set(
             CCommon.replacebycontext( p_context, Arrays.stream( m_value ) ).toArray( ITerm[]::new ), CCommon.replacebycontext( p_context, m_righthand ).raw() );
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

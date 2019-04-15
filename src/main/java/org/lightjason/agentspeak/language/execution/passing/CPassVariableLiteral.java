@@ -86,13 +86,13 @@ public final class CPassVariableLiteral extends IBaseExecution<IVariable<?>>
         if ( l_variable.valueassignableto( String.class ) )
         {
             p_return.add( this.bystring( p_context, l_variable.raw() ) );
-            return Stream.of();
+            return Stream.empty();
         }
 
         if ( l_variable.valueassignableto( ILiteral.class ) )
         {
             p_return.add( this.byliteral( p_context, l_variable.raw() ) );
-            return Stream.of();
+            return Stream.empty();
         }
 
         throw new CExecutionIllegealArgumentException( p_context, org.lightjason.agentspeak.common.CCommon

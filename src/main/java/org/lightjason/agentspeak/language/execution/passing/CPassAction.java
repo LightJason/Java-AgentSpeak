@@ -136,7 +136,7 @@ public final class CPassAction implements IExecution
         if ( Objects.isNull( p_term.raw() ) || !CCommon.isssignableto( p_term, IExecution.class ) )
         {
             p_return.add( p_term );
-            return Stream.of();
+            return Stream.empty();
         }
 
         final List<ITerm> l_result = CCommon.argumentlist();

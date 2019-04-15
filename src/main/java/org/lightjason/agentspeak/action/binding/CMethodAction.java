@@ -185,10 +185,10 @@ public final class CMethodAction extends IBaseAction
     {
         // void result of the execution
         if ( Objects.isNull( p_result ) || void.class.equals( p_result.getClass() ) )
-            return Stream.of();
+            return Stream.empty();
 
         // otherwise object is returned
         p_return.add( CRawTerm.of( p_result ) );
-        return Stream.of();
+        return Stream.empty();
     }
 }

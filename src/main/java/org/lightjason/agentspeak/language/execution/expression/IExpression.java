@@ -57,7 +57,7 @@ public interface IExpression extends IExecution
         )
         {
             p_return.add( CRawTerm.of( true ) );
-            return Stream.of();
+            return Stream.empty();
         }
 
         @Nonnull
