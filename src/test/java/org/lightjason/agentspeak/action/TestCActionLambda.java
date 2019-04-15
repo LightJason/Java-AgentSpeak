@@ -35,7 +35,6 @@ import org.lightjason.agentspeak.testing.IBaseTest;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -52,22 +51,6 @@ public final class TestCActionLambda extends IBaseTest
     public void namebyclass()
     {
         Assert.assertEquals( "test/testaction", new CTestAction().name().toString() );
-    }
-
-    /**
-     * test lmabda-object-streaming
-     */
-    @Test
-    public void lambdaobject()
-    {
-        final Object l_object = new Object();
-
-        Assert.assertArrayEquals(
-            Stream.of( 1, 2L, 3D, "foo", l_object ).toArray(),
-            Stream.of( 1, 2L, 3D, "foo", l_object ).flatMap( ILambdaStreaming.EMPTY::apply ).toArray()
-        );
-
-        Assert.assertTrue( ILambdaStreaming.EMPTY.assignable().collect( Collectors.toSet() ).contains( Object.class ) );
     }
 
     /**

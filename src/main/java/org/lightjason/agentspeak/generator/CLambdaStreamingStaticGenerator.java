@@ -27,7 +27,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,24 +49,6 @@ public final class CLambdaStreamingStaticGenerator implements ILambdaStreamingGe
      */
     private final Map<Class<?>, ILambdaStreaming<?>> m_lambdas;
 
-
-    /**
-     * ctor
-     */
-    public CLambdaStreamingStaticGenerator()
-    {
-        m_lambdas = Collections.emptyMap();
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_lambda collections with lambda
-     */
-    public CLambdaStreamingStaticGenerator( @NonNull final Collection<ILambdaStreaming<?>> p_lambda )
-    {
-        this( p_lambda.stream() );
-    }
 
     /**
      * ctor

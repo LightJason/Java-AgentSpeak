@@ -47,13 +47,13 @@ public interface ILambdaStreaming<T> extends Serializable, Function<T, Stream<?>
         @Override
         public Stream<Class<?>> assignable()
         {
-            return Stream.of( Object.class );
+            return Stream.empty();
         }
 
         @Override
         public Stream<?> apply( final Object p_value )
         {
-            return Stream.of( p_value );
+            return Stream.empty();
         }
 
         @Override
