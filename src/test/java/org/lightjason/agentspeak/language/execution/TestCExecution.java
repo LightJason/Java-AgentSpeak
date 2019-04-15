@@ -28,8 +28,12 @@ import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.variable.CMutexVariable;
+import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -38,6 +42,15 @@ import java.util.stream.Stream;
  */
 public final class TestCExecution extends IBaseTest
 {
+    /**
+     * test execution variables
+     */
+    @Test
+    public void execution()
+    {
+        Assert.assertEquals( 0, IExecution.EMPTY.variables().count() );
+    }
+
     /**
      * test empty context
      */
@@ -61,12 +74,34 @@ public final class TestCExecution extends IBaseTest
     }
 
     /**
-     * test execution variables
+     * test context to string
      */
     @Test
-    public void execution()
+    public void contexttostring()
     {
-        Assert.assertEquals( 0, IExecution.EMPTY.variables().count() );
+        Assert.assertTrue(
+            new CContext(
+                IAgent.EMPTY,
+                IPlan.EMPTY,
+                Collections.emptySet()
+            ).toString().startsWith( "org.lightjason.agentspeak.language.execution.CContext@" )
+        );
     }
 
+    /**
+     * test context hashcode & equals
+     */
+    @Test
+    public void contexthashcode()
+    {
+        Assert.assertEquals(
+            new CContext( IAgent.EMPTY, IPlan.EMPTY, Collections.emptySet() ),
+            new CContext( IAgent.EMPTY, IPlan.EMPTY, Collections.emptySet() )
+        );
+
+        Assert.assertEquals(
+            new CContext( IAgent.EMPTY, IPlan.EMPTY, Stream.of( new CMutexVariable<>( "X" ) ).collect( Collectors.toSet() ) ),
+            new CContext( IAgent.EMPTY, IPlan.EMPTY, Stream.of( new CVariable<>( "X" ) ).collect( Collectors.toSet() ) )
+        );
+    }
 }

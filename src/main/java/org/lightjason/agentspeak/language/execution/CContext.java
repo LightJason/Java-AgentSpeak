@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -64,6 +63,10 @@ public final class CContext implements IContext
      * plan variables with their data
      */
     private final Map<IPath, IVariable<?>> m_variables;
+    /**
+     * hash code
+     */
+    private final int m_hashcode;
 
 
     /**
@@ -75,9 +78,7 @@ public final class CContext implements IContext
      */
     public CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Collection<IVariable<?>> p_variables )
     {
-        m_agent = p_agent;
-        m_instance = p_instance;
-        m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i ) ) );
+        this( p_agent, p_instance, p_variables.stream() );
     }
 
     /**
@@ -85,14 +86,17 @@ public final class CContext implements IContext
      *
      * @param p_agent agent
      * @param p_instance instance object
-     * @param p_variables variable map
+     * @param p_variables instance variables
      */
-    private CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Map<IPath, IVariable<?>> p_variables )
+    public CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Stream<IVariable<?>> p_variables )
     {
         m_agent = p_agent;
         m_instance = p_instance;
-        m_variables = p_variables;
+        m_variables = Collections.unmodifiableMap( p_variables.parallel().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i, ( i, j ) -> i ) ) );
+
+        m_hashcode = m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().stream().mapToInt( Object::hashCode ).reduce( 0, ( i, j ) -> i ^ j );
     }
+
 
     @Nonnull
     @Override
@@ -108,11 +112,9 @@ public final class CContext implements IContext
         return new CContext(
             m_agent,
             m_instance,
-            Collections.unmodifiableMap(
-                Stream.concat(
-                    p_variables,
-                    m_variables.values().stream().map( i -> i.shallowcopy() )
-                ).collect( Collectors.toMap( ITerm::fqnfunctor, i -> i, ( i, j ) -> i ) )
+            Stream.concat(
+                p_variables,
+                m_variables.values().stream().map( i -> i.shallowcopy() )
             )
         );
     }
@@ -141,7 +143,7 @@ public final class CContext implements IContext
     @Override
     public int hashCode()
     {
-        return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();
+        return m_hashcode;
     }
 
     @Override
