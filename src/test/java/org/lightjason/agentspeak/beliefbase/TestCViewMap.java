@@ -152,9 +152,9 @@ public final class TestCViewMap extends IBaseTest
         Assume.assumeNotNull( m_data );
         final IView l_view = new CViewMap( "main", m_data );
 
-        Assert.assertTrue( l_view.containsLiteral( CPath.of( "val" ) ) );
-        Assert.assertTrue( l_view.containsLiteral( CPath.of( "obj/name" ) ) );
-        Assert.assertFalse( l_view.containsLiteral( CPath.of( "not/exists" ) ) );
+        Assert.assertTrue( l_view.containsliteral( CPath.of( "val" ) ) );
+        Assert.assertTrue( l_view.containsliteral( CPath.of( "obj/name" ) ) );
+        Assert.assertFalse( l_view.containsliteral( CPath.of( "not/exists" ) ) );
     }
 
     /**
@@ -166,8 +166,8 @@ public final class TestCViewMap extends IBaseTest
         Assume.assumeNotNull( m_data );
         final IView l_view = new CViewMap( "main", m_data );
 
-        Assert.assertFalse( l_view.containsView( CPath.of( "not/exists" ) ) );
-        Assert.assertTrue( l_view.containsView( CPath.of( "obj" ) ) );
+        Assert.assertFalse( l_view.containsview( CPath.of( "not/exists" ) ) );
+        Assert.assertTrue( l_view.containsview( CPath.of( "obj" ) ) );
     }
 
     /**

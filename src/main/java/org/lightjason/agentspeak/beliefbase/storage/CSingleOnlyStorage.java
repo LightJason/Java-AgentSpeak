@@ -119,7 +119,7 @@ public final class CSingleOnlyStorage<N, M> extends IBaseStorage<N, M>
     }
 
     @Override
-    public boolean isEmpty()
+    public boolean isempty()
     {
         return m_elements.isEmpty();
     }

@@ -99,7 +99,7 @@ public interface IView extends IStructure
         }
 
         @Override
-        public boolean hasParent()
+        public boolean hasparent()
         {
             return false;
         }
@@ -176,19 +176,19 @@ public interface IView extends IStructure
         }
 
         @Override
-        public boolean containsLiteral( @Nonnull final IPath p_path )
+        public boolean containsliteral( @Nonnull final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public boolean containsView( @Nonnull final IPath p_path )
+        public boolean containsview( @Nonnull final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public boolean isEmpty()
+        public boolean isempty()
         {
             return false;
         }
@@ -281,7 +281,7 @@ public interface IView extends IStructure
      *
      * @return boolean flag of the parent
      */
-    boolean hasParent();
+    boolean hasparent();
 
 
 
@@ -391,7 +391,7 @@ public interface IView extends IStructure
      * @param p_path path to a literal (suffix is literal name)
      * @return existance boolean
      */
-    boolean containsLiteral( @Nonnull final IPath p_path );
+    boolean containsliteral( @Nonnull final IPath p_path );
 
     /**
      * view existing check
@@ -399,6 +399,6 @@ public interface IView extends IStructure
      * @param p_path path to a view
      * @return existance boolean
      */
-    boolean containsView( @Nonnull final IPath p_path );
+    boolean containsview( @Nonnull final IPath p_path );
 
 }

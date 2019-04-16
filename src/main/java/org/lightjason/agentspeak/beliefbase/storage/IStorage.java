@@ -146,7 +146,7 @@ public interface IStorage<N, M>
      *
      * @return empty boolean
      */
-    boolean isEmpty();
+    boolean isempty();
 
     /**
      * updates all items

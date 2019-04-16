@@ -134,7 +134,7 @@ public final class CMultiStorage<N, M> extends IBaseStorage<N, M>
     }
 
     @Override
-    public boolean isEmpty()
+    public boolean isempty()
     {
         return m_multielements.isEmpty() && m_singleelements.isEmpty();
     }

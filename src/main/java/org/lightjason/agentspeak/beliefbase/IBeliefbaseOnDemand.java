@@ -43,7 +43,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
 {
 
     @Override
-    public boolean isEmpty()
+    public boolean isempty()
     {
         return true;
     }

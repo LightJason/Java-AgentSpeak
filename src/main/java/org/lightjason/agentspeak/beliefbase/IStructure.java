@@ -42,7 +42,7 @@ public interface IStructure extends IAgentUpdateable
      *
      * @return empty boolean
      */
-    boolean isEmpty();
+    boolean isempty();
 
     /**
      * returns the size of literals

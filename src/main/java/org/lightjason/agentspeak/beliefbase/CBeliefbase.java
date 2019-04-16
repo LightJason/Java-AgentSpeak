@@ -160,9 +160,9 @@ public final class CBeliefbase extends IBaseBeliefbase
     }
 
     @Override
-    public boolean isEmpty()
+    public boolean isempty()
     {
-        return m_storage.isEmpty();
+        return m_storage.isempty();
     }
 
     @Override

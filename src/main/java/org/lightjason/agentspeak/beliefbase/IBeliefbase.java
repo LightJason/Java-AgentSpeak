@@ -50,7 +50,7 @@ public interface IBeliefbase extends IStructure
     {
 
         @Override
-        public boolean isEmpty()
+        public boolean isempty()
         {
             return true;
         }

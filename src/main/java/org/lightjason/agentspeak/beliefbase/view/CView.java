@@ -193,24 +193,24 @@ public final class CView implements IView
     }
 
     @Override
-    public boolean containsView( @Nonnull final IPath p_path )
+    public boolean containsview( @Nonnull final IPath p_path )
     {
         return !p_path.empty()
                && ( p_path.size() == 1
                     ? m_beliefbase.containsview( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                          .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+                          .containsview( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
     @Override
-    public boolean containsLiteral( @Nonnull final IPath p_path )
+    public boolean containsliteral( @Nonnull final IPath p_path )
     {
         return !p_path.empty()
                || ( p_path.size() == 1
                     ? m_beliefbase.containsliteral( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                          .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+                          .containsliteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
@@ -331,9 +331,9 @@ public final class CView implements IView
     }
 
     @Override
-    public boolean isEmpty()
+    public boolean isempty()
     {
-        return m_beliefbase.isEmpty();
+        return m_beliefbase.isempty();
     }
 
     @Override
@@ -346,7 +346,7 @@ public final class CView implements IView
     @Override
     public Stream<IView> root()
     {
-        return this.hasParent()
+        return this.hasparent()
                ? Stream.concat( Stream.of( this ), Stream.of( this.parent() ).flatMap( IView::root ) )
                : Stream.empty();
     }
@@ -373,7 +373,7 @@ public final class CView implements IView
     }
 
     @Override
-    public boolean hasParent()
+    public boolean hasparent()
     {
         return Objects.nonNull( m_parent );
     }

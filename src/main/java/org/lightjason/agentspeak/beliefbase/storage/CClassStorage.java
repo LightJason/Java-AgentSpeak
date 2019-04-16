@@ -180,7 +180,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     }
 
     @Override
-    public boolean isEmpty()
+    public boolean isempty()
     {
         return m_fields.isEmpty();
     }
