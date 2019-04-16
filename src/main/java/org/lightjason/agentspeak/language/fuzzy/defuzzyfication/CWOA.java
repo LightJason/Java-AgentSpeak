@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.fuzzy.defuzzyfication;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.membership.IFuzzyMembership;
 import org.lightjason.agentspeak.language.fuzzy.set.IFuzzySet;
@@ -68,7 +69,8 @@ public final class CWOA<E extends Enum<?>> extends IBaseDefuzzification<E>
     public boolean success( @NonNull final Number p_value )
     {
         // scale the gravity on the maximum to the enum result
-        return p_value.doubleValue() / this.maximum().orElse( 1 ) > 0.5;
+        final double l_max = this.maximum().orElse( 1 );
+        return p_value.doubleValue() / ( CCommon.floatingequal( l_max, 0, CCommon.FLOATINGPRECISION ) ? 1 : l_max ) > 0.5;
     }
 
 }

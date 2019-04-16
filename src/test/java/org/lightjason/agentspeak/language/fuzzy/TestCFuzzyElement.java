@@ -51,7 +51,7 @@ public final class TestCFuzzyElement extends IBaseTest
      * test of weighted-average-method
      */
     @Test
-    public void cwoa()
+    public void cwoaresult()
     {
         Assert.assertEquals(
             1.0,
@@ -74,7 +74,7 @@ public final class TestCFuzzyElement extends IBaseTest
      * test of center-of-gravizry
      */
     @Test
-    public void ccog()
+    public void ccogresult()
     {
         Assert.assertEquals(
             67.419,
@@ -155,14 +155,13 @@ public final class TestCFuzzyElement extends IBaseTest
 
             0.01
         );
-
     }
 
     /**
      * test crip membership
      */
     @Test
-    public void membership()
+    public void membershipcrip()
     {
         Assert.assertArrayEquals(
             Stream.of( CFuzzyValue.of( ECrisp.FALSE, 1 ), CFuzzyValue.of( ECrisp.TRUE, 0 ) ).toArray(),
@@ -173,8 +172,14 @@ public final class TestCFuzzyElement extends IBaseTest
             Stream.of( CFuzzyValue.of( ECrisp.FALSE, 0 ), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).toArray(),
             new CCrisp<>( ECrisp.class ).apply( 1 ).toArray()
         );
+    }
 
-
+    /**
+     * test three membership
+     */
+    @Test
+    public void membershipthree()
+    {
         Assert.assertArrayEquals(
             Stream.of(
                 CFuzzyValue.of( EThreeElement.LOW, 1 ),
@@ -204,5 +209,22 @@ public final class TestCFuzzyElement extends IBaseTest
         Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 1 ).count() );
         Assert.assertEquals( 0, IFuzzyMembership.EMPTY.fail().count() );
         Assert.assertEquals( 0, IFuzzyMembership.EMPTY.success().count() );
+    }
+
+    /**
+     * test boolena matching
+     */
+    @Test
+    public void success()
+    {
+        Assert.assertTrue( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.51 ) );
+        Assert.assertFalse( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.5 ) );
+        Assert.assertTrue( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.7 ) );
+        Assert.assertFalse( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.1 ) );
+
+        Assert.assertTrue( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.51 ) );
+        Assert.assertFalse( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.5 ) );
+        Assert.assertTrue( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.7 ) );
+        Assert.assertFalse( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.1 ) );
     }
 }

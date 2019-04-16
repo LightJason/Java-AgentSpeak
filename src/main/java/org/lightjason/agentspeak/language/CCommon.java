@@ -78,6 +78,10 @@ import java.util.stream.Stream;
 public final class CCommon
 {
     /**
+     * floating precision
+     */
+    public static final Number FLOATINGPRECISION = 1e-8;
+    /**
      * numeric constant values - infinity is defined manually
      */
     public static final Map<String, Double> NUMERICCONSTANT = Collections.unmodifiableMap(
