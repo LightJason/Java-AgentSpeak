@@ -205,6 +205,7 @@ public final class CCommon
      */
     @Nonnull
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     public static Stream<IAction> actionsFromAgentClass( @Nonnull final Class<? extends IAgent<?>>... p_class )
     {
         return p_class.length == 0 ? Stream.empty() : actionsFromAgentClass( Arrays.stream( p_class ) );
@@ -370,6 +371,7 @@ public final class CCommon
      *
      * @tparam T class type
      */
+    @SuppressWarnings( "unchecked" )
     private static <T> Stream<T> classfrompackage( @Nonnull final Class<?> p_class, @Nonnull final Stream<String> p_package )
     {
         return p_package.flatMap( j -> new Reflections( j ).getSubTypesOf( p_class )
