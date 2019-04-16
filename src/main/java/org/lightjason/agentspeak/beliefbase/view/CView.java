@@ -197,7 +197,7 @@ public final class CView implements IView
     {
         return !p_path.empty()
                && ( p_path.size() == 1
-                    ? m_beliefbase.containsView( p_path.get( 0 ) )
+                    ? m_beliefbase.containsview( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
                           .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
@@ -208,7 +208,7 @@ public final class CView implements IView
     {
         return !p_path.empty()
                || ( p_path.size() == 1
-                    ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                    ? m_beliefbase.containsliteral( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
                           .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
@@ -226,7 +226,7 @@ public final class CView implements IView
         // build path relative to this view
         final IPath l_path = this.path();
         return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
-                 ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
+                 ? Stream.concat( m_beliefbase.streamliteral(), m_beliefbase.streamview().flatMap( i -> i.stream() ) )
                  : Arrays.stream( p_path )
                          .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
         ).map( i -> i.shallowcopy( l_path ) );
@@ -240,8 +240,8 @@ public final class CView implements IView
         final IPath l_path = this.path();
         return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
                  ? Stream.concat(
-            m_beliefbase.streamLiteral().filter( i -> i.negated() == p_negated ),
-            m_beliefbase.streamView().flatMap( i -> i.stream( p_negated ) )
+            m_beliefbase.streamliteral().filter( i -> i.negated() == p_negated ),
+            m_beliefbase.streamview().flatMap( i -> i.stream( p_negated ) )
         )
                  : Arrays.stream( p_path )
                          .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
@@ -285,7 +285,7 @@ public final class CView implements IView
         synchronized ( this )
         {
             // add is run here for avoid overwriting view with a new object reference
-            l_view = m_beliefbase.viewOrDefault(
+            l_view = m_beliefbase.viewordefault(
                 l_root,
 
                 Objects.isNull( p_generator ) || p_generator.length == 0
@@ -331,9 +331,9 @@ public final class CView implements IView
     }
 
     @Override
-    public boolean empty()
+    public boolean isEmpty()
     {
-        return m_beliefbase.empty();
+        return m_beliefbase.isEmpty();
     }
 
     @Override

@@ -50,7 +50,7 @@ public interface IBeliefbase extends IStructure
     {
 
         @Override
-        public boolean empty()
+        public boolean isEmpty()
         {
             return true;
         }
@@ -77,14 +77,14 @@ public interface IBeliefbase extends IStructure
 
         @Nonnull
         @Override
-        public Stream<ILiteral> streamLiteral()
+        public Stream<ILiteral> streamliteral()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public Stream<IView> streamView()
+        public Stream<IView> streamview()
         {
             return Stream.empty();
         }
@@ -125,13 +125,13 @@ public interface IBeliefbase extends IStructure
         }
 
         @Override
-        public boolean containsLiteral( @Nonnull final String p_key )
+        public boolean containsliteral( @Nonnull final String p_key )
         {
             return false;
         }
 
         @Override
-        public boolean containsView( @Nonnull final String p_key )
+        public boolean containsview( @Nonnull final String p_key )
         {
             return false;
         }
@@ -152,7 +152,7 @@ public interface IBeliefbase extends IStructure
 
         @Nullable
         @Override
-        public IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
+        public IView viewordefault( @Nonnull final String p_key, @Nullable final IView p_default )
         {
             return p_default;
         }
@@ -191,7 +191,7 @@ public interface IBeliefbase extends IStructure
      * @return literal stream
      */
     @Nonnull
-    Stream<ILiteral> streamLiteral();
+    Stream<ILiteral> streamliteral();
 
     /**
      * returns a stream over all views
@@ -199,7 +199,7 @@ public interface IBeliefbase extends IStructure
      * @return view stream
      */
     @Nonnull
-    Stream<IView> streamView();
+    Stream<IView> streamview();
 
 
 
@@ -259,7 +259,7 @@ public interface IBeliefbase extends IStructure
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsLiteral( @Nonnull final String p_key );
+    boolean containsliteral( @Nonnull final String p_key );
 
     /**
      * contains a single-element
@@ -267,7 +267,7 @@ public interface IBeliefbase extends IStructure
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsView( @Nonnull final String p_key );
+    boolean containsview( @Nonnull final String p_key );
 
 
 
@@ -297,7 +297,7 @@ public interface IBeliefbase extends IStructure
      * @return view or default element
      */
     @Nullable
-    IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default );
+    IView viewordefault( @Nonnull final String p_key, @Nullable final IView p_default );
 
 
 

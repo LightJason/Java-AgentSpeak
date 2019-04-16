@@ -43,7 +43,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
 {
 
     @Override
-    public boolean empty()
+    public boolean isEmpty()
     {
         return true;
     }
@@ -56,7 +56,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
 
     @Nonnull
     @Override
-    public Stream<ILiteral> streamLiteral()
+    public Stream<ILiteral> streamliteral()
     {
         return Stream.empty();
     }
@@ -76,7 +76,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     }
 
     @Override
-    public boolean containsLiteral( @Nonnull final String p_key )
+    public boolean containsliteral( @Nonnull final String p_key )
     {
         return false;
     }
@@ -96,14 +96,14 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     }
 
     @Override
-    public final IView viewOrDefault( @Nonnull final String p_key, final IView p_default )
+    public final IView viewordefault( @Nonnull final String p_key, final IView p_default )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
     @Nonnull
     @Override
-    public final Stream<IView> streamView()
+    public final Stream<IView> streamview()
     {
         return Stream.empty();
     }
@@ -130,7 +130,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     }
 
     @Override
-    public final boolean containsView( @Nonnull final String p_key )
+    public final boolean containsview( @Nonnull final String p_key )
     {
         return false;
     }

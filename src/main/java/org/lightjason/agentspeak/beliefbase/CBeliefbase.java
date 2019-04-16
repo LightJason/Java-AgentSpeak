@@ -71,7 +71,7 @@ public final class CBeliefbase extends IBaseBeliefbase
     @Override
     public ILiteral add( @Nonnull final ILiteral p_literal )
     {
-        return m_storage.putMultiElement( p_literal.functor(), p_literal )
+        return m_storage.putmulti( p_literal.functor(), p_literal )
                ? super.add( p_literal )
                : p_literal;
     }
@@ -80,7 +80,7 @@ public final class CBeliefbase extends IBaseBeliefbase
     @Override
     public IView add( @Nonnull final IView p_view )
     {
-        m_storage.putSingleElement( p_view.name(), p_view );
+        m_storage.putsingle( p_view.name(), p_view );
         return p_view;
     }
 
@@ -88,7 +88,7 @@ public final class CBeliefbase extends IBaseBeliefbase
     @Override
     public IView remove( @Nonnull final IView p_view )
     {
-        m_storage.removeSingleElement( this.internalremove( p_view ).name() );
+        m_storage.removesingle( this.internalremove( p_view ).name() );
         return p_view;
     }
 
@@ -96,42 +96,42 @@ public final class CBeliefbase extends IBaseBeliefbase
     @Override
     public ILiteral remove( @Nonnull final ILiteral p_literal )
     {
-        return m_storage.removeMultiElement( p_literal.functor(), p_literal )
+        return m_storage.removemulti( p_literal.functor(), p_literal )
                ? super.remove( p_literal )
                : p_literal;
     }
 
     @Override
-    public boolean containsLiteral( @Nonnull final String p_key )
+    public boolean containsliteral( @Nonnull final String p_key )
     {
-        return m_storage.containsMultiElement( p_key );
+        return m_storage.containsmulti( p_key );
     }
 
     @Override
-    public boolean containsView( @Nonnull final String p_key )
+    public boolean containsview( @Nonnull final String p_key )
     {
-        return m_storage.containsSingleElement( p_key );
+        return m_storage.containssingle( p_key );
     }
 
     @Nonnull
     @Override
     public IView view( @Nonnull final String p_key )
     {
-        return m_storage.getSingleElement( p_key );
+        return m_storage.single( p_key );
     }
 
     @Nonnull
     @Override
-    public IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
+    public IView viewordefault( @Nonnull final String p_key, @Nullable final IView p_default )
     {
-        return m_storage.getSingleElementOrDefault( p_key, p_default );
+        return m_storage.singleordefault( p_key, p_default );
     }
 
     @Nonnull
     @Override
     public Collection<ILiteral> literal( @Nonnull final String p_key )
     {
-        return m_storage.getMultiElement( p_key );
+        return m_storage.multi( p_key );
     }
 
     @Nonnull
@@ -139,7 +139,7 @@ public final class CBeliefbase extends IBaseBeliefbase
     public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         super.update( p_agent );
-        m_storage.streamSingleElements().parallel().forEach( i -> i.update( p_agent ) );
+        m_storage.streamsingle().parallel().forEach( i -> i.update( p_agent ) );
         return m_storage.update( p_agent );
     }
 
@@ -149,26 +149,26 @@ public final class CBeliefbase extends IBaseBeliefbase
     {
         // create delete-event for all literals
         m_storage
-            .streamMultiElements()
+            .streammulti()
             .parallel()
             .forEach( i -> this.event( ITrigger.EType.DELETEBELIEF, i ) );
 
-        m_storage.streamSingleElements().parallel().forEach( i -> i.clear() );
+        m_storage.streamsingle().parallel().forEach( i -> i.clear() );
         m_storage.clear();
 
         return this;
     }
 
     @Override
-    public boolean empty()
+    public boolean isEmpty()
     {
-        return m_storage.empty();
+        return m_storage.isEmpty();
     }
 
     @Override
     public int size()
     {
-        return m_storage.size() + m_storage.streamSingleElements().parallel().mapToInt( IStructure::size ).sum();
+        return m_storage.size() + m_storage.streamsingle().parallel().mapToInt( IStructure::size ).sum();
     }
 
     @Nonnull
@@ -177,22 +177,22 @@ public final class CBeliefbase extends IBaseBeliefbase
     {
         return Stream.concat(
             super.trigger( p_view ).parallel(),
-            m_storage.streamSingleElements().parallel().flatMap( IView::trigger )
+            m_storage.streamsingle().parallel().flatMap( IView::trigger )
         );
     }
 
     @Nonnull
     @Override
-    public Stream<ILiteral> streamLiteral()
+    public Stream<ILiteral> streamliteral()
     {
-        return m_storage.streamMultiElements();
+        return m_storage.streammulti();
     }
 
     @Nonnull
     @Override
-    public Stream<IView> streamView()
+    public Stream<IView> streamview()
     {
-        return m_storage.streamSingleElements();
+        return m_storage.streamsingle();
     }
 
     @Override

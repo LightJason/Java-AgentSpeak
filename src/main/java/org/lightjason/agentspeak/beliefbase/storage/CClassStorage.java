@@ -91,7 +91,7 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
 
     @Nonnull
     @Override
-    public Stream<ILiteral> streamMultiElements()
+    public Stream<ILiteral> streammulti()
     {
         return m_fields.entrySet().stream()
                        .map( i -> this.literal( i.getKey(), i.getValue() ) )
@@ -100,25 +100,25 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
 
     @Nonnull
     @Override
-    public Stream<M> streamSingleElements()
+    public Stream<M> streamsingle()
     {
         return Stream.empty();
     }
 
     @Override
-    public boolean containsMultiElement( @Nonnull final String p_key )
+    public boolean containsmulti( @Nonnull final String p_key )
     {
         return m_fields.containsKey( p_key );
     }
 
     @Override
-    public boolean containsSingleElement( @Nonnull final String p_key )
+    public boolean containssingle( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public boolean putMultiElement( @Nonnull final String p_key, final ILiteral p_value )
+    public boolean putmulti( @Nonnull final String p_key, final ILiteral p_value )
     {
         final Field l_field = m_fields.get( p_key );
         if ( Objects.isNull( l_field ) || p_value.emptyValues() || Modifier.isFinal( l_field.getModifiers() ) )
@@ -136,50 +136,51 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     }
 
     @Override
-    public boolean putSingleElement( @Nonnull final String p_key, final M p_value )
+    public boolean putsingle( @Nonnull final String p_key, final M p_value )
     {
         return false;
     }
 
     @Override
-    public boolean removeMultiElement( @Nonnull final String p_key, final ILiteral p_value )
+    public boolean removemulti( @Nonnull final String p_key, final ILiteral p_value )
     {
         return false;
     }
 
     @Override
-    public boolean removeSingleElement( @Nonnull final String p_key )
+    public boolean removesingle( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public M getSingleElement( @Nonnull final String p_key )
+    public M single( @Nonnull final String p_key )
     {
         return null;
     }
 
     @Override
-    public M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
+    public M singleordefault( @Nonnull final String p_key, final M p_default )
     {
         return p_default;
     }
 
     @Nonnull
     @Override
-    public Collection<ILiteral> getMultiElement( @Nonnull final String p_key )
+    public Collection<ILiteral> multi( @Nonnull final String p_key )
     {
         final Field l_field = m_fields.get( p_key );
         return Objects.isNull( l_field ) ? Collections.emptySet() : Stream.of( this.literal( p_key, l_field ) ).collect( Collectors.toSet() );
     }
 
     @Override
-    public void clear()
+    public IStorage<ILiteral, M> clear()
     {
+        return this;
     }
 
     @Override
-    public boolean empty()
+    public boolean isEmpty()
     {
         return m_fields.isEmpty();
     }

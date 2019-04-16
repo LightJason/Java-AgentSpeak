@@ -47,7 +47,7 @@ public interface IStorage<N, M>
      * @return multi-element stream
      */
     @Nonnull
-    Stream<N> streamMultiElements();
+    Stream<N> streammulti();
 
     /**
      * returns a stream over all single-elements
@@ -55,7 +55,7 @@ public interface IStorage<N, M>
      * @return single-element stream
      */
     @Nonnull
-    Stream<M> streamSingleElements();
+    Stream<M> streamsingle();
 
     /**
      * contains a multi-element
@@ -63,7 +63,7 @@ public interface IStorage<N, M>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsMultiElement( @Nonnull final String p_key );
+    boolean containsmulti( @Nonnull final String p_key );
 
     /**
      * contains a single-element
@@ -71,7 +71,7 @@ public interface IStorage<N, M>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsSingleElement( @Nonnull final String p_key );
+    boolean containssingle( @Nonnull final String p_key );
 
     /**
      * puts a multi-element into the storage
@@ -80,7 +80,7 @@ public interface IStorage<N, M>
      * @param p_value multi-element
      * @return boolean if the element can be stored
      */
-    boolean putMultiElement( @Nonnull final String p_key, final N p_value );
+    boolean putmulti( @Nonnull final String p_key, final N p_value );
 
     /**
      * puts a single-element into the storage
@@ -89,7 +89,7 @@ public interface IStorage<N, M>
      * @param p_value single-element
      * @return boolean if the element can be stored
      */
-    boolean putSingleElement( @Nonnull final String p_key, final M p_value );
+    boolean putsingle( @Nonnull final String p_key, final M p_value );
 
     /**
      * removes a multi-element of the storage
@@ -98,7 +98,7 @@ public interface IStorage<N, M>
      * @param p_value multi-element
      * @return boolean if the element can removed
      */
-    boolean removeMultiElement( @Nonnull final String p_key, final N p_value );
+    boolean removemulti( @Nonnull final String p_key, final N p_value );
 
     /**
      * removes a single-element of the storage
@@ -106,7 +106,7 @@ public interface IStorage<N, M>
      * @param p_key key
      * @return boolean if the element can be removed
      */
-    boolean removeSingleElement( @Nonnull final String p_key );
+    boolean removesingle( @Nonnull final String p_key );
 
     /**
      * returns a single-element by the name
@@ -114,7 +114,7 @@ public interface IStorage<N, M>
      * @param p_key key
      * @return single-element or null
      */
-    M getSingleElement( @Nonnull final String p_key );
+    M single( @Nonnull final String p_key );
 
     /**
      * returns a single-element by the name
@@ -123,7 +123,7 @@ public interface IStorage<N, M>
      * @param p_default default element
      * @return single-element or the default element
      */
-    M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default );
+    M singleordefault( @Nonnull final String p_key, final M p_default );
 
     /**
      * returns a collection of multi-elementy by name
@@ -132,19 +132,21 @@ public interface IStorage<N, M>
      * @return collection of multi-elements
      */
     @Nonnull
-    Collection<N> getMultiElement( @Nonnull final String p_key );
+    Collection<N> multi( @Nonnull final String p_key );
 
     /**
      * clears all elements
+     *
+     * @return self-refence
      */
-    void clear();
+    IStorage<N, M> clear();
 
     /**
      * checks if a storage is empty
      *
      * @return empty boolean
      */
-    boolean empty();
+    boolean isEmpty();
 
     /**
      * updates all items

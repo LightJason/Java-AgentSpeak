@@ -188,7 +188,7 @@ public interface IView extends IStructure
         }
 
         @Override
-        public boolean empty()
+        public boolean isEmpty()
         {
             return false;
         }

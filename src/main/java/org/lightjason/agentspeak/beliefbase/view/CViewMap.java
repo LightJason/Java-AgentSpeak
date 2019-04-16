@@ -257,7 +257,7 @@ public final class CViewMap implements IView
         // build path relative to this view
         final IPath l_path = this.path();
         return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
-                 ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
+                 ? Stream.concat( m_beliefbase.streamliteral(), m_beliefbase.streamview().flatMap( i -> i.stream() ) )
                  : Arrays.stream( p_path )
                          .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
         ).map( i -> i.shallowcopy( l_path ) );
@@ -337,7 +337,7 @@ public final class CViewMap implements IView
     {
         return !p_path.empty()
                && ( p_path.size() == 1
-                    ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                    ? m_beliefbase.containsliteral( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
                           .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
@@ -349,16 +349,16 @@ public final class CViewMap implements IView
     {
         return !p_path.empty()
                && ( p_path.size() == 1
-                    ? m_beliefbase.containsView( p_path.get( 0 ) )
+                    ? m_beliefbase.containsview( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
                           .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
     @Override
-    public boolean empty()
+    public boolean isEmpty()
     {
-        return m_beliefbase.empty();
+        return m_beliefbase.isEmpty();
     }
 
     @Override
@@ -415,7 +415,7 @@ public final class CViewMap implements IView
     {
 
         @Override
-        public boolean empty()
+        public boolean isEmpty()
         {
             return m_data.isEmpty();
         }
@@ -452,7 +452,7 @@ public final class CViewMap implements IView
         @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
-        public Stream<ILiteral> streamLiteral()
+        public Stream<ILiteral> streamliteral()
         {
             return m_data.entrySet()
                          .stream()
@@ -463,7 +463,7 @@ public final class CViewMap implements IView
         @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
-        public Stream<IView> streamView()
+        public Stream<IView> streamview()
         {
             return m_data.entrySet()
                          .stream()
@@ -512,14 +512,14 @@ public final class CViewMap implements IView
         }
 
         @Override
-        public boolean containsLiteral( @Nonnull final String p_key )
+        public boolean containsliteral( @Nonnull final String p_key )
         {
             final String l_key = m_literaltokey.apply( p_key );
             return m_data.containsKey( l_key ) && !( m_data.get( l_key ) instanceof Map<?, ?> );
         }
 
         @Override
-        public boolean containsView( @Nonnull final String p_key )
+        public boolean containsview( @Nonnull final String p_key )
         {
             final String l_key = m_literaltokey.apply( p_key );
             return m_data.containsKey( l_key ) && m_data.get( l_key ) instanceof Map<?, ?>;
@@ -549,7 +549,7 @@ public final class CViewMap implements IView
 
         @Nullable
         @Override
-        public IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
+        public IView viewordefault( @Nonnull final String p_key, @Nullable final IView p_default )
         {
             return null;
         }
