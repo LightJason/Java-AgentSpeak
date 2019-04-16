@@ -81,12 +81,6 @@ public final class CSingleOnlyStorage<N, M> extends IBaseStorage<N, M>
     }
 
     @Override
-    public boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
-    {
-        return !p_value.equals( m_elements.putIfAbsent( p_key, p_value ) );
-    }
-
-    @Override
     public boolean removeMultiElement( @Nonnull final String p_key, final N p_value )
     {
         return false;
@@ -134,4 +128,5 @@ public final class CSingleOnlyStorage<N, M> extends IBaseStorage<N, M>
     {
         return 0;
     }
+
 }

@@ -95,12 +95,6 @@ public final class CMultiStorage<N, M> extends IBaseStorage<N, M>
     }
 
     @Override
-    public boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
-    {
-        return !p_value.equals( m_singleelements.putIfAbsent( p_key, p_value ) );
-    }
-
-    @Override
     public boolean removeMultiElement( @Nonnull final String p_key, final N p_value )
     {
         return m_multielements.remove( p_key, p_value );

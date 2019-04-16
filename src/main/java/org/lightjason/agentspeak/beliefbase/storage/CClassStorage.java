@@ -142,12 +142,6 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     }
 
     @Override
-    public boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
-    {
-        return false;
-    }
-
-    @Override
     public boolean removeMultiElement( @Nonnull final String p_key, final ILiteral p_value )
     {
         return false;

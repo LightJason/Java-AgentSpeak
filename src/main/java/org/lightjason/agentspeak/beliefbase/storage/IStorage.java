@@ -92,15 +92,6 @@ public interface IStorage<N, M>
     boolean putSingleElement( @Nonnull final String p_key, final M p_value );
 
     /**
-     * puts a single-element if it is absent
-     *
-     * @param p_key key
-     * @param p_value single-element
-     * @return boolean if the element can be stored
-     */
-    boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value );
-
-    /**
      * removes a multi-element of the storage
      *
      * @param p_key key
