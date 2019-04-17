@@ -190,7 +190,7 @@ public interface IView extends IStructure
         @Override
         public boolean isempty()
         {
-            return false;
+            return true;
         }
 
         @Override

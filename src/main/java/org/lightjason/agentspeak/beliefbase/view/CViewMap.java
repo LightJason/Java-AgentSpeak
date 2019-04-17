@@ -129,7 +129,7 @@ public final class CViewMap implements IView
             // add view
             ( i, j ) -> j.putIfAbsent( i, new ConcurrentHashMap<>() ),
             // add literal
-            ( i, j ) -> i.getValue().limit( 1 ).filter( ITerm::raw ).forEach( n -> j.put( i.getKey(), n.raw() ) ),
+            ( i, j ) -> i.getValue().limit( 1 ).forEach( n -> j.put( i.getKey(), n.raw() ) ),
             // remove view
             ( i, j ) ->
             {
@@ -275,7 +275,7 @@ public final class CViewMap implements IView
     public IView clear( @Nullable final IPath... p_path )
     {
         if ( Objects.isNull( p_path ) || p_path.length == 0 )
-            m_clearconsumer.accept( m_data );
+            m_beliefbase.clear();
         else
             Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ) ).forEach( i -> i.clear() );
 
@@ -302,7 +302,7 @@ public final class CViewMap implements IView
     @SuppressWarnings( "varargs" )
     public IView add( @Nonnull final IView... p_view )
     {
-        Arrays.stream( p_view ).forEach( m_beliefbase::remove );
+        Arrays.stream( p_view ).forEach( m_beliefbase::add );
         return this;
     }
 
@@ -475,7 +475,7 @@ public final class CViewMap implements IView
         @Override
         public IBeliefbase clear()
         {
-            m_data.clear();
+            m_clearconsumer.accept( m_data );
             return this;
         }
 
@@ -551,7 +551,7 @@ public final class CViewMap implements IView
         @Override
         public IView viewordefault( @Nonnull final String p_key, @Nullable final IView p_default )
         {
-            return null;
+            return CViewMap.this;
         }
 
         @Nonnull

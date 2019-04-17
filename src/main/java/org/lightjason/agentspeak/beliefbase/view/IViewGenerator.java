@@ -31,4 +31,9 @@ import java.util.function.BiFunction;
  */
 public interface IViewGenerator extends BiFunction<String, IView, IView>
 {
+    /**
+     * empty view generator
+     */
+    IViewGenerator EMPTY = ( p_s, p_iView ) -> IView.EMPTY;
+
 }

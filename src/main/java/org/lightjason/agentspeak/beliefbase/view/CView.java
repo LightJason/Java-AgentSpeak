@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.ITrigger;
 
@@ -85,7 +84,7 @@ public final class CView implements IView
     public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase p_beliefbase, final IView p_parent )
     {
         if ( p_name.isEmpty() )
-            throw new CNoSuchElementException( CCommon.languagestring( this, "empty" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
 
         m_name = p_name;
         m_beliefbase = p_beliefbase;
@@ -195,23 +194,19 @@ public final class CView implements IView
     @Override
     public boolean containsview( @Nonnull final IPath p_path )
     {
-        return !p_path.empty()
-               && ( p_path.size() == 1
-                    ? m_beliefbase.containsview( p_path.get( 0 ) )
-                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                          .containsview( p_path.subpath( p_path.size() - 1, p_path.size() ) )
-               );
+        return p_path.size() > 1
+               ? this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                     .containsview( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+               : m_beliefbase.containsview( p_path.get( 0 ) );
     }
 
     @Override
     public boolean containsliteral( @Nonnull final IPath p_path )
     {
-        return !p_path.empty()
-               || ( p_path.size() == 1
-                    ? m_beliefbase.containsliteral( p_path.get( 0 ) )
-                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                          .containsliteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
-               );
+        return p_path.size() > 1
+               ? this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                     .containsliteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+               : m_beliefbase.containsliteral( p_path.get( 0 ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

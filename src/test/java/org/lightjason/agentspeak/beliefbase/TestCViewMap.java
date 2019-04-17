@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.view.CViewMap;
 import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -46,6 +47,7 @@ import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -168,6 +170,101 @@ public final class TestCViewMap extends IBaseTest
 
         Assert.assertFalse( l_view.containsview( CPath.of( "not/exists" ) ) );
         Assert.assertTrue( l_view.containsview( CPath.of( "obj" ) ) );
+    }
+
+    /**
+     * test add & remove literal
+     */
+    @Test
+    public void addremoveliteral()
+    {
+        final Map<String, Object> l_data = new HashMap<>();
+
+        final IView l_view = new CViewMap( "main", l_data )
+            .add(
+                CLiteral.of( "top", CRawTerm.of( 1 ) ),
+                CLiteral.of( "top/suba", CRawTerm.of( 2 ) ),
+                CLiteral.of( "top/sub/subb", CRawTerm.of( 3 ) )
+            );
+
+        Assert.assertFalse( l_view.isempty() );
+
+        Assert.assertEquals( l_data.size(), l_view.size() );
+        Assert.assertEquals( 1, l_data.get( "top" ) );
+        Assert.assertEquals( 2, l_data.get( "suba" ) );
+        Assert.assertEquals( 3, l_data.get( "subb" ) );
+
+        l_view.remove( CLiteral.of( "top/suba", CRawTerm.of( 2 ) ) );
+
+        Assert.assertEquals( l_data.size(), l_view.size() );
+        Assert.assertEquals( 1, l_data.get( "top" ) );
+        Assert.assertEquals( 3, l_data.get( "subb" ) );
+
+        l_view.clear();
+        Assert.assertEquals( l_data.size(), l_view.size() );
+        Assert.assertTrue( l_view.isempty() );
+    }
+
+    /**
+     * test add & remove view
+     */
+    @Test
+    public void addremoveview()
+    {
+        final Map<String, Object> l_datatop = new HashMap<>();
+        final Map<String, Object> l_datasuba = new HashMap<>();
+        final Map<String, Object> l_datasubb = new HashMap<>();
+
+        final IView l_suba = new CViewMap( "suba", l_datasuba );
+        final IView l_view = new CViewMap( "main", l_datatop )
+            .add(
+                l_suba,
+                new CViewMap( "subb", l_datasubb )
+            );
+
+        Assert.assertFalse( l_view.isempty() );
+        Assert.assertEquals( 2, l_datatop.size() );
+        Assert.assertNotNull( l_datatop.get( "suba" ) );
+        Assert.assertNotNull( l_datatop.get( "subb" ) );
+
+        l_view.remove( l_suba );
+
+        Assert.assertEquals( 1, l_datatop.size() );
+        Assert.assertNotNull( l_datatop.get( "subb" ) );
+
+        l_view.clear();
+        Assert.assertTrue( l_view.isempty() );
+    }
+
+    /**
+     * test empty view
+     */
+    @Test
+    public void emptyview()
+    {
+        Assert.assertEquals( 0, IView.EMPTY.walk( IPath.EMPTY ).count() );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.generate( IViewGenerator.EMPTY ) );
+        Assert.assertEquals( 0, IView.EMPTY.root().count() );
+        Assert.assertEquals( IBeliefbase.EMPY, IView.EMPTY.beliefbase() );
+        Assert.assertEquals( IPath.EMPTY, IView.EMPTY.path() );
+        Assert.assertTrue( IView.EMPTY.name().isEmpty() );
+        Assert.assertNull( IView.EMPTY.parent() );
+        Assert.assertFalse( IView.EMPTY.hasparent() );
+        Assert.assertEquals( 0, IView.EMPTY.trigger().count() );
+        Assert.assertEquals( 0, IView.EMPTY.stream( true ).count() );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.clear() );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.add( Stream.empty() ) );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.remove( Stream.empty() ) );
+        Assert.assertFalse( IView.EMPTY.containsliteral( IPath.EMPTY ) );
+        Assert.assertFalse( IView.EMPTY.containsview( IPath.EMPTY ) );
+        Assert.assertTrue( IView.EMPTY.isempty() );
+        Assert.assertEquals( 0, IView.EMPTY.size() );
+        Assert.assertEquals( 0, IView.EMPTY.stream( IPath.EMPTY ).count() );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.add( IView.EMPTY ) );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.add( ILiteral.EMPTY ) );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.remove( IView.EMPTY ) );
+        Assert.assertEquals( IView.EMPTY, IView.EMPTY.remove( ILiteral.EMPTY ) );
+        Assert.assertEquals( IAgent.EMPTY, IView.EMPTY.update( IAgent.EMPTY ) );
     }
 
     /**

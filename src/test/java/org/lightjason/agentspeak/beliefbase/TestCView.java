@@ -27,6 +27,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
+import org.lightjason.agentspeak.beliefbase.view.CView;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
 import org.lightjason.agentspeak.common.CPath;
@@ -48,7 +49,7 @@ public final class TestCView extends IBaseTest
      * random test tree structure
      */
     @Test
-    public void testTree()
+    public void tree()
     {
         final int l_max = 1000;
         final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
@@ -67,38 +68,85 @@ public final class TestCView extends IBaseTest
      * manual test of tree structure
      */
     @Test
-    public void testManual()
+    public void manual()
     {
-        final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
-        final IViewGenerator l_gen = new CGenerator();
+        final IView l_view = buildview();
 
-        l_beliefbase.add( CLiteral.of( "toplevel" ) )
-
-                    .generate( l_gen, CPath.of( "first" ) )
-                    .add( CLiteral.of( "first/sub1" ) )
-                    .add( CLiteral.of( "first/sub1", CRawTerm.of( 1 ) ) )
-                    .add( CLiteral.of( "first/sub1", CRawTerm.of( 2 ) ) )
-                    .add( CLiteral.of( "first/sub2" ) )
-
-                    .generate( l_gen, CPath.of( "second/sub" ) )
-                    .add( CLiteral.of( "second/sub3" ) )
-                    .add( CLiteral.of( "second/sub4" ) )
-
-                    .add( CLiteral.of( "second/sub/sub5" ) );
-
-
-        Assert.assertEquals( "number of beliefs is incorrect", 8, l_beliefbase.size() );
+        Assert.assertEquals( "number of beliefs is incorrect", 8, l_view.size() );
 
         Assert.assertArrayEquals(
             Stream.of( "toplevel[]", "first/sub1[]", "first/sub1[1]", "first/sub1[2]",
                        "first/sub2[]", "second/sub3[]", "second/sub4[]", "second/second/sub/sub5[]" ).toArray(),
-            l_beliefbase.stream().map( Object::toString ).toArray()
+            l_view.stream().map( Object::toString ).toArray()
         );
 
         Assert.assertArrayEquals(
             Stream.of( "sub1[]", "sub1[1]", "sub1[2]" ).toArray(),
-            l_beliefbase.stream( CPath.of( "first/sub1" ) ).map( Object::toString ).toArray()
+            l_view.stream( CPath.of( "first/sub1" ) ).map( Object::toString ).toArray()
         );
+    }
+
+    /**
+     * test contains, empty, clear
+     */
+    @Test
+    public void containsclearempty()
+    {
+        final IView l_view = buildview();
+
+        l_view.add( CLiteral.of( "xxx" ) );
+
+        Assert.assertFalse( l_view.isempty() );
+        Assert.assertTrue( l_view.containsliteral( CPath.of( "first/sub1" ) ) );
+        Assert.assertTrue( l_view.containsliteral( CPath.of( "xxx" ) ) );
+        Assert.assertTrue( l_view.containsview( CPath.of( "first" ) ) );
+        Assert.assertEquals( l_view, l_view.remove( l_view.beliefbase().view( "first" ) ) );
+        Assert.assertFalse( l_view.containsview( CPath.of( "first" ) ) );
+        Assert.assertTrue( l_view.containsview( CPath.of( "second/sub" ) ) );
+
+        l_view.clear( CPath.of( "second" ) );
+        Assert.assertFalse( l_view.isempty() );
+        Assert.assertTrue( l_view.containsview( CPath.of( "second" ) ) );
+        Assert.assertTrue( l_view.beliefbase().view( "second" ).isempty() );
+
+        l_view.clear();
+        Assert.assertTrue( l_view.isempty() );
+    }
+
+    /**
+     * test ctor exception
+     */
+    @Test( expected = IllegalArgumentException.class )
+    public void viewctorerror()
+    {
+        new CView( "", IBeliefbase.EMPY );
+    }
+
+    /**
+     * create a view with beliefbase
+     *
+     * @return view
+     */
+    private static IView buildview()
+    {
+        final IView l_view = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
+        final IViewGenerator l_gen = new CGenerator();
+
+        l_view.add( CLiteral.of( "toplevel" ) )
+
+              .generate( l_gen, CPath.of( "first" ) )
+              .add( CLiteral.of( "first/sub1" ) )
+              .add( CLiteral.of( "first/sub1", CRawTerm.of( 1 ) ) )
+              .add( CLiteral.of( "first/sub1", CRawTerm.of( 2 ) ) )
+              .add( CLiteral.of( "first/sub2" ) )
+
+              .generate( l_gen, CPath.of( "second/sub" ) )
+              .add( CLiteral.of( "second/sub3" ) )
+              .add( CLiteral.of( "second/sub4" ) )
+
+              .add( CLiteral.of( "second/sub/sub5" ) );
+
+        return l_view;
     }
 
 
