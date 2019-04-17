@@ -518,4 +518,20 @@ public final class TestCTermVariablesConstant extends IBaseTest
         IVariable.EMPTY.thrownotallocated();
     }
 
+    /**
+     * test empty term
+     */
+    @Test
+    public void emptyterm()
+    {
+        Assert.assertTrue( ITerm.EMPTYTERM.functor().isEmpty() );
+        Assert.assertEquals( IPath.EMPTY, ITerm.EMPTYTERM.functorpath() );
+        Assert.assertEquals( IPath.EMPTY, ITerm.EMPTYTERM.fqnfunctor() );
+        Assert.assertFalse( ITerm.EMPTYTERM.hasVariable() );
+        Assert.assertNull( ITerm.EMPTYTERM.raw() );
+        Assert.assertEquals( ITerm.EMPTYTERM, ITerm.EMPTYTERM.deepcopy() );
+        Assert.assertEquals( ITerm.EMPTYTERM, ITerm.EMPTYTERM.deepcopysuffix() );
+        Assert.assertEquals( 0, ITerm.EMPTYTERM.structurehash() );
+    }
+
 }

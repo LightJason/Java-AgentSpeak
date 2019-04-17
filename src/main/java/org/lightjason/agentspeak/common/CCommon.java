@@ -35,21 +35,14 @@ import org.reflections.Reflections;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -78,16 +71,14 @@ public final class CCommon
      **/
     private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(
         MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "language" ),
-        Locale.getDefault(),
-        new CUTF8Control()
+        Locale.getDefault()
     );
     /**
      * properties of the package
      */
     private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle(
         MessageFormat.format( "{0}{1}{2}", PACKAGEROOT, PACKAGESEPARATOR, "configuration" ),
-        Locale.getDefault(),
-        new CUTF8Control()
+        Locale.getDefault()
     );
 
 
@@ -448,46 +439,6 @@ public final class CCommon
         return ( p_class.getCanonicalName().toLowerCase( Locale.ROOT ) + "." + p_label.toLowerCase( Locale.ROOT ) )
             .replaceAll( "[^a-zA-Z0-9_.]+", "" )
             .replace( PACKAGEROOT + ".", "" );
-    }
-
-    // --- resource utf-8 encoding -----------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * class to read UTF-8 encoded property file
-     *
-     * @note Java default encoding for property files is ISO-Latin-1
-     */
-    private static final class CUTF8Control extends ResourceBundle.Control
-    {
-
-        public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
-                                         final boolean p_reload
-        ) throws IOException
-        {
-            final InputStream l_stream;
-            final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
-
-            if ( !p_reload )
-                l_stream = p_loader.getResourceAsStream( l_resource );
-            else
-            {
-
-                final URL l_url = p_loader.getResource( l_resource );
-                if ( Objects.isNull( l_url ) )
-                    return null;
-
-                final URLConnection l_connection = l_url.openConnection();
-                if ( Objects.isNull( l_connection ) )
-                    return null;
-
-                l_connection.setUseCaches( false );
-                l_stream = l_connection.getInputStream();
-            }
-
-            final ResourceBundle l_bundle = new PropertyResourceBundle( new InputStreamReader( l_stream, StandardCharsets.UTF_8 ) );
-            l_stream.close();
-            return l_bundle;
-        }
     }
 
 }

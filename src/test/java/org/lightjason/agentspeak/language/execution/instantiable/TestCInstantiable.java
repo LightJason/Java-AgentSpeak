@@ -86,6 +86,31 @@ public final class TestCInstantiable extends IBaseTest
     }
 
     /**
+     * test empty plan
+     */
+    @Test
+    public void emptyplan()
+    {
+        Assert.assertEquals( ITrigger.EMPTY, IPlan.EMPTY.trigger() );
+        Assert.assertTrue( IPlan.EMPTY.condition( IContext.EMPTYPLAN ) );
+        Assert.assertEquals( ILiteral.EMPTY, IPlan.EMPTY.literal() );
+        Assert.assertEquals( IContext.EMPTYPLAN, IPlan.EMPTY.instantiate( IAgent.EMPTY, Stream.empty() ) );
+        Assert.assertTrue( IPlan.EMPTY.description().isEmpty() );
+        Assert.assertEquals( 0, IPlan.EMPTY.tags().count() );
+        Assert.assertEquals( 0, IPlan.EMPTY.variabledescription().count() );
+        Assert.assertEquals( 0, IPlan.EMPTY.variables().count() );
+        Assert.assertEquals(
+            0,
+            IPlan.EMPTY.execute(
+                false,
+                IContext.EMPTYPLAN,
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).count()
+        );
+    }
+
+    /**
      * test plan statistic
      */
     @Test

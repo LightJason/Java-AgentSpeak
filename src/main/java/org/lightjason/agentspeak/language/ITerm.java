@@ -54,7 +54,7 @@ public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
         @Override
         public String functor()
         {
-            return "";
+            return IPath.EMPTY.toString();
         }
 
         @Nonnull
