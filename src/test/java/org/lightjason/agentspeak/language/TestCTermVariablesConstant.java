@@ -495,6 +495,22 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.raw() );
         Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.allocate( IContext.EMPTYPLAN ) );
         Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.bind( IContext.EMPTYPLAN ) );
+
+        Assert.assertTrue( ILiteral.EMPTY.emptyValues() );
+        Assert.assertNotEquals( 0, ILiteral.EMPTY.compareTo( CLiteral.of( "xxx" ) ) );
+
+        Assert.assertEquals( IPath.EMPTY.toString(), ILiteral.EMPTY.functor() );
+        Assert.assertEquals( IPath.EMPTY, ILiteral.EMPTY.functorpath() );
+        Assert.assertEquals( IPath.EMPTY, ILiteral.EMPTY.fqnfunctor() );
+
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.deepcopy() );
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.deepcopysuffix() );
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.shallowcopy() );
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.shallowcopysuffix() );
+        Assert.assertEquals( ILiteral.EMPTY, ILiteral.EMPTY.shallowcopywithoutsuffix() );
+        Assert.assertFalse( ILiteral.EMPTY.hasShallowcopywithoutsuffix() );
+
+        Assert.assertEquals( 0, ILiteral.EMPTY.structurehash() );
     }
 
     /**
