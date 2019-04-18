@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalStateException;
@@ -39,7 +38,7 @@ import java.util.stream.Stream;
  * on-demand beliefbase for creating trigger-events
  * without any percistency
  */
-public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeliefbase
+public abstract class IBeliefbaseOnDemand extends IBaseBeliefbase
 {
 
     @Override

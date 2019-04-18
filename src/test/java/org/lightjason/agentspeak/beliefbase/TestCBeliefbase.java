@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IActionGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
@@ -44,9 +45,9 @@ import java.util.stream.Stream;
 
 
 /**
- * test agent with beliebase properties
+ * test agent with beliebase
  */
-public final class TestCPropertyBeliefbase extends IBaseTest
+public final class TestCBeliefbase extends IBaseTest
 {
 
     /**
@@ -55,7 +56,7 @@ public final class TestCPropertyBeliefbase extends IBaseTest
      * @throws Exception is thrown on intialization error
      */
     @Test
-    public void belieflist() throws Exception
+    public void propertybeliefbase() throws Exception
     {
         final IAgent<?> l_agent = new CAgent.CAgentGenerator( "" ).generatesingle();
 
@@ -93,8 +94,95 @@ public final class TestCPropertyBeliefbase extends IBaseTest
         );
     }
 
+    /**
+     * test empty beliefbase
+     */
+    @Test
+    public void emptybeliefbase()
+    {
+        Assert.assertTrue( IBeliefbase.EMPY.isempty() );
+        Assert.assertEquals( 0, IBeliefbase.EMPY.size() );
+        Assert.assertEquals( IAgent.EMPTY, IBeliefbase.EMPY.update( IAgent.EMPTY ) );
+        Assert.assertEquals( 0, IBeliefbase.EMPY.trigger( IView.EMPTY ).count() );
+        Assert.assertEquals( 0, IBeliefbase.EMPY.streamliteral().count() );
+        Assert.assertEquals( 0, IBeliefbase.EMPY.streamview().count() );
+        Assert.assertEquals( IBeliefbase.EMPY, IBeliefbase.EMPY.clear() );
+        Assert.assertEquals( ILiteral.EMPTY, IBeliefbase.EMPY.add( ILiteral.EMPTY ) );
+        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.add( IView.EMPTY ) );
+        Assert.assertEquals( ILiteral.EMPTY, IBeliefbase.EMPY.remove( ILiteral.EMPTY ) );
+        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.remove( IView.EMPTY ) );
+        Assert.assertFalse( IBeliefbase.EMPY.containsliteral( "bar" ) );
+        Assert.assertFalse( IBeliefbase.EMPY.containsview( "bar" ) );
+        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.view( "bar " ) );
+        Assert.assertTrue( IBeliefbase.EMPY.literal( "x" ).isEmpty() );
+        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.create( "a" ) );
+        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.create( "a", null ) );
+        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.viewordefault( "x", IView.EMPTY ) );
+    }
+
+    /**
+     * test on-demand beliefbase
+     */
+    @Test
+    public void ondemandbeliefbase()
+    {
+        final IBeliefbase l_beliefbase = new CBeliefbaseOnDemand();
+
+        Assert.assertEquals( 0, l_beliefbase.size() );
+        Assert.assertTrue( l_beliefbase.isempty() );
+        Assert.assertEquals( 0, l_beliefbase.streamview().count() );
+        Assert.assertEquals( 0, l_beliefbase.streamliteral().count() );
+        Assert.assertFalse( l_beliefbase.containsliteral( "y" ) );
+        Assert.assertFalse( l_beliefbase.containsview( "z" ) );
+        Assert.assertEquals( l_beliefbase, l_beliefbase.clear() );
+        Assert.assertTrue( l_beliefbase.literal( "u" ).isEmpty() );
+    }
+
+    /**
+     * test on-demand beliefbase add error
+     */
+    @Test( expected = IllegalStateException.class )
+    public void ondemandaddviewerror()
+    {
+        new CBeliefbaseOnDemand().add( IView.EMPTY );
+    }
+
+    /**
+     * test on-demand beliefbase remove error
+     */
+    @Test( expected = IllegalStateException.class )
+    public void ondemandremoveviewerror()
+    {
+        new CBeliefbaseOnDemand().remove( IView.EMPTY );
+    }
+
+    /**
+     * test on-demand beliefbase view error
+     */
+    @Test( expected = IllegalStateException.class )
+    public void ondemandviewerror()
+    {
+        new CBeliefbaseOnDemand().view( "i" );
+    }
+
+    /**
+     * test on-demand beliefbase view-default error
+     */
+    @Test( expected = IllegalStateException.class )
+    public void ondemandviewdefaulterror()
+    {
+        new CBeliefbaseOnDemand().viewordefault( "j", IView.EMPTY );
+    }
+
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * on-demand beliefbase
+     */
+    private static final class CBeliefbaseOnDemand extends IBeliefbaseOnDemand
+    {
+    }
 
     /**
      * agent class
