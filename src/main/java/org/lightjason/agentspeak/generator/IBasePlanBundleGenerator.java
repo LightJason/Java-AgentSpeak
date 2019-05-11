@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
