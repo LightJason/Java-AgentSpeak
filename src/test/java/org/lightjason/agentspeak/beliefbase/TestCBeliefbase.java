@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -235,6 +236,7 @@ public final class TestCBeliefbase extends IBaseTest
                 super( IOUtils.toInputStream( p_asl, "UTF-8" ), IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
             }
 
+            @Nonnull
             @Override
             public IAgent<?> generatesingle( final Object... p_data )
             {

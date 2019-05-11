@@ -166,8 +166,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     {
         return IntStream.range( 0, p_number )
                         .parallel()
-                        .mapToObj( i -> this.generatesingle( p_data ) )
-                        .filter( Objects::nonNull );
+                        .mapToObj( i -> this.generatesingle( p_data ) );
     }
 
 }

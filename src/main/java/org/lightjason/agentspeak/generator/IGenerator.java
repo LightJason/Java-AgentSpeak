@@ -42,7 +42,7 @@ public interface IGenerator<T>
      *
      * @note can return null which will be ignored than on multiple generation
      */
-    @Nullable
+    @Nonnull
     T generatesingle( @Nullable final Object... p_data );
 
     /**

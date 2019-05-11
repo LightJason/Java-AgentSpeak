@@ -294,6 +294,7 @@ public final class TestCHanoiTowers extends IBaseTest
             );
         }
 
+        @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
         public CAgent generatesingle( final Object... p_data )

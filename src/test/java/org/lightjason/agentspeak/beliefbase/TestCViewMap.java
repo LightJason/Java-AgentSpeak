@@ -390,6 +390,7 @@ public final class TestCViewMap extends IBaseTest
                 m_map = p_map;
             }
 
+            @Nonnull
             @Override
             public IAgent<?> generatesingle( final Object... p_data )
             {

@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -293,7 +294,7 @@ public final class TestCActionBinding extends IBaseTest
             super( InputStream.nullInputStream(), IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
         }
 
-        @Nullable
+        @Nonnull
         @Override
         public CClassBindingWhitelist generatesingle( @Nullable final Object... p_data )
         {

@@ -199,6 +199,7 @@ public final class TestCAgentExecution extends IBaseTest
             );
         }
 
+        @Nonnull
         @Override
         public CAgent generatesingle( final Object... p_data )
         {

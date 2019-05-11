@@ -61,7 +61,7 @@ public final class CDefaultPlanBundleGenerator extends IBasePlanBundleGenerator
         super( p_configuration );
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public IPlanBundle generatesingle( @Nullable final Object... p_data )
     {

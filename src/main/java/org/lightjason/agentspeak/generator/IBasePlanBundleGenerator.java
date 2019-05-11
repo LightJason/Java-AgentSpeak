@@ -83,8 +83,7 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
     {
         return IntStream.range( 0, p_number )
                         .parallel()
-                        .mapToObj( i -> this.generatesingle( p_data ) )
-                        .filter( Objects::nonNull );
+                        .mapToObj( i -> this.generatesingle( p_data ) );
     }
 
 }
