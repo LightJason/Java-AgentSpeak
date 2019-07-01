@@ -77,7 +77,7 @@ public final class CFuzzyValue<E extends Enum<?>> implements IFuzzyValue<E>
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
+        return MessageFormat.format( "{0}({1})", m_value, String.format( "%G", m_fuzzy.doubleValue() ) );
     }
 
     @Override

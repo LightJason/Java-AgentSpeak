@@ -67,9 +67,9 @@ public final class TestCActionBinding extends IBaseTest
                 CClassBindingDefault.class,
                 CClassBindingBlacklist.class,
                 CClassBindingWhitelist.class
-            ).map( i -> i.name().toString() ).toArray(),
+            ).map( i -> i.name().toString() ).sorted().toArray(),
 
-            Stream.of( "methodwhitelist", "methodpass", "methodbyname", "methodfail" ).toArray()
+            Stream.of( "methodwhitelist", "methodpass", "methodbyname", "methodfail" ).sorted().toArray()
         );
     }
 

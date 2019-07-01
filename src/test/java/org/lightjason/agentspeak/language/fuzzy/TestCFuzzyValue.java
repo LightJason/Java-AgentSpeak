@@ -28,6 +28,8 @@ import org.junit.Test;
 import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
+import java.text.MessageFormat;
+
 
 /**
  * test fuzzy value
@@ -49,7 +51,10 @@ public final class TestCFuzzyValue extends IBaseTest
     @Test
     public void valuetostring()
     {
-        Assert.assertTrue( "FALSE(0,35)".equalsIgnoreCase( CFuzzyValue.of( ECrisp.FALSE, 0.35 ).toString().replace( ".", "," ) ) );
+        Assert.assertTrue(
+            MessageFormat.format( "FALSE({0})", String.format( "%G", 0.35 ) )
+                         .equalsIgnoreCase( CFuzzyValue.of( ECrisp.FALSE, 0.35 ).toString() )
+        );
     }
 
 }
