@@ -49,7 +49,7 @@ public final class TestCFuzzyValue extends IBaseTest
     @Test
     public void valuetostring()
     {
-        Assert.assertEquals( "FALSE(0,35)", CFuzzyValue.of( ECrisp.FALSE, 0.35 ).toString() );
+        Assert.assertTrue( "FALSE(0,35)".equalsIgnoreCase( CFuzzyValue.of( ECrisp.FALSE, 0.35 ).toString() ) );
     }
 
 }
