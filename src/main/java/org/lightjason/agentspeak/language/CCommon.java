@@ -624,7 +624,7 @@ public final class CCommon
      * @param p_deleteweight delete weight
      * @return distance
      *
-     * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
+     * @see <a href="https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java"></a>
      */
     public static double levenshtein( @Nonnull final String p_first, @Nonnull final String p_second, final double p_insertweight,
                                       final double p_replaceweight, final double p_deleteweight

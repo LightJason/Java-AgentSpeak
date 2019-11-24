@@ -47,10 +47,9 @@ import java.util.stream.Stream;
  * default behaviour of a beliefbase
  *
  * @tparam T agent type
-
- * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
- * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
- * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
+ * @see <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html"></a>
+ * @see <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html"></a>
+ * @see <a href="https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references"></a>
  */
 public abstract class IBaseBeliefbase implements IBeliefbase
 {
