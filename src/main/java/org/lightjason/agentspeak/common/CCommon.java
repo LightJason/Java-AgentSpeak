@@ -422,7 +422,9 @@ public final class CCommon
         }
         catch ( final MissingResourceException l_exception )
         {
-            return "";
+            return Objects.isNull( p_parameter )
+                   ? MessageFormat.format( "{0} - {1}", p_class, p_label )
+                   : MessageFormat.format( "{0} - {1}: {2}", p_class, p_label, Arrays.toString( p_parameter ) );
         }
     }
 
