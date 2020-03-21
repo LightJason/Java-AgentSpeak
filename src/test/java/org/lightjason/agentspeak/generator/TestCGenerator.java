@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.binding.CMethodAction;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.agent.IBaseAgent;
@@ -187,10 +188,10 @@ public final class TestCGenerator extends IBaseTest
     @Test
     public void actiongeneratorpackages()
     {
+        final IAction l_action = new CTestIs();
         final IActionGenerator l_generator = new CActionGenerator( Stream.of( "org.lightjason.agentspeak.testing" ) );
 
-        Assert.assertEquals( new CTestIs(), l_generator.apply( CPath.of( "test/is" ) ) );
-        Assert.assertEquals( new CTestIs(), l_generator.apply( CPath.of( "test/is" ) ) );
+        Assert.assertEquals( l_action, l_generator.apply( l_action.name() ) );
     }
 
     /**
@@ -204,6 +205,34 @@ public final class TestCGenerator extends IBaseTest
         Assert.assertTrue( l_generator.apply( CPath.of( "agenttest" ) ) instanceof CMethodAction );
         Assert.assertEquals( "agenttest", l_generator.apply( CPath.of( "agenttest" ) ).toString() );
         Assert.assertEquals( 0, l_generator.apply( CPath.of( "agenttest" ) ).minimalArgumentNumber() );
+    }
+
+    /**
+     * test other generators
+     */
+    @Test
+    public void othergenerators()
+    {
+        final IAction l_action = new CTestIs();
+        final IActionGenerator l_generator = new CActionGenerator();
+        final IActionGenerator l_other = new CActionGenerator( Stream.of( "org.lightjason.agentspeak.testing" ) );
+
+        Assert.assertTrue( l_other.contains( l_action.name() ) );
+        Assert.assertFalse( l_generator.contains( l_action.name() ) );
+        Assert.assertEquals( l_action, l_other.apply( l_action.name() ) );
+
+        Assert.assertTrue( l_generator.add( l_other ).contains( l_action.name() ) );
+        Assert.assertEquals( l_action, l_generator.apply( l_action.name() ) );
+    }
+
+    @Test
+    public void testemptyactiogenerator()
+    {
+        final IActionGenerator l_generator = IActionGenerator.EMPTY;
+
+        Assert.assertFalse( l_generator.contains( CPath.of( "foo" ) ) );
+        Assert.assertEquals( IActionGenerator.EMPTY, l_generator.add( l_generator ) );
+        Assert.assertEquals( IActionGenerator.EMPTY, l_generator.remove( l_generator ) );
     }
 
     /**

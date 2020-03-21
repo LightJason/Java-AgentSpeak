@@ -25,34 +25,25 @@ package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
 /**
  * action lazy-loader static generator
  */
-public final class CActionStaticGenerator implements IActionGenerator
+public final class CActionStaticGenerator extends IBaseActionGenerator
 {
-    /**
-     * loaded actions
-     */
-    private final Map<IPath, IAction> m_actions;
-
-
     /**
      * ctor
      */
     public CActionStaticGenerator()
     {
-        m_actions = Collections.emptyMap();
+        super();
     }
 
     /**
@@ -72,15 +63,13 @@ public final class CActionStaticGenerator implements IActionGenerator
      */
     public CActionStaticGenerator( @NonNull final Stream<IAction> p_actions )
     {
-        m_actions = Collections.unmodifiableMap( p_actions.collect( Collectors.toMap( IAction::name, i -> i, ( i, j ) -> i ) ) );
+        super( p_actions );
     }
 
     @Override
-    public IAction apply( @NonNull final IPath p_path )
+    protected Optional<IAction> stream( @Nonnull final IPath p_path )
     {
-        if ( m_actions.containsKey( p_path ) )
-            return m_actions.get( p_path );
-
-        throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
+        return Optional.empty();
     }
+
 }

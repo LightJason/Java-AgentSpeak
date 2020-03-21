@@ -28,12 +28,11 @@ import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CNoSuchElementException;
 
-import java.util.Map;
+import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,12 +40,9 @@ import java.util.stream.Stream;
 /**
  * action lazy-loader generator
  */
-public final class CActionGenerator implements IActionGenerator
+public final class CActionGenerator extends IBaseActionGenerator
 {
-    /**
-     * loaded actions
-     */
-    private final Map<IPath, IAction> m_actions = new ConcurrentHashMap<>();
+
     /**
      * Java package for searching
      */
@@ -55,6 +51,16 @@ public final class CActionGenerator implements IActionGenerator
      * agent classes with action
      */
     private final Set<Class<? extends IAgent<?>>> m_classes;
+
+    /**
+     * ctor
+     */
+    public CActionGenerator()
+    {
+        super();
+        m_packages = Collections.emptySet();
+        m_classes = Collections.emptySet();
+    }
 
     /**
      * ctor
@@ -74,26 +80,23 @@ public final class CActionGenerator implements IActionGenerator
      */
     public CActionGenerator( @NonNull final Stream<String> p_packages, @NonNull final Stream<Class<? extends IAgent<?>>> p_class )
     {
-        m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
+        super( Stream.empty() );
         m_packages = p_packages.collect( Collectors.toUnmodifiableSet() );
+        m_classes = p_class.collect( Collectors.toUnmodifiableSet() );
     }
 
-
-    @Override
-    public IAction apply( @NonNull final IPath p_path )
+    /**
+     * streams over all actions
+     *
+     * @param p_path action name
+     * @return optional action object
+     */
+    protected Optional<IAction> stream( @Nonnull final IPath p_path )
     {
-        // get action from cache
-        if ( m_actions.containsKey( p_path ) )
-            return m_actions.get( p_path );
-
-        final Optional<IAction> l_action = Stream.concat(
+        return Stream.concat(
             CCommon.actionsFromPackage( m_packages.stream() ),
             CCommon.actionsFromAgentClass( m_classes.stream() )
-        ).filter( i -> i.name().equals( p_path ) ).peek( i -> m_actions.putIfAbsent( i.name(), i ) ).findFirst();
-
-        if ( l_action.isEmpty() )
-            throw new CNoSuchElementException( CCommon.languagestring( this, "notfound", p_path ) );
-
-        return l_action.get();
+        ).parallel().filter( i -> i.name().equals( p_path ) ).findFirst();
     }
+
 }

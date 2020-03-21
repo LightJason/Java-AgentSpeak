@@ -28,7 +28,9 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 
+import javax.annotation.Nonnull;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
@@ -39,9 +41,84 @@ public interface IActionGenerator extends Function<IPath, IAction>
     /**
      * empty generator
      */
-    IActionGenerator EMPTY = p_path ->
+    IActionGenerator EMPTY = new IActionGenerator()
     {
-        throw new CNoSuchElementException( CCommon.languagestring( IActionGenerator.class, "notfound", p_path ) );
+
+
+        @Override
+        public boolean contains( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public IActionGenerator add( @Nonnull final IActionGenerator... p_generator )
+        {
+            return this;
+        }
+
+        @Override
+        public IActionGenerator remove( @Nonnull final IActionGenerator... p_generator )
+        {
+            return this;
+        }
+
+        @Override
+        public IActionGenerator add( @Nonnull final Stream<IActionGenerator> p_generator )
+        {
+            return this;
+        }
+
+        @Override
+        public IActionGenerator remove( @Nonnull final Stream<IActionGenerator> p_generator )
+        {
+            return this;
+        }
+
+        @Override
+        public IAction apply( @Nonnull final IPath p_path )
+        {
+            throw new CNoSuchElementException( CCommon.languagestring( IActionGenerator.class, "notfound", p_path ) );
+        }
     };
 
+    /**
+     * checks if an action exists within this generator
+     *
+     * @param p_path action name
+     * @return existance flag
+     */
+    boolean contains( @Nonnull final IPath p_path );
+
+    /**
+     * adds a temporary other generators
+     *
+     * @param p_generator generators
+     * @return self-reference
+     */
+    IActionGenerator add( @Nonnull IActionGenerator... p_generator );
+
+    /**
+     * removes a temporary other generators
+     *
+     * @param p_generator generators
+     * @return self-reference
+     */
+    IActionGenerator remove( @Nonnull IActionGenerator... p_generator );
+
+    /**
+     * adds a temporary other generators
+     *
+     * @param p_generator stream of generators
+     * @return self-reference
+     */
+    IActionGenerator add( @Nonnull Stream<IActionGenerator> p_generator );
+
+    /**
+     * removes a temporary other generators
+     *
+     * @param p_generator stream of generators
+     * @return self-reference
+     */
+    IActionGenerator remove( @Nonnull Stream<IActionGenerator> p_generator );
 }
