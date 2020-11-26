@@ -699,7 +699,7 @@ public final class CCommon
      */
     private static double compress( @Nonnull final ECompression p_compression, @Nonnull final String p_input )
     {
-        final DataOutputStream l_counting = new DataOutputStream( new NullOutputStream() );
+        final DataOutputStream l_counting = new DataOutputStream( NullOutputStream.NULL_OUTPUT_STREAM );
 
         try (
             InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
@@ -752,14 +752,6 @@ public final class CCommon
             public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
             {
                 return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.DEFLATE64, p_in );
-            }
-        },
-        PACK200
-        {
-            @Override
-            public OutputStream apply( @Nonnull final DataOutputStream p_in ) throws CompressorException
-            {
-                return new CompressorStreamFactory().createCompressorOutputStream( CompressorStreamFactory.PACK200, p_in );
             }
         };
 
