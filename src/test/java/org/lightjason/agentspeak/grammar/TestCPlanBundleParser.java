@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
@@ -52,6 +53,7 @@ import java.util.stream.Stream;
 /**
  * test for plan-bundle parser
  */
+@Disabled
 public final class TestCPlanBundleParser extends IBaseGrammarTest
 {
 

@@ -128,7 +128,6 @@ public final class TestCBinaryExpression extends IBaseTest
      */
     @ParameterizedTest
     @MethodSource( "operator" )
-    @SuppressWarnings( "unchecked" )
     public void variable( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull final EBinaryOperator p_operator, @Nonnull final Object p_result )
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -167,7 +166,6 @@ public final class TestCBinaryExpression extends IBaseTest
      */
     @ParameterizedTest
     @MethodSource( "operator" )
-    @SuppressWarnings( "unchecked" )
     public void raw( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull final EBinaryOperator p_operator, @Nonnull final Object p_result )
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -177,7 +175,7 @@ public final class TestCBinaryExpression extends IBaseTest
                 new CBinaryExpression(
                     p_operator,
                     new CPassRaw<>( p_lhs ),
-                    new CPassRaw<>( p_result )
+                    new CPassRaw<>( p_rhs )
                 ),
                 false,
                 Collections.emptyList(),

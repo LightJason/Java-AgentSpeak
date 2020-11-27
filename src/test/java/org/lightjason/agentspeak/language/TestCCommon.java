@@ -76,20 +76,23 @@ public final class TestCCommon extends IBaseTest
     @Test
     public void ncd()
     {
-        Assertions.assertArrayEquals(
-            Stream.of( 0.0, 0.0, 0.0, 0.0, 0.0 ).toArray(),
-            Arrays.stream( CCommon.ECompression.values() )
-                  .map( i ->  CCommon.ncd( i, "xxx", "xxx" ) )
-                  .toArray()
-        );
+        final Object[] l_equal = Arrays.stream( CCommon.ECompression.values() )
+                                     .map( i ->  CCommon.ncd( i, "xxx", "xxx" ) )
+                                     .toArray();
 
         Assertions.assertArrayEquals(
-            Stream.of( 0.05, 0.13043478260869565, 0.2727272727272727, Double.NaN, 0.0 ).toArray(),
-            Arrays.stream( CCommon.ECompression.values() )
-                  .map( i ->  CCommon.ncd( i, "bar", "box" ) )
-                  .toArray()
+            Stream.of( 0.0, 0.0, 0.0, 0.0 ).toArray(),
+            l_equal
         );
 
+
+        final Object[] l_unequal = Arrays.stream( CCommon.ECompression.values() )
+                                         .map( i ->  CCommon.ncd( i, "bar", "box" ) )
+                                         .toArray();
+        Assertions.assertArrayEquals(
+            Stream.of( 0.05, 0.13043478260869565, 0.2727272727272727, Double.NaN ).toArray(),
+            l_unequal
+        );
     }
 
     /**
