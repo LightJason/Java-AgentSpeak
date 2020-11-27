@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.fuzzy;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.fuzzy.bundle.EFuzzyBundleFactory;
 import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
 import org.lightjason.agentspeak.testing.IBaseTest;
@@ -42,7 +42,7 @@ public final class TestCFuzzyBundle extends IBaseTest
     @Test
     public void bundle()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CFuzzyValue<>( ECrisp.TRUE, 0.75 ),
             EFuzzyBundleFactory.CRISP.get().set().apply( "true", 0.75 )
         );

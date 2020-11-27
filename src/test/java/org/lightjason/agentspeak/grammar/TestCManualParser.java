@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -48,15 +48,15 @@ public final class TestCManualParser extends IBaseTest
     {
         final ILiteral l_literal =  CLiteral.parse( "foo(X, 123, 'test')" );
 
-        Assert.assertEquals( "foo", l_literal.functor() );
+        Assertions.assertEquals( "foo", l_literal.functor() );
 
         final List<ITerm> l_values = l_literal.orderedvalues().collect( Collectors.toList() );
-        Assert.assertEquals( 3, l_values.size() );
+        Assertions.assertEquals( 3, l_values.size() );
 
-        Assert.assertTrue( l_values.get( 0 ) instanceof IVariable<?> );
-        Assert.assertEquals( l_values.get( 0 ).<IVariable<?>>term().functor(), "X" );
-        Assert.assertEquals( l_values.get( 1 ).<Number>raw(), 123.0 );
-        Assert.assertEquals( l_values.get( 2 ).raw(), "test" );
+        Assertions.assertTrue( l_values.get( 0 ) instanceof IVariable<?> );
+        Assertions.assertEquals( l_values.get( 0 ).<IVariable<?>>term().functor(), "X" );
+        Assertions.assertEquals( l_values.get( 1 ).<Number>raw(), 123.0 );
+        Assertions.assertEquals( l_values.get( 2 ).raw(), "test" );
     }
 
 }

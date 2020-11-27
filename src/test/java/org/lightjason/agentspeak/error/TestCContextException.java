@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.error;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.error.context.CExecutionException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.error.context.CExecutionIllegealArgumentException;
@@ -42,43 +42,67 @@ public final class TestCContextException
     @Test
     public void executionexceptioncontext()
     {
-        Assert.assertEquals( IContext.EMPTYPLAN, new CExecutionException( IContext.EMPTYPLAN ).context() );
+        Assertions.assertEquals( IContext.EMPTYPLAN, new CExecutionException( IContext.EMPTYPLAN ).context() );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void executionexcpetion()
     {
-        throw new CExecutionException( IContext.EMPTYPLAN );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CExecutionException( IContext.EMPTYPLAN );
+            }
+        );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void executionexcpetionstring()
     {
-        throw new CExecutionException( IContext.EMPTYPLAN, "execution" );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CExecutionException( IContext.EMPTYPLAN, "execution" );
+            }
+        );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void executionexcpetionpassexception()
     {
-        throw new CExecutionException( IContext.EMPTYPLAN, new RuntimeException() );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CExecutionException( IContext.EMPTYPLAN, new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void executionexcpetionstringexception()
     {
-        throw new CExecutionException( IContext.EMPTYPLAN, "execution", new RuntimeException() );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CExecutionException( IContext.EMPTYPLAN, "execution", new RuntimeException() );
+            }
+        );
     }
 
 
@@ -89,43 +113,67 @@ public final class TestCContextException
     @Test
     public void executionillegealstateexceptioncontext()
     {
-        Assert.assertEquals( IContext.EMPTYPLAN, new CExecutionIllegalStateException( IContext.EMPTYPLAN ).context() );
+        Assertions.assertEquals( IContext.EMPTYPLAN, new CExecutionIllegalStateException( IContext.EMPTYPLAN ).context() );
     }
 
     /**
      * test illegalstaten-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void executionillegealstateexception()
     {
-        throw new CExecutionIllegalStateException( IContext.EMPTYPLAN );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CExecutionIllegalStateException( IContext.EMPTYPLAN );
+            }
+        );
     }
 
     /**
      * test illegalstate-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void executionillegealstateexceptionstring()
     {
-        throw new CExecutionIllegalStateException( IContext.EMPTYPLAN, "state" );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CExecutionIllegalStateException( IContext.EMPTYPLAN, "state" );
+            }
+        );
     }
 
     /**
      * test illegalstate-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void executionillegealstateexceptionpassexception()
     {
-        throw new CExecutionIllegalStateException( IContext.EMPTYPLAN, new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CExecutionIllegalStateException( IContext.EMPTYPLAN, new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test illegalstate-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void executionillegealstateexceptionstringexception()
     {
-        throw new CExecutionIllegalStateException( IContext.EMPTYPLAN, "state", new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CExecutionIllegalStateException( IContext.EMPTYPLAN, "state", new RuntimeException() );
+            }
+        );
     }
 
 
@@ -136,42 +184,66 @@ public final class TestCContextException
     @Test
     public void executionillegealargumentexceptioncontext()
     {
-        Assert.assertEquals( IContext.EMPTYPLAN, new CExecutionIllegealArgumentException( IContext.EMPTYPLAN ).context() );
+        Assertions.assertEquals( IContext.EMPTYPLAN, new CExecutionIllegealArgumentException( IContext.EMPTYPLAN ).context() );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void executionillegealargumentexception()
     {
-        throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN );
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () ->
+            {
+                throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN );
+            }
+        );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void executionillegealargumentexceptionstring()
     {
-        throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN, "argument" );
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () ->
+            {
+                throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN, "argument" );
+            }
+        );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void executionillegealargumentexceptionpassexception()
     {
-        throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN, new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () ->
+            {
+                throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN, new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test execution-exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void executionillegealargumentexceptionstringexception()
     {
-        throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN, "argument", new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () ->
+            {
+                throw new CExecutionIllegealArgumentException( IContext.EMPTYPLAN, "argument", new RuntimeException() );
+            }
+        );
     }
 }

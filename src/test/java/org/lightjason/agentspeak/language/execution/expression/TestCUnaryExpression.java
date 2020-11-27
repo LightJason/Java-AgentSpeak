@@ -23,13 +23,10 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
@@ -47,7 +44,6 @@ import java.util.stream.Stream;
 /**
  * test unary expression
  */
-@RunWith( DataProviderRunner.class )
 public final class TestCUnaryExpression extends IBaseTest
 {
     /**
@@ -55,49 +51,35 @@ public final class TestCUnaryExpression extends IBaseTest
      *
      * @return 3-tuple as array, first & second input values, 3rd operator, 4th result
      */
-    @DataProvider
-    public static Object[] operator()
+    public static Stream<Arguments> operator()
     {
         return Stream.of(
-
-            testcase( true, EUnaryOperator.NEGATION, false ),
-            testcase( false, EUnaryOperator.NEGATION, true )
-
-        ).toArray();
-    }
-
-    /**
-     * test-case generator
-     *
-     * @param p_value argument
-     * @param p_operator operator
-     * @param p_result result
-     * @return test-case
-     */
-    private static Object testcase( @Nonnull final Object p_value, @Nonnull final EUnaryOperator p_operator, @Nonnull final Object p_result )
-    {
-        return Stream.of( p_value, p_operator, p_result ).toArray();
+            Arguments.of( true, EUnaryOperator.NEGATION, false ),
+            Arguments.of( false, EUnaryOperator.NEGATION, true )
+        );
     }
 
     /**
      * test with variable
+     *
+     * @param p_value argument
+     * @param p_operator operator
+     * @param p_result result
      */
-    @Test
-    @UseDataProvider( "operator" )
+    @ParameterizedTest
+    @MethodSource( "operator" )
     @SuppressWarnings( "unchecked" )
-    public void variable( @Nonnull final Object[] p_data )
+    public void variable( final boolean p_value, @Nonnull final EUnaryOperator p_operator, final boolean p_result )
     {
-        Assume.assumeTrue( p_data.length == 3 );
-
         final List<ITerm> l_return = new ArrayList<>();
 
         final IVariable<Object> l_var = new CVariable<>( "Value" );
-        l_var.set( p_data[0] );
+        l_var.set( p_value );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CUnaryExpression(
-                    (EUnaryOperator) p_data[1],
+                    p_operator,
                     new CPassVariable( l_var )
                 ),
                 false,
@@ -107,28 +89,26 @@ public final class TestCUnaryExpression extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertEquals( p_data[2], l_return.get( 0 ).raw() );
-        Assert.assertEquals( p_data[0], l_var.raw() );
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertEquals( p_result, l_return.get( 0 ).raw() );
+        Assertions.assertEquals( p_value, l_var.raw() );
     }
 
     /**
      * test with native data
      */
-    @Test
-    @UseDataProvider( "operator" )
+    @ParameterizedTest
+    @MethodSource( "operator" )
     @SuppressWarnings( "unchecked" )
-    public void raw( @Nonnull final Object[] p_data )
+    public void raw( final boolean p_value, @Nonnull final EUnaryOperator p_operator, final boolean p_result )
     {
-        Assume.assumeTrue( p_data.length == 3 );
-
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CUnaryExpression(
-                    (EUnaryOperator) p_data[1],
-                    new CPassRaw<>( p_data[0] )
+                    p_operator,
+                    new CPassRaw<>( p_value )
                 ),
                 false,
                 Collections.emptyList(),
@@ -136,9 +116,8 @@ public final class TestCUnaryExpression extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertEquals( p_data[2], l_return.get( 0 ).raw() );
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertEquals( p_result, l_return.get( 0 ).raw() );
     }
-
 
 }

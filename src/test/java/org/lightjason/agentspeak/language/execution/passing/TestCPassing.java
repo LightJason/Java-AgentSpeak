@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.passing;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -53,10 +53,10 @@ public final class TestCPassing extends IBaseTest
         execute( new CPassRaw<>( false ), false, Collections.emptyList(), l_return );
         execute( new CPassRaw<>( 12 ), false, Collections.emptyList(), l_return );
 
-        Assert.assertEquals( 3, l_return.size() );
-        Assert.assertEquals( "foo", l_return.get( 0 ).raw() );
-        Assert.assertEquals( false, l_return.get( 1 ).raw() );
-        Assert.assertEquals( 12, l_return.get( 2 ).<Number>raw() );
+        Assertions.assertEquals( 3, l_return.size() );
+        Assertions.assertEquals( "foo", l_return.get( 0 ).raw() );
+        Assertions.assertEquals( false, l_return.get( 1 ).raw() );
+        Assertions.assertEquals( 12, l_return.get( 2 ).<Number>raw() );
     }
 
     /**
@@ -85,9 +85,9 @@ public final class TestCPassing extends IBaseTest
             l_number
         );
 
-        Assert.assertEquals( 2, l_return.size() );
-        Assert.assertEquals( "hello", l_return.get( 0 ).raw() );
-        Assert.assertEquals( 5, l_return.get( 1 ).<Number>raw() );
+        Assertions.assertEquals( 2, l_return.size() );
+        Assertions.assertEquals( "hello", l_return.get( 0 ).raw() );
+        Assertions.assertEquals( 5, l_return.get( 1 ).<Number>raw() );
     }
 
 

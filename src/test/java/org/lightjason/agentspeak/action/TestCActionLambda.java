@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.action;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -50,7 +50,7 @@ public final class TestCActionLambda extends IBaseTest
     @Test
     public void namebyclass()
     {
-        Assert.assertEquals( "test/testaction", new CTestAction().name().toString() );
+        Assertions.assertEquals( "test/testaction", new CTestAction().name().toString() );
     }
 
     /**
@@ -62,10 +62,10 @@ public final class TestCActionLambda extends IBaseTest
         final ILambdaStreaming<Number> l_stream = new CTestLambdaNumber();
         final Object[] l_result = Stream.of( 0L, 1L, 2L, 3L ).toArray();
 
-        Assert.assertArrayEquals( l_result, l_stream.apply( 4 ).toArray() );
-        Assert.assertArrayEquals( l_result, l_stream.apply( 4.3 ).toArray() );
-        Assert.assertArrayEquals( l_result, l_stream.apply( 4.7F ).toArray() );
-        Assert.assertArrayEquals( l_result, l_stream.apply( 4L ).toArray() );
+        Assertions.assertArrayEquals( l_result, l_stream.apply( 4 ).toArray() );
+        Assertions.assertArrayEquals( l_result, l_stream.apply( 4.3 ).toArray() );
+        Assertions.assertArrayEquals( l_result, l_stream.apply( 4.7F ).toArray() );
+        Assertions.assertArrayEquals( l_result, l_stream.apply( 4L ).toArray() );
     }
 
     /**
@@ -74,9 +74,9 @@ public final class TestCActionLambda extends IBaseTest
     @Test
     public void lambdaequal()
     {
-        Assert.assertEquals( ILambdaStreaming.EMPTY, ILambdaStreaming.EMPTY );
-        Assert.assertEquals( new CTestLambdaNumber(), new CTestLambdaNumber() );
-        Assert.assertNotEquals( ILambdaStreaming.EMPTY, new CTestLambdaNumber() );
+        Assertions.assertEquals( ILambdaStreaming.EMPTY, ILambdaStreaming.EMPTY );
+        Assertions.assertEquals( new CTestLambdaNumber(), new CTestLambdaNumber() );
+        Assertions.assertNotEquals( ILambdaStreaming.EMPTY, new CTestLambdaNumber() );
     }
 
     /**

@@ -23,13 +23,11 @@
 
 package org.lightjason.agentspeak.language.execution.assignment;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -52,7 +50,6 @@ import java.util.stream.Stream;
 /**
  * test single assignment
  */
-@RunWith( DataProviderRunner.class )
 public final class TestCAssignment extends IBaseTest
 {
 
@@ -61,63 +58,48 @@ public final class TestCAssignment extends IBaseTest
      *
      * @return 4-tuple as array, first & second input values, 3rd operator, 4th result
      */
-    @DataProvider
-    public static Object[] operator()
+    public static Stream<Arguments> operator()
     {
         return Stream.of(
 
-            testcase( 5, 2, EAssignOperator.INCREMENT, 7.0 ),
-            testcase( 7, 3, EAssignOperator.DECREMENT, 4.0 ),
+            Arguments.of( 5, 2, EAssignOperator.INCREMENT, 7.0 ),
+            Arguments.of( 7, 3, EAssignOperator.DECREMENT, 4.0 ),
 
-            testcase( 11, 11, EAssignOperator.MULTIPLY, 121.0 ),
-            testcase( 33, 3, EAssignOperator.DIVIDE, 11.0 ),
+            Arguments.of( 11, 11, EAssignOperator.MULTIPLY, 121.0 ),
+            Arguments.of( 33, 3, EAssignOperator.DIVIDE, 11.0 ),
 
-            testcase( 21, 17, EAssignOperator.MODULO, 4L ),
-            testcase( -1, 17, EAssignOperator.MODULO, 16L ),
-            testcase( -18, 17, EAssignOperator.MODULO, 1L ),
+            Arguments.of( 21, 17, EAssignOperator.MODULO, 4L ),
+            Arguments.of( -1, 17, EAssignOperator.MODULO, 16L ),
+            Arguments.of( -18, 17, EAssignOperator.MODULO, 1L ),
 
-            testcase( 2, 3, EAssignOperator.POWER, 8.0 ),
-            testcase( 9, 0.5, EAssignOperator.POWER, 3.0 ),
+            Arguments.of( 2, 3, EAssignOperator.POWER, 8.0 ),
+            Arguments.of( 9, 0.5, EAssignOperator.POWER, 3.0 ),
 
-            testcase( 2, 3, EAssignOperator.ASSIGN,  3 )
+            Arguments.of( 2, 3, EAssignOperator.ASSIGN,  3 )
 
-        ).toArray();
+        );
     }
 
     /**
-     * test-case generator
+     * test assignment operator with variables
      *
      * @param p_lhs left-hand-side argument
      * @param p_rhs right-hand-side argument
      * @param p_operator operator
      * @param p_result result
-     * @return test-case
      */
-    private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs,
-                                    @Nonnull final EAssignOperator p_operator, @Nonnull final Object p_result )
+    @ParameterizedTest
+    @MethodSource( "operator" )
+    public void assignvariable( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull final EAssignOperator p_operator,
+                                @Nonnull final Object p_result )
     {
-        return Stream.of( p_lhs, p_rhs, p_operator, p_result ).toArray();
-    }
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_lhs );
+        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_rhs );
 
-
-    /**
-     * test assignment operator with variables
-     * @param p_data input data
-     */
-    @Test
-    @SuppressWarnings( "unchecked" )
-    @UseDataProvider( "operator" )
-    public void assignvariable( @Nonnull final Object[] p_data )
-    {
-        Assume.assumeTrue( p_data.length == 4 );
-
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
-        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_data[1] );
-
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CSingleAssignment(
-                    (EAssignOperator) p_data[2], l_lhs,
+                    p_operator, l_lhs,
                     new CPassVariable( l_rhs )
                 ),
                 false,
@@ -128,28 +110,30 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertEquals( p_data[3], l_lhs.raw() );
-        Assert.assertEquals( p_data[1],  l_rhs.raw() );
+        Assertions.assertEquals( p_result, l_lhs.raw() );
+        Assertions.assertEquals( p_rhs, l_rhs.raw() );
     }
 
     /**
      * test assignment operator with native data
-     * @param p_data input data
+     *
+     * @param p_lhs left-hand-side argument
+     * @param p_rhs right-hand-side argument
+     * @param p_operator operator
+     * @param p_result result
      */
-    @Test
-    @SuppressWarnings( "unchecked" )
-    @UseDataProvider( "operator" )
-    public void assignraw( @Nonnull final Object[] p_data )
+    @ParameterizedTest
+    @MethodSource( "operator" )
+    public void assignraw( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull final EAssignOperator p_operator,
+                           @Nonnull final Object p_result )
     {
-        Assume.assumeTrue( p_data.length == 4 );
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_lhs );
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
-
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CSingleAssignment(
-                    (EAssignOperator) p_data[2], l_lhs,
-                    new CPassRaw<>( p_data[1] )
+                    p_operator, l_lhs,
+                    new CPassRaw<>( p_rhs )
                 ),
                 false,
                 Collections.emptyList(),
@@ -158,7 +142,7 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertEquals( p_data[3], l_lhs.raw() );
+        Assertions.assertEquals( p_result, l_lhs.raw() );
     }
 
     /**
@@ -170,7 +154,7 @@ public final class TestCAssignment extends IBaseTest
         final IVariable<?> l_outer = new CVariable<>( "Outer" );
         final IVariable<?> l_inner = new CVariable<>( "Inner" );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CDeconstruct( Stream.of( l_outer, l_inner ), CLiteral.of( "foobar", CRawTerm.of( 5 ), CRawTerm.of( "test" ) ) ),
                 false,
@@ -181,10 +165,10 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertEquals( "foobar", l_outer.raw() );
-        Assert.assertTrue( l_inner.raw() instanceof List<?> );
-        Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
-        Assert.assertArrayEquals( Stream.of( 5, "test" ).toArray(), l_inner.<List<?>>raw().toArray() );
+        Assertions.assertEquals( "foobar", l_outer.raw() );
+        Assertions.assertTrue( l_inner.raw() instanceof List<?> );
+        Assertions.assertEquals( 2, l_inner.<List<?>>raw().size() );
+        Assertions.assertArrayEquals( Stream.of( 5, "test" ).toArray(), l_inner.<List<?>>raw().toArray() );
     }
 
     /**
@@ -199,7 +183,7 @@ public final class TestCAssignment extends IBaseTest
 
         l_argument.set( CLiteral.of( "foo", CRawTerm.of( "bar" ), CRawTerm.of( 7 ) ) );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CDeconstruct( Stream.of( l_outer, l_inner ), l_argument ),
                 false,
@@ -211,27 +195,30 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertEquals( "foo", l_outer.raw() );
-        Assert.assertTrue( l_inner.raw() instanceof List<?> );
-        Assert.assertEquals( 2, l_inner.<List<?>>raw().size() );
-        Assert.assertArrayEquals( Stream.of( "bar", 7 ).toArray(), l_inner.<List<?>>raw().toArray() );
+        Assertions.assertEquals( "foo", l_outer.raw() );
+        Assertions.assertTrue( l_inner.raw() instanceof List<?> );
+        Assertions.assertEquals( 2, l_inner.<List<?>>raw().size() );
+        Assertions.assertArrayEquals( Stream.of( "bar", 7 ).toArray(), l_inner.<List<?>>raw().toArray() );
     }
 
     /**
      * test assignment exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void singleassignmenterror()
     {
-        execute(
-            new CSingleAssignment(
-                EAssignOperator.ASSIGN,
-                new CVariable<>( "X" ),
-                IExecution.EMPTY
-            ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList()
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> execute(
+                new CSingleAssignment(
+                    EAssignOperator.ASSIGN,
+                    new CVariable<>( "X" ),
+                    IExecution.EMPTY
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -240,7 +227,7 @@ public final class TestCAssignment extends IBaseTest
      */
     public void multiassignmenterror()
     {
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CMultiAssignment(
                     Stream.empty(),
@@ -273,17 +260,20 @@ public final class TestCAssignment extends IBaseTest
     /**
      * test multi-assignment exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void multiassigmentexception()
     {
-        execute(
-            new CMultiAssignment(
-                Stream.empty(),
-                IExecution.EMPTY
-            ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList()
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> execute(
+                new CMultiAssignment(
+                    Stream.empty(),
+                    IExecution.EMPTY
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -296,7 +286,7 @@ public final class TestCAssignment extends IBaseTest
         final IVariable<?> l_xvariable = new CVariable<>( "X" );
         final IVariable<?> l_yvariable = new CVariable<>( "Y" );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CMultiAssignment(
                     Stream.of( l_xvariable, l_yvariable ),
@@ -328,8 +318,8 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertEquals( Integer.valueOf( 1 ), l_xvariable.raw() );
-        Assert.assertArrayEquals( Stream.of( 2, 3 ).toArray(), l_yvariable.<Collection<?>>raw().toArray() );
+        Assertions.assertEquals( Integer.valueOf( 1 ), l_xvariable.raw() );
+        Assertions.assertArrayEquals( Stream.of( 2, 3 ).toArray(), l_yvariable.<Collection<?>>raw().toArray() );
     }
 
     /**
@@ -340,7 +330,7 @@ public final class TestCAssignment extends IBaseTest
     {
         final IVariable<?> l_variable = new CVariable<>( "Z" );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CMultiAssignment(
                     Stream.of( l_variable ),
@@ -371,7 +361,7 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertArrayEquals( Stream.of( 1, 2, 3 ).toArray(), l_variable.<Collection<?>>raw().toArray() );
+        Assertions.assertArrayEquals( Stream.of( 1, 2, 3 ).toArray(), l_variable.<Collection<?>>raw().toArray() );
     }
 
     /**
@@ -383,7 +373,7 @@ public final class TestCAssignment extends IBaseTest
         final IVariable<?> l_xvariable = new CVariable<>( "X" );
         final IVariable<?> l_yvariable = new CVariable<>( "Y", "xyz" );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CMultiAssignment(
                     Stream.of( l_xvariable, l_yvariable ),
@@ -415,8 +405,8 @@ public final class TestCAssignment extends IBaseTest
             )
         );
 
-        Assert.assertEquals( Integer.valueOf( 1 ), l_xvariable.raw() );
-        Assert.assertEquals( "xyz", l_yvariable.raw() );
+        Assertions.assertEquals( Integer.valueOf( 1 ), l_xvariable.raw() );
+        Assertions.assertEquals( "xyz", l_yvariable.raw() );
     }
 
     /**
@@ -425,31 +415,31 @@ public final class TestCAssignment extends IBaseTest
     @Test
     public void hashcodeeqauls()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CSingleAssignment( EAssignOperator.ASSIGN, IVariable.EMPTY, IExecution.EMPTY ),
             new CSingleAssignment( EAssignOperator.ASSIGN, IVariable.EMPTY, IExecution.EMPTY )
         );
-        Assert.assertNotEquals(
+        Assertions.assertNotEquals(
             new CSingleAssignment( EAssignOperator.ASSIGN, IVariable.EMPTY, IExecution.EMPTY ),
             new CSingleAssignment( EAssignOperator.INCREMENT, IVariable.EMPTY, IExecution.EMPTY )
         );
 
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CMultiAssignment( Stream.empty(), IExecution.EMPTY ),
             new CMultiAssignment( Stream.empty(), IExecution.EMPTY )
         );
-        Assert.assertNotEquals(
+        Assertions.assertNotEquals(
             new CMultiAssignment( Stream.empty(), IExecution.EMPTY ),
             new CMultiAssignment( Stream.of( new CVariable<>( "V" ) ), IExecution.EMPTY )
         );
 
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CDeconstruct( Stream.empty(), ITerm.EMPTYTERM ),
             new CDeconstruct( Stream.empty(), ITerm.EMPTYTERM )
         );
-        Assert.assertNotEquals(
+        Assertions.assertNotEquals(
             new CDeconstruct( Stream.empty(), ITerm.EMPTYTERM ),
             new CDeconstruct( Stream.empty(), IVariable.EMPTY )
         );

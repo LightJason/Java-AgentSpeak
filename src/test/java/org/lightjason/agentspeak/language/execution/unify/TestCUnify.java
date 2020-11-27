@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.unify;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -58,11 +58,11 @@ public final class TestCUnify extends IBaseTest
         final IVariable<?> l_yvariable = new CVariable<>( "Y", 111 );
         final IContext l_context = new CLocalContext( new CAgentGenerator().generatesingle(), l_xvariable, l_yvariable );
 
-        Assert.assertEquals( 2, l_context.instancevariables().size() );
-        Assert.assertEquals( Integer.valueOf( 321 ), l_xvariable.raw() );
-        Assert.assertEquals( Integer.valueOf( 111 ), l_yvariable.raw() );
+        Assertions.assertEquals( 2, l_context.instancevariables().size() );
+        Assertions.assertEquals( Integer.valueOf( 321 ), l_xvariable.raw() );
+        Assertions.assertEquals( Integer.valueOf( 111 ), l_yvariable.raw() );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CLiteralUnify( false, l_source, l_target ),
                 false,
@@ -73,12 +73,12 @@ public final class TestCUnify extends IBaseTest
         );
 
 
-        Assert.assertEquals( Integer.valueOf( 321 ), l_xvariable.raw() );
-        Assert.assertEquals( Integer.valueOf( 321 ), l_yvariable.raw() );
-        Assert.assertEquals( l_xvariable, l_context.instancevariables().get( l_xvariable.fqnfunctor() ) );
-        Assert.assertEquals( l_yvariable, l_context.instancevariables().get( l_yvariable.fqnfunctor() ) );
-        Assert.assertFalse( l_target.values().findFirst().get().<IVariable<?>>term().allocated() );
-        Assert.assertFalse( l_source.values().findFirst().get().<IVariable<?>>term().allocated() );
+        Assertions.assertEquals( Integer.valueOf( 321 ), l_xvariable.raw() );
+        Assertions.assertEquals( Integer.valueOf( 321 ), l_yvariable.raw() );
+        Assertions.assertEquals( l_xvariable, l_context.instancevariables().get( l_xvariable.fqnfunctor() ) );
+        Assertions.assertEquals( l_yvariable, l_context.instancevariables().get( l_yvariable.fqnfunctor() ) );
+        Assertions.assertFalse( l_target.values().findFirst().get().<IVariable<?>>term().allocated() );
+        Assertions.assertFalse( l_source.values().findFirst().get().<IVariable<?>>term().allocated() );
     }
 
     /**
@@ -87,7 +87,7 @@ public final class TestCUnify extends IBaseTest
     @Test
     public void failunify()
     {
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CLiteralUnify( false, CLiteral.parse( "xxx(123)" ), CLiteral.parse( "yyy(Y)" ) ),
                 false,
@@ -103,7 +103,7 @@ public final class TestCUnify extends IBaseTest
     @Test
     public void unifystring()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             ">>(zzz[Z()], abc[123.0])",
             new CLiteralUnify( false, CLiteral.parse( "abc(123)" ), CLiteral.parse( "zzz(Z)" ) ).toString()
         );
@@ -121,10 +121,10 @@ public final class TestCUnify extends IBaseTest
             CLiteral.parse( "foobar(Y)" )
         ).variables().collect( Collectors.toList() );
 
-        Assert.assertEquals( 2, l_variables.size() );
-        Assert.assertEquals( CPath.of( "X" ), l_variables.get( 0 ).fqnfunctor() );
-        Assert.assertEquals( CPath.of( "Y" ), l_variables.get( 1 ).fqnfunctor() );
-        Assert.assertFalse( l_variables.get( 0 ).allocated() );
-        Assert.assertFalse( l_variables.get( 1 ).allocated() );
+        Assertions.assertEquals( 2, l_variables.size() );
+        Assertions.assertEquals( CPath.of( "X" ), l_variables.get( 0 ).fqnfunctor() );
+        Assertions.assertEquals( CPath.of( "Y" ), l_variables.get( 1 ).fqnfunctor() );
+        Assertions.assertFalse( l_variables.get( 0 ).allocated() );
+        Assertions.assertFalse( l_variables.get( 1 ).allocated() );
     }
 }

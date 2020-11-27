@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IInspector;
 import org.lightjason.agentspeak.common.CPath;
@@ -51,6 +51,7 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -69,7 +70,7 @@ public final class TestCTestGoal extends IBaseTest
      *
      * @throws Exception on any error
      */
-    @Before
+    @BeforeEach
     public void init() throws Exception
     {
         m_agent = new CAgentGenerator().generatesingle();
@@ -81,7 +82,7 @@ public final class TestCTestGoal extends IBaseTest
     @Test
     public void goalliteral()
     {
-        Assume.assumeNotNull( m_agent );
+        Assumptions.assumeTrue( Objects.nonNull( m_agent ) );
 
         execute(
             new CAchievementGoalLiteral( CLiteral.of( "foo" ), false ),
@@ -124,7 +125,7 @@ public final class TestCTestGoal extends IBaseTest
             @Override
             public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
             {
-                Assert.assertEquals( "foo", p_value.findFirst().get().literal().functor() );
+                Assertions.assertEquals( "foo", p_value.findFirst().get().literal().functor() );
             }
         } );
     }
@@ -135,7 +136,7 @@ public final class TestCTestGoal extends IBaseTest
     @Test
     public void goalvariable()
     {
-        Assume.assumeNotNull( m_agent );
+        Assumptions.assumeTrue( Objects.nonNull( m_agent ) );
 
         final IVariable<?> l_var = new CVariable<>( "Var" ).set( "bar" );
 
@@ -181,7 +182,7 @@ public final class TestCTestGoal extends IBaseTest
             @Override
             public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
             {
-                Assert.assertEquals( "bar", p_value.findFirst().get().literal().functor() );
+                Assertions.assertEquals( "bar", p_value.findFirst().get().literal().functor() );
             }
         } );
     }
@@ -194,7 +195,7 @@ public final class TestCTestGoal extends IBaseTest
     @Test
     public void testgoal() throws Exception
     {
-        Assume.assumeNotNull( m_agent );
+        Assumptions.assumeTrue( Objects.nonNull( m_agent ) );
 
         final ITrigger l_trigger = CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "foobar" ) );
         m_agent.plans().put( l_trigger, CPlanStatistic.of( new IPlan()
@@ -265,7 +266,7 @@ public final class TestCTestGoal extends IBaseTest
         m_agent.call();
 
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CTestGoal( l_trigger.literal().fqnfunctor() ),
                 false,
@@ -275,7 +276,7 @@ public final class TestCTestGoal extends IBaseTest
             )
         );
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CTestGoal( CPath.of( "xxx" ) ),
                 false,

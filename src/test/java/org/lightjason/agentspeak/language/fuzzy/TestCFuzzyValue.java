@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.fuzzy;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.fuzzy.set.ECrisp;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
@@ -39,10 +39,10 @@ public final class TestCFuzzyValue extends IBaseTest
     /**
      * test fuzzy-value error
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void valueerror()
     {
-        CFuzzyValue.of( ECrisp.TRUE, 10 );
+        Assertions.assertThrows( IllegalArgumentException.class, () -> CFuzzyValue.of( ECrisp.TRUE, 10 ) );
     }
 
     /**
@@ -51,7 +51,7 @@ public final class TestCFuzzyValue extends IBaseTest
     @Test
     public void valuetostring()
     {
-        Assert.assertTrue(
+        Assertions.assertTrue(
             MessageFormat.format( "FALSE({0})", String.format( "%G", 0.35 ) )
                          .equalsIgnoreCase( CFuzzyValue.of( ECrisp.FALSE, 0.35 ).toString() )
         );

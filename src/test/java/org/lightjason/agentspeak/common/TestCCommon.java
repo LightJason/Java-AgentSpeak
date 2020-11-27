@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.common;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionName;
 import org.lightjason.agentspeak.agent.IBaseAgent;
@@ -45,13 +45,13 @@ public final class TestCCommon extends IBaseTest
     @Test
     public void emptyagentaction()
     {
-        Assert.assertEquals( 0, CCommon.actionsFromAgentClass().count() );
+        Assertions.assertEquals( 0, CCommon.actionsFromAgentClass().count() );
     }
 
     @Test
     public void agentactionerror()
     {
-        Assert.assertEquals( 0, CCommon.actionsFromAgentClass( CWrongAgent.class ).count() );
+        Assertions.assertEquals( 0, CCommon.actionsFromAgentClass( CWrongAgent.class ).count() );
     }
 
     /**

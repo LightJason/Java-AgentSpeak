@@ -26,10 +26,10 @@ package org.lightjason.agentspeak.agent;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -50,13 +50,12 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -101,7 +100,7 @@ public final class TestCAgentExecution extends IBaseTest
     /**
      * initializing
      */
-    @Before
+    @BeforeEach
     public void initialize()
     {
         m_running = new AtomicBoolean( true );
@@ -115,7 +114,7 @@ public final class TestCAgentExecution extends IBaseTest
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
-            Assert.fail( MessageFormat.format( "asl [{0}] could not be read", ASL ) );
+            Assertions.fail( MessageFormat.format( "asl [{0}] could not be read", ASL ) );
         }
 
 
@@ -138,8 +137,8 @@ public final class TestCAgentExecution extends IBaseTest
     @Test
     public void executionorder() throws Exception
     {
-        Assume.assumeNotNull( m_agent );
-        Assume.assumeNotNull( m_running );
+        Assumptions.assumeTrue( Objects.nonNull( m_agent ) );
+        Assumptions.assumeTrue( Objects.nonNull( m_running ) );
 
         int l_cycles = MAXIMUMCYCLES;
         while ( ( m_running.get() ) && ( l_cycles > 0 ) )
@@ -148,23 +147,23 @@ public final class TestCAgentExecution extends IBaseTest
             m_agent.call();
         }
 
-        Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
+        Assertions.assertTrue( l_cycles > 0, "agent did not terminate" );
 
         // check execute results
-        assertTrue(
-            MessageFormat.format(  "number of cycles are incorrect, excpected [{0}] contains [{1}]", m_result.asMap().size(), m_log.asMap().size() ),
-            LongStream.range( 0, m_result.asMap().size() ).allMatch( m_log::containsKey )
+        Assertions.assertTrue(
+            LongStream.range( 0, m_result.asMap().size() ).allMatch( m_log::containsKey ),
+            MessageFormat.format(  "number of cycles are incorrect, excpected [{0}] contains [{1}]", m_result.asMap().size(), m_log.asMap().size() )
         );
 
-        assertTrue(
-            MessageFormat.format( "number of log elements during execute are incorrect, expected {0} result {1}", m_result.asMap(), m_log.asMap() ),
+        Assertions.assertTrue(
             LongStream.range( 0, m_result.asMap().size() )
-                      .allMatch( i -> m_result.get( i ).size() == m_log.asMap().getOrDefault( i, Collections.emptyList() ).size() )
+                      .allMatch( i -> m_result.get( i ).size() == m_log.asMap().getOrDefault( i, Collections.emptyList() ).size() ),
+            MessageFormat.format( "number of log elements during execute are incorrect, expected {0} result {1}", m_result.asMap(), m_log.asMap() )
         );
 
-        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> Assert.assertTrue(
-            MessageFormat.format( "expected result {0} for index {2} is not equal to log {1}", m_result.get( i ), m_log.get( i ), i ),
-            m_log.get( i ).containsAll( m_result.get( i ) )
+        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> Assertions.assertTrue(
+            m_log.get( i ).containsAll( m_result.get( i ) ),
+            MessageFormat.format( "expected result {0} for index {2} is not equal to log {1}", m_result.get( i ), m_log.get( i ), i )
         ) );
 
     }

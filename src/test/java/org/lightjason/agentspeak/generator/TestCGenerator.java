@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.generator;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.binding.CMethodAction;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
@@ -65,16 +65,19 @@ public final class TestCGenerator extends IBaseTest
     @Test
     public void agentgeneratormultiple() throws IOException
     {
-        Assert.assertEquals( 5, new CAgentGenerator().generatemultiple( 5 ).count() );
+        Assertions.assertEquals( 5, new CAgentGenerator().generatemultiple( 5 ).count() );
     }
 
     /**
      * test static action generator fail
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void staticactiongeneratorfail()
     {
-        new CActionStaticGenerator().apply( CPath.of( "foo" ) );
+        Assertions.assertThrows(
+            NoSuchElementException.class,
+            () -> new CActionStaticGenerator().apply( CPath.of( "foo" ) )
+        );
     }
 
     /**
@@ -85,12 +88,12 @@ public final class TestCGenerator extends IBaseTest
     {
         final ILambdaStreaming<Number> l_stream = new CTestLambda();
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( 1, 2, 3, 4 ).toArray(),
             Stream.of( 1, 2.1F, 3L, 4.3D ).flatMap( l_stream::apply ).toArray()
         );
 
-        Assert.assertTrue( l_stream.assignable().collect( Collectors.toSet() ).contains( Number.class ) );
+        Assertions.assertTrue( l_stream.assignable().collect( Collectors.toSet() ).contains( Number.class ) );
     }
 
     /**
@@ -99,9 +102,9 @@ public final class TestCGenerator extends IBaseTest
     @Test
     public void emptylambdastreamgenerator()
     {
-        Assert.assertEquals( ILambdaStreaming.EMPTY, new CLambdaStreamingStaticGenerator( Stream.empty() ).apply( Object.class ) );
-        Assert.assertEquals( ILambdaStreaming.EMPTY, new CLambdaStreamingGenerator( CCommon.PACKAGEROOT ).apply( Object.class ) );
-        Assert.assertEquals( ILambdaStreaming.EMPTY, new CLambdaStreamingGenerator( false, CCommon.PACKAGEROOT ).apply( Object.class ) );
+        Assertions.assertEquals( ILambdaStreaming.EMPTY, new CLambdaStreamingStaticGenerator( Stream.empty() ).apply( Object.class ) );
+        Assertions.assertEquals( ILambdaStreaming.EMPTY, new CLambdaStreamingGenerator( CCommon.PACKAGEROOT ).apply( Object.class ) );
+        Assertions.assertEquals( ILambdaStreaming.EMPTY, new CLambdaStreamingGenerator( false, CCommon.PACKAGEROOT ).apply( Object.class ) );
     }
 
     /**
@@ -113,7 +116,7 @@ public final class TestCGenerator extends IBaseTest
         final ITerm l_object = CRawTerm.of( 3.5 );
 
         // without cache
-        Assert.assertEquals(
+        Assertions.assertEquals(
             l_object.<Number>raw().intValue(),
             new CLambdaStreamingGenerator( false, "org.lightjason.agentspeak.generator" )
                 .apply( l_object.raw().getClass() )
@@ -126,8 +129,8 @@ public final class TestCGenerator extends IBaseTest
         // with caching
         final ILambdaStreamingGenerator l_generator = new CLambdaStreamingGenerator( "org.lightjason.agentspeak.generator" );
 
-        Assert.assertEquals( l_object.<Number>raw().intValue(), l_generator.apply( l_object.raw().getClass() ).apply( l_object.raw() ).findFirst().get() );
-        Assert.assertEquals( l_object.<Number>raw().intValue(), l_generator.apply( l_object.raw().getClass() ).apply( l_object.raw() ).findFirst().get() );
+        Assertions.assertEquals( l_object.<Number>raw().intValue(), l_generator.apply( l_object.raw().getClass() ).apply( l_object.raw() ).findFirst().get() );
+        Assertions.assertEquals( l_object.<Number>raw().intValue(), l_generator.apply( l_object.raw().getClass() ).apply( l_object.raw() ).findFirst().get() );
     }
 
     /**
@@ -144,9 +147,9 @@ public final class TestCGenerator extends IBaseTest
             ILambdaStreamingGenerator.EMPTY
         ).generatesingle();
 
-        Assert.assertArrayEquals( Stream.of( CLiteral.of( "foobar" ) ).toArray(), l_bundle.initialbeliefs().toArray() );
-        Assert.assertEquals( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "do" ) ), l_bundle.plans().stream().findFirst().get().trigger() );
-        Assert.assertEquals( CLiteral.of( "bar" ), l_bundle.rules().stream().findFirst().get().identifier() );
+        Assertions.assertArrayEquals( Stream.of( CLiteral.of( "foobar" ) ).toArray(), l_bundle.initialbeliefs().toArray() );
+        Assertions.assertEquals( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "do" ) ), l_bundle.plans().stream().findFirst().get().trigger() );
+        Assertions.assertEquals( CLiteral.of( "bar" ), l_bundle.rules().stream().findFirst().get().identifier() );
     }
 
     /**
@@ -165,17 +168,17 @@ public final class TestCGenerator extends IBaseTest
 
         final IPlanBundle l_bundle = l_generator.generatesingle();
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.concat( l_bundle.initialbeliefs().stream(), l_bundle.initialbeliefs().stream() ).toArray(),
             l_generator.generatemultiple( 2 ).flatMap( i -> i.initialbeliefs().stream() ).toArray()
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.concat( l_bundle.plans().stream(), l_bundle.plans().stream() ).toArray(),
             l_generator.generatemultiple( 2 ).flatMap( i -> i.plans().stream() ).toArray()
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.concat( l_bundle.rules().stream(), l_bundle.rules().stream() ).toArray(),
             l_generator.generatemultiple( 2 ).flatMap( i -> i.rules().stream() ).toArray()
         );
@@ -191,7 +194,7 @@ public final class TestCGenerator extends IBaseTest
         final IAction l_action = new CTestIs();
         final IActionGenerator l_generator = new CActionGenerator( Stream.of( "org.lightjason.agentspeak.testing" ) );
 
-        Assert.assertEquals( l_action, l_generator.apply( l_action.name() ) );
+        Assertions.assertEquals( l_action, l_generator.apply( l_action.name() ) );
     }
 
     /**
@@ -202,9 +205,9 @@ public final class TestCGenerator extends IBaseTest
     {
         final IActionGenerator l_generator = new CActionGenerator( Stream.empty(), Stream.of( CTestAgent.class ) );
 
-        Assert.assertTrue( l_generator.apply( CPath.of( "agenttest" ) ) instanceof CMethodAction );
-        Assert.assertEquals( "agenttest", l_generator.apply( CPath.of( "agenttest" ) ).toString() );
-        Assert.assertEquals( 0, l_generator.apply( CPath.of( "agenttest" ) ).minimalArgumentNumber() );
+        Assertions.assertTrue( l_generator.apply( CPath.of( "agenttest" ) ) instanceof CMethodAction );
+        Assertions.assertEquals( "agenttest", l_generator.apply( CPath.of( "agenttest" ) ).toString() );
+        Assertions.assertEquals( 0, l_generator.apply( CPath.of( "agenttest" ) ).minimalArgumentNumber() );
     }
 
     /**
@@ -217,12 +220,12 @@ public final class TestCGenerator extends IBaseTest
         final IActionGenerator l_generator = new CActionGenerator();
         final IActionGenerator l_other = new CActionGenerator( Stream.of( "org.lightjason.agentspeak.testing" ) );
 
-        Assert.assertTrue( l_other.contains( l_action.name() ) );
-        Assert.assertFalse( l_generator.contains( l_action.name() ) );
-        Assert.assertEquals( l_action, l_other.apply( l_action.name() ) );
+        Assertions.assertTrue( l_other.contains( l_action.name() ) );
+        Assertions.assertFalse( l_generator.contains( l_action.name() ) );
+        Assertions.assertEquals( l_action, l_other.apply( l_action.name() ) );
 
-        Assert.assertTrue( l_generator.add( l_other ).contains( l_action.name() ) );
-        Assert.assertEquals( l_action, l_generator.apply( l_action.name() ) );
+        Assertions.assertTrue( l_generator.add( l_other ).contains( l_action.name() ) );
+        Assertions.assertEquals( l_action, l_generator.apply( l_action.name() ) );
     }
 
     @Test
@@ -230,18 +233,21 @@ public final class TestCGenerator extends IBaseTest
     {
         final IActionGenerator l_generator = IActionGenerator.EMPTY;
 
-        Assert.assertFalse( l_generator.contains( CPath.of( "foo" ) ) );
-        Assert.assertEquals( IActionGenerator.EMPTY, l_generator.add( l_generator ) );
-        Assert.assertEquals( IActionGenerator.EMPTY, l_generator.remove( l_generator ) );
+        Assertions.assertFalse( l_generator.contains( CPath.of( "foo" ) ) );
+        Assertions.assertEquals( IActionGenerator.EMPTY, l_generator.add( l_generator ) );
+        Assertions.assertEquals( IActionGenerator.EMPTY, l_generator.remove( l_generator ) );
     }
 
     /**
      * test action generator error
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void actiongeneratorfail()
     {
-        new CActionGenerator( Stream.empty() ).apply( CPath.of( "bar" ) );
+        Assertions.assertThrows(
+            NoSuchElementException.class,
+            () -> new CActionGenerator( Stream.empty() ).apply( CPath.of( "bar" ) )
+        );
     }
 
 

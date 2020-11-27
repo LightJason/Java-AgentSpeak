@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
@@ -48,7 +48,7 @@ public final class TestCExecution extends IBaseTest
     @Test
     public void execution()
     {
-        Assert.assertEquals( 0, IExecution.EMPTY.variables().count() );
+        Assertions.assertEquals( 0, IExecution.EMPTY.variables().count() );
     }
 
     /**
@@ -57,20 +57,20 @@ public final class TestCExecution extends IBaseTest
     @Test
     public void emptycontext()
     {
-        Assert.assertEquals( IAgent.EMPTY, IContext.EMPTYPLAN.agent() );
-        Assert.assertEquals( IAgent.EMPTY, IContext.EMPTYRULE.agent() );
+        Assertions.assertEquals( IAgent.EMPTY, IContext.EMPTYPLAN.agent() );
+        Assertions.assertEquals( IAgent.EMPTY, IContext.EMPTYRULE.agent() );
 
-        Assert.assertEquals( IRule.EMPTY, IContext.EMPTYRULE.instance() );
-        Assert.assertEquals( IPlan.EMPTY, IContext.EMPTYPLAN.instance() );
+        Assertions.assertEquals( IRule.EMPTY, IContext.EMPTYRULE.instance() );
+        Assertions.assertEquals( IPlan.EMPTY, IContext.EMPTYPLAN.instance() );
 
-        Assert.assertTrue( IContext.EMPTYPLAN.instancevariables().isEmpty() );
-        Assert.assertTrue( IContext.EMPTYRULE.instancevariables().isEmpty() );
+        Assertions.assertTrue( IContext.EMPTYPLAN.instancevariables().isEmpty() );
+        Assertions.assertTrue( IContext.EMPTYRULE.instancevariables().isEmpty() );
 
-        Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate() );
-        Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate() );
+        Assertions.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate() );
+        Assertions.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate() );
 
-        Assert.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate( Stream.empty() ) );
-        Assert.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate( Stream.empty() ) );
+        Assertions.assertEquals( IContext.EMPTYPLAN, IContext.EMPTYPLAN.duplicate( Stream.empty() ) );
+        Assertions.assertEquals( IContext.EMPTYRULE, IContext.EMPTYRULE.duplicate( Stream.empty() ) );
     }
 
     /**
@@ -79,7 +79,7 @@ public final class TestCExecution extends IBaseTest
     @Test
     public void contexttostring()
     {
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CContext(
                 IAgent.EMPTY,
                 IPlan.EMPTY,
@@ -94,12 +94,12 @@ public final class TestCExecution extends IBaseTest
     @Test
     public void contexthashcode()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CContext( IAgent.EMPTY, IPlan.EMPTY, Collections.emptySet() ),
             new CContext( IAgent.EMPTY, IPlan.EMPTY, Collections.emptySet() )
         );
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CContext( IAgent.EMPTY, IPlan.EMPTY, Stream.of( new CMutexVariable<>( "X" ) ).collect( Collectors.toSet() ) ),
             new CContext( IAgent.EMPTY, IPlan.EMPTY, Stream.of( new CVariable<>( "X" ) ).collect( Collectors.toSet() ) )
         );

@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.CVariable;
@@ -48,12 +48,12 @@ public final class TestCCommon extends IBaseTest
     @Test
     public void compression()
     {
-        Assert.assertTrue(
+        Assertions.assertTrue(
             Arrays.stream( CCommon.ECompression.values() )
                   .allMatch( i -> CCommon.ECompression.exist( i.toString() ) )
         );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             Arrays.stream( CCommon.ECompression.values() )
                   .allMatch( i -> CCommon.ECompression.of( i.toString() ).equals( i ) )
         );
@@ -65,9 +65,9 @@ public final class TestCCommon extends IBaseTest
     @Test
     public void levenshtein()
     {
-        Assert.assertEquals( 0.0, CCommon.levenshtein( "kitten", "kitten", 1, 10, 100 ), 0 );
-        Assert.assertEquals( 17.0, CCommon.levenshtein( "kitten", "sitting", 2, 20, 200 ), 0 );
-        Assert.assertEquals( 23.0, CCommon.levenshtein( "kitten", "singing", 3, 30, 300 ), 0 );
+        Assertions.assertEquals( 0.0, CCommon.levenshtein( "kitten", "kitten", 1, 10, 100 ), 0 );
+        Assertions.assertEquals( 17.0, CCommon.levenshtein( "kitten", "sitting", 2, 20, 200 ), 0 );
+        Assertions.assertEquals( 23.0, CCommon.levenshtein( "kitten", "singing", 3, 30, 300 ), 0 );
     }
 
     /**
@@ -76,14 +76,14 @@ public final class TestCCommon extends IBaseTest
     @Test
     public void ncd()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( 0.0, 0.0, 0.0, 0.0, 0.0 ).toArray(),
             Arrays.stream( CCommon.ECompression.values() )
                   .map( i ->  CCommon.ncd( i, "xxx", "xxx" ) )
                   .toArray()
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( 0.05, 0.13043478260869565, 0.2727272727272727, Double.NaN, 0.0 ).toArray(),
             Arrays.stream( CCommon.ECompression.values() )
                   .map( i ->  CCommon.ncd( i, "bar", "box" ) )
@@ -95,12 +95,12 @@ public final class TestCCommon extends IBaseTest
     /**
      * test replace context
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void replaceconntext()
     {
         final IVariable<?> l_variable = new CVariable<>( "F", 5 );
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             CCommon.replacebycontext(
                 new CLocalContext(
                     IAgent.EMPTY,
@@ -111,7 +111,7 @@ public final class TestCCommon extends IBaseTest
             l_variable
         );
 
-        CCommon.replacebycontext( IContext.EMPTYPLAN, new CVariable<>( "F" ) );
+        Assertions.assertThrows( NoSuchElementException.class, () -> CCommon.replacebycontext( IContext.EMPTYPLAN, new CVariable<>( "F" ) ) );
     }
 
     /**
@@ -120,7 +120,7 @@ public final class TestCCommon extends IBaseTest
     @Test
     public void flattenstream()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( "stream", 1, 1, 2 ).toArray(),
             CCommon.flatten( Stream.of(
                 CRawTerm.of( "stream" ),

@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.instantiable;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -52,16 +52,16 @@ public final class TestCInstantiable extends IBaseTest
     @Test
     public void emptytrigger()
     {
-        Assert.assertEquals( 0, ITrigger.EMPTY.compareTo( ITrigger.EMPTY ) );
-        Assert.assertEquals( -1, ITrigger.EMPTY.compareTo( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "xxx" ) ) ) );
-        Assert.assertEquals( 0, ITrigger.EMPTY.structurehash() );
-        Assert.assertFalse( ITrigger.EMPTY.hasShallowcopywithoutsuffix() );
-        Assert.assertTrue( ITrigger.EMPTY.type().sequence().isEmpty() );
-        Assert.assertEquals( ITrigger.EType.EMPTY, ITrigger.EMPTY.type() );
-        Assert.assertEquals( ILiteral.EMPTY, ITrigger.EMPTY.literal() );
-        Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopy() );
-        Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopysuffix() );
-        Assert.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopywithoutsuffix() );
+        Assertions.assertEquals( 0, ITrigger.EMPTY.compareTo( ITrigger.EMPTY ) );
+        Assertions.assertEquals( -1, ITrigger.EMPTY.compareTo( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.of( "xxx" ) ) ) );
+        Assertions.assertEquals( 0, ITrigger.EMPTY.structurehash() );
+        Assertions.assertFalse( ITrigger.EMPTY.hasShallowcopywithoutsuffix() );
+        Assertions.assertTrue( ITrigger.EMPTY.type().sequence().isEmpty() );
+        Assertions.assertEquals( ITrigger.EType.EMPTY, ITrigger.EMPTY.type() );
+        Assertions.assertEquals( ILiteral.EMPTY, ITrigger.EMPTY.literal() );
+        Assertions.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopy() );
+        Assertions.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopysuffix() );
+        Assertions.assertEquals( ITrigger.EMPTY, ITrigger.EMPTY.shallowcopywithoutsuffix() );
     }
 
     /**
@@ -70,13 +70,13 @@ public final class TestCInstantiable extends IBaseTest
     @Test
     public void emptyrule()
     {
-        Assert.assertEquals( ILiteral.EMPTY, IRule.EMPTY.identifier() );
-        Assert.assertEquals( ILiteral.EMPTY, IRule.EMPTY.literal() );
-        Assert.assertTrue( IRule.EMPTY.description().isEmpty() );
-        Assert.assertEquals( IContext.EMPTYRULE, IRule.EMPTY.instantiate( IAgent.EMPTY, Stream.empty() ) );
-        Assert.assertEquals( 0, IRule.EMPTY.variables().count() );
-        Assert.assertEquals( 0, IRule.EMPTY.variabledescription().count() );
-        Assert.assertEquals( 0, IRule.EMPTY.tags().count() );
+        Assertions.assertEquals( ILiteral.EMPTY, IRule.EMPTY.identifier() );
+        Assertions.assertEquals( ILiteral.EMPTY, IRule.EMPTY.literal() );
+        Assertions.assertTrue( IRule.EMPTY.description().isEmpty() );
+        Assertions.assertEquals( IContext.EMPTYRULE, IRule.EMPTY.instantiate( IAgent.EMPTY, Stream.empty() ) );
+        Assertions.assertEquals( 0, IRule.EMPTY.variables().count() );
+        Assertions.assertEquals( 0, IRule.EMPTY.variabledescription().count() );
+        Assertions.assertEquals( 0, IRule.EMPTY.tags().count() );
         execute(
             IRule.EMPTY,
             false,
@@ -91,15 +91,15 @@ public final class TestCInstantiable extends IBaseTest
     @Test
     public void emptyplan()
     {
-        Assert.assertEquals( ITrigger.EMPTY, IPlan.EMPTY.trigger() );
-        Assert.assertTrue( IPlan.EMPTY.condition( IContext.EMPTYPLAN ) );
-        Assert.assertEquals( ILiteral.EMPTY, IPlan.EMPTY.literal() );
-        Assert.assertEquals( IContext.EMPTYPLAN, IPlan.EMPTY.instantiate( IAgent.EMPTY, Stream.empty() ) );
-        Assert.assertTrue( IPlan.EMPTY.description().isEmpty() );
-        Assert.assertEquals( 0, IPlan.EMPTY.tags().count() );
-        Assert.assertEquals( 0, IPlan.EMPTY.variabledescription().count() );
-        Assert.assertEquals( 0, IPlan.EMPTY.variables().count() );
-        Assert.assertEquals(
+        Assertions.assertEquals( ITrigger.EMPTY, IPlan.EMPTY.trigger() );
+        Assertions.assertTrue( IPlan.EMPTY.condition( IContext.EMPTYPLAN ) );
+        Assertions.assertEquals( ILiteral.EMPTY, IPlan.EMPTY.literal() );
+        Assertions.assertEquals( IContext.EMPTYPLAN, IPlan.EMPTY.instantiate( IAgent.EMPTY, Stream.empty() ) );
+        Assertions.assertTrue( IPlan.EMPTY.description().isEmpty() );
+        Assertions.assertEquals( 0, IPlan.EMPTY.tags().count() );
+        Assertions.assertEquals( 0, IPlan.EMPTY.variabledescription().count() );
+        Assertions.assertEquals( 0, IPlan.EMPTY.variables().count() );
+        Assertions.assertEquals(
             0,
             IPlan.EMPTY.execute(
                 false,
@@ -118,11 +118,11 @@ public final class TestCInstantiable extends IBaseTest
     {
         final IPlanStatistic l_statistic = CPlanStatistic.of( IPlan.EMPTY );
 
-        Assert.assertTrue( l_statistic.toString().startsWith( "successful [0], fail [0]:" ) );
-        Assert.assertEquals( 0L, l_statistic.count() );
-        Assert.assertEquals( 0L, l_statistic.fail() );
-        Assert.assertEquals( 0L, l_statistic.successful() );
-        Assert.assertEquals( l_statistic, l_statistic );
-        Assert.assertEquals( l_statistic, IPlan.EMPTY );
+        Assertions.assertTrue( l_statistic.toString().startsWith( "successful [0], fail [0]:" ) );
+        Assertions.assertEquals( 0L, l_statistic.count() );
+        Assertions.assertEquals( 0L, l_statistic.fail() );
+        Assertions.assertEquals( 0L, l_statistic.successful() );
+        Assertions.assertEquals( l_statistic, l_statistic );
+        Assertions.assertEquals( l_statistic, IPlan.EMPTY );
     }
 }

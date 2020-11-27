@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.configuration;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collections;
@@ -42,9 +42,9 @@ public final class TestCPlanBundleConfiguration extends IBaseTest
     public void planbundle()
     {
         final IPlanBundleConfiguration l_bundle = new CDefaultPlanBundleConfiguration( Collections.emptySet(), Collections.emptySet(), Collections.emptySet() );
-        Assert.assertEquals( Collections.emptySet(), l_bundle.beliefs() );
-        Assert.assertEquals( Collections.emptySet(), l_bundle.plans() );
-        Assert.assertEquals( Collections.emptySet(), l_bundle.rules() );
+        Assertions.assertEquals( Collections.emptySet(), l_bundle.beliefs() );
+        Assertions.assertEquals( Collections.emptySet(), l_bundle.plans() );
+        Assertions.assertEquals( Collections.emptySet(), l_bundle.rules() );
     }
 
 }

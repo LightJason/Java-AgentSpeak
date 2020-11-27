@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.agent;
 
 import org.checkerframework.checker.index.qual.NonNegative;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CPath;
@@ -70,8 +70,8 @@ public final class TestCAgentStructure extends IBaseTest
     {
         final IAgent<?> l_agent = new CAgentGenerator().generatesingle();
 
-        Assert.assertTrue( l_agent.toString().startsWith( "org.lightjason.agentspeak.testing.IBaseTest$CAgent@" ) );
-        Assert.assertTrue( l_agent.toString().contains( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase" ) );
+        Assertions.assertTrue( l_agent.toString().startsWith( "org.lightjason.agentspeak.testing.IBaseTest$CAgent@" ) );
+        Assertions.assertTrue( l_agent.toString().contains( " ( Trigger: [] / Running Plans: [] / Beliefbase: beliefbase" ) );
     }
 
     /**
@@ -79,11 +79,15 @@ public final class TestCAgentStructure extends IBaseTest
      *
      * @throws IOException parsing error
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void triggervariableerror() throws IOException
     {
         final IAgent<?> l_agent = new CAgentGenerator().generatesingle();
-        l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.parse( "foo(X)" ) ) );
+
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> l_agent.trigger( CTrigger.of( ITrigger.EType.ADDGOAL, CLiteral.parse( "foo(X)" ) ) )
+        );
     }
 
     /**
@@ -102,8 +106,8 @@ public final class TestCAgentStructure extends IBaseTest
             ILambdaStreamingGenerator.EMPTY
         ).generatesingle();
 
-        Assert.assertTrue( agentcycle( l_agent ) );
-        Assert.assertTrue( l_agent.cycletime() / 1000000 >= l_sleepingtime );
+        Assertions.assertTrue( agentcycle( l_agent ) );
+        Assertions.assertTrue( l_agent.cycletime() / 1000000 >= l_sleepingtime );
     }
 
     /**
@@ -116,13 +120,13 @@ public final class TestCAgentStructure extends IBaseTest
     {
         final IAgent<?> l_agent = new CAgentGenerator( "+!wakeup <- success." ).generatesingle();
 
-        Assert.assertFalse( l_agent.sleeping() );
+        Assertions.assertFalse( l_agent.sleeping() );
         l_agent.sleep( 2 );
-        Assert.assertTrue( l_agent.sleeping() );
+        Assertions.assertTrue( l_agent.sleeping() );
         agentcycle( l_agent );
-        Assert.assertTrue( l_agent.sleeping() );
+        Assertions.assertTrue( l_agent.sleeping() );
         agentcycle( l_agent );
-        Assert.assertFalse( l_agent.sleeping() );
+        Assertions.assertFalse( l_agent.sleeping() );
 
         l_agent.inspect( new IInspector()
         {
@@ -160,7 +164,7 @@ public final class TestCAgentStructure extends IBaseTest
             @Override
             public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
             {
-                Assert.assertEquals( CLiteral.of( "wakeup" ), p_value.findFirst().get() );
+                Assertions.assertEquals( CLiteral.of( "wakeup" ), p_value.findFirst().get() );
             }
 
             @Override
@@ -176,7 +180,7 @@ public final class TestCAgentStructure extends IBaseTest
         } );
 
         agentcycle( l_agent );
-        Assert.assertFalse( l_agent.sleeping() );
+        Assertions.assertFalse( l_agent.sleeping() );
 
         l_agent.inspect( new IInspector()
         {
@@ -214,7 +218,7 @@ public final class TestCAgentStructure extends IBaseTest
             @Override
             public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
             {
-                Assert.assertEquals( 0, p_value.count() );
+                Assertions.assertEquals( 0, p_value.count() );
             }
 
             @Override
@@ -226,7 +230,7 @@ public final class TestCAgentStructure extends IBaseTest
             @Override
             public void inspectpendingtrigger( @Nonnull final Stream<ITrigger> p_value )
             {
-                Assert.assertEquals( 0, p_value.count() );
+                Assertions.assertEquals( 0, p_value.count() );
             }
         } );
     }
@@ -241,11 +245,11 @@ public final class TestCAgentStructure extends IBaseTest
     {
         final IAgent<?> l_agent = new CAgentGenerator( "+!wakeup <- success." ).generatesingle();
 
-        Assert.assertFalse( l_agent.sleeping() );
+        Assertions.assertFalse( l_agent.sleeping() );
         l_agent.sleep( Long.MAX_VALUE );
-        Assert.assertTrue( l_agent.sleeping() );
+        Assertions.assertTrue( l_agent.sleeping() );
 
-        Assert.assertFalse( l_agent.wakeup().sleeping() );
+        Assertions.assertFalse( l_agent.wakeup().sleeping() );
         agentcycle( l_agent );
 
         l_agent.inspect( new IInspector()
@@ -284,7 +288,7 @@ public final class TestCAgentStructure extends IBaseTest
             @Override
             public void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
             {
-                Assert.assertEquals( CLiteral.of( "wakeup" ), p_value.findFirst().get() );
+                Assertions.assertEquals( CLiteral.of( "wakeup" ), p_value.findFirst().get() );
             }
 
             @Override
@@ -314,9 +318,9 @@ public final class TestCAgentStructure extends IBaseTest
             )
         );
 
-        Assert.assertEquals( Collections.emptySet(), l_bundle.initialbeliefs() );
-        Assert.assertEquals( Collections.emptySet(), l_bundle.plans() );
-        Assert.assertEquals( Collections.emptySet(), l_bundle.rules() );
+        Assertions.assertEquals( Collections.emptySet(), l_bundle.initialbeliefs() );
+        Assertions.assertEquals( Collections.emptySet(), l_bundle.plans() );
+        Assertions.assertEquals( Collections.emptySet(), l_bundle.rules() );
     }
 
     /**
@@ -325,38 +329,38 @@ public final class TestCAgentStructure extends IBaseTest
     @Test
     public void emptyagent()
     {
-        Assert.assertEquals( 0, IAgent.EMPTY.trigger( ITrigger.EMPTY ).count() );
+        Assertions.assertEquals( 0, IAgent.EMPTY.trigger( ITrigger.EMPTY ).count() );
 
-        Assert.assertEquals( IView.EMPTY, IAgent.EMPTY.beliefbase() );
+        Assertions.assertEquals( IView.EMPTY, IAgent.EMPTY.beliefbase() );
 
-        Assert.assertTrue( IAgent.EMPTY.rules().isEmpty() );
-        Assert.assertTrue( IAgent.EMPTY.plans().isEmpty() );
-        Assert.assertTrue( IAgent.EMPTY.runningplans().isEmpty() );
-        Assert.assertTrue( IAgent.EMPTY.storage().isEmpty() );
+        Assertions.assertTrue( IAgent.EMPTY.rules().isEmpty() );
+        Assertions.assertTrue( IAgent.EMPTY.plans().isEmpty() );
+        Assertions.assertTrue( IAgent.EMPTY.runningplans().isEmpty() );
+        Assertions.assertTrue( IAgent.EMPTY.storage().isEmpty() );
 
         IAgent.EMPTY.sleep( 10 );
-        Assert.assertFalse( IAgent.EMPTY.sleeping() );
+        Assertions.assertFalse( IAgent.EMPTY.sleeping() );
 
-        Assert.assertEquals( 0, IAgent.EMPTY.cycletime() );
+        Assertions.assertEquals( 0, IAgent.EMPTY.cycletime() );
 
-        Assert.assertEquals( IAgentGenerator.DEFAULTFUZZYBUNDLE, IAgent.EMPTY.fuzzy() );
+        Assertions.assertEquals( IAgentGenerator.DEFAULTFUZZYBUNDLE, IAgent.EMPTY.fuzzy() );
 
-        Assert.assertEquals( IVariableBuilder.EMPTY, IAgent.EMPTY.variablebuilder() );
+        Assertions.assertEquals( IVariableBuilder.EMPTY, IAgent.EMPTY.variablebuilder() );
 
-        Assert.assertEquals( 0, IAgent.EMPTY.hashCode() );
+        Assertions.assertEquals( 0, IAgent.EMPTY.hashCode() );
 
-        Assert.assertEquals( IAgent.EMPTY, IAgent.EMPTY.raw() );
+        Assertions.assertEquals( IAgent.EMPTY, IAgent.EMPTY.raw() );
         try
         {
-            Assert.assertEquals( IAgent.EMPTY, IAgent.EMPTY.call() );
+            Assertions.assertEquals( IAgent.EMPTY, IAgent.EMPTY.call() );
         }
         catch ( final Exception l_exception )
         {
             l_exception.printStackTrace();
-            Assert.fail();
+            Assertions.fail();
         }
 
-        Assert.assertEquals( IAgent.EMPTY, IAgent.EMPTY.inspect( IInspector.EMPTY ) );
+        Assertions.assertEquals( IAgent.EMPTY, IAgent.EMPTY.inspect( IInspector.EMPTY ) );
     }
 
     /**

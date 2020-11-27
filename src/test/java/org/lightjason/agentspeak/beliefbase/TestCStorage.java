@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.storage.CSingleOnlyStorage;
@@ -55,17 +55,17 @@ public final class TestCStorage extends IBaseTest
         final IStorage<ILiteral, IView> l_storage = new CSingleOnlyStorage<>();
 
         final ILiteral l_literal = CLiteral.of( "xxx" );
-        Assert.assertFalse( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertFalse( l_storage.putmulti( l_literal.functor(), l_literal ) );
 
         final IView l_view = new CView( "foobar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
 
 
-        Assert.assertEquals( 0, l_storage.size() );
-        Assert.assertEquals( l_storage.size(), l_storage.streammulti().count() );
-        Assert.assertEquals( 0, l_storage.streammulti().count() );
-        Assert.assertEquals( 1, l_storage.streamsingle().count() );
-        Assert.assertTrue( l_storage.multi( l_literal.functor() ).isEmpty() );
+        Assertions.assertEquals( 0, l_storage.size() );
+        Assertions.assertEquals( l_storage.size(), l_storage.streammulti().count() );
+        Assertions.assertEquals( 0, l_storage.streammulti().count() );
+        Assertions.assertEquals( 1, l_storage.streamsingle().count() );
+        Assertions.assertTrue( l_storage.multi( l_literal.functor() ).isEmpty() );
     }
 
     /**
@@ -75,17 +75,17 @@ public final class TestCStorage extends IBaseTest
     public void singlestorageonlyclearempty()
     {
         final IStorage<ILiteral, IView> l_storage = new CSingleOnlyStorage<>();
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final ILiteral l_literal = CLiteral.of( "yyy" );
-        Assert.assertFalse( l_storage.putmulti( l_literal.functor(), l_literal ) );
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertFalse( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final IView l_view = new CView( "bar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
-        Assert.assertFalse( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertFalse( l_storage.isempty() );
 
-        Assert.assertTrue( l_storage.clear().isempty() );
+        Assertions.assertTrue( l_storage.clear().isempty() );
     }
 
     /**
@@ -95,22 +95,22 @@ public final class TestCStorage extends IBaseTest
     public void singlestorageonlyaccess()
     {
         final IStorage<ILiteral, IView> l_storage = new CSingleOnlyStorage<>();
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final ILiteral l_literal = CLiteral.of( "yyy" );
-        Assert.assertFalse( l_storage.putmulti( l_literal.functor(), l_literal ) );
-        Assert.assertTrue( l_storage.multi( l_literal.functor() ).isEmpty() );
+        Assertions.assertFalse( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertTrue( l_storage.multi( l_literal.functor() ).isEmpty() );
 
         final IView l_view = new CView( "xbar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
-        Assert.assertEquals( l_view, l_storage.single( l_view.name() ) );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertEquals( l_view, l_storage.single( l_view.name() ) );
 
-        Assert.assertTrue( l_storage.containssingle( l_view.name() ) );
-        Assert.assertFalse( l_storage.containsmulti( l_literal.functor() ) );
+        Assertions.assertTrue( l_storage.containssingle( l_view.name() ) );
+        Assertions.assertFalse( l_storage.containsmulti( l_literal.functor() ) );
 
-        Assert.assertTrue( l_storage.removesingle( l_view.name() ) );
-        Assert.assertTrue( l_storage.isempty() );
-        Assert.assertFalse( l_storage.removemulti( l_literal.functor(), l_literal ) );
+        Assertions.assertTrue( l_storage.removesingle( l_view.name() ) );
+        Assertions.assertTrue( l_storage.isempty() );
+        Assertions.assertFalse( l_storage.removemulti( l_literal.functor(), l_literal ) );
     }
 
 
@@ -124,17 +124,17 @@ public final class TestCStorage extends IBaseTest
         final IStorage<ILiteral, IView> l_storage = new CSingleStorage<>();
 
         final ILiteral l_literal = CLiteral.of( "xxx" );
-        Assert.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
 
         final IView l_view = new CView( "foobar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
 
 
-        Assert.assertEquals( 1, l_storage.size() );
-        Assert.assertEquals( l_storage.size(), l_storage.streammulti().count() );
-        Assert.assertEquals( 1, l_storage.streammulti().count() );
-        Assert.assertEquals( 1, l_storage.streamsingle().count() );
-        Assert.assertFalse( l_storage.multi( l_literal.functor() ).isEmpty() );
+        Assertions.assertEquals( 1, l_storage.size() );
+        Assertions.assertEquals( l_storage.size(), l_storage.streammulti().count() );
+        Assertions.assertEquals( 1, l_storage.streammulti().count() );
+        Assertions.assertEquals( 1, l_storage.streamsingle().count() );
+        Assertions.assertFalse( l_storage.multi( l_literal.functor() ).isEmpty() );
     }
 
     /**
@@ -144,17 +144,17 @@ public final class TestCStorage extends IBaseTest
     public void singlestorageclearempty()
     {
         final IStorage<ILiteral, IView> l_storage = new CSingleStorage<>();
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final ILiteral l_literal = CLiteral.of( "yyy" );
         l_storage.putmulti( l_literal.functor(), l_literal );
-        Assert.assertFalse( l_storage.isempty() );
+        Assertions.assertFalse( l_storage.isempty() );
 
         final IView l_view = new CView( "bar", IBeliefbase.EMPY );
         l_storage.putsingle( l_view.name(), l_view );
-        Assert.assertFalse( l_storage.isempty() );
+        Assertions.assertFalse( l_storage.isempty() );
 
-        Assert.assertTrue( l_storage.clear().isempty() );
+        Assertions.assertTrue( l_storage.clear().isempty() );
     }
 
     /**
@@ -164,34 +164,34 @@ public final class TestCStorage extends IBaseTest
     public void singlestorageaccess()
     {
         final IStorage<ILiteral, IView> l_storage = new CSingleStorage<>();
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final ILiteral l_literal1 = CLiteral.of( "abc" );
-        Assert.assertTrue( l_storage.putmulti( l_literal1.functor(), l_literal1 ) );
+        Assertions.assertTrue( l_storage.putmulti( l_literal1.functor(), l_literal1 ) );
 
         final ILiteral l_literal2 = CLiteral.of( "abc", CRawTerm.of( 123 ) );
-        Assert.assertTrue( l_storage.putmulti( l_literal2.functor(), l_literal2 ) );
+        Assertions.assertTrue( l_storage.putmulti( l_literal2.functor(), l_literal2 ) );
 
-        Assert.assertFalse( l_storage.multi( l_literal1.functor() ).isEmpty() );
+        Assertions.assertFalse( l_storage.multi( l_literal1.functor() ).isEmpty() );
 
         final IView l_view = new CView( "xbar", IBeliefbase.EMPY );
         l_storage.putsingle( l_view.name(), l_view );
-        Assert.assertEquals( l_view, l_storage.single( l_view.name() ) );
+        Assertions.assertEquals( l_view, l_storage.single( l_view.name() ) );
 
-        Assert.assertTrue( l_storage.containssingle( l_view.name() ) );
-        Assert.assertTrue( l_storage.containsmulti( l_literal1.functor() ) );
+        Assertions.assertTrue( l_storage.containssingle( l_view.name() ) );
+        Assertions.assertTrue( l_storage.containsmulti( l_literal1.functor() ) );
 
-        Assert.assertTrue( l_storage.removesingle( l_view.name() ) );
-        Assert.assertFalse( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.removesingle( l_view.name() ) );
+        Assertions.assertFalse( l_storage.isempty() );
 
-        Assert.assertTrue( l_storage.containsmulti( l_literal1.functor() ) );
-        Assert.assertEquals( l_literal2, l_storage.streammulti().findFirst().get() );
-        Assert.assertFalse( l_storage.removemulti( l_literal1.functor(), l_literal1 ) );
-        Assert.assertTrue( l_storage.removemulti( l_literal2.functor(), l_literal2 ) );
+        Assertions.assertTrue( l_storage.containsmulti( l_literal1.functor() ) );
+        Assertions.assertEquals( l_literal2, l_storage.streammulti().findFirst().get() );
+        Assertions.assertFalse( l_storage.removemulti( l_literal1.functor(), l_literal1 ) );
+        Assertions.assertTrue( l_storage.removemulti( l_literal2.functor(), l_literal2 ) );
 
-        Assert.assertEquals( 0, l_storage.streammulti().count() );
+        Assertions.assertEquals( 0, l_storage.streammulti().count() );
 
-        Assert.assertEquals( l_view, l_storage.singleordefault( l_view.name(), l_view ) );
+        Assertions.assertEquals( l_view, l_storage.singleordefault( l_view.name(), l_view ) );
     }
 
 
@@ -205,18 +205,18 @@ public final class TestCStorage extends IBaseTest
         final IStorage<ILiteral, IView> l_storage = new CMultiStorage<>();
 
         final ILiteral l_literal = CLiteral.of( "xxx" );
-        Assert.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
 
         final IView l_view = new CView( "foobar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
 
 
-        Assert.assertEquals( 1, l_storage.size() );
-        Assert.assertEquals( l_storage.size(), l_storage.streammulti().count() );
-        Assert.assertEquals( 1, l_storage.streammulti().count() );
-        Assert.assertEquals( 1, l_storage.streamsingle().count() );
-        Assert.assertFalse( l_storage.multi( l_literal.functor() ).isEmpty() );
-        Assert.assertNotNull( l_storage.single( l_view.name() ) );
+        Assertions.assertEquals( 1, l_storage.size() );
+        Assertions.assertEquals( l_storage.size(), l_storage.streammulti().count() );
+        Assertions.assertEquals( 1, l_storage.streammulti().count() );
+        Assertions.assertEquals( 1, l_storage.streamsingle().count() );
+        Assertions.assertFalse( l_storage.multi( l_literal.functor() ).isEmpty() );
+        Assertions.assertNotNull( l_storage.single( l_view.name() ) );
     }
 
     /**
@@ -226,17 +226,17 @@ public final class TestCStorage extends IBaseTest
     public void multistorageclearempty()
     {
         final IStorage<ILiteral, IView> l_storage = new CMultiStorage<>();
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final ILiteral l_literal = CLiteral.of( "yyy" );
-        Assert.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
-        Assert.assertFalse( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertFalse( l_storage.isempty() );
 
         final IView l_view = new CView( "bar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
-        Assert.assertFalse( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertFalse( l_storage.isempty() );
 
-        Assert.assertTrue( l_storage.clear().isempty() );
+        Assertions.assertTrue( l_storage.clear().isempty() );
     }
 
     /**
@@ -246,23 +246,23 @@ public final class TestCStorage extends IBaseTest
     public void multistorageaccess()
     {
         final IStorage<ILiteral, IView> l_storage = new CMultiStorage<>();
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.isempty() );
 
         final ILiteral l_literal = CLiteral.of( "yyy" );
-        Assert.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
-        Assert.assertFalse( l_storage.multi( l_literal.functor() ).isEmpty() );
+        Assertions.assertTrue( l_storage.putmulti( l_literal.functor(), l_literal ) );
+        Assertions.assertFalse( l_storage.multi( l_literal.functor() ).isEmpty() );
 
         final IView l_view = new CView( "xbar", IBeliefbase.EMPY );
-        Assert.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
-        Assert.assertEquals( l_view, l_storage.single( l_view.name() ) );
+        Assertions.assertTrue( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertEquals( l_view, l_storage.single( l_view.name() ) );
 
-        Assert.assertTrue( l_storage.containssingle( l_view.name() ) );
-        Assert.assertTrue( l_storage.containsmulti( l_literal.functor() ) );
+        Assertions.assertTrue( l_storage.containssingle( l_view.name() ) );
+        Assertions.assertTrue( l_storage.containsmulti( l_literal.functor() ) );
 
-        Assert.assertTrue( l_storage.removesingle( l_view.name() ) );
-        Assert.assertFalse( l_storage.isempty() );
-        Assert.assertTrue( l_storage.removemulti( l_literal.functor(), l_literal ) );
-        Assert.assertTrue( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.removesingle( l_view.name() ) );
+        Assertions.assertFalse( l_storage.isempty() );
+        Assertions.assertTrue( l_storage.removemulti( l_literal.functor(), l_literal ) );
+        Assertions.assertTrue( l_storage.isempty() );
     }
 
 
@@ -278,29 +278,29 @@ public final class TestCStorage extends IBaseTest
         final CTestStorageClass l_classdata = new CTestStorageClass( 123.45, "a long text", 555 );
         final IStorage<ILiteral, IView> l_storage = new CClassStorage<>( l_classdata, i -> i.getName().replace( "m_", "" ) );
 
-        Assert.assertFalse( l_storage.isempty() );
-        Assert.assertEquals( 2, l_storage.size() );
-        Assert.assertArrayEquals(
+        Assertions.assertFalse( l_storage.isempty() );
+        Assertions.assertEquals( 2, l_storage.size() );
+        Assertions.assertArrayEquals(
             Stream.of( CLiteral.of( l_numbername, CRawTerm.of( 123.45 ) ), CLiteral.of( l_stringname, CRawTerm.of( "a long text" ) ) ).toArray(),
             l_storage.streammulti().toArray()
         );
 
-        Assert.assertFalse( l_storage.putmulti( l_numbername, CLiteral.of( l_numbername, CRawTerm.of( 0 ) ) ) );
-        Assert.assertTrue( l_storage.putmulti( l_stringname, CLiteral.of( l_stringname, CRawTerm.of( "shorttext" ) ) ) );
-        Assert.assertNotEquals( 0, l_classdata.number() );
-        Assert.assertEquals( "shorttext", l_classdata.string() );
+        Assertions.assertFalse( l_storage.putmulti( l_numbername, CLiteral.of( l_numbername, CRawTerm.of( 0 ) ) ) );
+        Assertions.assertTrue( l_storage.putmulti( l_stringname, CLiteral.of( l_stringname, CRawTerm.of( "shorttext" ) ) ) );
+        Assertions.assertNotEquals( 0, l_classdata.number() );
+        Assertions.assertEquals( "shorttext", l_classdata.string() );
 
-        Assert.assertTrue( l_storage.containsmulti( l_numbername ) );
-        Assert.assertFalse( l_storage.multi( l_stringname ).isEmpty() );
-        Assert.assertFalse( l_storage.containssingle( "any" ) );
+        Assertions.assertTrue( l_storage.containsmulti( l_numbername ) );
+        Assertions.assertFalse( l_storage.multi( l_stringname ).isEmpty() );
+        Assertions.assertFalse( l_storage.containssingle( "any" ) );
 
         final IView l_view = new CView( "xyz", IBeliefbase.EMPY );
-        Assert.assertFalse( l_storage.putsingle( l_view.name(), l_view ) );
+        Assertions.assertFalse( l_storage.putsingle( l_view.name(), l_view ) );
 
-        Assert.assertFalse( l_storage.removesingle( l_view.name() ) );
-        Assert.assertFalse( l_storage.removemulti( l_numbername, CLiteral.of( l_numbername, CRawTerm.of( 0 ) ) ) );
+        Assertions.assertFalse( l_storage.removesingle( l_view.name() ) );
+        Assertions.assertFalse( l_storage.removemulti( l_numbername, CLiteral.of( l_numbername, CRawTerm.of( 0 ) ) ) );
 
-        Assert.assertFalse( l_storage.clear().isempty() );
+        Assertions.assertFalse( l_storage.clear().isempty() );
     }
 
 

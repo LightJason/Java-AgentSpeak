@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.error;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.error.parser.CParserCharacterException;
 import org.lightjason.agentspeak.error.parser.CParserInitializationError;
 import org.lightjason.agentspeak.error.parser.CParserSyntaxException;
@@ -38,37 +39,61 @@ public final class TestCParserException
     /**
      * test parser-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsersyntaxexception()
     {
-        throw new CParserSyntaxException();
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserSyntaxException();
+            }
+        );
     }
 
     /**
      * test parser-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsersyntaxexceptionstring()
     {
-        throw new CParserSyntaxException( "syntax" );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserSyntaxException( "syntax" );
+            }
+        );
     }
 
     /**
      * test parser-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsersyntaxexceptionpassexception()
     {
-        throw new CParserSyntaxException( new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserSyntaxException( new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test parser-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsersyntaxexceptionstringexception()
     {
-        throw new CParserSyntaxException( "syntax", new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserSyntaxException( "syntax", new RuntimeException() );
+            }
+        );
     }
 
 
@@ -76,37 +101,61 @@ public final class TestCParserException
     /**
      * test parser-character-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsercharactersyntaxexception()
     {
-        throw new CParserCharacterException();
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserCharacterException();
+            }
+        );
     }
 
     /**
      * test parser-character-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsercharactersyntaxexceptionstring()
     {
-        throw new CParserCharacterException( "char" );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserCharacterException( "char" );
+            }
+        );
     }
 
     /**
      * test parser-character-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsercharactersyntaxexceptionpassexception()
     {
-        throw new CParserCharacterException( new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserCharacterException( new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test parser-character-syntax exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void parsercharactersyntaxexceptionstringexception()
     {
-        throw new CParserCharacterException( "char", new RuntimeException() );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () ->
+            {
+                throw new CParserCharacterException( "char", new RuntimeException() );
+            }
+        );
     }
 
 
@@ -114,36 +163,60 @@ public final class TestCParserException
     /**
      * test parser-initialization exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void parserinitialization()
     {
-        throw new CParserInitializationError();
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CParserInitializationError();
+            }
+        );
     }
 
     /**
      * test parser-initialization exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void parserinitializationstring()
     {
-        throw new CParserInitializationError( "init" );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CParserInitializationError( "init" );
+            }
+        );
     }
 
     /**
      * test parser-initialization exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void parserinitializationexception()
     {
-        throw new CParserInitializationError( new RuntimeException() );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CParserInitializationError( new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test parser-initialization exception
      */
-    @Test( expected = RuntimeException.class )
+    @Test
     public void parserinitializationstringexception()
     {
-        throw new CParserInitializationError( "init", new RuntimeException() );
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () ->
+            {
+                throw new CParserInitializationError( "init", new RuntimeException() );
+            }
+        );
     }
 }

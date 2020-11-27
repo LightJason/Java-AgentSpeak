@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
@@ -65,7 +65,7 @@ public final class TestCBeliefbase extends IBaseTest
             l_agent.beliefbase().stream().forEach( System.out::println );
 
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of(
                 "self/m_fuzzy",
                 "self/m_trigger",
@@ -86,12 +86,12 @@ public final class TestCBeliefbase extends IBaseTest
         );
 
         final Set<ILiteral> l_beliefs = l_agent.beliefbase().stream().collect( Collectors.toSet() );
-        Assert.assertTrue(
-            "beliefs not found",
+        Assertions.assertTrue(
             Stream.of(
                 CLiteral.of( "self/m_stringvalue" ),
                 CLiteral.of( "self/m_integervalue", CRawTerm.of( 42 ) )
-            ).allMatch( l_beliefs::contains )
+            ).allMatch( l_beliefs::contains ),
+            "beliefs not found"
         );
     }
 
@@ -101,24 +101,24 @@ public final class TestCBeliefbase extends IBaseTest
     @Test
     public void emptybeliefbase()
     {
-        Assert.assertTrue( IBeliefbase.EMPY.isempty() );
-        Assert.assertEquals( 0, IBeliefbase.EMPY.size() );
-        Assert.assertEquals( IAgent.EMPTY, IBeliefbase.EMPY.update( IAgent.EMPTY ) );
-        Assert.assertEquals( 0, IBeliefbase.EMPY.trigger( IView.EMPTY ).count() );
-        Assert.assertEquals( 0, IBeliefbase.EMPY.streamliteral().count() );
-        Assert.assertEquals( 0, IBeliefbase.EMPY.streamview().count() );
-        Assert.assertEquals( IBeliefbase.EMPY, IBeliefbase.EMPY.clear() );
-        Assert.assertEquals( ILiteral.EMPTY, IBeliefbase.EMPY.add( ILiteral.EMPTY ) );
-        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.add( IView.EMPTY ) );
-        Assert.assertEquals( ILiteral.EMPTY, IBeliefbase.EMPY.remove( ILiteral.EMPTY ) );
-        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.remove( IView.EMPTY ) );
-        Assert.assertFalse( IBeliefbase.EMPY.containsliteral( "bar" ) );
-        Assert.assertFalse( IBeliefbase.EMPY.containsview( "bar" ) );
-        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.view( "bar " ) );
-        Assert.assertTrue( IBeliefbase.EMPY.literal( "x" ).isEmpty() );
-        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.create( "a" ) );
-        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.create( "a", null ) );
-        Assert.assertEquals( IView.EMPTY, IBeliefbase.EMPY.viewordefault( "x", IView.EMPTY ) );
+        Assertions.assertTrue( IBeliefbase.EMPY.isempty() );
+        Assertions.assertEquals( 0, IBeliefbase.EMPY.size() );
+        Assertions.assertEquals( IAgent.EMPTY, IBeliefbase.EMPY.update( IAgent.EMPTY ) );
+        Assertions.assertEquals( 0, IBeliefbase.EMPY.trigger( IView.EMPTY ).count() );
+        Assertions.assertEquals( 0, IBeliefbase.EMPY.streamliteral().count() );
+        Assertions.assertEquals( 0, IBeliefbase.EMPY.streamview().count() );
+        Assertions.assertEquals( IBeliefbase.EMPY, IBeliefbase.EMPY.clear() );
+        Assertions.assertEquals( ILiteral.EMPTY, IBeliefbase.EMPY.add( ILiteral.EMPTY ) );
+        Assertions.assertEquals( IView.EMPTY, IBeliefbase.EMPY.add( IView.EMPTY ) );
+        Assertions.assertEquals( ILiteral.EMPTY, IBeliefbase.EMPY.remove( ILiteral.EMPTY ) );
+        Assertions.assertEquals( IView.EMPTY, IBeliefbase.EMPY.remove( IView.EMPTY ) );
+        Assertions.assertFalse( IBeliefbase.EMPY.containsliteral( "bar" ) );
+        Assertions.assertFalse( IBeliefbase.EMPY.containsview( "bar" ) );
+        Assertions.assertEquals( IView.EMPTY, IBeliefbase.EMPY.view( "bar " ) );
+        Assertions.assertTrue( IBeliefbase.EMPY.literal( "x" ).isEmpty() );
+        Assertions.assertEquals( IView.EMPTY, IBeliefbase.EMPY.create( "a" ) );
+        Assertions.assertEquals( IView.EMPTY, IBeliefbase.EMPY.create( "a", null ) );
+        Assertions.assertEquals( IView.EMPTY, IBeliefbase.EMPY.viewordefault( "x", IView.EMPTY ) );
     }
 
     /**
@@ -129,50 +129,62 @@ public final class TestCBeliefbase extends IBaseTest
     {
         final IBeliefbase l_beliefbase = new CBeliefbaseOnDemand();
 
-        Assert.assertEquals( 0, l_beliefbase.size() );
-        Assert.assertTrue( l_beliefbase.isempty() );
-        Assert.assertEquals( 0, l_beliefbase.streamview().count() );
-        Assert.assertEquals( 0, l_beliefbase.streamliteral().count() );
-        Assert.assertFalse( l_beliefbase.containsliteral( "y" ) );
-        Assert.assertFalse( l_beliefbase.containsview( "z" ) );
-        Assert.assertEquals( l_beliefbase, l_beliefbase.clear() );
-        Assert.assertTrue( l_beliefbase.literal( "u" ).isEmpty() );
+        Assertions.assertEquals( 0, l_beliefbase.size() );
+        Assertions.assertTrue( l_beliefbase.isempty() );
+        Assertions.assertEquals( 0, l_beliefbase.streamview().count() );
+        Assertions.assertEquals( 0, l_beliefbase.streamliteral().count() );
+        Assertions.assertFalse( l_beliefbase.containsliteral( "y" ) );
+        Assertions.assertFalse( l_beliefbase.containsview( "z" ) );
+        Assertions.assertEquals( l_beliefbase, l_beliefbase.clear() );
+        Assertions.assertTrue( l_beliefbase.literal( "u" ).isEmpty() );
     }
 
     /**
      * test on-demand beliefbase add error
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void ondemandaddviewerror()
     {
-        new CBeliefbaseOnDemand().add( IView.EMPTY );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new CBeliefbaseOnDemand().add( IView.EMPTY )
+        );
     }
 
     /**
      * test on-demand beliefbase remove error
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void ondemandremoveviewerror()
     {
-        new CBeliefbaseOnDemand().remove( IView.EMPTY );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new CBeliefbaseOnDemand().remove( IView.EMPTY )
+        );
     }
 
     /**
      * test on-demand beliefbase view error
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void ondemandviewerror()
     {
-        new CBeliefbaseOnDemand().view( "i" );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new CBeliefbaseOnDemand().view( "i" )
+        );
     }
 
     /**
      * test on-demand beliefbase view-default error
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void ondemandviewdefaulterror()
     {
-        new CBeliefbaseOnDemand().viewordefault( "j", IView.EMPTY );
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new CBeliefbaseOnDemand().viewordefault( "j", IView.EMPTY )
+        );
     }
 
 

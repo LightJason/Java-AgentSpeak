@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.unary;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
@@ -48,7 +48,7 @@ public final class TestCUnary extends IBaseTest
         final IVariable<Object> l_value = new CVariable<>( "Value" );
         l_value.set( 5 );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CDecrement( l_value ),
                 false,
@@ -58,7 +58,7 @@ public final class TestCUnary extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 4, l_value.<Number>raw().intValue() );
+        Assertions.assertEquals( 4, l_value.<Number>raw().intValue() );
     }
 
     /**
@@ -70,7 +70,7 @@ public final class TestCUnary extends IBaseTest
         final IVariable<Object> l_value = new CVariable<>( "Value" );
         l_value.set( 7 );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CIncrement( l_value ),
                 false,
@@ -80,76 +80,88 @@ public final class TestCUnary extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 8, l_value.<Number>raw().intValue() );
+        Assertions.assertEquals( 8, l_value.<Number>raw().intValue() );
     }
 
     /**
      * test increment not-allocated
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void incrementnotallocated()
     {
         final IVariable<Object> l_value = new CVariable<>( "Not" );
 
-        execute(
-            new CIncrement( l_value ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            l_value
+        Assertions.assertThrows(
+            NoSuchElementException.class,
+            () -> execute(
+                new CIncrement( l_value ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_value
+            )
         );
     }
 
     /**
      * test decrement not-allocated
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void decrementnotallocated()
     {
         final IVariable<Object> l_value = new CVariable<>( "Not" );
 
-        execute(
-            new CDecrement( l_value ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            l_value
+        Assertions.assertThrows(
+            NoSuchElementException.class,
+            () -> execute(
+                new CDecrement( l_value ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_value
+            )
         );
     }
 
     /**
      * test increment wrong type
      */
-    @Test( expected = TypeNotPresentException.class )
+    @Test
     public void incrementwrongtype()
     {
         final IVariable<Object> l_value = new CVariable<>( "Type" );
         l_value.set( "v" );
 
-        execute(
-            new CIncrement( l_value ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            l_value
+        Assertions.assertThrows(
+            TypeNotPresentException.class,
+            () -> execute(
+                new CIncrement( l_value ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_value
+            )
         );
     }
 
     /**
      * test decrement wrong type
      */
-    @Test( expected = TypeNotPresentException.class )
+    @Test
     public void decrementwrongtype()
     {
         final IVariable<Object> l_value = new CVariable<>( "Type" );
         l_value.set( "v" );
 
-        execute(
-            new CDecrement( l_value ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            l_value
+        Assertions.assertThrows(
+            TypeNotPresentException.class,
+            () -> execute(
+                new CDecrement( l_value ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                l_value
+            )
         );
     }
 
@@ -159,8 +171,8 @@ public final class TestCUnary extends IBaseTest
     @Test
     public void unarytostring()
     {
-        Assert.assertEquals( "X()++", new CIncrement( new CVariable<>( "X" ) ).toString() );
-        Assert.assertEquals( "Y()--", new CDecrement( new CVariable<>( "Y" ) ).toString() );
+        Assertions.assertEquals( "X()++", new CIncrement( new CVariable<>( "X" ) ).toString() );
+        Assertions.assertEquals( "Y()--", new CDecrement( new CVariable<>( "Y" ) ).toString() );
     }
 
     /**
@@ -171,7 +183,7 @@ public final class TestCUnary extends IBaseTest
     {
         final IVariable<?> l_var = new CVariable<>( "A" );
 
-        Assert.assertEquals( l_var, new CIncrement( l_var ).variables().findFirst().get() );
-        Assert.assertEquals( l_var, new CDecrement( l_var ).variables().findFirst().get() );
+        Assertions.assertEquals( l_var, new CIncrement( l_var ).variables().findFirst().get() );
+        Assertions.assertEquals( l_var, new CDecrement( l_var ).variables().findFirst().get() );
     }
 }

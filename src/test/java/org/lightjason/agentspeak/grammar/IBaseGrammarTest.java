@@ -30,7 +30,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.TokenStream;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.lightjason.agentspeak.language.execution.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.testing.IBaseTest;
@@ -66,7 +66,7 @@ public abstract class IBaseGrammarTest extends IBaseTest
                                                                               @Nonnull final String p_source ) throws Exception
     {
         final IPlan l_plan = parsemultipleplans( p_parser, p_source ).findFirst().orElse( IPlan.EMPTY );
-        Assert.assertNotEquals( IPlan.EMPTY, l_plan );
+        Assertions.assertNotEquals( IPlan.EMPTY, l_plan );
         return l_plan;
     }
 
@@ -100,7 +100,7 @@ public abstract class IBaseGrammarTest extends IBaseTest
                                                                               @Nonnull final String p_source ) throws Exception
     {
         final IRule l_rule = parsemultiplerules( p_parser, p_source ).findFirst().orElse( IRule.EMPTY );
-        Assert.assertNotEquals( IRule.EMPTY, l_rule );
+        Assertions.assertNotEquals( IRule.EMPTY, l_rule );
         return l_rule;
     }
 

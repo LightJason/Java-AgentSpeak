@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.language.execution.achievementtest;
 
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.Collections;
+import java.util.Objects;
 
 
 /**
@@ -53,7 +54,7 @@ public final class TestCTestRule extends IBaseTest
      *
      * @throws Exception on any error
      */
-    @Before
+    @BeforeAll
     public void init() throws Exception
     {
         m_agent = new CAgentGenerator().generatesingle();
@@ -65,11 +66,11 @@ public final class TestCTestRule extends IBaseTest
     @Test
     public void ruletest()
     {
-        Assume.assumeNotNull( m_agent );
+        Assumptions.assumeTrue( Objects.nonNull( m_agent ) );
 
         m_agent.rules().put( CPath.of( "foo" ), IRule.EMPTY );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CTestRule( CPath.of( "foo" ) ),
                 false,
@@ -79,7 +80,7 @@ public final class TestCTestRule extends IBaseTest
             )
         );
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CTestRule( CPath.of( "xxx" ) ),
                 false,
@@ -96,7 +97,7 @@ public final class TestCTestRule extends IBaseTest
     @Test
     public void testruletostring()
     {
-        Assert.assertEquals( "?$foobar", new CTestRule( CPath.of( "foobar" ) ).toString() );
+        Assertions.assertEquals( "?$foobar", new CTestRule( CPath.of( "foobar" ) ).toString() );
     }
 
     /**
@@ -105,21 +106,21 @@ public final class TestCTestRule extends IBaseTest
     @Test
     public void equalshashcode()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CAchievementRuleLiteral( CLiteral.of( "bar" ) ),
             new CAchievementRuleLiteral( CLiteral.of( "bar" ) )
         );
-        Assert.assertNotEquals(
+        Assertions.assertNotEquals(
             new CAchievementRuleLiteral( CLiteral.of( "bar" ) ),
             new CAchievementRuleLiteral( CLiteral.of( "foo" ) )
         );
 
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "FOO" ) ) ),
             new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "FOO" ) ) )
         );
-        Assert.assertNotEquals(
+        Assertions.assertNotEquals(
             new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "FOO" ) ) ),
             new CAchievementRuleVariable( new CPassVariable( new CVariable<>( "BAR" ) ) )
         );

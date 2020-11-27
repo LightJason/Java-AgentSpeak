@@ -24,8 +24,8 @@
 
 package org.lightjason.agentspeak.agent;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -77,7 +77,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         } );
 
         l_log.sort( Comparator.comparingInt( Object::hashCode ) );
-        Assert.assertArrayEquals( Stream.of( 1D, 2D ).toArray(), l_log.toArray() );
+        Assertions.assertArrayEquals( Stream.of( 1D, 2D ).toArray(), l_log.toArray() );
     }
 
     /**
@@ -100,7 +100,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         } );
 
         l_log.sort( Comparator.comparingInt( Object::hashCode ) );
-        Assert.assertArrayEquals( Stream.of( 1D, 2D ).toArray(), l_log.toArray() );
+        Assertions.assertArrayEquals( Stream.of( 1D, 2D ).toArray(), l_log.toArray() );
     }
 
     /**
@@ -119,7 +119,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         } );
 
         l_log.sort( Comparator.comparingInt( Object::hashCode ) );
-        Assert.assertArrayEquals( Stream.of( 1D ).toArray(), l_log.toArray() );
+        Assertions.assertArrayEquals( Stream.of( 1D ).toArray(), l_log.toArray() );
     }
 
     /**
@@ -138,7 +138,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         } );
 
         l_log.sort( Comparator.comparingInt( Object::hashCode ) );
-        Assert.assertArrayEquals( Stream.of( 1D, 3D ).toArray(), l_log.toArray() );
+        Assertions.assertArrayEquals( Stream.of( 1D, 3D ).toArray(), l_log.toArray() );
     }
 
     /**
@@ -157,7 +157,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         } );
 
         l_log.sort( Comparator.comparingInt( Object::hashCode ) );
-        Assert.assertArrayEquals( Stream.of( 5D, 50D ).toArray(), l_log.toArray() );
+        Assertions.assertArrayEquals( Stream.of( 5D, 50D ).toArray(), l_log.toArray() );
 
 
         l_log.clear();
@@ -166,7 +166,7 @@ public final class TestCHierarchicalPlan extends IBaseTest
         } );
 
         l_log.sort( Comparator.comparingInt( Object::hashCode ) );
-        Assert.assertArrayEquals( Stream.of( 2D, 200D ).toArray(), l_log.toArray() );
+        Assertions.assertArrayEquals( Stream.of( 2D, 200D ).toArray(), l_log.toArray() );
     }
 
 

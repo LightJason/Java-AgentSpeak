@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.language.fuzzy;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.defuzzyfication.CCOG;
@@ -53,7 +53,7 @@ public final class TestCFuzzyElement extends IBaseTest
     @Test
     public void cwoaresult()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             1.0,
 
             new CWOA<>( EFourElement.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( EFourElement.HIGH, 1 ) ).apply(
@@ -76,7 +76,7 @@ public final class TestCFuzzyElement extends IBaseTest
     @Test
     public void ccogresult()
     {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             67.419,
 
             new CCOG<>(
@@ -163,12 +163,12 @@ public final class TestCFuzzyElement extends IBaseTest
     @Test
     public void membershipcrip()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( CFuzzyValue.of( ECrisp.FALSE, 1 ), CFuzzyValue.of( ECrisp.TRUE, 0 ) ).toArray(),
             new CCrisp<>( ECrisp.class ).apply( 0 ).toArray()
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( CFuzzyValue.of( ECrisp.FALSE, 0 ), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).toArray(),
             new CCrisp<>( ECrisp.class ).apply( 1 ).toArray()
         );
@@ -180,7 +180,7 @@ public final class TestCFuzzyElement extends IBaseTest
     @Test
     public void membershipthree()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of(
                 CFuzzyValue.of( EThreeElement.LOW, 1 ),
                 CFuzzyValue.of( EThreeElement.MEDIUM, 0.5 ),
@@ -189,7 +189,7 @@ public final class TestCFuzzyElement extends IBaseTest
             new CCrisp<>( EThreeElement.class ).apply( 0 ).toArray()
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of(
                 CFuzzyValue.of( EThreeElement.LOW, 0 ),
                 CFuzzyValue.of( EThreeElement.MEDIUM, 0.5 ),
@@ -205,10 +205,10 @@ public final class TestCFuzzyElement extends IBaseTest
     @Test
     public void membershipempty()
     {
-        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 0 ).count() );
-        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 1 ).count() );
-        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.fail().count() );
-        Assert.assertEquals( 0, IFuzzyMembership.EMPTY.success().count() );
+        Assertions.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 0 ).count() );
+        Assertions.assertEquals( 0, IFuzzyMembership.EMPTY.apply( 1 ).count() );
+        Assertions.assertEquals( 0, IFuzzyMembership.EMPTY.fail().count() );
+        Assertions.assertEquals( 0, IFuzzyMembership.EMPTY.success().count() );
     }
 
     /**
@@ -217,14 +217,14 @@ public final class TestCFuzzyElement extends IBaseTest
     @Test
     public void success()
     {
-        Assert.assertTrue( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.51 ) );
-        Assert.assertFalse( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.5 ) );
-        Assert.assertTrue( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.7 ) );
-        Assert.assertFalse( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.1 ) );
+        Assertions.assertTrue( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.51 ) );
+        Assertions.assertFalse( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.5 ) );
+        Assertions.assertTrue( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.7 ) );
+        Assertions.assertFalse( new CCOG<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.1 ) );
 
-        Assert.assertTrue( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.51 ) );
-        Assert.assertFalse( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.5 ) );
-        Assert.assertTrue( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.7 ) );
-        Assert.assertFalse( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.1 ) );
+        Assertions.assertTrue( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.51 ) );
+        Assertions.assertFalse( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.5 ) );
+        Assertions.assertTrue( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.7 ) );
+        Assertions.assertFalse( new CWOA<>( ECrisp.class, IFuzzyMembership.EMPTY.raw(), CFuzzyValue.of( ECrisp.TRUE, 1 ) ).success( 0.1 ) );
     }
 }

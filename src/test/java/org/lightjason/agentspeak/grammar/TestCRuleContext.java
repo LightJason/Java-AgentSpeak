@@ -24,15 +24,12 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -59,7 +56,6 @@ import java.util.stream.Stream;
 /**
  * test agent parser rule context
  */
-@RunWith( DataProviderRunner.class )
 public final class TestCRuleContext extends IBaseGrammarTest
 {
     /**
@@ -67,80 +63,69 @@ public final class TestCRuleContext extends IBaseGrammarTest
      *
      * @return pair of rule-context class and rule method name
      */
-    @DataProvider
-    public static Object[] manualnullrules()
+    public static Stream<Arguments> manualnullrules()
     {
         return Stream.of(
-            generaterule( ManualParser.BeliefContext.class, "visitBelief" ),
-            generaterule( ManualParser.PlanContext.class, "visitPlan" ),
-            generaterule( ManualParser.PlantriggerContext.class, "visitPlantrigger" ),
-            generaterule( ManualParser.PlandefinitionContext.class, "visitPlandefinition" ),
-            generaterule( ManualParser.LogicruleContext.class, "visitLogicrule" ),
-            generaterule( ManualParser.BodyContext.class, "visitBody" ),
-            generaterule( ManualParser.BlockformulaContext.class, "visitBlockformula" ),
-            generaterule( ManualParser.ExpressionContext.class, "visitExpression" ),
-            generaterule( ManualParser.RepairformulaContext.class, "visitRepairformula" ),
-            generaterule( ManualParser.BodyformulaContext.class, "visitBodyformula" ),
-            generaterule( ManualParser.BeliefactionContext.class, "visitBeliefaction" ),
-            generaterule( ManualParser.TestactionContext.class, "visitTestaction" ),
-            generaterule( ManualParser.AchievementgoalContext.class, "visitAchievementgoal" ),
-            generaterule( ManualParser.DeconstructexpressionContext.class, "visitDeconstructexpression" ),
-            generaterule( ManualParser.AssignmentexpressionContext.class, "visitAssignmentexpression" ),
-            generaterule( ManualParser.AssignmentexpressionsinglevariableContext.class, "visitAssignmentexpressionsinglevariable" ),
-            generaterule( ManualParser.AssignmentexpressionmultivariableContext.class, "visitAssignmentexpressionmultivariable" ),
-            generaterule( ManualParser.UnaryexpressionContext.class, "visitUnaryexpression" ),
-            generaterule( ManualParser.TernaryoperationContext.class, "visitTernaryoperation" ),
-            generaterule( ManualParser.TernaryoperationtrueContext.class, "visitTernaryoperationtrue" ),
-            generaterule( ManualParser.TernaryoperationfalseContext.class, "visitTernaryoperationfalse" ),
-            generaterule( ManualParser.UnificationContext.class, "visitUnification" ),
-            generaterule( ManualParser.UnificationconstraintContext.class, "visitUnificationconstraint" ),
-            generaterule( ManualParser.LambdaContext.class, "visitLambda" ),
-            generaterule( ManualParser.LambdastreamContext.class, "visitLambdastream" ),
-            generaterule( ManualParser.LambdaelementContext.class, "visitLambdaelement" ),
-            generaterule( ManualParser.LambdareturnContext.class, "visitLambdareturn" ),
-            generaterule( ManualParser.ExecuteruleContext.class, "visitExecuterule" ),
-            generaterule( ManualParser.ExecutevariableContext.class, "visitExecutevariable" ),
-            generaterule( ManualParser.ExecuteactionContext.class, "visitExecuteaction" )
+            Arguments.of( ManualParser.BeliefContext.class, "visitBelief" ),
+            Arguments.of( ManualParser.PlanContext.class, "visitPlan" ),
+            Arguments.of( ManualParser.PlantriggerContext.class, "visitPlantrigger" ),
+            Arguments.of( ManualParser.PlandefinitionContext.class, "visitPlandefinition" ),
+            Arguments.of( ManualParser.LogicruleContext.class, "visitLogicrule" ),
+            Arguments.of( ManualParser.BodyContext.class, "visitBody" ),
+            Arguments.of( ManualParser.BlockformulaContext.class, "visitBlockformula" ),
+            Arguments.of( ManualParser.ExpressionContext.class, "visitExpression" ),
+            Arguments.of( ManualParser.RepairformulaContext.class, "visitRepairformula" ),
+            Arguments.of( ManualParser.BodyformulaContext.class, "visitBodyformula" ),
+            Arguments.of( ManualParser.BeliefactionContext.class, "visitBeliefaction" ),
+            Arguments.of( ManualParser.TestactionContext.class, "visitTestaction" ),
+            Arguments.of( ManualParser.AchievementgoalContext.class, "visitAchievementgoal" ),
+            Arguments.of( ManualParser.DeconstructexpressionContext.class, "visitDeconstructexpression" ),
+            Arguments.of( ManualParser.AssignmentexpressionContext.class, "visitAssignmentexpression" ),
+            Arguments.of( ManualParser.AssignmentexpressionsinglevariableContext.class, "visitAssignmentexpressionsinglevariable" ),
+            Arguments.of( ManualParser.AssignmentexpressionmultivariableContext.class, "visitAssignmentexpressionmultivariable" ),
+            Arguments.of( ManualParser.UnaryexpressionContext.class, "visitUnaryexpression" ),
+            Arguments.of( ManualParser.TernaryoperationContext.class, "visitTernaryoperation" ),
+            Arguments.of( ManualParser.TernaryoperationtrueContext.class, "visitTernaryoperationtrue" ),
+            Arguments.of( ManualParser.TernaryoperationfalseContext.class, "visitTernaryoperationfalse" ),
+            Arguments.of( ManualParser.UnificationContext.class, "visitUnification" ),
+            Arguments.of( ManualParser.UnificationconstraintContext.class, "visitUnificationconstraint" ),
+            Arguments.of( ManualParser.LambdaContext.class, "visitLambda" ),
+            Arguments.of( ManualParser.LambdastreamContext.class, "visitLambdastream" ),
+            Arguments.of( ManualParser.LambdaelementContext.class, "visitLambdaelement" ),
+            Arguments.of( ManualParser.LambdareturnContext.class, "visitLambdareturn" ),
+            Arguments.of( ManualParser.ExecuteruleContext.class, "visitExecuterule" ),
+            Arguments.of( ManualParser.ExecutevariableContext.class, "visitExecutevariable" ),
+            Arguments.of( ManualParser.ExecuteactionContext.class, "visitExecuteaction" )
 
-        ).toArray();
-    }
-
-    /**
-     * generate pair of rule context class and checking method name
-     *
-     * @param p_ruleclass rule class
-     * @param p_visitormethod visitor rule name
-     * @return pair of class and method name
-     */
-    private static Pair<Class<?>, String> generaterule( @NonNull final Class<?> p_ruleclass, @Nonnull final String p_visitormethod )
-    {
-        return new ImmutablePair<>( p_ruleclass, p_visitormethod );
+        );
     }
 
     /**
      * test manual rules which return null
      *
-     * @param p_rule pair of rule class and string name
+     * @param p_ruleclass rule class
+     * @param p_visitormethod visitor rule name
      *
      * @throws NoSuchMethodException visitor method no exists
      * @throws InvocationTargetException invocation error
      * @throws IllegalAccessException access error
      */
-    @Test
-    @UseDataProvider( "manualnullrules" )
-    public void manualnullreturnrules( @Nonnull final Pair<Class<?>, String> p_rule ) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
+    @ParameterizedTest
+    @MethodSource( "manualnullrules" )
+    public void manualnullreturnrules( @NonNull final Class<?> p_ruleclass, @Nonnull final String p_visitormethod )
+        throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
     {
         final ManualVisitor<Object> l_visitor = new CASTVisitorManual();
 
-        Assert.assertNull(
-            p_rule.getLeft().toString(),
+        Assertions.assertNull(
             l_visitor.getClass().getMethod(
-                p_rule.getRight(),
-                p_rule.getLeft()
+                p_visitormethod,
+                p_ruleclass
             ).invoke(
                     l_visitor,
                     new Object[]{null}
-            )
+            ),
+            p_ruleclass.toString()
         );
     }
 
@@ -151,8 +136,8 @@ public final class TestCRuleContext extends IBaseGrammarTest
     public void manualliteral()
     {
         final Object l_literal = new CASTVisitorManual().visitLiteral( new CManualRuleParser().parser( "foo" ).literal() );
-        Assert.assertTrue( l_literal instanceof ILiteral );
-        Assert.assertEquals( "foo[]", l_literal.toString() );
+        Assertions.assertTrue( l_literal instanceof ILiteral );
+        Assertions.assertEquals( "foo[]", l_literal.toString() );
     }
 
     /**
@@ -164,12 +149,12 @@ public final class TestCRuleContext extends IBaseGrammarTest
         final IASTVisitorAgent l_visitor = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
 
         final Object l_unify = l_visitor.visitBodyformula( new CAgentRuleParser().parser( ">>foo(X)" ).bodyformula() );
-        Assert.assertTrue( l_unify instanceof IExecution );
-        Assert.assertEquals( ">>foo[X()]", l_unify.toString() );
+        Assertions.assertTrue( l_unify instanceof IExecution );
+        Assertions.assertEquals( ">>foo[X()]", l_unify.toString() );
 
         final Object l_ternary = l_visitor.visitBodyformula( new CAgentRuleParser().parser( "X = Y > 3 ? 'foo' : 'bar'" ).bodyformula() );
-        Assert.assertTrue( l_ternary instanceof IExecution );
-        Assert.assertEquals( "X() = ( Y() > 3.0 ) ? foo : bar", l_ternary.toString() );
+        Assertions.assertTrue( l_ternary instanceof IExecution );
+        Assertions.assertEquals( "X() = ( Y() > 3.0 ) ? foo : bar", l_ternary.toString() );
     }
 
     /**
@@ -181,12 +166,12 @@ public final class TestCRuleContext extends IBaseGrammarTest
         final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY );
 
         final Object l_unify = l_visitor.visitBodyformula( new CPlanBundleRuleParser().parser( ">>foo(X)" ).bodyformula() );
-        Assert.assertTrue( l_unify instanceof IExecution );
-        Assert.assertEquals( ">>foo[X()]", l_unify.toString() );
+        Assertions.assertTrue( l_unify instanceof IExecution );
+        Assertions.assertEquals( ">>foo[X()]", l_unify.toString() );
 
         final Object l_ternary = l_visitor.visitBodyformula( new CPlanBundleRuleParser().parser( "X = Y > 3 ? 'foo' : 'bar'" ).bodyformula() );
-        Assert.assertTrue( l_ternary instanceof IExecution );
-        Assert.assertEquals( "X() = ( Y() > 3.0 ) ? foo : bar", l_ternary.toString() );
+        Assertions.assertTrue( l_ternary instanceof IExecution );
+        Assertions.assertEquals( "X() = ( Y() > 3.0 ) ? foo : bar", l_ternary.toString() );
     }
 
     /**
@@ -197,8 +182,8 @@ public final class TestCRuleContext extends IBaseGrammarTest
     {
         final Object l_testaction = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                     .visitTestaction( new CAgentRuleParser().parser( "?foo" ).testaction() );
-        Assert.assertTrue( l_testaction instanceof IExecution );
-        Assert.assertEquals( "?foo", l_testaction.toString() );
+        Assertions.assertTrue( l_testaction instanceof IExecution );
+        Assertions.assertEquals( "?foo", l_testaction.toString() );
     }
 
     /**
@@ -209,8 +194,8 @@ public final class TestCRuleContext extends IBaseGrammarTest
     {
         final Object l_testaction = new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                     .visitTestaction( new CPlanBundleRuleParser().parser( "?foo" ).testaction() );
-        Assert.assertTrue( l_testaction instanceof IExecution );
-        Assert.assertEquals( "?foo", l_testaction.toString() );
+        Assertions.assertTrue( l_testaction instanceof IExecution );
+        Assertions.assertEquals( "?foo", l_testaction.toString() );
     }
 
     /**
@@ -222,8 +207,8 @@ public final class TestCRuleContext extends IBaseGrammarTest
     {
         final Stream<IVariable<?>> l_list = (Stream<IVariable<?>>)new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                             .visitVariablelist( new CPlanBundleRuleParser().parser( "[X|Y|Z]" ).variablelist() );
-        Assert.assertNotNull( l_list );
-        Assert.assertArrayEquals(
+        Assertions.assertNotNull( l_list );
+        Assertions.assertArrayEquals(
             Stream.of( "X()", "Y()", "Z()" ).toArray(),
             l_list.map( Object::toString ).toArray()
         );
@@ -237,50 +222,56 @@ public final class TestCRuleContext extends IBaseGrammarTest
     {
         final Object l_unify = new CASTVisitorPlanBundle( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
                                .visitUnification( new CPlanBundleRuleParser().parser( ">>bar(X)" ).unification() );
-        Assert.assertTrue( l_unify instanceof IExecution );
-        Assert.assertEquals( ">>bar[X()]", l_unify.toString() );
+        Assertions.assertTrue( l_unify instanceof IExecution );
+        Assertions.assertEquals( ">>bar[X()]", l_unify.toString() );
     }
 
     /**
      * test agent action-execution rule
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void agentexecutionactionwrongarguments()
     {
-        new CASTVisitorAgent( new CActionStaticGenerator( Stream.of( new IAction()
-        {
-            @Override
-            public int minimalArgumentNumber()
-            {
-                return 5;
-            }
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new CASTVisitorAgent( new CActionStaticGenerator( Stream.of( new IAction()
+                {
+                    @Override
+                    public int minimalArgumentNumber()
+                    {
+                        return 5;
+                    }
 
-            @Nonnull
-            @Override
-            public IPath name()
-            {
-                return CPath.of( "bar" );
-            }
+                    @Nonnull
+                    @Override
+                    public IPath name()
+                    {
+                        return CPath.of( "bar" );
+                    }
 
-            @Nonnull
-            @Override
-            public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                   @Nonnull final List<ITerm> p_return
-            )
-            {
-                return Stream.empty();
-            }
-        } ) ), ILambdaStreamingGenerator.EMPTY ).visitExecuteaction( new CAgentRuleParser().parser( ".bar" ).executeaction() );
+                    @Nonnull
+                    @Override
+                    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                           @Nonnull final List<ITerm> p_return
+                    )
+                    {
+                        return Stream.empty();
+                    }
+                } ) ), ILambdaStreamingGenerator.EMPTY ).visitExecuteaction( new CAgentRuleParser().parser( ".bar" ).executeaction() )
+        );
     }
 
     /**
      * test agent action-execution rule
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void agentexecuteactionnotexist()
     {
-        new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
-            .visitExecuteaction( new CAgentRuleParser().parser( ".bar(123)" ).executeaction() );
+        Assertions.assertThrows(
+            NoSuchElementException.class,
+            () -> new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
+                .visitExecuteaction( new CAgentRuleParser().parser( ".bar(123)" ).executeaction() )
+        );
     }
 
     /**
@@ -292,12 +283,12 @@ public final class TestCRuleContext extends IBaseGrammarTest
         final Object l_unifyexpression = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
             .visitUnificationconstraint( new CAgentRuleParser().parser( ">>(foo(X), X > 1000)" ).unificationconstraint() );
 
-        Assert.assertTrue( l_unifyexpression instanceof IExecution );
+        Assertions.assertTrue( l_unifyexpression instanceof IExecution );
 
         final Object l_unifyliteral = new CASTVisitorAgent( IActionGenerator.EMPTY, ILambdaStreamingGenerator.EMPTY )
             .visitUnificationconstraint( new CAgentRuleParser().parser( ">>( foo(X), foo(bar(5)) )" ).unificationconstraint() );
 
-        Assert.assertTrue( l_unifyliteral instanceof IExecution );
+        Assertions.assertTrue( l_unifyliteral instanceof IExecution );
     }
 
     /**
@@ -315,8 +306,8 @@ public final class TestCRuleContext extends IBaseGrammarTest
                {
                } );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertArrayEquals(
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertArrayEquals(
             Stream.of( 1L, 2L, 3L, 4L ).toArray(),
             l_return.get( 0 ).<Stream<?>>raw().toArray()
         );
@@ -339,8 +330,8 @@ public final class TestCRuleContext extends IBaseGrammarTest
             new CVariable<>( "B", 10 )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertArrayEquals(
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertArrayEquals(
             Stream.of( 5L, 6L, 7L, 8L, 9L ).toArray(),
             l_return.get( 0 ).<Stream<?>>raw().toArray()
         );

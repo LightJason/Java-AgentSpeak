@@ -23,13 +23,10 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.passing.CPassRaw;
 import org.lightjason.agentspeak.language.execution.passing.CPassVariable;
@@ -47,7 +44,6 @@ import java.util.stream.Stream;
 /**
  * test binary expression
  */
-@RunWith( DataProviderRunner.class )
 public final class TestCBinaryExpression extends IBaseTest
 {
     /**
@@ -55,8 +51,7 @@ public final class TestCBinaryExpression extends IBaseTest
      *
      * @return 4-tuple as array, first & second input values, 3rd operator, 4th result
      */
-    @DataProvider
-    public static Object[] operator()
+    public static Stream<Arguments> operator()
     {
         final Object l_object = new Object();
 
@@ -65,99 +60,86 @@ public final class TestCBinaryExpression extends IBaseTest
 
         return Stream.of(
 
-            testcase( 5, 2, EBinaryOperator.PLUS, 7.0 ),
-            testcase( 3, 5, EBinaryOperator.MINUS, -2.0 ),
+            Arguments.of( 5, 2, EBinaryOperator.PLUS, 7.0 ),
+            Arguments.of( 3, 5, EBinaryOperator.MINUS, -2.0 ),
 
-            testcase( 12, 10, EBinaryOperator.MULTIPLY, 120.0 ),
-            testcase( 360, 12, EBinaryOperator.DIVIDE, 30.0 ),
-            testcase( 2, 8, EBinaryOperator.POWER, 256.0 ),
+            Arguments.of( 12, 10, EBinaryOperator.MULTIPLY, 120.0 ),
+            Arguments.of( 360, 12, EBinaryOperator.DIVIDE, 30.0 ),
+            Arguments.of( 2, 8, EBinaryOperator.POWER, 256.0 ),
 
-            testcase( 21, 17, EBinaryOperator.MODULO, 4L ),
-            testcase( -1, 17, EBinaryOperator.MODULO, 16L ),
-            testcase( -18, 17, EBinaryOperator.MODULO,  1L ),
+            Arguments.of( 21, 17, EBinaryOperator.MODULO, 4L ),
+            Arguments.of( -1, 17, EBinaryOperator.MODULO, 16L ),
+            Arguments.of( -18, 17, EBinaryOperator.MODULO,  1L ),
 
-            testcase( 1, 2, EBinaryOperator.LESS,  true ),
-            testcase( 2, 3, EBinaryOperator.LESSEQUAL,  true ),
-            testcase( 3, 3, EBinaryOperator.LESSEQUAL,  true ),
-            testcase( 3, 2, EBinaryOperator.LESSEQUAL,  false ),
+            Arguments.of( 1, 2, EBinaryOperator.LESS,  true ),
+            Arguments.of( 2, 3, EBinaryOperator.LESSEQUAL,  true ),
+            Arguments.of( 3, 3, EBinaryOperator.LESSEQUAL,  true ),
+            Arguments.of( 3, 2, EBinaryOperator.LESSEQUAL,  false ),
 
-            testcase( 8, 6, EBinaryOperator.GREATER,  true ),
-            testcase( 8, 6, EBinaryOperator.GREATEREQUAL,  true ),
-            testcase( 8, 8, EBinaryOperator.GREATEREQUAL,  true ),
-            testcase( 6, 8, EBinaryOperator.GREATEREQUAL,  false ),
+            Arguments.of( 8, 6, EBinaryOperator.GREATER,  true ),
+            Arguments.of( 8, 6, EBinaryOperator.GREATEREQUAL,  true ),
+            Arguments.of( 8, 8, EBinaryOperator.GREATEREQUAL,  true ),
+            Arguments.of( 6, 8, EBinaryOperator.GREATEREQUAL,  false ),
 
-            testcase( l_compare2, l_compare1, EBinaryOperator.LESS,  true ),
-            testcase( l_compare1, l_compare2, EBinaryOperator.LESS,  false ),
-            testcase( l_compare2, l_compare1, EBinaryOperator.LESSEQUAL,  true ),
-            testcase( l_compare2, l_compare2, EBinaryOperator.LESSEQUAL,  true ),
+            Arguments.of( l_compare2, l_compare1, EBinaryOperator.LESS,  true ),
+            Arguments.of( l_compare1, l_compare2, EBinaryOperator.LESS,  false ),
+            Arguments.of( l_compare2, l_compare1, EBinaryOperator.LESSEQUAL,  true ),
+            Arguments.of( l_compare2, l_compare2, EBinaryOperator.LESSEQUAL,  true ),
 
-            testcase( l_compare1, l_compare2, EBinaryOperator.GREATER,  true ),
-            testcase( l_compare2, l_compare1, EBinaryOperator.GREATER,  false ),
-            testcase( l_compare1, l_compare2, EBinaryOperator.GREATEREQUAL,  true ),
-            testcase( l_compare1, l_compare1, EBinaryOperator.GREATEREQUAL,  true ),
+            Arguments.of( l_compare1, l_compare2, EBinaryOperator.GREATER,  true ),
+            Arguments.of( l_compare2, l_compare1, EBinaryOperator.GREATER,  false ),
+            Arguments.of( l_compare1, l_compare2, EBinaryOperator.GREATEREQUAL,  true ),
+            Arguments.of( l_compare1, l_compare1, EBinaryOperator.GREATEREQUAL,  true ),
 
-            testcase( new Object(), new Object(), EBinaryOperator.EQUAL,  false ),
-            testcase( l_object, l_object, EBinaryOperator.EQUAL,  true ),
-            testcase( new Object(), new Object(), EBinaryOperator.NOTEQUAL,  true ),
-            testcase( l_object, l_object, EBinaryOperator.NOTEQUAL,  false ),
+            Arguments.of( new Object(), new Object(), EBinaryOperator.EQUAL,  false ),
+            Arguments.of( l_object, l_object, EBinaryOperator.EQUAL,  true ),
+            Arguments.of( new Object(), new Object(), EBinaryOperator.NOTEQUAL,  true ),
+            Arguments.of( l_object, l_object, EBinaryOperator.NOTEQUAL,  false ),
 
-            testcase( 5, 5, EBinaryOperator.EQUAL,  true ),
-            testcase( 5.0, 5, EBinaryOperator.EQUAL,  true ),
-            testcase( 5.0000, 5.0000001, EBinaryOperator.NOTEQUAL,  true ),
+            Arguments.of( 5, 5, EBinaryOperator.EQUAL,  true ),
+            Arguments.of( 5.0, 5, EBinaryOperator.EQUAL,  true ),
+            Arguments.of( 5.0000, 5.0000001, EBinaryOperator.NOTEQUAL,  true ),
 
-            testcase( true, true, EBinaryOperator.OR, true ),
-            testcase( true, false, EBinaryOperator.OR, true ),
-            testcase( false, true, EBinaryOperator.OR, true ),
-            testcase( false, false, EBinaryOperator.OR, false ),
+            Arguments.of( true, true, EBinaryOperator.OR, true ),
+            Arguments.of( true, false, EBinaryOperator.OR, true ),
+            Arguments.of( false, true, EBinaryOperator.OR, true ),
+            Arguments.of( false, false, EBinaryOperator.OR, false ),
 
-            testcase( true, true, EBinaryOperator.AND, true ),
-            testcase( true, false, EBinaryOperator.AND, false ),
-            testcase( false, true, EBinaryOperator.AND, false ),
-            testcase( false, false, EBinaryOperator.AND, false ),
+            Arguments.of( true, true, EBinaryOperator.AND, true ),
+            Arguments.of( true, false, EBinaryOperator.AND, false ),
+            Arguments.of( false, true, EBinaryOperator.AND, false ),
+            Arguments.of( false, false, EBinaryOperator.AND, false ),
 
-            testcase( true, true, EBinaryOperator.XOR, false ),
-            testcase( true, false, EBinaryOperator.XOR, true ),
-            testcase( false, true, EBinaryOperator.XOR, true ),
-            testcase( false, false, EBinaryOperator.XOR, false )
+            Arguments.of( true, true, EBinaryOperator.XOR, false ),
+            Arguments.of( true, false, EBinaryOperator.XOR, true ),
+            Arguments.of( false, true, EBinaryOperator.XOR, true ),
+            Arguments.of( false, false, EBinaryOperator.XOR, false )
 
-        ).toArray();
+        );
     }
 
     /**
-     * test-case generator
+     * test assignment operator with variables
      *
      * @param p_lhs left-hand-side argument
      * @param p_rhs right-hand-side argument
      * @param p_operator operator
      * @param p_result result
-     * @return test-case
      */
-    private static Object testcase( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs,
-                                    @Nonnull final EBinaryOperator p_operator, @Nonnull final Object p_result )
-    {
-        return Stream.of( p_lhs, p_rhs, p_operator, p_result ).toArray();
-    }
-
-    /**
-     * test assignment operator with variables
-     * @param p_data input data
-     */
-    @Test
+    @ParameterizedTest
+    @MethodSource( "operator" )
     @SuppressWarnings( "unchecked" )
-    @UseDataProvider( "operator" )
-    public void variable( @Nonnull final Object[] p_data )
+    public void variable( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull final EBinaryOperator p_operator, @Nonnull final Object p_result )
     {
-        Assume.assumeTrue( p_data.length == 4 );
-
         final List<ITerm> l_return = new ArrayList<>();
 
-        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_data[0] );
-        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_data[1] );
+        final IVariable<Object> l_lhs = new CVariable<>( "Lhs" ).set( p_lhs );
+        final IVariable<Object> l_rhs = new CVariable<>( "Rhs" ).set( p_rhs );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CBinaryExpression(
-                    (EBinaryOperator) p_data[2],
+                    p_operator,
                     new CPassVariable( l_lhs ),
                     new CPassVariable( l_rhs )
                 ),
@@ -169,31 +151,33 @@ public final class TestCBinaryExpression extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertEquals( p_data[0], l_lhs.raw() );
-        Assert.assertEquals( p_data[1],  l_rhs.raw() );
-        Assert.assertEquals( p_data[3], l_return.get( 0 ).raw() );
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertEquals( p_lhs, l_lhs.raw() );
+        Assertions.assertEquals( p_rhs,  l_rhs.raw() );
+        Assertions.assertEquals( p_result, l_return.get( 0 ).raw() );
     }
 
     /**
      * test assignment operator with native data
-     * @param p_data input data
+     *
+     * @param p_lhs left-hand-side argument
+     * @param p_rhs right-hand-side argument
+     * @param p_operator operator
+     * @param p_result result
      */
-    @Test
+    @ParameterizedTest
+    @MethodSource( "operator" )
     @SuppressWarnings( "unchecked" )
-    @UseDataProvider( "operator" )
-    public void raw( @Nonnull final Object[] p_data )
+    public void raw( @Nonnull final Object p_lhs, @Nonnull final Object p_rhs, @Nonnull final EBinaryOperator p_operator, @Nonnull final Object p_result )
     {
-        Assume.assumeTrue( p_data.length == 4 );
-
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CBinaryExpression(
-                    (EBinaryOperator) p_data[2],
-                    new CPassRaw<>( p_data[0] ),
-                    new CPassRaw<>( p_data[1] )
+                    p_operator,
+                    new CPassRaw<>( p_lhs ),
+                    new CPassRaw<>( p_result )
                 ),
                 false,
                 Collections.emptyList(),
@@ -201,8 +185,8 @@ public final class TestCBinaryExpression extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertEquals( p_data[3], l_return.get( 0 ).raw() );
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertEquals( p_result, l_return.get( 0 ).raw() );
     }
 
     /**

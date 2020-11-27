@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.action;
 
 import org.apache.commons.lang3.SerializationUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.action.binding.IAgentActionName;
@@ -62,7 +62,7 @@ public final class TestCActionBinding extends IBaseTest
     @Test
     public void classbinding()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             CCommon.actionsFromAgentClass(
                 CClassBindingDefault.class,
                 CClassBindingBlacklist.class,
@@ -80,7 +80,7 @@ public final class TestCActionBinding extends IBaseTest
     @Test
     public void methoddefault()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             CCommon.actionsFromAgentClass( CMethodBindingDefault.class ).map( i -> i.name().toString() ).toArray(),
             Stream.of( "methodannotate" ).toArray()
         );
@@ -93,7 +93,7 @@ public final class TestCActionBinding extends IBaseTest
     @Test
     public void methodblacklist()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             CCommon.actionsFromAgentClass( CMethodBindingBlacklist.class ).map( i -> i.name().toString() ).toArray(),
             Stream.of( "methodannotate" ).toArray()
         );
@@ -106,7 +106,7 @@ public final class TestCActionBinding extends IBaseTest
     @Test
     public void methodwhitelist()
     {
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             CCommon.actionsFromAgentClass( CMethodBindingWhitelist.class ).map( i -> i.name().toString() ).toArray(),
             Stream.of( "methodnotannotate" ).toArray()
         );
@@ -124,12 +124,12 @@ public final class TestCActionBinding extends IBaseTest
         final List<IAction> l_actions = CCommon.actionsFromAgentClass( CClassBindingWhitelist.class )
                                                .collect( Collectors.toList() );
 
-        Assert.assertEquals( 4, l_actions.size() );
+        Assertions.assertEquals( 4, l_actions.size() );
 
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertEquals( 0, l_actions.get( 0 ).minimalArgumentNumber() );
-        Assert.assertTrue(
+        Assertions.assertEquals( 0, l_actions.get( 0 ).minimalArgumentNumber() );
+        Assertions.assertTrue(
             execute(
                 l_actions.get( 0 ),
                 false,
@@ -139,8 +139,8 @@ public final class TestCActionBinding extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_actions.get( 1 ).minimalArgumentNumber() );
-        Assert.assertTrue(
+        Assertions.assertEquals( 1, l_actions.get( 1 ).minimalArgumentNumber() );
+        Assertions.assertTrue(
             execute(
                 l_actions.get( 1 ),
                 false,
@@ -150,8 +150,8 @@ public final class TestCActionBinding extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 0, l_actions.get( 2 ).minimalArgumentNumber() );
-        Assert.assertTrue(
+        Assertions.assertEquals( 0, l_actions.get( 2 ).minimalArgumentNumber() );
+        Assertions.assertTrue(
             execute(
                 l_actions.get( 2 ),
                 false,
@@ -161,8 +161,8 @@ public final class TestCActionBinding extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 0, l_actions.get( 3 ).minimalArgumentNumber() );
-        Assert.assertFalse(
+        Assertions.assertEquals( 0, l_actions.get( 3 ).minimalArgumentNumber() );
+        Assertions.assertFalse(
             execute(
                 l_actions.get( 3 ),
                 false,
@@ -172,7 +172,7 @@ public final class TestCActionBinding extends IBaseTest
             )
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( 2, 111, 3 ).toArray(),
             l_return.stream().map( ITerm::raw ).toArray()
         );
@@ -192,8 +192,8 @@ public final class TestCActionBinding extends IBaseTest
         final IAction l_origin = CCommon.actionsFromAgentClass( CClassBindingWhitelist.class ).findFirst().get();
         final IAction l_copy = SerializationUtils.clone( l_origin );
 
-        Assert.assertEquals( l_origin, l_copy );
-        Assert.assertTrue(
+        Assertions.assertEquals( l_origin, l_copy );
+        Assertions.assertTrue(
             execute(
                 l_origin,
                 false,
@@ -202,7 +202,7 @@ public final class TestCActionBinding extends IBaseTest
                 l_agent
             )
         );
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 l_copy,
                 false,
@@ -212,8 +212,8 @@ public final class TestCActionBinding extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 2, l_return.size() );
-        Assert.assertEquals( l_return.get( 0 ), l_return.get( 1 ) );
+        Assertions.assertEquals( 2, l_return.size() );
+        Assertions.assertEquals( l_return.get( 0 ), l_return.get( 1 ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

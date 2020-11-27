@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.unifier;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
@@ -52,7 +52,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CHashUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( new CVariable<>( "foo", 1 ) ),
@@ -61,14 +61,14 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variable = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertTrue( l_variable instanceof IRelocateVariable<?> );
-        Assert.assertFalse( l_variable.mutex() );
-        Assert.assertEquals( "foo", l_variable.functor() );
-        Assert.assertEquals( Integer.valueOf( 1 ), l_variable.raw() );
+        Assertions.assertTrue( l_variable instanceof IRelocateVariable<?> );
+        Assertions.assertFalse( l_variable.mutex() );
+        Assertions.assertEquals( "foo", l_variable.functor() );
+        Assertions.assertEquals( Integer.valueOf( 1 ), l_variable.raw() );
 
         l_variables.clear();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CHashUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( new CVariable<>( "bar", 2 ) ),
@@ -77,10 +77,10 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variablemutex = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertTrue( l_variablemutex instanceof IRelocateVariable<?> );
-        Assert.assertTrue( l_variablemutex.mutex() );
-        Assert.assertEquals( "bar", l_variablemutex.functor() );
-        Assert.assertEquals( Integer.valueOf( 2 ), l_variablemutex.raw() );
+        Assertions.assertTrue( l_variablemutex instanceof IRelocateVariable<?> );
+        Assertions.assertTrue( l_variablemutex.mutex() );
+        Assertions.assertEquals( "bar", l_variablemutex.functor() );
+        Assertions.assertEquals( Integer.valueOf( 2 ), l_variablemutex.raw() );
     }
 
     /**
@@ -91,7 +91,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CHashUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CRawTerm.of( 123 ) ),
@@ -100,7 +100,7 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variable = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertEquals( Integer.valueOf( 123 ), l_variable.raw() );
+        Assertions.assertEquals( Integer.valueOf( 123 ), l_variable.raw() );
     }
 
     /**
@@ -111,7 +111,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             new CHashUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CRawTerm.of( new Object() ) ),
@@ -119,7 +119,7 @@ public final class TestCUnify extends IBaseTest
             )
         );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CHashUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CRawTerm.of( "foobar" ) ),
@@ -138,7 +138,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( new CVariable<>( "rfoo", 1 ) ),
@@ -147,14 +147,14 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variable = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertTrue( l_variable instanceof IRelocateVariable<?> );
-        Assert.assertFalse( l_variable.mutex() );
-        Assert.assertEquals( "rfoo", l_variable.functor() );
-        Assert.assertEquals( Integer.valueOf( 1 ), l_variable.raw() );
+        Assertions.assertTrue( l_variable instanceof IRelocateVariable<?> );
+        Assertions.assertFalse( l_variable.mutex() );
+        Assertions.assertEquals( "rfoo", l_variable.functor() );
+        Assertions.assertEquals( Integer.valueOf( 1 ), l_variable.raw() );
 
         l_variables.clear();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( new CVariable<>( "rbar", 2 ) ),
@@ -163,10 +163,10 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variablemutex = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertTrue( l_variablemutex instanceof IRelocateVariable<?> );
-        Assert.assertTrue( l_variablemutex.mutex() );
-        Assert.assertEquals( "rbar", l_variablemutex.functor() );
-        Assert.assertEquals( Integer.valueOf( 2 ), l_variablemutex.raw() );
+        Assertions.assertTrue( l_variablemutex instanceof IRelocateVariable<?> );
+        Assertions.assertTrue( l_variablemutex.mutex() );
+        Assertions.assertEquals( "rbar", l_variablemutex.functor() );
+        Assertions.assertEquals( Integer.valueOf( 2 ), l_variablemutex.raw() );
     }
 
     /**
@@ -177,7 +177,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CRawTerm.of( 123 ) ),
@@ -186,7 +186,7 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variable = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertEquals( Integer.valueOf( 123 ), l_variable.raw() );
+        Assertions.assertEquals( Integer.valueOf( 123 ), l_variable.raw() );
     }
 
     /**
@@ -197,7 +197,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CRawTerm.of( new Object() ) ),
@@ -205,7 +205,7 @@ public final class TestCUnify extends IBaseTest
             )
         );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CRawTerm.of( "foobar" ) ),
@@ -220,7 +220,7 @@ public final class TestCUnify extends IBaseTest
     @Test
     public void recursionempty()
     {
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 Collections.emptySet(),
                 Stream.empty(),
@@ -235,7 +235,7 @@ public final class TestCUnify extends IBaseTest
     @Test
     public void recursionunequal()
     {
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 Collections.emptySet(),
                 Stream.of( CRawTerm.of( new Object() ) ),
@@ -252,7 +252,7 @@ public final class TestCUnify extends IBaseTest
     {
         final Set<IVariable<?>> l_variables = new HashSet<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CLiteral.parse( "literal(bar(5))" ) ),
@@ -261,10 +261,10 @@ public final class TestCUnify extends IBaseTest
         );
 
         final IVariable<?> l_variable = l_variables.stream().findFirst().orElseThrow();
-        Assert.assertEquals( Double.valueOf( 5 ), l_variable.raw() );
+        Assertions.assertEquals( Double.valueOf( 5 ), l_variable.raw() );
 
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             new CRecursiveUnifyAlgorithm().apply(
                 l_variables,
                 Stream.of( CLiteral.parse( "literal(xbar(5))" ) ),

@@ -23,9 +23,8 @@
 
 package org.lightjason.agentspeak.error;
 
-import org.junit.Test;
-
-import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -37,119 +36,197 @@ public final class TestCException
     /**
      * test no-such-element exception
      */
-    @Test( expected = NoSuchElementException.class )
+    @Test
     public void nosuchelementexception()
     {
-        throw new CNoSuchElementException();
+        Assertions.assertThrows(
+            CNoSuchElementException.class,
+            () ->
+            {
+                throw new CNoSuchElementException();
+            }
+        );
     }
 
     /**
      * test enum-not-present exception
      */
-    @Test( expected = EnumConstantNotPresentException.class )
+    @Test
     public void enumnotpresentstring()
     {
-        throw new CEnumConstantNotPresentException( ETestEnum.class, "MISSING" );
+        Assertions.assertThrows(
+            CEnumConstantNotPresentException.class,
+            () ->
+            {
+                throw new CEnumConstantNotPresentException( ETestEnum.class, "MISSING" );
+            }
+        );
     }
 
     /**
      * test illegal-argument exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void illegalargument()
     {
-        throw new CIllegalArgumentException();
+        Assertions.assertThrows(
+            CIllegalArgumentException.class,
+            () ->
+            {
+                throw new CIllegalArgumentException();
+            }
+        );
     }
 
     /**
      * test illegal-argument exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void illegalargumentstring()
     {
-        throw new CIllegalArgumentException( "illegealargument" );
+        Assertions.assertThrows(
+            CIllegalArgumentException.class,
+            () ->
+            {
+                throw new CIllegalArgumentException( "illegealargument" );
+            }
+        );
     }
 
     /**
      * test illegal-argument exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void illegalargumentstringexception()
     {
-        throw new CIllegalArgumentException( "illegealargument", new RuntimeException() );
+        Assertions.assertThrows(
+            CIllegalArgumentException.class,
+            () ->
+            {
+                throw new CIllegalArgumentException( "illegealargument", new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test illegal-argument exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void illegalargumentexception()
     {
-        throw new CIllegalArgumentException( new RuntimeException() );
+        Assertions.assertThrows(
+            CIllegalArgumentException.class,
+            () ->
+            {
+                throw new CIllegalArgumentException( new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test unmodifyable-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void unmodifyableexception()
     {
-        throw new CUnmodifiableException();
+        Assertions.assertThrows(
+            CUnmodifiableException.class,
+            () ->
+            {
+                throw new CUnmodifiableException();
+            }
+        );
     }
 
     /**
      * test unmodifyable-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void unmodifyableexceptionstringexception()
     {
-        throw new CUnmodifiableException( "unmodifyable", new RuntimeException() );
+        Assertions.assertThrows(
+            CUnmodifiableException.class,
+            () ->
+            {
+                throw new CUnmodifiableException( "unmodifyable", new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test unmodifyable-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void unmodifyableexceptionpassexception()
     {
-        throw new CUnmodifiableException( new RuntimeException() );
+        Assertions.assertThrows(
+            CUnmodifiableException.class,
+            () ->
+            {
+                throw new CUnmodifiableException( new RuntimeException() );
+            }
+        );
     }
 
     /**
      * test illegal-state-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void illegalstateexception()
     {
-        throw new CIllegalStateException();
+        Assertions.assertThrows(
+            CIllegalStateException.class,
+            () ->
+            {
+                throw new CIllegalStateException();
+            }
+        );
     }
 
     /**
      * test illegal-state-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void illegalstateexceptionstring()
     {
-        throw new CIllegalStateException( "illegal-state" );
+        Assertions.assertThrows(
+            CIllegalStateException.class,
+            () ->
+            {
+                throw new CIllegalStateException( "illegal-state" );
+            }
+        );
     }
 
     /**
      * test illegal-state-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void illegalstateexceptionpassexception()
     {
-        throw new CIllegalStateException( new RuntimeException() );
+        Assertions.assertThrows(
+            CIllegalStateException.class,
+            () ->
+            {
+                throw new CIllegalStateException( new RuntimeException() );
+            }
+        );
     }
 
 
     /**
      * test illegal-state-exception
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void illegalstateexceptionstringexception()
     {
-        throw new CIllegalStateException( "illegal-state", new RuntimeException() );
+        Assertions.assertThrows(
+            CIllegalStateException.class,
+            () ->
+            {
+                throw new CIllegalStateException( "illegal-state", new RuntimeException() );
+            }
+        );
     }
 
     /**

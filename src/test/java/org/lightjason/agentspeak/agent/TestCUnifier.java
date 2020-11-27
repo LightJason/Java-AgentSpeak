@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.agent;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -37,8 +37,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -65,7 +63,7 @@ public final class TestCUnifier extends IBaseTest
         ) ).collect( Collectors.toSet() ) );
 
         final List<ITerm> l_result = l_literal.values( CPath.of( "first" ) ).collect( Collectors.toList() );
-        Assert.assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_test.size(), l_result.size() );
+        Assertions.assertEquals( l_test.size(), l_result.size(), MessageFormat.format( "literal traversing in {0} is wrong", l_literal ) );
     }
 
 
@@ -89,13 +87,13 @@ public final class TestCUnifier extends IBaseTest
             )
         ).collect( Collectors.toList() ) );
 
-        Assert.assertArrayEquals(
-            MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
+        Assertions.assertArrayEquals(
             Arrays.stream( l_test ).flatMap( i -> i.orderedvalues() ).toArray(),
-            l_literal.orderedvalues( CPath.of( "first" ) ).toArray()
+            l_literal.orderedvalues( CPath.of( "first" ) ).toArray(),
+            MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal )
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( CLiteral.parse( "val(1)" ), CLiteral.parse( "val(2)" ), CLiteral.parse( "val(3)" ) ).toArray(),
             l_literal.orderedvalues( CPath.of( "second/sub" ) ).toArray()
         );
@@ -110,20 +108,20 @@ public final class TestCUnifier extends IBaseTest
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "foo(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
 
-        assertEquals(
+        Assertions.assertEquals(
+            l_first.structurehash(),
+            l_second.structurehash(),
             MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.structurehash(),
                                   l_second.structurehash()
-            ),
-            l_first.structurehash(),
-            l_second.structurehash()
+            )
         );
 
         final ILiteral l_third = CLiteral.parse( "foo" );
         final ILiteral l_fourth = CLiteral.parse( "hallo" );
-        Assert.assertNotEquals(
-            MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.structurehash() ),
+        Assertions.assertNotEquals(
             l_fourth.structurehash(),
-            l_third.structurehash()
+            l_third.structurehash(),
+            MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.structurehash() )
         );
     }
 

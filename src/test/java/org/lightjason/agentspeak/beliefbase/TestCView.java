@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.CView;
 import org.lightjason.agentspeak.beliefbase.view.IView;
@@ -60,7 +60,7 @@ public final class TestCView extends IBaseTest
                  .map( i -> CLiteral.of( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
                  .forEach( i -> l_beliefbase.generate( l_generator, i.functorpath() ).add( i ) );
 
-        Assert.assertEquals( "number of beliefs is incorrect", l_max, l_beliefbase.size() );
+        Assertions.assertEquals( l_max, l_beliefbase.size(), "number of beliefs is incorrect" );
     }
 
 
@@ -72,15 +72,15 @@ public final class TestCView extends IBaseTest
     {
         final IView l_view = buildview();
 
-        Assert.assertEquals( "number of beliefs is incorrect", 8, l_view.size() );
+        Assertions.assertEquals( 8, l_view.size(), "number of beliefs is incorrect" );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( "toplevel[]", "first/sub1[]", "first/sub1[1]", "first/sub1[2]",
                        "first/sub2[]", "second/sub3[]", "second/sub4[]", "second/second/sub/sub5[]" ).toArray(),
             l_view.stream().map( Object::toString ).toArray()
         );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( "sub1[]", "sub1[1]", "sub1[2]" ).toArray(),
             l_view.stream( CPath.of( "first/sub1" ) ).map( Object::toString ).toArray()
         );
@@ -96,30 +96,33 @@ public final class TestCView extends IBaseTest
 
         l_view.add( CLiteral.of( "xxx" ) );
 
-        Assert.assertFalse( l_view.isempty() );
-        Assert.assertTrue( l_view.containsliteral( CPath.of( "first/sub1" ) ) );
-        Assert.assertTrue( l_view.containsliteral( CPath.of( "xxx" ) ) );
-        Assert.assertTrue( l_view.containsview( CPath.of( "first" ) ) );
-        Assert.assertEquals( l_view, l_view.remove( l_view.beliefbase().view( "first" ) ) );
-        Assert.assertFalse( l_view.containsview( CPath.of( "first" ) ) );
-        Assert.assertTrue( l_view.containsview( CPath.of( "second/sub" ) ) );
+        Assertions.assertFalse( l_view.isempty() );
+        Assertions.assertTrue( l_view.containsliteral( CPath.of( "first/sub1" ) ) );
+        Assertions.assertTrue( l_view.containsliteral( CPath.of( "xxx" ) ) );
+        Assertions.assertTrue( l_view.containsview( CPath.of( "first" ) ) );
+        Assertions.assertEquals( l_view, l_view.remove( l_view.beliefbase().view( "first" ) ) );
+        Assertions.assertFalse( l_view.containsview( CPath.of( "first" ) ) );
+        Assertions.assertTrue( l_view.containsview( CPath.of( "second/sub" ) ) );
 
         l_view.clear( CPath.of( "second" ) );
-        Assert.assertFalse( l_view.isempty() );
-        Assert.assertTrue( l_view.containsview( CPath.of( "second" ) ) );
-        Assert.assertTrue( l_view.beliefbase().view( "second" ).isempty() );
+        Assertions.assertFalse( l_view.isempty() );
+        Assertions.assertTrue( l_view.containsview( CPath.of( "second" ) ) );
+        Assertions.assertTrue( l_view.beliefbase().view( "second" ).isempty() );
 
         l_view.clear();
-        Assert.assertTrue( l_view.isempty() );
+        Assertions.assertTrue( l_view.isempty() );
     }
 
     /**
      * test ctor exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void viewctorerror()
     {
-        new CView( "", IBeliefbase.EMPY );
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new CView( "", IBeliefbase.EMPY )
+        );
     }
 
     /**

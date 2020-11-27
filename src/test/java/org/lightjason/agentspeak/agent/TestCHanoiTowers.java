@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.agent;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
@@ -113,7 +113,7 @@ public final class TestCHanoiTowers extends IBaseTest
      *
      * @throws Exception on initialize error
      */
-    @Before
+    @BeforeEach
     public void initialize() throws Exception
     {
         this.setup(
@@ -175,7 +175,7 @@ public final class TestCHanoiTowers extends IBaseTest
         catch ( final IOException l_exception )
         {
             l_exception.printStackTrace();
-            Assert.fail( "asl could not be read" );
+            Assertions.fail( "asl could not be read" );
         }
         m_agents = Collections.unmodifiableMap( l_agentmap );
     }
@@ -198,14 +198,14 @@ public final class TestCHanoiTowers extends IBaseTest
                     .forEach( IBaseTest::agentcycle );
         }
 
-        Assert.assertTrue( "agent did not terminate", l_cycles > 0 );
+        Assertions.assertTrue( l_cycles > 0, "agent did not terminate" );
     }
 
 
     /**
      * agent class
      */
-    private class CAgent extends IBaseAgent<CAgent>
+    private static class CAgent extends IBaseAgent<CAgent>
     {
         /**
          * serial id

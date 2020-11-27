@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.lambda;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.generator.ILambdaStreamingGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -59,7 +59,7 @@ public final class TestCLambda extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CLambdaInitializeRange( Stream.of( new CPassRaw<>( 3 ) ) ),
                 false,
@@ -68,8 +68,8 @@ public final class TestCLambda extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertArrayEquals(
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertArrayEquals(
             LongStream.range( 0, 3 ).boxed().toArray(),
             l_return.get( 0 ).<Stream<?>>raw().toArray()
         );
@@ -83,7 +83,7 @@ public final class TestCLambda extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CLambdaInitializeRange( Stream.of( new CPassRaw<>( 4 ), new CPassRaw<>( 12 ) ) ),
                 false,
@@ -92,8 +92,8 @@ public final class TestCLambda extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertArrayEquals(
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertArrayEquals(
             LongStream.range( 4, 12 ).boxed().toArray(),
             l_return.get( 0 ).<Stream<?>>raw().toArray()
         );
@@ -107,7 +107,7 @@ public final class TestCLambda extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CLambdaInitializeRange( Stream.of( new CPassRaw<>( 5 ), new CPassRaw<>( 12 ), new CPassRaw<>( 2 ) ) ),
                 false,
@@ -116,8 +116,8 @@ public final class TestCLambda extends IBaseTest
             )
         );
 
-        Assert.assertEquals( 1, l_return.size() );
-        Assert.assertArrayEquals(
+        Assertions.assertEquals( 1, l_return.size() );
+        Assertions.assertArrayEquals(
             Stream.of( 5L, 7L, 9L, 11L ).toArray(),
             l_return.get( 0 ).<Stream<?>>raw().toArray()
         );
@@ -126,14 +126,17 @@ public final class TestCLambda extends IBaseTest
     /**
      * test lambda-range exception
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void initializerangeerror()
     {
-        execute(
-            new CLambdaInitializeRange( Stream.of( new CEmptyExecution() ) ),
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> execute(
+                new CLambdaInitializeRange( Stream.of( new CEmptyExecution() ) ),
             false,
-            Collections.emptyList(),
-            Collections.emptyList()
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -143,7 +146,7 @@ public final class TestCLambda extends IBaseTest
     @Test
     public void initializefail()
     {
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CLambdaInitializeRange( Stream.of( new CFailExecution() ) ),
                 false,
@@ -160,20 +163,23 @@ public final class TestCLambda extends IBaseTest
     public void rangevariables()
     {
         final IVariable<?> l_variable = new CVariable<>( "X" );
-        Assert.assertEquals( l_variable, new CLambdaInitializeRange( Stream.of( new CPassVariable( l_variable ) ) ).variables().findFirst().get() );
+        Assertions.assertEquals( l_variable, new CLambdaInitializeRange( Stream.of( new CPassVariable( l_variable ) ) ).variables().findFirst().get() );
     }
 
     /**
      * lambda initialize stream error
      */
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void initializestreamerror()
     {
-        execute(
-            new CLambdaInitializeStream( Stream.of( new CEmptyExecution() ), ILambdaStreamingGenerator.EMPTY ),
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> execute(
+                new CLambdaInitializeStream( Stream.of( new CEmptyExecution() ), ILambdaStreamingGenerator.EMPTY ),
             false,
-            Collections.emptyList(),
-            Collections.emptyList()
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -183,7 +189,7 @@ public final class TestCLambda extends IBaseTest
     @Test
     public void initializestreamfail()
     {
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CLambdaInitializeStream( Stream.of( new CFailExecution() ), ILambdaStreamingGenerator.EMPTY ),
                 false,
@@ -196,20 +202,23 @@ public final class TestCLambda extends IBaseTest
     /**
      * test lambda execution fail
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void lambdafail()
     {
-        execute(
-            new CLambda(
-                false,
-                new CLambdaInitializeStream( Stream.of( new CFailExecution() ), ILambdaStreamingGenerator.EMPTY ),
-                IVariable.EMPTY,
-                Stream.empty(),
-                IVariable.EMPTY
-            ),
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> execute(
+                new CLambda(
+                    false,
+                    new CLambdaInitializeStream( Stream.of( new CFailExecution() ), ILambdaStreamingGenerator.EMPTY ),
+                    IVariable.EMPTY,
+                    Stream.empty(),
+                    IVariable.EMPTY
+                ),
             false,
-            Collections.emptyList(),
-            Collections.emptyList()
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
@@ -224,7 +233,7 @@ public final class TestCLambda extends IBaseTest
         final IVariable<?> l_rvariable = new CVariable<>( "R" );
         final IVariable<?> l_pvariable = new CVariable<>( "P" );
 
-        Assert.assertArrayEquals(
+        Assertions.assertArrayEquals(
             Stream.of( l_vvariable, l_rvariable ).toArray(),
             new CLambda(
                 false,
@@ -244,7 +253,7 @@ public final class TestCLambda extends IBaseTest
     {
         final IVariable<?> l_variable = new CVariable<>( "I" );
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CLambda(
                     false,
@@ -268,7 +277,7 @@ public final class TestCLambda extends IBaseTest
     {
         final IVariable<?> l_variable = new CVariable<>( "I" );
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
             execute(
                 new CLambda(
                     true,
@@ -292,7 +301,7 @@ public final class TestCLambda extends IBaseTest
     {
         final IVariable<?> l_variable = new CVariable<>( "I" );
 
-        Assert.assertFalse(
+        Assertions.assertFalse(
             execute(
                 new CLambda(
                     true,

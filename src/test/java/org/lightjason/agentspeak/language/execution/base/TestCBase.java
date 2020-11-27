@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.base;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -77,7 +77,7 @@ public final class TestCBase extends IBaseTest
                     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                            @Nonnull final List<ITerm> p_return )
                     {
-                        Assert.fail();
+                        Assertions.fail();
                         return Stream.empty();
                     }
 
@@ -95,7 +95,7 @@ public final class TestCBase extends IBaseTest
                     public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                            @Nonnull final List<ITerm> p_return )
                     {
-                        Assert.assertTrue( true );
+                        Assertions.assertTrue( true );
                         return Stream.empty();
                     }
 
@@ -116,68 +116,71 @@ public final class TestCBase extends IBaseTest
     /**
      * test tenary-operator wrong argument number
      */
-    @Test( expected = IllegalStateException.class )
+    @Test
     public void ternaryargumenterror()
     {
-        execute(
-            new CTernaryOperation(
-                new IExpression()
-                {
-                    @Nonnull
-                    @Override
-                    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                           @Nonnull final List<ITerm> p_return )
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> execute(
+                new CTernaryOperation(
+                    new IExpression()
                     {
-                        return p_context.agent().fuzzy().membership().success();
-                    }
+                        @Nonnull
+                        @Override
+                        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                               @Nonnull final List<ITerm> p_return )
+                        {
+                            return p_context.agent().fuzzy().membership().success();
+                        }
 
-                    @Nonnull
-                    @Override
-                    public Stream<IVariable<?>> variables()
+                        @Nonnull
+                        @Override
+                        public Stream<IVariable<?>> variables()
+                        {
+                            return Stream.empty();
+                        }
+                    },
+                    new IExecution()
                     {
-                        return Stream.empty();
-                    }
-                },
-                new IExecution()
-                {
-                    @Nonnull
-                    @Override
-                    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                           @Nonnull final List<ITerm> p_return )
-                    {
-                        Assert.fail();
-                        return Stream.empty();
-                    }
+                        @Nonnull
+                        @Override
+                        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                               @Nonnull final List<ITerm> p_return )
+                        {
+                            Assertions.fail();
+                            return Stream.empty();
+                        }
 
-                    @Nonnull
-                    @Override
-                    public Stream<IVariable<?>> variables()
+                        @Nonnull
+                        @Override
+                        public Stream<IVariable<?>> variables()
+                        {
+                            return Stream.empty();
+                        }
+                    },
+                    new IExecution()
                     {
-                        return Stream.empty();
-                    }
-                },
-                new IExecution()
-                {
-                    @Nonnull
-                    @Override
-                    public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                                           @Nonnull final List<ITerm> p_return )
-                    {
-                        Assert.fail();
-                        return Stream.empty();
-                    }
+                        @Nonnull
+                        @Override
+                        public Stream<IFuzzyValue<?>> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                                               @Nonnull final List<ITerm> p_return )
+                        {
+                            Assertions.fail();
+                            return Stream.empty();
+                        }
 
-                    @Nonnull
-                    @Override
-                    public Stream<IVariable<?>> variables()
-                    {
-                        return Stream.empty();
+                        @Nonnull
+                        @Override
+                        public Stream<IVariable<?>> variables()
+                        {
+                            return Stream.empty();
+                        }
                     }
-                }
-            ),
-            false,
-            Collections.emptyList(),
-            Collections.emptyList()
+                ),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            )
         );
     }
 
