@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.grammar;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
@@ -60,7 +59,6 @@ import java.util.stream.Stream;
 /**
  * test for agent parser
  */
-@Disabled
 public final class TestCAgentParser extends IBaseGrammarTest
 {
 
@@ -467,17 +465,17 @@ public final class TestCAgentParser extends IBaseGrammarTest
             l_plan.toString()
         );
 
-        Assertions.assertTrue( l_andtrue.raw(), l_plan.toString() );
-        Assertions.assertFalse( l_andfalse.raw(), l_plan.toString() );
+        Assertions.assertTrue( l_andtrue.<Boolean>raw(), l_plan.toString() );
+        Assertions.assertFalse( l_andfalse.<Boolean>raw(), l_plan.toString() );
 
-        Assertions.assertTrue( l_ortrue.raw(), l_plan.toString() );
-        Assertions.assertFalse( l_orfalse.raw(), l_plan.toString() );
+        Assertions.assertTrue( l_ortrue.<Boolean>raw(), l_plan.toString() );
+        Assertions.assertFalse( l_orfalse.<Boolean>raw(), l_plan.toString() );
 
-        Assertions.assertTrue( l_xortrue.raw(), l_plan.toString() );
-        Assertions.assertFalse( l_xorfalse.raw(), l_plan.toString() );
+        Assertions.assertTrue( l_xortrue.<Boolean>raw(), l_plan.toString() );
+        Assertions.assertFalse( l_xorfalse.<Boolean>raw(), l_plan.toString() );
 
-        Assertions.assertTrue( l_nottrue.raw(), l_plan.toString() );
-        Assertions.assertFalse( l_notfalse.raw(), l_plan.toString() );
+        Assertions.assertTrue( l_nottrue.<Boolean>raw(), l_plan.toString() );
+        Assertions.assertFalse( l_notfalse.<Boolean>raw(), l_plan.toString() );
     }
 
     /**
@@ -718,8 +716,8 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assertions.assertEquals( "description text", property( "m_description", l_plan ) );
 
-        Assertions.assertTrue( property( "m_atomic", l_plan ), l_plan.toString() );
-        Assertions.assertTrue( property( "m_parallel", l_plan ), l_plan.toString() );
+        Assertions.assertTrue( this.<Boolean>property( "m_atomic", l_plan ), l_plan.toString() );
+        Assertions.assertTrue( this.<Boolean>property( "m_parallel", l_plan ), l_plan.toString() );
 
         Assertions.assertTrue(
             l_plan.variables().parallel().anyMatch( i -> ( "StringValue".equals( i.functor() ) ) && ( "abcd".equals( i.raw() ) ) ),
