@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.language.execution.achievementtest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CPath;
@@ -54,7 +54,7 @@ public final class TestCTestRule extends IBaseTest
      *
      * @throws Exception on any error
      */
-    @BeforeAll
+    @BeforeEach
     public void init() throws Exception
     {
         m_agent = new CAgentGenerator().generatesingle();
