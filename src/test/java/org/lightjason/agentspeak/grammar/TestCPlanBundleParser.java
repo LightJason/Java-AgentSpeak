@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.plan.trigger.IT
 import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.IBaseTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -611,8 +612,8 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
 
         Assertions.assertEquals( "description text", property( "m_description", l_plan ) );
 
-        Assertions.assertTrue( this.<Boolean>property( "m_atomic", l_plan ), l_plan.toString() );
-        Assertions.assertTrue( this.<Boolean>property( "m_parallel", l_plan ), l_plan.toString() );
+        Assertions.assertTrue( IBaseTest.<Boolean>property( "m_atomic", l_plan ), l_plan.toString() );
+        Assertions.assertTrue( IBaseTest.<Boolean>property( "m_parallel", l_plan ), l_plan.toString() );
 
         Assertions.assertTrue(
             l_plan.variables().parallel().anyMatch( i -> ( "StringValue".equals( i.functor() ) ) && ( "xyz".equals( i.raw() ) ) ),

@@ -42,6 +42,7 @@ import org.lightjason.agentspeak.language.execution.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.execution.lambda.ILambdaStreaming;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
+import org.lightjason.agentspeak.testing.IBaseTest;
 import org.lightjason.agentspeak.testing.action.CTestMax;
 import org.lightjason.agentspeak.testing.action.CTestMin;
 
@@ -716,8 +717,8 @@ public final class TestCAgentParser extends IBaseGrammarTest
 
         Assertions.assertEquals( "description text", property( "m_description", l_plan ) );
 
-        Assertions.assertTrue( this.<Boolean>property( "m_atomic", l_plan ), l_plan.toString() );
-        Assertions.assertTrue( this.<Boolean>property( "m_parallel", l_plan ), l_plan.toString() );
+        Assertions.assertTrue( IBaseTest.<Boolean>property( "m_atomic", l_plan ), l_plan.toString() );
+        Assertions.assertTrue( IBaseTest.<Boolean>property( "m_parallel", l_plan ), l_plan.toString() );
 
         Assertions.assertTrue(
             l_plan.variables().parallel().anyMatch( i -> ( "StringValue".equals( i.functor() ) ) && ( "abcd".equals( i.raw() ) ) ),
