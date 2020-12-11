@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.grammar;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.generator.CActionStaticGenerator;
 import org.lightjason.agentspeak.generator.CLambdaStreamingStaticGenerator;
@@ -60,6 +61,7 @@ import java.util.stream.Stream;
 /**
  * test for agent parser
  */
+@Timeout( 60 )
 public final class TestCAgentParser extends IBaseGrammarTest
 {
 
