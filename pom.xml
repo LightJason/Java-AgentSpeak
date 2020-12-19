@@ -114,6 +114,7 @@
         <spotbugsmaven.version>4.1.4</spotbugsmaven.version>
 
         <junit.version>5.7.0</junit.version>
+        <surefire.version>3.0.0-M5</surefire.version>
 
         <!-- will be set outside (build parameter) -->
         <build.number />
@@ -387,7 +388,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${surefire.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
