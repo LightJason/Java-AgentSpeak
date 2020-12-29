@@ -511,6 +511,7 @@
                         <fileset>
                             <directory>.</directory>
                             <includes>
+                                <include>dependency-reduced-pom.xml</include>
                                 <include>${project.basedir}/src/main/antlr4/**/*.tokens</include>
                             </includes>
                         </fileset>
