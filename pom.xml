@@ -81,26 +81,6 @@
         </developer>
     </developers>
 
-    <contributors>
-        <contributor>
-            <name>Malte Aschermann</name>
-            <email>malte@lightjason.org</email>
-            <timezone>Europe/Berlin</timezone>
-            <roles>
-                <role>testing</role>
-            </roles>
-        </contributor>
-
-        <contributor>
-            <name>Sophie Denissen</name>
-            <email>sophie@lightjason.org</email>
-            <timezone>Europe/Berlin</timezone>
-            <roles>
-                <role>testing</role>
-            </roles>
-        </contributor>
-    </contributors>
-
 
     <!-- project build configuration -->
     <properties>
@@ -110,16 +90,16 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
-        <spotbugs.version>4.1.4</spotbugs.version>
-        <spotbugsmaven.version>4.1.4</spotbugsmaven.version>
+        <spotbugs.version>4.2.0</spotbugs.version>
+        <spotbugsmaven.version>4.2.0</spotbugsmaven.version>
+
+        <antlr.version>4.9</antlr.version>
 
         <junit.version>5.7.0</junit.version>
-        <surefire.version>3.0.0-M5</surefire.version>
 
         <!-- will be set outside (build parameter) -->
         <build.number />
         <build.commit />
-        <coverall.token />
     </properties>
 
 
@@ -129,7 +109,7 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.9</version>
+            <version>${antlr.version}</version>
         </dependency>
 
         <dependency>
@@ -153,7 +133,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.0-jre</version>
+            <version>30.1-jre</version>
         </dependency>
 
         <dependency>
@@ -208,129 +188,6 @@
     </dependencies>
 
 
-    <!-- reporting plugins -->
-    <reporting>
-
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.0</version>
-            </plugin>
-
-            <plugin>
-                <groupId>de.flashpixx</groupId>
-                <artifactId>rrd-antlr4</artifactId>
-                <version>0.0.1</version>
-                <configuration>
-                    <excludes>
-                        <exclude>Manual.g4</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugsmaven.version}</version>
-                <configuration>
-                    <includeFilterFile>${project.basedir}/src/codestyle/spotbugs/includefiles.xml</includeFilterFile>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
-                    <maxRank>20</maxRank>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jdepend-maven-plugin</artifactId>
-                <version>2.0</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <targetJdk>1.8</targetJdk>
-                    <excludes>
-                        <exclude>**/CASTVisitorAgent.java</exclude>
-                        <exclude>**/CASTVisitorPlanBundle.java</exclude>
-                        <exclude>**/generated/*.java</exclude>
-                    </excludes>
-                    <linkXRef>false</linkXRef>
-                </configuration>
-            </plugin>
-<!--
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>5.0.0-M1</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>aggregate</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
--->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.3</version>
-                <configuration>
-                    <includes>
-                        <include>**/C*.class</include>
-                        <include>**/I*.class</include>
-                    </includes>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>report</report>
-                            <report>report-integration</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-
-        </plugins>
-
-    </reporting>
-
-
-    <!-- profile for signing arifacts on release -->
-    <profiles>
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 
     <!-- main build -->
@@ -338,18 +195,16 @@
         <!-- default goal is set to package and checking dependency updates -->
         <defaultGoal>install versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates</defaultGoal>
 
-        <!-- include resource directory with replacing configuration variables -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
         <!-- using build plugins -->
         <pluginManagement>
 
             <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -371,6 +226,12 @@
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.9.1</version>
                     <configuration>
@@ -378,17 +239,121 @@
                     </configuration>
                 </plugin>
 
-            </plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                </plugin>
 
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>4.0.rc2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
+                    <version>${antlr.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.6</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.14.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>de.flashpixx</groupId>
+                    <artifactId>rrd-antlr4</artifactId>
+                    <version>0.0.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jdepend-maven-plugin</artifactId>
+                    <version>2.0</version>
+                </plugin>
+
+            </plugins>
         </pluginManagement>
 
-        <plugins>
 
+
+
+        <!-- include resource directory with replacing configuration variables -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
             <!-- surefire testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
@@ -405,7 +370,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M3</version>
                 <executions>
                     <execution>
                         <id>defaults</id>
@@ -430,30 +394,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M1</version>
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.amashchenko.maven.plugin</groupId>
-                <artifactId>gitflow-maven-plugin</artifactId>
-                <version>1.14.0</version>
-                <configuration>
-                    <installProject>false</installProject>
-                    <verbose>false</verbose>
-
-                    <gitFlowConfig>
-                        <productionBranch>master</productionBranch>
-                        <developmentBranch>developing</developmentBranch>
-                        <featureBranchPrefix>feature/</featureBranchPrefix>
-                        <releaseBranchPrefix>release/</releaseBranchPrefix>
-                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-                        <supportBranchPrefix>support/</supportBranchPrefix>
-                        <versionTagPrefix>pre-v</versionTagPrefix>
-                        <origin>origin</origin>
-                    </gitFlowConfig>
                 </configuration>
             </plugin>
 
@@ -461,7 +403,6 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>4.0.rc2</version>
                 <configuration>
                     <header>${project.basedir}/src/codestyle/license/licensetemplate.txt</header>
                     <useDefaultExcludes>true</useDefaultExcludes>
@@ -491,7 +432,6 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.9</version>
                 <configuration>
                     <visitor>true</visitor>
                     <listener>false</listener>
@@ -512,7 +452,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <configuration>
+                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -529,7 +471,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>doxygen</id>
@@ -549,8 +490,8 @@
 
             <!-- compiler settings -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
@@ -563,7 +504,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -579,7 +519,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>remove-old-artifacts</id>
@@ -598,7 +537,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -630,7 +568,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
                 <executions>
                     <execution>
                         <goals>
@@ -653,6 +590,7 @@
                             <includes>
                                 <include>**/C*.class</include>
                                 <include>**/I*.class</include>
+                                <include>**/E*.class</include>
                             </includes>
                             <rules>
                                 <rules>
@@ -683,18 +621,115 @@
                 </executions>
             </plugin>
 
+        </plugins>
+    </build>
+
+
+
+
+
+    <!-- profile for signing arifacts on release -->
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+
+
+    <!-- reporting plugins -->
+    <reporting>
+        <plugins>
+
             <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.3.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>de.flashpixx</groupId>
+                <artifactId>rrd-antlr4</artifactId>
                 <configuration>
-                    <repoToken>${coverall.token}</repoToken>
-                    <sourceDirectories>
-                        <directory>target/generated-sources/antlr4</directory>
-                    </sourceDirectories>
+                    <excludes>
+                        <exclude>Manual.g4</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <includeFilterFile>${project.basedir}/src/codestyle/spotbugs/includefiles.xml</includeFilterFile>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <maxRank>20</maxRank>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>${maven.compiler.target}</targetJdk>
+                    <excludes>
+                        <exclude>**/CASTVisitor*.java</exclude>
+                        <exclude>**/generated/*.java</exclude>
+                    </excludes>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/C*.class</include>
+                        <include>**/I*.class</include>
+                        <include>**/E*.class</include>
+                    </includes>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                            <report>report-integration</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
         </plugins>
-    </build>
+    </reporting>
+
 </project>
