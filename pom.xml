@@ -90,11 +90,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
-        <spotbugs.version>4.2.0</spotbugs.version>
-        <spotbugsmaven.version>4.2.0</spotbugsmaven.version>
-
         <antlr.version>4.9</antlr.version>
-
         <junit.version>5.7.0</junit.version>
 
         <!-- will be set outside (build parameter) -->
@@ -159,7 +155,7 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>${spotbugs.version}</version>
+            <version>4.2.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -315,6 +311,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>3.14.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>4.1.4</version>
                 </plugin>
 
                 <plugin>
