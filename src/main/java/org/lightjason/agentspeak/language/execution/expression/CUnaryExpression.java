@@ -76,10 +76,21 @@ public final class CUnaryExpression implements IUnaryExpression
     )
     {
         final List<ITerm> l_return = CCommon.argumentlist();
-
         final IFuzzyValue<?>[] l_result =  m_element.execute( p_parallel, p_context, p_argument, l_return ).toArray( IFuzzyValue[]::new );
-        if ( l_return.size() != 1 )
+        if ( l_return.size() == 0 && l_result.length == 0 )
             throw new CExecutionIllegalStateException( p_context, org.lightjason.agentspeak.common.CCommon.languagestring( this, "incorrectreturnargument" ) );
+
+        // if no return argument is set, defuzzyfication of result
+        if ( l_return.size() == 0 )
+            l_return.add(
+                CRawTerm.of(
+                    p_context.agent().fuzzy().defuzzification().success(
+                        p_context.agent().fuzzy().defuzzification().apply(
+                            Arrays.stream( l_result )
+                        )
+                    )
+                )
+            );
 
         p_return.add(
             CRawTerm.of(
