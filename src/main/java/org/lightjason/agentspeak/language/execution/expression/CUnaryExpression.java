@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.error.context.CExecutionIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -82,19 +83,25 @@ public final class CUnaryExpression implements IUnaryExpression
 
         // if no return argument is set, defuzzyfication of result
         if ( l_return.size() == 0 )
-            l_return.add(
+        {
+            final Pair<Object, Stream<IFuzzyValue<?>>> l_manual = m_operator.apply(
                 CRawTerm.of(
                     p_context.agent().fuzzy().defuzzification().success(
                         p_context.agent().fuzzy().defuzzification().apply(
                             Arrays.stream( l_result )
                         )
                     )
-                )
+                ),
+                p_context.agent()
             );
+
+            p_return.add( CRawTerm.of( l_manual.getLeft() ) );
+            return l_manual.getRight();
+        }
 
         p_return.add(
             CRawTerm.of(
-                m_operator.apply( l_return.get( 0 ) )
+                m_operator.apply( l_return.get( 0 ), p_context.agent() ).getLeft()
             )
         );
 

@@ -23,26 +23,32 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CNoSuchElementException;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.function.Function;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 
 /**
  * expression unary operator
  */
-public enum EUnaryOperator implements Function<ITerm, Object>
+public enum EUnaryOperator implements BiFunction<ITerm, IAgent<?>, Pair<Object, Stream<IFuzzyValue<?>>>>
 {
     NEGATION( "~", "not" )
     {
         @Override
-        public Object apply( @Nonnull final ITerm p_term )
+        public Pair<Object, Stream<IFuzzyValue<?>>> apply( final ITerm p_term, final IAgent<?> p_agent )
         {
-            return !p_term.<Boolean>raw();
+            final boolean l_result = !p_term.<Boolean>raw();
+            return new ImmutablePair<>( l_result, l_result ? p_agent.fuzzy().membership().success() : p_agent.fuzzy().membership().fail() );
         }
     };
 
