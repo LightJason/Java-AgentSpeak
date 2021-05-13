@@ -209,7 +209,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         return this.sleep(
             p_cycles,
-            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
+            Objects.isNull( p_term ) || p_term.length == 0
             ? Stream.empty()
             : Arrays.stream( p_term )
         );
@@ -229,7 +229,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final IAgent<T> wakeup( @Nullable final ITerm... p_term )
     {
         return this.wakeup(
-            ( Objects.isNull( p_term ) ) || ( p_term.length == 0 )
+            Objects.isNull( p_term ) || p_term.length == 0
             ? Stream.empty()
             : Arrays.stream( p_term )
         );

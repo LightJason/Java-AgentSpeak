@@ -127,6 +127,7 @@ public abstract class IBaseBeliefbase implements IBeliefbase
      *
      * @param p_event event
      * @param p_literal literal
+     * @return input literal
      */
     protected ILiteral event( final ITrigger.EType p_event, final ILiteral p_literal )
     {

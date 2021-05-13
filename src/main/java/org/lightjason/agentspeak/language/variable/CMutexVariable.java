@@ -104,7 +104,7 @@ public final class CMutexVariable<T> extends IBaseVariable<T>
     @Override
     public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+        return Objects.isNull( p_prefix ) || p_prefix.length == 0
                ? new CMutexVariable<>( m_functor, m_value.get() )
                : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value.get() );
     }
@@ -128,7 +128,7 @@ public final class CMutexVariable<T> extends IBaseVariable<T>
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CMutexVariable<>(
-            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+            Objects.isNull( p_prefix ) || p_prefix.length == 0
             ? m_functor
             : p_prefix[0].append( m_functor ),
             CCommon.deepclone( m_value.get() )

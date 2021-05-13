@@ -120,7 +120,7 @@ public enum EAnnotation implements BiFunction<String, Object, IAnnotation<?>>
     public static EAnnotation of( @Nonnull final String p_value )
     {
         return Arrays.stream( EAnnotation.values() )
-                     .filter( i -> ( !i.m_name.isEmpty() ) && ( p_value.startsWith( i.m_name ) ) )
+                     .filter( i -> !i.m_name.isEmpty() && p_value.startsWith( i.m_name ) )
                      .findFirst()
                      .orElse( EMPTY );
     }

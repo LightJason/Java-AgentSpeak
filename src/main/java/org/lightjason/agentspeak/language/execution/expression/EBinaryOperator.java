@@ -196,7 +196,7 @@ public enum EBinaryOperator implements BiFunction<ITerm, ITerm, Object>
      */
     private static boolean checkequal( @Nonnull final ITerm p_value1, @Nonnull final ITerm p_value2 )
     {
-        return ( p_value1.raw() instanceof Number ) && ( p_value2.raw() instanceof Number )
+        return p_value1.raw() instanceof Number && p_value2.raw() instanceof Number
                ? Double.valueOf( p_value1.<Number>raw().doubleValue() ).equals( p_value2.<Number>raw().doubleValue() )
                : Objects.isNull( p_value1.raw() ) && Objects.isNull( p_value2.raw() )
                  || Objects.nonNull( p_value1.raw() ) && p_value1.raw().equals( p_value2.raw() );

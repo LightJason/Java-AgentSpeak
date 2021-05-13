@@ -77,7 +77,7 @@ public final class CConstant<T> extends IBaseVariable<T>
     @Override
     public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
-        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+        return Objects.isNull( p_prefix ) || p_prefix.length == 0
                ? new CConstant<>( m_functor, m_value )
                : new CConstant<>( p_prefix[0].append( m_functor ), m_value );
     }
@@ -102,7 +102,7 @@ public final class CConstant<T> extends IBaseVariable<T>
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CConstant<>(
-            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+            Objects.isNull( p_prefix ) || p_prefix.length == 0
             ? m_functor
             : p_prefix[0].append( m_functor ),
             org.lightjason.agentspeak.language.CCommon.deepclone( m_value )

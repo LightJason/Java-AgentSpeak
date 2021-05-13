@@ -127,7 +127,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
     @Override
     public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+        return Objects.isNull( p_prefix ) || p_prefix.length == 0
                ? new CRelocateVariable<>( m_functor, m_relocate, m_value )
                : new CRelocateVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
@@ -151,7 +151,7 @@ public final class CRelocateVariable<T> extends IBaseVariable<T> implements IRel
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CRelocateVariable<>(
-            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+            Objects.isNull( p_prefix ) || p_prefix.length == 0
             ? m_functor
             : p_prefix[0].append( m_functor ),
             m_relocate, CCommon.deepclone( m_value )

@@ -220,8 +220,8 @@ public final class CView implements IView
     {
         // build path relative to this view
         final IPath l_path = this.path();
-        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
-                 ? Stream.concat( m_beliefbase.streamliteral(), m_beliefbase.streamview().flatMap( i -> i.stream() ) )
+        return ( Objects.isNull( p_path ) || p_path.length == 0
+                 ? Stream.concat( m_beliefbase.streamliteral(), m_beliefbase.streamview().flatMap( IView::stream ) )
                  : Arrays.stream( p_path )
                          .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
         ).map( i -> i.shallowcopy( l_path ) );
@@ -233,7 +233,7 @@ public final class CView implements IView
     {
         // build path relative to this view
         final IPath l_path = this.path();
-        return ( ( Objects.isNull( p_path ) ) || ( p_path.length == 0 )
+        return ( Objects.isNull( p_path ) || p_path.length == 0
                  ? Stream.concat(
             m_beliefbase.streamliteral().filter( i -> i.negated() == p_negated ),
             m_beliefbase.streamview().flatMap( i -> i.stream( p_negated ) )

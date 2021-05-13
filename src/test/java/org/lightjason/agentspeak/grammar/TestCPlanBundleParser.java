@@ -252,7 +252,7 @@ public final class TestCPlanBundleParser extends IBaseGrammarTest
         );
 
         Assertions.assertEquals( "bar", l_avar.raw() );
-        Assertions.assertTrue( ( l_bvar.raw() instanceof List<?> ) && ( l_bvar.<List<?>>raw().size() == 1 ), l_bvar.toString() );
+        Assertions.assertTrue( l_bvar.raw() instanceof List<?> && l_bvar.<List<?>>raw().size() == 1, l_bvar.toString() );
         Assertions.assertEquals( "test", l_bvar.<List<?>>raw().get( 0 ) );
     }
 

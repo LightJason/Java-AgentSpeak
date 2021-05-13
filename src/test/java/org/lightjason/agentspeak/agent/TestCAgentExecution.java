@@ -141,7 +141,7 @@ public final class TestCAgentExecution extends IBaseTest
         Assumptions.assumeTrue( Objects.nonNull( m_running ) );
 
         int l_cycles = MAXIMUMCYCLES;
-        while ( ( m_running.get() ) && ( l_cycles > 0 ) )
+        while ( m_running.get() && l_cycles > 0 )
         {
             l_cycles--;
             m_agent.call();

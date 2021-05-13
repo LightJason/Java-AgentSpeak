@@ -43,7 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,7 +161,7 @@ public final class CLiteral implements ILiteral
     {
         return of(
             p_functor,
-            ( Objects.isNull( p_values ) ) || ( p_values.length == 0 )
+            Objects.isNull( p_values ) || p_values.length == 0
             ? Collections.emptySet()
             : Arrays.stream( p_values ).collect( Collectors.toList() )
         );
@@ -229,7 +229,7 @@ public final class CLiteral implements ILiteral
      */
     public static ILiteral of( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return of( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
+        return of( p_at, p_negated, p_functor, Objects.isNull( p_values ) || p_values.length == 0 ? Stream.empty() : Arrays.stream( p_values ) );
     }
 
     /**
@@ -255,14 +255,14 @@ public final class CLiteral implements ILiteral
     @Nonnull
     public static ILiteral parse( @Nonnull final String p_literal )
     {
-        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).literal();
+        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( StandardCharsets.UTF_8 ) ) ).literal();
     }
 
     @Nonnull
     @Override
     public Stream<ITerm> values( @Nullable final IPath... p_path )
     {
-        return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
+        return Objects.isNull( p_path ) || p_path.length < 1
                ? m_values.values().stream()
                : valuefilter( m_values.asMap().getOrDefault( p_path[0], Collections.emptyList() ).stream(), p_path );
     }
@@ -271,7 +271,7 @@ public final class CLiteral implements ILiteral
     @Override
     public Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
-        return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
+        return Objects.isNull( p_path ) || p_path.length < 1
                ? m_orderedvalues.stream()
                : valuefilter( m_orderedvalues.stream().filter( i -> i.fqnfunctor().equals( p_path[0] ) ), p_path );
     }
@@ -393,7 +393,7 @@ public final class CLiteral implements ILiteral
     @Override
     public ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+        return Objects.isNull( p_prefix ) || p_prefix.length == 0
                ? new CLiteral( m_at, m_negated, m_functor, m_values.values() )
                : new CLiteral( m_at, m_negated, p_prefix[0].append( m_functor ), m_values.values() );
     }
@@ -437,9 +437,9 @@ public final class CLiteral implements ILiteral
     @Override
     public synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
-        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
-               ? new CLiteral( m_at, m_negated, m_functor, m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ) )
-               : new CLiteral( m_at, m_negated, p_prefix[0].append( m_functor ), m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ) );
+        return Objects.isNull( p_prefix ) || p_prefix.length == 0
+               ? new CLiteral( m_at, m_negated, m_functor, m_values.values().stream().map( IDeepCopy::deepcopy ).collect( Collectors.toList() ) )
+               : new CLiteral( m_at, m_negated, p_prefix[0].append( m_functor ), m_values.values().stream().map( IDeepCopy::deepcopy ).collect( Collectors.toList() ) );
     }
 
     @Nonnull

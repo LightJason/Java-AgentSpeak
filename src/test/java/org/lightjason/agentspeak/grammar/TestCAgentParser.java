@@ -317,7 +317,7 @@ public final class TestCAgentParser extends IBaseGrammarTest
         );
 
         Assertions.assertEquals( "foo", l_xvar.raw() );
-        Assertions.assertTrue( ( l_yvar.raw() instanceof List<?> ) && ( l_yvar.<List<?>>raw().size() == 1 ), l_yvar.toString() );
+        Assertions.assertTrue( l_yvar.raw() instanceof List<?> && l_yvar.<List<?>>raw().size() == 1, l_yvar.toString() );
         Assertions.assertEquals( 123.0, l_yvar.<List<?>>raw().get( 0 ) );
     }
 

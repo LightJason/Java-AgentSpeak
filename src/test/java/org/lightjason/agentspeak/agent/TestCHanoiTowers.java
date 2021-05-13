@@ -188,7 +188,7 @@ public final class TestCHanoiTowers extends IBaseTest
     private void execute()
     {
         int l_cycles = MAXIMUMCYCLES;
-        while ( ( m_running.get() ) && ( l_cycles > 0 ) )
+        while ( m_running.get() && l_cycles > 0 )
         {
             l_cycles--;
             if ( PRINTENABLE )
@@ -422,7 +422,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
+            if ( Objects.isNull( l_tower ) || Math.random() < m_failprobability )
                 return p_context.agent().fuzzy().membership().fail();
 
             try
@@ -533,7 +533,7 @@ public final class TestCHanoiTowers extends IBaseTest
         @Override
         public synchronized CSlice push( @NonNull final CSlice p_item )
         {
-            if ( ( this.size() > 0 ) && ( this.peek().size() < p_item.size() ) )
+            if ( this.size() > 0 && this.peek().size() < p_item.size() )
                 throw new IllegalStateException();
 
             return super.push( p_item );

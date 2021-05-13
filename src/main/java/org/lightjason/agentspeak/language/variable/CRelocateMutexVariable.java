@@ -126,7 +126,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
     @Override
     public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+        return Objects.isNull( p_prefix ) || p_prefix.length == 0
                ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value.get() )
                : new CRelocateMutexVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value.get() );
     }
@@ -150,7 +150,7 @@ public final class CRelocateMutexVariable<T> extends IBaseVariable<T> implements
     public ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return new CRelocateMutexVariable<>(
-            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
+            Objects.isNull( p_prefix ) || p_prefix.length == 0
             ? m_functor
             : p_prefix[0].append( m_functor ),
             m_relocate,
